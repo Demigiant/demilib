@@ -46,165 +46,6 @@
             (or resets them to the default ones if NULL)
             </summary>
         </member>
-        <member name="T:DG.DemiEditor.AssemblyExtensions">
-            <summary>
-            Assembly extensions
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.AssemblyExtensions.ADBDir(System.Reflection.Assembly)">
-            <summary>AssetDatabase path to the assembly directory, without final slash</summary>
-        </member>
-        <member name="T:DG.DemiEditor.DeFileUtils">
-            <summary>
-            File utils
-            </summary>
-        </member>
-        <member name="F:DG.DemiEditor.DeFileUtils.ADBPathSlash">
-            <summary>Path slash for AssetDatabase format</summary>
-        </member>
-        <member name="F:DG.DemiEditor.DeFileUtils.ADBPathSlashToReplace">
-            <summary>Path slash to replace for AssetDatabase format</summary>
-        </member>
-        <member name="F:DG.DemiEditor.DeFileUtils.PathSlash">
-            <summary>Current OS path slash</summary>
-        </member>
-        <member name="F:DG.DemiEditor.DeFileUtils.PathSlashToReplace">
-            <summary>Path slash to replace on current OS</summary>
-        </member>
-        <member name="T:DG.DemiEditor.DeStylePalette">
-            <summary>
-            Stores a GUIStyle palette, which can be passed to default DeGUI layouts when calling <code>DeGUI.BeginGUI</code>,
-            and changed at any time by calling <code>DeGUI.ChangePalette</code>.
-            You can inherit from this class to create custom GUIStyle palettes with more options.
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeStylePalette.Init">
-            <summary>
-            Called automatically by <code>DeGUI.BeginGUI</code>.
-            Override when adding new style subclasses.
-            </summary>
-        </member>
-        <member name="T:DG.DemiEditor.DeStyleSubPalette">
-            <summary>
-            Extend any custom subpalettes from this, so they will be initialized correctly
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.Box.Init">
-            <summary>
-            Needs to be overridden in order to initialize new styles added from inherited classes
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.Button.Init">
-            <summary>
-            Needs to be overridden in order to initialize new styles added from inherited classes
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.Label.Init">
-            <summary>
-            Needs to be overridden in order to initialize new styles added from inherited classes
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.Toolbar.Init">
-            <summary>
-            Needs to be overridden in order to initialize new styles added from inherited classes
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.Misc.Init">
-            <summary>
-            Needs to be overridden in order to initialize new styles added from inherited classes
-            </summary>
-        </member>
-        <member name="T:DG.DemiEditor.DeGUILayout">
-            <summary>
-            GUILayout methods
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,System.String,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-            <summary>Button that can be toggled on and off</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ToolbarFoldoutButton(System.Boolean,System.String)">
-            <summary>Toolbar foldout button</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,System.String,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,System.String,DG.DemiLib.DeColorPalette,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,UnityEngine.GUIContent,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,UnityEngine.GUIContent,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,UnityEngine.GUIContent,DG.DemiLib.DeColorPalette,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-            <summary>Button that can be toggled on and off</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.BeginToolbar(UnityEngine.GUILayoutOption[])">
-            <summary>Begins an horizontal toolbar layout</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.BeginToolbar(UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>Begins an horizontal toolbar layout</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.BeginToolbar(UnityEngine.Color,UnityEngine.GUILayoutOption[])">
-            <summary>Begins an horizontal toolbar layout</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.BeginToolbar(UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>Begins an horizontal toolbar layout</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.EndToolbar">
-            <summary>Ends an horizontal toolbar layout</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.GUILayoutOption[])">
-            <summary>A toolbar with a label</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>A toolbar with a label</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.GUIStyle,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>A toolbar with a label</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.Color,UnityEngine.GUILayoutOption[])">
-            <summary>A toolbar with a label</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>A toolbar with a label</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>A toolbar with a label</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.BeginVBox(UnityEngine.GUIStyle)">
-            <summary>Vertical box layout with style and color options</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.BeginVBox(System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle)">
-            <summary>Vertical box layout with style and color options</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.EndVBox">
-            <summary>End vertical box layout</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.HorizontalDivider(System.Nullable{UnityEngine.Color},System.Int32,System.Int32,System.Int32)">
-            <summary>Divider</summary>
-        </member>
-        <member name="T:DG.DemiEditor.DeSkinStyle">
-            <summary>
-            Contains both free and pro skins GUIStyle variations,
-            and automatically returns the correct one when converted to GUIStyle
-            </summary>
-        </member>
         <member name="T:DG.DemiEditor.GUIStyleExtensions">
             <summary>
             GUI extension methods
@@ -328,6 +169,141 @@
         <member name="M:DG.DemiEditor.GUIStyleExtensions.StretchWidth(UnityEngine.GUIStyle,System.Boolean)">
             <summary>
             Sets the stretchWidth property of the style
+            </summary>
+        </member>
+        <member name="T:DG.DemiEditor.AssemblyExtensions">
+            <summary>
+            Assembly extensions
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.AssemblyExtensions.ADBDir(System.Reflection.Assembly)">
+            <summary>AssetDatabase path to the assembly directory, without final slash</summary>
+        </member>
+        <member name="T:DG.DemiEditor.DeFileUtils">
+            <summary>
+            File utils
+            </summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeFileUtils.ADBPathSlash">
+            <summary>Path slash for AssetDatabase format</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeFileUtils.ADBPathSlashToReplace">
+            <summary>Path slash to replace for AssetDatabase format</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeFileUtils.PathSlash">
+            <summary>Current OS path slash</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeFileUtils.PathSlashToReplace">
+            <summary>Path slash to replace on current OS</summary>
+        </member>
+        <member name="T:DG.DemiEditor.DeStylePalette">
+            <summary>
+            Stores a GUIStyle palette, which can be passed to default DeGUI layouts when calling <code>DeGUI.BeginGUI</code>,
+            and changed at any time by calling <code>DeGUI.ChangePalette</code>.
+            You can inherit from this class to create custom GUIStyle palettes with more options.
+            Each of the sub-options require a public Init method to initialize the styles, which will be called via Reflection.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeStylePalette.Init">
+            <summary>
+            Called automatically by <code>DeGUI.BeginGUI</code>.
+            Override when adding new style subclasses.
+            </summary>
+        </member>
+        <member name="T:DG.DemiEditor.DeStyleSubPalette">
+            <summary>
+            Extend any custom subpalettes from this, so they will be initialized correctly
+            </summary>
+        </member>
+        <member name="T:DG.DemiEditor.DeGUILayout">
+            <summary>
+            GUILayout methods
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,System.String,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ToolbarFoldoutButton(System.Boolean,System.String)">
+            <summary>Toolbar foldout button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,System.String,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,System.String,DG.DemiLib.DeColorPalette,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,UnityEngine.GUIContent,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,UnityEngine.GUIContent,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,UnityEngine.GUIContent,DG.DemiLib.DeColorPalette,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.BeginToolbar(UnityEngine.GUILayoutOption[])">
+            <summary>Begins an horizontal toolbar layout</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.BeginToolbar(UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Begins an horizontal toolbar layout</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.BeginToolbar(UnityEngine.Color,UnityEngine.GUILayoutOption[])">
+            <summary>Begins an horizontal toolbar layout</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.BeginToolbar(UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Begins an horizontal toolbar layout</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.EndToolbar">
+            <summary>Ends an horizontal toolbar layout</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.GUILayoutOption[])">
+            <summary>A toolbar with a label</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>A toolbar with a label</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.GUIStyle,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>A toolbar with a label</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.Color,UnityEngine.GUILayoutOption[])">
+            <summary>A toolbar with a label</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>A toolbar with a label</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>A toolbar with a label</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.BeginVBox(UnityEngine.GUIStyle)">
+            <summary>Vertical box layout with style and color options</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.BeginVBox(System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle)">
+            <summary>Vertical box layout with style and color options</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.EndVBox">
+            <summary>End vertical box layout</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.HorizontalDivider(System.Nullable{UnityEngine.Color},System.Int32,System.Int32,System.Int32)">
+            <summary>Divider</summary>
+        </member>
+        <member name="T:DG.DemiEditor.DeSkinStyle">
+            <summary>
+            Contains both free and pro skins GUIStyle variations,
+            and automatically returns the correct one when converted to GUIStyle
             </summary>
         </member>
     </members>

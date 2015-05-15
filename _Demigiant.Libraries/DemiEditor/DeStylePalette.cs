@@ -12,6 +12,7 @@ namespace DG.DemiEditor
     /// Stores a GUIStyle palette, which can be passed to default DeGUI layouts when calling <code>DeGUI.BeginGUI</code>,
     /// and changed at any time by calling <code>DeGUI.ChangePalette</code>.
     /// You can inherit from this class to create custom GUIStyle palettes with more options.
+    /// Each of the sub-options require a public Init method to initialize the styles, which will be called via Reflection.
     /// </summary>
     public class DeStylePalette
     {
@@ -34,7 +35,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteSquare {
             get {
                 if (_fooWhiteSquare == null) {
-                    _fooWhiteSquare = Resources.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquare.png", typeof(Texture2D)) as Texture2D;
+                    _fooWhiteSquare = AssetDatabase.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquare.png", typeof(Texture2D)) as Texture2D;
                     _fooWhiteSquare.SetFormat(FilterMode.Point, 16);
                 }
                 return _fooWhiteSquare;
@@ -43,7 +44,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteSquareAlpha10 {
             get {
                 if (_fooWhiteSquareAlpha10 == null) {
-                    _fooWhiteSquareAlpha10 = Resources.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquareAlpha10.png", typeof(Texture2D)) as Texture2D;
+                    _fooWhiteSquareAlpha10 = AssetDatabase.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquareAlpha10.png", typeof(Texture2D)) as Texture2D;
                     _fooWhiteSquareAlpha10.SetFormat(FilterMode.Point, 16);
                 }
                 return _fooWhiteSquareAlpha10;
@@ -52,7 +53,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteSquareAlpha25 {
             get {
                 if (_fooWhiteSquareAlpha25 == null) {
-                    _fooWhiteSquareAlpha25 = Resources.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquareAlpha25.png", typeof(Texture2D)) as Texture2D;
+                    _fooWhiteSquareAlpha25 = AssetDatabase.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquareAlpha25.png", typeof(Texture2D)) as Texture2D;
                     _fooWhiteSquareAlpha25.SetFormat(FilterMode.Point, 16);
                 }
                 return _fooWhiteSquareAlpha25;
@@ -61,7 +62,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteSquareAlpha50 {
             get {
                 if (_fooWhiteSquareAlpha50 == null) {
-                    _fooWhiteSquareAlpha50 = Resources.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquareAlpha50.png", typeof(Texture2D)) as Texture2D;
+                    _fooWhiteSquareAlpha50 = AssetDatabase.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquareAlpha50.png", typeof(Texture2D)) as Texture2D;
                     _fooWhiteSquareAlpha50.SetFormat(FilterMode.Point, 16);
                 }
                 return _fooWhiteSquareAlpha50;
@@ -113,9 +114,6 @@ namespace DG.DemiEditor
                         flat, flatAlpha10, flatAlpha25; // Flat with white background
         public DeSkinStyle sticky, stickyTop; // Without any margin (or only top margin)
 
-        /// <summary>
-        /// Needs to be overridden in order to initialize new styles added from inherited classes
-        /// </summary>
         internal void Init()
         {
             def = new GUIStyle(GUI.skin.box).Padding(6, 6, 6, 6);
@@ -133,9 +131,6 @@ namespace DG.DemiEditor
                         tool, toolL, toolIco,
                         toolFoldoutClosed, toolFoldoutClosedWLabel, toolFoldoutOpen, toolFoldoutOpenWLabel;
 
-        /// <summary>
-        /// Needs to be overridden in order to initialize new styles added from inherited classes
-        /// </summary>
         internal void Init()
         {
             def = new GUIStyle(GUI.skin.button);
@@ -166,9 +161,6 @@ namespace DG.DemiEditor
                         wordwrap,
                         toolbar, toolbarL, toolbarBox;
 
-        /// <summary>
-        /// Needs to be overridden in order to initialize new styles added from inherited classes
-        /// </summary>
         internal void Init()
         {
             bold = new GUIStyle(GUI.skin.label).Add(FontStyle.Bold);
@@ -187,9 +179,6 @@ namespace DG.DemiEditor
                         box,
                         flat; // Flat with white background
 
-        /// <summary>
-        /// Needs to be overridden in order to initialize new styles added from inherited classes
-        /// </summary>
         internal void Init()
         {
             def = new GUIStyle(EditorStyles.toolbar).Height(18).StretchWidth();
@@ -197,7 +186,6 @@ namespace DG.DemiEditor
             stickyTop = new GUIStyle(def).MarginTop(0);
             box = new GUIStyle(GUI.skin.box).Height(20).StretchWidth().Padding(5, 6, 1, 0).Margin(0, 0, 0, 0);
             flat = new GUIStyle(GUI.skin.box).Height(18).StretchWidth().Padding(5, 6, 0, 0).Margin(0, 0, 0, 0).Background(DeStylePalette.whiteSquare);
-
         }
     }
 
@@ -205,9 +193,6 @@ namespace DG.DemiEditor
     {
         public GUIStyle line; // Flat line with no margin
 
-        /// <summary>
-        /// Needs to be overridden in order to initialize new styles added from inherited classes
-        /// </summary>
         internal void Init()
         {
             line = new GUIStyle(GUI.skin.box).Padding(0, 0, 0, 0).Margin(0, 0, 0, 0).Background(DeStylePalette.whiteSquare);

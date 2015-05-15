@@ -155,6 +155,17 @@ public class DeSamplerInspector : Editor
             DeGUILayout.EndVBox();
         }
         GUILayout.Space(_vSpace);
+
+        // Toggles
+        GUILayout.BeginHorizontal();
+            _src.toggles[0] = EditorGUILayout.Toggle(_src.toggles[0], GUILayout.Width(16));
+            GUILayout.Button("Some Button");
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+            _src.toggles[0] = EditorGUILayout.Toggle(_src.toggles[0], GUILayout.Width(16));
+            GUILayout.Label("Some label");
+        GUILayout.EndHorizontal();
+        GUILayout.Space(_vSpace);
     }
 
     void DrawColorPalette()
