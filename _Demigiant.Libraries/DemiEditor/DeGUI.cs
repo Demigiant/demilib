@@ -1,9 +1,12 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/04/24 18:27
 
+using System;
 using DG.DemiLib;
 using DG.DemiLib.Core;
 using UnityEditor;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DG.DemiEditor
 {
@@ -26,11 +29,11 @@ namespace DG.DemiEditor
         /// <summary>
         /// TRUE if we're using the PRO skin
         /// </summary>
-        public static readonly bool isProSkin;
+        public static readonly bool IsProSkin;
 
         static DeGUI()
         {
-            GUIUtils.isProSkin = isProSkin = EditorGUIUtility.isProSkin;
+            GUIUtils.isProSkin = IsProSkin = EditorGUIUtility.isProSkin;
         }
 
         #region Public GUI Methods
@@ -64,6 +67,23 @@ namespace DG.DemiEditor
 
             styles.Init();
         }
+
+        #endregion
+
+        #region Public GUI Draw Methods
+
+        #region ObjectFields
+
+        /// <summary>Scene field</summary>
+        public static Object SceneField(Rect rect, string label, Object obj)
+        {
+            // Verify that obj is a SceneAsset (not recognized by compiler as a class, so we have to use the string representation)
+            if (obj != null && !obj.ToString().EndsWith(".SceneAsset)")) obj = null;
+            // Draw
+            return EditorGUI.ObjectField(rect, label, obj, typeof(Object), false);
+        }
+
+        #endregion
 
         #endregion
     }

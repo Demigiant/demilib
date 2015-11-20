@@ -16,3 +16,4 @@ _Demigiant.Libraries/.git
 *.Unity*/*.userprefs
 *HOTools*
 *HOUnityEditor*
+.vs

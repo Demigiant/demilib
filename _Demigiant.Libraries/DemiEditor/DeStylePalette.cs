@@ -25,7 +25,7 @@ namespace DG.DemiEditor
         protected bool initialized;
 
         // ADB path to Imgs directory, final slash included
-        static string adbImgsDir {
+        static string _adbImgsDir {
             get { if (_fooAdbImgsDir == null) _fooAdbImgsDir = Assembly.GetExecutingAssembly().ADBDir() + "/Imgs/"; return _fooAdbImgsDir; }
         }
         static string _fooAdbImgsDir;
@@ -35,7 +35,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteSquare {
             get {
                 if (_fooWhiteSquare == null) {
-                    _fooWhiteSquare = AssetDatabase.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquare.png", typeof(Texture2D)) as Texture2D;
+                    _fooWhiteSquare = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "whiteSquare.png", typeof(Texture2D)) as Texture2D;
                     _fooWhiteSquare.SetFormat(FilterMode.Point, 16);
                 }
                 return _fooWhiteSquare;
@@ -44,7 +44,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteSquareAlpha10 {
             get {
                 if (_fooWhiteSquareAlpha10 == null) {
-                    _fooWhiteSquareAlpha10 = AssetDatabase.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquareAlpha10.png", typeof(Texture2D)) as Texture2D;
+                    _fooWhiteSquareAlpha10 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "whiteSquareAlpha10.png", typeof(Texture2D)) as Texture2D;
                     _fooWhiteSquareAlpha10.SetFormat(FilterMode.Point, 16);
                 }
                 return _fooWhiteSquareAlpha10;
@@ -53,7 +53,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteSquareAlpha25 {
             get {
                 if (_fooWhiteSquareAlpha25 == null) {
-                    _fooWhiteSquareAlpha25 = AssetDatabase.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquareAlpha25.png", typeof(Texture2D)) as Texture2D;
+                    _fooWhiteSquareAlpha25 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "whiteSquareAlpha25.png", typeof(Texture2D)) as Texture2D;
                     _fooWhiteSquareAlpha25.SetFormat(FilterMode.Point, 16);
                 }
                 return _fooWhiteSquareAlpha25;
@@ -62,7 +62,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteSquareAlpha50 {
             get {
                 if (_fooWhiteSquareAlpha50 == null) {
-                    _fooWhiteSquareAlpha50 = AssetDatabase.LoadAssetAtPath("Assets/" + adbImgsDir + "whiteSquareAlpha50.png", typeof(Texture2D)) as Texture2D;
+                    _fooWhiteSquareAlpha50 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "whiteSquareAlpha50.png", typeof(Texture2D)) as Texture2D;
                     _fooWhiteSquareAlpha50.SetFormat(FilterMode.Point, 16);
                 }
                 return _fooWhiteSquareAlpha50;

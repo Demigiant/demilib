@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EditorGUI")]
+[assembly: AssemblyTitle("DemiEditor")]
 [assembly: AssemblyDescription("Utility for the skinning and implementation of various editor GUI elements")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Demigiant")]
-[assembly: AssemblyProduct("EditorGUI")]
+[assembly: AssemblyProduct("DemiEditor")]
 [assembly: AssemblyCopyright("Copyright © Daniele Giardini, Demigiant 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

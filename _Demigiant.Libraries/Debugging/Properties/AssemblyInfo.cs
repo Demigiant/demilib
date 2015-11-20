@@ -5,17 +5,14 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DemiLib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Debugging")]
+[assembly: AssemblyDescription("Debug utils for Unity")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Demigiant")]
-[assembly: AssemblyProduct("DemiLib")]
+[assembly: AssemblyProduct("Debugging")]
 [assembly: AssemblyCopyright("Copyright © Daniele Giardini, Demigiant 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
-// Friends
-[assembly: InternalsVisibleTo("DemiEditor")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

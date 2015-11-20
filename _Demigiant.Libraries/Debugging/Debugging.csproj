@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3B8F6061-77A9-4111-9E7C-A9EA494D14A0}</ProjectGuid>
+    <ProjectGuid>{0B529A90-0B97-4840-BEB6-4A6700B46655}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DG.DemiEditor</RootNamespace>
-    <AssemblyName>DemiEditor</AssemblyName>
+    <RootNamespace>DG.Debugging</RootNamespace>
+    <AssemblyName>Debugging</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,66 +17,43 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Editor\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Editor\DemiEditor.xml</DocumentationFile>
+    <DocumentationFile>..\bin\Debugging.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Editor\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Editor\DemiEditor.xml</DocumentationFile>
+    <DocumentationFile>..\bin\Debugging.XML</DocumentationFile>
     <NoWarn>1573</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEditor">
-      <HintPath>C:\Program Files (x86)\Unity 46\Editor\Data\Managed\UnityEditor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files (x86)\Unity 46\Editor\Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributesManagers\ScriptExecutionOrderManager.cs" />
-    <Compile Include="DeFileUtils.cs" />
-    <Compile Include="DePanelUtils.cs" />
-    <Compile Include="DeSkinStyle.cs" />
-    <Compile Include="Extensions %28no namespace%29\AssemblyExtensions.cs" />
-    <Compile Include="Extensions %28no namespace%29\GUIStyleExtensions.cs" />
-    <Compile Include="DeStylePalette.cs" />
-    <Compile Include="DeGUILayout.cs" />
-    <Compile Include="DeGUI.cs" />
-    <Compile Include="Extensions %28no namespace%29\StringExtensions.cs" />
-    <Compile Include="Extensions %28no namespace%29\TextureExtensions.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Format.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DemiLib\DemiLib.csproj">
-      <Project>{C492E28D-FC6D-4988-929B-964DB4272A30}</Project>
-      <Name>DemiLib</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set BinDir=bin.Global\DemiLib\Editor
+    <PostBuildEvent>set BinDir=bin.Global\DemiLib
 set DestinationDir=$(SolutionDir)..\..\%25BinDir%25
-set BinDirNoMeta=bin.Global_no_meta\DemiLib\Editor
+set BinDirNoMeta=bin.Global_no_meta\DemiLib
 set DestinationDirNoMeta=$(SolutionDir)..\..\%25BinDirNoMeta%25
-set BinDirUnityTests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib\Editor
+set BinDirUnityTests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib
 set DestinationDirUnityTests=$(SolutionDir)..\%25BinDirUnityTests%25
-set BinDirDOTweenTests=UnityTests.Unity5\Assets\Demigiant\DemiLib\Editor
+set BinDirDOTweenTests=UnityTests.Unity5\Assets\Demigiant\DemiLib
 set DestinationDirDOTweenTests=$(SolutionDir)..\..\__DOTween\%25BinDirDOTweenTests%25
 
 echo %25DestinationDir%25
@@ -91,16 +68,16 @@ DEL $(TargetName).pdb
 
 echo Exporting Assembly to %25DestinationDir%25
 echo Copying files to Destination...
-echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDir%25 /Y /I /E
+echo f | xcopy "$(SolutionDir)\bin" %25DestinationDir%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirNoMeta%25
-echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirNoMeta%25 /Y /I /E
+echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirNoMeta%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirUnityTests%25
-echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirUnityTests%25 /Y /I /E
+echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirUnityTests%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirDOTweenTests%25
-echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirDOTweenTests%25 /Y /I /E</PostBuildEvent>
+echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirDOTweenTests%25 /Y /I /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

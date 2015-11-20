@@ -1,6 +1,8 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/05/01 01:50
 
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace DG.DemiEditor
@@ -19,11 +21,117 @@ namespace DG.DemiEditor
         /// <summary>Path slash to replace on current OS</summary>
         public static readonly string PathSlashToReplace;
 
+        /// <summary>
+        /// Full path to project directory, without final slash.
+        /// </summary>
+        public static string projectPath {
+            get {
+                if (_fooProjectPath == null) {
+                    _fooProjectPath = Application.dataPath;
+                    _fooProjectPath = _fooProjectPath.Substring(0, _fooProjectPath.LastIndexOf(ADBPathSlash));
+                    _fooProjectPath = _fooProjectPath.Replace(ADBPathSlash, PathSlash);
+                }
+                return _fooProjectPath;
+            }
+        }
+        /// <summary>
+        /// Full path to project's Assets directory, without final slash.
+        /// </summary>
+        public static string assetsPath { get { return projectPath + PathSlash + "Assets"; } }
+
+        static string _fooProjectPath;
+
+        #region Constructor
+
         static DeFileUtils()
         {
             bool useWindowsSlashes = Application.platform == RuntimePlatform.WindowsEditor;
             PathSlash = useWindowsSlashes ? "\\" : "/";
             PathSlashToReplace = useWindowsSlashes ? "/" : "\\";
         }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Converts the given project-relative path to a full path
+        /// </summary>
+        public static string ADBPathToFullPath(string adbPath)
+        {
+            adbPath = adbPath.Replace(ADBPathSlash, PathSlash);
+            return projectPath + PathSlash + adbPath;
+        }
+
+        /// <summary>
+        /// Returns TRUE if the file/directory at the given path exists.
+        /// </summary>
+        /// <param name="adbPath">Path, relative to Unity's project folder</param>
+        public static bool AssetExists(string adbPath)
+        {
+            string fullPath = ADBPathToFullPath(adbPath);
+            return File.Exists(fullPath) || Directory.Exists(fullPath);
+        }
+
+        /// <summary>
+        /// Returns the asset path of the given GUID (relative to Unity project's folder),
+        /// or an empty string if either the GUID is invalid or the related path doesn't exist.
+        /// </summary>
+        public static string GUIDToExistingAssetPath(string guid)
+        {
+            if (string.IsNullOrEmpty(guid)) return "";
+            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            if (string.IsNullOrEmpty(assetPath)) return "";
+            if (AssetExists(assetPath)) return assetPath;
+            return "";
+        }
+
+        /// <summary>Returns the adb path to the given ScriptableObject</summary>
+        public static string MonoInstanceADBPath(ScriptableObject scriptableObj)
+        {
+            MonoScript ms = MonoScript.FromScriptableObject(scriptableObj);
+            return AssetDatabase.GetAssetPath(ms);
+        }
+        /// <summary>Returns the adb path to the given MonoBehaviour</summary>
+        public static string MonoInstanceADBPath(MonoBehaviour monobehaviour)
+        {
+            MonoScript ms = MonoScript.FromMonoBehaviour(monobehaviour);
+            return AssetDatabase.GetAssetPath(ms);
+        }
+
+        /// <summary>Returns the adb directory that contains the given ScriptableObject without final slash</summary>
+        public static string MonoInstanceADBDir(ScriptableObject scriptableObj)
+        {
+            MonoScript ms = MonoScript.FromScriptableObject(scriptableObj);
+            string res = AssetDatabase.GetAssetPath(ms);
+            return res.Substring(0, res.LastIndexOf(ADBPathSlash));
+        }
+        /// <summary>Returns the adb directory that contains the given MonoBehaviour without final slash</summary>
+        public static string MonoInstanceADBDir(MonoBehaviour monobehaviour)
+        {
+            MonoScript ms = MonoScript.FromMonoBehaviour(monobehaviour);
+            string res = AssetDatabase.GetAssetPath(ms);
+            return res.Substring(0, res.LastIndexOf(ADBPathSlash));
+        }
+
+        /// <summary>
+        /// Sets the script execution order of the given MonoBehaviour
+        /// </summary>
+        public static void SetScriptExecutionOrder(MonoBehaviour monobehaviour, int order)
+        {
+            MonoScript ms = MonoScript.FromMonoBehaviour(monobehaviour);
+            MonoImporter.SetExecutionOrder(ms, order);
+        }
+
+        /// <summary>
+        /// Gets the script execution order of the given MonoBehaviour
+        /// </summary>
+        public static int GetScriptExecutionOrder(MonoBehaviour monobehaviour)
+        {
+            MonoScript ms = MonoScript.FromMonoBehaviour(monobehaviour);
+            return MonoImporter.GetExecutionOrder(ms);
+        }
+
+        #endregion
     }
 }

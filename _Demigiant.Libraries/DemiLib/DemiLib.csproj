@@ -37,12 +37,13 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>C:\Program Files\_Design\Unity 4.6\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Unity 46\Editor\Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\GUIUtils.cs" />
+    <Compile Include="Attributes\ScriptExecutionOrder.cs" />
     <Compile Include="DeColorPalette.cs" />
     <Compile Include="DeSkinColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,7 +57,7 @@ set DestinationDirNoMeta=$(SolutionDir)..\..\%25BinDirNoMeta%25
 set BinDirUnityTests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib
 set DestinationDirUnityTests=$(SolutionDir)..\%25BinDirUnityTests%25
 set BinDirDOTweenTests=UnityTests.Unity5\Assets\Demigiant\DemiLib
-set DestinationDirDOTwenTests=$(SolutionDir)..\..\__DOTween\%25BinDirDOTweenTests%25
+set DestinationDirDOTweenTests=$(SolutionDir)..\..\__DOTween\%25BinDirDOTweenTests%25
 
 echo %25DestinationDir%25
 
@@ -65,7 +66,7 @@ DEL $(TargetDir)\*.tmp
 
 CD $(TargetDir)
 echo Converting PDB to MDB and deleting PDB...
-"c:\Program Files\_Design\Unity 4.6\Editor\Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe" $(TargetFileName)
+"c:\Program Files\pdb2mdb\pdb2mdb.exe" $(TargetFileName)
 DEL $(TargetName).pdb
 
 echo Exporting Assembly to %25DestinationDir%25
@@ -78,8 +79,8 @@ echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirNoMeta%25 /Y /I /E
 echo Exporting Assembly to %25DestinationDirUnityTests%25
 echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirUnityTests%25 /Y /I /E
 
-echo Exporting Assembly to %25DestinationDirDOTwenTests%25
-echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirDOTwenTests%25 /Y /I /E</PostBuildEvent>
+echo Exporting Assembly to %25DestinationDirDOTweenTests%25
+echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirDOTweenTests%25 /Y /I /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
