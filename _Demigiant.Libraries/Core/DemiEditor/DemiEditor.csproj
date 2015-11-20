@@ -17,21 +17,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Editor\</OutputPath>
+    <OutputPath>..\..\bin\Core\Editor\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Editor\DemiEditor.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Core\Editor\DemiEditor.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Editor\</OutputPath>
+    <OutputPath>..\..\bin\Core\Editor\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Editor\DemiEditor.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Core\Editor\DemiEditor.xml</DocumentationFile>
     <NoWarn>1573</NoWarn>
   </PropertyGroup>
   <ItemGroup>
@@ -70,13 +70,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set BinDir=bin.Global\DemiLib\Editor
+    <PostBuildEvent>set BinDir=bin.Global\DemiLib\Core\Editor
 set DestinationDir=$(SolutionDir)..\..\%25BinDir%25
-set BinDirNoMeta=bin.Global_no_meta\DemiLib\Editor
+set BinDirNoMeta=bin.Global_no_meta\DemiLib\Core\Editor
 set DestinationDirNoMeta=$(SolutionDir)..\..\%25BinDirNoMeta%25
-set BinDirUnityTests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib\Editor
+set BinDirUnityTests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib\Core\Editor
 set DestinationDirUnityTests=$(SolutionDir)..\%25BinDirUnityTests%25
-set BinDirDOTweenTests=UnityTests.Unity5\Assets\Demigiant\DemiLib\Editor
+set BinDirDOTweenTests=UnityTests.Unity5\Assets\Demigiant\DemiLib\Core\Editor
 set DestinationDirDOTweenTests=$(SolutionDir)..\..\__DOTween\%25BinDirDOTweenTests%25
 
 echo %25DestinationDir%25
@@ -91,16 +91,16 @@ DEL $(TargetName).pdb
 
 echo Exporting Assembly to %25DestinationDir%25
 echo Copying files to Destination...
-echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDir%25 /Y /I /E
+echo f | xcopy "$(SolutionDir)\bin\Core\Editor" %25DestinationDir%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirNoMeta%25
-echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirNoMeta%25 /Y /I /E
+echo f | xcopy "$(SolutionDir)\bin\Core\Editor" %25DestinationDirNoMeta%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirUnityTests%25
-echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirUnityTests%25 /Y /I /E
+echo f | xcopy "$(SolutionDir)\bin\Core\Editor" %25DestinationDirUnityTests%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirDOTweenTests%25
-echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirDOTweenTests%25 /Y /I /E</PostBuildEvent>
+echo f | xcopy "$(SolutionDir)\bin\Core\Editor" %25DestinationDirDOTweenTests%25 /Y /I /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

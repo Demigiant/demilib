@@ -17,21 +17,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
+    <OutputPath>..\..\bin\Core\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\DemiLib.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Core\DemiLib.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
+    <OutputPath>..\..\bin\Core\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\DemiLib.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Core\DemiLib.xml</DocumentationFile>
     <NoWarn>1573</NoWarn>
   </PropertyGroup>
   <ItemGroup>
@@ -50,13 +50,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set BinDir=bin.Global\DemiLib
+    <PostBuildEvent>set BinDir=bin.Global\DemiLib\Core
 set DestinationDir=$(SolutionDir)..\..\%25BinDir%25
-set BinDirNoMeta=bin.Global_no_meta\DemiLib
+set BinDirNoMeta=bin.Global_no_meta\DemiLib\Core
 set DestinationDirNoMeta=$(SolutionDir)..\..\%25BinDirNoMeta%25
-set BinDirUnityTests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib
+set BinDirUnityTests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib\Core
 set DestinationDirUnityTests=$(SolutionDir)..\%25BinDirUnityTests%25
-set BinDirDOTweenTests=UnityTests.Unity5\Assets\Demigiant\DemiLib
+set BinDirDOTweenTests=UnityTests.Unity5\Assets\Demigiant\DemiLib\Core
 set DestinationDirDOTweenTests=$(SolutionDir)..\..\__DOTween\%25BinDirDOTweenTests%25
 
 echo %25DestinationDir%25
@@ -71,16 +71,16 @@ DEL $(TargetName).pdb
 
 echo Exporting Assembly to %25DestinationDir%25
 echo Copying files to Destination...
-echo f | xcopy "$(SolutionDir)\bin" %25DestinationDir%25 /Y /I /E
+echo f | xcopy "$(SolutionDir)\bin\Core" %25DestinationDir%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirNoMeta%25
-echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirNoMeta%25 /Y /I /E
+echo f | xcopy "$(SolutionDir)\bin\Core" %25DestinationDirNoMeta%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirUnityTests%25
-echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirUnityTests%25 /Y /I /E
+echo f | xcopy "$(SolutionDir)\bin\Core" %25DestinationDirUnityTests%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirDOTweenTests%25
-echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirDOTweenTests%25 /Y /I /E</PostBuildEvent>
+echo f | xcopy "$(SolutionDir)\bin\Core" %25DestinationDirDOTweenTests%25 /Y /I /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
