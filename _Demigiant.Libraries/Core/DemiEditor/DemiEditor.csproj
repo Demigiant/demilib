@@ -17,21 +17,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Editor\</OutputPath>
+    <OutputPath>..\..\bin\Editor\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Editor\DemiEditor.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Editor\DemiEditor.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Editor\</OutputPath>
+    <OutputPath>..\..\bin\Editor\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Editor\DemiEditor.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Editor\DemiEditor.xml</DocumentationFile>
     <NoWarn>1573</NoWarn>
   </PropertyGroup>
   <ItemGroup>

@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemiEditor", "DemiEditor\DemiEditor.csproj", "{3B8F6061-77A9-4111-9E7C-A9EA494D14A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemiEditor", "Core\DemiEditor\DemiEditor.csproj", "{3B8F6061-77A9-4111-9E7C-A9EA494D14A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemiLib", "DemiLib\DemiLib.csproj", "{C492E28D-FC6D-4988-929B-964DB4272A30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemiLib", "Core\DemiLib\DemiLib.csproj", "{C492E28D-FC6D-4988-929B-964DB4272A30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Debugging", "Debugging\Debugging.csproj", "{0B529A90-0B97-4840-BEB6-4A6700B46655}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B2F1B2E5-94A2-438E-AF7B-ECA25C6CCF7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +32,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3B8F6061-77A9-4111-9E7C-A9EA494D14A0} = {B2F1B2E5-94A2-438E-AF7B-ECA25C6CCF7F}
+		{C492E28D-FC6D-4988-929B-964DB4272A30} = {B2F1B2E5-94A2-438E-AF7B-ECA25C6CCF7F}
 	EndGlobalSection
 EndGlobal

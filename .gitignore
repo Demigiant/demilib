@@ -1,7 +1,9 @@
 _Demigiant.Libraries/_ReSharper*
 _Demigiant.Libraries/*/obj
-_Demigiant.Libraries/*.suo
-_Demigiant.Libraries/*.user
+_Demigiant.Libraries/Core/*/obj
+*.suo
+*.user
+*.DotSettings
 _Demigiant.Libraries/.gitignore
 _Demigiant.Libraries/.git
 *.Unity*/_ReSharper*
