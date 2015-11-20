@@ -3,6 +3,7 @@ _Demigiant.Libraries/*/obj
 _Demigiant.Libraries/Core/*/obj
 *.suo
 *.user
+*.tmp
 *.DotSettings
 _Demigiant.Libraries/.gitignore
 _Demigiant.Libraries/.git

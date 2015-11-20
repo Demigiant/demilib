@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Audio</name>
+    </assembly>
+    <members>
+        <member name="T:DG.Audio.Core.DeAudioSource">
+            <summary>
+            Must be instantiate via DeAudioSource.Instantiate()
+            </summary>
+        </member>
+        <member name="T:DG.Audio.DeAudioManager">
+            <summary>
+            Global AudioManager.
+            Must be instantiate only once per project (either manually or via code).
+            </summary>
+        </member>
+        <member name="M:DG.Audio.DeAudioManager.PrecacheSources(DG.Audio.DeAudioType,System.Int32)">
+            <summary>
+            Creates the given amount of sources, if within the set max limits
+            </summary>
+        </member>
+        <member name="M:DG.Audio.DeAudioManager.Play(DG.Audio.DeAudioType,UnityEngine.AudioClip,System.Boolean)">
+            <summary>
+            Plays the given clip with the given options
+            </summary>
+        </member>
+        <member name="M:DG.Audio.DeAudioManager.Play(DG.Audio.DeAudioType,UnityEngine.AudioClip,System.Single,System.Boolean)">
+            <summary>
+            Plays the given clip with the given options
+            </summary>
+        </member>
+    </members>
+</doc>

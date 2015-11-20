@@ -41,8 +41,7 @@ namespace DG.Debugging
 
         static readonly StringBuilder _Strb = new StringBuilder();
 
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-        // ■■■ PUBLIC METHODS
+        #region Public Methods
 
         /// <summary>
         /// Logs the given message with the given options
@@ -62,8 +61,9 @@ namespace DG.Debugging
         public static void LogError(object message)
         { Log(LogType.Error, message, false, null); }
 
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-        // ■■■ METHODS
+        #endregion
+
+        #region Methods
 
         static void Log(LogType logType, object message, bool isVerbose, string hexColor)
         {
@@ -99,5 +99,7 @@ namespace DG.Debugging
 
             _Strb.Length = 0;
         }
+
+        #endregion
     }
 }

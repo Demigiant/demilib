@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{675810D9-CC79-45E6-A6C5-62B1A9570B30}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DG.AudioEditor</RootNamespace>
+    <AssemblyName>AudioEditor</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Editor\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Editor\AudioEditor.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Editor\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Editor\AudioEditor.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="UnityEditor">
+      <HintPath>C:\Program Files (x86)\Unity 46\Editor\Data\Managed\UnityEditor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>C:\Program Files (x86)\Unity 46\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DeAudioManagerInspector.cs" />
+    <Compile Include="MenuItems.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Audio\Audio.csproj">
+      <Project>{d8dc2a04-b062-47ce-81f2-fb9e68942b58}</Project>
+      <Name>Audio</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\DemiEditor\DemiEditor.csproj">
+      <Project>{3b8f6061-77a9-4111-9e7c-a9ea494d14a0}</Project>
+      <Name>DemiEditor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\DemiLib\DemiLib.csproj">
+      <Project>{c492e28d-fc6d-4988-929b-964db4272a30}</Project>
+      <Name>DemiLib</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set BinDir=bin.Global\DemiLib
+set DestinationDir=$(SolutionDir)..\..\%25BinDir%25
+set BinDirNoMeta=bin.Global_no_meta\DemiLib\Editor
+set DestinationDirNoMeta=$(SolutionDir)..\..\%25BinDirNoMeta%25
+set BinDirUnityTests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib\Editor
+set DestinationDirUnityTests=$(SolutionDir)..\%25BinDirUnityTests%25
+set BinDirDOTweenTests=UnityTests.Unity5\Assets\Demigiant\DemiLib\Editor
+set DestinationDirDOTweenTests=$(SolutionDir)..\..\__DOTween\%25BinDirDOTweenTests%25
+
+echo %25DestinationDir%25
+
+echo Deleting TMPs...
+DEL $(TargetDir)\*.tmp
+
+CD $(TargetDir)
+echo Converting PDB to MDB and deleting PDB...
+"c:\Program Files\pdb2mdb\pdb2mdb.exe" $(TargetFileName)
+DEL $(TargetName).pdb
+
+echo Exporting Assembly to %25DestinationDir%25
+echo Copying files to Destination...
+echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDir%25 /Y /I /E
+
+echo Exporting Assembly to %25DestinationDirNoMeta%25
+echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirNoMeta%25 /Y /I /E
+
+echo Exporting Assembly to %25DestinationDirUnityTests%25
+echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirUnityTests%25 /Y /I /E
+
+echo Exporting Assembly to %25DestinationDirDOTweenTests%25
+echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirDOTweenTests%25 /Y /I /E</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
