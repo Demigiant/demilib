@@ -75,8 +75,6 @@ set BinDirNoMeta=bin.Global_no_meta\DemiLib\Editor
 set DestinationDirNoMeta=$(SolutionDir)..\..\%25BinDirNoMeta%25
 set BinDirUnityTests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib\Editor
 set DestinationDirUnityTests=$(SolutionDir)..\%25BinDirUnityTests%25
-set BinDirDOTweenTests=UnityTests.Unity5\Assets\Demigiant\DemiLib\Editor
-set DestinationDirDOTweenTests=$(SolutionDir)..\..\__DOTween\%25BinDirDOTweenTests%25
 
 echo %25DestinationDir%25
 
@@ -96,10 +94,7 @@ echo Exporting Assembly to %25DestinationDirNoMeta%25
 echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirNoMeta%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirUnityTests%25
-echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirUnityTests%25 /Y /I /E
-
-echo Exporting Assembly to %25DestinationDirDOTweenTests%25
-echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirDOTweenTests%25 /Y /I /E</PostBuildEvent>
+echo f | xcopy "$(SolutionDir)\bin\Editor" %25DestinationDirUnityTests%25 /Y /I /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

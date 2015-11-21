@@ -10,7 +10,7 @@ namespace DG.Audio
 {
     /// <summary>
     /// Global AudioManager.
-    /// Must be instantiate only once per project (either manually or via code).
+    /// Must be instantiated only once per project (either manually or via code).
     /// </summary>
     public class DeAudioManager : MonoBehaviour
     {
@@ -29,13 +29,16 @@ namespace DG.Audio
 #pragma warning restore 1591
 
         static DeAudioManager I;
-        static List<DeAudioSource> _fxSources, _ambientSources, _musicSources;
+        static List<DeAudioSource> _sources, _fxSources, _ambientSources, _musicSources;
 
         #region Unity Methods
 
         void Awake()
         {
             I = this;
+            _sources = maxFxSources > 0 && maxAmbientSources > 0 && maxMusicSources > 0
+                ? new List<DeAudioSource>(maxFxSources + maxAmbientSources + maxMusicSources)
+                : new List<DeAudioSource>();
             _fxSources = maxFxSources > 0 ? new List<DeAudioSource>(maxFxSources) : new List<DeAudioSource>();
             _ambientSources = maxAmbientSources > 0 ? new List<DeAudioSource>(maxAmbientSources) : new List<DeAudioSource>();
             _musicSources = maxMusicSources > 0 ? new List<DeAudioSource>(maxMusicSources) : new List<DeAudioSource>();
@@ -66,7 +69,48 @@ namespace DG.Audio
         public static void Play(DeAudioType type, AudioClip clip, float volume = 1, bool loop = false)
         { DoPlay(type, clip, volume, loop); }
 
+        /// <summary>
+        /// Fades out all playing audios of the given type
+        /// </summary>
+        public static void FadeOutAllOfType(DeAudioType type, float fadeTime = 1, bool ignoreTimeScale = true)
+        {
+            List<DeAudioSource> li = GetSourceListByType(type);
+            int len = li.Count;
+            for (int i = 0; i < len; ++i) {
+                DeAudioSource s = li[i];
+                if (s.isPlaying) s.StartCoroutine(s.FadeOutCoroutine(fadeTime, ignoreTimeScale));
+            }
+        }
+
+        /// <summary>
+        /// Fades out all playing instances of the given clip
+        /// </summary>
+        public static void FadeOut(AudioClip clip, float fadeTime = 1, bool ignoreTimeScale = true)
+        {
+            int len = _sources.Count;
+            for (int i = 0; i < len; ++i) {
+                DeAudioSource s = _sources[i];
+                if (s.clip == clip && s.isPlaying) s.StartCoroutine(s.FadeOutCoroutine(fadeTime, ignoreTimeScale));
+            }
+        }
+
         #endregion
+
+        #endregion
+
+        #region Internal Methods
+
+        internal static float GetVolumeMultiplierByType(DeAudioType type)
+        {
+            switch (type) {
+            case DeAudioType.Ambient:
+                return I.masterVolume * I.ambientVolume;
+            case DeAudioType.Music:
+                return I.masterVolume * I.musicVolume;
+            default:
+                return I.masterVolume * I.fxVolume;
+            }
+        }
 
         #endregion
 
@@ -94,11 +138,11 @@ namespace DG.Audio
             cacheAmount -= li.Count;
             while (cacheAmount > 0) {
                 cacheAmount--;
-                li.Add(CreateSource(type));
+                DeAudioSource s = CreateSource(type);
+                li.Add(s);
+                _sources.Add(s);
             }
         }
-
-        #region Play Methods
 
         static void DoPlay(DeAudioType type, AudioClip clip, float volume, bool loop)
         {
@@ -110,6 +154,7 @@ namespace DG.Audio
                     // Add new src
                     src = I.CreateSource(type);
                     li.Add(src);
+                    _sources.Add(src);
                 } else {
                     // Too many sources already
                     if (I.culling) {
@@ -124,8 +169,6 @@ namespace DG.Audio
             }
             src.Play(clip, volume, loop);
         }
-
-        #endregion
 
         #region Utils
 
@@ -145,7 +188,7 @@ namespace DG.Audio
             int len = li.Count;
             for (int i = 0; i < len; ++i) {
                 DeAudioSource s = li[i];
-                if (!s.IsPlaying()) return s;
+                if (!s.isPlaying) return s;
             }
             return null;
         }

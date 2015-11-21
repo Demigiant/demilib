@@ -12,7 +12,7 @@
         <member name="T:DG.Audio.DeAudioManager">
             <summary>
             Global AudioManager.
-            Must be instantiate only once per project (either manually or via code).
+            Must be instantiated only once per project (either manually or via code).
             </summary>
         </member>
         <member name="M:DG.Audio.DeAudioManager.PrecacheSources(DG.Audio.DeAudioType,System.Int32)">
@@ -28,6 +28,11 @@
         <member name="M:DG.Audio.DeAudioManager.Play(DG.Audio.DeAudioType,UnityEngine.AudioClip,System.Single,System.Boolean)">
             <summary>
             Plays the given clip with the given options
+            </summary>
+        </member>
+        <member name="M:DG.Audio.DeAudioManager.FadeOutAllOfType(DG.Audio.DeAudioType,System.Single,System.Boolean)">
+            <summary>
+            Fades out all playing audios of the given type
             </summary>
         </member>
     </members>
