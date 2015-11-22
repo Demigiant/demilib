@@ -76,6 +76,8 @@ set BinDirNoMeta=bin.Global_no_meta\DemiLib\Core\Editor
 set DestinationDirNoMeta=$(SolutionDir)..\..\%25BinDirNoMeta%25
 set BinDirUnityTests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib\Core\Editor
 set DestinationDirUnityTests=$(SolutionDir)..\%25BinDirUnityTests%25
+set BinDirUnity5Tests=DemiLib.UnityTests.Unity5\Assets\Demigiant\DemiLib\Core\Editor
+set DestinationDirUnity5Tests=$(SolutionDir)..\%25BinDirUnityTests%25
 set BinDirDOTweenTests=UnityTests.Unity5\Assets\Demigiant\DemiLib\Core\Editor
 set DestinationDirDOTweenTests=$(SolutionDir)..\..\__DOTween\%25BinDirDOTweenTests%25
 
@@ -98,6 +100,9 @@ echo f | xcopy "$(SolutionDir)\bin\Core\Editor" %25DestinationDirNoMeta%25 /Y /I
 
 echo Exporting Assembly to %25DestinationDirUnityTests%25
 echo f | xcopy "$(SolutionDir)\bin\Core\Editor" %25DestinationDirUnityTests%25 /Y /I /E
+
+echo Exporting Assembly to %25DestinationDirUnity5Tests%25
+echo f | xcopy "$(SolutionDir)\bin\Core" %25DestinationDirUnity5Tests%25 /Y /I /E
 
 echo Exporting Assembly to %25DestinationDirDOTweenTests%25
 echo f | xcopy "$(SolutionDir)\bin\Core\Editor" %25DestinationDirDOTweenTests%25 /Y /I /E</PostBuildEvent>

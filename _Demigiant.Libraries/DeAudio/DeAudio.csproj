@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4B0B8B50-781D-4AE8-B6B2-3553E369E5EF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DG.DeAudio</RootNamespace>
+    <AssemblyName>DeAudio</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\DeAudio.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\DeAudio.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="UnityEngine">
+      <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\OperationType.cs" />
+    <Compile Include="DeAudioGroup.cs" />
+    <Compile Include="DeAudioGroupId.cs" />
+    <Compile Include="DeAudioManager.cs" />
+    <Compile Include="DeAudioNotificator.cs" />
+    <Compile Include="DeAudioSource.cs" />
+    <Compile Include="Events\DeAudioEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set BinDir=bin.Global\DemiLib
+set DestinationDir=$(SolutionDir)..\..\%25BinDir%25
+set BinDirNoMeta=bin.Global_no_meta\DemiLib
+set DestinationDirNoMeta=$(SolutionDir)..\..\%25BinDirNoMeta%25
+set BinDirUnityTests=DemiLib.UnityTests.Unity5\Assets\Demigiant\DemiLib
+set DestinationDirUnityTests=$(SolutionDir)..\%25BinDirUnityTests%25
+
+echo %25DestinationDir%25
+
+echo Deleting TMPs...
+DEL $(TargetDir)\*.tmp
+
+CD $(TargetDir)
+echo Converting PDB to MDB and deleting PDB...
+"c:\Program Files\pdb2mdb\pdb2mdb.exe" $(TargetFileName)
+DEL $(TargetName).pdb
+
+echo Exporting Assembly to %25DestinationDir%25
+echo Copying files to Destination...
+echo f | xcopy "$(SolutionDir)\bin" %25DestinationDir%25 /Y /I /E
+
+echo Exporting Assembly to %25DestinationDirNoMeta%25
+echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirNoMeta%25 /Y /I /E
+
+echo Exporting Assembly to %25DestinationDirUnityTests%25
+echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirUnityTests%25 /Y /I /E</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
