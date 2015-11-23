@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using DG.DeAudio.Core;
 using DG.DeAudio.Events;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -33,6 +34,7 @@ namespace DG.DeAudio
 
         bool _disposed;
         GameObject _sourcesContainer;
+        Tween _fadeTween;
 
         // ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
         // INIT
@@ -72,6 +74,28 @@ namespace DG.DeAudio
         public void Stop(AudioClip clip)
         { IterateOnAllSources(OperationType.StopByClip, clip); }
 
+        #region Tweens
+
+        /// <summary>Fades out this group's volume</summary>
+        public void FadeOut(float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true, TweenCallback onComplete = null)
+        { FadeTo(0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
+        /// <summary>Fades in this group's volume</summary>
+        public void FadeIn(float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
+        { FadeTo(1, duration, ignoreTimeScale, false, onComplete); }
+        /// <summary>Fades this group's volume to the given value</summary>
+        public void FadeTo(float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
+        { FadeTo(to, duration, ignoreTimeScale, false, onComplete); }
+        internal void FadeTo(float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
+        {
+            _fadeTween.Kill();
+            _fadeTween = DOTween.To(() => volume, x => volume = x, to, duration)
+                .SetTarget(this).SetUpdate(ignoreTimeScale).SetEase(Ease.Linear);
+            if (stopOnComplete) _fadeTween.OnStepComplete(Stop);
+            if (onComplete != null) _fadeTween.OnComplete(onComplete);
+        }
+
+        #endregion
+
         #endregion
 
         #region Methods
@@ -85,6 +109,7 @@ namespace DG.DeAudio
         {
             if (_disposed) return;
             if (disposing) {
+                _fadeTween.Kill();
                 int len = sources.Count;
                 for (int i = 0; i < len; ++i) sources[i].Dispose();
                 sources.Clear();

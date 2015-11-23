@@ -4,6 +4,7 @@
 
 using System;
 using DG.DeAudio.Events;
+using DG.Tweening;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -22,16 +23,21 @@ namespace DG.DeAudio
         public bool isFree { get { return !locked && !audioSource.isPlaying; } }
         public bool isPlaying { get { return audioSource.isPlaying; } }
         public AudioClip clip { get { return audioSource.clip; } }
+        /// <summary>Unscaled volume (doesn't include modifiers caused by global and group volumes)</summary>
+        public float unscaledVolume { get; private set; }
+        /// <summary>Current volume (including modifiers caused by global and group volumes)</summary>
         public float volume {
             get { return audioSource.volume; }
-            set { audioSource.volume = value; }
+            set {
+                unscaledVolume = value;
+                audioSource.volume = value * audioGroup.fooVolume * DeAudioManager.globalVolume;
+            }
         }
 
         internal float playTime { get; private set; } // Time.realTimeSinceStartup since the last Play call
-        internal float originalVolume { get; private set; } // Volume set at the last Play call
-        internal float unmodifiedVolume { get; private set; } // Volume unmodified by global and group volumes
 
         bool _disposed;
+        Tween _fadeTween;
 
         // ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
         // CONSTRUCTOR
@@ -56,10 +62,10 @@ namespace DG.DeAudio
         /// </summary>
         public void Play(AudioClip clip, float volume = 1, bool loop = false)
         {
+            _fadeTween.Kill();
             playTime = Time.realtimeSinceStartup;
-            originalVolume = unmodifiedVolume = volume;
+            this.volume = volume;
             audioSource.clip = clip;
-            audioSource.volume = volume * audioGroup.fooVolume * DeAudioManager.globalVolume;
             audioSource.loop = loop;
             audioSource.Play();
         }
@@ -69,8 +75,31 @@ namespace DG.DeAudio
         /// </summary>
         public void Stop()
         {
+            _fadeTween.Kill();
             audioSource.Stop();
         }
+
+        #region Tweens
+
+        /// <summary>Fades out this source's volume</summary>
+        public void FadeOut(float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true, TweenCallback onComplete = null)
+        { FadeTo(0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
+        /// <summary>Fades in this source's volume</summary>
+        public void FadeIn(float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
+        { FadeTo(1, duration, ignoreTimeScale, false, onComplete); }
+        /// <summary>Fades this source's volume to the given value</summary>
+        public void FadeTo(float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
+        { FadeTo(to, duration, ignoreTimeScale, false, onComplete); }
+        internal void FadeTo(float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
+        {
+            _fadeTween.Kill();
+            _fadeTween = DOTween.To(() => volume, x => volume = x, to, duration)
+                .SetTarget(this).SetUpdate(ignoreTimeScale).SetEase(Ease.Linear);
+            if (stopOnComplete) _fadeTween.OnStepComplete(Stop);
+            if (onComplete != null) _fadeTween.OnComplete(onComplete);
+        }
+
+        #endregion
 
         #endregion
 
@@ -86,14 +115,10 @@ namespace DG.DeAudio
             if (_disposed) return;
             if (disposing) {
                 DeAudioNotificator.DeAudioEvent -= DeAudioEventHandler;
+                _fadeTween.Kill();
                 Object.Destroy(audioSource);
             }
             _disposed = true;
-        }
-
-        internal void UpdateVolume()
-        {
-            audioSource.volume = unmodifiedVolume * audioGroup.fooVolume * DeAudioManager.globalVolume;
         }
 
         #endregion
@@ -104,10 +129,10 @@ namespace DG.DeAudio
         {
             switch (e.type) {
             case DeAudioEventType.GlobalVolumeChange:
-                UpdateVolume();
+                volume = unscaledVolume;
                 break;
             case DeAudioEventType.GroupVolumeChange:
-                if (e.audioGroup == audioGroup) UpdateVolume();
+                if (e.audioGroup == audioGroup) volume = unscaledVolume;
                 break;
             }
         }
