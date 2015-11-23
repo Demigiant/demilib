@@ -92,11 +92,11 @@ namespace DG.DeAudioEditor
             GUI.color = _src.fooAudioMixer == null ? Color.red : Color.white;
             _src.fooAudioMixer = EditorGUILayout.ObjectField("Audio Mixer", _src.fooAudioMixer, typeof(AudioMixer), false) as AudioMixer;
             GUI.color = Color.white;
+            DeGUILayout.EndVBox();
             if (_src.fooAudioMixer == null) {
                 EditorGUILayout.HelpBox("Add an AudioMixer to proceed to the next step", MessageType.Warning);
                 return;
             }
-            DeGUILayout.EndVBox();
 
             EditorGUIUtility.labelWidth = 96;
             _src.logInfo = DeGUILayout.ToggleButton(_src.logInfo, "Output Additional Info Logs");

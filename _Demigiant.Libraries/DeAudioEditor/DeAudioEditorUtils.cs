@@ -16,6 +16,8 @@ namespace DG.DeAudioEditor
         internal static void CheckForDuplicateAudioGroupIds(DeAudioGroup[] audioGroups, List<DeAudioGroupId> fillWithDuplicates)
         {
             fillWithDuplicates.Clear();
+            if (audioGroups == null) return;
+
             int len = audioGroups.Length;
             for (int i = 0; i < len; ++i) {
                 DeAudioGroup groupA = audioGroups[i];
