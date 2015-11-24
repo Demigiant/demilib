@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeAudioCollectionInspector.cs" />
     <Compile Include="DeAudioEditorUtils.cs" />
     <Compile Include="DeAudioManagerInspector.cs" />
     <Compile Include="MenuItems.cs" />

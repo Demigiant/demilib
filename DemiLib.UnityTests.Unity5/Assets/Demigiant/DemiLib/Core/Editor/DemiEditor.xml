@@ -91,6 +91,21 @@
             and automatically returns the correct one when converted to GUIStyle
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeSoundUtils.Play(UnityEngine.AudioClip)">
+            <summary>
+            Plays the given clip in the Editor
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeSoundUtils.Stop(UnityEngine.AudioClip)">
+            <summary>
+            Stops playing the given clip.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeSoundUtils.StopAll">
+            <summary>
+            Stops all clips playing.
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.AssemblyExtensions">
             <summary>
             Assembly extensions

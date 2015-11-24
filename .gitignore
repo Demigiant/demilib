@@ -4,6 +4,8 @@ _Demigiant.Libraries/Core/*/obj
 *.suo
 *.user
 *.tmp
+*.pdb
+*.pdb.meta
 *.DotSettings
 _Demigiant.Libraries/.gitignore
 _Demigiant.Libraries/.git

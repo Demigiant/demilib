@@ -21,8 +21,7 @@ namespace DG.DeAudioEditor
         readonly List<DeAudioGroupId> _duplicateGroupIds = new List<DeAudioGroupId>();
         bool _requiresDuplicateCheck; // Used to check for duplicates during draw method, since during onChangedCallback it won't work correctly
 
-        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-        // ■■■ UNITY METHODS
+        #region Unity and GUI Methods
 
         void OnEnable()
         {
@@ -35,6 +34,15 @@ namespace DG.DeAudioEditor
             _audioGroupsList.elementHeight = lineH * 5 + listVSpacer * 4 + 10;
             _audioGroupsList.drawHeaderCallback = rect => { GUI.Label(rect, "DeAudioGroups", DeGUI.styles.label.bold); };
             _audioGroupsList.onChangedCallback = list => { _requiresDuplicateCheck = true; };
+            _audioGroupsList.onAddCallback = list => {
+                // Force volume to 1, max sources to -1 and recycle to true
+                ReorderableList.defaultBehaviours.DoAddButton(list);
+                int addedIndex = list.serializedProperty.arraySize - 1;
+                SerializedProperty element = list.serializedProperty.GetArrayElementAtIndex(addedIndex);
+                element.FindPropertyRelative("fooVolume").floatValue = 1;
+                element.FindPropertyRelative("maxSources").intValue = -1;
+                element.FindPropertyRelative("recycle").boolValue = true;
+            };
             _audioGroupsList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) => {
                 if (_requiresDuplicateCheck && Event.current.type == EventType.Repaint) {
                     DeAudioEditorUtils.CheckForDuplicateAudioGroupIds(_src.fooAudioGroups, _duplicateGroupIds);
@@ -77,6 +85,7 @@ namespace DG.DeAudioEditor
             Undo.RecordObject(_src, "DeAudioManager");
             DeGUI.BeginGUI();
 
+            GUILayout.Label("v" + DeAudioManager.Version, EditorStyles.miniLabel.MarginBottom(0));
             if (Application.isPlaying) DrawRuntime();
             else DrawDefault();
         }
@@ -84,9 +93,7 @@ namespace DG.DeAudioEditor
         void DrawDefault()
         {
             EditorGUIUtility.labelWidth = 86;
-            GUILayout.Space(4);
             if (_duplicateGroupIds.Count > 0) EditorGUILayout.HelpBox("Beware: some DeAudioGroups have the same ID, which is not permitted", MessageType.Error);
-            GUILayout.Space(4);
 
             DeGUILayout.BeginVBox();
             GUI.color = _src.fooAudioMixer == null ? Color.red : Color.white;
@@ -132,5 +139,7 @@ namespace DG.DeAudioEditor
                 if (Math.Abs(g.fooVolume - prevVolume) > float.Epsilon) g.SetVolume(g.fooVolume);
             }
         }
+
+        #endregion
     }
 }

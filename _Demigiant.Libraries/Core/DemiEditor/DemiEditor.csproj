@@ -51,6 +51,7 @@
     <Compile Include="DeFileUtils.cs" />
     <Compile Include="DePanelUtils.cs" />
     <Compile Include="DeSkinStyle.cs" />
+    <Compile Include="DeSoundUtils.cs" />
     <Compile Include="Extensions %28no namespace%29\AssemblyExtensions.cs" />
     <Compile Include="Extensions %28no namespace%29\GUIStyleExtensions.cs" />
     <Compile Include="DeStylePalette.cs" />

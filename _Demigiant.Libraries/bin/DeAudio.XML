@@ -4,6 +4,11 @@
         <name>DeAudio</name>
     </assembly>
     <members>
+        <member name="T:DG.DeAudio.DeAudioCollection">
+            <summary>
+            A collection of audio files
+            </summary>
+        </member>
         <member name="T:DG.DeAudio.DeAudioGroup">
             <summary>
             Audio group, connected to an AudioMixerGroup
