@@ -43,7 +43,7 @@ namespace DG.DeAudioEditor
                 float ry = rect.y + 2;
                 item.clip = EditorGUI.ObjectField(new Rect(rect.x, ry, rect.width, lineH), "Clip", item.clip, typeof (AudioClip), false) as AudioClip;
                 ry += lineH + listVSpacer;
-                float btW = 22;
+                float btW = 25;
                 float prevVolume = item.volume;
                 item.volume = EditorGUI.Slider(new Rect(rect.x, ry, rect.width - btW * 2 - 5, lineH), "Volume", item.volume, 0, 1);
                 if (Math.Abs(item.volume - prevVolume) > float.Epsilon && _src.previewSource.isPlaying && _src.previewSource.clip == item.clip) _src.previewSource.volume = item.volume;
