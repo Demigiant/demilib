@@ -10,7 +10,7 @@ namespace DG.DemiEditor
     /// <summary>
     /// File utils
     /// </summary>
-    public static class DeFileUtils
+    public static class DeEditorFileUtils
     {
         /// <summary>Path slash for AssetDatabase format</summary>
         public static readonly string ADBPathSlash = "/";
@@ -43,7 +43,7 @@ namespace DG.DemiEditor
 
         #region Constructor
 
-        static DeFileUtils()
+        static DeEditorFileUtils()
         {
             bool useWindowsSlashes = Application.platform == RuntimePlatform.WindowsEditor;
             PathSlash = useWindowsSlashes ? "\\" : "/";

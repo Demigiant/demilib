@@ -62,8 +62,8 @@ namespace DG.DeAudioEditor
             MonoBehaviour m = GetValidMonoBehaviour(property);
             if (m == null) {
                 // Can't use AudioSource: play clip regardless of volume
-                DeSoundUtils.StopAll();
-                DeSoundUtils.Play(clip);
+                DeEditorSoundUtils.StopAll();
+                DeEditorSoundUtils.Play(clip);
                 return;
             }
             AudioSource s = m.GetComponent<AudioSource>();
@@ -84,7 +84,7 @@ namespace DG.DeAudioEditor
         {
             MonoBehaviour m = GetValidMonoBehaviour(property);
             if (m == null) {
-                DeSoundUtils.StopAll();
+                DeEditorSoundUtils.StopAll();
                 return;
             }
             AudioSource s = m.GetComponent<AudioSource>();

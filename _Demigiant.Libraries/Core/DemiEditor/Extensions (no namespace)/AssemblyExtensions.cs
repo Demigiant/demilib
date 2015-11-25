@@ -26,7 +26,7 @@ namespace DG.DemiEditor
                 fullPath = Path.GetDirectoryName(assembly.Location);
             }
             string adbPath = fullPath.Substring(Application.dataPath.Length + 1);
-            return adbPath.Replace(DeFileUtils.ADBPathSlashToReplace, DeFileUtils.ADBPathSlash);
+            return adbPath.Replace(DeEditorFileUtils.ADBPathSlashToReplace, DeEditorFileUtils.ADBPathSlash);
         }
     }
 }

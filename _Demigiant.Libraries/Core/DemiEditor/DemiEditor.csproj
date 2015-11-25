@@ -48,10 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributesManagers\ScriptExecutionOrderManager.cs" />
-    <Compile Include="DeFileUtils.cs" />
-    <Compile Include="DePanelUtils.cs" />
+    <Compile Include="DeEditorFileUtils.cs" />
+    <Compile Include="DeEditorPanelUtils.cs" />
     <Compile Include="DeSkinStyle.cs" />
-    <Compile Include="DeSoundUtils.cs" />
+    <Compile Include="DeEditorSoundUtils.cs" />
     <Compile Include="Extensions %28no namespace%29\AssemblyExtensions.cs" />
     <Compile Include="Extensions %28no namespace%29\GUIStyleExtensions.cs" />
     <Compile Include="DeStylePalette.cs" />

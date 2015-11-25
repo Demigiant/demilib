@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DG.DemiEditor
 {
-    public static class DeSoundUtils
+    public static class DeEditorSoundUtils
     {
         #region Public Methods
 

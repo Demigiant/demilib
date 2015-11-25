@@ -10,7 +10,7 @@ namespace DG.DemiEditor
     /// <summary>
     /// Utilities for Editor Panels.
     /// </summary>
-    public static class DePanelUtils
+    public static class DeEditorPanelUtils
     {
         #region Public Methods
 
@@ -24,7 +24,7 @@ namespace DG.DemiEditor
         /// <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
         public static T ConnectToSourceAsset<T>(string adbFilePath, bool createIfMissing = false) where T : ScriptableObject
         {
-            if (!DeFileUtils.AssetExists(adbFilePath)) {
+            if (!DeEditorFileUtils.AssetExists(adbFilePath)) {
                 if (createIfMissing) CreateScriptableAsset<T>(adbFilePath);
                 else return null;
             }
