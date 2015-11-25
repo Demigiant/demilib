@@ -24,7 +24,7 @@ namespace DG.DeAudio
         public float fooGlobalVolume = 1;
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.001";
+        public const string Version = "0.5.010";
         public static AudioMixer audioMixer { get { return I.fooAudioMixer; } }
         public static DeAudioGroup[] audioGroups { get { return I.fooAudioGroups; } }
         public static float globalVolume {

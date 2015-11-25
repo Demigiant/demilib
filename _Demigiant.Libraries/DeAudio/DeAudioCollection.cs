@@ -7,7 +7,7 @@ using UnityEngine;
 namespace DG.DeAudio
 {
     /// <summary>
-    /// A collection of audio files
+    /// A collection of audio files. Still needs to be completed.
     /// </summary>
     public class DeAudioCollection : MonoBehaviour
     {

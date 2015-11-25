@@ -20,14 +20,14 @@ namespace DG.DeAudioEditor
             Selection.activeObject = go;
         }
 
-        [MenuItem("GameObject/Demigiant/DeAudioCollection", false, 10)]
-        static void CreateDeAudioCollection(MenuCommand menuCommand)
-        {
-            GameObject go = new GameObject("DeAudioCollection");
-            go.AddComponent<DeAudioCollection>();
-            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
-            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
-            Selection.activeObject = go;
-        }
+//        [MenuItem("GameObject/Demigiant/DeAudioCollection", false, 10)]
+//        static void CreateDeAudioCollection(MenuCommand menuCommand)
+//        {
+//            GameObject go = new GameObject("DeAudioCollection");
+//            go.AddComponent<DeAudioCollection>();
+//            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+//            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+//            Selection.activeObject = go;
+//        }
     }
 }

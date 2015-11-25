@@ -11,5 +11,6 @@ namespace DG.DeAudio
     {
         public AudioClip clip;
         public float volume = 1;
+        public float pitch = 1;
     }
 }
