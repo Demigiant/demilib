@@ -108,6 +108,13 @@ namespace DG.DeAudio
         /// <summary>Fades this source's volume to the given value</summary>
         public void FadeTo(float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
         { FadeTo(to, duration, ignoreTimeScale, false, onComplete); }
+        /// <summary>Fades this source's volume from the given value to its current one</summary>
+        public void FadeFrom(float from, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
+        {
+            float to = volume;
+            volume = from;
+            FadeTo(to, duration, ignoreTimeScale, false, onComplete);
+        }
         internal void FadeTo(float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
         {
             _fadeTween.Kill();

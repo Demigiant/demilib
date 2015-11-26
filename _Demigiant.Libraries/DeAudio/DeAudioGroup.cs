@@ -116,20 +116,35 @@ namespace DG.DeAudio
 
         /// <summary>Fades out this group's volume</summary>
         public void FadeOut(float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true, TweenCallback onComplete = null)
-        { FadeTo(0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
+        { DoFadeTo(0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
         /// <summary>Fades in this group's volume</summary>
         public void FadeIn(float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeTo(1, duration, ignoreTimeScale, false, onComplete); }
+        { DoFadeTo(1, duration, ignoreTimeScale, false, onComplete); }
         /// <summary>Fades this group's volume to the given value</summary>
         public void FadeTo(float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeTo(to, duration, ignoreTimeScale, false, onComplete); }
-        internal void FadeTo(float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
+        { DoFadeTo(to, duration, ignoreTimeScale, false, onComplete); }
+        internal void DoFadeTo(float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
         {
             _fadeTween.Kill();
             _fadeTween = DOTween.To(() => volume, x => volume = x, to, duration)
                 .SetTarget(this).SetUpdate(ignoreTimeScale).SetEase(Ease.Linear);
             if (stopOnComplete) _fadeTween.OnStepComplete(Stop);
             if (onComplete != null) _fadeTween.OnComplete(onComplete);
+        }
+
+        /// <summary>Fades out the volume of each source in this group (not this group's volume)</summary>
+        public void FadeSourcesOut(float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true)
+        { DoFadeSourcesTo(0, duration, ignoreTimeScale, stopOnComplete, null); }
+        /// <summary>Fades in the volume of each source in this group (not this group's volume)</summary>
+        public void FadeSourcesIn(float duration = 1.5f, bool ignoreTimeScale = true)
+        { DoFadeSourcesTo(1, duration, ignoreTimeScale, false, null); }
+        /// <summary>Fades the volume of each source in this group (not this group's volume) to the given value</summary>
+        public void FadeSourcesTo(float to, float duration = 1.5f, bool ignoreTimeScale = true)
+        { DoFadeSourcesTo(to, duration, ignoreTimeScale, false, null); }
+        internal void DoFadeSourcesTo(float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
+        {
+            int len = sources.Count;
+            for (int i = 0; i < len; ++i) sources[i].FadeTo(to, duration, ignoreTimeScale, stopOnComplete, onComplete);
         }
 
         #endregion

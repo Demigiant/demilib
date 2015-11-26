@@ -57,6 +57,15 @@
         <member name="M:DG.DeAudio.DeAudioGroup.FadeTo(System.Single,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades this group's volume to the given value</summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.FadeSourcesOut(System.Single,System.Boolean,System.Boolean)">
+            <summary>Fades out the volume of each source in this group (not this group's volume)</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.FadeSourcesIn(System.Single,System.Boolean)">
+            <summary>Fades in the volume of each source in this group (not this group's volume)</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.FadeSourcesTo(System.Single,System.Single,System.Boolean)">
+            <summary>Fades the volume of each source in this group (not this group's volume) to the given value</summary>
+        </member>
         <member name="F:DG.DeAudio.DeAudioGroupId.INTERNAL_Global">
             <summary>Don't use/assign this! It's assigned automatically to the global group</summary>
         </member>
@@ -89,13 +98,13 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Play(UnityEngine.AudioClip,System.Single,System.Single,System.Boolean)">
             <summary>
-            Plays the given sound with external to any group, using the given options.
+            Plays the given sound external to any group, using the given options.
             <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
             </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Play(DG.DeAudio.DeAudioClipData)">
             <summary>
-            PlaPlays the given <see cref="T:DG.DeAudio.DeAudioClipData"/>external to any group,  with the stored volume, pitch and loop settings.
+            PlaPlays the given <see cref="T:DG.DeAudio.DeAudioClipData"/> external to any group,  with the stored volume, pitch and loop settings.
             <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
             </summary>
         </member>
@@ -145,6 +154,15 @@
         <member name="M:DG.DeAudio.DeAudioManager.FadeTo(System.Single,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades the global volume to the given value</summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioManager.FadeSourcesOut(System.Single,System.Boolean,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>Fades out the volume of every source without touching global and group volumes</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.FadeSourcesIn(System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>Fades in the volume of every source without touching global and group volumes</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.FadeSourcesTo(System.Single,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>Fades the volume of every source to the given value without touching global and group volumes</summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioManager.FadeOut(DG.DeAudio.DeAudioGroupId,System.Single,System.Boolean,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades out the given group's volume</summary>
         </member>
@@ -153,6 +171,15 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.FadeTo(DG.DeAudio.DeAudioGroupId,System.Single,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades the given group's volume to the given value</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.FadeSourcesOut(DG.DeAudio.DeAudioGroupId,System.Single,System.Boolean,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>Fades out the volume of each source in the given group (not the given group's volume)</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.FadeSourcesIn(DG.DeAudio.DeAudioGroupId,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>Fades in the volume of each source in the given group (not the given group's volume)</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.FadeSourcesTo(DG.DeAudio.DeAudioGroupId,System.Single,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>Fades the volume of each source in the given group (not the given group's volume) to the given value</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.FadeOut(UnityEngine.AudioClip,System.Single,System.Boolean,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades out the given clip's volume</summary>
@@ -212,6 +239,9 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioSource.FadeTo(System.Single,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades this source's volume to the given value</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioSource.FadeFrom(System.Single,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>Fades this source's volume from the given value to its current one</summary>
         </member>
         <member name="P:DG.DeAudio.Events.DeAudioEventArgs.type">
             <summary>Type of event</summary>
