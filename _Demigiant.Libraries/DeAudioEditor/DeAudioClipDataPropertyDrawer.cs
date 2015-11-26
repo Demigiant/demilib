@@ -3,9 +3,6 @@
 // License Copyright (c) Daniele Giardini
 
 using System;
-using System.Linq;
-using System.Reflection;
-using System.Collections;
 using DG.DeAudio;
 using DG.DemiEditor;
 using UnityEditor;
