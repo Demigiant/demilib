@@ -23,7 +23,7 @@ namespace DG.DeAudio
         public float fooGlobalVolume = 1;
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.150";
+        public const string Version = "0.5.160";
         internal const string LogPrefix = "DAM :: ";
         static Tween _fadeTween;
 

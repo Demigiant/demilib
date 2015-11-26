@@ -20,8 +20,8 @@ namespace DG.DeAudioEditor
             int orIndent = EditorGUI.indentLevel;
 
             float lineH = EditorGUIUtility.singleLineHeight;
-            float btW = 25;
-            float btLoopW = 50;
+            float btW = 22;
+            float btLoopW = 44;
             Rect clipRect = new Rect(position.x, position.y, position.width, lineH);
             Rect volumeRect = new Rect(position.x, position.y + lineH + 1, position.width - btW * 2 - 4, lineH);
             Rect btPlayRect = new Rect(position.x + (position.width - btW * 2), volumeRect.y - 1, btW, lineH);
