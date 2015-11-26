@@ -57,11 +57,20 @@
         <member name="M:DG.DeAudio.DeAudioGroup.FadeTo(System.Single,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades this group's volume to the given value</summary>
         </member>
+        <member name="F:DG.DeAudio.DeAudioGroupId.INTERNAL_Global">
+            <summary>Don't use/assign this! It's assigned automatically to the global group</summary>
+        </member>
         <member name="T:DG.DeAudio.DeAudioManager">
             <summary>
-            Global AudioManager.
-            Must be instantiated only once per project (either manually or via code).
-            Its GameObject is set automatically to DontDestroyOnLoad.
+            Global AudioManager. Only use its static methods.
+            <para>Must be instantiated only once per project (either manually or via code), and its GameObject is set automatically to DontDestroyOnLoad.</para>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Init">
+            <summary>
+            Creates a DeAudioManager instance (if it's not present already) and sets it as DontDestroyOnLoad.
+            <para>Use this method if you want to use DeAudioManager without setting up any DeAudioGroup.
+            Though the recommended way is to create a prefab with the required settings and instantiate it once at startup.</para>
             </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Play(DG.DeAudio.DeAudioGroupId,UnityEngine.AudioClip,System.Single,System.Single,System.Boolean)">
@@ -75,6 +84,18 @@
             <summary>
             Plays the given <see cref="T:DG.DeAudio.DeAudioClipData"/> with the stored volume, pitch and loop settings.
             A <see cref="T:DG.DeAudio.DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Play(UnityEngine.AudioClip,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Plays the given sound with external to any group, using the given options.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Play(DG.DeAudio.DeAudioClipData)">
+            <summary>
+            PlaPlays the given <see cref="T:DG.DeAudio.DeAudioClipData"/>external to any group,  with the stored volume, pitch and loop settings.
             <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
             </summary>
         </member>

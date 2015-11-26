@@ -42,9 +42,14 @@ namespace DG.DeAudio
 
         internal DeAudioGroup() {}
 
-        internal void Init(Transform container)
+        public DeAudioGroup(DeAudioGroupId id)
         {
-            _sourcesContainer = new GameObject(id.ToString());
+            this.id = id;
+        }
+
+        internal void Init(Transform container, string name = null)
+        {
+            _sourcesContainer = new GameObject(name == null ? id.ToString() : name);
             _sourcesContainer.transform.parent = container;
             sources = maxSources >= 0 ? new List<DeAudioSource>(maxSources) : new List<DeAudioSource>();
             if (preallocate > 0) {

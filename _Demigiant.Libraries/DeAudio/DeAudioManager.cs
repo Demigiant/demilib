@@ -12,9 +12,8 @@ using UnityEngine.Audio;
 namespace DG.DeAudio
 {
     /// <summary>
-    /// Global AudioManager.
-    /// Must be instantiated only once per project (either manually or via code).
-    /// Its GameObject is set automatically to DontDestroyOnLoad.
+    /// Global AudioManager. Only use its static methods.
+    /// <para>Must be instantiated only once per project (either manually or via code), and its GameObject is set automatically to DontDestroyOnLoad.</para>
     /// </summary>
     public class DeAudioManager : MonoBehaviour
     {
@@ -25,20 +24,21 @@ namespace DG.DeAudio
         internal static DeAudioManager I;
         public const string Version = "0.5.160";
         internal const string LogPrefix = "DAM :: ";
+        static DeAudioGroup _globalGroup; // Group created when playing a clip without any group indication. Also stored as the final _audioGroups value
         static Tween _fadeTween;
 
-        public static DeAudioGroup[] audioGroups { get { return I.fooAudioGroups; } }
         public static float globalVolume {
             get { return I.fooGlobalVolume; }
             set { SetVolume(value); }
         }
+        static DeAudioGroup[] _audioGroups;
 
         #region Unity Methods
 
         void Awake()
         {
             if (I != null) {
-                Debug.LogWarning(LogPrefix + "Multiple DeAudioManager instances were found. The newest ones will be destroyed");
+                Debug.LogWarning(LogPrefix + "Multiple DeAudioManager instances were found. The newest one will be destroyed");
                 Destroy(this.gameObject);
             }
 
@@ -46,21 +46,43 @@ namespace DG.DeAudio
             DontDestroyOnLoad(this.gameObject);
 
             // Initialize audioGroups
-            foreach (DeAudioGroup group in audioGroups) group.Init(this.transform);
+            _globalGroup = new DeAudioGroup(DeAudioGroupId.INTERNAL_Global);
+            _globalGroup.Init(this.transform, "Global [auto]");
+            int len = I.fooAudioGroups == null ? 0 : I.fooAudioGroups.Length;
+            _audioGroups = new DeAudioGroup[len + 1];
+            for (int i = 0; i < len; ++i) {
+                DeAudioGroup g = I.fooAudioGroups[i];
+                g.Init(this.transform);
+                _audioGroups[i] = g;
+            }
+            _audioGroups[len] = _globalGroup;
         }
 
         void OnDestroy()
         {
             if (I != this) return;
             _fadeTween.Kill();
-            int len = audioGroups.Length;
-            for (int i = 0; i < len; ++i) audioGroups[i].Dispose();
+            int len = _audioGroups.Length;
+            for (int i = 0; i < len; ++i) _audioGroups[i].Dispose();
             I = null;
         }
 
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Creates a DeAudioManager instance (if it's not present already) and sets it as DontDestroyOnLoad.
+        /// <para>Use this method if you want to use DeAudioManager without setting up any DeAudioGroup.
+        /// Though the recommended way is to create a prefab with the required settings and instantiate it once at startup.</para>
+        /// </summary>
+        public static void Init()
+        {
+            if (I != null) return;
+
+            GameObject go = new GameObject("DeAudioManager");
+            go.AddComponent<DeAudioManager>();
+        }
 
         /// <summary>
         /// Plays the given sound with the given options and using the given group id.
@@ -89,6 +111,22 @@ namespace DG.DeAudio
                 return null;
             }
             return group.Play(clipData);
+        }
+        /// <summary>
+        /// Plays the given sound with external to any group, using the given options.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+        /// </summary>
+        public static DeAudioSource Play(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
+        {
+            return _globalGroup.Play(clip, volume, pitch, loop);
+        }
+        /// <summary>
+        /// PlaPlays the given <see cref="DeAudioClipData"/>external to any group,  with the stored volume, pitch and loop settings.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+        /// </summary>
+        public static DeAudioSource Play(DeAudioClipData clipData)
+        {
+            return _globalGroup.Play(clipData);
         }
 
         /// <summary>Stops all sounds</summary>
@@ -138,9 +176,9 @@ namespace DG.DeAudio
         /// </summary>
         public static DeAudioGroup GetAudioGroup(DeAudioGroupId groupId)
         {
-            int len = audioGroups.Length;
+            int len = _audioGroups.Length;
             for (int i = 0; i < len; ++i) {
-                DeAudioGroup g = audioGroups[i];
+                DeAudioGroup g = _audioGroups[i];
                 if (g.id == groupId) return g;
             }
             return null;
@@ -202,9 +240,9 @@ namespace DG.DeAudio
         { FadeTo(clip, to, duration, ignoreTimeScale, false, onComplete); }
         static void FadeTo(AudioClip clip, float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
         {
-            int len = audioGroups.Length;
+            int len = _audioGroups.Length;
             for (int i = 0; i < len; ++i) {
-                DeAudioGroup group = audioGroups[i];
+                DeAudioGroup group = _audioGroups[i];
                 int slen = group.sources.Count;
                 for (int c = 0; c < slen; c++) {
                     DeAudioSource s = group.sources[c];
@@ -221,9 +259,9 @@ namespace DG.DeAudio
 
         static void IterateOnAllGroups(OperationType operationType, AudioClip clip = null, float floatValue = 0)
         {
-            int len = audioGroups.Length;
+            int len = _audioGroups.Length;
             for (int i = 0; i < len; ++i) {
-                DeAudioGroup group = audioGroups[i];
+                DeAudioGroup group = _audioGroups[i];
                 switch (operationType) {
                 case OperationType.Stop:
                     group.Stop();

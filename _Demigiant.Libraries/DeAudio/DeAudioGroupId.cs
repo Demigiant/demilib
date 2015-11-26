@@ -24,6 +24,9 @@ namespace DG.DeAudio
         Custom7,
         Custom8,
         Custom9,
-        Custom10
+        Custom10,
+
+        /// <summary>Don't use/assign this! It's assigned automatically to the global group</summary>
+        INTERNAL_Global
     }
 }
