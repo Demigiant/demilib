@@ -8,6 +8,7 @@ namespace DG.DeAudio.Core
         Stop,
         StopByClip,
         Unlock,
-        UnlockByClip
+        UnlockByClip,
+        SetVolumeByClip
     }
 }

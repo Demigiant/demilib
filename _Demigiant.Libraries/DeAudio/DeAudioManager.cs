@@ -30,7 +30,7 @@ namespace DG.DeAudio
         public static DeAudioGroup[] audioGroups { get { return I.fooAudioGroups; } }
         public static float globalVolume {
             get { return I.fooGlobalVolume; }
-            set { SetGlobalVolume(value); }
+            set { SetVolume(value); }
         }
 
         #region Unity Methods
@@ -89,6 +89,22 @@ namespace DG.DeAudio
         /// <summary>Stops all sounds for the given clip</summary>
         public static void Stop(AudioClip clip)
         { IterateOnAllGroups(OperationType.StopByClip, clip); }
+
+        /// <summary>Sets the global volume (same as setting <see cref="globalVolume"/> directly</summary>
+        public static void SetVolume(float volume)
+        {
+            I.fooGlobalVolume = volume;
+            DeAudioNotificator.DispatchDeAudioEvent(DeAudioEventType.GlobalVolumeChange);
+        }
+        /// <summary>Sets the volume for the given group</summary>
+        public static void SetVolume(DeAudioGroupId groupId, float volume)
+        {
+            DeAudioGroup group = GetAudioGroup(groupId);
+            if (group != null) group.SetVolume(volume);
+        }
+        /// <summary>Sets the volume for the given clip</summary>
+        public static void SetVolume(AudioClip clip, float volume)
+        { IterateOnAllGroups(OperationType.SetVolumeByClip, clip, volume); }
 
         /// <summary>Unlocks all <see cref="DeAudioSource"/> instances</summary>
         public static void Unlock()
@@ -189,14 +205,7 @@ namespace DG.DeAudio
 
         #region Methods
 
-        // Internal so it can be accessed by the editor at runtime
-        internal static void SetGlobalVolume(float volume)
-        {
-            I.fooGlobalVolume = volume;
-            DeAudioNotificator.DispatchDeAudioEvent(DeAudioEventType.GlobalVolumeChange);
-        }
-
-        static void IterateOnAllGroups(OperationType operationType, AudioClip clip = null)
+        static void IterateOnAllGroups(OperationType operationType, AudioClip clip = null, float floatValue = 0)
         {
             int len = audioGroups.Length;
             for (int i = 0; i < len; ++i) {
@@ -207,6 +216,9 @@ namespace DG.DeAudio
                     break;
                 case OperationType.StopByClip:
                     group.Stop(clip);
+                    break;
+                case OperationType.SetVolumeByClip:
+                    group.SetVolume(clip, floatValue);
                     break;
                 case OperationType.Unlock:
                     group.Unlock();

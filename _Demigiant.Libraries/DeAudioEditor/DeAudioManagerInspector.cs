@@ -113,7 +113,7 @@ namespace DG.DeAudioEditor
             GUILayout.BeginVertical(DeGUI.styles.box.def);
             float prevGlobalVolume = _src.fooGlobalVolume;
             _src.fooGlobalVolume = EditorGUILayout.Slider("Global Volume", _src.fooGlobalVolume, 0, 1);
-            if (Math.Abs(_src.fooGlobalVolume - prevGlobalVolume) > float.Epsilon) DeAudioManager.SetGlobalVolume(_src.fooGlobalVolume);
+            if (Math.Abs(_src.fooGlobalVolume - prevGlobalVolume) > float.Epsilon) DeAudioManager.SetVolume(_src.fooGlobalVolume);
             GUILayout.EndVertical();
             // Group volumes
             GUILayout.Space(4);

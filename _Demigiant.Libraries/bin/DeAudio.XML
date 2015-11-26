@@ -28,7 +28,13 @@
             <summary>Stops all sounds for this group</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioGroup.Stop(UnityEngine.AudioClip)">
-            <summary>Stops all sounds for this group that are using the given clip</summary>
+            <summary>Stops all sources for this group that are using the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.SetVolume(System.Single)">
+            <summary>Sets the volume for this group (same as setting <see cref="P:DG.DeAudio.DeAudioGroup.volume"/> directly)</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.SetVolume(UnityEngine.AudioClip,System.Single)">
+            <summary>Sets the volume for all sources in this group that are using the given clip</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioGroup.Unlock">
             <summary>Unlocks all <see cref="T:DG.DeAudio.DeAudioSource"/> instances for this group</summary>
@@ -67,6 +73,15 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Stop(UnityEngine.AudioClip)">
             <summary>Stops all sounds for the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.SetVolume(System.Single)">
+            <summary>Sets the global volume (same as setting <see cref="P:DG.DeAudio.DeAudioManager.globalVolume"/> directly</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.SetVolume(DG.DeAudio.DeAudioGroupId,System.Single)">
+            <summary>Sets the volume for the given group</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.SetVolume(UnityEngine.AudioClip,System.Single)">
+            <summary>Sets the volume for the given clip</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Unlock">
             <summary>Unlocks all <see cref="T:DG.DeAudio.DeAudioSource"/> instances</summary>

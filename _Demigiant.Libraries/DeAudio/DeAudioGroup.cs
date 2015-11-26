@@ -72,9 +72,19 @@ namespace DG.DeAudio
         /// <summary>Stops all sounds for this group</summary>
         public void Stop()
         { IterateOnAllSources(OperationType.Stop); }
-        /// <summary>Stops all sounds for this group that are using the given clip</summary>
+        /// <summary>Stops all sources for this group that are using the given clip</summary>
         public void Stop(AudioClip clip)
         { IterateOnAllSources(OperationType.StopByClip, clip); }
+
+        /// <summary>Sets the volume for this group (same as setting <see cref="volume"/> directly)</summary>
+        public void SetVolume(float volume)
+        {
+            fooVolume = volume;
+            DeAudioNotificator.DispatchDeAudioEvent(DeAudioEventType.GroupVolumeChange, this);
+        }
+        /// <summary>Sets the volume for all sources in this group that are using the given clip</summary>
+        public void SetVolume(AudioClip clip, float volume)
+        { IterateOnAllSources(OperationType.SetVolumeByClip, clip, volume); }
 
         /// <summary>Unlocks all <see cref="DeAudioSource"/> instances for this group</summary>
         public void Unlock()
@@ -126,13 +136,6 @@ namespace DG.DeAudio
             _disposed = true;
         }
 
-        // Internal so it can be accessed by the editor at runtime
-        internal void SetVolume(float volume)
-        {
-            fooVolume = volume;
-            DeAudioNotificator.DispatchDeAudioEvent(DeAudioEventType.GroupVolumeChange, this);
-        }
-
         // Either:
         // - returns an existing non playing source if available
         // - creates a new source if all existing are busy and maxSources allows it
@@ -159,7 +162,7 @@ namespace DG.DeAudio
             }
         }
 
-        void IterateOnAllSources(OperationType operationType, AudioClip clip = null)
+        void IterateOnAllSources(OperationType operationType, AudioClip clip = null, float floatValue = 0)
         {
             int len = sources.Count;
             for (int i = 0; i < len; ++i) {
@@ -170,6 +173,9 @@ namespace DG.DeAudio
                     break;
                 case OperationType.StopByClip:
                     if (s.clip == clip) s.Stop();
+                    break;
+                case OperationType.SetVolumeByClip:
+                    if (s.clip == clip) s.volume = floatValue;
                     break;
                 case OperationType.Unlock:
                     s.locked = false;
