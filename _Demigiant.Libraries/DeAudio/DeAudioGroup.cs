@@ -13,7 +13,8 @@ using UnityEngine.Audio;
 namespace DG.DeAudio
 {
     /// <summary>
-    /// Audio group, connected to an AudioMixerGroup
+    /// Audio group, connected to an AudioMixerGroup.
+    /// Create it using the DeAudioManager Inspector
     /// </summary>
     [System.Serializable]
     public class DeAudioGroup : IDisposable
@@ -37,7 +38,9 @@ namespace DG.DeAudio
         Tween _fadeTween;
 
         // ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-        // INIT
+        // INIT + CONSTRUCTOR
+
+        internal DeAudioGroup() {}
 
         internal void Init(Transform container)
         {

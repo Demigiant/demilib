@@ -11,7 +11,8 @@
         </member>
         <member name="T:DG.DeAudio.DeAudioGroup">
             <summary>
-            Audio group, connected to an AudioMixerGroup
+            Audio group, connected to an AudioMixerGroup.
+            Create it using the DeAudioManager Inspector
             </summary>
         </member>
         <member name="F:DG.DeAudio.DeAudioGroup.maxSources">

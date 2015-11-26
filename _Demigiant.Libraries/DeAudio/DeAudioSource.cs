@@ -42,7 +42,7 @@ namespace DG.DeAudio
         // ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
         // CONSTRUCTOR
 
-        public DeAudioSource(DeAudioGroup audioGroup, GameObject container)
+        internal DeAudioSource(DeAudioGroup audioGroup, GameObject container)
         {
             this.audioGroup = audioGroup;
             audioSource = container.AddComponent<AudioSource>();
