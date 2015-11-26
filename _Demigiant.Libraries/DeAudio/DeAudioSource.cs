@@ -65,6 +65,7 @@ namespace DG.DeAudio
             _fadeTween.Kill();
             playTime = Time.realtimeSinceStartup;
             this.volume = volume;
+            if (audioGroup.mixerGroup != null) audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
             audioSource.clip = clip;
             audioSource.loop = loop;
             audioSource.Play();

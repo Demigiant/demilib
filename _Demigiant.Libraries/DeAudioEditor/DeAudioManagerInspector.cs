@@ -39,6 +39,8 @@ namespace DG.DeAudioEditor
                 ReorderableList.defaultBehaviours.DoAddButton(list);
                 int addedIndex = list.serializedProperty.arraySize - 1;
                 SerializedProperty element = list.serializedProperty.GetArrayElementAtIndex(addedIndex);
+                element.FindPropertyRelative("mixerGroup").objectReferenceValue = null;
+                element.FindPropertyRelative("id").enumValueIndex = 0;
                 element.FindPropertyRelative("fooVolume").floatValue = 1;
                 element.FindPropertyRelative("maxSources").intValue = -1;
                 element.FindPropertyRelative("recycle").boolValue = true;
@@ -52,31 +54,27 @@ namespace DG.DeAudioEditor
                 EditorGUIUtility.labelWidth = 86;
                 float ry = rect.y + 2;
                 DeAudioGroup item = _src.fooAudioGroups[index];
-                GUI.color = item.mixerGroup == null ? Color.red : Color.green;
+                GUI.color = item.mixerGroup == null ? Color.white : Color.green;
                 AudioMixerGroup prevMixerGroup = item.mixerGroup;
                 item.mixerGroup = EditorGUI.ObjectField(new Rect(rect.x, ry, rect.width, lineH), "MixerGroup", item.mixerGroup, typeof(AudioMixerGroup), false) as AudioMixerGroup;
                 if (item.mixerGroup != prevMixerGroup) DeAudioEditorUtils.CheckForDuplicateAudioGroupIds(_src.fooAudioGroups, _duplicateGroupIds);
                 GUI.color = Color.white;
                 ry += lineH + listVSpacer;
-                if (item.mixerGroup == null) {
-                    EditorGUI.HelpBox(new Rect(rect.x, ry, rect.width, lineH * 3), "Add a MixerGroup in order to set more options", MessageType.Warning);
-                } else {
-                    DeAudioGroupId prevId = item.id;
-                    GUI.color = hasDuplicateGroupIds && _duplicateGroupIds.Contains(item.id) ? Color.red : Color.white;
-                    item.id = (DeAudioGroupId)EditorGUI.EnumPopup(new Rect(rect.x, ry, rect.width, lineH), "Id (univocal)", item.id);
-                    GUI.color = Color.white;
-                    if (item.id != prevId) DeAudioEditorUtils.CheckForDuplicateAudioGroupIds(_src.fooAudioGroups, _duplicateGroupIds);
-                    ry += lineH + listVSpacer;
-                    item.fooVolume = EditorGUI.Slider(new Rect(rect.x, ry, rect.width, lineH), "Volume", item.fooVolume, 0, 1);
-                    ry += lineH + listVSpacer;
-                    item.maxSources = EditorGUI.IntSlider(new Rect(rect.x, ry, rect.width, lineH), "Max Sources", item.maxSources, -1, 100);
-                    ry += lineH + listVSpacer;
-                    item.recycle = EditorGUI.Toggle(new Rect(rect.x, ry, 120, lineH), new GUIContent("       Recycle", "If toggled, when max sources are reached and no free one is available the oldest one will be reused. If untoggled the new audio won't play."), item.recycle);
-                    EditorGUI.BeginDisabledGroup(item.maxSources == 0);
-                    EditorGUIUtility.labelWidth = 76;
-                    item.preallocate = EditorGUI.IntSlider(new Rect(rect.x + 120, ry, rect.width - 120, lineH), new GUIContent("Pre-allocate", "Allocates the given sources at startup."), item.preallocate, 0, item.maxSources >= 0 ? item.maxSources : 100);
-                    EditorGUI.EndDisabledGroup();
-                }
+                DeAudioGroupId prevId = item.id;
+                GUI.color = hasDuplicateGroupIds && _duplicateGroupIds.Contains(item.id) ? Color.red : Color.white;
+                item.id = (DeAudioGroupId)EditorGUI.EnumPopup(new Rect(rect.x, ry, rect.width, lineH), "Id (univocal)", item.id);
+                GUI.color = Color.white;
+                if (item.id != prevId) DeAudioEditorUtils.CheckForDuplicateAudioGroupIds(_src.fooAudioGroups, _duplicateGroupIds);
+                ry += lineH + listVSpacer;
+                item.fooVolume = EditorGUI.Slider(new Rect(rect.x, ry, rect.width, lineH), "Volume", item.fooVolume, 0, 1);
+                ry += lineH + listVSpacer;
+                item.maxSources = EditorGUI.IntSlider(new Rect(rect.x, ry, rect.width, lineH), "Max Sources", item.maxSources, -1, 100);
+                ry += lineH + listVSpacer;
+                item.recycle = EditorGUI.Toggle(new Rect(rect.x, ry, 120, lineH), new GUIContent("       Recycle", "If toggled, when max sources are reached and no free one is available the oldest one will be reused. If untoggled the new audio won't play."), item.recycle);
+                EditorGUI.BeginDisabledGroup(item.maxSources == 0);
+                EditorGUIUtility.labelWidth = 76;
+                item.preallocate = EditorGUI.IntSlider(new Rect(rect.x + 120, ry, rect.width - 120, lineH), new GUIContent("Pre-allocate", "Allocates the given sources at startup."), item.preallocate, 0, item.maxSources >= 0 ? item.maxSources : 100);
+                EditorGUI.EndDisabledGroup();
             };
         }
 
@@ -94,16 +92,6 @@ namespace DG.DeAudioEditor
         {
             EditorGUIUtility.labelWidth = 86;
             if (_duplicateGroupIds.Count > 0) EditorGUILayout.HelpBox("Beware: some DeAudioGroups have the same ID, which is not permitted", MessageType.Error);
-
-            DeGUILayout.BeginVBox();
-            GUI.color = _src.fooAudioMixer == null ? Color.red : Color.white;
-            _src.fooAudioMixer = EditorGUILayout.ObjectField("Audio Mixer", _src.fooAudioMixer, typeof(AudioMixer), false) as AudioMixer;
-            GUI.color = Color.white;
-            DeGUILayout.EndVBox();
-            if (_src.fooAudioMixer == null) {
-                EditorGUILayout.HelpBox("Add an AudioMixer to proceed to the next step", MessageType.Warning);
-                return;
-            }
 
             EditorGUIUtility.labelWidth = 96;
             _src.logInfo = DeGUILayout.ToggleButton(_src.logInfo, "Output Additional Info Logs");

@@ -21,10 +21,9 @@ namespace DG.DeAudioEditor
             int len = audioGroups.Length;
             for (int i = 0; i < len; ++i) {
                 DeAudioGroup groupA = audioGroups[i];
-                if (groupA.mixerGroup == null) continue;
                 for (int c = i + 1; c < len; ++c) {
                     DeAudioGroup groupB = audioGroups[c];
-                    if (groupB.mixerGroup == null || groupA.id != groupB.id) continue;
+                    if (groupA.id != groupB.id) continue;
                     if (!fillWithDuplicates.Contains(groupA.id)) fillWithDuplicates.Add(groupA.id);
                 }
             }

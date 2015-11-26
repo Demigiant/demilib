@@ -34,6 +34,9 @@
     <DocumentationFile>..\bin\DeAudio.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DOTween">
       <HintPath>..\..\..\bin.Global_no_meta\DOTween\DOTween.dll</HintPath>
@@ -59,32 +62,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set BinDir=bin.Global\DemiLib
-set DestinationDir=$(SolutionDir)..\..\%25BinDir%25
-set BinDirNoMeta=bin.Global_no_meta\DemiLib
-set DestinationDirNoMeta=$(SolutionDir)..\..\%25BinDirNoMeta%25
-set BinDirUnityTests=DemiLib.UnityTests.Unity5\Assets\Demigiant\DemiLib
-set DestinationDirUnityTests=$(SolutionDir)..\%25BinDirUnityTests%25
-
-echo %25DestinationDir%25
-
-echo Deleting TMPs...
-DEL $(TargetDir)\*.tmp
-
-CD $(TargetDir)
-echo Converting PDB to MDB and deleting PDB...
-"c:\Program Files\pdb2mdb\pdb2mdb.exe" $(TargetFileName)
-DEL $(TargetName).pdb
-
-echo Exporting Assembly to %25DestinationDir%25
-echo Copying files to Destination...
-echo f | xcopy "$(SolutionDir)\bin" %25DestinationDir%25 /Y /I /E
-
-echo Exporting Assembly to %25DestinationDirNoMeta%25
-echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirNoMeta%25 /Y /I /E
-
-echo Exporting Assembly to %25DestinationDirUnityTests%25
-echo f | xcopy "$(SolutionDir)\bin" %25DestinationDirUnityTests%25 /Y /I /E</PostBuildEvent>
+    <PostBuildEvent>call $(SolutionDir)PostBuild_Default.bat $(SolutionDir) $(TargetDir) $(TargetFileName) $(TargetName)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

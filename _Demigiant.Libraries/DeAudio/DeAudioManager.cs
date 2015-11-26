@@ -19,16 +19,14 @@ namespace DG.DeAudio
     public class DeAudioManager : MonoBehaviour
     {
         public bool logInfo = false;
-        public AudioMixer fooAudioMixer;
         public DeAudioGroup[] fooAudioGroups;
         public float fooGlobalVolume = 1;
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.010";
+        public const string Version = "0.5.100";
         internal const string LogPrefix = "DAM :: ";
         static Tween _fadeTween;
 
-        public static AudioMixer audioMixer { get { return I.fooAudioMixer; } }
         public static DeAudioGroup[] audioGroups { get { return I.fooAudioGroups; } }
         public static float globalVolume {
             get { return I.fooGlobalVolume; }
