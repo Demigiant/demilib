@@ -21,11 +21,13 @@ namespace DG.DeAudioEditor
 
             float lineH = EditorGUIUtility.singleLineHeight;
             float btW = 25;
-            Rect clipRect = new Rect(position.x, position.y, position.width - btW * 2 - 4, lineH);
-            Rect volumeRect = new Rect(position.x, position.y + lineH + 1, position.width, lineH);
-            Rect pitchRect = new Rect(position.x, volumeRect.y + lineH, position.width, lineH);
-            Rect btPlayRect = new Rect(position.x + (position.width - btW * 2), clipRect.y - 1, btW, lineH);
-            Rect btStopRect = new Rect(position.x + (position.width - btW), clipRect.y - 1, btW, lineH);
+            float btLoopW = 50;
+            Rect clipRect = new Rect(position.x, position.y, position.width, lineH);
+            Rect volumeRect = new Rect(position.x, position.y + lineH + 1, position.width - btW * 2 - 4, lineH);
+            Rect btPlayRect = new Rect(position.x + (position.width - btW * 2), volumeRect.y - 1, btW, lineH);
+            Rect btStopRect = new Rect(position.x + (position.width - btW), volumeRect.y - 1, btW, lineH);
+            Rect pitchRect = new Rect(position.x, volumeRect.y + lineH, position.width - btLoopW - 4, lineH);
+            Rect btLoopRect = new Rect(position.x + (position.width - btLoopW), pitchRect.y, btLoopW, lineH);
 
             // Clip
             EditorGUI.PropertyField(clipRect, property.FindPropertyRelative("clip"), label);
@@ -42,6 +44,8 @@ namespace DG.DeAudioEditor
             // Controls
             if (GUI.Button(btPlayRect, "►", DeGUI.styles.button.tool)) Play(property);
             if (GUI.Button(btStopRect, "■", DeGUI.styles.button.tool)) Stop(property);
+            SerializedProperty loopProp = property.FindPropertyRelative("loop");
+            loopProp.boolValue = DeGUI.ToggleButton(btLoopRect, loopProp.boolValue, "Loop");
 
             EditorGUI.indentLevel = orIndent;
             EditorGUI.EndProperty();
@@ -73,6 +77,7 @@ namespace DG.DeAudioEditor
             s.playOnAwake = false;
             s.volume = property.FindPropertyRelative("volume").floatValue;
             s.pitch = property.FindPropertyRelative("pitch").floatValue;
+            s.loop = property.FindPropertyRelative("loop").boolValue;
             s.clip = clip;
             s.Play();
         }

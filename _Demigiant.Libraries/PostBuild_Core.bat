@@ -12,10 +12,12 @@ echo %2
 
 echo Deleting TMPs...
 DEL %2\*.tmp
+DEL %2\*.tmp
 
 CD %2
 echo Converting PDB to MDB and deleting PDB...
 "c:\Program Files\pdb2mdb\pdb2mdb.exe" %3
+DEL %4.pdb
 DEL %4.pdb
 
 echo Exporting Assembly to %DestinationDir%

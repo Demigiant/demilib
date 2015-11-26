@@ -72,6 +72,46 @@ namespace DG.DemiEditor
 
         #region Public GUI Draw Methods
 
+        #region Buttons
+
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, string text)
+        { return ToggleButton(rect, toggled, new GUIContent(text, ""), null, null); }
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, string text, GUIStyle guiStyle)
+        { return ToggleButton(rect, toggled, new GUIContent(text, ""), null, guiStyle); }
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, string text, DeColorPalette colorPalette, GUIStyle guiStyle = null)
+        { return ToggleButton(rect, toggled, new GUIContent(text, ""), colorPalette, guiStyle); }
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, GUIContent content)
+        { return ToggleButton(rect, toggled, content, null, null); }
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, GUIContent content, GUIStyle guiStyle)
+        { return ToggleButton(rect, toggled, content, null, guiStyle); }
+        /// <summary>Button that can be toggled on and off</summary>
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, GUIContent content, DeColorPalette colorPalette, GUIStyle guiStyle = null)
+        {
+            DeColorPalette cp = colorPalette ?? DeGUI.colors;
+            Color prevBgColor = GUI.backgroundColor;
+            GUI.backgroundColor = toggled ? cp.bg.toggleOn : cp.bg.toggleOff;
+            if (guiStyle == null) guiStyle = DeGUI.styles.button.def;
+            bool clicked = GUI.Button(
+                rect,
+                content,
+                guiStyle.Clone(toggled ? cp.content.toggleOn : cp.content.toggleOff)
+            );
+            if (clicked) {
+                toggled = !toggled;
+                GUI.changed = true;
+            }
+            GUI.backgroundColor = prevBgColor;
+            return toggled;
+        }
+
+        #endregion
+
         #region ObjectFields
 
         /// <summary>Scene field</summary>
