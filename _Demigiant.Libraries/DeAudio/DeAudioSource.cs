@@ -60,14 +60,31 @@ namespace DG.DeAudio
         /// Calling Play directly from a DeAudioSource overrides any lock that might've been set
         /// (though the locked status won't change)
         /// </summary>
-        public void Play(AudioClip clip, float volume = 1, bool loop = false)
+        public void Play(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
         {
             _fadeTween.Kill();
             playTime = Time.realtimeSinceStartup;
             this.volume = volume;
             if (audioGroup.mixerGroup != null) audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
             audioSource.clip = clip;
+            audioSource.pitch = pitch;
             audioSource.loop = loop;
+            audioSource.Play();
+        }
+        /// <summary>
+        /// Play the given clip with the stored volume, pitch and loop settings.
+        /// Calling Play directly from a DeAudioSource overrides any lock that might've been set
+        /// (though the locked status won't change)
+        /// </summary>
+        public void Play(DeAudioClipData clipData)
+        {
+            _fadeTween.Kill();
+            playTime = Time.realtimeSinceStartup;
+            this.volume = clipData.volume;
+            if (audioGroup.mixerGroup != null) audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
+            audioSource.clip = clipData.clip;
+            audioSource.pitch = clipData.pitch;
+            audioSource.loop = clipData.loop;
             audioSource.Play();
         }
 

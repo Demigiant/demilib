@@ -23,7 +23,7 @@ namespace DG.DeAudio
         public float fooGlobalVolume = 1;
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.100";
+        public const string Version = "0.5.150";
         internal const string LogPrefix = "DAM :: ";
         static Tween _fadeTween;
 
@@ -67,14 +67,28 @@ namespace DG.DeAudio
         /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
-        public static DeAudioSource Play(DeAudioGroupId groupId, AudioClip clip, float volume = 1, bool loop = false)
+        public static DeAudioSource Play(DeAudioGroupId groupId, AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
         {
             DeAudioGroup group = GetAudioGroup(groupId);
             if (group == null) {
                 Debug.LogWarning(LogPrefix + "Clip can't be played because no group with the given groupId (" + groupId + ") was created");
                 return null;
             }
-            return group.Play(clip, volume, loop);
+            return group.Play(clip, volume, pitch, loop);
+        }
+        /// <summary>
+        /// Plays the given <see cref="DeAudioClipData"/> with the stored volume, pitch and loop settings.
+        /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+        /// </summary>
+        public static DeAudioSource Play(DeAudioGroupId groupId, DeAudioClipData clipData)
+        {
+            DeAudioGroup group = GetAudioGroup(groupId);
+            if (group == null) {
+                Debug.LogWarning(LogPrefix + "Clip can't be played because no group with the given groupId (" + groupId + ") was created");
+                return null;
+            }
+            return group.Play(clipData);
         }
 
         /// <summary>Stops all sounds</summary>
