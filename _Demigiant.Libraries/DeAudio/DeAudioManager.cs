@@ -106,7 +106,7 @@ namespace DG.DeAudio
         { IterateOnAllGroups(OperationType.UnlockByClip, clip); }
 
         /// <summary>
-        /// Returns the <see cref="DeAudioGroup"/> with the given ID, or NULL if it doesn't exist.
+        /// Returns the <see cref="DeAudioGroup"/> with the given ID, or NULL if there is none
         /// </summary>
         public static DeAudioGroup GetAudioGroup(DeAudioGroupId groupId)
         {
@@ -116,6 +116,16 @@ namespace DG.DeAudio
                 if (g.id == groupId) return g;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Returns the AudioMixerGroup for <see cref="DeAudioGroup"/> with the given ID, or null if there is none
+        /// </summary>
+        public static AudioMixerGroup GetMixerGroup(DeAudioGroupId groupId)
+        {
+            DeAudioGroup g = GetAudioGroup(groupId);
+            if (g == null) return null;
+            return g.mixerGroup;
         }
 
         #region Tweens
