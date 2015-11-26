@@ -19,16 +19,21 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioGroup.Play(UnityEngine.AudioClip,System.Single,System.Boolean)">
             <summary>
-            Play the given sound with the given options
+            Plays the given sound with the given options.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
             </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioGroup.Stop">
-            <summary>
-            Stop all sounds for this group
-            </summary>
+            <summary>Stops all sounds for this group</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioGroup.Stop(UnityEngine.AudioClip)">
-            <summary>Stop all sounds for this group that are using the given clip</summary>
+            <summary>Stops all sounds for this group that are using the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.Unlock">
+            <summary>Unlocks all <see cref="T:DG.DeAudio.DeAudioSource"/> instances for this group</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.Unlock(UnityEngine.AudioClip)">
+            <summary>Unlocks all <see cref="T:DG.DeAudio.DeAudioSource"/> instances for this group that are using the given clip</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioGroup.FadeOut(System.Single,System.Boolean,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades out this group's volume</summary>
@@ -48,20 +53,33 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Play(DG.DeAudio.DeAudioGroupId,UnityEngine.AudioClip,System.Single,System.Boolean)">
             <summary>
-            Play the given sound with the given options and using the given group id.
-            A DeAudioGroup with the given ID must exist in order for the sound to play.
+            Plays the given sound with the given options and using the given group id.
+            A <see cref="T:DG.DeAudio.DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
             </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Stop">
-            <summary>
-            Stops all sounds
-            </summary>
+            <summary>Stops all sounds</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Stop(DG.DeAudio.DeAudioGroupId)">
             <summary>Stops all sounds for the given group</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Stop(UnityEngine.AudioClip)">
             <summary>Stops all sounds for the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Unlock">
+            <summary>Unlocks all <see cref="T:DG.DeAudio.DeAudioSource"/> instances</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Unlock(DG.DeAudio.DeAudioGroupId)">
+            <summary>Unlocks all <see cref="T:DG.DeAudio.DeAudioSource"/> instances for the given group</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Unlock(UnityEngine.AudioClip)">
+            <summary>Unlocks all <see cref="T:DG.DeAudio.DeAudioSource"/> instances for the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.GetAudioGroup(DG.DeAudio.DeAudioGroupId)">
+            <summary>
+            Returns the <see cref="T:DG.DeAudio.DeAudioGroup"/> with the given ID, or NULL if it doesn't exist.
+            </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.FadeOut(System.Single,System.Boolean,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades out the global volume</summary>
@@ -97,11 +115,11 @@
         </member>
         <member name="T:DG.DeAudio.DeAudioSource">
             <summary>
-            Data connected to every AudioSource added by DeAudioManager
+            Data connected to every AudioSource added by <see cref="T:DG.DeAudio.DeAudioManager"/>
             </summary>
         </member>
         <member name="F:DG.DeAudio.DeAudioSource.locked">
-            <summary>If TRUE, the AudioSource won't be recycled until it's unlocked</summary>
+            <summary>If TRUE, the AudioSource won't be reused until it's unlocked</summary>
         </member>
         <member name="P:DG.DeAudio.DeAudioSource.isFree">
             <summary>TRUE if the audioSource is not playing and is not locked</summary>
@@ -116,7 +134,7 @@
             <summary>
             Play the given clip with the given options.
             Calling Play directly from a DeAudioSource overrides any lock that might've been set
-            (though the locked status will remain active if present)
+            (though the locked status won't change)
             </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioSource.Stop">

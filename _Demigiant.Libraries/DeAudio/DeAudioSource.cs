@@ -11,11 +11,11 @@ using Object = UnityEngine.Object;
 namespace DG.DeAudio
 {
     /// <summary>
-    /// Data connected to every AudioSource added by DeAudioManager
+    /// Data connected to every AudioSource added by <see cref="DeAudioManager"/>
     /// </summary>
     public class DeAudioSource : IDisposable
     {
-        /// <summary>If TRUE, the AudioSource won't be recycled until it's unlocked</summary>
+        /// <summary>If TRUE, the AudioSource won't be reused until it's unlocked</summary>
         public bool locked;
         public DeAudioGroup audioGroup { get; private set; }
         public AudioSource audioSource { get; private set; }
@@ -58,7 +58,7 @@ namespace DG.DeAudio
         /// <summary>
         /// Play the given clip with the given options.
         /// Calling Play directly from a DeAudioSource overrides any lock that might've been set
-        /// (though the locked status will remain active if present)
+        /// (though the locked status won't change)
         /// </summary>
         public void Play(AudioClip clip, float volume = 1, bool loop = false)
         {

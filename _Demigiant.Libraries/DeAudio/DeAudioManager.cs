@@ -25,15 +25,15 @@ namespace DG.DeAudio
 
         internal static DeAudioManager I;
         public const string Version = "0.5.010";
+        internal const string LogPrefix = "DAM :: ";
+        static Tween _fadeTween;
+
         public static AudioMixer audioMixer { get { return I.fooAudioMixer; } }
         public static DeAudioGroup[] audioGroups { get { return I.fooAudioGroups; } }
         public static float globalVolume {
             get { return I.fooGlobalVolume; }
             set { SetGlobalVolume(value); }
         }
-        public const string LogPrefix = "DAM :: ";
-
-        static Tween _fadeTween;
 
         #region Unity Methods
 
@@ -65,8 +65,9 @@ namespace DG.DeAudio
         #region Public Methods
 
         /// <summary>
-        /// Play the given sound with the given options and using the given group id.
-        /// A DeAudioGroup with the given ID must exist in order for the sound to play.
+        /// Plays the given sound with the given options and using the given group id.
+        /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
         public static DeAudioSource Play(DeAudioGroupId groupId, AudioClip clip, float volume = 1, bool loop = false)
         {
@@ -78,9 +79,7 @@ namespace DG.DeAudio
             return group.Play(clip, volume, loop);
         }
 
-        /// <summary>
-        /// Stops all sounds
-        /// </summary>
+        /// <summary>Stops all sounds</summary>
         public static void Stop()
         { IterateOnAllGroups(OperationType.Stop); }
         /// <summary>Stops all sounds for the given group</summary>
@@ -92,6 +91,32 @@ namespace DG.DeAudio
         /// <summary>Stops all sounds for the given clip</summary>
         public static void Stop(AudioClip clip)
         { IterateOnAllGroups(OperationType.StopByClip, clip); }
+
+        /// <summary>Unlocks all <see cref="DeAudioSource"/> instances</summary>
+        public static void Unlock()
+        { IterateOnAllGroups(OperationType.Unlock); }
+        /// <summary>Unlocks all <see cref="DeAudioSource"/> instances for the given group</summary>
+        public static void Unlock(DeAudioGroupId groupId)
+        {
+            DeAudioGroup group = GetAudioGroup(groupId);
+            if (group != null) group.Unlock();
+        }
+        /// <summary>Unlocks all <see cref="DeAudioSource"/> instances for the given clip</summary>
+        public static void Unlock(AudioClip clip)
+        { IterateOnAllGroups(OperationType.UnlockByClip, clip); }
+
+        /// <summary>
+        /// Returns the <see cref="DeAudioGroup"/> with the given ID, or NULL if it doesn't exist.
+        /// </summary>
+        public static DeAudioGroup GetAudioGroup(DeAudioGroupId groupId)
+        {
+            int len = audioGroups.Length;
+            for (int i = 0; i < len; ++i) {
+                DeAudioGroup g = audioGroups[i];
+                if (g.id == groupId) return g;
+            }
+            return null;
+        }
 
         #region Tweens
 
@@ -175,23 +200,15 @@ namespace DG.DeAudio
                 case OperationType.StopByClip:
                     group.Stop(clip);
                     break;
+                case OperationType.Unlock:
+                    group.Unlock();
+                    break;
+                case OperationType.UnlockByClip:
+                    group.Unlock(clip);
+                    break;
                 }
             }
         }
-
-        #region Helpers
-
-        static DeAudioGroup GetAudioGroup(DeAudioGroupId groupId)
-        {
-            int len = audioGroups.Length;
-            for (int i = 0; i < len; ++i) {
-                DeAudioGroup g = audioGroups[i];
-                if (g.id == groupId) return g;
-            }
-            return null;
-        }
-
-        #endregion
 
         #endregion
     }

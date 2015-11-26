@@ -6,6 +6,8 @@ namespace DG.DeAudio.Core
     public enum OperationType
     {
         Stop,
-        StopByClip
+        StopByClip,
+        Unlock,
+        UnlockByClip
     }
 }

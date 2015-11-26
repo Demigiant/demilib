@@ -52,7 +52,8 @@ namespace DG.DeAudio
         #region Public Methods
 
         /// <summary>
-        /// Play the given sound with the given options
+        /// Plays the given sound with the given options.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
         public DeAudioSource Play(AudioClip clip, float volume = 1, bool loop = false)
         {
@@ -65,14 +66,19 @@ namespace DG.DeAudio
             return source;
         }
 
-        /// <summary>
-        /// Stop all sounds for this group
-        /// </summary>
+        /// <summary>Stops all sounds for this group</summary>
         public void Stop()
         { IterateOnAllSources(OperationType.Stop); }
-        /// <summary>Stop all sounds for this group that are using the given clip</summary>
+        /// <summary>Stops all sounds for this group that are using the given clip</summary>
         public void Stop(AudioClip clip)
         { IterateOnAllSources(OperationType.StopByClip, clip); }
+
+        /// <summary>Unlocks all <see cref="DeAudioSource"/> instances for this group</summary>
+        public void Unlock()
+        { IterateOnAllSources(OperationType.Unlock); }
+        /// <summary>Unlocks all <see cref="DeAudioSource"/> instances for this group that are using the given clip</summary>
+        public void Unlock(AudioClip clip)
+        { IterateOnAllSources(OperationType.UnlockByClip, clip); }
 
         #region Tweens
 
@@ -161,6 +167,12 @@ namespace DG.DeAudio
                     break;
                 case OperationType.StopByClip:
                     if (s.clip == clip) s.Stop();
+                    break;
+                case OperationType.Unlock:
+                    s.locked = false;
+                    break;
+                case OperationType.UnlockByClip:
+                    if (s.clip == clip) s.locked = false;
                     break;
                 }
             }
