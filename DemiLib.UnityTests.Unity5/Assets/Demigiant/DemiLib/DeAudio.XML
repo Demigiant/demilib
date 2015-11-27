@@ -18,15 +18,15 @@
         <member name="F:DG.DeAudio.DeAudioGroup.maxSources">
             <summary>Max AudioSources for this group. DO NOT change this at runtime</summary>
         </member>
-        <member name="M:DG.DeAudio.DeAudioGroup.Play(UnityEngine.AudioClip,System.Single,System.Single,System.Boolean)">
-            <summary>
-            Plays the given sound with the given options.
-            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
-            </summary>
-        </member>
         <member name="M:DG.DeAudio.DeAudioGroup.Play(DG.DeAudio.DeAudioClipData)">
             <summary>
             Plays the given <see cref="T:DG.DeAudio.DeAudioClipData"/> with the stored volume, pitch and loop settings.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.Play(UnityEngine.AudioClip,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Plays the given sound with the given options.
             <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
             </summary>
         </member>
@@ -65,6 +65,18 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioGroup.FadeSourcesTo(System.Single,System.Single,System.Boolean)">
             <summary>Fades the volume of each source in this group (not this group's volume) to the given value</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.Crossfade(DG.DeAudio.DeAudioClipData,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>
+            Fades out then stops all sources in this group, while starting the given <see cref="T:DG.DeAudio.DeAudioClipData"/> with a fade-in effect.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.Crossfade(UnityEngine.AudioClip,System.Single,System.Single,System.Boolean,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>
+            Fades out then stops all sources in this group, while starting the given clip with a fade-in effect.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
         </member>
         <member name="F:DG.DeAudio.DeAudioGroupId.INTERNAL_Global">
             <summary>Don't use/assign this! It's assigned automatically to the global group</summary>
@@ -189,6 +201,18 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.FadeTo(UnityEngine.AudioClip,System.Single,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades the given clip's volume to the given value</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Crossfade(DG.DeAudio.DeAudioGroupId,DG.DeAudio.DeAudioClipData,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>
+            Fades out then stops all sources in the given group, while starting the given <see cref="T:DG.DeAudio.DeAudioClipData"/> with a fade-in effect.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Crossfade(DG.DeAudio.DeAudioGroupId,UnityEngine.AudioClip,System.Single,System.Single,System.Boolean,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>
+            Fades out then stops all sources in the given group, while starting the given clip with a fade-in effect.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
         </member>
         <member name="T:DG.DeAudio.DeAudioNotificator">
             <summary>
