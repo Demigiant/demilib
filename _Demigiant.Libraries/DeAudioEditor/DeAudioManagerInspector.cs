@@ -120,7 +120,7 @@ namespace DG.DeAudioEditor
             // Group volumes
             GUILayout.Space(4);
             EditorGUIUtility.labelWidth = 101;
-            GUILayout.Label("DeAudioGroups Volumes", DeGUI.styles.label.bold);
+            GUILayout.Label("DeAudioGroups", DeGUI.styles.label.bold);
             // Groups with ids
             int len = _src.fooAudioGroups.Length;
             for (int i = 0; i < len; ++i) {
