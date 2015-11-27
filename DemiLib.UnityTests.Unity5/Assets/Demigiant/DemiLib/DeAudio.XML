@@ -87,6 +87,9 @@
             <para>Must be instantiated only once per project (either manually or via code), and its GameObject is set automatically to DontDestroyOnLoad.</para>
             </summary>
         </member>
+        <member name="F:DG.DeAudio.DeAudioManager.inspectorUpdater">
+            <summary>Used internally inside Unity Editor, as a trick to update DeAudioManager's inspector at every frame</summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioManager.Init">
             <summary>
             Creates a DeAudioManager instance (if it's not present already) and sets it as DontDestroyOnLoad.

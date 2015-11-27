@@ -23,6 +23,8 @@ namespace DG.DeAudio
         public bool isFree { get { return !locked && !audioSource.isPlaying; } }
         public bool isPlaying { get { return audioSource.isPlaying; } }
         public AudioClip clip { get { return audioSource.clip; } }
+        public float pitch { get { return audioSource.pitch; } }
+        public bool loop { get { return audioSource.loop; } }
         /// <summary>Unscaled volume (doesn't include modifiers caused by global and group volumes)</summary>
         public float unscaledVolume { get; private set; }
         /// <summary>Current volume (including modifiers caused by global and group volumes)</summary>

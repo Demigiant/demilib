@@ -20,11 +20,13 @@ namespace DG.DeAudio
         public bool logInfo = false;
         public DeAudioGroup[] fooAudioGroups;
         public float fooGlobalVolume = 1;
+        /// <summary>Used internally inside Unity Editor, as a trick to update DeAudioManager's inspector at every frame</summary>
+        public int inspectorUpdater;
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.200";
+        public const string Version = "0.5.250";
         internal const string LogPrefix = "DAM :: ";
-        static DeAudioGroup _globalGroup; // Group created when playing a clip without any group indication. Also stored as the final _audioGroups value
+        internal static DeAudioGroup globalGroup; // Group created when playing a clip without any group indication. Also stored as the final _audioGroups value
         static Tween _fadeTween;
 
         public static float globalVolume {
@@ -46,8 +48,8 @@ namespace DG.DeAudio
             DontDestroyOnLoad(this.gameObject);
 
             // Initialize audioGroups
-            _globalGroup = new DeAudioGroup(DeAudioGroupId.INTERNAL_Global);
-            _globalGroup.Init(this.transform, "Global [auto]");
+            globalGroup = new DeAudioGroup(DeAudioGroupId.INTERNAL_Global);
+            globalGroup.Init(this.transform, "Global [auto]");
             int len = I.fooAudioGroups == null ? 0 : I.fooAudioGroups.Length;
             _audioGroups = new DeAudioGroup[len + 1];
             for (int i = 0; i < len; ++i) {
@@ -55,7 +57,12 @@ namespace DG.DeAudio
                 g.Init(this.transform);
                 _audioGroups[i] = g;
             }
-            _audioGroups[len] = _globalGroup;
+            _audioGroups[len] = globalGroup;
+        }
+
+        void Update()
+        {
+            if (Application.isEditor) inspectorUpdater++;
         }
 
         void OnDestroy()
@@ -118,7 +125,7 @@ namespace DG.DeAudio
         /// </summary>
         public static DeAudioSource Play(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
         {
-            return _globalGroup.Play(clip, volume, pitch, loop);
+            return globalGroup.Play(clip, volume, pitch, loop);
         }
         /// <summary>
         /// PlaPlays the given <see cref="DeAudioClipData"/> external to any group,  with the stored volume, pitch and loop settings.
@@ -126,7 +133,7 @@ namespace DG.DeAudio
         /// </summary>
         public static DeAudioSource Play(DeAudioClipData clipData)
         {
-            return _globalGroup.Play(clipData);
+            return globalGroup.Play(clipData);
         }
 
         /// <summary>Stops all sounds</summary>

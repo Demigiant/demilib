@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using DG.DeAudio;
 using DG.DemiEditor;
 using UnityEditor;
@@ -20,6 +21,7 @@ namespace DG.DeAudioEditor
         ReorderableList _audioGroupsList;
         readonly List<DeAudioGroupId> _duplicateGroupIds = new List<DeAudioGroupId>();
         bool _requiresDuplicateCheck; // Used to check for duplicates during draw method, since during onChangedCallback it won't work correctly
+        StringBuilder _runtimeStrb = new StringBuilder();
 
         #region Unity and GUI Methods
 
@@ -56,13 +58,13 @@ namespace DG.DeAudioEditor
                 DeAudioGroup item = _src.fooAudioGroups[index];
                 GUI.color = item.mixerGroup == null ? Color.white : Color.green;
                 AudioMixerGroup prevMixerGroup = item.mixerGroup;
-                item.mixerGroup = EditorGUI.ObjectField(new Rect(rect.x, ry, rect.width, lineH), "MixerGroup", item.mixerGroup, typeof(AudioMixerGroup), false) as AudioMixerGroup;
+                item.mixerGroup = EditorGUI.ObjectField(new Rect(rect.x, ry, rect.width, lineH), "MixerGroup", item.mixerGroup, typeof (AudioMixerGroup), false) as AudioMixerGroup;
                 if (item.mixerGroup != prevMixerGroup) DeAudioEditorUtils.CheckForDuplicateAudioGroupIds(_src.fooAudioGroups, _duplicateGroupIds);
                 GUI.color = Color.white;
                 ry += lineH + listVSpacer;
                 DeAudioGroupId prevId = item.id;
                 GUI.color = hasDuplicateGroupIds && _duplicateGroupIds.Contains(item.id) ? Color.red : Color.white;
-                item.id = (DeAudioGroupId)EditorGUI.EnumPopup(new Rect(rect.x, ry, rect.width, lineH), "Id (univocal)", item.id);
+                item.id = (DeAudioGroupId) EditorGUI.EnumPopup(new Rect(rect.x, ry, rect.width, lineH), "Id (univocal)", item.id);
                 GUI.color = Color.white;
                 if (item.id != prevId) DeAudioEditorUtils.CheckForDuplicateAudioGroupIds(_src.fooAudioGroups, _duplicateGroupIds);
                 ry += lineH + listVSpacer;
@@ -78,7 +80,7 @@ namespace DG.DeAudioEditor
             };
         }
 
-        override public void OnInspectorGUI()
+        public override void OnInspectorGUI()
         {
             Undo.RecordObject(_src, "DeAudioManager");
             DeGUI.BeginGUI();
@@ -119,13 +121,52 @@ namespace DG.DeAudioEditor
             GUILayout.Space(4);
             EditorGUIUtility.labelWidth = 101;
             GUILayout.Label("DeAudioGroups Volumes", DeGUI.styles.label.bold);
+            // Groups with ids
             int len = _src.fooAudioGroups.Length;
             for (int i = 0; i < len; ++i) {
+                // Group volumes
                 DeAudioGroup g = _src.fooAudioGroups[i];
                 float prevVolume = g.fooVolume;
                 g.fooVolume = EditorGUILayout.Slider(g.id.ToString(), g.fooVolume, 0, 1);
                 if (Math.Abs(g.fooVolume - prevVolume) > float.Epsilon) g.SetVolume(g.fooVolume);
+                DrawRuntimeSourcesFor(g);
             }
+            // Global group
+            if (HasPlayingSources(DeAudioManager.globalGroup)) {
+                GUILayout.Label("[GLOBAL]");
+                DrawRuntimeSourcesFor(DeAudioManager.globalGroup);
+            }
+        }
+
+        void DrawRuntimeSourcesFor(DeAudioGroup group)
+        {
+            int len = group.sources.Count;
+            for (int i = 0; i < len; ++i) {
+                // Sources volume
+                DeAudioSource s = group.sources[i];
+                if (s.isPlaying) {
+                    _runtimeStrb.Length = 0;
+                    _runtimeStrb.Append("└ ").Append(s.clip.name);
+                    if (s.locked) _runtimeStrb.Append(" [LOCKED]");
+                    _runtimeStrb.Append(" (").Append(s.unscaledVolume.ToString("G2")).Append("-").Append(s.pitch.ToString("G2"));
+                    if (s.loop) _runtimeStrb.Append("-loop");
+                    _runtimeStrb.Append(")");
+                    GUILayout.Label(_runtimeStrb.ToString());
+                }
+            }
+        }
+
+        #endregion
+
+        #region Utils
+
+        bool HasPlayingSources(DeAudioGroup group)
+        {
+            int len = group.sources.Count;
+            for (int i = 0; i < len; ++i) {
+                if (group.sources[i].isPlaying) return true;
+            }
+            return false;
         }
 
         #endregion
