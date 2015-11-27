@@ -22,7 +22,9 @@ namespace DG.DeAudioEditor
             float lineH = EditorGUIUtility.singleLineHeight;
             float btW = 22;
             float btLoopW = 44;
-            Rect clipRect = new Rect(position.x, position.y, position.width, lineH);
+            float groupW = 78;
+            Rect clipRect = new Rect(position.x, position.y, position.width - groupW - 4, lineH);
+            Rect groupIdRect = new Rect(position.x + (position.width - groupW), clipRect.y, groupW, lineH);
             Rect volumeRect = new Rect(position.x, position.y + lineH + 1, position.width - btW * 2 - 4, lineH);
             Rect btPlayRect = new Rect(position.x + (position.width - btW * 2), volumeRect.y - 1, btW, lineH);
             Rect btStopRect = new Rect(position.x + (position.width - btW), volumeRect.y - 1, btW, lineH);
@@ -31,6 +33,8 @@ namespace DG.DeAudioEditor
 
             // Clip
             EditorGUI.PropertyField(clipRect, property.FindPropertyRelative("clip"), label);
+            // Group
+            EditorGUI.PropertyField(groupIdRect, property.FindPropertyRelative("groupId"), new GUIContent(""));
             // Volume
             SerializedProperty volumeProp = property.FindPropertyRelative("volume");
             float prevVolume = volumeProp.floatValue;

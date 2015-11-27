@@ -24,7 +24,7 @@ namespace DG.DeAudio
         public int inspectorUpdater;
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.250";
+        public const string Version = "0.5.300";
         internal const string LogPrefix = "DAM :: ";
         internal static DeAudioGroup globalGroup; // Group created when playing a clip without any group indication. Also stored as the final _audioGroups value
         static Tween _fadeTween;
@@ -92,6 +92,13 @@ namespace DG.DeAudio
         }
 
         /// <summary>
+        /// Plays the given <see cref="DeAudioClipData"/> on the stored group, with the stored volume, pitch and loop settings.
+        /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+        /// </summary>
+        public static DeAudioSource Play(DeAudioClipData clipData)
+        { return Play(clipData.groupId, clipData.clip, clipData.volume, clipData.pitch, clipData.loop); }
+        /// <summary>
         /// Plays the given sound with the given options and using the given group id.
         /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
@@ -106,34 +113,12 @@ namespace DG.DeAudio
             return group.Play(clip, volume, pitch, loop);
         }
         /// <summary>
-        /// Plays the given <see cref="DeAudioClipData"/> with the stored volume, pitch and loop settings.
-        /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
-        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
-        /// </summary>
-        public static DeAudioSource Play(DeAudioGroupId groupId, DeAudioClipData clipData)
-        {
-            DeAudioGroup group = GetAudioGroup(groupId);
-            if (group == null) {
-                Debug.LogWarning(LogPrefix + "Clip can't be played because no group with the given groupId (" + groupId + ") was created");
-                return null;
-            }
-            return group.Play(clipData);
-        }
-        /// <summary>
         /// Plays the given sound external to any group, using the given options.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
         public static DeAudioSource Play(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
         {
             return globalGroup.Play(clip, volume, pitch, loop);
-        }
-        /// <summary>
-        /// PlaPlays the given <see cref="DeAudioClipData"/> external to any group,  with the stored volume, pitch and loop settings.
-        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
-        /// </summary>
-        public static DeAudioSource Play(DeAudioClipData clipData)
-        {
-            return globalGroup.Play(clipData);
         }
 
         /// <summary>Stops all sounds</summary>
@@ -287,11 +272,12 @@ namespace DG.DeAudio
         }
 
         /// <summary>
-        /// Fades out then stops all sources in the given group, while starting the given <see cref="DeAudioClipData"/> with a fade-in effect.
+        /// Fades out then stops all sources in the given <see cref="DeAudioClipData"/> group,
+        /// while starting the given <see cref="DeAudioClipData"/> with a fade-in effect.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
-        public static DeAudioSource Crossfade(DeAudioGroupId groupId, DeAudioClipData clipData, float fadeDuration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { return Crossfade(groupId, clipData.clip, clipData.volume, clipData.pitch, clipData.loop, fadeDuration, ignoreTimeScale, onComplete); }
+        public static DeAudioSource Crossfade(DeAudioClipData clipData, float fadeDuration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
+        { return Crossfade(clipData.groupId, clipData.clip, clipData.volume, clipData.pitch, clipData.loop, fadeDuration, ignoreTimeScale, onComplete); }
         /// <summary>
         /// Fades out then stops all sources in the given group, while starting the given clip with a fade-in effect.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>

@@ -9,6 +9,7 @@ namespace DG.DeAudio
     [System.Serializable]
     public class DeAudioClipData
     {
+        public DeAudioGroupId groupId;
         public AudioClip clip;
         public float volume = 1;
         public float pitch = 1;
