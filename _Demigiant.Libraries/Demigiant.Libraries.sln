@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeAudioEditor", "DeAudioEdi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUtils", "DeUtils\DeUtils.csproj", "{12702A57-BC07-4785-86E1-BE436E661FF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeExtensions", "DeExtensions\DeExtensions.csproj", "{5593BBD5-E576-45F0-9371-301914C1EA74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{12702A57-BC07-4785-86E1-BE436E661FF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12702A57-BC07-4785-86E1-BE436E661FF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12702A57-BC07-4785-86E1-BE436E661FF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5593BBD5-E576-45F0-9371-301914C1EA74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5593BBD5-E576-45F0-9371-301914C1EA74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5593BBD5-E576-45F0-9371-301914C1EA74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5593BBD5-E576-45F0-9371-301914C1EA74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
