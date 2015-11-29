@@ -12,23 +12,23 @@ Integrates with DemiEditor to allow customization of colors. Uses custom Skin an
 
 ##Extra libraries
 Extra Libraries are independent from each other, but may require the Core libraries (DemiLib and DemiEditor).
-####DeAudio/DeAudioEditor
+###DeAudio/DeAudioEditor
 ![DeAudioManager](screenshots/DeAudioManager_inspector.png "DeAudioManager")  
 *Unity 5 or later - requires Core libraries and DOTween*  
 Audio manager.
-####Debugging
+###Debugging
 *Unity 4.6 or later - requires Core libraries*  
 A barebone debug library.
-####DeEditorTools
+###DeEditorTools
 *Unity 5 or later - requires Core libraries*  
 Miscellaneous editor panels.
 #####DeEditorTools > Scenes Panel
 ![Scenes Panel](screenshots/DeEditorTools_scenespanel.png "Scenes Panel")  
 *Open from Tools > Demigiant > Scenes Panel*  
 A dockable panel with all scenes in the build. You can click them directly to switch to the given scene, or use a toggle to enable/disable each.
-####DeExtensions
+###DeExtensions
 *Unity 5 or later*  
 Miscellaneous runtime extensions.
-####DeUtils
+###DeUtils
 *Unity 5 or later*  
 Miscellaneous runtime utilities.
