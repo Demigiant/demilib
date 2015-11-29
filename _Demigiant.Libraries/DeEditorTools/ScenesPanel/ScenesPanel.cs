@@ -42,7 +42,7 @@ namespace DG.DeEditorTools.ScenesPanel
             }
             _strb.Length = 0;
             _strb.Append("Scenes in build: ").Append(totEnabled + totDisabled)
-                .Append(" (").Append(totEnabled).Append("/").Append(totDisabled).Append(")");
+                .Append(" (").Append(totEnabled).Append("-").Append(totDisabled).Append(")");
             GUILayout.Label(_strb.ToString());
 
             // Draw scenes
