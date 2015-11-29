@@ -18,7 +18,7 @@ Audio manager.
 ####Debugging
 *Unity 4.6 or later - requires Core libraries*  
 A barebone debug library.
-####DeEditorTools
+####DeEditorTools - requires Core libraries
 *Unity 5 or later*  
 Miscellaneous editor panels.
 #####DeEditorTools > Scenes Panel
