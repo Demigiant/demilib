@@ -18,6 +18,15 @@ Audio manager.
 ####Debugging
 *Unity 4.6 or later - requires Core libraries*  
 A barebone debug library.
+####DeEditorTools
+*Unity 5 or later*  
+Miscellaneous editor panels.
+#####Scenes Panel
+Open from Tools > Demigiant > Scenes Panel  
+A dockable panel with all scenes in the build, with options to enable/disable them.
+####DeExtensions
+*Unity 5 or later*  
+Miscellaneous runtime extensions.
 ####DeUtils
 *Unity 5 or later*  
 Miscellaneous runtime utilities.
