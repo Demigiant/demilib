@@ -18,8 +18,8 @@ Audio manager.
 ####Debugging
 *Unity 4.6 or later - requires Core libraries*  
 A barebone debug library.
-####DeEditorTools - requires Core libraries
-*Unity 5 or later*  
+####DeEditorTools
+*Unity 5 or later - requires Core libraries*  
 Miscellaneous editor panels.
 #####DeEditorTools > Scenes Panel
 Open from Tools > Demigiant > Scenes Panel  
