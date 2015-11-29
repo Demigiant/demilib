@@ -50,10 +50,15 @@ namespace DG.DeEditorTools.ScenesPanel
             EditorBuildSettingsScene[] scenes = EditorBuildSettings.scenes;
             for (int i = 0; i < len; i++) {
                 EditorBuildSettingsScene scene = scenes[i];
+                bool isCurrentlyLoaded = Application.isPlaying ? Application.loadedLevel == i : scene.path == EditorApplication.currentScene;
                 DeGUILayout.BeginToolbar();
                 string sceneName = Path.GetFileNameWithoutExtension(scene.path);
                 scene.enabled = EditorGUILayout.Toggle(scene.enabled, GUILayout.Width(16));
-                if (GUILayout.Button(sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft))) {
+//                if (GUILayout.Button(sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft))) {
+                if (DeGUILayout.ColoredButton(
+                    isCurrentlyLoaded ? DeGUI.colors.bg.toggleOn : DeGUI.colors.bg.def, isCurrentlyLoaded ? DeGUI.colors.content.toggleOn : DeGUI.colors.content.def,
+                    sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft)
+                )) {
                     if (Event.current.button == 1) {
                         // Right-click: ping scene in Project panel
                         Object sceneObj = AssetDatabase.LoadAssetAtPath<Object>(scene.path);
