@@ -24,7 +24,7 @@ namespace DG.DeAudio
         public int inspectorUpdater;
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.300";
+        public const string Version = "0.5.310";
         internal const string LogPrefix = "DAM :: ";
         internal static DeAudioGroup globalGroup; // Group created when playing a clip without any group indication. Also stored as the final _audioGroups value
         static Tween _fadeTween;

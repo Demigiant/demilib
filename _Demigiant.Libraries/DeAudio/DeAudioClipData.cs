@@ -14,5 +14,19 @@ namespace DG.DeAudio
         public float volume = 1;
         public float pitch = 1;
         public bool loop = false;
+
+        public DeAudioClipData(DeAudioGroupId groupId, float volume = 1, float pitch = 1, bool loop = false)
+        {
+            this.groupId = groupId;
+            this.volume = volume;
+            this.pitch = pitch;
+            this.loop = loop;
+        }
+
+        public DeAudioClipData(DeAudioGroupId groupId, bool loop)
+        {
+            this.groupId = groupId;
+            this.loop = loop;
+        }
     }
 }

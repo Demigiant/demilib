@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUtils", "DeUtils\DeUtils.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeExtensions", "DeExtensions\DeExtensions.csproj", "{5593BBD5-E576-45F0-9371-301914C1EA74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeEditorTools", "DeEditorTools\DeEditorTools.csproj", "{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{5593BBD5-E576-45F0-9371-301914C1EA74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5593BBD5-E576-45F0-9371-301914C1EA74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5593BBD5-E576-45F0-9371-301914C1EA74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
