@@ -23,6 +23,7 @@ A barebone debug library.
 Miscellaneous editor panels.
 #####DeEditorTools > Scenes Panel
 *Open from Tools > Demigiant > Scenes Panel*  
+![Scenes Panel](demilib/screenshots/DeEditorTools_scenespanel.png?raw=true "Scenes Panel")
 A dockable panel with all scenes in the build. You can click them directly to switch to the given scene, or use a toggle to enable/disable each.
 ####DeExtensions
 *Unity 5 or later*  

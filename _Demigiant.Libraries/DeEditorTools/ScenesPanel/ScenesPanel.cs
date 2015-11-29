@@ -54,7 +54,6 @@ namespace DG.DeEditorTools.ScenesPanel
                 DeGUILayout.BeginToolbar();
                 string sceneName = Path.GetFileNameWithoutExtension(scene.path);
                 scene.enabled = EditorGUILayout.Toggle(scene.enabled, GUILayout.Width(16));
-//                if (GUILayout.Button(sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft))) {
                 if (DeGUILayout.ColoredButton(
                     isCurrentlyLoaded ? DeGUI.colors.bg.toggleOn : DeGUI.colors.bg.def, isCurrentlyLoaded ? DeGUI.colors.content.toggleOn : DeGUI.colors.content.def,
                     sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft)
