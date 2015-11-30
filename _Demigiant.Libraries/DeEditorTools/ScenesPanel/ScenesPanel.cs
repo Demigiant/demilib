@@ -70,7 +70,7 @@ namespace DG.DeEditorTools.ScenesPanel
                             EditorApplication.OpenScene(scene.path);
                         }
                     }
-                    if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) DeGUIDrag.StartDrag(0, this, scenes, scene, i);
+                    if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) DeGUIDrag.StartDrag(0, this, scenes, i);
                     DeGUILayout.EndToolbar();
                 }
 

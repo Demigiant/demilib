@@ -110,25 +110,23 @@
             Retrieves the eventual optional data stored via the StartDrag method.
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUIDrag.StartDrag(System.Int32,UnityEditor.Editor,System.Collections.IList,System.Object,System.Int32,System.Object)">
+        <member name="M:DG.DemiEditor.DeGUIDrag.StartDrag(System.Int32,UnityEditor.Editor,System.Collections.IList,System.Int32,System.Object)">
             <summary>
             Starts a drag operation on a GUI element.
             </summary>
             <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
             <param name="editor">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
             <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
-            <param name="dragItem">Item being dragged</param>
             <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
             <param name="optionalData">Optional data that can be retrieved via the <see cref="P:DG.DemiEditor.DeGUIDrag.optionalDragData"/> static property</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUIDrag.StartDrag(System.Int32,UnityEditor.EditorWindow,System.Collections.IList,System.Object,System.Int32,System.Object)">
+        <member name="M:DG.DemiEditor.DeGUIDrag.StartDrag(System.Int32,UnityEditor.EditorWindow,System.Collections.IList,System.Int32,System.Object)">
             <summary>
             Starts a drag operation on a GUI element.
             </summary>
             <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
             <param name="editorWindow">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
             <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
-            <param name="dragItem">Item being dragged</param>
             <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
             <param name="optionalData">Optional data that can be retrieved via the <see cref="P:DG.DemiEditor.DeGUIDrag.optionalDragData"/> static property</param>
         </member>
@@ -157,6 +155,7 @@
             <summary>
             Ends the drag operations, and eventually applies the drag result.
             Returns TRUE if the position of the dragged item actually changed.
+            Called automatically by Drag method. Use it only if you want to force the end of a drag operation.
             </summary>
             <param name="applyDrag">If TRUE applies the drag results, otherwise simply cancels the drag</param>
         </member>

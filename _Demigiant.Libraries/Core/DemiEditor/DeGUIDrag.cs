@@ -34,7 +34,7 @@ namespace DG.DemiEditor
         // Default drag color
         static readonly Color _DefDragColor = new Color(0.1720873f, 0.4236527f, 0.7686567f, 0.35f);
 
-        public static GUIDragData _dragData;
+        static GUIDragData _dragData;
         static int _dragId;
         static bool _waitingToApplyDrag;
         static Editor _editor;
@@ -48,17 +48,16 @@ namespace DG.DemiEditor
         /// <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
         /// <param name="editor">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
         /// <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
-        /// <param name="dragItem">Item being dragged</param>
         /// <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
         /// <param name="optionalData">Optional data that can be retrieved via the <see cref="optionalDragData"/> static property</param>
-        public static void StartDrag(int dragId, Editor editor, IList draggableList, object dragItem, int draggedItemIndex, object optionalData = null)
+        public static void StartDrag(int dragId, Editor editor, IList draggableList, int draggedItemIndex, object optionalData = null)
         {
             if (_dragData != null) return;
             Reset();
             _editorWindow = null;
             _editor = editor;
             _dragId = dragId;
-            _dragData = new GUIDragData(draggableList, dragItem, draggedItemIndex, optionalData);
+            _dragData = new GUIDragData(draggableList, draggableList[draggedItemIndex], draggedItemIndex, optionalData);
         }
         /// <summary>
         /// Starts a drag operation on a GUI element.
@@ -66,17 +65,16 @@ namespace DG.DemiEditor
         /// <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
         /// <param name="editorWindow">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
         /// <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
-        /// <param name="dragItem">Item being dragged</param>
         /// <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
         /// <param name="optionalData">Optional data that can be retrieved via the <see cref="optionalDragData"/> static property</param>
-        public static void StartDrag(int dragId, EditorWindow editorWindow, IList draggableList, object dragItem, int draggedItemIndex, object optionalData = null)
+        public static void StartDrag(int dragId, EditorWindow editorWindow, IList draggableList, int draggedItemIndex, object optionalData = null)
         {
             if (_dragData != null) return;
             Reset();
             _editor = null;
             _editorWindow = editorWindow;
             _dragId = dragId;
-            _dragData = new GUIDragData(draggableList, dragItem, draggedItemIndex, optionalData);
+            _dragData = new GUIDragData(draggableList, draggableList[draggedItemIndex], draggedItemIndex, optionalData);
         }
 
         /// <summary>
@@ -143,6 +141,7 @@ namespace DG.DemiEditor
         /// <summary>
         /// Ends the drag operations, and eventually applies the drag result.
         /// Returns TRUE if the position of the dragged item actually changed.
+        /// Called automatically by Drag method. Use it only if you want to force the end of a drag operation.
         /// </summary>
         /// <param name="applyDrag">If TRUE applies the drag results, otherwise simply cancels the drag</param>
         public static bool EndDrag(bool applyDrag)
@@ -208,7 +207,7 @@ namespace DG.DemiEditor
     // ███ CLASS ███████████████████████████████████████████████████████████████████████████████████████████████████████████
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
-    public class GUIDragData
+    internal class GUIDragData
     {
         public readonly object draggedItem; // Dragged element
         public readonly int draggedItemIndex;
