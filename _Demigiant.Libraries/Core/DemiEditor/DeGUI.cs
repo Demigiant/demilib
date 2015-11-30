@@ -1,7 +1,6 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/04/24 18:27
 
-using System;
 using DG.DemiLib;
 using DG.DemiLib.Core;
 using UnityEditor;
@@ -11,7 +10,7 @@ using Object = UnityEngine.Object;
 namespace DG.DemiEditor
 {
     /// <summary>
-    /// Global Demigiant GUI manager
+    /// Global Demigiant GUI manager. Call <see cref="DeGUI.BeginGUI"/> to initialize it inside GUI calls.
     /// </summary>
     public static class DeGUI
     {
@@ -121,6 +120,19 @@ namespace DG.DemiEditor
             if (obj != null && !obj.ToString().EndsWith(".SceneAsset)")) obj = null;
             // Draw
             return EditorGUI.ObjectField(rect, label, obj, typeof(Object), false);
+        }
+
+        #endregion
+
+        #region Miscellaneous
+
+        /// <summary>Divider</summary>
+        public static void FlatDivider(Rect rect, Color? color = null)
+        {
+            Color prevBgColor = GUI.backgroundColor;
+            if (color != null) GUI.backgroundColor = (Color)color;
+            GUI.Box(rect, "", DeGUI.styles.box.sticky);
+            GUI.backgroundColor = prevBgColor;
         }
 
         #endregion

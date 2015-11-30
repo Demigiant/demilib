@@ -49,8 +49,32 @@ namespace DG.DeEditorTools.ScenesPanel
             EditorBuildSettingsScene[] scenes = EditorBuildSettings.scenes;
             for (int i = 0; i < len; i++) {
                 EditorBuildSettingsScene scene = scenes[i];
-                bool isCurrent = Application.isPlaying ? Application.loadedLevel == i : scene.path == EditorApplication.currentScene;
-                DrawScene(scene, isCurrent);
+                if (Application.isPlaying && !scene.enabled) continue;
+
+                string sceneName = Path.GetFileNameWithoutExtension(scene.path);
+                bool isCurrent = Application.isPlaying ? Application.loadedLevelName == sceneName : scene.path == EditorApplication.currentScene;
+                Color bgShade = isCurrent ? DeGUI.colors.bg.toggleOn : DeGUI.colors.bg.def;
+                Color labelColor = isCurrent ? DeGUI.colors.content.toggleOn : DeGUI.colors.content.def;
+                if (Application.isPlaying) {
+                    DeGUILayout.Toolbar(sceneName, bgShade, DeGUI.styles.toolbar.def, DeGUI.styles.label.toolbar.Add(labelColor));
+                } else {
+                    DeGUILayout.BeginToolbar();
+                    scene.enabled = EditorGUILayout.Toggle(scene.enabled, GUILayout.Width(16));
+                    if (DeGUILayout.ColoredButton(bgShade, labelColor, sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft))) {
+                        if (Event.current.button == 1) {
+                            // Right-click: ping scene in Project panel
+                            Object sceneObj = AssetDatabase.LoadAssetAtPath<Object>(scene.path);
+                            EditorGUIUtility.PingObject(sceneObj);
+                        } else if (EditorApplication.SaveCurrentSceneIfUserWantsTo()) {
+                            // Left-click: open scene
+                            EditorApplication.OpenScene(scene.path);
+                        }
+                    }
+                    if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) DeGUIDrag.StartDrag(0, this, scenes, scene, i);
+                    DeGUILayout.EndToolbar();
+                }
+
+                if (DeGUIDrag.Drag(0, scenes, i)) GUI.changed = true;
             }
             if (GUI.changed) EditorBuildSettings.scenes = scenes;
 
@@ -58,32 +82,6 @@ namespace DG.DeEditorTools.ScenesPanel
             if (!Application.isPlaying) DrawDragDropSceneArea();
 
             GUILayout.EndScrollView();
-        }
-
-        void DrawScene(EditorBuildSettingsScene scene, bool isCurrent)
-        {
-            if (Application.isPlaying && !scene.enabled) return;
-
-            string sceneName = Path.GetFileNameWithoutExtension(scene.path);
-            Color bgShade = isCurrent ? DeGUI.colors.bg.toggleOn : DeGUI.colors.bg.def;
-            Color labelColor = isCurrent ? DeGUI.colors.content.toggleOn : DeGUI.colors.content.def;
-            if (Application.isPlaying) {
-                DeGUILayout.Toolbar(sceneName, bgShade, DeGUI.styles.toolbar.def, DeGUI.styles.label.toolbar.Add(labelColor));
-            } else {
-                DeGUILayout.BeginToolbar();
-                scene.enabled = EditorGUILayout.Toggle(scene.enabled, GUILayout.Width(16));
-                if (DeGUILayout.ColoredButton(bgShade, labelColor, sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft))) {
-                    if (Event.current.button == 1) {
-                        // Right-click: ping scene in Project panel
-                        Object sceneObj = AssetDatabase.LoadAssetAtPath<Object>(scene.path);
-                        EditorGUIUtility.PingObject(sceneObj);
-                    } else if (EditorApplication.SaveCurrentSceneIfUserWantsTo()) {
-                        // Left-click: open scene
-                        EditorApplication.OpenScene(scene.path);
-                    }
-                }
-                DeGUILayout.EndToolbar();
-            }
         }
 
         void DrawDragDropSceneArea()

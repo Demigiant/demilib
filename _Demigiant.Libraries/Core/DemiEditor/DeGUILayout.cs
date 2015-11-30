@@ -12,6 +12,8 @@ namespace DG.DemiEditor
     /// </summary>
     public static class DeGUILayout
     {
+        static int _activePressButtonId = -1;
+
         #region Buttons
 
         /// <summary>Button that can be toggled on and off</summary>
@@ -33,6 +35,29 @@ namespace DG.DemiEditor
             bool clicked = GUILayout.Button(content, guiStyle.Clone(contentColor), options);
             GUI.backgroundColor = prevBgColor;
             return clicked;
+        }
+
+        /// <summary>
+        /// Draws a button that returns TRUE the first time it's pressed, instead than when its released.
+        /// </summary>
+        public static bool PressButton(string text, GUIStyle guiStyle, params GUILayoutOption[] options)
+        { return PressButton(new GUIContent(text, ""), guiStyle, options); }
+        /// <summary>
+        /// Draws a button that returns TRUE the first time it's pressed, instead than when its released.
+        /// </summary>
+        public static bool PressButton(GUIContent content, GUIStyle guiStyle, params GUILayoutOption[] options)
+        {
+            // NOTE: tried using RepeatButton, but doesn't work if used for dragging
+            GUILayout.Button(content, guiStyle, options);
+            int controlId = GUIUtility.GetControlID(FocusType.Native);
+            int hotControl = GUIUtility.hotControl;
+            bool pressed = hotControl > 1 && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition);
+            if (pressed && _activePressButtonId != controlId) {
+                _activePressButtonId = controlId;
+                return true;
+            }
+            if (!pressed && hotControl < 1) _activePressButtonId = -1;
+            return false;
         }
 
         /// <summary>Toolbar foldout button</summary>
