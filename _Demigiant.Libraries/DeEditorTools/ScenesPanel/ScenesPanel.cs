@@ -42,22 +42,37 @@ namespace DG.DeEditorTools.ScenesPanel
                 else totDisabled++;
             }
             _strb.Length = 0;
-            _strb.Append("Scenes in build: ").Append(totEnabled + totDisabled)
-                .Append(" (").Append(totEnabled).Append("-").Append(totDisabled).Append(")");
+            _strb.Append("Build Scenes: ").Append(totEnabled).Append("/").Append(totEnabled + totDisabled);
             GUILayout.Label(_strb.ToString());
 
             // Draw scenes
             EditorBuildSettingsScene[] scenes = EditorBuildSettings.scenes;
             for (int i = 0; i < len; i++) {
                 EditorBuildSettingsScene scene = scenes[i];
-                bool isCurrentlyLoaded = Application.isPlaying ? Application.loadedLevel == i : scene.path == EditorApplication.currentScene;
+                bool isCurrent = Application.isPlaying ? Application.loadedLevel == i : scene.path == EditorApplication.currentScene;
+                DrawScene(scene, isCurrent);
+            }
+            if (GUI.changed) EditorBuildSettings.scenes = scenes;
+
+            // Drag drop area
+            if (!Application.isPlaying) DrawDragDropSceneArea();
+
+            GUILayout.EndScrollView();
+        }
+
+        void DrawScene(EditorBuildSettingsScene scene, bool isCurrent)
+        {
+            if (Application.isPlaying && !scene.enabled) return;
+
+            string sceneName = Path.GetFileNameWithoutExtension(scene.path);
+            Color bgShade = isCurrent ? DeGUI.colors.bg.toggleOn : DeGUI.colors.bg.def;
+            Color labelColor = isCurrent ? DeGUI.colors.content.toggleOn : DeGUI.colors.content.def;
+            if (Application.isPlaying) {
+                DeGUILayout.Toolbar(sceneName, bgShade, DeGUI.styles.toolbar.def, DeGUI.styles.label.toolbar.Add(labelColor));
+            } else {
                 DeGUILayout.BeginToolbar();
-                string sceneName = Path.GetFileNameWithoutExtension(scene.path);
                 scene.enabled = EditorGUILayout.Toggle(scene.enabled, GUILayout.Width(16));
-                if (DeGUILayout.ColoredButton(
-                    isCurrentlyLoaded ? DeGUI.colors.bg.toggleOn : DeGUI.colors.bg.def, isCurrentlyLoaded ? DeGUI.colors.content.toggleOn : DeGUI.colors.content.def,
-                    sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft)
-                )) {
+                if (DeGUILayout.ColoredButton(bgShade, labelColor, sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft))) {
                     if (Event.current.button == 1) {
                         // Right-click: ping scene in Project panel
                         Object sceneObj = AssetDatabase.LoadAssetAtPath<Object>(scene.path);
@@ -69,13 +84,6 @@ namespace DG.DeEditorTools.ScenesPanel
                 }
                 DeGUILayout.EndToolbar();
             }
-            if (GUI.changed) EditorBuildSettings.scenes = scenes;
-
-            // Drag drop area
-            GUILayout.Space(8);
-            DrawDragDropSceneArea();
-
-            GUILayout.EndScrollView();
         }
 
         void DrawDragDropSceneArea()
