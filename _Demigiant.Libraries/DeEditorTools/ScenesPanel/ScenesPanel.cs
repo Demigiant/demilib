@@ -62,9 +62,10 @@ namespace DG.DeEditorTools.ScenesPanel
                     scene.enabled = EditorGUILayout.Toggle(scene.enabled, GUILayout.Width(16));
                     if (DeGUILayout.ColoredButton(bgShade, labelColor, sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft))) {
                         if (Event.current.button == 1) {
-                            // Right-click: ping scene in Project panel
+                            // Right-click: ping scene in Project panel and store its name in the clipboard
                             Object sceneObj = AssetDatabase.LoadAssetAtPath<Object>(scene.path);
                             EditorGUIUtility.PingObject(sceneObj);
+                            EditorGUIUtility.systemCopyBuffer = sceneName;
                         } else if (EditorApplication.SaveCurrentSceneIfUserWantsTo()) {
                             // Left-click: open scene
                             EditorApplication.OpenScene(scene.path);
