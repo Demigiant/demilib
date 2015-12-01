@@ -165,7 +165,7 @@ namespace DG.DemiEditor
         {
             bold = new GUIStyle(GUI.skin.label).Add(FontStyle.Bold);
             wordwrap = new GUIStyle(GUI.skin.label).Add(Format.WordWrap);
-            toolbar = new GUIStyle(GUI.skin.label).Add(10).ContentOffset(new Vector2(-2, -1));
+            toolbar = new GUIStyle(GUI.skin.label).Add(9).ContentOffset(new Vector2(-2, 0));
             toolbarL = new GUIStyle(toolbar).ContentOffsetY(2);
             toolbarBox = new GUIStyle(toolbar).ContentOffsetY(0);
         }

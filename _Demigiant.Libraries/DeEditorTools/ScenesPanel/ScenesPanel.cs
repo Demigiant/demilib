@@ -13,7 +13,7 @@ namespace DG.DeEditorTools.ScenesPanel
 {
     class ScenesPanel : EditorWindow
     {
-        [MenuItem("Tools/Demigiant Tools/" + _Title)]
+        [MenuItem("Tools/Demigiant > DeEditorTools/" + _Title)]
         static void ShowWindow() { GetWindow(typeof(ScenesPanel), false, _Title); }
 		
         const string _Title = "Scenes Panel";
@@ -42,25 +42,30 @@ namespace DG.DeEditorTools.ScenesPanel
                 else totDisabled++;
             }
             _strb.Length = 0;
-            _strb.Append("Build Scenes: ").Append(totEnabled).Append("/").Append(totEnabled + totDisabled);
-            GUILayout.Label(_strb.ToString());
+            _strb.Append("Scenes In Build: ").Append(totEnabled).Append("/").Append(totEnabled + totDisabled);
+            DeGUILayout.Toolbar(_strb.ToString(), DeGUI.styles.toolbar.def, DeGUI.styles.label.toolbar.Clone(10, FontStyle.Bold));
+//            GUILayout.Label(_strb.ToString(), EditorStyles.boldLabel);
 
             // Draw scenes
             EditorBuildSettingsScene[] scenes = EditorBuildSettings.scenes;
+            int sceneIndex = -1;
             for (int i = 0; i < len; i++) {
                 EditorBuildSettingsScene scene = scenes[i];
                 if (Application.isPlaying && !scene.enabled) continue;
 
+                if (scene.enabled) sceneIndex++;
                 string sceneName = Path.GetFileNameWithoutExtension(scene.path);
                 bool isCurrent = Application.isPlaying ? Application.loadedLevelName == sceneName : scene.path == EditorApplication.currentScene;
                 Color bgShade = isCurrent ? DeGUI.colors.bg.toggleOn : DeGUI.colors.bg.def;
                 Color labelColor = isCurrent ? DeGUI.colors.content.toggleOn : DeGUI.colors.content.def;
                 if (Application.isPlaying) {
-                    DeGUILayout.Toolbar(sceneName, bgShade, DeGUI.styles.toolbar.def, DeGUI.styles.label.toolbar.Add(labelColor));
+                    _strb.Length = 0;
+                    _strb.Append("[").Append(sceneIndex).Append("] ").Append(sceneName);
+                    DeGUILayout.Toolbar(_strb.ToString(), bgShade, DeGUI.styles.toolbar.def, DeGUI.styles.label.toolbar.Clone(labelColor));
                 } else {
                     DeGUILayout.BeginToolbar();
-                    scene.enabled = EditorGUILayout.Toggle(scene.enabled, GUILayout.Width(16));
-                    if (DeGUILayout.ColoredButton(bgShade, labelColor, sceneName, DeGUI.styles.button.tool.Add(TextAnchor.MiddleLeft))) {
+                    scene.enabled = DeGUILayout.ToggleButton(scene.enabled, scene.enabled ? sceneIndex.ToString() : "x", DeGUI.styles.button.tool.Clone(TextAnchor.MiddleCenter).PaddingLeft(0).PaddingRight(0), GUILayout.Width(20));
+                    if (DeGUILayout.ColoredButton(bgShade, labelColor, sceneName, DeGUI.styles.button.tool.Clone(TextAnchor.MiddleLeft))) {
                         if (Event.current.button == 1) {
                             // Right-click: ping scene in Project panel and store its name in the clipboard
                             Object sceneObj = AssetDatabase.LoadAssetAtPath<Object>(scene.path);
