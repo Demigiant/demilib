@@ -97,17 +97,22 @@
         </member>
         <member name="P:DG.DemiEditor.DeGUIDrag.draggedItem">
             <summary>
-            Return the current item being dragged, or NULL if there is none.
+            Return the current item being dragged, or NULL if there is none
             </summary>
         </member>
         <member name="P:DG.DemiEditor.DeGUIDrag.draggedItemType">
             <summary>
-            Type of current item being dragged, or NULL if there is none.
+            Type of current item being dragged, or NULL if there is none
+            </summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeGUIDrag.draggedItemOriginalIndex">
+            <summary>
+            Starting index of current item being dragged, or NULL if there is none
             </summary>
         </member>
         <member name="P:DG.DemiEditor.DeGUIDrag.optionalDragData">
             <summary>
-            Retrieves the eventual optional data stored via the StartDrag method.
+            Retrieves the eventual optional data stored via the StartDrag method
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUIDrag.StartDrag(System.Int32,UnityEditor.Editor,System.Collections.IList,System.Int32,System.Object)">

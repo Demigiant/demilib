@@ -19,15 +19,19 @@ namespace DG.DemiEditor
         /// </summary>
         static public bool isDragging { get { return _dragData != null; } }
         /// <summary>
-        /// Return the current item being dragged, or NULL if there is none.
+        /// Return the current item being dragged, or NULL if there is none
         /// </summary>
         static public object draggedItem { get { if (_dragData == null) return null; return _dragData.draggedItem; } }
         /// <summary>
-        /// Type of current item being dragged, or NULL if there is none.
+        /// Type of current item being dragged, or NULL if there is none
         /// </summary>
         static public Type draggedItemType { get { if (_dragData == null) return null; return _dragData.draggedItem.GetType(); } }
         /// <summary>
-        /// Retrieves the eventual optional data stored via the StartDrag method.
+        /// Starting index of current item being dragged, or NULL if there is none
+        /// </summary>
+        static public int draggedItemOriginalIndex { get { if (_dragData == null) return -1; return _dragData.draggedItemIndex; } }
+        /// <summary>
+        /// Retrieves the eventual optional data stored via the StartDrag method
         /// </summary>
         static public object optionalDragData { get { if (_dragData == null) return null; return _dragData.optionalData; } }
 

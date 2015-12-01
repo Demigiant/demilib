@@ -18,6 +18,7 @@ namespace DG.DeEditorTools.ScenesPanel
 		
         const string _Title = "Scenes Panel";
         Vector2 _scrollPos;
+        bool _enableDelete;
         readonly StringBuilder _strb = new StringBuilder();
 
         // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -34,6 +35,9 @@ namespace DG.DeEditorTools.ScenesPanel
 
             int len = EditorBuildSettings.scenes.Length;
 
+            // Enabled delete button
+            if (!Application.isPlaying) _enableDelete = DeGUILayout.ToggleButton(_enableDelete, "Enable Remove", DeGUI.styles.button.tool);
+
             // Get and show total enabled + disabled scenes
             int totEnabled = 0;
             int totDisabled = 0;
@@ -44,10 +48,10 @@ namespace DG.DeEditorTools.ScenesPanel
             _strb.Length = 0;
             _strb.Append("Scenes In Build: ").Append(totEnabled).Append("/").Append(totEnabled + totDisabled);
             DeGUILayout.Toolbar(_strb.ToString(), DeGUI.styles.toolbar.def, DeGUI.styles.label.toolbar.Clone(10, FontStyle.Bold));
-//            GUILayout.Label(_strb.ToString(), EditorStyles.boldLabel);
 
             // Draw scenes
             EditorBuildSettingsScene[] scenes = EditorBuildSettings.scenes;
+            EditorBuildSettingsScene[] scenesMod = null;
             int sceneIndex = -1;
             for (int i = 0; i < len; i++) {
                 EditorBuildSettingsScene scene = scenes[i];
@@ -63,8 +67,16 @@ namespace DG.DeEditorTools.ScenesPanel
                     _strb.Append("[").Append(sceneIndex).Append("] ").Append(sceneName);
                     DeGUILayout.Toolbar(_strb.ToString(), bgShade, DeGUI.styles.toolbar.def, DeGUI.styles.label.toolbar.Clone(labelColor));
                 } else {
-                    DeGUILayout.BeginToolbar();
-                    scene.enabled = DeGUILayout.ToggleButton(scene.enabled, scene.enabled ? sceneIndex.ToString() : "x", DeGUI.styles.button.tool.Clone(TextAnchor.MiddleCenter).PaddingLeft(0).PaddingRight(0), GUILayout.Width(20));
+                    DeGUILayout.BeginToolbar(DeGUI.styles.toolbar.def.Clone().PaddingLeft(0).PaddingRight(0));
+                    if (_enableDelete) {
+                        if (DeGUILayout.ColoredButton(DeGUI.colors.bg.critical, DeGUI.colors.content.critical, "x", DeGUI.styles.button.tool, GUILayout.Width(16))) {
+                            // Remove scene from build
+                            scenesMod = CloneAndRemove(scenes, i);
+                            GUI.changed = true;
+                        }
+                        GUILayout.Space(4);
+                    }
+                    scene.enabled = DeGUILayout.ToggleButton(scene.enabled, scene.enabled ? sceneIndex.ToString() : "-", DeGUI.styles.button.tool.Clone(TextAnchor.MiddleCenter).PaddingLeft(0).PaddingRight(0), GUILayout.Width(20));
                     if (DeGUILayout.ColoredButton(bgShade, labelColor, sceneName, DeGUI.styles.button.tool.Clone(TextAnchor.MiddleLeft))) {
                         if (Event.current.button == 1) {
                             // Right-click: ping scene in Project panel and store its name in the clipboard
@@ -82,7 +94,7 @@ namespace DG.DeEditorTools.ScenesPanel
 
                 if (DeGUIDrag.Drag(0, scenes, i)) GUI.changed = true;
             }
-            if (GUI.changed) EditorBuildSettings.scenes = scenes;
+            if (GUI.changed) EditorBuildSettings.scenes = scenesMod == null ? scenes : scenesMod;
 
             // Drag drop area
             if (!Application.isPlaying) DrawDragDropSceneArea();
@@ -129,6 +141,17 @@ namespace DG.DeEditorTools.ScenesPanel
                 }
                 break;
             }
+        }
+
+        static EditorBuildSettingsScene[] CloneAndRemove(EditorBuildSettingsScene[] scenes, int index)
+        {
+            EditorBuildSettingsScene[] res = new EditorBuildSettingsScene[scenes.Length - 1];
+            int diff = 0;
+            for (int i = 0; i < res.Length; ++i) {
+                if (i == index) diff++;
+                res[i] = scenes[i + diff];
+            }
+            return res;
         }
     }
 }
