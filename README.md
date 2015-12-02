@@ -2,7 +2,7 @@
 Various utility libraries for Unity (alpha).  
 Developed by Daniele Giardini - http://www.demigiant.com
 
-As of now it includes these libraries (inside _Demigiant.Libraries/bin):
+You can get it all, or only single configurations, from the downloads folder.
 
 ##Core libraries (Unity 4.6 or later)
 ####DemiEditor

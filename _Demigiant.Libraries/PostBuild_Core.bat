@@ -11,12 +11,12 @@ echo %DestinationDir%
 echo %2
 
 echo Deleting TMPs...
-DEL %2\*.tmp
+start /wait cmd /c DEL %2\*.tmp
 
 CD %2
 echo Converting PDB to MDB and deleting PDB...
 "c:\Program Files\pdb2mdb\pdb2mdb.exe" %3
-DEL %4.pdb
+start /wait cmd /c DEL %4.pdb
 
 echo Exporting Assembly to %DestinationDir%
 echo Copying files to Destination...
@@ -27,3 +27,6 @@ echo f | xcopy "%1\bin\Core" %DestinationDirNoMeta% /Y /I /E
 
 echo Exporting Assembly to %DestinationDirUnityTests%
 echo f | xcopy "%1\bin\Core" %DestinationDirUnityTests% /Y /I /E
+
+:: Call PostBuild_CopyToDownloads to create download configurations
+start %1\PostBuild_CopyToDownloads.bat %1
