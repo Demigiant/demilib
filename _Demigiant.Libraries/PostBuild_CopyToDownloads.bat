@@ -1,3 +1,5 @@
+:: Called by DeEditorTools (last in compilation order) post build
+
 :: %StartupDir = $(SolutionDir)
 set PATH=%PATH%;C:\Program Files\7-Zip\
 set StartupDir=%~dp0
@@ -5,7 +7,7 @@ set DownloadsDir=%StartupDir%..\downloads
 set DemigiantSubdir=Demigiant\DemiLib
 
 :: Wait for other builds to complete
-timeout /t 5
+timeout /t 1
 
 :: Complete DemiLib
 set TargetDir=%DownloadsDir%\Complete\%DemigiantSubdir%

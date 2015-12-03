@@ -11,13 +11,21 @@ using UnityEngine;
 
 namespace DG.DeEditorTools.ScenesPanel
 {
+    enum ScenesPanelState
+    {
+        Default,
+        Info
+    }
+
     class ScenesPanel : EditorWindow
     {
         [MenuItem("Tools/Demigiant > DeEditorTools/" + _Title)]
         static void ShowWindow() { GetWindow(typeof(ScenesPanel), false, _Title); }
-		
+
+        public const string Version = "1.0.010";
         const string _Title = "Scenes Panel";
         Vector2 _scrollPos;
+        ScenesPanelState _state = ScenesPanelState.Default;
         bool _enableDelete;
         readonly StringBuilder _strb = new StringBuilder();
 
@@ -33,10 +41,23 @@ namespace DG.DeEditorTools.ScenesPanel
             _scrollPos = GUILayout.BeginScrollView(_scrollPos);
             DeGUI.BeginGUI();
 
-            int len = EditorBuildSettings.scenes.Length;
+            if (!Application.isPlaying && _state == ScenesPanelState.Info) DrawHelpState();
+            else DrawDefaultState();
 
-            // Enabled delete button
-            if (!Application.isPlaying) _enableDelete = DeGUILayout.ToggleButton(_enableDelete, "Enable Remove", DeGUI.styles.button.tool);
+            GUILayout.EndScrollView();
+        }
+
+        void DrawDefaultState()
+        {
+            // ? and Enable Remove button
+            if (!Application.isPlaying) {
+                DeGUILayout.BeginToolbar(DeGUI.styles.toolbar.large);
+                _enableDelete = DeGUILayout.ToggleButton(_enableDelete, "Enable Remove", DeGUI.styles.button.toolL);
+                if (GUILayout.Button("Info", DeGUI.styles.button.toolL, GUILayout.Width(46))) _state = ScenesPanelState.Info;
+                DeGUILayout.EndToolbar();
+            }
+
+            int len = EditorBuildSettings.scenes.Length;
 
             // Get and show total enabled + disabled scenes
             int totEnabled = 0;
@@ -98,8 +119,31 @@ namespace DG.DeEditorTools.ScenesPanel
 
             // Drag drop area
             if (!Application.isPlaying) DrawDragDropSceneArea();
+        }
 
-            GUILayout.EndScrollView();
+        void DrawHelpState()
+        {
+            DeGUILayout.BeginToolbar(DeGUI.styles.toolbar.large);
+            if (GUILayout.Button("Main", DeGUI.styles.button.toolL)) _state = ScenesPanelState.Default;
+            DeGUILayout.EndToolbar();
+
+            _strb.Length = 0;
+            _strb.Append("<b>Scenes Panel v").Append(Version).Append("</b>\n")
+                .Append("<i>Part of DemiLib</i>\n")
+                .Append("Developed by Daniele Giardini (Demigiant)");
+            GUILayout.Label(_strb.ToString(), DeGUI.styles.label.wordwrapRichtText);
+
+            GUILayout.Space(4);
+            DeGUILayout.Toolbar("Tips", DeGUI.styles.toolbar.stickyTop);
+            DeGUILayout.BeginVBox(DeGUI.styles.box.stickyTop);
+            GUILayout.Label("<b>Right-click on a scene</b>\nPing it and copy its name in the clipboard", DeGUI.styles.label.wordwrapRichtText);
+            DeGUILayout.EndVBox();
+
+            DeGUILayout.Toolbar("Links", DeGUI.styles.toolbar.stickyTop);
+            DeGUILayout.BeginVBox(DeGUI.styles.box.stickyTop);
+            if (GUILayout.Button("DemiLib on GitHub")) Application.OpenURL("https://github.com/Demigiant/demilib");
+            if (GUILayout.Button("Demigiant")) Application.OpenURL("http://www.demigiant.com");
+            DeGUILayout.EndVBox();
         }
 
         void DrawDragDropSceneArea()

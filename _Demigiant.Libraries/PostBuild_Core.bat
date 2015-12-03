@@ -27,6 +27,3 @@ echo f | xcopy "%1\bin\Core" %DestinationDirNoMeta% /Y /I /E
 
 echo Exporting Assembly to %DestinationDirUnityTests%
 echo f | xcopy "%1\bin\Core" %DestinationDirUnityTests% /Y /I /E
-
-:: Call PostBuild_CopyToDownloads to create download configurations
-start %1\PostBuild_CopyToDownloads.bat %1
