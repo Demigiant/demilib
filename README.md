@@ -3,7 +3,7 @@ Various utility libraries for Unity (alpha).
 Developed by Daniele Giardini - http://www.demigiant.com
 
 You can get it all, or only single configurations, from the downloads folder.  
-**NOTE** If you have *DOTween* in your project, and you're importing a configuration that requires DemiLib core, first delete (not simply overwrite) the DemiLib folder that DOTween already put in your project, since it's an old version with a different directory layout.
+**NOTE:** If you have *DOTween* in your project, and you're importing a configuration that requires DemiLib core, first delete (not simply overwrite) the DemiLib folder that DOTween already put in your project, since it's an old version with a different directory layout.
 
 ##Core libraries (Unity 4.6 or later)
 ####DemiEditor
