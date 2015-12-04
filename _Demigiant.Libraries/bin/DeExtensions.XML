@@ -4,5 +4,12 @@
         <name>DeExtensions</name>
     </assembly>
     <members>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.AwakeAndDeactivate(UnityEngine.GameObject)">
+            <summary>
+            Activates then immediately deactivates the target gameObject.
+            Useful when wanting to call Awake before deactivating a gameObject.
+            </summary>
+            <param name="go"></param>
+        </member>
     </members>
 </doc>
