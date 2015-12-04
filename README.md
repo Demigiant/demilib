@@ -1,4 +1,4 @@
-# demilib
+# DemiLib
 Various utility libraries for Unity (alpha).  
 Developed by Daniele Giardini - http://www.demigiant.com
 
