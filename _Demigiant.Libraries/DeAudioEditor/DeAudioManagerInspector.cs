@@ -140,6 +140,9 @@ namespace DG.DeAudioEditor
 
         void DrawRuntimeSourcesFor(DeAudioGroup group)
         {
+            Color volumeColor = new Color(0.1999999f, 1f, 0f, 1f);
+            Color pitchColor = new Color(1f, 0.8482759f, 0f, 1f);
+            Color timeColor = new Color(0f, 0.9172413f, 1f, 1f);
             int len = group.sources.Count;
             for (int i = 0; i < len; ++i) {
                 // Sources volume
@@ -148,12 +151,31 @@ namespace DG.DeAudioEditor
                     _runtimeStrb.Length = 0;
                     _runtimeStrb.Append("└ ").Append(s.clip.name);
                     if (s.locked) _runtimeStrb.Append(" [LOCKED]");
-                    _runtimeStrb.Append(" (").Append(s.unscaledVolume.ToString("G2")).Append("-").Append(s.pitch.ToString("G2"));
-                    if (s.loop) _runtimeStrb.Append("-loop");
-                    _runtimeStrb.Append(")");
+                    if (s.loop) _runtimeStrb.Append(" [loop]");
                     GUILayout.Label(_runtimeStrb.ToString());
+                    DrawRuntimeSourceBar(volumeColor, s.unscaledVolume);
+                    DrawRuntimeSourceBar(pitchColor, s.pitch);
+                    float elapsed = s.audioSource.time / s.clip.length;
+                    if (elapsed > 1) elapsed = 1;
+                    DrawRuntimeSourceBar(timeColor, elapsed);
                 }
             }
+        }
+
+        void DrawRuntimeSourceBar(Color color, float percentage)
+        {
+            Rect timeRect = GUILayoutUtility.GetRect(0, 2, GUILayout.ExpandWidth(true));
+            timeRect.x += 15;
+            timeRect.y -= 1;
+            timeRect.width -= 15;
+            Color guiOrColor = GUI.color;
+            GUI.color = Color.black;
+            GUI.Box(timeRect, "", DeGUI.styles.box.flat);
+            timeRect.width *= percentage;
+            GUI.color = color;
+            GUI.Box(timeRect, "", DeGUI.styles.box.flat);
+            GUI.color = guiOrColor;
+            GUILayout.Space(2);
         }
 
         #endregion
