@@ -252,9 +252,15 @@ namespace DG.DeAudio
         /// <summary>Fades out the given clip's volume</summary>
         public static void FadeOut(AudioClip clip, float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true, TweenCallback onComplete = null)
         { FadeTo(clip, 0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
-        /// <summary>Fades in the given clip's volume</summary>
+        /// <summary>Starts playing the given clip with a fade-in volume effect</summary>
+        public static void FadeIn(DeAudioGroupId groupId, AudioClip clip, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
+        { Play(groupId, clip, 0).FadeTo(1, duration, ignoreTimeScale, onComplete); }
+        /// <summary>Starts playing the given clip external to any group, with a fade-in volume effect</summary>
         public static void FadeIn(AudioClip clip, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeTo(clip, 1, duration, ignoreTimeScale, false, onComplete); }
+        { Play(clip, 0).FadeTo(1, duration, ignoreTimeScale, onComplete); }
+        /// <summary>Starts playing the given <see cref="DeAudioClipData"/> with a fade-in volume effect</summary>
+        public static void FadeIn(DeAudioClipData clipData, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
+        { Play(clipData.groupId, clipData.clip, 0, clipData.pitch, clipData.loop).FadeTo(clipData.volume, duration, ignoreTimeScale, false, onComplete); }
         /// <summary>Fades the given clip's volume to the given value</summary>
         public static void FadeTo(AudioClip clip, float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
         { FadeTo(clip, to, duration, ignoreTimeScale, false, onComplete); }

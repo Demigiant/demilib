@@ -193,8 +193,14 @@
         <member name="M:DG.DeAudio.DeAudioManager.FadeOut(UnityEngine.AudioClip,System.Single,System.Boolean,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades out the given clip's volume</summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioManager.FadeIn(DG.DeAudio.DeAudioGroupId,UnityEngine.AudioClip,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>Starts playing the given clip with a fade-in volume effect</summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioManager.FadeIn(UnityEngine.AudioClip,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
-            <summary>Fades in the given clip's volume</summary>
+            <summary>Starts playing the given clip external to any group, with a fade-in volume effect</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.FadeIn(DG.DeAudio.DeAudioClipData,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
+            <summary>Starts playing the given <see cref="T:DG.DeAudio.DeAudioClipData"/> with a fade-in volume effect</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.FadeTo(UnityEngine.AudioClip,System.Single,System.Single,System.Boolean,DG.Tweening.TweenCallback)">
             <summary>Fades the given clip's volume to the given value</summary>
