@@ -141,24 +141,21 @@ namespace DG.DeAudioEditor
         void DrawRuntimeSourcesFor(DeAudioGroup group)
         {
             Color volumeColor = new Color(0.1999999f, 1f, 0f, 1f);
-            Color pitchColor = new Color(1f, 0.8482759f, 0f, 1f);
             Color timeColor = new Color(0f, 0.9172413f, 1f, 1f);
             int len = group.sources.Count;
             for (int i = 0; i < len; ++i) {
-                // Sources volume
+                // Sources volume and play time
                 DeAudioSource s = group.sources[i];
-                if (s.isPlaying) {
-                    _runtimeStrb.Length = 0;
-                    _runtimeStrb.Append("└ ").Append(s.clip.name);
-                    if (s.locked) _runtimeStrb.Append(" [LOCKED]");
-                    if (s.loop) _runtimeStrb.Append(" [loop]");
-                    GUILayout.Label(_runtimeStrb.ToString());
-                    DrawRuntimeSourceBar(volumeColor, s.unscaledVolume);
-                    DrawRuntimeSourceBar(pitchColor, s.pitch);
-                    float elapsed = s.audioSource.time / s.clip.length;
-                    if (elapsed > 1) elapsed = 1;
-                    DrawRuntimeSourceBar(timeColor, elapsed);
-                }
+                if (!s.isPlaying) continue;
+                _runtimeStrb.Length = 0;
+                _runtimeStrb.Append("└ ").Append(s.clip.name);
+                if (s.locked) _runtimeStrb.Append(" [LOCKED]");
+                if (s.loop) _runtimeStrb.Append(" [loop]");
+                GUILayout.Label(_runtimeStrb.ToString());
+                DrawRuntimeSourceBar(volumeColor, s.unscaledVolume);
+                float elapsed = s.audioSource.time / s.clip.length;
+                if (elapsed > 1) elapsed = 1;
+                DrawRuntimeSourceBar(timeColor, elapsed);
             }
         }
 
