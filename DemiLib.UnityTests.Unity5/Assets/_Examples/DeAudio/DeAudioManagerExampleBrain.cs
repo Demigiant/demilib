@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.DeAudio;
 
-public class DeAudioExample : MonoBehaviour
+public class DeAudioManagerExampleBrain : MonoBehaviour
 {
     [Header("FX")]
     public DeAudioClipData fxA;
@@ -34,26 +34,6 @@ public class DeAudioExample : MonoBehaviour
     {
         DeAudioManager.Play(musicB);
     }
-
-    // public void PlayFXA()
-    // {
-    //     DeAudioManager.Play(fxA);
-    // }
-
-    // public void PlayFXB()
-    // {
-    //     DeAudioManager.Play(fxB);
-    // }
-
-    // public void PlayMusicA()
-    // {
-    //     DeAudioManager.Play(musicA);
-    // }
-
-    // public void PlayMusicB()
-    // {
-    //     DeAudioManager.Play(musicB);
-    // }
 
     public void StopAll()
     {

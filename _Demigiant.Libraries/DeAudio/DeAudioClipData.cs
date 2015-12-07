@@ -28,5 +28,12 @@ namespace DG.DeAudio
             this.groupId = groupId;
             this.loop = loop;
         }
+
+        public DeAudioClipData()
+        {
+            volume = 1;
+            pitch = 1;
+            loop = false;
+        }
     }
 }

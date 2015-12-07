@@ -24,8 +24,8 @@ namespace DG.DeAudio
         public int inspectorUpdater;
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.325";
-        internal const string LogPrefix = "DAM :: ";
+        public const string Version = "0.5.340";
+        internal const string LogPrefix = "DeAudio :: ";
         internal static DeAudioGroup globalGroup; // Group created when playing a clip without any group indication. Also stored as the final _audioGroups value
         static Tween _fadeTween;
 
@@ -79,6 +79,18 @@ namespace DG.DeAudio
         #region Public Methods
 
         /// <summary>
+        /// Instantiates the DeAudioManager prefab at the given Resources path (if it's not present already) and sets it as DontDestroyOnLoad.
+        /// </summary>
+        public static void Init(string resourcePath)
+        {
+            if (I != null) return;
+
+            GameObject go = Instantiate(Resources.Load<GameObject>(resourcePath));
+            int index = go.name.LastIndexOf("(");
+            if (index != -1) go.name = go.name.Substring(0, index);
+        }
+
+        /// <summary>
         /// Creates a DeAudioManager instance (if it's not present already) and sets it as DontDestroyOnLoad.
         /// <para>Use this method if you want to use DeAudioManager without setting up any DeAudioGroup.
         /// Though the recommended way is to create a prefab with the required settings and instantiate it once at startup.</para>
@@ -87,7 +99,7 @@ namespace DG.DeAudio
         {
             if (I != null) return;
 
-            GameObject go = new GameObject("DeAudioManager");
+            GameObject go = new GameObject("[DeAudioManager]");
             go.AddComponent<DeAudioManager>();
         }
 
