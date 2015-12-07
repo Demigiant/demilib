@@ -4,6 +4,8 @@ set BinDir=bin.Global\DemiLib\Core
 set DestinationDir=%1..\..\%BinDir%
 set BinDirNoMeta=bin.Global_no_meta\DemiLib\Core
 set DestinationDirNoMeta=%1..\..\%BinDirNoMeta%
+set BinDirUnity46Tests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib\Core
+set DestinationDirUnity46Tests=%1..\%BinDirUnity46Tests%
 set BinDirUnityTests=DemiLib.UnityTests.Unity5\Assets\Demigiant\DemiLib\Core
 set DestinationDirUnityTests=%1..\%BinDirUnityTests%
 
@@ -24,6 +26,9 @@ echo f | xcopy "%1\bin\Core" %DestinationDir% /Y /I /E
 
 echo Exporting Assembly to %DestinationDirNoMeta%
 echo f | xcopy "%1\bin\Core" %DestinationDirNoMeta% /Y /I /E
+
+echo Exporting Assembly to %DestinationDirUnity46Tests%
+echo f | xcopy "%1\bin\Core" %DestinationDirUnity46Tests% /Y /I /E
 
 echo Exporting Assembly to %DestinationDirUnityTests%
 echo f | xcopy "%1\bin\Core" %DestinationDirUnityTests% /Y /I /E

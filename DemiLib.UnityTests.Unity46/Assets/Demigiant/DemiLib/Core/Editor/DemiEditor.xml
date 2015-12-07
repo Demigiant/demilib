@@ -85,6 +85,85 @@
             <param name="adbFilePath">File path (relative to Unity's project folder)</param>
             <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
         </member>
+        <member name="T:DG.DemiEditor.DeGUIDrag">
+            <summary>
+            Manages the dragging of GUI elements
+            </summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeGUIDrag.isDragging">
+            <summary>
+            True if a GUI element is currently being dragged
+            </summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeGUIDrag.draggedItem">
+            <summary>
+            Return the current item being dragged, or NULL if there is none
+            </summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeGUIDrag.draggedItemType">
+            <summary>
+            Type of current item being dragged, or NULL if there is none
+            </summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeGUIDrag.draggedItemOriginalIndex">
+            <summary>
+            Starting index of current item being dragged, or NULL if there is none
+            </summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeGUIDrag.optionalDragData">
+            <summary>
+            Retrieves the eventual optional data stored via the StartDrag method
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUIDrag.StartDrag(System.Int32,UnityEditor.Editor,System.Collections.IList,System.Int32,System.Object)">
+            <summary>
+            Starts a drag operation on a GUI element.
+            </summary>
+            <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
+            <param name="editor">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
+            <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
+            <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
+            <param name="optionalData">Optional data that can be retrieved via the <see cref="P:DG.DemiEditor.DeGUIDrag.optionalDragData"/> static property</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUIDrag.StartDrag(System.Int32,UnityEditor.EditorWindow,System.Collections.IList,System.Int32,System.Object)">
+            <summary>
+            Starts a drag operation on a GUI element.
+            </summary>
+            <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
+            <param name="editorWindow">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
+            <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
+            <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
+            <param name="optionalData">Optional data that can be retrieved via the <see cref="P:DG.DemiEditor.DeGUIDrag.optionalDragData"/> static property</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Int32,System.Collections.IList,System.Int32)">
+            <summary>
+            Call this after each draggable GUI block, to calculate and draw the current drag state
+            (or complete it if the mouse was released).
+            Returns TRUE if the drag operation was concluded and accepted.
+            </summary>
+            <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
+            <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
+            <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Int32,System.Collections.IList,System.Int32,UnityEngine.Color)">
+            <summary>
+            Call this after each draggable GUI block, to calculate and draw the current drag state
+            (or complete it if the mouse was released).
+            Returns TRUE if the drag operation was concluded and accepted.
+            </summary>
+            <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
+            <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
+            <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
+            <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUIDrag.EndDrag(System.Boolean)">
+            <summary>
+            Ends the drag operations, and eventually applies the drag result.
+            Returns TRUE if the position of the dragged item actually changed.
+            Called automatically by Drag method. Use it only if you want to force the end of a drag operation.
+            </summary>
+            <param name="applyDrag">If TRUE applies the drag results, otherwise simply cancels the drag</param>
+        </member>
         <member name="T:DG.DemiEditor.DeSkinStyle">
             <summary>
             Contains both free and pro skins GUIStyle variations,
@@ -276,6 +355,16 @@
             <summary>Button that can be toggled on and off</summary>
             <summary>Button that can be toggled on and off</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.PressButton(System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>
+            Draws a button that returns TRUE the first time it's pressed, instead than when its released.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.PressButton(UnityEngine.GUIContent,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>
+            Draws a button that returns TRUE the first time it's pressed, instead than when its released.
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUILayout.ToolbarFoldoutButton(System.Boolean,System.String)">
             <summary>Toolbar foldout button</summary>
         </member>
@@ -348,7 +437,7 @@
         </member>
         <member name="T:DG.DemiEditor.DeGUI">
             <summary>
-            Global Demigiant GUI manager
+            Global Demigiant GUI manager. Call <see cref="M:DG.DemiEditor.DeGUI.BeginGUI(DG.DemiLib.DeColorPalette,DG.DemiEditor.DeStylePalette)"/> to initialize it inside GUI calls.
             </summary>
         </member>
         <member name="F:DG.DemiEditor.DeGUI.colors">
@@ -378,8 +467,30 @@
             (or resets them to the default ones if NULL)
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,System.String)">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,System.String,UnityEngine.GUIStyle)">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,System.String,DG.DemiLib.DeColorPalette,UnityEngine.GUIStyle)">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,UnityEngine.GUIContent)">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,UnityEngine.GUIContent,DG.DemiLib.DeColorPalette,UnityEngine.GUIStyle)">
+            <summary>Button that can be toggled on and off</summary>
+            <summary>Button that can be toggled on and off</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.SceneField(UnityEngine.Rect,System.String,UnityEngine.Object)">
             <summary>Scene field</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.FlatDivider(UnityEngine.Rect,System.Nullable{UnityEngine.Color})">
+            <summary>Divider</summary>
         </member>
         <member name="T:DG.DemiEditor.StringExtensions">
             <summary>
