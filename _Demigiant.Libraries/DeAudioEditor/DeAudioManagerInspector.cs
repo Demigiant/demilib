@@ -127,17 +127,15 @@ namespace DG.DeAudioEditor
                 for (int i = 0; i < len; ++i) {
                     // Group volumes
                     DeAudioGroup g = DeAudioManager.audioGroups[i];
+                    if (g.id == DeAudioGroupId.INTERNAL_Global && !HasPlayingSources(DeAudioManager.globalGroup)) continue;
+                    DeGUILayout.BeginVBox(DeGUI.styles.box.flatAlpha25);
                     float prevVolume = g.fooVolume;
                     g.fooVolume = EditorGUILayout.Slider(g.id == DeAudioGroupId.INTERNAL_Global ? "[GLOBAL]" : g.id.ToString(), g.fooVolume, 0, 1);
                     if (Math.Abs(g.fooVolume - prevVolume) > float.Epsilon) g.SetVolume(g.fooVolume);
                     DrawRuntimeSourcesFor(g);
+                    DeGUILayout.EndVBox();
                 }
             }
-//            // Global group
-//            if (HasPlayingSources(DeAudioManager.globalGroup)) {
-//                GUILayout.Label("[GLOBAL]");
-//                DrawRuntimeSourcesFor(DeAudioManager.globalGroup);
-//            }
         }
 
         void DrawRuntimeSourcesFor(DeAudioGroup group)
