@@ -122,20 +122,22 @@ namespace DG.DeAudioEditor
             EditorGUIUtility.labelWidth = 101;
             GUILayout.Label("DeAudioGroups", DeGUI.styles.label.bold);
             // Groups with ids
-            int len = _src.fooAudioGroups.Length;
-            for (int i = 0; i < len; ++i) {
-                // Group volumes
-                DeAudioGroup g = _src.fooAudioGroups[i];
-                float prevVolume = g.fooVolume;
-                g.fooVolume = EditorGUILayout.Slider(g.id.ToString(), g.fooVolume, 0, 1);
-                if (Math.Abs(g.fooVolume - prevVolume) > float.Epsilon) g.SetVolume(g.fooVolume);
-                DrawRuntimeSourcesFor(g);
+            if (DeAudioManager.audioGroups != null) {
+                int len = DeAudioManager.audioGroups.Length;
+                for (int i = 0; i < len; ++i) {
+                    // Group volumes
+                    DeAudioGroup g = DeAudioManager.audioGroups[i];
+                    float prevVolume = g.fooVolume;
+                    g.fooVolume = EditorGUILayout.Slider(g.id == DeAudioGroupId.INTERNAL_Global ? "[GLOBAL]" : g.id.ToString(), g.fooVolume, 0, 1);
+                    if (Math.Abs(g.fooVolume - prevVolume) > float.Epsilon) g.SetVolume(g.fooVolume);
+                    DrawRuntimeSourcesFor(g);
+                }
             }
-            // Global group
-            if (HasPlayingSources(DeAudioManager.globalGroup)) {
-                GUILayout.Label("[GLOBAL]");
-                DrawRuntimeSourcesFor(DeAudioManager.globalGroup);
-            }
+//            // Global group
+//            if (HasPlayingSources(DeAudioManager.globalGroup)) {
+//                GUILayout.Label("[GLOBAL]");
+//                DrawRuntimeSourcesFor(DeAudioManager.globalGroup);
+//            }
         }
 
         void DrawRuntimeSourcesFor(DeAudioGroup group)

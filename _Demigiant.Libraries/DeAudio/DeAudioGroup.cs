@@ -21,10 +21,10 @@ namespace DG.DeAudio
     {
         public AudioMixerGroup mixerGroup;
         public DeAudioGroupId id;
-        public bool recycle = true;
         /// <summary>Max AudioSources for this group. DO NOT change this at runtime</summary>
         public int maxSources = -1;
         public int preallocate = 0;
+        public bool recycle = true;
         public float fooVolume = 1;
 
         [System.NonSerialized] public List<DeAudioSource> sources; // Sources per each group
@@ -37,14 +37,22 @@ namespace DG.DeAudio
         GameObject _sourcesContainer;
         Tween _fadeTween;
 
-        // ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-        // INIT + CONSTRUCTOR
+        #region Constructor + Init
 
         internal DeAudioGroup() {}
 
         public DeAudioGroup(DeAudioGroupId id)
         {
             this.id = id;
+        }
+        public DeAudioGroup(DeAudioGroupId id, float volume, int maxSources = -1, int preallocate = 0, bool recycle = true, AudioMixerGroup mixerGroup = null)
+        {
+            this.id = id;
+            this.volume = volume;
+            this.maxSources = maxSources;
+            this.preallocate = preallocate;
+            this.recycle = recycle;
+            this.mixerGroup = mixerGroup;
         }
 
         internal void Init(Transform container, string name = null)
@@ -56,6 +64,8 @@ namespace DG.DeAudio
                 for (int i = 0; i < preallocate; ++i) sources.Add(new DeAudioSource(this, _sourcesContainer));
             }
         }
+
+        #endregion
 
         #region Public Methods
 

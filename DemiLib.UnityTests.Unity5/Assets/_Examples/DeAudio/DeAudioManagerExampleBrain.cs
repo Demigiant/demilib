@@ -1,9 +1,20 @@
 ﻿using UnityEngine;
+using System.Collections;
 using DG.DeAudio;
+
+public enum InitMode
+{
+    Simple,
+    InstantiateDeAudioManagerPrefab,
+    CreateRuntimeAudioGroups
+}
 
 public class DeAudioManagerExampleBrain : MonoBehaviour
 {
-    [Header("FX")]
+	[Header("Settings")]
+	public InitMode initMode = InitMode.Simple;
+	public string prefabName = "- DeAudioManager";
+	[Header("FX")]
     public DeAudioClipData fxA;
     public DeAudioClipData fxB;
     [Header("MUSIC")]
@@ -12,7 +23,23 @@ public class DeAudioManagerExampleBrain : MonoBehaviour
 
     void Start()
     {
-        DeAudioManager.Init();
+        switch (initMode) {
+        case InitMode.Simple:
+    		// Create a new DeAudioManager withou any group (which means only the implicit GLOBAL group)
+            DeAudioManager.Init();
+            break;
+        case InitMode.InstantiateDeAudioManagerPrefab:
+    		// Instantiate existing prefab from Resources folder
+    		DeAudioManager.Init(prefabName);
+            break;
+        case InitMode.CreateRuntimeAudioGroups:
+            // Create DeAudioManager with AudioGroups at runtime
+            DeAudioManager.Init(new[] {
+                new DeAudioGroup(DeAudioGroupId.Music, 1, 4, 2),
+                new DeAudioGroup(DeAudioGroupId.FX, 1),
+            });
+            break;
+        }
     }
 
     public void PlayFXA()

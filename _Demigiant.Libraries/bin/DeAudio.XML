@@ -90,16 +90,24 @@
         <member name="F:DG.DeAudio.DeAudioManager.inspectorUpdater">
             <summary>Used internally inside Unity Editor, as a trick to update DeAudioManager's inspector at every frame</summary>
         </member>
-        <member name="M:DG.DeAudio.DeAudioManager.Init(System.String)">
-            <summary>
-            Instantiates the DeAudioManager prefab at the given Resources path (if it's not present already) and sets it as DontDestroyOnLoad.
-            </summary>
-        </member>
         <member name="M:DG.DeAudio.DeAudioManager.Init">
             <summary>
             Creates a DeAudioManager instance (if it's not present already) and sets it as DontDestroyOnLoad.
+            Returns TRUE if the initialization is successful, FALSE otherwise.
             <para>Use this method if you want to use DeAudioManager without setting up any DeAudioGroup.
             Though the recommended way is to create a prefab with the required settings and instantiate it once at startup.</para>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Init(System.String)">
+            <summary>
+            Instantiates the DeAudioManager prefab at the given Resources path (if it's not present already) and sets it as DontDestroyOnLoad.
+            Returns TRUE if the initialization is successful, FALSE otherwise.
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Init(DG.DeAudio.DeAudioGroup[])">
+            <summary>
+            Creates a DeAudioManager instance (if it's not present already), sets it as DontDestroyOnLoad, and sets it with the given groups.
+            Returns TRUE if the initialization is successful, FALSE otherwise.
             </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Play(DG.DeAudio.DeAudioClipData)">
