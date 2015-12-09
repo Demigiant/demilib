@@ -4,6 +4,14 @@ using UnityEngine.SceneManagement;
 
 public class ScenesPanelExample : MonoBehaviour
 {
+    static ScenesPanelExample I;
+
+    void Awake()
+    {
+        if (I != null) Destroy(this.gameObject);
+        else I = this;
+    }
+
     void Start()
     {
         DontDestroyOnLoad(this.gameObject);

@@ -24,7 +24,7 @@ namespace DG.DeEditorTools.ScenesPanel
         [MenuItem("Tools/Demigiant > DeEditorTools/" + _Title)]
         static void ShowWindow() { GetWindow(typeof(ScenesPanel), false, _Title); }
 
-        public const string Version = "1.0.010";
+        public const string Version = "1.1.000";
         const string _Title = "Scenes Panel";
         Vector2 _scrollPos;
         ScenesPanelState _state = ScenesPanelState.Default;
@@ -85,22 +85,25 @@ namespace DG.DeEditorTools.ScenesPanel
                 bool isCurrent = SceneManager.sceneCount > 1 ? IsAdditiveSceneLoaded(scene.path) : SceneManager.GetActiveScene().path == scene.path;
                 Color bgShade = isCurrent ? DeGUI.colors.bg.toggleOn : DeGUI.colors.bg.def;
                 Color labelColor = isCurrent ? DeGUI.colors.content.toggleOn : DeGUI.colors.content.def;
-                if (Application.isPlaying) {
-                    _strb.Length = 0;
-                    _strb.Append("[").Append(sceneIndex).Append("] ").Append(sceneName);
-                    DeGUILayout.Toolbar(_strb.ToString(), bgShade, DeGUI.styles.toolbar.def, DeGUI.styles.label.toolbar.Clone(labelColor));
-                } else {
-                    DeGUILayout.BeginToolbar(DeGUI.styles.toolbar.def.Clone().PaddingLeft(0).PaddingRight(0));
-                    if (_enableDelete) {
-                        if (DeGUILayout.ColoredButton(DeGUI.colors.bg.critical, DeGUI.colors.content.critical, "x", DeGUI.styles.button.tool, GUILayout.Width(16))) {
-                            // Remove scene from build
-                            scenesMod = CloneAndRemove(scenes, i);
-                            GUI.changed = true;
-                        }
-                        GUILayout.Space(4);
+                DeGUILayout.BeginToolbar(DeGUI.styles.toolbar.def.Clone().PaddingLeft(0).PaddingRight(0));
+                EditorGUI.BeginDisabledGroup(Application.isPlaying);
+                if (_enableDelete) {
+                    if (DeGUILayout.ColoredButton(DeGUI.colors.bg.critical, DeGUI.colors.content.critical, "x", DeGUI.styles.button.tool, GUILayout.Width(16))) {
+                        // Remove scene from build
+                        scenesMod = CloneAndRemove(scenes, i);
+                        GUI.changed = true;
                     }
+                    GUILayout.Space(4);
+                }
+                if (Application.isPlaying)
+                    GUILayout.Button(sceneIndex.ToString(), DeGUI.styles.button.tool.Clone(TextAnchor.MiddleCenter).PaddingLeft(0).PaddingRight(0), GUILayout.Width(20));
+                else
                     scene.enabled = DeGUILayout.ToggleButton(scene.enabled, scene.enabled ? sceneIndex.ToString() : "-", DeGUI.styles.button.tool.Clone(TextAnchor.MiddleCenter).PaddingLeft(0).PaddingRight(0), GUILayout.Width(20));
-                    if (DeGUILayout.ColoredButton(bgShade, labelColor, sceneName, DeGUI.styles.button.tool.Clone(TextAnchor.MiddleLeft))) {
+                EditorGUI.EndDisabledGroup();
+                if (DeGUILayout.ColoredButton(bgShade, labelColor, sceneName, DeGUI.styles.button.tool.Clone(TextAnchor.MiddleLeft))) {
+                    if (Application.isPlaying) {
+                        SceneManager.LoadScene(sceneIndex);
+                    } else {
                         if (Event.current.button == 1) {
                             // Right-click: ping scene in Project panel and store its name in the clipboard
                             Object sceneObj = AssetDatabase.LoadAssetAtPath<Object>(scene.path);
@@ -116,9 +119,11 @@ namespace DG.DeEditorTools.ScenesPanel
                             }
                         }
                     }
-                    if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) DeGUIDrag.StartDrag(0, this, scenes, i);
-                    DeGUILayout.EndToolbar();
                 }
+                EditorGUI.BeginDisabledGroup(Application.isPlaying);
+                if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) DeGUIDrag.StartDrag(0, this, scenes, i);
+                EditorGUI.EndDisabledGroup();
+                DeGUILayout.EndToolbar();
 
                 if (DeGUIDrag.Drag(0, scenes, i)) GUI.changed = true;
             }
@@ -151,7 +156,7 @@ namespace DG.DeEditorTools.ScenesPanel
 
             DeGUILayout.Toolbar("Links", DeGUI.styles.toolbar.stickyTop);
             DeGUILayout.BeginVBox(DeGUI.styles.box.stickyTop);
-            if (GUILayout.Button("DemiLib on GitHub")) Application.OpenURL("https://github.com/Demigiant/demilib");
+            if (GUILayout.Button("DemiLib on GitHub")) Application.OpenURL("https://github.com/Demigiant/demilib/wiki");
             if (GUILayout.Button("Demigiant")) Application.OpenURL("http://www.demigiant.com");
             DeGUILayout.EndVBox();
         }
