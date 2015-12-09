@@ -7,7 +7,9 @@ using DG.DemiEditor;
 using System.IO;
 using System.Text;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DG.DeEditorTools.ScenesPanel
 {
@@ -80,7 +82,7 @@ namespace DG.DeEditorTools.ScenesPanel
 
                 if (scene.enabled) sceneIndex++;
                 string sceneName = Path.GetFileNameWithoutExtension(scene.path);
-                bool isCurrent = Application.isPlaying ? Application.loadedLevelName == sceneName : scene.path == EditorApplication.currentScene;
+                bool isCurrent = SceneManager.sceneCount > 1 ? IsAdditiveSceneLoaded(scene.path) : SceneManager.GetActiveScene().path == scene.path;
                 Color bgShade = isCurrent ? DeGUI.colors.bg.toggleOn : DeGUI.colors.bg.def;
                 Color labelColor = isCurrent ? DeGUI.colors.content.toggleOn : DeGUI.colors.content.def;
                 if (Application.isPlaying) {
@@ -104,9 +106,14 @@ namespace DG.DeEditorTools.ScenesPanel
                             Object sceneObj = AssetDatabase.LoadAssetAtPath<Object>(scene.path);
                             EditorGUIUtility.PingObject(sceneObj);
                             EditorGUIUtility.systemCopyBuffer = sceneName;
-                        } else if (EditorApplication.SaveCurrentSceneIfUserWantsTo()) {
-                            // Left-click: open scene
-                            EditorApplication.OpenScene(scene.path);
+                        } else {
+                            if (Event.current.shift) {
+                                // Shift click: open scene additive
+                                EditorSceneManager.OpenScene(scene.path, OpenSceneMode.Additive);
+                            } else {
+                                // Left-click: open scene
+                                if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) EditorSceneManager.OpenScene(scene.path);
+                            }
                         }
                     }
                     if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) DeGUIDrag.StartDrag(0, this, scenes, i);
@@ -136,7 +143,10 @@ namespace DG.DeEditorTools.ScenesPanel
             GUILayout.Space(4);
             DeGUILayout.Toolbar("Tips", DeGUI.styles.toolbar.stickyTop);
             DeGUILayout.BeginVBox(DeGUI.styles.box.stickyTop);
-            GUILayout.Label("<b>Right-click on a scene</b>\nPing it and copy its name in the clipboard", DeGUI.styles.label.wordwrapRichtText);
+            _strb.Length = 0;
+            _strb.Append("<b>SHIFT + click on a scene</b>\nOpen scene additive")
+                .Append("\n<b>Right-click on a scene</b>\nPing it and copy its name in the clipboard");
+            GUILayout.Label(_strb.ToString(), DeGUI.styles.label.wordwrapRichtText);
             DeGUILayout.EndVBox();
 
             DeGUILayout.Toolbar("Links", DeGUI.styles.toolbar.stickyTop);
@@ -196,6 +206,14 @@ namespace DG.DeEditorTools.ScenesPanel
                 res[i] = scenes[i + diff];
             }
             return res;
+        }
+
+        static bool IsAdditiveSceneLoaded(string scenePath)
+        {
+            foreach (Scene s in SceneManager.GetAllScenes()) {
+                if (s.path == scenePath) return true;
+            }
+            return false;
         }
     }
 }
