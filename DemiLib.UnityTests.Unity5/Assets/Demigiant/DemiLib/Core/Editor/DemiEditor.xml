@@ -75,7 +75,7 @@
             Utilities for Editor Panels.
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeEditorPanelUtils.ConnectToSourceAsset``1(System.String,System.Boolean)">
+        <member name="M:DG.DemiEditor.DeEditorPanelUtils.ConnectToSourceAsset``1(System.String,System.Boolean,System.Boolean)">
             <summary>
             Connects to a <see cref="T:UnityEngine.ScriptableObject"/> asset.
             If the asset already exists at the given path, loads it and returns it.
@@ -84,6 +84,7 @@
             <typeparam name="T">Asset type</typeparam>
             <param name="adbFilePath">File path (relative to Unity's project folder)</param>
             <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
+            <param name="createFoldersIfMissing">If TRUE also creates the path folders if they don't exist</param>
         </member>
         <member name="T:DG.DemiEditor.DeGUIDrag">
             <summary>
