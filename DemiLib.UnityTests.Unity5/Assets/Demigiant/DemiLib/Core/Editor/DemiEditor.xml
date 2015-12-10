@@ -343,18 +343,29 @@
             GUILayout methods
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ShadedButton(UnityEngine.Color,System.String,UnityEngine.GUILayoutOption[])">
+            <summary>Shaded button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ShadedButton(UnityEngine.Color,System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Shaded button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ShadedButton(UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUILayoutOption[])">
+            <summary>Shaded button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ShadedButton(UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Shaded button</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,System.String,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
+            <summary>Colored button</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
+            <summary>Colored button</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
+            <summary>Colored button</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUILayout.ColoredButton(UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
-            <summary>Button that can be toggled on and off</summary>
-            <summary>Button that can be toggled on and off</summary>
+            <summary>Colored button</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUILayout.PressButton(System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
             <summary>
@@ -460,13 +471,38 @@
             <summary>
             Call this at the beginning of GUI methods
             </summary>
-            <param name="guiColorPalette"></param>
+            <param name="guiColorPalette">Eventual <see cref="T:DG.DemiLib.DeColorPalette"/> to use</param>
+            <param name="guiStylePalette">Eventual <see cref="T:DG.DemiEditor.DeStylePalette"/> to use</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ChangePalette(DG.DemiLib.DeColorPalette,DG.DemiEditor.DeStylePalette)">
             <summary>
             Changes the active palettes to the given ones
             (or resets them to the default ones if NULL)
             </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ShadedButton(UnityEngine.Rect,UnityEngine.Color,System.String)">
+            <summary>Shaded button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ShadedButton(UnityEngine.Rect,UnityEngine.Color,System.String,UnityEngine.GUIStyle)">
+            <summary>Shaded button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ShadedButton(UnityEngine.Rect,UnityEngine.Color,UnityEngine.GUIContent)">
+            <summary>Shaded button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ShadedButton(UnityEngine.Rect,UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
+            <summary>Shaded button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ColoredButton(UnityEngine.Rect,UnityEngine.Color,UnityEngine.Color,System.String)">
+            <summary>Colored button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ColoredButton(UnityEngine.Rect,UnityEngine.Color,UnityEngine.Color,System.String,UnityEngine.GUIStyle)">
+            <summary>Colored button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ColoredButton(UnityEngine.Rect,UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIContent)">
+            <summary>Colored button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ColoredButton(UnityEngine.Rect,UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
+            <summary>Colored button</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,System.String)">
             <summary>Button that can be toggled on and off</summary>
@@ -489,6 +525,9 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.SceneField(UnityEngine.Rect,System.String,UnityEngine.Object)">
             <summary>Scene field</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.Box(UnityEngine.Rect,UnityEngine.Color,UnityEngine.GUIStyle)">
+            <summary>Box with style and color options</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.FlatDivider(UnityEngine.Rect,System.Nullable{UnityEngine.Color})">
             <summary>Divider</summary>

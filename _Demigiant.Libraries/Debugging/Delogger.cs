@@ -32,7 +32,7 @@ namespace DG.Debugging
     /// <summary>
     /// Logs messages using the given options
     /// </summary>
-    public static class Logger
+    public static class Delogger
     {
         /// <summary>Sets the verbosity value, which indicates the type of messages that will be logged</summary>
         public static Verbosity verbosity = Verbosity.Normal;

@@ -16,17 +16,35 @@ namespace DG.DemiEditor
 
         #region Buttons
 
-        /// <summary>Button that can be toggled on and off</summary>
+        /// <summary>Shaded button</summary>
+        public static bool ShadedButton(Color shade, string text, params GUILayoutOption[] options)
+        { return ShadedButton(shade, new GUIContent(text, ""), null, options); }
+        /// <summary>Shaded button</summary>
+        public static bool ShadedButton(Color shade, string text, GUIStyle guiStyle, params GUILayoutOption[] options)
+        { return ShadedButton(shade, new GUIContent(text, ""), guiStyle, options); }
+        /// <summary>Shaded button</summary>
+        public static bool ShadedButton(Color shade, GUIContent content, params GUILayoutOption[] options)
+        { return ShadedButton(shade, content, null, options); }
+        /// <summary>Shaded button</summary>
+        public static bool ShadedButton(Color shade, GUIContent content, GUIStyle guiStyle, params GUILayoutOption[] options)
+        {
+            Color prevBgColor = GUI.backgroundColor;
+            GUI.backgroundColor = shade;
+            bool clicked = guiStyle == null ? GUILayout.Button(content, options) : GUILayout.Button(content, guiStyle, options);
+            GUI.backgroundColor = prevBgColor;
+            return clicked;
+        }
+
+        /// <summary>Colored button</summary>
         public static bool ColoredButton(Color shade, Color contentColor, string text, params GUILayoutOption[] options)
         { return ColoredButton(shade, contentColor, new GUIContent(text, ""), null, options); }
-        /// <summary>Button that can be toggled on and off</summary>
+        /// <summary>Colored button</summary>
         public static bool ColoredButton(Color shade, Color contentColor, string text, GUIStyle guiStyle, params GUILayoutOption[] options)
         { return ColoredButton(shade, contentColor, new GUIContent(text, ""), guiStyle, options); }
-        /// <summary>Button that can be toggled on and off</summary>
+        /// <summary>Colored button</summary>
         public static bool ColoredButton(Color shade, Color contentColor, GUIContent content, params GUILayoutOption[] options)
         { return ColoredButton(shade, contentColor, content, null, options); }
-        /// <summary>Button that can be toggled on and off</summary>
-        /// <summary>Button that can be toggled on and off</summary>
+        /// <summary>Colored button</summary>
         public static bool ColoredButton(Color shade, Color contentColor, GUIContent content, GUIStyle guiStyle, params GUILayoutOption[] options)
         {
             Color prevBgColor = GUI.backgroundColor;

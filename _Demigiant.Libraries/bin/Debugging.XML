@@ -19,28 +19,28 @@
         <member name="F:DG.Debugging.Verbosity.Verbose">
             <summary>Log everything, verbose logs included</summary>
         </member>
-        <member name="T:DG.Debugging.Logger">
+        <member name="T:DG.Debugging.Delogger">
             <summary>
             Logs messages using the given options
             </summary>
         </member>
-        <member name="F:DG.Debugging.Logger.verbosity">
+        <member name="F:DG.Debugging.Delogger.verbosity">
             <summary>Sets the verbosity value, which indicates the type of messages that will be logged</summary>
         </member>
-        <member name="F:DG.Debugging.Logger.enabled">
+        <member name="F:DG.Debugging.Delogger.enabled">
             <summary>If FALSE doesn't log anything</summary>
         </member>
-        <member name="M:DG.Debugging.Logger.Log(System.Object,System.Boolean,System.String)">
+        <member name="M:DG.Debugging.Delogger.Log(System.Object,System.Boolean,System.String)">
             <summary>
             Logs the given message with the given options
             </summary>
         </member>
-        <member name="M:DG.Debugging.Logger.LogWarning(System.Object)">
+        <member name="M:DG.Debugging.Delogger.LogWarning(System.Object)">
             <summary>
             Logs the given message with the given options
             </summary>
         </member>
-        <member name="M:DG.Debugging.Logger.LogError(System.Object)">
+        <member name="M:DG.Debugging.Delogger.LogError(System.Object)">
             <summary>
             Logs the given message with the given options
             </summary>

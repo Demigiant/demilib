@@ -22,10 +22,22 @@ namespace DG.DemiLib
             this.pro = pro;
         }
 
+        public DeSkinColor(float freeGradation, float proGradation)
+        {
+            this.free = new Color(freeGradation, freeGradation, freeGradation, 1);
+            this.pro = new Color(proGradation, proGradation, proGradation, 1);
+        }
+
         public DeSkinColor(Color color) : this()
         {
             free = color;
             pro = color;
+        }
+
+        public DeSkinColor(float gradation) : this()
+        {
+            free = new Color(gradation, gradation, gradation, 1);
+            pro = free;
         }
 
         public static implicit operator Color(DeSkinColor v)

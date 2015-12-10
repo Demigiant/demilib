@@ -40,7 +40,8 @@ namespace DG.DemiEditor
         /// <summary>
         /// Call this at the beginning of GUI methods
         /// </summary>
-        /// <param name="guiColorPalette"></param>
+        /// <param name="guiColorPalette">Eventual <see cref="DeColorPalette"/> to use</param>
+        /// <param name="guiStylePalette">Eventual <see cref="DeStylePalette"/> to use</param>
         public static void BeginGUI(DeColorPalette guiColorPalette = null, DeStylePalette guiStylePalette = null)
         {
             ChangePalette(guiColorPalette, guiStylePalette);
@@ -72,6 +73,45 @@ namespace DG.DemiEditor
         #region Public GUI Draw Methods
 
         #region Buttons
+
+        /// <summary>Shaded button</summary>
+        public static bool ShadedButton(Rect rect, Color shade, string text)
+        { return ShadedButton(rect, shade, new GUIContent(text, ""), null); }
+        /// <summary>Shaded button</summary>
+        public static bool ShadedButton(Rect rect, Color shade, string text, GUIStyle guiStyle)
+        { return ShadedButton(rect, shade, new GUIContent(text, ""), guiStyle); }
+        /// <summary>Shaded button</summary>
+        public static bool ShadedButton(Rect rect, Color shade, GUIContent content)
+        { return ShadedButton(rect, shade, content, null); }
+        /// <summary>Shaded button</summary>
+        public static bool ShadedButton(Rect rect, Color shade, GUIContent content, GUIStyle guiStyle)
+        {
+            Color prevBgColor = GUI.backgroundColor;
+            GUI.backgroundColor = shade;
+            bool clicked = guiStyle == null ? GUI.Button(rect, content) : GUI.Button(rect, content, guiStyle);
+            GUI.backgroundColor = prevBgColor;
+            return clicked;
+        }
+
+        /// <summary>Colored button</summary>
+        public static bool ColoredButton(Rect rect, Color shade, Color contentColor, string text)
+        { return ColoredButton(rect, shade, contentColor, new GUIContent(text, ""), null); }
+        /// <summary>Colored button</summary>
+        public static bool ColoredButton(Rect rect, Color shade, Color contentColor, string text, GUIStyle guiStyle)
+        { return ColoredButton(rect, shade, contentColor, new GUIContent(text, ""), guiStyle); }
+        /// <summary>Colored button</summary>
+        public static bool ColoredButton(Rect rect, Color shade, Color contentColor, GUIContent content)
+        { return ColoredButton(rect, shade, contentColor, content, null); }
+        /// <summary>Colored button</summary>
+        public static bool ColoredButton(Rect rect, Color shade, Color contentColor, GUIContent content, GUIStyle guiStyle)
+        {
+            Color prevBgColor = GUI.backgroundColor;
+            GUI.backgroundColor = shade;
+            if (guiStyle == null) guiStyle = DeGUI.styles.button.def;
+            bool clicked = GUI.Button(rect, content, guiStyle.Clone(contentColor));
+            GUI.backgroundColor = prevBgColor;
+            return clicked;
+        }
 
         /// <summary>Button that can be toggled on and off</summary>
         public static bool ToggleButton(Rect rect, bool toggled, string text)
@@ -125,6 +165,16 @@ namespace DG.DemiEditor
         #endregion
 
         #region Miscellaneous
+
+        /// <summary>Box with style and color options</summary>
+        public static void Box(Rect rect, Color color, GUIStyle style = null)
+        {
+            if (style == null) style = DeGUI.styles.box.def;
+            Color orColor = GUI.backgroundColor;
+            GUI.backgroundColor = color;
+            GUI.Box(rect, "", style);
+            GUI.backgroundColor = orColor;
+        }
 
         /// <summary>Divider</summary>
         public static void FlatDivider(Rect rect, Color? color = null)
