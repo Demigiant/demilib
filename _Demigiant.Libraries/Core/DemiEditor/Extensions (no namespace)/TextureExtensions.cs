@@ -14,9 +14,9 @@ namespace DG.DemiEditor
         /// <summary>
         /// Checks that the texture uses the correct import settings, and applies them if they're incorrect.
         /// </summary>
-        public static void SetFormat(this Texture2D texture, FilterMode filterMode = FilterMode.Point, int maxTextureSize = 32)
+        public static void SetGUIFormat(this Texture2D texture, FilterMode filterMode = FilterMode.Point, int maxTextureSize = 32)
         {
-            if (texture.wrapMode == TextureWrapMode.Clamp) return;
+            if (texture.wrapMode == TextureWrapMode.Clamp && texture.filterMode == filterMode && texture.width == maxTextureSize) return;
 
             string path = AssetDatabase.GetAssetPath(texture);
             TextureImporter tImporter = AssetImporter.GetAtPath(path) as TextureImporter;

@@ -548,7 +548,7 @@
             Texture extensions
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.TextureExtensions.SetFormat(UnityEngine.Texture2D,UnityEngine.FilterMode,System.Int32)">
+        <member name="M:DG.DemiEditor.TextureExtensions.SetGUIFormat(UnityEngine.Texture2D,UnityEngine.FilterMode,System.Int32)">
             <summary>
             Checks that the texture uses the correct import settings, and applies them if they're incorrect.
             </summary>
