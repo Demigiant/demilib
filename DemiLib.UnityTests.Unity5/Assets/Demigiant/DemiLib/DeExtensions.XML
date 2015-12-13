@@ -4,6 +4,12 @@
         <name>DeExtensions</name>
     </assembly>
     <members>
+        <member name="M:DG.DeExtensions.ComponentExtensions.GetOnlyComponentsInChildren``1(UnityEngine.MonoBehaviour,System.Boolean)">
+            <summary>
+            Returns ONLY the Components in the children, and ignores the parent.
+            </summary>
+            <param name="includeInactive">If TRUE also includes inactive children</param>
+        </member>
         <member name="M:DG.DeExtensions.GameObjectExtensions.AwakeAndDeactivate(UnityEngine.GameObject)">
             <summary>
             Activates then immediately deactivates the target gameObject.
