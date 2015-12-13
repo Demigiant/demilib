@@ -181,7 +181,7 @@ namespace DG.DemiEditor
         {
             Color prevBgColor = GUI.backgroundColor;
             if (color != null) GUI.backgroundColor = (Color)color;
-            GUI.Box(rect, "", DeGUI.styles.box.def);
+            GUI.Box(rect, "", DeGUI.styles.box.flat);
             GUI.backgroundColor = prevBgColor;
         }
 
