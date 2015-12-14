@@ -68,10 +68,54 @@ namespace DG.DemiEditor
                 return _fooWhiteSquareAlpha50;
             }
         }
+        public static Texture2D blackSquare
+        {
+            get {
+                if (_fooBlackSquare == null) {
+                    _fooBlackSquare = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquare.png", typeof(Texture2D)) as Texture2D;
+                    _fooBlackSquare.SetGUIFormat(FilterMode.Point, 16);
+                }
+                return _fooBlackSquare;
+            }
+        }
+        public static Texture2D blackSquareAlpha10
+        {
+            get {
+                if (_fooBlackSquareAlpha10 == null) {
+                    _fooBlackSquareAlpha10 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha10.png", typeof(Texture2D)) as Texture2D;
+                    _fooBlackSquareAlpha10.SetGUIFormat(FilterMode.Point, 16);
+                }
+                return _fooBlackSquareAlpha10;
+            }
+        }
+        public static Texture2D blackSquareAlpha25
+        {
+            get {
+                if (_fooBlackSquareAlpha25 == null) {
+                    _fooBlackSquareAlpha25 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha25.png", typeof(Texture2D)) as Texture2D;
+                    _fooBlackSquareAlpha25.SetGUIFormat(FilterMode.Point, 16);
+                }
+                return _fooBlackSquareAlpha25;
+            }
+        }
+        public static Texture2D blackSquareAlpha50
+        {
+            get {
+                if (_fooBlackSquareAlpha50 == null) {
+                    _fooBlackSquareAlpha50 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha50.png", typeof(Texture2D)) as Texture2D;
+                    _fooBlackSquareAlpha50.SetGUIFormat(FilterMode.Point, 16);
+                }
+                return _fooBlackSquareAlpha50;
+            }
+        }
         static Texture2D _fooWhiteSquare;
         static Texture2D _fooWhiteSquareAlpha10;
         static Texture2D _fooWhiteSquareAlpha25;
         static Texture2D _fooWhiteSquareAlpha50;
+        static Texture2D _fooBlackSquare;
+        static Texture2D _fooBlackSquareAlpha10;
+        static Texture2D _fooBlackSquareAlpha25;
+        static Texture2D _fooBlackSquareAlpha50;
 
         #endregion
 
