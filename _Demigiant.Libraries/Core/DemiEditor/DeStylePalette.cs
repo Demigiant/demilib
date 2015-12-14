@@ -137,15 +137,23 @@ namespace DG.DemiEditor
             tool = new GUIStyle(EditorStyles.toolbarButton).ContentOffsetY(-1);
             toolL = new GUIStyle(EditorStyles.toolbarButton).Height(23).ContentOffsetY(0);
             toolIco = new GUIStyle(tool).StretchWidth(false).Width(22).ContentOffsetX(-1);
+//            toolFoldoutClosed = new GUIStyle(GUI.skin.button) {
+//                alignment = TextAnchor.UpperLeft,
+//                active = { background = null },
+//                fixedWidth = 14,
+//                normal = { background = EditorStyles.foldout.normal.background },
+//                border = EditorStyles.foldout.border,
+//                padding = new RectOffset(14, 0, 0, 0)
+//            }.MarginTop(2);
             toolFoldoutClosed = new GUIStyle(GUI.skin.button) {
-                alignment = TextAnchor.UpperLeft,
+                alignment = TextAnchor.MiddleLeft,
                 active = { background = null },
                 fixedWidth = 14,
                 normal = { background = EditorStyles.foldout.normal.background },
                 border = EditorStyles.foldout.border,
-                padding = new RectOffset(14, 0, 0, 0)
-            }.MarginTop(2);
-            toolFoldoutClosedWLabel = new GUIStyle(toolFoldoutClosed).Width(0).StretchWidth(false);
+                padding = new RectOffset(14, 0, 2, 0)
+            }.MarginTop(3);
+            toolFoldoutClosedWLabel = toolFoldoutClosed.Clone(9).Width(0).StretchWidth(false);
             toolFoldoutOpen = new GUIStyle(toolFoldoutClosed) {
                 normal = { background = EditorStyles.foldout.onNormal.background }
             };
