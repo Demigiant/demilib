@@ -1,6 +1,7 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/04/24 18:27
 
+using System.Collections;
 using DG.DemiLib;
 using DG.DemiLib.Core;
 using UnityEditor;
@@ -22,14 +23,12 @@ namespace DG.DemiEditor
         /// Default style palette
         /// </summary>
         public static DeStylePalette styles;
+        /// <summary>TRUE if we're using the PRO skin</summary>
+        public static readonly bool IsProSkin;
         public static Color defaultGUIColor, defaultGUIBackgroundColor, defaultGUIContentColor; // Set on Begin GUI
         static DeColorPalette _defaultColorPalette; // Default color palette if none selected
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
-
-        /// <summary>
-        /// TRUE if we're using the PRO skin
-        /// </summary>
-        public static readonly bool IsProSkin;
+        static string _doubleClickTextFieldId; // ID of selected double click textField
 
         static DeGUI()
         {
@@ -49,6 +48,15 @@ namespace DG.DemiEditor
             defaultGUIColor = GUI.color;
             defaultGUIBackgroundColor = GUI.backgroundColor;
             defaultGUIContentColor = GUI.contentColor;
+        }
+
+        /// <summary>
+        /// Exits the current event correctly, also taking care of eventual drag operations
+        /// </summary>
+        public static void ExitCurrentEvent()
+        {
+            DeGUIDrag.EndDrag(false);
+            Event.current.Use();
         }
 
         /// <summary>
@@ -197,6 +205,67 @@ namespace DG.DemiEditor
             if (color != null) GUI.backgroundColor = (Color)color;
             GUI.Box(rect, "", DeGUI.styles.box.flat);
             GUI.backgroundColor = prevBgColor;
+        }
+
+        /// <summary>
+        /// A text field that becomes editable only on double-click
+        /// </summary>
+        /// <param name="rect">Area</param>
+        /// <param name="editor">Editor reference</param>
+        /// <param name="id">A unique ID to use in order to determine if the text is selected or not</param>
+        /// <param name="text">Text</param>
+        /// <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
+        /// <param name="editingStyle">Style for editing mode</param>
+        public static string DoubleClickTextField(Rect rect, EditorWindow editor, string id, string text, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
+        { return DoDoubleClickTextField(rect, editor, id, text, -1, null, -1, defaultStyle, editingStyle); }
+        /// <summary>
+        /// A text field that becomes editable only on double-click and can also be dragged
+        /// </summary>
+        /// <param name="rect">Area</param>
+        /// <param name="editor">Editor reference</param>
+        /// <param name="id">A unique ID to use in order to determine if the text is selected or not</param>
+        /// <param name="text">Text</param>
+        /// <param name="dragId">ID for this drag operation (must be the same for both this and Drag</param>
+        /// <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
+        /// <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
+        /// <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
+        /// <param name="editingStyle">Style for editing mode</param>
+        /// <returns></returns>
+        public static string DoubleClickDraggableTextField(Rect rect, EditorWindow editor, string id, string text, int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
+        { return DoDoubleClickTextField(rect, editor, id, text, dragId, draggableList, draggedItemIndex, defaultStyle, editingStyle); }
+
+        static string DoDoubleClickTextField(Rect rect, EditorWindow editor, string id, string text, int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
+        {
+            if (defaultStyle == null) defaultStyle = EditorStyles.label;
+            if (editingStyle == null) editingStyle = EditorStyles.textField;
+            GUI.SetNextControlName(id);
+            if (_doubleClickTextFieldId != id && Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition)) {
+                if (Event.current.clickCount == 2) {
+                    // Activate edit mode
+                    _doubleClickTextFieldId = id;
+                    EditorGUI.FocusTextInControl(id);
+                } else {
+                    // Start drag
+                    DeGUIDrag.StartDrag(dragId, editor, draggableList, draggedItemIndex);
+                }
+            }
+            bool selected = _doubleClickTextFieldId == id && GUI.GetNameOfFocusedControl() == id;
+            if (!selected) {
+                EditorGUIUtility.AddCursorRect(rect, MouseCursor.Arrow);
+                if (GUI.GetNameOfFocusedControl() == id) GUIUtility.keyboardControl = 0;
+            }
+            text = EditorGUI.TextField(rect, text, selected ? editingStyle : defaultStyle);
+            // End editing
+            if (!selected) return text;
+            if (
+                Event.current.isKey && Event.current.keyCode == KeyCode.Return
+                || Event.current.type == EventType.MouseDown && !rect.Contains(Event.current.mousePosition)
+            ) {
+                GUIUtility.keyboardControl = 0;
+                _doubleClickTextFieldId = null;
+                editor.Repaint();
+            }
+            return text;
         }
 
         #endregion

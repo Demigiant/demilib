@@ -463,9 +463,7 @@
             </summary>
         </member>
         <member name="F:DG.DemiEditor.DeGUI.IsProSkin">
-            <summary>
-            TRUE if we're using the PRO skin
-            </summary>
+            <summary>TRUE if we're using the PRO skin</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.BeginGUI(DG.DemiLib.DeColorPalette,DG.DemiEditor.DeStylePalette)">
             <summary>
@@ -473,6 +471,11 @@
             </summary>
             <param name="guiColorPalette">Eventual <see cref="T:DG.DemiLib.DeColorPalette"/> to use</param>
             <param name="guiStylePalette">Eventual <see cref="T:DG.DemiEditor.DeStylePalette"/> to use</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ExitCurrentEvent">
+            <summary>
+            Exits the current event correctly, also taking care of eventual drag operations
+            </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ChangePalette(DG.DemiLib.DeColorPalette,DG.DemiEditor.DeStylePalette)">
             <summary>
@@ -536,6 +539,32 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.FlatDivider(UnityEngine.Rect,System.Nullable{UnityEngine.Color})">
             <summary>Divider</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.DoubleClickTextField(UnityEngine.Rect,UnityEditor.EditorWindow,System.String,System.String,UnityEngine.GUIStyle,UnityEngine.GUIStyle)">
+            <summary>
+            A text field that becomes editable only on double-click
+            </summary>
+            <param name="rect">Area</param>
+            <param name="editor">Editor reference</param>
+            <param name="id">A unique ID to use in order to determine if the text is selected or not</param>
+            <param name="text">Text</param>
+            <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
+            <param name="editingStyle">Style for editing mode</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.DoubleClickDraggableTextField(UnityEngine.Rect,UnityEditor.EditorWindow,System.String,System.String,System.Int32,System.Collections.IList,System.Int32,UnityEngine.GUIStyle,UnityEngine.GUIStyle)">
+            <summary>
+            A text field that becomes editable only on double-click and can also be dragged
+            </summary>
+            <param name="rect">Area</param>
+            <param name="editor">Editor reference</param>
+            <param name="id">A unique ID to use in order to determine if the text is selected or not</param>
+            <param name="text">Text</param>
+            <param name="dragId">ID for this drag operation (must be the same for both this and Drag</param>
+            <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
+            <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
+            <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
+            <param name="editingStyle">Style for editing mode</param>
+            <returns></returns>
         </member>
         <member name="T:DG.DemiEditor.StringExtensions">
             <summary>
