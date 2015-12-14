@@ -22,6 +22,7 @@ namespace DG.DemiEditor
         /// Default style palette
         /// </summary>
         public static DeStylePalette styles;
+        public static Color defaultGUIColor, defaultGUIBackgroundColor, defaultGUIContentColor; // Set on Begin GUI
         static DeColorPalette _defaultColorPalette; // Default color palette if none selected
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
 
@@ -45,6 +46,9 @@ namespace DG.DemiEditor
         public static void BeginGUI(DeColorPalette guiColorPalette = null, DeStylePalette guiStylePalette = null)
         {
             ChangePalette(guiColorPalette, guiStylePalette);
+            defaultGUIColor = GUI.color;
+            defaultGUIBackgroundColor = GUI.backgroundColor;
+            defaultGUIContentColor = GUI.contentColor;
         }
 
         /// <summary>
@@ -66,6 +70,16 @@ namespace DG.DemiEditor
             }
 
             styles.Init();
+        }
+
+        /// <summary>
+        /// Resets the GUI colors to the default ones (only available if BeginGUI was called first)
+        /// </summary>
+        public static void ResetGUIColors(bool resetBackground = true, bool resetContent = true, bool resetMain = true)
+        {
+            if (resetBackground) GUI.backgroundColor = defaultGUIBackgroundColor;
+            if (resetContent) GUI.contentColor = defaultGUIContentColor;
+            if (resetMain) GUI.color = defaultGUIColor;
         }
 
         #endregion
