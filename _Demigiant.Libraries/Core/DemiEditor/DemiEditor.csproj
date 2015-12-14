@@ -53,6 +53,7 @@
     <Compile Include="AttributesManagers\ScriptExecutionOrderManager.cs" />
     <Compile Include="DeEditorFileUtils.cs" />
     <Compile Include="DeEditorPanelUtils.cs" />
+    <Compile Include="DeEditorUtils.cs" />
     <Compile Include="DeGUIDrag.cs" />
     <Compile Include="DeSkinStyle.cs" />
     <Compile Include="DeEditorSoundUtils.cs" />

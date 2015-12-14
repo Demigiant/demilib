@@ -17,23 +17,23 @@ namespace DG.DemiEditor
         /// <summary>
         /// True if a GUI element is currently being dragged
         /// </summary>
-        static public bool isDragging { get { return _dragData != null; } }
+        public static bool isDragging { get { return _dragData != null; } }
         /// <summary>
         /// Return the current item being dragged, or NULL if there is none
         /// </summary>
-        static public object draggedItem { get { if (_dragData == null) return null; return _dragData.draggedItem; } }
+        public static object draggedItem { get { if (_dragData == null) return null; return _dragData.draggedItem; } }
         /// <summary>
         /// Type of current item being dragged, or NULL if there is none
         /// </summary>
-        static public Type draggedItemType { get { if (_dragData == null) return null; return _dragData.draggedItem.GetType(); } }
+        public static Type draggedItemType { get { if (_dragData == null) return null; return _dragData.draggedItem.GetType(); } }
         /// <summary>
         /// Starting index of current item being dragged, or NULL if there is none
         /// </summary>
-        static public int draggedItemOriginalIndex { get { if (_dragData == null) return -1; return _dragData.draggedItemIndex; } }
+        public static int draggedItemOriginalIndex { get { if (_dragData == null) return -1; return _dragData.draggedItemIndex; } }
         /// <summary>
         /// Retrieves the eventual optional data stored via the StartDrag method
         /// </summary>
-        static public object optionalDragData { get { if (_dragData == null) return null; return _dragData.optionalData; } }
+        public static object optionalDragData { get { if (_dragData == null) return null; return _dragData.optionalData; } }
 
         // Default drag color
         static readonly Color _DefDragColor = new Color(0.1720873f, 0.4236527f, 0.7686567f, 0.35f);
@@ -41,6 +41,7 @@ namespace DG.DemiEditor
         static GUIDragData _dragData;
         static int _dragId;
         static bool _waitingToApplyDrag;
+        static bool _dragDelayElapsed;
         static Editor _editor;
         static EditorWindow _editorWindow;
 
@@ -62,6 +63,7 @@ namespace DG.DemiEditor
             _editor = editor;
             _dragId = dragId;
             _dragData = new GUIDragData(draggableList, draggableList[draggedItemIndex], draggedItemIndex, optionalData);
+            DeEditorUtils.DelayedCall(0.2f, () => _dragDelayElapsed = true);
         }
         /// <summary>
         /// Starts a drag operation on a GUI element.
@@ -79,6 +81,7 @@ namespace DG.DemiEditor
             _editorWindow = editorWindow;
             _dragId = dragId;
             _dragData = new GUIDragData(draggableList, draggableList[draggedItemIndex], draggedItemIndex, optionalData);
+            DeEditorUtils.DelayedCall(0.1f, ()=> _dragDelayElapsed = true);
         }
 
         /// <summary>
@@ -89,7 +92,7 @@ namespace DG.DemiEditor
         /// <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
         /// <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
         /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
-        static public bool Drag(int dragId, IList draggableList, int currDraggableItemIndex)
+        public static bool Drag(int dragId, IList draggableList, int currDraggableItemIndex)
         { return Drag(dragId, draggableList, currDraggableItemIndex, _DefDragColor); }
 
         /// <summary>
@@ -101,12 +104,16 @@ namespace DG.DemiEditor
         /// <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
         /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
         /// <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
-        static public bool Drag(int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor)
+        public static bool Drag(int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor)
         {
             if (_dragData == null || _dragId != dragId) return false;
             if (_waitingToApplyDrag) {
                 if (Event.current.type == EventType.Repaint) Event.current.Use();
                 if (Event.current.type == EventType.Used) ApplyDrag();
+                return false;
+            }
+            if (!_dragDelayElapsed) {
+                if (GUIUtility.hotControl < 1) return EndDrag(false);
                 return false;
             }
 
@@ -202,6 +209,7 @@ namespace DG.DemiEditor
             _dragData = null;
             _dragId = -1;
             _waitingToApplyDrag = false;
+            _dragDelayElapsed = false;
         }
 
         #endregion

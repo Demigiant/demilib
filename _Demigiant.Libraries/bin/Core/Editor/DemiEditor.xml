@@ -86,6 +86,9 @@
             <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
             <param name="createFoldersIfMissing">If TRUE also creates the path folders if they don't exist</param>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorUtils.DelayedCall(System.Single,System.Action)">
+            <summary>Calls the given action after the given delay</summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUIDrag">
             <summary>
             Manages the dragging of GUI elements
