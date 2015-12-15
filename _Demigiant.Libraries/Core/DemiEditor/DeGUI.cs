@@ -198,13 +198,13 @@ namespace DG.DemiEditor
             GUI.backgroundColor = orColor;
         }
 
-        /// <summary>Divider</summary>
-        public static void FlatDivider(Rect rect, Color? color = null)
+        /// <summary>Draws a colored square</summary>
+        public static void DrawColoredSquare(Rect rect, Color color)
         {
-            Color prevBgColor = GUI.backgroundColor;
-            if (color != null) GUI.backgroundColor = (Color)color;
-            GUI.Box(rect, "", DeGUI.styles.box.flat);
-            GUI.backgroundColor = prevBgColor;
+            Color orColor = GUI.color;
+            GUI.color = color;
+            GUI.DrawTexture(rect, DeStylePalette.whiteSquare);
+            GUI.color = orColor;
         }
 
         /// <summary>
@@ -268,6 +268,15 @@ namespace DG.DemiEditor
                 editor.Repaint();
             }
             return text;
+        }
+
+        /// <summary>Divider</summary>
+        public static void FlatDivider(Rect rect, Color? color = null)
+        {
+            Color prevBgColor = GUI.backgroundColor;
+            if (color != null) GUI.backgroundColor = (Color)color;
+            GUI.Box(rect, "", DeGUI.styles.box.flat);
+            GUI.backgroundColor = prevBgColor;
         }
 
         #endregion
