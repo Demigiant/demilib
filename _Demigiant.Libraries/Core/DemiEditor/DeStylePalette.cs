@@ -50,6 +50,15 @@ namespace DG.DemiEditor
                 return _fooWhiteSquareAlpha10;
             }
         }
+        public static Texture2D whiteSquareAlpha15 {
+            get {
+                if (_fooWhiteSquareAlpha15 == null) {
+                    _fooWhiteSquareAlpha15 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "whiteSquareAlpha15.png", typeof(Texture2D)) as Texture2D;
+                    _fooWhiteSquareAlpha15.SetGUIFormat(FilterMode.Point, 16);
+                }
+                return _fooWhiteSquareAlpha15;
+            }
+        }
         public static Texture2D whiteSquareAlpha25 {
             get {
                 if (_fooWhiteSquareAlpha25 == null) {
@@ -68,8 +77,7 @@ namespace DG.DemiEditor
                 return _fooWhiteSquareAlpha50;
             }
         }
-        public static Texture2D blackSquare
-        {
+        public static Texture2D blackSquare {
             get {
                 if (_fooBlackSquare == null) {
                     _fooBlackSquare = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquare.png", typeof(Texture2D)) as Texture2D;
@@ -78,8 +86,7 @@ namespace DG.DemiEditor
                 return _fooBlackSquare;
             }
         }
-        public static Texture2D blackSquareAlpha10
-        {
+        public static Texture2D blackSquareAlpha10 {
             get {
                 if (_fooBlackSquareAlpha10 == null) {
                     _fooBlackSquareAlpha10 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha10.png", typeof(Texture2D)) as Texture2D;
@@ -88,8 +95,16 @@ namespace DG.DemiEditor
                 return _fooBlackSquareAlpha10;
             }
         }
-        public static Texture2D blackSquareAlpha25
-        {
+        public static Texture2D blackSquareAlpha15 {
+            get {
+                if (_fooBlackSquareAlpha15 == null) {
+                    _fooBlackSquareAlpha15 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha15.png", typeof(Texture2D)) as Texture2D;
+                    _fooBlackSquareAlpha15.SetGUIFormat(FilterMode.Point, 16);
+                }
+                return _fooBlackSquareAlpha15;
+            }
+        }
+        public static Texture2D blackSquareAlpha25 {
             get {
                 if (_fooBlackSquareAlpha25 == null) {
                     _fooBlackSquareAlpha25 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha25.png", typeof(Texture2D)) as Texture2D;
@@ -98,8 +113,7 @@ namespace DG.DemiEditor
                 return _fooBlackSquareAlpha25;
             }
         }
-        public static Texture2D blackSquareAlpha50
-        {
+        public static Texture2D blackSquareAlpha50 {
             get {
                 if (_fooBlackSquareAlpha50 == null) {
                     _fooBlackSquareAlpha50 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha50.png", typeof(Texture2D)) as Texture2D;
@@ -110,10 +124,12 @@ namespace DG.DemiEditor
         }
         static Texture2D _fooWhiteSquare;
         static Texture2D _fooWhiteSquareAlpha10;
+        static Texture2D _fooWhiteSquareAlpha15;
         static Texture2D _fooWhiteSquareAlpha25;
         static Texture2D _fooWhiteSquareAlpha50;
         static Texture2D _fooBlackSquare;
         static Texture2D _fooBlackSquareAlpha10;
+        static Texture2D _fooBlackSquareAlpha15;
         static Texture2D _fooBlackSquareAlpha25;
         static Texture2D _fooBlackSquareAlpha50;
 

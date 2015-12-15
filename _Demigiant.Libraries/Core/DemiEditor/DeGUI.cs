@@ -244,6 +244,8 @@ namespace DG.DemiEditor
                     // Activate edit mode
                     _doubleClickTextFieldId = id;
                     EditorGUI.FocusTextInControl(id);
+                    DeGUI.ExitCurrentEvent();
+                    editor.Repaint();
                 } else {
                     // Start drag
                     DeGUIDrag.StartDrag(dragId, editor, draggableList, draggedItemIndex);
