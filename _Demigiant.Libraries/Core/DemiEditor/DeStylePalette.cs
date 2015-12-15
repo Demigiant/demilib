@@ -1,6 +1,7 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/04/29 18:54
 
+using System;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -32,96 +33,70 @@ namespace DG.DemiEditor
 
         #region Texture2D
 
-        public static Texture2D whiteSquare {
-            get {
-                if (_fooWhiteSquare == null) {
-                    _fooWhiteSquare = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "whiteSquare.png", typeof(Texture2D)) as Texture2D;
-                    _fooWhiteSquare.SetGUIFormat(FilterMode.Point, 16);
-                }
+        public static Texture2D whiteSquare { get {
+                if (_fooWhiteSquare == null) _fooWhiteSquare = LoadSquareTexture("whiteSquare");
                 return _fooWhiteSquare;
-            }
-        }
-        public static Texture2D whiteSquareAlpha10 {
-            get {
-                if (_fooWhiteSquareAlpha10 == null) {
-                    _fooWhiteSquareAlpha10 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "whiteSquareAlpha10.png", typeof(Texture2D)) as Texture2D;
-                    _fooWhiteSquareAlpha10.SetGUIFormat(FilterMode.Point, 16);
-                }
+        }}
+        public static Texture2D whiteSquareAlpha10 { get {
+                if (_fooWhiteSquareAlpha10 == null) _fooWhiteSquareAlpha10 = LoadSquareTexture("whiteSquareAlpha10");
                 return _fooWhiteSquareAlpha10;
-            }
-        }
-        public static Texture2D whiteSquareAlpha15 {
-            get {
-                if (_fooWhiteSquareAlpha15 == null) {
-                    _fooWhiteSquareAlpha15 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "whiteSquareAlpha15.png", typeof(Texture2D)) as Texture2D;
-                    _fooWhiteSquareAlpha15.SetGUIFormat(FilterMode.Point, 16);
-                }
+        }}
+        public static Texture2D whiteSquareAlpha15 { get {
+                if (_fooWhiteSquareAlpha15 == null) _fooWhiteSquareAlpha15 = LoadSquareTexture("whiteSquareAlpha15");
                 return _fooWhiteSquareAlpha15;
-            }
-        }
-        public static Texture2D whiteSquareAlpha25 {
-            get {
-                if (_fooWhiteSquareAlpha25 == null) {
-                    _fooWhiteSquareAlpha25 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "whiteSquareAlpha25.png", typeof(Texture2D)) as Texture2D;
-                    _fooWhiteSquareAlpha25.SetGUIFormat(FilterMode.Point, 16);
-                }
+        }}
+        public static Texture2D whiteSquareAlpha25 { get {
+                if (_fooWhiteSquareAlpha25 == null) _fooWhiteSquareAlpha25 = LoadSquareTexture("whiteSquareAlpha25");
                 return _fooWhiteSquareAlpha25;
-            }
-        }
-        public static Texture2D whiteSquareAlpha50 {
-            get {
-                if (_fooWhiteSquareAlpha50 == null) {
-                    _fooWhiteSquareAlpha50 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "whiteSquareAlpha50.png", typeof(Texture2D)) as Texture2D;
-                    _fooWhiteSquareAlpha50.SetGUIFormat(FilterMode.Point, 16);
-                }
+        }}
+        public static Texture2D whiteSquareAlpha50 { get {
+                if (_fooWhiteSquareAlpha50 == null) _fooWhiteSquareAlpha50 = LoadSquareTexture("whiteSquareAlpha50");
                 return _fooWhiteSquareAlpha50;
-            }
-        }
-        public static Texture2D blackSquare {
-            get {
-                if (_fooBlackSquare == null) {
-                    _fooBlackSquare = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquare.png", typeof(Texture2D)) as Texture2D;
-                    _fooBlackSquare.SetGUIFormat(FilterMode.Point, 16);
-                }
+        }}
+        public static Texture2D blackSquare { get {
+                if (_fooBlackSquare == null) _fooBlackSquare = LoadSquareTexture("blackSquare");
                 return _fooBlackSquare;
-            }
-        }
-        public static Texture2D blackSquareAlpha10 {
-            get {
-                if (_fooBlackSquareAlpha10 == null) {
-                    _fooBlackSquareAlpha10 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha10.png", typeof(Texture2D)) as Texture2D;
-                    _fooBlackSquareAlpha10.SetGUIFormat(FilterMode.Point, 16);
-                }
+        }}
+        public static Texture2D blackSquareAlpha10 { get {
+                if (_fooBlackSquareAlpha10 == null) _fooBlackSquareAlpha10 = LoadSquareTexture("blackSquareAlpha10");
                 return _fooBlackSquareAlpha10;
-            }
-        }
-        public static Texture2D blackSquareAlpha15 {
-            get {
-                if (_fooBlackSquareAlpha15 == null) {
-                    _fooBlackSquareAlpha15 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha15.png", typeof(Texture2D)) as Texture2D;
-                    _fooBlackSquareAlpha15.SetGUIFormat(FilterMode.Point, 16);
-                }
+        }}
+        public static Texture2D blackSquareAlpha15 { get {
+                if (_fooBlackSquareAlpha15 == null) _fooBlackSquareAlpha15 = LoadSquareTexture("blackSquareAlpha15");
                 return _fooBlackSquareAlpha15;
-            }
-        }
-        public static Texture2D blackSquareAlpha25 {
-            get {
-                if (_fooBlackSquareAlpha25 == null) {
-                    _fooBlackSquareAlpha25 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha25.png", typeof(Texture2D)) as Texture2D;
-                    _fooBlackSquareAlpha25.SetGUIFormat(FilterMode.Point, 16);
-                }
+        }}
+        public static Texture2D blackSquareAlpha25 { get {
+                if (_fooBlackSquareAlpha25 == null) _fooBlackSquareAlpha25 = LoadSquareTexture("blackSquareAlpha25");
                 return _fooBlackSquareAlpha25;
-            }
-        }
-        public static Texture2D blackSquareAlpha50 {
-            get {
-                if (_fooBlackSquareAlpha50 == null) {
-                    _fooBlackSquareAlpha50 = AssetDatabase.LoadAssetAtPath("Assets/" + _adbImgsDir + "blackSquareAlpha50.png", typeof(Texture2D)) as Texture2D;
-                    _fooBlackSquareAlpha50.SetGUIFormat(FilterMode.Point, 16);
-                }
+        }}
+        public static Texture2D blackSquareAlpha50 { get {
+                if (_fooBlackSquareAlpha50 == null) _fooBlackSquareAlpha50 = LoadSquareTexture("blackSquareAlpha50");
                 return _fooBlackSquareAlpha50;
-            }
-        }
+        }}
+        public static Texture2D redSquare { get {
+                if (_fooRedSquare == null) _fooRedSquare = LoadSquareTexture("redSquare");
+                return _fooRedSquare;
+        }}
+        public static Texture2D orangeSquare { get {
+                if (_fooOrangeSquare == null) _fooOrangeSquare = LoadSquareTexture("orangeSquare");
+                return _fooOrangeSquare;
+        }}
+        public static Texture2D yellowSquare { get {
+                if (_fooYellowSquare == null) _fooYellowSquare = LoadSquareTexture("yellowSquare");
+                return _fooYellowSquare;
+        }}
+        public static Texture2D greenSquare { get {
+                if (_fooGreenSquare == null) _fooGreenSquare = LoadSquareTexture("greenSquare");
+                return _fooGreenSquare;
+        }}
+        public static Texture2D blueSquare { get {
+                if (_fooBlueSquare == null) _fooBlueSquare = LoadSquareTexture("blueSquare");
+                return _fooBlueSquare;
+        }}
+        public static Texture2D purpleSquare { get {
+                if (_fooPurpleSquare == null) _fooPurpleSquare = LoadSquareTexture("purpleSquare");
+                return _fooPurpleSquare;
+        }}
         static Texture2D _fooWhiteSquare;
         static Texture2D _fooWhiteSquareAlpha10;
         static Texture2D _fooWhiteSquareAlpha15;
@@ -132,6 +107,12 @@ namespace DG.DemiEditor
         static Texture2D _fooBlackSquareAlpha15;
         static Texture2D _fooBlackSquareAlpha25;
         static Texture2D _fooBlackSquareAlpha50;
+        static Texture2D _fooRedSquare;
+        static Texture2D _fooOrangeSquare;
+        static Texture2D _fooYellowSquare;
+        static Texture2D _fooGreenSquare;
+        static Texture2D _fooBlueSquare;
+        static Texture2D _fooPurpleSquare;
 
         #endregion
 
@@ -157,6 +138,13 @@ namespace DG.DemiEditor
             foreach (FieldInfo fi in fieldInfos) {
                 if (fi.FieldType.BaseType == typeof(DeStyleSubPalette)) ((DeStyleSubPalette)fi.GetValue(this)).Init();
             }
+        }
+
+        static Texture2D LoadSquareTexture(string name)
+        {
+            Texture2D tex = AssetDatabase.LoadAssetAtPath(String.Format("Assets/{0}{1}.png", _adbImgsDir, name), typeof(Texture2D)) as Texture2D;
+            tex.SetGUIFormat(FilterMode.Point, 16);
+            return tex;
         }
     }
 
