@@ -10,5 +10,15 @@
             </summary>
             Taken from wydoidoit's code on Unity Answers http://answers.unity3d.com/questions/659932/how-do-i-clamp-my-rotation.html
         </member>
+        <member name="T:DG.DeUtils.DeRectUtils">
+            <summary>
+            Utils for structs (since they can't directly work with extension methods)
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeRectUtils.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Modifies and returns the given Rect, with its values shifted according the the given parameters
+            </summary>
+        </member>
     </members>
 </doc>
