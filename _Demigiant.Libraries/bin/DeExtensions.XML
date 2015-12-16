@@ -17,5 +17,15 @@
             </summary>
             <param name="go"></param>
         </member>
+        <member name="T:DG.DeExtensions.ListExtensions">
+            <summary>
+            List, IList and Array utils
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.ListExtensions.Shift``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32)">
+            <summary>
+            Shifts an item from an index to another, without modifying the list except than by moving elements around
+            </summary>
+        </member>
     </members>
 </doc>
