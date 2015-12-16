@@ -252,6 +252,11 @@
             Sets the margin of the style
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.Margin(UnityEngine.GUIStyle,System.Int32)">
+            <summary>
+            Sets the margin of the style
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.GUIStyleExtensions.MarginLeft(UnityEngine.GUIStyle,System.Int32)">
             <summary>
             Sets the left margin of the style
@@ -278,6 +283,11 @@
             </summary>
         </member>
         <member name="M:DG.DemiEditor.GUIStyleExtensions.Padding(UnityEngine.GUIStyle,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Sets the padding of the style
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.Padding(UnityEngine.GUIStyle,System.Int32)">
             <summary>
             Sets the padding of the style
             </summary>

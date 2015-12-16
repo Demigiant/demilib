@@ -128,6 +128,14 @@ namespace DG.DemiEditor
             return style;
         }
         /// <summary>
+        /// Sets the margin of the style
+        /// </summary>
+        public static GUIStyle Margin(this GUIStyle style, int margin)
+        {
+            style.margin = new RectOffset(margin, margin, margin, margin);
+            return style;
+        }
+        /// <summary>
         /// Sets the left margin of the style
         /// </summary>
         public static GUIStyle MarginLeft(this GUIStyle style, int left)
@@ -174,6 +182,14 @@ namespace DG.DemiEditor
         public static GUIStyle Padding(this GUIStyle style, int left, int right, int top, int bottom)
         {
             style.padding = new RectOffset(left, right, top, bottom);
+            return style;
+        }
+        /// <summary>
+        /// Sets the padding of the style
+        /// </summary>
+        public static GUIStyle Padding(this GUIStyle style, int padding)
+        {
+            style.padding = new RectOffset(padding, padding, padding, padding);
             return style;
         }
         /// <summary>
