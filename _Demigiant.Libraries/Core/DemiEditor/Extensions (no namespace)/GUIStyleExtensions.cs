@@ -78,7 +78,10 @@ namespace DG.DemiEditor
         /// </summary>
         public static GUIStyle Background(this GUIStyle style, Texture2D background)
         {
-            style.normal.background = style.active.background = background;
+            style.normal.background = style.onNormal.background
+                = style.active.background = style.onActive.background
+                = style.focused.background = style.onFocused.background
+                = style.hover.background = style.onHover.background = background;
             return style;
         }
 
