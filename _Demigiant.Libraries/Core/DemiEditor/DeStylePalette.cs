@@ -136,7 +136,7 @@ namespace DG.DemiEditor
             // Initialize custome subpalettes from inherited classes
             FieldInfo[] fieldInfos = this.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
             foreach (FieldInfo fi in fieldInfos) {
-                if (fi.FieldType.BaseType == typeof(DeStyleSubPalette)) ((DeStyleSubPalette)fi.GetValue(this)).Init();
+                if (fi.FieldType.IsSubclassOf(typeof(DeStyleSubPalette))) ((DeStyleSubPalette)fi.GetValue(this)).Init();
             }
         }
 
