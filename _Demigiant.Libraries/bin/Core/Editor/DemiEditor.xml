@@ -248,6 +248,11 @@
             Sets the contentOffset of the style
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.ContentOffset(UnityEngine.GUIStyle,System.Single,System.Single)">
+            <summary>
+            Sets the contentOffset of the style
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.GUIStyleExtensions.ContentOffsetX(UnityEngine.GUIStyle,System.Single)">
             <summary>
             Sets the X contentOffset of the style

@@ -98,6 +98,14 @@ namespace DG.DemiEditor
             return style;
         }
         /// <summary>
+        /// Sets the contentOffset of the style
+        /// </summary>
+        public static GUIStyle ContentOffset(this GUIStyle style, float offsetX, float offsetY)
+        {
+            style.contentOffset = new Vector2(offsetX, offsetY);
+            return style;
+        }
+        /// <summary>
         /// Sets the X contentOffset of the style
         /// </summary>
         public static GUIStyle ContentOffsetX(this GUIStyle style, float offsetX)
