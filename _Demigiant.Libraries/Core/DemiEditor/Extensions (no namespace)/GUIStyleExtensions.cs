@@ -46,7 +46,11 @@ namespace DG.DemiEditor
                 } else if (t == typeof(int)) {
                     style.fontSize = (int)f;
                 } else if (t == typeof(Color) || t == typeof(DeSkinColor)) {
-                    style.normal.textColor = style.active.textColor = t == typeof(Color) ? (Color)f : (Color)(DeSkinColor)f;
+                    style.normal.textColor = style.onNormal.textColor
+                        = style.active.textColor = style.onActive.textColor
+                        = style.focused.textColor = style.onFocused.textColor
+                        = style.hover.textColor = style.onHover.textColor
+                        = t == typeof(Color) ? (Color)f : (Color)(DeSkinColor)f;
                 }
             }
             return style;
