@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,10 +11,28 @@ namespace DG.DemiEditor
 {
     public static class DeEditorUtils
     {
+        static readonly List<DelayedCall> _DelayedCalls = new List<DelayedCall>();
+
         /// <summary>Calls the given action after the given delay</summary>
-        public static void DelayedCall(float delay, Action callback)
+        public static DelayedCall DelayedCall(float delay, Action callback)
         {
-            new DelayedCall(delay, callback);
+            DelayedCall res = new DelayedCall(delay, callback);
+            _DelayedCalls.Add(res);
+            return res;
+        }
+
+        public static void ClearAllDelayedCalls()
+        {
+            foreach (DelayedCall dc in _DelayedCalls) dc.Clear();
+            _DelayedCalls.Clear();
+        }
+
+        public static void ClearDelayedCall(DelayedCall call)
+        {
+            call.Clear();
+            int index = _DelayedCalls.IndexOf(call);
+            if (index == -1) return;
+            _DelayedCalls.Remove(call);
         }
     }
 
@@ -33,6 +52,12 @@ namespace DG.DemiEditor
             this.callback = callback;
             _startupTime = Time.realtimeSinceStartup;
             EditorApplication.update += Update;
+        }
+
+        public void Clear()
+        {
+            if (EditorApplication.update != null) EditorApplication.update -= Update;
+            callback = null;
         }
 
         void Update()

@@ -89,6 +89,24 @@
         <member name="M:DG.DemiEditor.DeEditorUtils.DelayedCall(System.Single,System.Action)">
             <summary>Calls the given action after the given delay</summary>
         </member>
+        <member name="F:DG.DemiEditor.DeDragResult.NoDrag">
+            <summary>Nothing is being dragged</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeDragResult.Dragging">
+            <summary>Dragging</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeDragResult.Accepted">
+            <summary>Dragging concluced and accepted</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeDragResult.Ineffective">
+            <summary>Dragging concluced but item position didn't change</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeDragResult.Canceled">
+            <summary>Dragging canceled</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeDragResult.Click">
+            <summary>Dragging concluced but not accepted because too short</summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUIDrag">
             <summary>
             Manages the dragging of GUI elements
@@ -143,7 +161,6 @@
             <summary>
             Call this after each draggable GUI block, to calculate and draw the current drag state
             (or complete it if the mouse was released).
-            Returns TRUE if the drag operation was concluded and accepted.
             </summary>
             <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
             <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
@@ -153,7 +170,6 @@
             <summary>
             Call this after each draggable GUI block, to calculate and draw the current drag state
             (or complete it if the mouse was released).
-            Returns TRUE if the drag operation was concluded and accepted.
             </summary>
             <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
             <param name="draggableList">List containing the draggable item and all other relative draggable items</param>

@@ -9,6 +9,22 @@ using UnityEngine;
 
 namespace DG.DemiEditor
 {
+    public enum DeDragResult
+    {
+        /// <summary>Nothing is being dragged</summary>
+        NoDrag,
+        /// <summary>Dragging</summary>
+        Dragging,
+        /// <summary>Dragging concluced and accepted</summary>
+        Accepted,
+        /// <summary>Dragging concluced but item position didn't change</summary>
+        Ineffective,
+        /// <summary>Dragging canceled</summary>
+        Canceled,
+        /// <summary>Dragging concluced but not accepted because too short</summary>
+        Click
+    }
+
     /// <summary>
     /// Manages the dragging of GUI elements
     /// </summary>
@@ -38,9 +54,11 @@ namespace DG.DemiEditor
         // Default drag color
         public static readonly Color DefaultDragColor = new Color(0.1720873f, 0.4236527f, 0.7686567f, 0.35f);
 
+        const float _DragDelay = 0.15f;
         static GUIDragData _dragData;
         static int _dragId;
         static bool _waitingToApplyDrag;
+        static DelayedCall _dragDelayedCall; // Used to set _dragDelayElapsed to TRUE
         static bool _dragDelayElapsed;
         static Editor _editor;
         static EditorWindow _editorWindow;
@@ -63,7 +81,8 @@ namespace DG.DemiEditor
             _editor = editor;
             _dragId = dragId;
             _dragData = new GUIDragData(draggableList, draggableList[draggedItemIndex], draggedItemIndex, optionalData);
-            DeEditorUtils.DelayedCall(0.1f, () => _dragDelayElapsed = true);
+            ClearDragDelayedCall();
+            _dragDelayedCall = DeEditorUtils.DelayedCall(_DragDelay, () => _dragDelayElapsed = true);
         }
         /// <summary>
         /// Starts a drag operation on a GUI element.
@@ -81,36 +100,35 @@ namespace DG.DemiEditor
             _editorWindow = editorWindow;
             _dragId = dragId;
             _dragData = new GUIDragData(draggableList, draggableList[draggedItemIndex], draggedItemIndex, optionalData);
-            DeEditorUtils.DelayedCall(0.1f, ()=> _dragDelayElapsed = true);
+            ClearDragDelayedCall();
+            _dragDelayedCall = DeEditorUtils.DelayedCall(_DragDelay, ()=> _dragDelayElapsed = true);
         }
 
         /// <summary>
         /// Call this after each draggable GUI block, to calculate and draw the current drag state
         /// (or complete it if the mouse was released).
-        /// Returns TRUE if the drag operation was concluded and accepted.
         /// </summary>
         /// <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
         /// <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
         /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
-        public static bool Drag(int dragId, IList draggableList, int currDraggableItemIndex)
+        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex)
         { return Drag(dragId, draggableList, currDraggableItemIndex, DefaultDragColor); }
 
         /// <summary>
         /// Call this after each draggable GUI block, to calculate and draw the current drag state
         /// (or complete it if the mouse was released).
-        /// Returns TRUE if the drag operation was concluded and accepted.
         /// </summary>
         /// <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
         /// <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
         /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
         /// <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
-        public static bool Drag(int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor)
+        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor)
         {
-            if (_dragData == null || _dragId != dragId) return false;
+            if (_dragData == null || _dragId != dragId) return DeDragResult.NoDrag;
             if (_waitingToApplyDrag) {
                 if (Event.current.type == EventType.Repaint) Event.current.Use();
                 if (Event.current.type == EventType.Used) ApplyDrag();
-                return false;
+                return DeDragResult.Dragging;
             }
 
             _dragData.draggableList = draggableList; // Reassign in case of references that change every call (like with EditorBuildSettings.scenes)
@@ -140,9 +158,11 @@ namespace DG.DemiEditor
 
             if (GUIUtility.hotControl < 1) {
                 // End drag
-                return EndDrag(true);
+                if (_dragDelayElapsed) return EndDrag(true);
+                EndDrag(false);
+                return DeDragResult.Click;
             }
-            return false;
+            return DeDragResult.Dragging;
         }
 
         /// <summary>
@@ -151,20 +171,20 @@ namespace DG.DemiEditor
         /// Called automatically by Drag method. Use it only if you want to force the end of a drag operation.
         /// </summary>
         /// <param name="applyDrag">If TRUE applies the drag results, otherwise simply cancels the drag</param>
-        public static bool EndDrag(bool applyDrag)
+        public static DeDragResult EndDrag(bool applyDrag)
         {
-            if (_dragData == null) return false;
+            if (_dragData == null) return DeDragResult.NoDrag;
 
             if (applyDrag) {
                 bool changed = _dragData.currDragIndex < _dragData.draggedItemIndex || _dragData.currDragIndex > _dragData.draggedItemIndex + 1;
                 if (Event.current.type == EventType.Repaint) Event.current.Use();
                 else if (Event.current.type == EventType.Used) ApplyDrag();
                 else _waitingToApplyDrag = true;
-                return changed;
+                return changed ? DeDragResult.Accepted : DeDragResult.Ineffective;
             }
 
             Reset();
-            return true;
+            return DeDragResult.Canceled;
         }
 
         #endregion
@@ -206,6 +226,14 @@ namespace DG.DemiEditor
             _dragId = -1;
             _waitingToApplyDrag = false;
             _dragDelayElapsed = false;
+            ClearDragDelayedCall();
+        }
+
+        static void ClearDragDelayedCall()
+        {
+            if (_dragDelayedCall == null) return;
+            DeEditorUtils.ClearDelayedCall(_dragDelayedCall);
+            _dragDelayedCall = null;
         }
 
         #endregion
