@@ -160,7 +160,7 @@ namespace DG.DemiEditor
     {
         public GUIStyle def,
                         flat, flatAlpha10, flatAlpha25; // Flat with white background
-        public DeSkinStyle sticky, stickyTop; // Without any margin (or only top margin)
+        public GUIStyle sticky, stickyTop; // Without any margin (or only top margin)
 
         internal void Init()
         {

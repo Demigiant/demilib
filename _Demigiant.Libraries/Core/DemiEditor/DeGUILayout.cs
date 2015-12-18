@@ -203,17 +203,13 @@ namespace DG.DemiEditor
             GUILayout.EndVertical();
         }
 
-        /// <summary>Divider</summary>
+        /// <summary>Horizontal Divider</summary>
         public static void HorizontalDivider(Color? color = null, int height = 1, int topMargin = 5, int bottomMargin = 5)
         {
-            Color prevBgColor = GUI.backgroundColor;
-            GUI.backgroundColor = color == null ? (Color)DeGUI.colors.bg.divider : (Color)color;
             GUILayout.Space(topMargin);
-            GUILayout.BeginHorizontal(DeGUI.styles.misc.line, GUILayout.Height(height));
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
+            Rect r = GUILayoutUtility.GetRect(0, height, GUILayout.ExpandWidth(true));
+            DeGUI.DrawColoredSquare(r, color == null ? (Color)DeGUI.colors.bg.divider : (Color)color);
             GUILayout.Space(bottomMargin);
-            GUI.backgroundColor = prevBgColor;
         }
 
         /// <summary>Scene field</summary>

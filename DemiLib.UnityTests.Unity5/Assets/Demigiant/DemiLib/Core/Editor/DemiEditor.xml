@@ -476,7 +476,7 @@
             <summary>End vertical box layout</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUILayout.HorizontalDivider(System.Nullable{UnityEngine.Color},System.Int32,System.Int32,System.Int32)">
-            <summary>Divider</summary>
+            <summary>Horizontal Divider</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUILayout.SceneField(System.String,UnityEngine.Object)">
             <summary>Scene field</summary>
