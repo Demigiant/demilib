@@ -298,6 +298,41 @@
             Sets the bottom margin of the style
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.Overflow(UnityEngine.GUIStyle,UnityEngine.RectOffset)">
+            <summary>
+            Sets the overflow of the style
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.Overflow(UnityEngine.GUIStyle,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Sets the overflow of the style
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.Overflow(UnityEngine.GUIStyle,System.Int32)">
+            <summary>
+            Sets the overflow of the style
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.OverflowLeft(UnityEngine.GUIStyle,System.Int32)">
+            <summary>
+            Sets the left overflow of the style
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.OverflowRight(UnityEngine.GUIStyle,System.Int32)">
+            <summary>
+            Sets the right overflow of the style
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.OverflowTop(UnityEngine.GUIStyle,System.Int32)">
+            <summary>
+            Sets the top overflow of the style
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.OverflowBottom(UnityEngine.GUIStyle,System.Int32)">
+            <summary>
+            Sets the bottom overflow of the style
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.GUIStyleExtensions.Padding(UnityEngine.GUIStyle,UnityEngine.RectOffset)">
             <summary>
             Sets the padding of the style
@@ -411,7 +446,7 @@
             Draws a button that returns TRUE the first time it's pressed, instead than when its released.
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ToolbarFoldoutButton(System.Boolean,System.String)">
+        <member name="M:DG.DemiEditor.DeGUILayout.ToolbarFoldoutButton(System.Boolean,System.String,System.Boolean,System.Boolean)">
             <summary>Toolbar foldout button</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,System.String,UnityEngine.GUILayoutOption[])">

@@ -177,7 +177,10 @@ namespace DG.DemiEditor
     {
         public GUIStyle def,
                         tool, toolL, toolIco,
-                        toolFoldoutClosed, toolFoldoutClosedWLabel, toolFoldoutOpen, toolFoldoutOpenWLabel;
+                        toolFoldoutClosed, toolFoldoutClosedWLabel, toolFoldoutClosedWStretchedLabel,
+                        toolFoldoutOpen, toolFoldoutOpenWLabel, toolFoldoutOpenWStretchedLabel,
+                        toolLFoldoutClosed, toolLFoldoutClosedWLabel, toolLFoldoutClosedWStretchedLabel,
+                        toolLFoldoutOpen, toolLFoldoutOpenWLabel, toolLFoldoutOpenWStretchedLabel;
 
         internal void Init()
         {
@@ -199,15 +202,28 @@ namespace DG.DemiEditor
                 fixedWidth = 14,
                 normal = { background = EditorStyles.foldout.normal.background },
                 border = EditorStyles.foldout.border,
-                padding = new RectOffset(14, 0, 2, 0)
-            }.MarginTop(3);
+                padding = new RectOffset(14, 0, 0, 0),
+                margin = new RectOffset(0, 3, 0, 0),
+                overflow = new RectOffset(-2, 0, -2, 0),
+                stretchHeight = true,
+                contentOffset = new Vector2(2, -1)
+            };
             toolFoldoutClosedWLabel = toolFoldoutClosed.Clone(9).Width(0).StretchWidth(false);
+            toolFoldoutClosedWStretchedLabel = toolFoldoutClosedWLabel.Clone().StretchWidth();
             toolFoldoutOpen = new GUIStyle(toolFoldoutClosed) {
                 normal = { background = EditorStyles.foldout.onNormal.background }
             };
             toolFoldoutOpenWLabel = new GUIStyle(toolFoldoutClosedWLabel) {
                 normal = { background = EditorStyles.foldout.onNormal.background }
             };
+            toolFoldoutOpenWStretchedLabel = toolFoldoutOpenWLabel.Clone().StretchWidth();
+            // Large
+            toolLFoldoutClosed = toolFoldoutClosed.Clone().OverflowTop(-4);
+            toolLFoldoutClosedWLabel = toolFoldoutClosedWLabel.Clone().OverflowTop(-4);
+            toolLFoldoutClosedWStretchedLabel = toolFoldoutClosedWStretchedLabel.Clone().OverflowTop(-4);
+            toolLFoldoutOpen = toolFoldoutOpen.Clone().OverflowTop(-4);
+            toolLFoldoutOpenWLabel = toolFoldoutOpenWLabel.Clone().OverflowTop(-4);
+            toolLFoldoutOpenWStretchedLabel = toolFoldoutOpenWStretchedLabel.Clone().OverflowTop(-4);
         }
     }
 

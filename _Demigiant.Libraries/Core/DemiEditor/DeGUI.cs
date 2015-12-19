@@ -246,7 +246,7 @@ namespace DG.DemiEditor
                     EditorGUI.FocusTextInControl(id);
                     DeGUI.ExitCurrentEvent();
                     editor.Repaint();
-                } else {
+                } else if (draggableList != null) {
                     // Start drag
                     DeGUIDrag.StartDrag(dragId, editor, draggableList, draggedItemIndex);
                 }

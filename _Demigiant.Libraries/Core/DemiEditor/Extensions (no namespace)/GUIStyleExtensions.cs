@@ -184,6 +184,63 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Sets the overflow of the style
+        /// </summary>
+        public static GUIStyle Overflow(this GUIStyle style, RectOffset overflow)
+        {
+            style.overflow = overflow;
+            return style;
+        }
+        /// <summary>
+        /// Sets the overflow of the style
+        /// </summary>
+        public static GUIStyle Overflow(this GUIStyle style, int left, int right, int top, int bottom)
+        {
+            style.overflow = new RectOffset(left, right, top, bottom);
+            return style;
+        }
+        /// <summary>
+        /// Sets the overflow of the style
+        /// </summary>
+        public static GUIStyle Overflow(this GUIStyle style, int overflow)
+        {
+            style.overflow = new RectOffset(overflow, overflow, overflow, overflow);
+            return style;
+        }
+        /// <summary>
+        /// Sets the left overflow of the style
+        /// </summary>
+        public static GUIStyle OverflowLeft(this GUIStyle style, int left)
+        {
+            style.overflow.left = left;
+            return style;
+        }
+        /// <summary>
+        /// Sets the right overflow of the style
+        /// </summary>
+        public static GUIStyle OverflowRight(this GUIStyle style, int right)
+        {
+            style.overflow.right = right;
+            return style;
+        }
+        /// <summary>
+        /// Sets the top overflow of the style
+        /// </summary>
+        public static GUIStyle OverflowTop(this GUIStyle style, int top)
+        {
+            style.overflow.top = top;
+            return style;
+        }
+        /// <summary>
+        /// Sets the bottom overflow of the style
+        /// </summary>
+        public static GUIStyle OverflowBottom(this GUIStyle style, int bottom)
+        {
+            style.overflow.bottom = bottom;
+            return style;
+        }
+
+        /// <summary>
         /// Sets the padding of the style
         /// </summary>
         public static GUIStyle Padding(this GUIStyle style, RectOffset padding)

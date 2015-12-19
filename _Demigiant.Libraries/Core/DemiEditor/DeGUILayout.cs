@@ -1,9 +1,11 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/04/27 11:09
 
+using System;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DG.DemiEditor
 {
@@ -79,14 +81,23 @@ namespace DG.DemiEditor
         }
 
         /// <summary>Toolbar foldout button</summary>
-        public static bool ToolbarFoldoutButton(bool toggled, string text = null)
+        public static bool ToolbarFoldoutButton(bool toggled, string text = null, bool isLarge = false, bool stretchedLabel = false)
         {
-            bool clicked = GUILayout.Button(
-                text,
-                string.IsNullOrEmpty(text)
+            GUIStyle style;
+            if (isLarge) {
+                style = string.IsNullOrEmpty(text)
+                    ? toggled ? DeGUI.styles.button.toolLFoldoutOpen : DeGUI.styles.button.toolLFoldoutClosed
+                    : toggled
+                        ? stretchedLabel ? DeGUI.styles.button.toolLFoldoutOpenWStretchedLabel : DeGUI.styles.button.toolLFoldoutOpenWLabel
+                        : stretchedLabel ? DeGUI.styles.button.toolLFoldoutClosedWStretchedLabel : DeGUI.styles.button.toolLFoldoutClosedWLabel;
+            } else {
+                style = string.IsNullOrEmpty(text)
                     ? toggled ? DeGUI.styles.button.toolFoldoutOpen : DeGUI.styles.button.toolFoldoutClosed
-                    : toggled ? DeGUI.styles.button.toolFoldoutOpenWLabel : DeGUI.styles.button.toolFoldoutClosedWLabel
-            );
+                    : toggled
+                        ? stretchedLabel ? DeGUI.styles.button.toolFoldoutOpenWStretchedLabel : DeGUI.styles.button.toolFoldoutOpenWLabel
+                        : stretchedLabel ? DeGUI.styles.button.toolFoldoutClosedWStretchedLabel : DeGUI.styles.button.toolFoldoutClosedWLabel;
+            }
+            bool clicked = GUILayout.Button(text, style);
             if (clicked) {
                 toggled = !toggled;
                 GUI.changed = true;
