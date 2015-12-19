@@ -8,10 +8,12 @@ using System.Collections.Generic;
 namespace DG.DeExtensions
 {
     /// <summary>
-    /// List, IList and Array utils
+    /// List, IList, Array and Dictionary utils
     /// </summary>
     public static class ListExtensions
     {
+        #region IList
+
         /// <summary>
         /// Shifts an item from an index to another, without modifying the list except than by moving elements around
         /// </summary>
@@ -31,5 +33,20 @@ namespace DG.DeExtensions
                 list[index] = shifted;
             }
         }
+
+        #endregion
+
+        #region Dictionary
+
+        /// <summary>
+        /// Adds a key/value pair to the dictionary and returns its value
+        /// </summary>
+        public static T2 AddAndReturnValue<T1, T2>(this Dictionary<T1, T2> dictionary, T1 key, T2 value)
+        {
+            dictionary.Add(key, value);
+            return value;
+        }
+
+        #endregion
     }
 }
