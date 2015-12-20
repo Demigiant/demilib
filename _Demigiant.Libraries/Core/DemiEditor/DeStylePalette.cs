@@ -53,6 +53,10 @@ namespace DG.DemiEditor
                 if (_fooWhiteSquareAlpha50 == null) _fooWhiteSquareAlpha50 = LoadSquareTexture("whiteSquareAlpha50");
                 return _fooWhiteSquareAlpha50;
         }}
+        public static Texture2D whiteSquareAlpha80 { get {
+                if (_fooWhiteSquareAlpha80 == null) _fooWhiteSquareAlpha80 = LoadSquareTexture("whiteSquareAlpha80");
+                return _fooWhiteSquareAlpha80;
+        }}
         public static Texture2D blackSquare { get {
                 if (_fooBlackSquare == null) _fooBlackSquare = LoadSquareTexture("blackSquare");
                 return _fooBlackSquare;
@@ -72,6 +76,10 @@ namespace DG.DemiEditor
         public static Texture2D blackSquareAlpha50 { get {
                 if (_fooBlackSquareAlpha50 == null) _fooBlackSquareAlpha50 = LoadSquareTexture("blackSquareAlpha50");
                 return _fooBlackSquareAlpha50;
+        }}
+        public static Texture2D blackSquareAlpha80 { get {
+                if (_fooBlackSquareAlpha80 == null) _fooBlackSquareAlpha80 = LoadSquareTexture("blackSquareAlpha80");
+                return _fooBlackSquareAlpha80;
         }}
         public static Texture2D redSquare { get {
                 if (_fooRedSquare == null) _fooRedSquare = LoadSquareTexture("redSquare");
@@ -102,11 +110,13 @@ namespace DG.DemiEditor
         static Texture2D _fooWhiteSquareAlpha15;
         static Texture2D _fooWhiteSquareAlpha25;
         static Texture2D _fooWhiteSquareAlpha50;
+        static Texture2D _fooWhiteSquareAlpha80;
         static Texture2D _fooBlackSquare;
         static Texture2D _fooBlackSquareAlpha10;
         static Texture2D _fooBlackSquareAlpha15;
         static Texture2D _fooBlackSquareAlpha25;
         static Texture2D _fooBlackSquareAlpha50;
+        static Texture2D _fooBlackSquareAlpha80;
         static Texture2D _fooRedSquare;
         static Texture2D _fooOrangeSquare;
         static Texture2D _fooYellowSquare;
