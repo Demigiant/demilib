@@ -581,6 +581,16 @@
         <member name="M:DG.DemiEditor.DeGUI.ColoredButton(UnityEngine.Rect,UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
             <summary>Colored button</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.PressButton(UnityEngine.Rect,System.String,UnityEngine.GUIStyle)">
+            <summary>
+            Draws a button that returns TRUE the first time it's pressed, instead than when its released.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.PressButton(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
+            <summary>
+            Draws a button that returns TRUE the first time it's pressed, instead than when its released.
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,System.String)">
             <summary>Button that can be toggled on and off</summary>
         </member>

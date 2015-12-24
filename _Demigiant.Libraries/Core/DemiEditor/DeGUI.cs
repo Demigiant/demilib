@@ -29,6 +29,7 @@ namespace DG.DemiEditor
         static DeColorPalette _defaultColorPalette; // Default color palette if none selected
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
         static string _doubleClickTextFieldId; // ID of selected double click textField
+        static int _activePressButtonId = -1;
 
         static DeGUI()
         {
@@ -133,6 +134,29 @@ namespace DG.DemiEditor
             bool clicked = GUI.Button(rect, content, guiStyle.Clone(contentColor));
             GUI.backgroundColor = prevBgColor;
             return clicked;
+        }
+
+        /// <summary>
+        /// Draws a button that returns TRUE the first time it's pressed, instead than when its released.
+        /// </summary>
+        public static bool PressButton(Rect rect, string text, GUIStyle guiStyle)
+        { return PressButton(rect, new GUIContent(text, ""), guiStyle); }
+        /// <summary>
+        /// Draws a button that returns TRUE the first time it's pressed, instead than when its released.
+        /// </summary>
+        public static bool PressButton(Rect rect, GUIContent content, GUIStyle guiStyle)
+        {
+            // NOTE: tried using RepeatButton, but doesn't work if used for dragging
+            GUI.Button(rect, content, guiStyle);
+            int controlId = GUIUtility.GetControlID(FocusType.Native);
+            int hotControl = GUIUtility.hotControl;
+            bool pressed = hotControl > 1 && rect.Contains(Event.current.mousePosition);
+            if (pressed && _activePressButtonId != controlId) {
+                _activePressButtonId = controlId;
+                return true;
+            }
+            if (!pressed && hotControl < 1) _activePressButtonId = -1;
+            return false;
         }
 
         /// <summary>Button that can be toggled on and off</summary>
