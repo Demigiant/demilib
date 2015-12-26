@@ -22,15 +22,23 @@ namespace DG.DeUtils
         }
 
         /// <summary>
-        /// Includes one rect into another, and returns the resulting a
+        /// Adds one rect into another, and returns the resulting a
         /// </summary>
-        public static Rect Include(Rect a, Rect b)
+        public static Rect Add(Rect a, Rect b)
         {
             if (b.xMin < a.xMin) a.xMin = b.xMin;
             if (b.xMax > a.xMax) a.xMax = b.xMax;
             if (b.yMin < a.yMin) a.yMin = b.yMin;
             if (b.yMax > a.yMax) a.yMax = b.yMax;
             return a;
+        }
+
+        /// <summary>
+        /// Returns TRUE if the first rect fully includes the second one
+        /// </summary>
+        public static bool Includes(Rect a, Rect b)
+        {
+            return a.xMin <= b.xMin && a.xMax > b.xMax && a.yMin <= b.yMin && a.yMax >= b.yMax;
         }
 
         #endregion
