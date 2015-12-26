@@ -20,5 +20,10 @@
             Modifies and returns the given Rect, with its values shifted according the the given parameters
             </summary>
         </member>
+        <member name="M:DG.DeUtils.DeRectUtils.Include(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary>
+            Includes one rect into another, and returns the resulting a
+            </summary>
+        </member>
     </members>
 </doc>
