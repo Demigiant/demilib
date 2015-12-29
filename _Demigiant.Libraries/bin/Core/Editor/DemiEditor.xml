@@ -238,7 +238,7 @@
             Sets the border of the style
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.GUIStyleExtensions.Background(UnityEngine.GUIStyle,UnityEngine.Texture2D)">
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.Background(UnityEngine.GUIStyle,UnityEngine.Texture2D,UnityEngine.Texture2D)">
             <summary>
             Sets the background of the style
             </summary>
