@@ -557,6 +557,11 @@
             Resets the GUI colors to the default ones (only available if BeginGUI was called first)
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.SetGUIColors(System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color})">
+            <summary>
+            Sets the GUI colors to the given ones
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.ShadedButton(UnityEngine.Rect,UnityEngine.Color,System.String)">
             <summary>Shaded button</summary>
         </member>

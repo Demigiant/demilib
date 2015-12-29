@@ -127,8 +127,10 @@ namespace DG.DemiEditor
             DeColorPalette cp = colorPalette ?? DeGUI.colors;
             Color prevBgColor = GUI.backgroundColor;
             Color prevContentColor = GUI.contentColor;
+            Color prevColor = GUI.color;
             GUI.backgroundColor = toggled ? cp.bg.toggleOn : cp.bg.toggleOff;
             GUI.contentColor = toggled ? cp.content.toggleOn : cp.content.toggleOff;
+            if (toggled) GUI.color = cp.content.toggleOn;
             if (guiStyle == null) guiStyle = DeGUI.styles.button.def;
             bool clicked = GUILayout.Button(
                 content,
@@ -139,8 +141,7 @@ namespace DG.DemiEditor
                 toggled = !toggled;
                 GUI.changed = true;
             }
-            GUI.backgroundColor = prevBgColor;
-            GUI.contentColor = prevContentColor;
+            DeGUI.SetGUIColors(prevBgColor, prevContentColor, prevColor);
             return toggled;
         }
 
