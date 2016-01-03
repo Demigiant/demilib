@@ -172,7 +172,7 @@ namespace DG.DemiEditor
                 // End drag
                 if (_dragDelayElapsed) return EndDrag(true);
                 EndDrag(false);
-                return new DeDragResult(DeDragResultType.Click, _dragData.draggedItemIndex, _dragData.currDragIndex);
+                return new DeDragResult(DeDragResultType.Click);
             }
             return new DeDragResult(DeDragResultType.Dragging, _dragData.draggedItemIndex, _dragData.currDragIndex);
         }
