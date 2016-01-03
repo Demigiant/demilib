@@ -89,22 +89,22 @@
         <member name="M:DG.DemiEditor.DeEditorUtils.DelayedCall(System.Single,System.Action)">
             <summary>Calls the given action after the given delay</summary>
         </member>
-        <member name="F:DG.DemiEditor.DeDragResult.NoDrag">
+        <member name="F:DG.DemiEditor.DeDragResultType.NoDrag">
             <summary>Nothing is being dragged</summary>
         </member>
-        <member name="F:DG.DemiEditor.DeDragResult.Dragging">
+        <member name="F:DG.DemiEditor.DeDragResultType.Dragging">
             <summary>Dragging</summary>
         </member>
-        <member name="F:DG.DemiEditor.DeDragResult.Accepted">
+        <member name="F:DG.DemiEditor.DeDragResultType.Accepted">
             <summary>Dragging concluced and accepted</summary>
         </member>
-        <member name="F:DG.DemiEditor.DeDragResult.Ineffective">
+        <member name="F:DG.DemiEditor.DeDragResultType.Ineffective">
             <summary>Dragging concluced but item position didn't change</summary>
         </member>
-        <member name="F:DG.DemiEditor.DeDragResult.Canceled">
+        <member name="F:DG.DemiEditor.DeDragResultType.Canceled">
             <summary>Dragging canceled</summary>
         </member>
-        <member name="F:DG.DemiEditor.DeDragResult.Click">
+        <member name="F:DG.DemiEditor.DeDragResultType.Click">
             <summary>Dragging concluced but not accepted because too short</summary>
         </member>
         <member name="T:DG.DemiEditor.DeGUIDrag">

@@ -125,7 +125,7 @@ namespace DG.DeEditorTools.ScenesPanel
                 EditorGUI.EndDisabledGroup();
                 DeGUILayout.EndToolbar();
 
-                if (DeGUIDrag.Drag(0, scenes, i) == DeDragResult.Accepted) GUI.changed = true;
+                if (DeGUIDrag.Drag(0, scenes, i).result == DeDragResultType.Accepted) GUI.changed = true;
             }
             if (GUI.changed) EditorBuildSettings.scenes = scenesMod == null ? scenes : scenesMod;
 

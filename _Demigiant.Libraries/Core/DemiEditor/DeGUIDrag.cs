@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DG.DemiEditor
 {
-    public enum DeDragResult
+    public enum DeDragResultType
     {
         /// <summary>Nothing is being dragged</summary>
         NoDrag,
@@ -23,6 +23,18 @@ namespace DG.DemiEditor
         Canceled,
         /// <summary>Dragging concluced but not accepted because too short</summary>
         Click
+    }
+
+    public struct DeDragResult
+    {
+        public DeDragResultType result;
+        public int movedFromIndex, movedToIndex;
+        public DeDragResult(DeDragResultType result, int movedFromIndex = -1, int movedToIndex = -1)
+        {
+            this.result = result;
+            this.movedFromIndex = movedFromIndex;
+            this.movedToIndex = movedToIndex;
+        }
     }
 
     /// <summary>
@@ -124,11 +136,11 @@ namespace DG.DemiEditor
         /// <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
         public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor)
         {
-            if (_dragData == null || _dragId != dragId) return DeDragResult.NoDrag;
+            if (_dragData == null || _dragId != dragId) return new DeDragResult(DeDragResultType.NoDrag);
             if (_waitingToApplyDrag) {
                 if (Event.current.type == EventType.Repaint) Event.current.Use();
                 if (Event.current.type == EventType.Used) ApplyDrag();
-                return DeDragResult.Dragging;
+                return new DeDragResult(DeDragResultType.Dragging, _dragData.draggedItemIndex, _dragData.currDragIndex);
             }
 
             _dragData.draggableList = draggableList; // Reassign in case of references that change every call (like with EditorBuildSettings.scenes)
@@ -160,9 +172,9 @@ namespace DG.DemiEditor
                 // End drag
                 if (_dragDelayElapsed) return EndDrag(true);
                 EndDrag(false);
-                return DeDragResult.Click;
+                return new DeDragResult(DeDragResultType.Click, _dragData.draggedItemIndex, _dragData.currDragIndex);
             }
-            return DeDragResult.Dragging;
+            return new DeDragResult(DeDragResultType.Dragging, _dragData.draggedItemIndex, _dragData.currDragIndex);
         }
 
         /// <summary>
@@ -173,18 +185,22 @@ namespace DG.DemiEditor
         /// <param name="applyDrag">If TRUE applies the drag results, otherwise simply cancels the drag</param>
         public static DeDragResult EndDrag(bool applyDrag)
         {
-            if (_dragData == null) return DeDragResult.NoDrag;
+            if (_dragData == null) return new DeDragResult(DeDragResultType.NoDrag);
+
+            int dragFrom = _dragData.currDragIndex;
+            int dragTo = _dragData.draggedItemIndex;
 
             if (applyDrag) {
                 bool changed = _dragData.currDragIndex < _dragData.draggedItemIndex || _dragData.currDragIndex > _dragData.draggedItemIndex + 1;
                 if (Event.current.type == EventType.Repaint) Event.current.Use();
                 else if (Event.current.type == EventType.Used) ApplyDrag();
                 else _waitingToApplyDrag = true;
-                return changed ? DeDragResult.Accepted : DeDragResult.Ineffective;
+                DeDragResultType resultType = changed ? DeDragResultType.Accepted : DeDragResultType.Ineffective;
+                return new DeDragResult(resultType, dragFrom, dragTo);
             }
 
             Reset();
-            return DeDragResult.Canceled;
+            return new DeDragResult(DeDragResultType.Canceled, dragFrom, dragTo);
         }
 
         #endregion
