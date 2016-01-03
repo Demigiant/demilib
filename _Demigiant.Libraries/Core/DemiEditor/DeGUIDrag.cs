@@ -27,11 +27,11 @@ namespace DG.DemiEditor
 
     public struct DeDragResult
     {
-        public DeDragResultType result;
+        public DeDragResultType outcome;
         public int movedFromIndex, movedToIndex;
-        public DeDragResult(DeDragResultType result, int movedFromIndex = -1, int movedToIndex = -1)
+        public DeDragResult(DeDragResultType outcome, int movedFromIndex = -1, int movedToIndex = -1)
         {
-            this.result = result;
+            this.outcome = outcome;
             this.movedFromIndex = movedFromIndex;
             this.movedToIndex = movedToIndex;
         }
@@ -178,7 +178,7 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
-        /// Ends the drag operations, and eventually applies the drag result.
+        /// Ends the drag operations, and eventually applies the drag outcome.
         /// Returns TRUE if the position of the dragged item actually changed.
         /// Called automatically by Drag method. Use it only if you want to force the end of a drag operation.
         /// </summary>
