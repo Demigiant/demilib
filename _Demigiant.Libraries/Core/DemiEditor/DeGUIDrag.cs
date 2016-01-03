@@ -187,8 +187,8 @@ namespace DG.DemiEditor
         {
             if (_dragData == null) return new DeDragResult(DeDragResultType.NoDrag);
 
-            int dragFrom = _dragData.currDragIndex;
-            int dragTo = _dragData.draggedItemIndex;
+            int dragFrom = _dragData.draggedItemIndex;
+            int dragTo = _dragData.currDragIndex > _dragData.draggedItemIndex ? _dragData.currDragIndex - 1 : _dragData.currDragIndex;
 
             if (applyDrag) {
                 bool changed = _dragData.currDragIndex < _dragData.draggedItemIndex || _dragData.currDragIndex > _dragData.draggedItemIndex + 1;
