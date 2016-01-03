@@ -160,7 +160,7 @@ namespace DG.DemiEditor
             GUI.Button(rect, content, guiStyle);
             int controlId = GUIUtility.GetControlID(FocusType.Native);
             int hotControl = GUIUtility.hotControl;
-            bool pressed = hotControl > 1 && rect.Contains(Event.current.mousePosition);
+            bool pressed = _activePressButtonId == -1 && hotControl > 1 && rect.Contains(Event.current.mousePosition);
             if (pressed && _activePressButtonId != controlId) {
                 _activePressButtonId = controlId;
                 return true;
