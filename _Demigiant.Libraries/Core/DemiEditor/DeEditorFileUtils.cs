@@ -1,6 +1,7 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/05/01 01:50
 
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -115,6 +116,26 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Returns the adb paths to the selected folders in the Project panel, or NULL if there is none.
+        /// Contrary to Selection.activeObject, which only returns folders selected in the right side of the panel,
+        /// this method also works with folders selected in the left side.
+        /// </summary>
+        public static List<string> SelectedADBDirs()
+        {
+            List<string> selectedPaths = null;
+            foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets)) {
+                string adbPath = AssetDatabase.GetAssetPath(obj);
+                if (!string.IsNullOrEmpty(adbPath) && Directory.Exists(ADBPathToFullPath(adbPath))) {
+                    if (selectedPaths == null) selectedPaths = new List<string>();
+                    selectedPaths.Add(adbPath);
+                }
+            }
+            return selectedPaths;
+        }
+
+        #region ScriptUtils
+
+        /// <summary>
         /// Sets the script execution order of the given MonoBehaviour
         /// </summary>
         public static void SetScriptExecutionOrder(MonoBehaviour monobehaviour, int order)
@@ -131,6 +152,8 @@ namespace DG.DemiEditor
             MonoScript ms = MonoScript.FromMonoBehaviour(monobehaviour);
             return MonoImporter.GetExecutionOrder(ms);
         }
+
+        #endregion
 
         #endregion
     }

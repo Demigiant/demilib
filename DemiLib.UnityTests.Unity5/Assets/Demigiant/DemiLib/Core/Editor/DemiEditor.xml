@@ -60,6 +60,13 @@
         <member name="M:DG.DemiEditor.DeEditorFileUtils.MonoInstanceADBDir(UnityEngine.MonoBehaviour)">
             <summary>Returns the adb directory that contains the given MonoBehaviour without final slash</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.SelectedADBDirs">
+            <summary>
+            Returns the adb paths to the selected folders in the Project panel, or NULL if there is none.
+            Contrary to Selection.activeObject, which only returns folders selected in the right side of the panel,
+            this method also works with folders selected in the left side.
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorFileUtils.SetScriptExecutionOrder(UnityEngine.MonoBehaviour,System.Int32)">
             <summary>
             Sets the script execution order of the given MonoBehaviour
