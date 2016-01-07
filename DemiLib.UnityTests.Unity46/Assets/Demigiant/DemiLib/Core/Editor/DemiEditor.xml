@@ -36,6 +36,11 @@
             Converts the given project-relative path to a full path
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.FullPathToADBPath(System.String)">
+            <summary>
+            Converts the given full path to a project-relative path
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorFileUtils.AssetExists(System.String)">
             <summary>
             Returns TRUE if the file/directory at the given path exists.

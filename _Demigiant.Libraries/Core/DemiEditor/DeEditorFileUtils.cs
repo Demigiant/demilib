@@ -65,6 +65,14 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Converts the given full path to a project-relative path
+        /// </summary>
+        public static string FullPathToADBPath(string fullPath)
+        {
+            return fullPath.Substring(projectPath.Length + 1).Replace(ADBPathSlashToReplace, ADBPathSlash);
+        }
+
+        /// <summary>
         /// Returns TRUE if the file/directory at the given path exists.
         /// </summary>
         /// <param name="adbPath">Path, relative to Unity's project folder</param>
