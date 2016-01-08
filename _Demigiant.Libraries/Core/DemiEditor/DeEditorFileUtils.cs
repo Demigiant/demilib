@@ -83,6 +83,31 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Checks if the given directory (full path) is empty or not
+        /// </summary>
+        public static bool IsEmpty(string dir)
+        {
+            DirectoryInfo dInfo = new DirectoryInfo(dir);
+            if (dInfo.GetFiles().Length > 0) return false;
+            if (dInfo.GetDirectories().Length > 0) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Deletes all files and subdirectories from the given directory
+        /// </summary>
+        public static void MakeEmpty(string dir)
+        {
+            DirectoryInfo dInfo = new DirectoryInfo(dir);
+            foreach (FileInfo f in dInfo.GetFiles()) {
+                if (f.Extension != "meta") AssetDatabase.DeleteAsset(FullPathToADBPath(f.ToString()));
+            }
+            foreach (DirectoryInfo d in dInfo.GetDirectories()) {
+                AssetDatabase.DeleteAsset(FullPathToADBPath(d.ToString()));
+            }
+        }
+
+        /// <summary>
         /// Returns the asset path of the given GUID (relative to Unity project's folder),
         /// or an empty string if either the GUID is invalid or the related path doesn't exist.
         /// </summary>
