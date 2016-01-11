@@ -11,8 +11,6 @@ namespace DG.DeUtils
     /// </summary>
     public static class DeRectUtils
     {
-        #region Rect
-
         /// <summary>
         /// Modifies and returns the given Rect, with its values shifted according the the given parameters
         /// </summary>
@@ -40,7 +38,5 @@ namespace DG.DeUtils
         {
             return a.xMin <= b.xMin && a.xMax > b.xMax && a.yMin <= b.yMin && a.yMax >= b.yMax;
         }
-
-        #endregion
     }
 }

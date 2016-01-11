@@ -4,6 +4,17 @@
         <name>DeUtils</name>
     </assembly>
     <members>
+        <member name="M:DG.DeUtils.DeColorUtils.HexToColor(System.String)">
+            <summary>
+            Converts a HEX color to a Unity Color
+            </summary>
+            <param name="hex">The HEX color (either with or without the initial #)</param>
+        </member>
+        <member name="M:DG.DeUtils.DeColorUtils.ColorToHex(UnityEngine.Color32)">
+            <summary>
+            Returns a HEX version of the given Unity Color, without the initial #
+            </summary>
+        </member>
         <member name="M:DG.DeUtils.DeMathUtils.ClampAngle(System.Single,System.Single,System.Single)">
             <summary>
             Clamps an angle between the given values.

@@ -686,6 +686,13 @@
             with or without final slash depending on the original directory format
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.StringExtensions.FileOrDirectoryName(System.String)">
+            <summary>
+            If the string is a directory, returns the directory name,
+            if instead it's a file returns its name without extension.
+            Works better than Path.GetDirectoryName, which kind of sucks imho
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.TextureExtensions">
             <summary>
             Texture extensions
