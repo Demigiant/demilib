@@ -111,6 +111,12 @@
         <member name="M:DG.DemiEditor.DeEditorUtils.DelayedCall(System.Single,System.Action)">
             <summary>Calls the given action after the given delay</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorUtils.GetGameViewSize">
+            <summary>
+            Return the size of the editor game view, eventual extra bars excluded (meaning the true size of the game area)
+            </summary>
+            <returns></returns>
+        </member>
         <member name="F:DG.DemiEditor.DeDragResultType.NoDrag">
             <summary>Nothing is being dragged</summary>
         </member>

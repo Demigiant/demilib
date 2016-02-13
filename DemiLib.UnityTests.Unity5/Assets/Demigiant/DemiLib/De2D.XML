@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>De2D</name>
+    </assembly>
+    <members>
+        <member name="T:DG.De2D.De2DCamera">
+            <summary>
+            Sets up the 2D orthographic camera it's attached to
+            </summary>
+        </member>
+    </members>
+</doc>

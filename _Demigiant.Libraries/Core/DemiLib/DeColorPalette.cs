@@ -29,7 +29,7 @@ namespace DG.DemiLib
         public DeSkinColor critical = new DeSkinColor(new Color(0.9411765f, 0.2388736f, 0.006920422f, 1f), new Color(1f, 0.2482758f, 0f, 1f));
         public DeSkinColor divider = new DeSkinColor(new Color(0.5f, 0.5f, 0.5f, 1), Color.black);
         public DeSkinColor toggleOn = Color.green;
-        public DeSkinColor toggleOff = Color.white;
+        public DeSkinColor toggleOff = new DeSkinColor(1f, 0.3f);
     }
 
     /// <summary>
@@ -42,6 +42,6 @@ namespace DG.DemiLib
 //        public DeSkinColor critical = new DeSkinColor(new Color(1f, 0.8458418f, 0.4411765f, 1f), new Color(1f, 0.1691176f, 0.1691176f, 1f));
         public DeSkinColor critical = new DeSkinColor(new Color(1f, 0.9148073f, 0.5588235f, 1f), new Color(1f, 0.3881846f, 0.3014706f, 1f));
         public DeSkinColor toggleOn = new DeSkinColor(new Color(1f, 0.9686275f, 0.6980392f, 1f), new Color(0.8117647f, 1f, 0.5607843f, 1f));
-        public DeSkinColor toggleOff = new DeSkinColor(new Color(0.3529412f, 0.3647059f, 0.3647059f, 1f), new Color(0.5294118f, 0.5294118f, 0.5294118f, 1f));
+        public DeSkinColor toggleOff = new DeSkinColor(0.36f, 0.5f);
     }
 }

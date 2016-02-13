@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemiEditor", "Core\DemiEditor\DemiEditor.csproj", "{3B8F6061-77A9-4111-9E7C-A9EA494D14A0}"
 EndProject
@@ -12,6 +12,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B2F1B2E5-94A2-438E-AF7B-ECA25C6CCF7F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unity46", "Unity46", "{F7E0047D-567B-4DE2-B3D1-61F20DC8E350}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "De2D", "De2D\De2D.csproj", "{D0ACF1EF-A90C-4791-887C-2131573C7C54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "De2DEditor", "De2DEditor\De2DEditor.csproj", "{ADD50017-2482-4BE9-80F1-28E7EDE213FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeAudio", "DeAudio\DeAudio.csproj", "{4B0B8B50-781D-4AE8-B6B2-3553E369E5EF}"
 EndProject
@@ -61,6 +65,14 @@ Global
 		{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0ACF1EF-A90C-4791-887C-2131573C7C54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0ACF1EF-A90C-4791-887C-2131573C7C54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0ACF1EF-A90C-4791-887C-2131573C7C54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0ACF1EF-A90C-4791-887C-2131573C7C54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADD50017-2482-4BE9-80F1-28E7EDE213FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADD50017-2482-4BE9-80F1-28E7EDE213FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADD50017-2482-4BE9-80F1-28E7EDE213FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADD50017-2482-4BE9-80F1-28E7EDE213FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,6 +13,11 @@ timeout /t 1
 set TargetDir=%DownloadsDir%\Complete\%DemigiantSubdir%
 echo f | xcopy "%StartupDir%\bin" %TargetDir% /Y /I /S
 
+:: De2D + Core
+set TargetDir="%DownloadsDir%\De2D_complete\%DemigiantSubdir%"
+echo f | xcopy %StartupDir%\bin\Core %TargetDir%\Core /Y /I /S
+echo f | xcopy %StartupDir%\bin\De2D*.* %TargetDir% /Y /I /S
+
 :: DeAudio + Core
 set TargetDir="%DownloadsDir%\DeAudio_complete\%DemigiantSubdir%"
 echo f | xcopy %StartupDir%\bin\Core %TargetDir%\Core /Y /I /S
@@ -40,6 +45,10 @@ start /wait cmd /c del /S %DownloadsDir%\*.pdb
 start /wait cmd /c del %DownloadsDir%\Complete.zip
 start /wait cmd /c 7z a %DownloadsDir%\Complete.zip -r %DownloadsDir%\Complete\Demigiant\
 rmdir /S /Q %DownloadsDir%\Complete
+
+start /wait cmd /c del %DownloadsDir%\De2D_complete.zip
+start /wait cmd /c 7z a "%DownloadsDir%\De2D_complete.zip" -r %DownloadsDir%\De2D_complete\Demigiant\
+rmdir /S /Q %DownloadsDir%\De2D_complete
 
 start /wait cmd /c del %DownloadsDir%\DeAudio_complete.zip
 start /wait cmd /c 7z a "%DownloadsDir%\DeAudio_complete (requires DOTween).zip" -r %DownloadsDir%\DeAudio_complete\Demigiant\
