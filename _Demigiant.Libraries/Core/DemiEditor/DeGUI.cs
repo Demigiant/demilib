@@ -272,7 +272,7 @@ namespace DG.DemiEditor
         public static string DoubleClickDraggableTextField(Rect rect, EditorWindow editor, string id, string text, int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
         { return DoDoubleClickTextField(rect, editor, id, text, dragId, draggableList, draggedItemIndex, defaultStyle, editingStyle); }
 
-        static string DoDoubleClickTextField(Rect rect, EditorWindow editor, string id, string text, int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
+        internal static string DoDoubleClickTextField(Rect rect, EditorWindow editor, string id, string text, int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
         {
             if (defaultStyle == null) defaultStyle = EditorStyles.label;
             if (editingStyle == null) editingStyle = EditorStyles.textField;

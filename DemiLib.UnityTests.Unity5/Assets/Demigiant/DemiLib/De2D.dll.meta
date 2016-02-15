@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: d23cccb6a77c74b40b53ed7823e215f3
-timeCreated: 1455362685
+timeCreated: 1455445514
 licenseType: Pro
 PluginImporter:
   serializedVersion: 1
-  iconMap: {}
+  iconMap:
+    DG.De2D.De2DCamera: {fileID: 2800000, guid: 60a0e4e93e9892b43bb27e0de53ef2fc,
+      type: 3}
   executionOrder: {}
   isPreloaded: 0
   platformData:

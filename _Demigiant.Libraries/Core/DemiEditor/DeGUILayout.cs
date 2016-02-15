@@ -2,6 +2,7 @@
 // Created: 2015/04/27 11:09
 
 using System;
+using System.Collections;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
@@ -225,6 +226,37 @@ namespace DG.DemiEditor
             Rect r = GUILayoutUtility.GetRect(0, height, GUILayout.ExpandWidth(true));
             DeGUI.DrawColoredSquare(r, color == null ? (Color)DeGUI.colors.bg.divider : (Color)color);
             GUILayout.Space(bottomMargin);
+        }
+
+        /// <summary>
+        /// A text field that becomes editable only on double-click
+        /// </summary>
+        /// <param name="editor">Editor reference</param>
+        /// <param name="id">A unique ID to use in order to determine if the text is selected or not</param>
+        /// <param name="text">Text</param>
+        /// <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
+        /// <param name="editingStyle">Style for editing mode</param>
+        public static string DoubleClickTextField(EditorWindow editor, string id, string text, GUIStyle defaultStyle, GUIStyle editingStyle = null)
+        { return DoDoubleClickTextField(editor, id, text, -1, null, -1, defaultStyle, editingStyle); }
+        /// <summary>
+        /// A text field that becomes editable only on double-click and can also be dragged
+        /// </summary>
+        /// <param name="editor">Editor reference</param>
+        /// <param name="id">A unique ID to use in order to determine if the text is selected or not</param>
+        /// <param name="text">Text</param>
+        /// <param name="dragId">ID for this drag operation (must be the same for both this and Drag</param>
+        /// <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
+        /// <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
+        /// <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
+        /// <param name="editingStyle">Style for editing mode</param>
+        /// <returns></returns>
+        public static string DoubleClickDraggableTextField(EditorWindow editor, string id, string text, int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle, GUIStyle editingStyle = null)
+        { return DoDoubleClickTextField(editor, id, text, dragId, draggableList, draggedItemIndex, defaultStyle, editingStyle); }
+
+        static string DoDoubleClickTextField(EditorWindow editor, string id, string text, int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle, GUIStyle editingStyle = null)
+        {
+            Rect r = GUILayoutUtility.GetRect(new GUIContent(""), defaultStyle, GUILayout.ExpandWidth(true));
+            return DeGUI.DoDoubleClickTextField(r, editor, id, text, dragId, draggableList, draggedItemIndex, defaultStyle, editingStyle);
         }
 
         /// <summary>Scene field</summary>
