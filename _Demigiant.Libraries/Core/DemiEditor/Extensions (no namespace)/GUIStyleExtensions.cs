@@ -41,8 +41,6 @@ namespace DG.DemiEditor
                     style.fontStyle = (FontStyle)f;
                 } else if (t == typeof(TextAnchor)) {
                     style.alignment = (TextAnchor)f;
-                } else if (t == typeof(FontStyle)) {
-                    style.fontStyle = (FontStyle)f;
                 } else if (t == typeof(int)) {
                     style.fontSize = (int)f;
                 } else if (t == typeof(Color) || t == typeof(DeSkinColor)) {

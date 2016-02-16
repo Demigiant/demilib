@@ -108,6 +108,17 @@
             <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
             <param name="createFoldersIfMissing">If TRUE also creates the path folders if they don't exist</param>
         </member>
+        <member name="T:DG.DemiEditor.DeEditorPrefabUtils">
+            <summary>
+            Prefab utilities
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorPrefabUtils.ApplyPrefabInstanceModifications(UnityEngine.GameObject)">
+            <summary>
+            Behaves as the Inspector's Apply button, applying any modification of this instance to the prefab parent
+            </summary>
+            <param name="instance"></param>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorUtils.DelayedCall(System.Single,System.Action)">
             <summary>Calls the given action after the given delay</summary>
         </member>
