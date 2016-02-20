@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using DG.DemiEditor.Core;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
@@ -150,6 +151,19 @@ namespace DG.DemiEditor
 
         #region Toolbars
 
+        public class ToolbarScope : DeGUIScope
+        {
+            public ToolbarScope(params GUILayoutOption[] options)
+            { BeginToolbar(options); }
+            public ToolbarScope(GUIStyle style, params GUILayoutOption[] options)
+            { BeginToolbar(style, options); }
+            public ToolbarScope(Color backgroundShade, GUIStyle style, params GUILayoutOption[] options)
+            { BeginToolbar(backgroundShade, style, options); }
+
+            protected override void CloseScope()
+	        { EndToolbar(); }
+        }
+
         /// <summary>Begins an horizontal toolbar layout</summary>
         public static void BeginToolbar(params GUILayoutOption[] options)
         { BeginToolbar(Color.white, null, options); }
@@ -199,6 +213,15 @@ namespace DG.DemiEditor
         #endregion
 
         #region Miscellaneous
+
+        public class VBoxScope : DeGUIScope
+        {
+            public VBoxScope(GUIStyle style)
+            { BeginVBox(style); }
+
+            protected override void CloseScope()
+	        { EndVBox(); }
+        }
 
         /// <summary>Vertical box layout with style and color options</summary>
         public static void BeginVBox(GUIStyle style)

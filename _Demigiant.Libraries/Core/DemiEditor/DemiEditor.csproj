@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributesManagers\ScriptExecutionOrderManager.cs" />
+    <Compile Include="Core\DeGUIScope.cs" />
     <Compile Include="DeEditorFileUtils.cs" />
     <Compile Include="DeEditorPanelUtils.cs" />
     <Compile Include="DeEditorPrefabUtils.cs" />

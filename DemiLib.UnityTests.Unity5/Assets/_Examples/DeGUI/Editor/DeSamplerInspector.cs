@@ -71,29 +71,29 @@ public class DeSamplerInspector : Editor
 
         // Toolbars + toolbar content
 
-        DeGUILayout.BeginToolbar();
+        using (new DeGUILayout.ToolbarScope()) {
             GUILayout.Label("Toolbar | UPPERCASE", DeGUI.styles.label.toolbar);
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("▲", DeGUI.styles.button.toolIco)) Debug.Log("▲ pressed");
             if (GUILayout.Button("▼", DeGUI.styles.button.toolIco)) Debug.Log("▼ pressed");
             if (DeGUILayout.ColoredButton(DeGUI.colors.bg.critical, DeGUI.colors.content.critical, "X", DeGUI.styles.button.toolIco.Clone(FontStyle.Bold))) Debug.Log("x pressed");
-        DeGUILayout.EndToolbar();
+        }
         GUILayout.Space(4);
-        DeGUILayout.BeginToolbar(DeGUI.styles.toolbar.box);
+        using (new DeGUILayout.ToolbarScope(DeGUI.styles.toolbar.box)) {
         GUILayout.Label("Toolbar | UPPERCASE", DeGUI.styles.label.toolbarBox);
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("▲", DeGUI.styles.button.toolIco)) Debug.Log("▲ pressed");
             if (GUILayout.Button("▼", DeGUI.styles.button.toolIco)) Debug.Log("▼ pressed");
             if (DeGUILayout.ColoredButton(DeGUI.colors.bg.critical, DeGUI.colors.content.critical, "X", DeGUI.styles.button.toolIco.Clone(FontStyle.Bold))) Debug.Log("x pressed");
-        DeGUILayout.EndToolbar();
+        }
         GUILayout.Space(4);
-        DeGUILayout.BeginToolbar(Color.black, DeGUI.styles.toolbar.flat);
+        using (new DeGUILayout.ToolbarScope(Color.black, DeGUI.styles.toolbar.flat)) {
         GUILayout.Label("Toolbar | UPPERCASE", DeGUI.styles.label.toolbarBox.Clone(Color.white));
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("▲", DeGUI.styles.button.toolIco)) Debug.Log("▲ pressed");
             if (GUILayout.Button("▼", DeGUI.styles.button.toolIco)) Debug.Log("▼ pressed");
             if (DeGUILayout.ColoredButton(DeGUI.colors.bg.critical, DeGUI.colors.content.critical, "X", DeGUI.styles.button.toolIco.Clone(FontStyle.Bold))) Debug.Log("x pressed");
-        DeGUILayout.EndToolbar();
+        }
         GUILayout.Space(_vSpace);
 
         // Container
