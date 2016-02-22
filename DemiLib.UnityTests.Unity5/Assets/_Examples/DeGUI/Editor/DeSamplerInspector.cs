@@ -15,6 +15,7 @@ public class DeSamplerInspector : Editor
         ColorPalette
     }
 
+    const int _DragID0 = 0;
     DeSampler _src;
     DrawMode _drawMode;
     DeColorPalette _toolbarButtonsColors;
@@ -106,53 +107,53 @@ public class DeSamplerInspector : Editor
 
         // Toggle buttons
 
-        DeGUILayout.BeginToolbar(_src.palette.toolbarBg, DeGUI.styles.toolbar.large.Clone());
-        GUILayout.Label("Toggle Buttons", DeGUI.styles.label.toolbarL.Clone(_src.palette.toolbarContent));
-        _src.toggles[0] = DeGUILayout.ToggleButton(_src.toggles[0], string.Format("Toggle (0)"), _toolbarButtonsColors, DeGUI.styles.button.toolL);
-        DeGUILayout.EndToolbar();
+        using (new DeGUILayout.ToolbarScope(_src.palette.toolbarBg, DeGUI.styles.toolbar.large.Clone())) {
+            GUILayout.Label("Toggle Buttons", DeGUI.styles.label.toolbarL.Clone(_src.palette.toolbarContent));
+            _src.toggles[0] = DeGUILayout.ToggleButton(_src.toggles[0], string.Format("Toggle (0)"), _toolbarButtonsColors, DeGUI.styles.button.toolL);
+        }
 
-        DeGUILayout.BeginVBox(DeGUI.styles.box.stickyTop);
-        GUILayout.Label("Toggle buttons (tool)");
-        GUILayout.BeginHorizontal();
+        using (new DeGUILayout.VBoxScope(DeGUI.styles.box.stickyTop)) {
+            GUILayout.Label("Toggle buttons (tool)");
+            GUILayout.BeginHorizontal();
             for (int i = 0; i < _src.toggles.Length; ++i) {
                 _src.toggles[i] = DeGUILayout.ToggleButton(_src.toggles[i], string.Format("Toggle ({0})", i), DeGUI.styles.button.tool);
             }
-        GUILayout.EndHorizontal();
-        GUILayout.Space(3);
-        GUILayout.Label("Toggle buttons (toolL)");
-        GUILayout.BeginHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.Space(3);
+            GUILayout.Label("Toggle buttons (toolL)");
+            GUILayout.BeginHorizontal();
             for (int i = 0; i < _src.toggles.Length; ++i) {
                 _src.toggles[i] = DeGUILayout.ToggleButton(_src.toggles[i], string.Format("Toggle ({0})", i), DeGUI.styles.button.toolL);
             }
-        GUILayout.EndHorizontal();
-        GUILayout.Space(3);
-        GUILayout.Label("Toggle buttons (normal)");
-        GUILayout.BeginHorizontal();
+            GUILayout.EndHorizontal();
+            GUILayout.Space(3);
+            GUILayout.Label("Toggle buttons (normal)");
+            GUILayout.BeginHorizontal();
             for (int i = 0; i < _src.toggles.Length; ++i) {
                 _src.toggles[i] = DeGUILayout.ToggleButton(_src.toggles[i], string.Format("Toggle ({0})", i));
             }
-        GUILayout.EndHorizontal();
-        DeGUILayout.EndVBox();
+            GUILayout.EndHorizontal();
+        }
         GUILayout.Space(_vSpace);
 
         // Foldout
 
-        DeGUILayout.BeginToolbar();
-        _src.foldoutOpen = DeGUILayout.ToolbarFoldoutButton(_src.foldoutOpen, "Sticky foldout toolbars");
-        DeGUILayout.EndToolbar();
+        using (new DeGUILayout.ToolbarScope()) {
+            _src.foldoutOpen = DeGUILayout.ToolbarFoldoutButton(_src.foldoutOpen, "Sticky foldout toolbars");
+        }
         if (_src.foldoutOpen) {
-            DeGUILayout.BeginVBox(DeGUI.styles.box.sticky);
-            GUILayout.Label("Blah blah blah here's a label inside a VBox with some wordwrapping just to be on the safe side", DeGUI.styles.label.wordwrap);
-            DeGUILayout.EndVBox();
+            using (new DeGUILayout.VBoxScope(DeGUI.styles.box.sticky)) {
+                GUILayout.Label("Blah blah blah here's a label inside a VBox with some wordwrapping just to be on the safe side", DeGUI.styles.label.wordwrap);
+            }
         }
 
-        DeGUILayout.BeginToolbar(DeGUI.styles.toolbar.stickyTop);
-        _src.foldoutOpen = DeGUILayout.ToolbarFoldoutButton(_src.foldoutOpen);
-        DeGUILayout.EndToolbar();
+        using (new DeGUILayout.ToolbarScope(DeGUI.styles.toolbar.stickyTop)) {
+            _src.foldoutOpen = DeGUILayout.ToolbarFoldoutButton(_src.foldoutOpen);
+        }
         if (_src.foldoutOpen) {
-            DeGUILayout.BeginVBox(DeGUI.styles.box.stickyTop);
-            GUILayout.Label("Blah blah blah here's a label inside a VBox with some wordwrapping just to be on the safe side", DeGUI.styles.label.wordwrap);
-            DeGUILayout.EndVBox();
+            using (new DeGUILayout.VBoxScope(DeGUI.styles.box.stickyTop)) {
+                GUILayout.Label("Blah blah blah here's a label inside a VBox with some wordwrapping just to be on the safe side", DeGUI.styles.label.wordwrap);
+            }
         }
         GUILayout.Space(_vSpace);
 
@@ -166,6 +167,19 @@ public class DeSamplerInspector : Editor
             GUILayout.Label("Some label");
         GUILayout.EndHorizontal();
         GUILayout.Space(_vSpace);
+
+        // TODO Draggable elements
+        using (new DeGUILayout.ToolbarScope(DeGUI.styles.toolbar.stickyTop)) {
+            GUILayout.Label("Draggable editable textFields");
+        }
+        using (new DeGUILayout.VBoxScope(DeGUI.styles.box.stickyTop)) {
+            EditorGUILayout.HelpBox("Double click a label to edit it, drag it to change its position (works with both arrays and lists)", MessageType.Info);
+            for (int i = 0; i < _src.draggableLabels.Length; ++i) {
+                string l = _src.draggableLabels[i];
+                _src.draggableLabels[i] = DeGUILayout.DoubleClickDraggableTextField(this, i.ToString(), l, _DragID0, _src.draggableLabels, i, DeGUI.styles.label.toolbar);
+                if (DeGUIDrag.Drag(_DragID0, _src.draggableLabels, i).outcome == DeDragResultType.Accepted) EditorUtility.SetDirty(_src);
+            }
+        }
     }
 
     void DrawColorPalette()

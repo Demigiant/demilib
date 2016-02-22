@@ -11,4 +11,8 @@ public class DeSampler : MonoBehaviour
     
     public bool[] toggles = new bool[3];
     public bool foldoutOpen;
+
+    public string[] draggableLabels = new[] {
+        "Label 0", "Label 1", "Label 2", "Label 3"
+    };
 }
