@@ -29,7 +29,7 @@ namespace DG.DemiLib
         public DeSkinColor critical = new DeSkinColor(new Color(0.9411765f, 0.2388736f, 0.006920422f, 1f), new Color(1f, 0.2482758f, 0f, 1f));
         public DeSkinColor divider = new DeSkinColor(new Color(0.5f, 0.5f, 0.5f, 1), Color.black);
         public DeSkinColor toggleOn = Color.green;
-        public DeSkinColor toggleOff = new DeSkinColor(1f, 0.3f);
+        public DeSkinColor toggleOff = new DeSkinColor(1f, 0.7f);
     }
 
     /// <summary>

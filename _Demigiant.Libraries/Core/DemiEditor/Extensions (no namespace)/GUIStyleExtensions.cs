@@ -15,14 +15,28 @@ namespace DG.DemiEditor
         #region Add Methods
 
         /// <summary>
-        /// Clones the style and adds the given formats to it
+        /// Clones the style and adds the given formats to it. You can pass any of these types of values:
+        /// <list type="bullet">
+        /// <item><term>Format:</term><description>Rich-text, wordwrap</description></item>
+        /// <item><term>FontStyle:</term><description>Font style</description></item>
+        /// <item><term>TextAnchor:</term><description>Content anchor</description></item>
+        /// <item><term>int:</term><description>Font size</description></item>
+        /// <item><term>Color/DeSkinColor:</term><description>Font color</description></item>
+        /// </list>
         /// </summary>
         public static GUIStyle Clone(this GUIStyle style, params object[] formats)
         {
             return new GUIStyle(style).Add(formats);
         }
         /// <summary>
-        /// Adds the given formats to the style
+        /// Adds the given formats to the style. You can pass any of these types of values:
+        /// <list type="bullet">
+        /// <item><term>Format:</term><description>RichText, WordWrap</description></item>
+        /// <item><term>FontStyle:</term><description>Font style</description></item>
+        /// <item><term>TextAnchor:</term><description>Content anchor</description></item>
+        /// <item><term>int:</term><description>Font size</description></item>
+        /// <item><term>Color/DeSkinColor:</term><description>Font color</description></item>
+        /// </list>
         /// </summary>
         public static GUIStyle Add(this GUIStyle style, params object[] formats)
         {
