@@ -32,5 +32,12 @@
             Adds a key/value pair to the dictionary and returns its value
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.StringExtensions.IsNullOrEmpty(System.String,System.Boolean)">
+            <summary>
+            Returns TRUE if the string is null or empty
+            </summary>
+            <param name="trimSpaces">If TRUE (default) and the string contains only spaces, considers it empty</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
