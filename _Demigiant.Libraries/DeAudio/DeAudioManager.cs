@@ -44,6 +44,7 @@ namespace DG.DeAudio
             if (I != null) {
                 Debug.LogWarning(LogPrefix + "Multiple DeAudioManager instances were found. The newest one will be destroyed");
                 Destroy(this.gameObject);
+                return;
             }
 
             I = this;
