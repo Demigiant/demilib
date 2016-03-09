@@ -45,5 +45,24 @@ namespace DG.DeExtensions
             v.z = value;
             t.localPosition = v;
         }
+
+        public static void SetLocalScaleX(this Transform t, float value)
+        {
+            Vector3 v = t.localScale;
+            v.x = value;
+            t.localScale = v;
+        }
+        public static void SetLocalScaleY(this Transform t, float value)
+        {
+            Vector3 v = t.localScale;
+            v.y = value;
+            t.localScale = v;
+        }
+        public static void SetLocalScaleZ(this Transform t, float value)
+        {
+            Vector3 v = t.localScale;
+            v.z = value;
+            t.localScale = v;
+        }
     }
 }
