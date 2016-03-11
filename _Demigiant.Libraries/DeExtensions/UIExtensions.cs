@@ -31,6 +31,23 @@ namespace DG.DeExtensions
 
         #endregion
 
+        #region RectTransform
+
+        public static void SetAnchoredPosX(this RectTransform t, float value)
+        {
+            Vector3 v = t.anchoredPosition;
+            v.x = value;
+            t.anchoredPosition = v;
+        }
+        public static void SetAnchoredPosY(this RectTransform t, float value)
+        {
+            Vector3 v = t.anchoredPosition;
+            v.y = value;
+            t.anchoredPosition = v;
+        }
+
+        #endregion
+
         #region Text
 
         public static void SetAlpha(this Text t, float alpha)

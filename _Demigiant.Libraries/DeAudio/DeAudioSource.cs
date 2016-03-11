@@ -113,7 +113,7 @@ namespace DG.DeAudio
         /// <summary>Fades this source's volume from the given value to its current one</summary>
         public void FadeFrom(float from, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
         {
-            float to = volume;
+            float to = unscaledVolume;
             volume = from;
             FadeTo(to, duration, ignoreTimeScale, false, onComplete);
         }
