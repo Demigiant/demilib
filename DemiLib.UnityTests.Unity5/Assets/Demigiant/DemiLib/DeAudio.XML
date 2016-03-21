@@ -36,6 +36,18 @@
         <member name="M:DG.DeAudio.DeAudioGroup.Stop(UnityEngine.AudioClip)">
             <summary>Stops all sources for this group that are using the given clip</summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.Pause">
+            <summary>Pauses all sounds for this group</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.Pause(UnityEngine.AudioClip)">
+            <summary>Pauses all sources for this group that are using the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.Resume">
+            <summary>Resumes all paused sounds for this group</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.Resume(UnityEngine.AudioClip)">
+            <summary>Resumes all paused sources for this group that are using the given clip</summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioGroup.SetVolume(System.Single)">
             <summary>Sets the volume for this group (same as setting <see cref="P:DG.DeAudio.DeAudioGroup.volume"/> directly)</summary>
         </member>
@@ -138,6 +150,24 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Stop(UnityEngine.AudioClip)">
             <summary>Stops all sounds for the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Pause">
+            <summary>Pauses all sounds</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Pause(DG.DeAudio.DeAudioGroupId)">
+            <summary>Pauses all sounds for the given group</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Pause(UnityEngine.AudioClip)">
+            <summary>Pauses all sounds for the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Resume">
+            <summary>Resumes all paused sounds</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Resume(DG.DeAudio.DeAudioGroupId)">
+            <summary>Resumes all paused sounds for the given group</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.Resume(UnityEngine.AudioClip)">
+            <summary>Resumes all paused sounds for the given clip</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.SetVolume(System.Single)">
             <summary>Sets the global volume (same as setting <see cref="P:DG.DeAudio.DeAudioManager.globalVolume"/> directly</summary>
@@ -265,6 +295,16 @@
             Play the given clip with the stored volume, pitch and loop settings.
             Calling Play directly from a DeAudioSource overrides any lock that might've been set
             (though the locked status won't change)
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioSource.Pause">
+            <summary>
+            If the source was actually playing something, pauses it and returns TRUE, otherwise returns FALSE
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioSource.Resume">
+            <summary>
+            Resumes playing if paused
             </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioSource.Stop">

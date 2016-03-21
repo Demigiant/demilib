@@ -97,6 +97,20 @@ namespace DG.DeAudio
         public void Stop(AudioClip clip)
         { IterateOnAllSources(OperationType.StopByClip, clip); }
 
+        /// <summary>Pauses all sounds for this group</summary>
+        public void Pause()
+        { IterateOnAllSources(OperationType.Pause); }
+        /// <summary>Pauses all sources for this group that are using the given clip</summary>
+        public void Pause(AudioClip clip)
+        { IterateOnAllSources(OperationType.PauseByClip, clip); }
+
+        /// <summary>Resumes all paused sounds for this group</summary>
+        public void Resume()
+        { IterateOnAllSources(OperationType.Resume); }
+        /// <summary>Resumes all paused sources for this group that are using the given clip</summary>
+        public void Resume(AudioClip clip)
+        { IterateOnAllSources(OperationType.ResumeByClip, clip); }
+
         /// <summary>Sets the volume for this group (same as setting <see cref="volume"/> directly)</summary>
         public void SetVolume(float volume)
         {
@@ -227,6 +241,18 @@ namespace DG.DeAudio
                     break;
                 case OperationType.StopByClip:
                     if (s.clip == clip) s.Stop();
+                    break;
+                case OperationType.Pause:
+                    s.Pause();
+                    break;
+                case OperationType.PauseByClip:
+                    if (s.clip == clip) s.Pause();
+                    break;
+                case OperationType.Resume:
+                    s.Resume();
+                    break;
+                case OperationType.ResumeByClip:
+                    if (s.clip == clip) s.Resume();
                     break;
                 case OperationType.SetVolumeByClip:
                     if (s.clip == clip) s.volume = floatValue;

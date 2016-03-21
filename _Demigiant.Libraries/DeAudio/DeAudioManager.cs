@@ -29,7 +29,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.510";
+        public const string Version = "0.5.600";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
@@ -165,6 +165,32 @@ namespace DG.DeAudio
         /// <summary>Stops all sounds for the given clip</summary>
         public static void Stop(AudioClip clip)
         { IterateOnAllGroups(OperationType.StopByClip, clip); }
+
+        /// <summary>Pauses all sounds</summary>
+        public static void Pause()
+        { IterateOnAllGroups(OperationType.Pause); }
+        /// <summary>Pauses all sounds for the given group</summary>
+        public static void Pause(DeAudioGroupId groupId)
+        {
+            DeAudioGroup group = GetAudioGroup(groupId);
+            if (group != null) group.Pause();
+        }
+        /// <summary>Pauses all sounds for the given clip</summary>
+        public static void Pause(AudioClip clip)
+        { IterateOnAllGroups(OperationType.PauseByClip, clip); }
+
+        /// <summary>Resumes all paused sounds</summary>
+        public static void Resume()
+        { IterateOnAllGroups(OperationType.Resume); }
+        /// <summary>Resumes all paused sounds for the given group</summary>
+        public static void Resume(DeAudioGroupId groupId)
+        {
+            DeAudioGroup group = GetAudioGroup(groupId);
+            if (group != null) group.Resume();
+        }
+        /// <summary>Resumes all paused sounds for the given clip</summary>
+        public static void Resume(AudioClip clip)
+        { IterateOnAllGroups(OperationType.ResumeByClip, clip); }
 
         /// <summary>Sets the global volume (same as setting <see cref="globalVolume"/> directly</summary>
         public static void SetVolume(float volume)
@@ -362,6 +388,18 @@ namespace DG.DeAudio
                     break;
                 case OperationType.StopByClip:
                     group.Stop(clip);
+                    break;
+                case OperationType.Pause:
+                    group.Pause();
+                    break;
+                case OperationType.PauseByClip:
+                    group.Pause(clip);
+                    break;
+                case OperationType.Resume:
+                    group.Resume();
+                    break;
+                case OperationType.ResumeByClip:
+                    group.Resume(clip);
                     break;
                 case OperationType.SetVolumeByClip:
                     group.SetVolume(clip, floatValue);

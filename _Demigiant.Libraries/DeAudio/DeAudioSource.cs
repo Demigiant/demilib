@@ -22,6 +22,7 @@ namespace DG.DeAudio
         /// <summary>TRUE if the audioSource is not playing and is not locked</summary>
         public bool isFree { get { return !locked && !audioSource.isPlaying; } }
         public bool isPlaying { get { return audioSource.isPlaying; } }
+        public bool isPaused { get; private set; } // TRUE if the clip was playing and was paused - FALSE if it was stopped
         public AudioClip clip { get { return audioSource.clip; } }
         public float pitch { get { return audioSource.pitch; } }
         public bool loop { get { return audioSource.loop; } }
@@ -64,7 +65,8 @@ namespace DG.DeAudio
         /// </summary>
         public void Play(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
         {
-            _fadeTween.Kill();
+            isPaused = false;
+            DestroyFadeTween();
             playTime = Time.realtimeSinceStartup;
             this.volume = volume;
             if (audioGroup.mixerGroup != null) audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
@@ -80,7 +82,8 @@ namespace DG.DeAudio
         /// </summary>
         public void Play(DeAudioClipData clipData)
         {
-            _fadeTween.Kill();
+            isPaused = false;
+            DestroyFadeTween();
             playTime = Time.realtimeSinceStartup;
             this.volume = clipData.volume;
             if (audioGroup.mixerGroup != null) audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
@@ -91,11 +94,37 @@ namespace DG.DeAudio
         }
 
         /// <summary>
+        /// If the source was actually playing something, pauses it and returns TRUE, otherwise returns FALSE
+        /// </summary>
+        public bool Pause()
+        {
+            if (clip == null || !audioSource.isPlaying) return false;
+
+            isPaused = true;
+            audioSource.Pause();
+            if (_fadeTween != null) _fadeTween.Pause();
+            return true;
+        }
+
+        /// <summary>
+        /// Resumes playing if paused
+        /// </summary>
+        public void Resume()
+        {
+            if (clip == null || !isPaused) return;
+
+            isPaused = false;
+            if (_fadeTween != null) _fadeTween.Play();
+            audioSource.Play();
+        }
+
+        /// <summary>
         /// Stops any sound connected to this source
         /// </summary>
         public void Stop()
         {
-            _fadeTween.Kill();
+            isPaused = false;
+            DestroyFadeTween();
             audioSource.Stop();
         }
 
@@ -142,10 +171,18 @@ namespace DG.DeAudio
             if (_disposed) return;
             if (disposing) {
                 DeAudioNotificator.DeAudioEvent -= DeAudioEventHandler;
-                _fadeTween.Kill();
+                DestroyFadeTween();
                 Object.Destroy(audioSource);
             }
             _disposed = true;
+        }
+
+        // Kills _fadeTween and sets it as null
+        void DestroyFadeTween()
+        {
+            if (_fadeTween == null) return;
+            _fadeTween.Kill();
+            _fadeTween = null;
         }
 
         #endregion
