@@ -59,6 +59,13 @@ namespace DG.DeAudio
         #region Public Methods
 
         /// <summary>
+        /// Play the given clip with the stored volume, pitch and loop settings.
+        /// Calling Play directly from a DeAudioSource overrides any lock that might've been set
+        /// (though the locked status won't change)
+        /// </summary>
+        public void Play(DeAudioClipData clipData)
+        { Play(clipData.clip, clipData.volume, clipData.pitch, clipData.loop); }
+        /// <summary>
         /// Play the given clip with the given options.
         /// Calling Play directly from a DeAudioSource overrides any lock that might've been set
         /// (though the locked status won't change)
@@ -71,25 +78,9 @@ namespace DG.DeAudio
             this.volume = volume;
             if (audioGroup.mixerGroup != null) audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
             audioSource.clip = clip;
+            audioSource.time = 0; // Reset time to 0 so that paused clips are not just resumed
             audioSource.pitch = pitch;
             audioSource.loop = loop;
-            audioSource.Play();
-        }
-        /// <summary>
-        /// Play the given clip with the stored volume, pitch and loop settings.
-        /// Calling Play directly from a DeAudioSource overrides any lock that might've been set
-        /// (though the locked status won't change)
-        /// </summary>
-        public void Play(DeAudioClipData clipData)
-        {
-            isPaused = false;
-            DestroyFadeTween();
-            playTime = Time.realtimeSinceStartup;
-            this.volume = clipData.volume;
-            if (audioGroup.mixerGroup != null) audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
-            audioSource.clip = clipData.clip;
-            audioSource.pitch = clipData.pitch;
-            audioSource.loop = clipData.loop;
             audioSource.Play();
         }
 

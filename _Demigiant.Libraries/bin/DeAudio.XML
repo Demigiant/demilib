@@ -283,16 +283,16 @@
         <member name="P:DG.DeAudio.DeAudioSource.volume">
             <summary>Current volume (including modifiers caused by global and group volumes)</summary>
         </member>
-        <member name="M:DG.DeAudio.DeAudioSource.Play(UnityEngine.AudioClip,System.Single,System.Single,System.Boolean)">
+        <member name="M:DG.DeAudio.DeAudioSource.Play(DG.DeAudio.DeAudioClipData)">
             <summary>
-            Play the given clip with the given options.
+            Play the given clip with the stored volume, pitch and loop settings.
             Calling Play directly from a DeAudioSource overrides any lock that might've been set
             (though the locked status won't change)
             </summary>
         </member>
-        <member name="M:DG.DeAudio.DeAudioSource.Play(DG.DeAudio.DeAudioClipData)">
+        <member name="M:DG.DeAudio.DeAudioSource.Play(UnityEngine.AudioClip,System.Single,System.Single,System.Boolean)">
             <summary>
-            Play the given clip with the stored volume, pitch and loop settings.
+            Play the given clip with the given options.
             Calling Play directly from a DeAudioSource overrides any lock that might've been set
             (though the locked status won't change)
             </summary>
