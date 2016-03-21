@@ -64,13 +64,28 @@ namespace DG.DeAudio
         /// (though the locked status won't change)
         /// </summary>
         public void Play(DeAudioClipData clipData)
-        { Play(clipData.clip, clipData.volume, clipData.pitch, clipData.loop); }
+        { PlayFrom(clipData.clip, 0, clipData.volume, clipData.pitch, clipData.loop); }
         /// <summary>
         /// Play the given clip with the given options.
         /// Calling Play directly from a DeAudioSource overrides any lock that might've been set
         /// (though the locked status won't change)
         /// </summary>
         public void Play(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
+        { PlayFrom(clip, 0, volume, pitch, loop); }
+
+        /// <summary>
+        /// Play the given clip with the stored volume, pitch and loop settings.
+        /// Calling Play directly from a DeAudioSource overrides any lock that might've been set
+        /// (though the locked status won't change)
+        /// </summary>
+        public void PlayFrom(DeAudioClipData clipData, float fromTime)
+        { PlayFrom(clipData.clip, fromTime, clipData.volume, clipData.pitch, clipData.loop); }
+        /// <summary>
+        /// Play the given clip with the given options from the given time.
+        /// Calling PlayFrom directly from a DeAudioSource overrides any lock that might've been set
+        /// (though the locked status won't change)
+        /// </summary>
+        public void PlayFrom(AudioClip clip, float fromTime, float volume = 1, float pitch = 1, bool loop = false)
         {
             isPaused = false;
             DestroyFadeTween();
@@ -78,7 +93,7 @@ namespace DG.DeAudio
             this.volume = volume;
             if (audioGroup.mixerGroup != null) audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
             audioSource.clip = clip;
-            audioSource.time = 0; // Reset time to 0 so that paused clips are not just resumed
+            audioSource.time = fromTime;
             audioSource.pitch = pitch;
             audioSource.loop = loop;
             audioSource.Play();
@@ -115,6 +130,7 @@ namespace DG.DeAudio
         public void Stop()
         {
             isPaused = false;
+            audioSource.time = 0; // Reset time to beginning
             DestroyFadeTween();
             audioSource.Stop();
         }

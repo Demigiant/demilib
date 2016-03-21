@@ -29,7 +29,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.610";
+        public const string Version = "0.5.620";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
@@ -129,28 +129,49 @@ namespace DG.DeAudio
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
         public static DeAudioSource Play(DeAudioClipData clipData)
-        { return Play(clipData.groupId, clipData.clip, clipData.volume, clipData.pitch, clipData.loop); }
+        { return PlayFrom(clipData.groupId, clipData.clip, 0, clipData.volume, clipData.pitch, clipData.loop); }
         /// <summary>
         /// Plays the given sound with the given options and using the given group id.
         /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
         public static DeAudioSource Play(DeAudioGroupId groupId, AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
+        { return PlayFrom(groupId, clip, 0, volume, pitch, loop); }
+        /// <summary>
+        /// Plays the given sound external to any group, using the given options.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+        /// </summary>
+        public static DeAudioSource Play(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
+        { return PlayFrom(clip, 0, volume, pitch, loop); }
+
+        /// <summary>
+        /// Plays the given <see cref="DeAudioClipData"/> on the stored group, with the stored volume, pitch, loop settings, and from the given time.
+        /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+        /// </summary>
+        public static DeAudioSource PlayFrom(DeAudioClipData clipData, float fromTime)
+        { return PlayFrom(clipData.groupId, clipData.clip, fromTime, clipData.volume, clipData.pitch, clipData.loop); }
+        /// <summary>
+        /// Plays the given sound with the given options, using the given group id, and from the given time.
+        /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+        /// </summary>
+        public static DeAudioSource PlayFrom(DeAudioGroupId groupId, AudioClip clip, float fromTime, float volume = 1, float pitch = 1, bool loop = false)
         {
             DeAudioGroup group = GetAudioGroup(groupId);
             if (group == null) {
                 Debug.LogWarning(LogPrefix + "Clip can't be played because no group with the given groupId (" + groupId + ") was created");
                 return null;
             }
-            return group.Play(clip, volume, pitch, loop);
+            return group.PlayFrom(clip, fromTime, volume, pitch, loop);
         }
         /// <summary>
-        /// Plays the given sound external to any group, using the given options.
+        /// Plays the given sound external to any group, using the given options and from the given time.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
-        public static DeAudioSource Play(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
+        public static DeAudioSource PlayFrom(AudioClip clip, float fromTime, float volume = 1, float pitch = 1, bool loop = false)
         {
-            return globalGroup.Play(clip, volume, pitch, loop);
+            return globalGroup.PlayFrom(clip, fromTime, volume, pitch, loop);
         }
 
         /// <summary>Stops all sounds</summary>

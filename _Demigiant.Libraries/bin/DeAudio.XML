@@ -30,6 +30,12 @@
             <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
             </summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.PlayFrom(UnityEngine.AudioClip,System.Single,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Plays the given sound with the given options from the given time.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioGroup.Stop">
             <summary>Stops all sounds for this group</summary>
         </member>
@@ -139,6 +145,26 @@
         <member name="M:DG.DeAudio.DeAudioManager.Play(UnityEngine.AudioClip,System.Single,System.Single,System.Boolean)">
             <summary>
             Plays the given sound external to any group, using the given options.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.PlayFrom(DG.DeAudio.DeAudioClipData,System.Single)">
+            <summary>
+            Plays the given <see cref="T:DG.DeAudio.DeAudioClipData"/> on the stored group, with the stored volume, pitch, loop settings, and from the given time.
+            A <see cref="T:DG.DeAudio.DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.PlayFrom(DG.DeAudio.DeAudioGroupId,UnityEngine.AudioClip,System.Single,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Plays the given sound with the given options, using the given group id, and from the given time.
+            A <see cref="T:DG.DeAudio.DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
+            <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.PlayFrom(UnityEngine.AudioClip,System.Single,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Plays the given sound external to any group, using the given options and from the given time.
             <para>Returns the <see cref="T:DG.DeAudio.DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
             </summary>
         </member>
@@ -294,6 +320,20 @@
             <summary>
             Play the given clip with the given options.
             Calling Play directly from a DeAudioSource overrides any lock that might've been set
+            (though the locked status won't change)
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioSource.PlayFrom(DG.DeAudio.DeAudioClipData,System.Single)">
+            <summary>
+            Play the given clip with the stored volume, pitch and loop settings.
+            Calling Play directly from a DeAudioSource overrides any lock that might've been set
+            (though the locked status won't change)
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioSource.PlayFrom(UnityEngine.AudioClip,System.Single,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Play the given clip with the given options from the given time.
+            Calling PlayFrom directly from a DeAudioSource overrides any lock that might've been set
             (though the locked status won't change)
             </summary>
         </member>

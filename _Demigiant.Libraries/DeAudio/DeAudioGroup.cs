@@ -74,19 +74,25 @@ namespace DG.DeAudio
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
         public DeAudioSource Play(DeAudioClipData clipData)
-        { return Play(clipData.clip, clipData.volume, clipData.pitch, clipData.loop); }
+        { return PlayFrom(clipData.clip, 0, clipData.volume, clipData.pitch, clipData.loop); }
         /// <summary>
         /// Plays the given sound with the given options.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
         public DeAudioSource Play(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
+        { return PlayFrom(clip, 0, volume, pitch, loop); }
+        /// <summary>
+        /// Plays the given sound with the given options from the given time.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
+        /// </summary>
+        public DeAudioSource PlayFrom(AudioClip clip, float fromTime, float volume = 1, float pitch = 1, bool loop = false)
         {
             DeAudioSource source = GetAvailableSource();
             if (source == null) {
                 if (DeAudioManager.I.logInfo) Debug.Log(DeAudioManager.LogPrefix + "Clip can't be played because all sources are busy");
                 return null;
             }
-            source.Play(clip, volume, pitch, loop);
+            source.PlayFrom(clip, fromTime, volume, pitch, loop);
             return source;
         }
 
