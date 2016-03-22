@@ -135,6 +135,14 @@ namespace DG.DeAudio
             audioSource.Stop();
         }
 
+        /// <summary>
+        /// If this source was paused, stops any sound connected to it
+        /// </summary>
+        public void StopIfPaused()
+        {
+            if (isPaused) Stop();
+        }
+
         #region Tweens
 
         /// <summary>Fades out this source's volume</summary>

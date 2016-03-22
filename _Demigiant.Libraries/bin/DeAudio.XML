@@ -42,6 +42,9 @@
         <member name="M:DG.DeAudio.DeAudioGroup.Stop(UnityEngine.AudioClip)">
             <summary>Stops all sources for this group that are using the given clip</summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.StopAllPaused">
+            <summary>Stops all sounds for this group that are in a paused state</summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioGroup.Pause">
             <summary>Pauses all sounds for this group</summary>
         </member>
@@ -176,6 +179,12 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Stop(UnityEngine.AudioClip)">
             <summary>Stops all sounds for the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.StopAllPaused">
+            <summary>Stops all paused sounds</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.StopAllPaused(DG.DeAudio.DeAudioGroupId)">
+            <summary>Stops all paused sounds for the given group</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Pause">
             <summary>Pauses all sounds</summary>
@@ -350,6 +359,11 @@
         <member name="M:DG.DeAudio.DeAudioSource.Stop">
             <summary>
             Stops any sound connected to this source
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioSource.StopIfPaused">
+            <summary>
+            If this source was paused, stops any sound connected to it
             </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioSource.FadeOut(System.Single,System.Boolean,System.Boolean,DG.Tweening.TweenCallback)">

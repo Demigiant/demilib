@@ -29,7 +29,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "0.5.620";
+        public const string Version = "0.5.650";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
@@ -186,6 +186,16 @@ namespace DG.DeAudio
         /// <summary>Stops all sounds for the given clip</summary>
         public static void Stop(AudioClip clip)
         { IterateOnAllGroups(OperationType.StopByClip, clip); }
+
+        /// <summary>Stops all paused sounds</summary>
+        public static void StopAllPaused()
+        { IterateOnAllGroups(OperationType.StopIfPaused); }
+        /// <summary>Stops all paused sounds for the given group</summary>
+        public static void StopAllPaused(DeAudioGroupId groupId)
+        {
+            DeAudioGroup group = GetAudioGroup(groupId);
+            if (group != null) group.StopAllPaused();
+        }
 
         /// <summary>Pauses all sounds</summary>
         public static void Pause()
@@ -409,6 +419,9 @@ namespace DG.DeAudio
                     break;
                 case OperationType.StopByClip:
                     group.Stop(clip);
+                    break;
+                case OperationType.StopIfPaused:
+                    group.StopAllPaused();
                     break;
                 case OperationType.Pause:
                     group.Pause();

@@ -103,6 +103,10 @@ namespace DG.DeAudio
         public void Stop(AudioClip clip)
         { IterateOnAllSources(OperationType.StopByClip, clip); }
 
+        /// <summary>Stops all sounds for this group that are in a paused state</summary>
+        public void StopAllPaused()
+        { IterateOnAllSources(OperationType.StopIfPaused); }
+
         /// <summary>Pauses all sounds for this group</summary>
         public void Pause()
         { IterateOnAllSources(OperationType.Pause); }
@@ -247,6 +251,9 @@ namespace DG.DeAudio
                     break;
                 case OperationType.StopByClip:
                     if (s.clip == clip) s.Stop();
+                    break;
+                case OperationType.StopIfPaused:
+                    if (s.isPaused) s.Stop();
                     break;
                 case OperationType.Pause:
                     s.Pause();

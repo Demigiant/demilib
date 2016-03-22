@@ -7,6 +7,7 @@ namespace DG.DeAudio.Core
     {
         Stop,
         StopByClip,
+        StopIfPaused,
         Pause,
         PauseByClip,
         Resume,
