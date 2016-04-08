@@ -22,7 +22,8 @@ namespace DG.DeAudio
         /// <summary>TRUE if the audioSource is not playing and is not locked</summary>
         public bool isFree { get { return !locked && !audioSource.isPlaying; } }
         public bool isPlaying { get { return audioSource.isPlaying; } }
-        public bool isPaused { get; private set; } // TRUE if the clip was playing and was paused - FALSE if it was stopped
+        /// <summary>TRUE if the clip was playing and has been paused - FALSE if it was/is stopped</summary>
+        public bool isPaused { get; private set; }
         public AudioClip clip { get { return audioSource.clip; } }
         public float pitch { get { return audioSource.pitch; } }
         public bool loop { get { return audioSource.loop; } }

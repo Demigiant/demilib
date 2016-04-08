@@ -312,6 +312,9 @@
         <member name="P:DG.DeAudio.DeAudioSource.isFree">
             <summary>TRUE if the audioSource is not playing and is not locked</summary>
         </member>
+        <member name="P:DG.DeAudio.DeAudioSource.isPaused">
+            <summary>TRUE if the clip was playing and has been paused - FALSE if it was/is stopped</summary>
+        </member>
         <member name="P:DG.DeAudio.DeAudioSource.unscaledVolume">
             <summary>Unscaled volume (doesn't include modifiers caused by global and group volumes)</summary>
         </member>
