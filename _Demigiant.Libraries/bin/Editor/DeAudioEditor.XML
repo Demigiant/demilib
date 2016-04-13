@@ -10,5 +10,28 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="F:DG.DeAudioEditor.DeAudioGUIMode.ClipOnly">
+            <summary>1 row > AudioClip only</summary>
+        </member>
+        <member name="F:DG.DeAudioEditor.DeAudioGUIMode.Compact">
+            <summary>1 row > AudioClip and GroupId</summary>
+        </member>
+        <member name="F:DG.DeAudioEditor.DeAudioGUIMode.CompactWithPreview">
+            <summary>1 row > AudioClip, GroupId and play/stop buttons</summary>
+        </member>
+        <member name="F:DG.DeAudioEditor.DeAudioGUIMode.VolumeWithPreview">
+            <summary>2 rows > AudioClip, GroupId, Volume, play/stop buttons</summary>
+        </member>
+        <member name="F:DG.DeAudioEditor.DeAudioGUIMode.VolumeAndLoopsWithPreview">
+            <summary>2 rows > AudioClip, GroupId, Volume, play/stop/loops buttons</summary>
+        </member>
+        <member name="F:DG.DeAudioEditor.DeAudioGUIMode.Full">
+            <summary>3 rows > All options</summary>
+        </member>
+        <member name="T:DG.DeAudioEditor.DeAudioGUILayout">
+            <summary>
+            GUILayout methods for drawing DeAudio data objects
+            </summary>
+        </member>
     </members>
 </doc>

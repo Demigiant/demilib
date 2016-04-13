@@ -18,6 +18,12 @@ namespace DG.DeExtensions
             t.color = c;
         }
 
+        public static void SetColor(this Image t, Color color, float alpha)
+        {
+            color.a = alpha;
+            t.color = color;
+        }
+
         #endregion
 
         #region RawImage
@@ -27,6 +33,12 @@ namespace DG.DeExtensions
             Color c = t.color;
             c.a = alpha;
             t.color = c;
+        }
+
+        public static void SetColor(this RawImage t, Color color, float alpha)
+        {
+            color.a = alpha;
+            t.color = color;
         }
 
         #endregion
@@ -55,6 +67,12 @@ namespace DG.DeExtensions
             Color c = t.color;
             c.a = alpha;
             t.color = c;
+        }
+
+        public static void SetColor(this Text t, Color color, float alpha)
+        {
+            color.a = alpha;
+            t.color = color;
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/04/26 13:29
 
+using DG.DeAudioEditor;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
@@ -20,6 +21,8 @@ public class DeSamplerInspector : Editor
     DrawMode _drawMode;
     DeColorPalette _toolbarButtonsColors;
     float _vSpace = 8;
+    DeAudioGUIMode _deAudioGUIMode = DeAudioGUIMode.Full;
+    bool _allowDeAudioGroupIdChange = true;
 
     // ===================================================================================
     // MONOBEHAVIOUR METHODS -------------------------------------------------------------
@@ -158,6 +161,7 @@ public class DeSamplerInspector : Editor
         GUILayout.Space(_vSpace);
 
         // Toggles
+
         GUILayout.BeginHorizontal();
             _src.toggles[0] = EditorGUILayout.Toggle(_src.toggles[0], GUILayout.Width(16));
             GUILayout.Button("Some Button");
@@ -180,6 +184,12 @@ public class DeSamplerInspector : Editor
                 if (DeGUIDrag.Drag(_DragID0, _src.draggableLabels, i).outcome == DeDragResultType.Accepted) EditorUtility.SetDirty(_src);
             }
         }
+
+        // DeAudio
+
+        _deAudioGUIMode = (DeAudioGUIMode)EditorGUILayout.EnumPopup("DeAudioGUIMode", _deAudioGUIMode);
+        _allowDeAudioGroupIdChange = EditorGUILayout.Toggle("Allow Group Change", _allowDeAudioGroupIdChange);
+        _src.deAudioClip = DeAudioGUILayout.DeAudioClip("Some Clip", _src.deAudioClip, _allowDeAudioGroupIdChange, _deAudioGUIMode);
     }
 
     void DrawColorPalette()

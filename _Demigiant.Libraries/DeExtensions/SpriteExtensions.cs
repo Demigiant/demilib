@@ -14,5 +14,11 @@ namespace DG.DeExtensions
             c.a = alpha;
             t.color = c;
         }
+
+        public static void SetColor(this SpriteRenderer t, Color color, float alpha)
+        {
+            color.a = alpha;
+            t.color = color;
+        }
     }
 }

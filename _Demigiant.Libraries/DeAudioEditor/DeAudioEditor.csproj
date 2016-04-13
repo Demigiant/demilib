@@ -52,6 +52,7 @@
     <Compile Include="DeAudioCollectionInspector.cs" />
     <Compile Include="DeAudioClipDataPropertyDrawer.cs" />
     <Compile Include="DeAudioEditorUtils.cs" />
+    <Compile Include="DeAudioGUILayout.cs" />
     <Compile Include="DeAudioManagerInspector.cs" />
     <Compile Include="MenuItems.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
