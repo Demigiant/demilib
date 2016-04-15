@@ -4,6 +4,31 @@
         <name>DeAudio</name>
     </assembly>
     <members>
+        <member name="T:DG.DeAudio.DeAudioClipGUIMode">
+            <summary>
+            Display mode used when drawing <see cref="T:DG.DeAudio.DeAudioClipData"/> objects in a custom editor.
+            Public so it can be serialized for advanced editors.
+            </summary>
+        </member>
+        <member name="F:DG.DeAudio.DeAudioClipGUIMode.ClipOnly">
+            <summary>1 row > AudioClip only</summary>
+        </member>
+        <member name="F:DG.DeAudio.DeAudioClipGUIMode.Compact">
+            <summary>1 row > AudioClip and GroupId</summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:DG.DeAudio.DeAudioClipGUIMode.CompactPreviewOnly" -->
+        <member name="F:DG.DeAudio.DeAudioClipGUIMode.CompactWithGroupAndPreview">
+            <summary>1 row > AudioClip, GroupId and play/stop buttons</summary>
+        </member>
+        <member name="F:DG.DeAudio.DeAudioClipGUIMode.VolumeWithPreview">
+            <summary>2 rows > AudioClip, GroupId, Volume, play/stop buttons</summary>
+        </member>
+        <member name="F:DG.DeAudio.DeAudioClipGUIMode.VolumeAndLoopsWithPreview">
+            <summary>2 rows > AudioClip, GroupId, Volume, play/stop/loops buttons</summary>
+        </member>
+        <member name="F:DG.DeAudio.DeAudioClipGUIMode.Full">
+            <summary>3 rows > All options</summary>
+        </member>
         <member name="T:DG.DeAudio.DeAudioCollection">
             <summary>
             A collection of audio files. Still needs to be completed.

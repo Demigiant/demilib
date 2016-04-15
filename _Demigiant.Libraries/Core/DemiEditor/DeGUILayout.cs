@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using System.Reflection;
 using DG.DemiEditor.Core;
 using DG.DemiLib;
 using UnityEditor;
@@ -17,6 +18,7 @@ namespace DG.DemiEditor
     public static class DeGUILayout
     {
         static int _activePressButtonId = -1;
+        static MethodInfo _miGradientField;
 
         #region Buttons
 
@@ -304,6 +306,15 @@ namespace DG.DemiEditor
         {
             Rect r = GUILayoutUtility.GetRect(new GUIContent(""), defaultStyle, GUILayout.ExpandWidth(true));
             return DeGUI.DoDoubleClickTextField(r, editor, editorWindow, id, text, dragId, draggableList, draggedItemIndex, defaultStyle, editingStyle);
+        }
+
+        /// <summary>
+        /// Creates a Gradient field by using Unity 4.x hidden default one and Reflection.
+        /// </summary>
+        public static Gradient GradientField(string label, Gradient gradient, params GUILayoutOption[] options)
+        {
+            if (_miGradientField == null) _miGradientField = typeof(EditorGUILayout).GetMethod("GradientField", BindingFlags.NonPublic | BindingFlags.Static, null, new[] { typeof(string), typeof(Gradient), typeof(GUILayoutOption[]) }, null);
+            return _miGradientField.Invoke(null, new object[] { label, gradient, options }) as Gradient;
         }
 
         /// <summary>Scene field</summary>

@@ -621,6 +621,11 @@
             <param name="editingStyle">Style for editing mode</param>
             <returns></returns>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.GradientField(System.String,UnityEngine.Gradient,UnityEngine.GUILayoutOption[])">
+            <summary>
+            Creates a Gradient field by using Unity 4.x hidden default one and Reflection.
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUILayout.SceneField(System.String,UnityEngine.Object)">
             <summary>Scene field</summary>
         </member>

@@ -10,61 +10,48 @@ using UnityEngine;
 
 namespace DG.DeAudioEditor
 {
-    public enum DeAudioGUIMode
-    {
-        /// <summary>1 row > AudioClip only</summary>
-        ClipOnly, // Only clip, no groupId
-        /// <summary>1 row > AudioClip and GroupId</summary>
-        Compact,
-        /// <summary>1 row > AudioClip, GroupId and play/stop buttons</summary>
-        CompactWithPreview,
-        /// <summary>2 rows > AudioClip, GroupId, Volume, play/stop buttons</summary>
-        VolumeWithPreview,
-        /// <summary>2 rows > AudioClip, GroupId, Volume, play/stop/loops buttons</summary>
-        VolumeAndLoopsWithPreview,
-        /// <summary>3 rows > All options</summary>
-        Full
-    }
-
     /// <summary>
     /// GUILayout methods for drawing DeAudio data objects
     /// </summary>
     public static class DeAudioGUILayout
     {
-        public static DeAudioClipData DeAudioClip(string label, DeAudioClipData value, bool allowGroupChange = true, DeAudioGUIMode mode = DeAudioGUIMode.Full)
+        public static DeAudioClipData DeAudioClip(string label, DeAudioClipData value, bool allowGroupChange = true, DeAudioClipGUIMode mode = DeAudioClipGUIMode.Full)
         { return DeAudioClip(new GUIContent(label, ""), value, allowGroupChange, mode); }
-        public static DeAudioClipData DeAudioClip(GUIContent label, DeAudioClipData value, bool allowGroupChange = true, DeAudioGUIMode mode = DeAudioGUIMode.Full)
+        public static DeAudioClipData DeAudioClip(GUIContent label, DeAudioClipData value, bool allowGroupChange = true, DeAudioClipGUIMode mode = DeAudioClipGUIMode.Full)
         {
             using (new GUILayout.HorizontalScope()) {
                 value.clip = EditorGUILayout.ObjectField(label, value.clip, typeof(AudioClip), false) as AudioClip;
-                if (mode != DeAudioGUIMode.ClipOnly) {
-                    using (new EditorGUI.DisabledGroupScope(!allowGroupChange)) {
-                        DeAudioGroupId newGroupId = (DeAudioGroupId)EditorGUILayout.EnumPopup(value.groupId, GUILayout.Width(78));
-                        if (allowGroupChange) value.groupId = newGroupId;
+                if (mode != DeAudioClipGUIMode.ClipOnly) {
+                    if (mode != DeAudioClipGUIMode.CompactPreviewOnly) {
+                        using (new EditorGUI.DisabledGroupScope(!allowGroupChange)) {
+                            DeAudioGroupId newGroupId = (DeAudioGroupId)EditorGUILayout.EnumPopup(value.groupId, GUILayout.Width(78));
+                            if (allowGroupChange) value.groupId = newGroupId;
+                        }
                     }
-                    if (mode == DeAudioGUIMode.CompactWithPreview) {
+                    if (mode == DeAudioClipGUIMode.CompactPreviewOnly || mode == DeAudioClipGUIMode.CompactWithGroupAndPreview) {
                         DeAudioGUI.PlayButton(value);
                         DeAudioGUI.StopButton();
                     }
                 }
             }
-            if (mode == DeAudioGUIMode.VolumeWithPreview || mode == DeAudioGUIMode.VolumeAndLoopsWithPreview || mode == DeAudioGUIMode.Full) {
+            if (mode == DeAudioClipGUIMode.CompactPreviewOnly) GUILayout.Space(4);
+            if (mode == DeAudioClipGUIMode.VolumeWithPreview || mode == DeAudioClipGUIMode.VolumeAndLoopsWithPreview || mode == DeAudioClipGUIMode.Full) {
                 // Volume, pitch, play/pause/loop buttons
                 GUILayout.Space(-1);
                 using (new GUILayout.HorizontalScope()) {
                     value.volume = EditorGUILayout.Slider("└ Volume", value.volume, 0, 1);
-                    if (mode == DeAudioGUIMode.VolumeAndLoopsWithPreview) DeAudioGUI.LoopToggle(value);
+                    if (mode == DeAudioClipGUIMode.VolumeAndLoopsWithPreview) DeAudioGUI.LoopToggle(value);
                     DeAudioGUI.PlayButton(value);
                     DeAudioGUI.StopButton();
                 }
-                if (mode == DeAudioGUIMode.Full) {
+                if (mode == DeAudioClipGUIMode.Full) {
                     GUILayout.Space(-1);
                     using (new GUILayout.HorizontalScope()) {
                         value.pitch = EditorGUILayout.Slider("└ Pitch", value.pitch, 0, 3);
                         DeAudioGUI.LoopToggle(value);
                     }
                 } else GUILayout.Space(4);
-            } else if (mode == DeAudioGUIMode.CompactWithPreview) GUILayout.Space(4);
+            } else if (mode == DeAudioClipGUIMode.CompactWithGroupAndPreview) GUILayout.Space(4);
             return value;
         }
 

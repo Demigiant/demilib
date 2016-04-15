@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Core\OperationType.cs" />
     <Compile Include="DeAudioClipData.cs" />
+    <Compile Include="DeAudioClipGUIMode.cs" />
     <Compile Include="DeAudioCollection.cs" />
     <Compile Include="DeAudioGroup.cs" />
     <Compile Include="DeAudioGroupId.cs" />
