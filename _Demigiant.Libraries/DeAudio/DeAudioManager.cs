@@ -30,7 +30,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "0.6.000";
+        public const string Version = "0.6.100";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
@@ -223,6 +223,18 @@ namespace DG.DeAudio
         /// <summary>Resumes all paused sounds for the given clip</summary>
         public static void Resume(AudioClip clip)
         { IterateOnAllGroups(OperationType.ResumeByClip, clip); }
+
+        /// <summary>Changes the pitch for the given group's existing sources</summary>
+        public static void ChangePitch(DeAudioGroupId groupId, float pitch)
+        {
+            DeAudioGroup group = GetAudioGroup(groupId);
+            if (group != null) group.ChangePitch(pitch);
+        }
+        /// <summary>Changes the pitch for all audio groups' existing sources</summary>
+        public static void ChangePitch(float pitch)
+        {
+            for (int i = 0; i < audioGroups.Length; ++i) audioGroups[i].ChangePitch(pitch);
+        }
 
         /// <summary>Sets the global volume (same as setting <see cref="globalVolume"/> directly</summary>
         public static void SetVolume(float volume)

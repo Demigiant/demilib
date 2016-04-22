@@ -25,7 +25,7 @@ namespace DG.DeAudio
         /// <summary>TRUE if the clip was playing and has been paused - FALSE if it was/is stopped</summary>
         public bool isPaused { get; private set; }
         public AudioClip clip { get { return audioSource.clip; } }
-        public float pitch { get { return audioSource.pitch; } }
+        public float pitch { get { return audioSource.pitch; } set { audioSource.pitch = value; } }
         public bool loop { get { return audioSource.loop; } }
         /// <summary>Unscaled volume (doesn't include modifiers caused by global and group volumes)</summary>
         public float unscaledVolume { get; private set; }

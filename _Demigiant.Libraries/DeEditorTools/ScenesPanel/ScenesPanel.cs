@@ -215,8 +215,8 @@ namespace DG.DeEditorTools.ScenesPanel
 
         static bool IsAdditiveSceneLoaded(string scenePath)
         {
-            foreach (Scene s in SceneManager.GetAllScenes()) {
-                if (s.path == scenePath) return true;
+            for (int i = 0; i < SceneManager.sceneCount; ++i) {
+                if (SceneManager.GetSceneAt(i).path == scenePath) return true;
             }
             return false;
         }

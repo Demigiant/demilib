@@ -16,7 +16,9 @@
         <member name="F:DG.DeAudio.DeAudioClipGUIMode.Compact">
             <summary>1 row > AudioClip and GroupId</summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "F:DG.DeAudio.DeAudioClipGUIMode.CompactPreviewOnly" -->
+        <member name="F:DG.DeAudio.DeAudioClipGUIMode.CompactPreviewOnly">
+            <summary>1 row > AudioClip and play/stop buttons</summary>
+        </member>
         <member name="F:DG.DeAudio.DeAudioClipGUIMode.CompactWithGroupAndPreview">
             <summary>1 row > AudioClip, GroupId and play/stop buttons</summary>
         </member>
@@ -81,6 +83,9 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioGroup.Resume(UnityEngine.AudioClip)">
             <summary>Resumes all paused sources for this group that are using the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.ChangePitch(System.Single)">
+            <summary>Changes the pitch for all existing sources of this group</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioGroup.SetVolume(System.Single)">
             <summary>Sets the volume for this group (same as setting <see cref="P:DG.DeAudio.DeAudioGroup.volume"/> directly)</summary>
@@ -228,6 +233,12 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Resume(UnityEngine.AudioClip)">
             <summary>Resumes all paused sounds for the given clip</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.ChangePitch(DG.DeAudio.DeAudioGroupId,System.Single)">
+            <summary>Changes the pitch for the given group's existing sources</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.ChangePitch(System.Single)">
+            <summary>Changes the pitch for all audio groups' existing sources</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.SetVolume(System.Single)">
             <summary>Sets the global volume (same as setting <see cref="P:DG.DeAudio.DeAudioManager.globalVolume"/> directly</summary>

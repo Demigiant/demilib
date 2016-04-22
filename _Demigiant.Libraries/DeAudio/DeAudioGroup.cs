@@ -121,6 +121,12 @@ namespace DG.DeAudio
         public void Resume(AudioClip clip)
         { IterateOnAllSources(OperationType.ResumeByClip, clip); }
 
+        /// <summary>Changes the pitch for all existing sources of this group</summary>
+        public void ChangePitch(float pitch)
+        {
+            for (int i = 0; i < sources.Count; i++) sources[i].audioSource.pitch = pitch;
+        }
+
         /// <summary>Sets the volume for this group (same as setting <see cref="volume"/> directly)</summary>
         public void SetVolume(float volume)
         {

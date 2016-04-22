@@ -13,7 +13,7 @@ namespace DG.DeAudio
         ClipOnly, // Only clip, no groupId
         /// <summary>1 row > AudioClip and GroupId</summary>
         Compact,
-        /// <summary>1 row > AudioClip and play/stop buttons/summary>
+        /// <summary>1 row > AudioClip and play/stop buttons</summary>
         CompactPreviewOnly,
         /// <summary>1 row > AudioClip, GroupId and play/stop buttons</summary>
         CompactWithGroupAndPreview,

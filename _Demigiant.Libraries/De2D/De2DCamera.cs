@@ -9,6 +9,7 @@ namespace DG.De2D
     /// <summary>
     /// Sets up the 2D orthographic camera it's attached to
     /// </summary>
+    [RequireComponent(typeof(Camera))]
     public class De2DCamera : MonoBehaviour
     {
         public enum OrthoMode
@@ -21,7 +22,7 @@ namespace DG.De2D
         public int ppu = 100; // Pixels per unit
         public OrthoMode orthoMode = OrthoMode.FixedHeight;
         // Editor-only
-        public bool editorAutoRefresh = false; // If TRUE, refreshes the ortho-size automatically while in editor mode
+        public bool editorAutoRefresh = true; // If TRUE, refreshes the ortho-size automatically while in editor mode
 
         Camera _thisCam;
 
