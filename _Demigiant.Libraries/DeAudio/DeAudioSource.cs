@@ -112,6 +112,11 @@ namespace DG.DeAudio
             if (_fadeTween != null) _fadeTween.Pause();
             return true;
         }
+        // Here so it can be called from fade tweens without using lambdas (they require a void method)
+        void PauseDirect()
+        {
+            Pause();
+        }
 
         /// <summary>
         /// Resumes playing if paused
@@ -147,27 +152,34 @@ namespace DG.DeAudio
         #region Tweens
 
         /// <summary>Fades out this source's volume</summary>
-        public void FadeOut(float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true, TweenCallback onComplete = null)
-        { FadeTo(0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
+        public void FadeOut(float duration = 1.5f, bool ignoreTimeScale = true, FadeBehaviour onCompleteBehaviour = FadeBehaviour.Stop, TweenCallback onComplete = null)
+        { FadeTo(0, duration, ignoreTimeScale, onCompleteBehaviour, onComplete); }
         /// <summary>Fades in this source's volume</summary>
         public void FadeIn(float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeTo(1, duration, ignoreTimeScale, false, onComplete); }
+        { FadeTo(1, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
         /// <summary>Fades this source's volume to the given value</summary>
         public void FadeTo(float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeTo(to, duration, ignoreTimeScale, false, onComplete); }
+        { FadeTo(to, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
         /// <summary>Fades this source's volume from the given value to its current one</summary>
         public void FadeFrom(float from, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
         {
             float to = unscaledVolume;
             volume = from;
-            FadeTo(to, duration, ignoreTimeScale, false, onComplete);
+            FadeTo(to, duration, ignoreTimeScale, FadeBehaviour.None, onComplete);
         }
-        internal void FadeTo(float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
+        internal void FadeTo(float to, float duration, bool ignoreTimeScale, FadeBehaviour onCompleteBehaviour, TweenCallback onComplete)
         {
             _fadeTween.Kill();
             _fadeTween = DOTween.To(() => volume, x => volume = x, to, duration)
                 .SetTarget(this).SetUpdate(ignoreTimeScale).SetEase(Ease.Linear);
-            if (stopOnComplete) _fadeTween.OnStepComplete(Stop);
+            switch (onCompleteBehaviour) {
+            case FadeBehaviour.Stop:
+                _fadeTween.OnStepComplete(Stop);
+                break;
+            case FadeBehaviour.Pause:
+                _fadeTween.OnStepComplete(PauseDirect);
+                break;
+            }
             if (onComplete != null) _fadeTween.OnComplete(onComplete);
         }
 

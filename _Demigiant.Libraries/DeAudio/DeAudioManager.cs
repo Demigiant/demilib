@@ -30,7 +30,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "0.6.100";
+        public const string Version = "0.6.110";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
@@ -125,12 +125,19 @@ namespace DG.DeAudio
         #endregion
 
         /// <summary>
-        /// Plays the given <see cref="DeAudioClipData"/> on the stored group, with the stored volume, pitch and loop settings.
+        /// Plays the given <see cref="DeAudioClipData"/> on the stored group,
+        /// with the stored volume, pitch and loop settings (unless set otherwise).
         /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
-        public static DeAudioSource Play(DeAudioClipData clipData)
-        { return PlayFrom(clipData.groupId, clipData.clip, 0, clipData.volume, clipData.pitch, clipData.loop); }
+        public static DeAudioSource Play(DeAudioClipData clipData, float? volume = null, float? pitch = null, bool? loop = null)
+        {
+            return PlayFrom(clipData.groupId, clipData.clip, 0,
+                volume == null ? clipData.volume : (float)volume,
+                pitch == null ? clipData.pitch : (float)pitch,
+                loop == null ? clipData.loop : (bool)loop
+            );
+        }
         /// <summary>
         /// Plays the given sound with the given options and using the given group id.
         /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
@@ -146,12 +153,19 @@ namespace DG.DeAudio
         { return PlayFrom(clip, 0, volume, pitch, loop); }
 
         /// <summary>
-        /// Plays the given <see cref="DeAudioClipData"/> on the stored group, with the stored volume, pitch, loop settings, and from the given time.
+        /// Plays the given <see cref="DeAudioClipData"/> on the stored group,
+        /// with the stored volume, pitch, loop settings (unless set otherwise), and from the given time.
         /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
-        public static DeAudioSource PlayFrom(DeAudioClipData clipData, float fromTime)
-        { return PlayFrom(clipData.groupId, clipData.clip, fromTime, clipData.volume, clipData.pitch, clipData.loop); }
+        public static DeAudioSource PlayFrom(DeAudioClipData clipData, float fromTime, float? volume = null, float? pitch = null, bool? loop = null)
+        {
+            return PlayFrom(clipData.groupId, clipData.clip, fromTime,
+                volume == null ? clipData.volume : (float)volume,
+                pitch == null ? clipData.pitch : (float)pitch,
+                loop == null ? clipData.loop : (bool)loop
+            );
+        }
         /// <summary>
         /// Plays the given sound with the given options, using the given group id, and from the given time.
         /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually play.
@@ -291,69 +305,76 @@ namespace DG.DeAudio
         #region Tweens
 
         /// <summary>Fades out the global volume</summary>
-        public static void FadeOut(float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true, TweenCallback onComplete = null)
-        { FadeTo(0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
+        public static void FadeOut(float duration = 1.5f, bool ignoreTimeScale = true, FadeBehaviour onCompleteBehaviour = FadeBehaviour.Stop, TweenCallback onComplete = null)
+        { FadeTo(0, duration, ignoreTimeScale, onCompleteBehaviour, onComplete); }
         /// <summary>Fades in the global volume</summary>
         public static void FadeIn(float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeTo(1, duration, ignoreTimeScale, false, onComplete); }
+        { FadeTo(1, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
         /// <summary>Fades the global volume to the given value</summary>
         public static void FadeTo(float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeTo(to, duration, ignoreTimeScale, false, onComplete); }
-        static void FadeTo(float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
+        { FadeTo(to, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
+        static void FadeTo(float to, float duration, bool ignoreTimeScale, FadeBehaviour onCompleteBehaviour, TweenCallback onComplete)
         {
             _fadeTween.Kill();
             _fadeTween = DOTween.To(() => globalVolume, x => globalVolume = x, to, duration)
                 .SetTarget(I).SetUpdate(ignoreTimeScale).SetEase(Ease.Linear);
-            if (stopOnComplete) _fadeTween.OnStepComplete(Stop);
+            switch (onCompleteBehaviour) {
+            case FadeBehaviour.Stop:
+                _fadeTween.OnStepComplete(Stop);
+                break;
+            case FadeBehaviour.Pause:
+                _fadeTween.OnStepComplete(Pause);
+                break;
+            }
             if (onComplete != null) _fadeTween.OnComplete(onComplete);
         }
         /// <summary>Fades out the volume of every source without touching global and group volumes</summary>
-        public static void FadeSourcesOut(float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true, TweenCallback onComplete = null)
-        { FadeSourcesTo(0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
+        public static void FadeSourcesOut(float duration = 1.5f, bool ignoreTimeScale = true, FadeBehaviour onCompleteBehaviour = FadeBehaviour.Stop, TweenCallback onComplete = null)
+        { FadeSourcesTo(0, duration, ignoreTimeScale, onCompleteBehaviour, onComplete); }
         /// <summary>Fades in the volume of every source without touching global and group volumes</summary>
         public static void FadeSourcesIn(float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeSourcesTo(1, duration, ignoreTimeScale, false, onComplete); }
+        { FadeSourcesTo(1, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
         /// <summary>Fades the volume of every source to the given value without touching global and group volumes</summary>
         public static void FadeSourcesTo(float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeSourcesTo(to, duration, ignoreTimeScale, false, onComplete); }
-        static void FadeSourcesTo(float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
+        { FadeSourcesTo(to, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
+        static void FadeSourcesTo(float to, float duration, bool ignoreTimeScale, FadeBehaviour onCompleteBehaviour, TweenCallback onComplete)
         {
             int len = audioGroups.Length;
-            for (int i = 0; i < len; ++i) audioGroups[i].FadeSourcesTo(to, duration, ignoreTimeScale, stopOnComplete, onComplete);
+            for (int i = 0; i < len; ++i) audioGroups[i].FadeSourcesTo(to, duration, ignoreTimeScale, onCompleteBehaviour, onComplete);
         }
 
         /// <summary>Fades out the given group's volume</summary>
-        public static void FadeOut(DeAudioGroupId groupId, float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true, TweenCallback onComplete = null)
-        { FadeTo(groupId, 0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
+        public static void FadeOut(DeAudioGroupId groupId, float duration = 1.5f, bool ignoreTimeScale = true, FadeBehaviour onCompleteBehaviour = FadeBehaviour.Stop, TweenCallback onComplete = null)
+        { FadeTo(groupId, 0, duration, ignoreTimeScale, onCompleteBehaviour, onComplete); }
         /// <summary>Fades in the given group's volume</summary>
         public static void FadeIn(DeAudioGroupId groupId, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeTo(groupId, 1, duration, ignoreTimeScale, false, onComplete); }
+        { FadeTo(groupId, 1, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
         /// <summary>Fades the given group's volume to the given value</summary>
         public static void FadeTo(DeAudioGroupId groupId, float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeTo(groupId, to, duration, ignoreTimeScale, false, onComplete); }
-        static void FadeTo(DeAudioGroupId groupId, float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
+        { FadeTo(groupId, to, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
+        static void FadeTo(DeAudioGroupId groupId, float to, float duration, bool ignoreTimeScale, FadeBehaviour onCompleteBehaviour, TweenCallback onComplete)
         {
             DeAudioGroup group = GetAudioGroup(groupId);
-            if (group != null) group.FadeTo(to, duration, ignoreTimeScale, stopOnComplete, onComplete);
+            if (group != null) group.FadeTo(to, duration, ignoreTimeScale, onCompleteBehaviour, onComplete);
         }
         /// <summary>Fades out the volume of each source in the given group (not the given group's volume)</summary>
-        public static void FadeSourcesOut(DeAudioGroupId groupId, float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true, TweenCallback onComplete = null)
-        { FadeSourcesTo(groupId, 0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
+        public static void FadeSourcesOut(DeAudioGroupId groupId, float duration = 1.5f, bool ignoreTimeScale = true, FadeBehaviour onCompleteBehaviour = FadeBehaviour.Stop, TweenCallback onComplete = null)
+        { FadeSourcesTo(groupId, 0, duration, ignoreTimeScale, onCompleteBehaviour, onComplete); }
         /// <summary>Fades in the volume of each source in the given group (not the given group's volume)</summary>
         public static void FadeSourcesIn(DeAudioGroupId groupId, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeSourcesTo(groupId, 1, duration, ignoreTimeScale, false, onComplete); }
+        { FadeSourcesTo(groupId, 1, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
         /// <summary>Fades the volume of each source in the given group (not the given group's volume) to the given value</summary>
         public static void FadeSourcesTo(DeAudioGroupId groupId, float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeSourcesTo(groupId, to, duration, ignoreTimeScale, false, onComplete); }
-        static void FadeSourcesTo(DeAudioGroupId groupId, float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
+        { FadeSourcesTo(groupId, to, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
+        static void FadeSourcesTo(DeAudioGroupId groupId, float to, float duration, bool ignoreTimeScale, FadeBehaviour onCompleteBehaviour, TweenCallback onComplete)
         {
             DeAudioGroup group = GetAudioGroup(groupId);
-            if (group != null) group.FadeSourcesTo(to, duration, ignoreTimeScale, stopOnComplete, onComplete);
+            if (group != null) group.FadeSourcesTo(to, duration, ignoreTimeScale, onCompleteBehaviour, onComplete);
         }
 
         /// <summary>Fades out the given clip's volume</summary>
-        public static void FadeOut(AudioClip clip, float duration = 1.5f, bool ignoreTimeScale = true, bool stopOnComplete = true, TweenCallback onComplete = null)
-        { FadeTo(clip, 0, duration, ignoreTimeScale, stopOnComplete, onComplete); }
+        public static void FadeOut(AudioClip clip, float duration = 1.5f, bool ignoreTimeScale = true, FadeBehaviour onCompleteBehaviour = FadeBehaviour.Stop, TweenCallback onComplete = null)
+        { FadeTo(clip, 0, duration, ignoreTimeScale, onCompleteBehaviour, onComplete); }
         /// <summary>Starts playing the given clip with a fade-in volume effect</summary>
         public static void FadeIn(DeAudioGroupId groupId, AudioClip clip, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
         { Play(groupId, clip, 0).FadeTo(1, duration, ignoreTimeScale, onComplete); }
@@ -362,11 +383,11 @@ namespace DG.DeAudio
         { Play(clip, 0).FadeTo(1, duration, ignoreTimeScale, onComplete); }
         /// <summary>Starts playing the given <see cref="DeAudioClipData"/> with a fade-in volume effect</summary>
         public static void FadeIn(DeAudioClipData clipData, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { Play(clipData.groupId, clipData.clip, 0, clipData.pitch, clipData.loop).FadeTo(clipData.volume, duration, ignoreTimeScale, false, onComplete); }
+        { Play(clipData.groupId, clipData.clip, 0, clipData.pitch, clipData.loop).FadeTo(clipData.volume, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
         /// <summary>Fades the given clip's volume to the given value</summary>
         public static void FadeTo(AudioClip clip, float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { FadeTo(clip, to, duration, ignoreTimeScale, false, onComplete); }
-        static void FadeTo(AudioClip clip, float to, float duration, bool ignoreTimeScale, bool stopOnComplete, TweenCallback onComplete)
+        { FadeTo(clip, to, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
+        static void FadeTo(AudioClip clip, float to, float duration, bool ignoreTimeScale, FadeBehaviour onCompleteBehaviour, TweenCallback onComplete)
         {
             int len = audioGroups.Length;
             for (int i = 0; i < len; ++i) {
@@ -374,7 +395,7 @@ namespace DG.DeAudio
                 int slen = group.sources.Count;
                 for (int c = 0; c < slen; c++) {
                     DeAudioSource s = group.sources[c];
-                    if (s.clip == clip) s.FadeTo(to, duration, ignoreTimeScale, stopOnComplete, onComplete);
+                    if (s.clip == clip) s.FadeTo(to, duration, ignoreTimeScale, onCompleteBehaviour, onComplete);
                 }
             }
         }
@@ -384,20 +405,20 @@ namespace DG.DeAudio
         /// while starting the given <see cref="DeAudioClipData"/> with a fade-in effect.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
-        public static DeAudioSource Crossfade(DeAudioClipData clipData, float fadeDuration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { return Crossfade(clipData.groupId, clipData.clip, clipData.volume, clipData.pitch, clipData.loop, fadeDuration, ignoreTimeScale, onComplete); }
+        public static DeAudioSource Crossfade(DeAudioClipData clipData, float fadeDuration = 1.5f, bool ignoreTimeScale = true, FadeBehaviour onfadeOutBehaviour = FadeBehaviour.Stop, TweenCallback onComplete = null)
+        { return Crossfade(clipData.groupId, clipData.clip, clipData.volume, clipData.pitch, clipData.loop, fadeDuration, ignoreTimeScale, onfadeOutBehaviour, onComplete); }
         /// <summary>
         /// Fades out then stops all sources in the given group, while starting the given clip with a fade-in effect.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
-        public static DeAudioSource Crossfade(DeAudioGroupId groupId, AudioClip clip, float volume = 1, float pitch = 1, bool loop = false, float fadeDuration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
+        public static DeAudioSource Crossfade(DeAudioGroupId groupId, AudioClip clip, float volume = 1, float pitch = 1, bool loop = false, float fadeDuration = 1.5f, bool ignoreTimeScale = true, FadeBehaviour onfadeOutBehaviour = FadeBehaviour.Stop, TweenCallback onComplete = null)
         {
             DeAudioGroup group = GetAudioGroup(groupId);
             if (group == null) {
                 Debug.LogWarning(LogPrefix + "Crossfade can't happend and clip can't be played because no group with the given groupId (" + groupId + ") was created");
                 return null;
             }
-            return group.Crossfade(clip, volume, pitch, loop, fadeDuration, ignoreTimeScale, onComplete);
+            return group.Crossfade(clip, volume, pitch, loop, fadeDuration, ignoreTimeScale, onfadeOutBehaviour, onComplete);
         }
 
         #endregion

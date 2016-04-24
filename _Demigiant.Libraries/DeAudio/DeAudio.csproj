@@ -59,6 +59,7 @@
     <Compile Include="DeAudioNotificator.cs" />
     <Compile Include="DeAudioSource.cs" />
     <Compile Include="Events\DeAudioEventArgs.cs" />
+    <Compile Include="FadeBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
