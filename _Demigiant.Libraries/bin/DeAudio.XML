@@ -84,11 +84,13 @@
         <member name="M:DG.DeAudio.DeAudioGroup.Pause(UnityEngine.AudioClip)">
             <summary>Pauses all sources for this group that are using the given clip</summary>
         </member>
-        <member name="M:DG.DeAudio.DeAudioGroup.Resume">
+        <member name="M:DG.DeAudio.DeAudioGroup.Resume(System.Single)">
             <summary>Resumes all paused sounds for this group</summary>
+            <param name="volume">If >=0 also sets the group volume, otherwise leaves as it was</param>
         </member>
-        <member name="M:DG.DeAudio.DeAudioGroup.Resume(UnityEngine.AudioClip)">
+        <member name="M:DG.DeAudio.DeAudioGroup.Resume(UnityEngine.AudioClip,System.Single)">
             <summary>Resumes all paused sources for this group that are using the given clip</summary>
+            <param name="volume">If >=0 also sets the volume for the sources resuming the clip, otherwise leaves as it was</param>
         </member>
         <member name="M:DG.DeAudio.DeAudioGroup.ChangePitch(System.Single)">
             <summary>Changes the pitch for all existing sources of this group</summary>
@@ -236,11 +238,15 @@
         <member name="M:DG.DeAudio.DeAudioManager.Resume">
             <summary>Resumes all paused sounds</summary>
         </member>
-        <member name="M:DG.DeAudio.DeAudioManager.Resume(DG.DeAudio.DeAudioGroupId)">
+        <member name="M:DG.DeAudio.DeAudioManager.Resume(DG.DeAudio.DeAudioGroupId,System.Single)">
             <summary>Resumes all paused sounds for the given group</summary>
+            <param name="groupId">Group ID</param>
+            <param name="volume">If >=0 also sets the group volume, otherwise leaves as it was</param>
         </member>
-        <member name="M:DG.DeAudio.DeAudioManager.Resume(UnityEngine.AudioClip)">
+        <member name="M:DG.DeAudio.DeAudioManager.Resume(UnityEngine.AudioClip,System.Single)">
             <summary>Resumes all paused sounds for the given clip</summary>
+            <param name="clip">Clip</param>
+            <param name="volume">If >= 0 also sets the volume for the sources resuming the given clip, otherwise leaves as it was</param>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.ChangePitch(DG.DeAudio.DeAudioGroupId,System.Single)">
             <summary>Changes the pitch for the given group's existing sources</summary>

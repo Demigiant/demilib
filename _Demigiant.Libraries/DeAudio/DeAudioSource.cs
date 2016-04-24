@@ -20,7 +20,7 @@ namespace DG.DeAudio
         public DeAudioGroup audioGroup { get; private set; }
         public AudioSource audioSource { get; private set; }
         /// <summary>TRUE if the audioSource is not playing and is not locked</summary>
-        public bool isFree { get { return !locked && !audioSource.isPlaying; } }
+        public bool isFree { get { return !locked && !audioSource.isPlaying && !isPaused; } }
         public bool isPlaying { get { return audioSource.isPlaying; } }
         /// <summary>TRUE if the clip was playing and has been paused - FALSE if it was/is stopped</summary>
         public bool isPaused { get; private set; }

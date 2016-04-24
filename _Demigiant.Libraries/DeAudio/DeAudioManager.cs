@@ -229,14 +229,18 @@ namespace DG.DeAudio
         public static void Resume()
         { IterateOnAllGroups(OperationType.Resume); }
         /// <summary>Resumes all paused sounds for the given group</summary>
-        public static void Resume(DeAudioGroupId groupId)
+        /// <param name="groupId">Group ID</param>
+        /// <param name="volume">If >=0 also sets the group volume, otherwise leaves as it was</param>
+        public static void Resume(DeAudioGroupId groupId, float volume = -1)
         {
             DeAudioGroup group = GetAudioGroup(groupId);
-            if (group != null) group.Resume();
+            if (group != null) group.Resume(volume);
         }
         /// <summary>Resumes all paused sounds for the given clip</summary>
-        public static void Resume(AudioClip clip)
-        { IterateOnAllGroups(OperationType.ResumeByClip, clip); }
+        /// <param name="clip">Clip</param>
+        /// <param name="volume">If >= 0 also sets the volume for the sources resuming the given clip, otherwise leaves as it was</param>
+        public static void Resume(AudioClip clip, float volume = -1)
+        { IterateOnAllGroups(OperationType.ResumeByClip, clip, volume); }
 
         /// <summary>Changes the pitch for the given group's existing sources</summary>
         public static void ChangePitch(DeAudioGroupId groupId, float pitch)
@@ -467,7 +471,7 @@ namespace DG.DeAudio
                     group.Resume();
                     break;
                 case OperationType.ResumeByClip:
-                    group.Resume(clip);
+                    group.Resume(clip, floatValue);
                     break;
                 case OperationType.SetVolumeByClip:
                     group.SetVolume(clip, floatValue);
