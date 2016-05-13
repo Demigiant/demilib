@@ -8,5 +8,7 @@ namespace DG.DemiEditor
     {
         RichText,
         WordWrap,
+        NoRichText,
+        NoWordWrap
     }
 }

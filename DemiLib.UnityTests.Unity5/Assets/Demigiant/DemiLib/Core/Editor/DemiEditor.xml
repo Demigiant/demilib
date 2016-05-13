@@ -135,6 +135,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorUtils.ClearConsole">
+            <summary>
+            Clears all logs from Unity's console
+            </summary>
+        </member>
         <member name="F:DG.DemiEditor.DeDragResultType.NoDrag">
             <summary>Nothing is being dragged</summary>
         </member>

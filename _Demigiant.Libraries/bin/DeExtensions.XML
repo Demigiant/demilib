@@ -32,6 +32,13 @@
             Adds a key/value pair to the dictionary and returns its value
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.NumberExtensions.IsWithinRange(System.Int32,System.Int32,System.Int32,System.Boolean)">
+            <summary>Returns TRUE if the int is within the given range.</summary>
+            <param name="min">Min</param>
+            <param name="max">Max</param>
+            <param name="inclusive">If TRUE min/max range values will be valid, otherwise not</param>
+            <returns></returns>
+        </member>
         <member name="M:DG.DeExtensions.StringExtensions.IsNullOrEmpty(System.String,System.Boolean)">
             <summary>
             Returns TRUE if the string is null or empty

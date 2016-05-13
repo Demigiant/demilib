@@ -47,8 +47,14 @@ namespace DG.DemiEditor
                     case Format.RichText:
                         style.richText = true;
                         break;
+                    case Format.NoRichText:
+                        style.richText = false;
+                        break;
                     case Format.WordWrap:
                         style.wordWrap = true;
+                        break;
+                    case Format.NoWordWrap:
+                        style.wordWrap = false;
                         break;
                     }
                 } else if (t == typeof(FontStyle)) {

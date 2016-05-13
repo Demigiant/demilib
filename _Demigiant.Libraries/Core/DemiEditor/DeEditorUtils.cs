@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace DG.DemiEditor
     public static class DeEditorUtils
     {
         static readonly List<DelayedCall> _DelayedCalls = new List<DelayedCall>();
+        static MethodInfo _clearConsoleMI;
 
         /// <summary>Calls the given action after the given delay</summary>
         public static DelayedCall DelayedCall(float delay, Action callback)
@@ -42,6 +44,19 @@ namespace DG.DemiEditor
         public static Vector2 GetGameViewSize()
         {
             return Handles.GetMainGameViewSize();
+        }
+
+        /// <summary>
+        /// Clears all logs from Unity's console
+        /// </summary>
+        public static void ClearConsole()
+        {
+            if (_clearConsoleMI == null) {
+                Type logEntries = Type.GetType("UnityEditorInternal.LogEntries,UnityEditor.dll");
+                if (logEntries != null) _clearConsoleMI = logEntries.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public);
+                if (_clearConsoleMI == null) return;
+            }
+            _clearConsoleMI.Invoke(null,null);
         }
     }
 
