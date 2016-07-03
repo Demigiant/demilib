@@ -2,6 +2,8 @@
 // Created: 2016/02/13 11:17
 // License Copyright (c) Daniele Giardini
 
+using System;
+using System.Reflection;
 using UnityEngine;
 
 namespace DG.De2D
@@ -10,6 +12,7 @@ namespace DG.De2D
     /// Sets up the 2D orthographic camera it's attached to
     /// </summary>
     [RequireComponent(typeof(Camera))]
+    [ExecuteInEditMode]
     public class De2DCamera : MonoBehaviour
     {
         public enum OrthoMode
@@ -18,17 +21,23 @@ namespace DG.De2D
             FixedWidth
         }
 
-        public int targetSize = 960; // Target width or height, depending on CameraMode
+        public int targetWidth = 960;
+        public int targetHeight = 960;
         public int ppu = 100; // Pixels per unit
         public OrthoMode orthoMode = OrthoMode.FixedHeight;
-        // Editor-only
-        public bool editorAutoRefresh = true; // If TRUE, refreshes the ortho-size automatically while in editor mode
 
         Camera _thisCam;
 
         #region Unity Methods
 
         void Start()
+        {
+            Adapt();
+            if (Application.isPlaying) this.enabled = false;
+        }
+
+        // Here to be executed in edit mode and then disabled at runtime
+        void Update() // EDIT MODE only
         {
             Adapt();
         }
@@ -39,11 +48,16 @@ namespace DG.De2D
 
         public void Adapt()
         {
+            if (targetWidth <= 0 || targetHeight <= 0 || ppu <= 0) {
+                Debug.LogWarning("De2DCamera ::: Values can't be 0 or less", this);
+                return;
+            }
+
             // Store the cam
             if (_thisCam == null) {
                 _thisCam = this.GetComponent<Camera>();
                 if (_thisCam == null) {
-                    Debug.LogWarning(string.Format("De2DCamera ::: No Camera found on \"{0}\"", this.name));
+                    Debug.LogWarning(string.Format("De2DCamera ::: No Camera found on \"{0}\"", this.name), this);
                     return;
                 }
             }
@@ -51,15 +65,15 @@ namespace DG.De2D
             // Assign ortho value
             if (!_thisCam.orthographic) {
                 _thisCam.orthographic = true;
-                Debug.Log(string.Format("De2DCamera ::: Setting \"{0}\" camera to orthographic", this.name));
+                Debug.Log(string.Format("De2DCamera ::: Setting \"{0}\" camera to orthographic", this.name), this);
             }
-            _thisCam.orthographicSize = (targetSize / (float)ppu) * 0.5f;
+            _thisCam.orthographicSize = ((orthoMode == OrthoMode.FixedWidth ? targetWidth : targetHeight) / (float)ppu) * 0.5f;
             if (orthoMode == OrthoMode.FixedWidth) {
                 float ratio = (float)Screen.height / Screen.width;
                 _thisCam.orthographicSize *= ratio;
             }
         }
 
-        #endregion
+#endregion
     }
 }

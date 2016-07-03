@@ -1,6 +1,7 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/04/26 13:32
 
+using System.Collections.Generic;
 using DG.DeAudio;
 using DG.DemiLib;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class DeSampler : MonoBehaviour
     public bool useCustomPalette = true;
     public CustomColorPalette palette = new CustomColorPalette();
     
+    public List<string> strList = new List<string>() {"A", "B", "C"};
     public bool[] toggles = new bool[3];
     public bool foldoutOpen;
 

@@ -4,6 +4,13 @@
         <name>De2D</name>
     </assembly>
     <members>
+        <member name="T:DG.De2D.De2DAutosorter">
+            <summary>
+            Automatically sorts all its SpriteRenderer children based on their position in the Hierarchy
+            (like UI: top is behind, bottom is frontal).
+            Only applies sorting in the editor
+            </summary>
+        </member>
         <member name="T:DG.De2D.De2DCamera">
             <summary>
             Sets up the 2D orthographic camera it's attached to

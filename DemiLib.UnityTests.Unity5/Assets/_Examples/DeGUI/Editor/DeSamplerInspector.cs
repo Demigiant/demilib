@@ -1,6 +1,7 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/04/26 13:29
 
+using DG.DeAudio;
 using DG.DeAudioEditor;
 using DG.DemiLib;
 using UnityEditor;
@@ -21,7 +22,7 @@ public class DeSamplerInspector : Editor
     DrawMode _drawMode;
     DeColorPalette _toolbarButtonsColors;
     float _vSpace = 8;
-    DeAudioGUIMode _deAudioGUIMode = DeAudioGUIMode.Full;
+    DeAudioClipGUIMode _deAudioGUIMode = DeAudioClipGUIMode.Full;
     bool _allowDeAudioGroupIdChange = true;
 
     // ===================================================================================
@@ -99,6 +100,17 @@ public class DeSamplerInspector : Editor
             if (DeGUILayout.ColoredButton(DeGUI.colors.bg.critical, DeGUI.colors.content.critical, "X", DeGUI.styles.button.toolIco.Clone(FontStyle.Bold))) Debug.Log("x pressed");
         }
         GUILayout.Space(_vSpace);
+
+        // Draggable list
+
+        for (int i = 0; i < _src.strList.Count; ++i) {
+            DeGUILayout.BeginToolbar();
+            if (DeGUILayout.PressButton("Drag me " + _src.strList[i], DeGUI.styles.button.tool)) {
+                DeGUIDrag.StartDrag(10, this, _src.strList, i);
+            }
+            DeGUILayout.EndToolbar();
+            if (DeGUIDrag.Drag(10, _src.strList, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
+        }
 
         // Container
 
@@ -187,7 +199,7 @@ public class DeSamplerInspector : Editor
 
         // DeAudio
 
-        _deAudioGUIMode = (DeAudioGUIMode)EditorGUILayout.EnumPopup("DeAudioGUIMode", _deAudioGUIMode);
+        _deAudioGUIMode = (DeAudioClipGUIMode)EditorGUILayout.EnumPopup("DeAudioGUIMode", _deAudioGUIMode);
         _allowDeAudioGroupIdChange = EditorGUILayout.Toggle("Allow Group Change", _allowDeAudioGroupIdChange);
         _src.deAudioClip = DeAudioGUILayout.DeAudioClip("Some Clip", _src.deAudioClip, _allowDeAudioGroupIdChange, _deAudioGUIMode);
     }
