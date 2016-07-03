@@ -23,6 +23,7 @@ namespace DG.De2D
     public class De2DAutosorter : MonoBehaviour
     {
         public SortMode sortMode = SortMode.OrderInLayer;
+        public int sortFrom = 0;
         public float zShift = 0.001f;
 
         MethodInfo _miSubscribe, _miUnsubscribe;

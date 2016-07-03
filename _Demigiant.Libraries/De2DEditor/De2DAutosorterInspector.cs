@@ -32,14 +32,19 @@ namespace DG.De2DEditor
             GUILayout.Space(4);
 
             _src.sortMode = (SortMode)EditorGUILayout.EnumPopup("Sort Mode", _src.sortMode);
-            if (_src.sortMode == SortMode.LocalZAxis) {
+            switch (_src.sortMode) {
+            case SortMode.OrderInLayer:
+                _src.sortFrom = EditorGUILayout.IntField("Starting Order", _src.sortFrom);
+                break;
+            case SortMode.LocalZAxis:
                 _src.zShift = EditorGUILayout.Slider("Z Shift", _src.zShift, 0.0001f, 3f);
+                break;
             }
-            EditorGUILayout.HelpBox(
-                "OrderInLayer: Top sprite will have 0 sorting order, the others will be decreased from top to bottom\nLocalZAxis: Top sprite will have 0 local Z depth, the others will be decreased from top to bottom"
-            , MessageType.Info);
 
-            if (GUI.changed) Reorder();
+            if (GUI.changed) {
+                if (_src.sortFrom < 0) _src.sortFrom = 0;
+                Reorder();
+            }
         }
 
         #endregion
@@ -67,14 +72,14 @@ namespace DG.De2DEditor
                 case SortMode.OrderInLayer:
                     for (int i = 0; i < srs.Length; ++i) {
                         SpriteRenderer sr = srs[i];
-                        sr.sortingOrder = i;
+                        sr.sortingOrder = de2DAutosorter.sortFrom + i;
                         SetLocalZ(sr.transform, 0);
                     }
                     break;
                 case SortMode.LocalZAxis:
                     for (int i = 0; i < srs.Length; ++i) {
                         SpriteRenderer sr = srs[i];
-                        sr.sortingOrder = 0;
+                        sr.sortingOrder = de2DAutosorter.sortFrom;
                         SetLocalZ(sr.transform, -i * de2DAutosorter.zShift);
                     }
                     break;
