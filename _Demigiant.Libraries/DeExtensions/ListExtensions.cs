@@ -2,7 +2,7 @@
 // Created: 2015/12/16 20:26
 // License Copyright (c) Daniele Giardini
 
-using System.Collections;
+using System;
 using System.Collections.Generic;
 
 namespace DG.DeExtensions
@@ -12,6 +12,8 @@ namespace DG.DeExtensions
     /// </summary>
     public static class ListExtensions
     {
+        static Random _rng;
+
         #region IList
 
         /// <summary>
@@ -31,6 +33,22 @@ namespace DG.DeExtensions
                 index++;
                 list[index - 1] = list[index];
                 list[index] = shifted;
+            }
+        }
+
+        /// <summary>
+        /// Shuffles the list
+        /// </summary>
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            if (_rng == null) _rng = new Random();
+            int len = list.Count;
+            while (len > 1) {
+                len--;
+                int k = _rng.Next(len + 1);
+                T value = list[k];
+                list[k] = list[len];
+                list[len] = value;
             }
         }
 

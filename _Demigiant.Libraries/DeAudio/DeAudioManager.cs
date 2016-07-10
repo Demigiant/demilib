@@ -30,7 +30,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "0.6.110";
+        public const string Version = "0.6.120";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it

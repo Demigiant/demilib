@@ -27,6 +27,11 @@
             Shifts an item from an index to another, without modifying the list except than by moving elements around
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.ListExtensions.Shuffle``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            Shuffles the list
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.ListExtensions.AddAndReturnValue``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1)">
             <summary>
             Adds a key/value pair to the dictionary and returns its value

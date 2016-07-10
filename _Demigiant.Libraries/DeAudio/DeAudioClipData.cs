@@ -35,5 +35,33 @@ namespace DG.DeAudio
             pitch = 1;
             loop = false;
         }
+
+        #region Public Methods
+
+        /// <summary>
+        /// Plays this DeAudioClipData
+        /// </summary>
+        public DeAudioSource Play()
+        {
+            return DeAudioManager.Play(this);
+        }
+
+        /// <summary>
+        /// Stops all sounds using this DeAudioClipData clip
+        /// </summary>
+        public void Stop()
+        {
+            DeAudioManager.Stop(this.clip);
+        }
+
+        /// <summary>
+        /// Pauses all sounds using this DeAudioClipData clip
+        /// </summary>
+        public void Pause()
+        {
+            DeAudioManager.Pause(this.clip);
+        }
+
+        #endregion
     }
 }

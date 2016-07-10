@@ -4,6 +4,21 @@
         <name>DeAudio</name>
     </assembly>
     <members>
+        <member name="M:DG.DeAudio.DeAudioClipData.Play">
+            <summary>
+            Plays this DeAudioClipData
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioClipData.Stop">
+            <summary>
+            Stops all sounds using this DeAudioClipData clip
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioClipData.Pause">
+            <summary>
+            Pauses all sounds using this DeAudioClipData clip
+            </summary>
+        </member>
         <member name="T:DG.DeAudio.DeAudioClipGUIMode">
             <summary>
             Display mode used when drawing <see cref="T:DG.DeAudio.DeAudioClipData"/> objects in a custom editor.
