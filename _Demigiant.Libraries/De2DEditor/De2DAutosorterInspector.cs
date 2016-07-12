@@ -32,6 +32,7 @@ namespace DG.De2DEditor
             GUILayout.Space(4);
 
             _src.sortMode = (SortMode)EditorGUILayout.EnumPopup("Sort Mode", _src.sortMode);
+            _src.ignoreEditorOnly = EditorGUILayout.Toggle("Ignore editorOnly", _src.ignoreEditorOnly);
             switch (_src.sortMode) {
             case SortMode.OrderInLayer:
                 _src.sortFrom = EditorGUILayout.IntField("Starting Order", _src.sortFrom);
@@ -68,19 +69,22 @@ namespace DG.De2DEditor
         {
             foreach (De2DAutosorter de2DAutosorter in _Subscribed) {
                 SpriteRenderer[] srs = de2DAutosorter.GetComponentsInChildren<SpriteRenderer>(true);
+                int sortIncrement = 0;
                 switch (de2DAutosorter.sortMode) {
                 case SortMode.OrderInLayer:
-                    for (int i = 0; i < srs.Length; ++i) {
-                        SpriteRenderer sr = srs[i];
-                        sr.sortingOrder = de2DAutosorter.sortFrom + i;
+                    foreach (SpriteRenderer sr in srs) {
+                        if (de2DAutosorter.ignoreEditorOnly && IsEditorOnly(sr.transform)) continue;
+                        sr.sortingOrder = de2DAutosorter.sortFrom + sortIncrement;
                         SetLocalZ(sr.transform, 0);
+                        sortIncrement++;
                     }
                     break;
                 case SortMode.LocalZAxis:
-                    for (int i = 0; i < srs.Length; ++i) {
-                        SpriteRenderer sr = srs[i];
+                    foreach (SpriteRenderer sr in srs) {
+                        if (de2DAutosorter.ignoreEditorOnly && IsEditorOnly(sr.transform)) continue;
                         sr.sortingOrder = de2DAutosorter.sortFrom;
-                        SetLocalZ(sr.transform, -i * de2DAutosorter.zShift);
+                        SetLocalZ(sr.transform, -sortIncrement * de2DAutosorter.zShift);
+                        sortIncrement++;
                     }
                     break;
                 }
@@ -99,6 +103,17 @@ namespace DG.De2DEditor
             Vector3 localP = t.localPosition;
             localP.z = value;
             t.localPosition = localP;
+        }
+
+        static bool IsEditorOnly(Transform t)
+        {
+            const string editorOnly = "EditorOnly";
+            if (t.tag == editorOnly) return true;
+            while (t.parent != null) {
+                t = t.parent;
+                if (t.tag == editorOnly) return true;
+            }
+            return false;
         }
     }
 }

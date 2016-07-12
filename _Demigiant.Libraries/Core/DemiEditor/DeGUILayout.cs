@@ -125,16 +125,23 @@ namespace DG.DemiEditor
         public static bool ToggleButton(bool toggled, GUIContent content, GUIStyle guiStyle, params GUILayoutOption[] options)
         { return ToggleButton(toggled, content, null, guiStyle, options); }
         /// <summary>Button that can be toggled on and off</summary>
-        /// <summary>Button that can be toggled on and off</summary>
         public static bool ToggleButton(bool toggled, GUIContent content, DeColorPalette colorPalette, GUIStyle guiStyle = null, params GUILayoutOption[] options)
         {
             DeColorPalette cp = colorPalette ?? DeGUI.colors;
+            return ToggleButton(toggled, content, cp.bg.toggleOn, cp.content.toggleOn, guiStyle, options);
+        }
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(bool toggled, string text, Color bgOnColor, Color contenOnColor, GUIStyle guiStyle = null, params GUILayoutOption[] options)
+        { return ToggleButton(toggled, new GUIContent(text, ""), bgOnColor, contenOnColor, guiStyle, options); }
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(bool toggled, GUIContent content, Color bgOnColor, Color contenOnColor, GUIStyle guiStyle = null, params GUILayoutOption[] options)
+        {
+            DeColorPalette cp = DeGUI.colors;
             Color prevBgColor = GUI.backgroundColor;
             Color prevContentColor = GUI.contentColor;
             Color prevColor = GUI.color;
-            GUI.backgroundColor = toggled ? cp.bg.toggleOn : cp.bg.toggleOff;
-            GUI.contentColor = toggled ? cp.content.toggleOn : cp.content.toggleOff;
-//            if (toggled) GUI.color = cp.content.toggleOn; // TODO see if this is really required
+            GUI.backgroundColor = toggled ? bgOnColor : (Color)cp.bg.toggleOff;
+            GUI.contentColor = toggled ? contenOnColor : (Color)cp.content.toggleOff;
             if (guiStyle == null) guiStyle = DeGUI.styles.button.def;
             bool clicked = GUILayout.Button(
                 content,
@@ -148,6 +155,27 @@ namespace DG.DemiEditor
             DeGUI.SetGUIColors(prevBgColor, prevContentColor, prevColor);
             return toggled;
         }
+//        public static bool ToggleButton(bool toggled, GUIContent content, DeColorPalette colorPalette, GUIStyle guiStyle = null, params GUILayoutOption[] options)
+//        {
+//            DeColorPalette cp = colorPalette ?? DeGUI.colors;
+//            Color prevBgColor = GUI.backgroundColor;
+//            Color prevContentColor = GUI.contentColor;
+//            Color prevColor = GUI.color;
+//            GUI.backgroundColor = toggled ? cp.bg.toggleOn : cp.bg.toggleOff;
+//            GUI.contentColor = toggled ? cp.content.toggleOn : cp.content.toggleOff;
+//            if (guiStyle == null) guiStyle = DeGUI.styles.button.def;
+//            bool clicked = GUILayout.Button(
+//                content,
+//                guiStyle,
+//                options
+//            );
+//            if (clicked) {
+//                toggled = !toggled;
+//                GUI.changed = true;
+//            }
+//            DeGUI.SetGUIColors(prevBgColor, prevContentColor, prevColor);
+//            return toggled;
+//        }
 
         #endregion
 
