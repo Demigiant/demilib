@@ -17,6 +17,18 @@
             </summary>
             <param name="go"></param>
         </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.IsChildOfComponent``1(UnityEngine.GameObject)">
+            <summary>Returns TRUE if the gameObject is a child of an object with the given Component</summary>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.HasOrIsChildOfComponent``1(UnityEngine.GameObject)">
+            <summary>Returns TRUE if the gameObject has or is a child of an object with the given Component</summary>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.IsChildOfTag(UnityEngine.GameObject,System.String)">
+            <summary>Returns TRUE if the gameObject is a child of the given tag</summary>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.HasOrIsChildOfTag(UnityEngine.GameObject,System.String)">
+            <summary>Returns TRUE if the gameObject has or is a child of the given tag</summary>
+        </member>
         <member name="T:DG.DeExtensions.ListExtensions">
             <summary>
             List, IList, Array and Dictionary utils

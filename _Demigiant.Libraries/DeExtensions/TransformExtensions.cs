@@ -8,6 +8,8 @@ namespace DG.DeExtensions
 {
     public static class TransformExtensions
     {
+        #region Position/Scale
+
         public static void SetX(this Transform t, float value)
         {
             Vector3 v = t.position;
@@ -68,5 +70,7 @@ namespace DG.DeExtensions
             v.z = value;
             t.localScale = v;
         }
+
+        #endregion
     }
 }

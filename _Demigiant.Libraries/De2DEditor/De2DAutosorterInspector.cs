@@ -32,7 +32,7 @@ namespace DG.De2DEditor
             GUILayout.Space(4);
 
             _src.sortMode = (SortMode)EditorGUILayout.EnumPopup("Sort Mode", _src.sortMode);
-            _src.ignoreEditorOnly = EditorGUILayout.Toggle("Ignore editorOnly", _src.ignoreEditorOnly);
+            _src.ignoreEditorOnly = EditorGUILayout.Toggle("Ignore EditorOnly", _src.ignoreEditorOnly);
             switch (_src.sortMode) {
             case SortMode.OrderInLayer:
                 _src.sortFrom = EditorGUILayout.IntField("Starting Order", _src.sortFrom);
