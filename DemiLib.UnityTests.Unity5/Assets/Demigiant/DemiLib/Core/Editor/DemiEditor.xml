@@ -54,6 +54,18 @@
             </summary>
             <param name="adbPath">Path, relative to Unity's project folder</param>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.ConvertToValidFilename(System.String)">
+            <summary>
+            Converts the given string to a valid filename and returns it.
+            Beware: doesn't check for reserved words
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.GUIDToExistingAssetPath(System.String)">
+            <summary>
+            Returns the asset path of the given GUID (relative to Unity project's folder),
+            or an empty string if either the GUID is invalid or the related path doesn't exist.
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorFileUtils.IsEmpty(System.String)">
             <summary>
             Checks if the given directory (full path) is empty or not
@@ -62,12 +74,6 @@
         <member name="M:DG.DemiEditor.DeEditorFileUtils.MakeEmpty(System.String)">
             <summary>
             Deletes all files and subdirectories from the given directory
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeEditorFileUtils.GUIDToExistingAssetPath(System.String)">
-            <summary>
-            Returns the asset path of the given GUID (relative to Unity project's folder),
-            or an empty string if either the GUID is invalid or the related path doesn't exist.
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeEditorFileUtils.MonoInstanceADBPath(UnityEngine.ScriptableObject)">

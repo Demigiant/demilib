@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -83,6 +84,30 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Converts the given string to a valid filename and returns it.
+        /// Beware: doesn't check for reserved words
+        /// </summary>
+        public static string ConvertToValidFilename(string text)
+        {
+            string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(Path.GetInvalidFileNameChars()) + ":");
+            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+            return Regex.Replace(text, invalidRegStr, "_");
+        }
+
+        /// <summary>
+        /// Returns the asset path of the given GUID (relative to Unity project's folder),
+        /// or an empty string if either the GUID is invalid or the related path doesn't exist.
+        /// </summary>
+        public static string GUIDToExistingAssetPath(string guid)
+        {
+            if (string.IsNullOrEmpty(guid)) return "";
+            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            if (string.IsNullOrEmpty(assetPath)) return "";
+            if (AssetExists(assetPath)) return assetPath;
+            return "";
+        }
+
+        /// <summary>
         /// Checks if the given directory (full path) is empty or not
         /// </summary>
         public static bool IsEmpty(string dir)
@@ -105,19 +130,6 @@ namespace DG.DemiEditor
             foreach (DirectoryInfo d in dInfo.GetDirectories()) {
                 AssetDatabase.DeleteAsset(FullPathToADBPath(d.ToString()));
             }
-        }
-
-        /// <summary>
-        /// Returns the asset path of the given GUID (relative to Unity project's folder),
-        /// or an empty string if either the GUID is invalid or the related path doesn't exist.
-        /// </summary>
-        public static string GUIDToExistingAssetPath(string guid)
-        {
-            if (string.IsNullOrEmpty(guid)) return "";
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            if (string.IsNullOrEmpty(assetPath)) return "";
-            if (AssetExists(assetPath)) return assetPath;
-            return "";
         }
 
         /// <summary>Returns the adb path to the given ScriptableObject</summary>
