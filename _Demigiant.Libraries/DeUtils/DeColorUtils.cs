@@ -31,6 +31,15 @@ namespace DG.DeUtils
             return color.r.ToString("x2") + color.g.ToString("x2") + color.b.ToString("x2");
         }
 
+        /// <summary>
+        /// Returns a clone of the given Color with the alpha changed to the given value
+        /// </summary>
+        public static Color ChangeAlpha(Color color, float alpha)
+        {
+            color.a = alpha;
+            return color;
+        }
+
         #region Methods
 
         static int HexToInt(char hexVal)

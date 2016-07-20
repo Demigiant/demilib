@@ -15,6 +15,11 @@
             Returns a HEX version of the given Unity Color, without the initial #
             </summary>
         </member>
+        <member name="M:DG.DeUtils.DeColorUtils.ChangeAlpha(UnityEngine.Color,System.Single)">
+            <summary>
+            Returns a clone of the given Color with the alpha changed to the given value
+            </summary>
+        </member>
         <member name="M:DG.DeUtils.DeMathUtils.ClampAngle(System.Single,System.Single,System.Single)">
             <summary>
             Clamps an angle between the given values.

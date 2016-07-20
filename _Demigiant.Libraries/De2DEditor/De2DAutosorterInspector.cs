@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using DG.De2D;
 using UnityEditor;
 using UnityEngine;
@@ -90,12 +89,13 @@ namespace DG.De2DEditor
                 }
             }
 
-            // Repaint game view
+            // Repaint game view and Scene
             if (_gameView == null) {
                 Type type = Type.GetType("UnityEditor.GameView, UnityEditor");
                 _gameView = EditorWindow.GetWindow(type);
             }
             _gameView.Repaint();
+            SceneView.RepaintAll();
         }
 
         static void SetLocalZ(Transform t, float value)
