@@ -2,6 +2,8 @@
 // Created: 2015/11/09 12:36
 // License Copyright (c) Daniele Giardini
 
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,6 +14,8 @@ namespace DG.DemiEditor
     /// </summary>
     public static class DeEditorPanelUtils
     {
+        static Dictionary<EditorWindow, GUIContent> _winTitleContentByEditor;
+
         #region Public Methods
 
         /// <summary>
@@ -38,6 +42,33 @@ namespace DG.DemiEditor
             return source;
         }
 
+        /// <summary>
+        /// Sets the icon and title of an editor window. Works with older versions of Unity, where the titleContent property wasn't available.
+        /// </summary>
+        /// <param name="editor">Reference to the editor panel whose icon to set</param>
+        /// <param name="icon">Icon to apply</param>
+        /// <param name="title">Title. If NULL doesn't change it</param>
+        public static void SetWindowTitle(EditorWindow editor, Texture icon, string title = null)
+        {
+            GUIContent titleContent;
+            if (_winTitleContentByEditor == null) _winTitleContentByEditor = new Dictionary<EditorWindow, GUIContent>();
+            if (_winTitleContentByEditor.ContainsKey(editor)) {
+                titleContent = _winTitleContentByEditor[editor];
+                if (titleContent != null) {
+                    if (titleContent.image != icon) titleContent.image = icon;
+                    if (title != null && titleContent.text != title) titleContent.text = title;
+                    return;
+                }
+                _winTitleContentByEditor.Remove(editor);
+            }
+            titleContent = GetWinTitleContent(editor);
+            if (titleContent != null) {
+                if (titleContent.image != icon) titleContent.image = icon;
+                if (title != null && titleContent.text != title) titleContent.text = title;
+                _winTitleContentByEditor.Add(editor, titleContent);
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -55,6 +86,14 @@ namespace DG.DemiEditor
                 }
             }
             AssetDatabase.CreateAsset(data, adbFilePath);
+        }
+
+        static GUIContent GetWinTitleContent(EditorWindow editor)
+        {
+            const BindingFlags bFlags = BindingFlags.Instance | BindingFlags.NonPublic;
+            PropertyInfo p = typeof(EditorWindow).GetProperty("cachedTitleContent", bFlags);
+            if (p == null) return null;
+            return p.GetValue(editor, null) as GUIContent;
         }
 
         #endregion

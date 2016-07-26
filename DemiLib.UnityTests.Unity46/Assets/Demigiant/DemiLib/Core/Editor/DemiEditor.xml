@@ -121,6 +121,14 @@
             <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
             <param name="createFoldersIfMissing">If TRUE also creates the path folders if they don't exist</param>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorPanelUtils.SetWindowTitle(UnityEditor.EditorWindow,UnityEngine.Texture,System.String)">
+            <summary>
+            Sets the icon and title of an editor window. Works with older versions of Unity, where the titleContent property wasn't available.
+            </summary>
+            <param name="editor">Reference to the editor panel whose icon to set</param>
+            <param name="icon">Icon to apply</param>
+            <param name="title">Title. If NULL doesn't change it</param>
+        </member>
         <member name="T:DG.DemiEditor.DeEditorPrefabUtils">
             <summary>
             Prefab utilities
