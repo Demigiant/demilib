@@ -152,7 +152,7 @@ namespace DG.DemiEditor
 
         static Texture2D LoadSquareTexture(string name)
         {
-            Texture2D tex = AssetDatabase.LoadAssetAtPath(String.Format("Assets/{0}{1}.png", _adbImgsDir, name), typeof(Texture2D)) as Texture2D;
+            Texture2D tex = AssetDatabase.LoadAssetAtPath(String.Format("{0}{1}.png", _adbImgsDir, name), typeof(Texture2D)) as Texture2D;
             tex.SetGUIFormat(FilterMode.Point, 16);
             return tex;
         }

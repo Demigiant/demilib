@@ -25,7 +25,7 @@ namespace DG.DemiEditor
                 // Regular method failed (happens in case of folders that start with # and are inside Documents)
                 fullPath = Path.GetDirectoryName(assembly.Location);
             }
-            string adbPath = fullPath.Substring(Application.dataPath.Length + 1);
+            string adbPath = fullPath.Substring(Application.dataPath.Length - 6); // Was +1, but excluded Assets folder (which is instead part of ADB path)
             return adbPath.Replace(DeEditorFileUtils.ADBPathSlashToReplace, DeEditorFileUtils.ADBPathSlash);
         }
     }
