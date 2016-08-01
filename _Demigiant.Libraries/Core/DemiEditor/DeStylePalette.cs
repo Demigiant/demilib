@@ -17,11 +17,11 @@ namespace DG.DemiEditor
     /// </summary>
     public class DeStylePalette
     {
-        public readonly Box box = new Box();
-        public readonly Button button = new Button();
-        public readonly Label label = new Label();
-        public readonly Toolbar toolbar = new Toolbar();
-        public readonly Misc misc = new Misc();
+        public readonly BoxStyles box = new BoxStyles();
+        public readonly ButtonStyles button = new ButtonStyles();
+        public readonly LabelStyles label = new LabelStyles();
+        public readonly ToolbarStyles toolbar = new ToolbarStyles();
+        public readonly MiscStyles misc = new MiscStyles();
 
         protected bool initialized;
 
@@ -166,7 +166,7 @@ namespace DG.DemiEditor
         public abstract void Init();
     }
 
-    public class Box
+    public class BoxStyles
     {
         public GUIStyle def,
                         flat, flatAlpha10, flatAlpha25; // Flat with white background
@@ -183,7 +183,7 @@ namespace DG.DemiEditor
         }
     }
 
-    public class Button
+    public class ButtonStyles
     {
         public GUIStyle def,
                         tool, toolL, toolIco,
@@ -237,7 +237,7 @@ namespace DG.DemiEditor
         }
     }
 
-    public class Label
+    public class LabelStyles
     {
         public GUIStyle bold,
                         wordwrap, wordwrapRichtText,
@@ -254,7 +254,7 @@ namespace DG.DemiEditor
         }
     }
 
-    public class Toolbar
+    public class ToolbarStyles
     {
         public GUIStyle def,
                         large,
@@ -272,7 +272,7 @@ namespace DG.DemiEditor
         }
     }
 
-    public class Misc
+    public class MiscStyles
     {
         public GUIStyle line; // Flat line with no margin
 
