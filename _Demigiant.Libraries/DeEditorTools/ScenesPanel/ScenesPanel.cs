@@ -21,7 +21,7 @@ namespace DG.DeEditorTools.ScenesPanel
 
     class ScenesPanel : EditorWindow
     {
-        [MenuItem("Tools/Demigiant > DeEditorTools/" + _Title)]
+        [MenuItem("Tools/Demigiant/" + _Title)]
         static void ShowWindow() { GetWindow(typeof(ScenesPanel), false, _Title); }
 
         public const string Version = "1.1.000";
