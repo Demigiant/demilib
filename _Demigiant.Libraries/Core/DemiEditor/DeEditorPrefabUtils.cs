@@ -24,13 +24,17 @@ namespace DG.DemiEditor
 
         /// <summary>
         /// Completely removes any prefab connection from the given prefab instances.
+        /// <para>
         /// Based on RodGreen's method (http://forum.unity3d.com/threads/82883-Breaking-connection-from-gameObject-to-prefab-for-good.?p=726602&amp;viewfull=1#post726602)
+        /// </para>
         /// </summary>
         public static void BreakPrefabInstances(List<GameObject> prefabInstances)
         { foreach (GameObject instance in prefabInstances) BreakPrefabInstance(instance); }
         /// <summary>
         /// Completely removes any prefab connection from the given prefab instance.
+        /// <para>
         /// Based on RodGreen's method (http://forum.unity3d.com/threads/82883-Breaking-connection-from-gameObject-to-prefab-for-good.?p=726602&amp;viewfull=1#post726602)
+        /// </para>
         /// </summary>
         public static void BreakPrefabInstance(GameObject prefabInstance)
         {
