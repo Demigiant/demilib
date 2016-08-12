@@ -186,7 +186,7 @@ namespace DG.DemiEditor
     public class ButtonStyles
     {
         public GUIStyle def,
-                        tool, toolL, toolIco,
+                        tool, toolL, toolS, toolIco,
                         toolFoldoutClosed, toolFoldoutClosedWLabel, toolFoldoutClosedWStretchedLabel,
                         toolFoldoutOpen, toolFoldoutOpenWLabel, toolFoldoutOpenWStretchedLabel,
                         toolLFoldoutClosed, toolLFoldoutClosedWLabel, toolLFoldoutClosedWStretchedLabel,
@@ -197,6 +197,7 @@ namespace DG.DemiEditor
             def = new GUIStyle(GUI.skin.button);
             tool = new GUIStyle(EditorStyles.toolbarButton).ContentOffsetY(-1);
             toolL = new GUIStyle(EditorStyles.toolbarButton).Height(23).ContentOffsetY(0);
+            toolS = new GUIStyle(EditorStyles.toolbarButton).Height(12).ContentOffsetY(-1);
             toolIco = new GUIStyle(tool).StretchWidth(false).Width(22).ContentOffsetX(-1);
 //            toolFoldoutClosed = new GUIStyle(GUI.skin.button) {
 //                alignment = TextAnchor.UpperLeft,
@@ -241,7 +242,7 @@ namespace DG.DemiEditor
     {
         public GUIStyle bold,
                         wordwrap, wordwrapRichtText,
-                        toolbar, toolbarL, toolbarBox;
+                        toolbar, toolbarL, toolbarS, toolbarBox;
 
         internal void Init()
         {
@@ -250,6 +251,7 @@ namespace DG.DemiEditor
             wordwrapRichtText = wordwrap.Clone(Format.RichText);
             toolbar = new GUIStyle(GUI.skin.label).Add(9).ContentOffset(new Vector2(-2, 0));
             toolbarL = new GUIStyle(toolbar).ContentOffsetY(2);
+            toolbarS = new GUIStyle(toolbar).Add(8, FontStyle.Bold).ContentOffsetY(-3);
             toolbarBox = new GUIStyle(toolbar).ContentOffsetY(0);
         }
     }
@@ -257,7 +259,7 @@ namespace DG.DemiEditor
     public class ToolbarStyles
     {
         public GUIStyle def,
-                        large,
+                        large, small,
                         stickyTop,
                         box,
                         flat; // Flat with white background
@@ -266,6 +268,7 @@ namespace DG.DemiEditor
         {
             def = new GUIStyle(EditorStyles.toolbar).Height(18).StretchWidth();
             large = new GUIStyle(def).Height(23);
+            small = new GUIStyle(def).Height(12);
             stickyTop = new GUIStyle(def).MarginTop(0);
             box = new GUIStyle(GUI.skin.box).Height(20).StretchWidth().Padding(5, 6, 1, 0).Margin(0, 0, 0, 0);
             flat = new GUIStyle(GUI.skin.box).Height(18).StretchWidth().Padding(5, 6, 0, 0).Margin(0, 0, 0, 0).Background(DeStylePalette.whiteSquare);
