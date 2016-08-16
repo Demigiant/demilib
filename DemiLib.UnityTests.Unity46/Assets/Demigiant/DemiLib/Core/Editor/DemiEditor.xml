@@ -832,6 +832,14 @@
         <member name="M:DG.DemiEditor.DeGUI.FlatDivider(UnityEngine.Rect,System.Nullable{UnityEngine.Color})">
             <summary>Divider</summary>
         </member>
+        <member name="M:DG.DemiEditor.SerializedPropertyExtensions.CastTo``1(UnityEditor.SerializedProperty)">
+            <summary>
+            Returns the value of the given property (works like a cast to type).
+            <para>
+            Based on HiddenMonk's function (http://answers.unity3d.com/questions/627090/convert-serializedproperty-to-custom-class.html)
+            </para>
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.StringExtensions">
             <summary>
             String extensions

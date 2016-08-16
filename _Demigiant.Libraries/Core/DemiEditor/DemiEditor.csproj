@@ -64,6 +64,7 @@
     <Compile Include="DeStylePalette.cs" />
     <Compile Include="DeGUILayout.cs" />
     <Compile Include="DeGUI.cs" />
+    <Compile Include="Extensions %28no namespace%29\SerializedPropertyExtensions.cs" />
     <Compile Include="Extensions %28no namespace%29\StringExtensions.cs" />
     <Compile Include="Extensions %28no namespace%29\TextureExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
