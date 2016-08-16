@@ -59,14 +59,14 @@
     <Compile Include="DeGUIDrag.cs" />
     <Compile Include="DeSkinStyle.cs" />
     <Compile Include="DeEditorSoundUtils.cs" />
-    <Compile Include="Extensions %28no namespace%29\AssemblyExtensions.cs" />
-    <Compile Include="Extensions %28no namespace%29\GUIStyleExtensions.cs" />
+    <Compile Include="Extensions\AssemblyExtensions.cs" />
+    <Compile Include="Extensions\GUIStyleExtensions.cs" />
     <Compile Include="DeStylePalette.cs" />
     <Compile Include="DeGUILayout.cs" />
     <Compile Include="DeGUI.cs" />
-    <Compile Include="Extensions %28no namespace%29\SerializedPropertyExtensions.cs" />
-    <Compile Include="Extensions %28no namespace%29\StringExtensions.cs" />
-    <Compile Include="Extensions %28no namespace%29\TextureExtensions.cs" />
+    <Compile Include="Extensions\SerializedPropertyExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TextureExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Format.cs" />
   </ItemGroup>

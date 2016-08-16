@@ -836,8 +836,18 @@
             <summary>
             Returns the value of the given property (works like a cast to type).
             <para>
-            Based on HiddenMonk's function (http://answers.unity3d.com/questions/627090/convert-serializedproperty-to-custom-class.html)
+            Improved from HiddenMonk's functions (http://answers.unity3d.com/questions/627090/convert-serializedproperty-to-custom-class.html)
             </para>
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.SerializedPropertyExtensions.IsArrayElement(UnityEditor.SerializedProperty)">
+            <summary>
+            Returns TRUE if this property is inside an array
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.SerializedPropertyExtensions.GetIndexInArray(UnityEditor.SerializedProperty)">
+            <summary>
+            Returns -1 if the property is not inside an array, otherwise returns its index inside the array
             </summary>
         </member>
         <member name="T:DG.DemiEditor.StringExtensions">
