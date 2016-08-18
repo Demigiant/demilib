@@ -49,6 +49,16 @@
             Adds a key/value pair to the dictionary and returns its value
             </summary>
         </member>
+        <member name="T:DG.DeExtensions.MiscellaneousExtensions">
+            <summary>
+            Mainly used for structs extensions
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.MiscellaneousExtensions.SetAlpha(UnityEngine.Color,System.Single)">
+            <summary>
+            Changes the alpha of this color and returns it
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.NumberExtensions.IsWithinRange(System.Int32,System.Int32,System.Int32,System.Boolean)">
             <summary>Returns TRUE if the int is within the given range.</summary>
             <param name="min">Min</param>

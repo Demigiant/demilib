@@ -250,7 +250,7 @@ namespace DG.DemiEditor
             wordwrap = new GUIStyle(GUI.skin.label).Add(Format.WordWrap);
             wordwrapRichtText = wordwrap.Clone(Format.RichText);
             toolbar = new GUIStyle(GUI.skin.label).Add(9).ContentOffset(new Vector2(-2, 0));
-            toolbarL = new GUIStyle(toolbar).ContentOffsetY(2);
+            toolbarL = new GUIStyle(toolbar).ContentOffsetY(3);
             toolbarS = new GUIStyle(toolbar).Add(8, FontStyle.Bold).ContentOffsetY(-2);
             toolbarBox = new GUIStyle(toolbar).ContentOffsetY(0);
         }

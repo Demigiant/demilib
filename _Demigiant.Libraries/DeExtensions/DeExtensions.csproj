@@ -49,6 +49,7 @@
     <Compile Include="ComponentExtensions.cs" />
     <Compile Include="GameObjectExtensions.cs" />
     <Compile Include="ListExtensions.cs" />
+    <Compile Include="MiscellaneousExtensions.cs" />
     <Compile Include="NumberExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteExtensions.cs" />
