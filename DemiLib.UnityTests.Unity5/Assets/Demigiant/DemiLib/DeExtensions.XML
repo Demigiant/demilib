@@ -66,6 +66,31 @@
             <param name="inclusive">If TRUE min/max range values will be valid, otherwise not</param>
             <returns></returns>
         </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Add(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary>
+            Adds one rect into another, and returns the resulting a
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Resizes the given Rect so it fits proportionally within the given size limits
+            </summary>
+            <param name="r">Rect target</param>
+            <param name="w">Width to fit</param>
+            <param name="h">Height to fit</param>
+            <param name="shrinkOnly">If TRUE (default) only shrinks the rect if needed, if FALSE also enlarges it to fit</param>
+            <returns></returns>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Includes(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary>
+            Returns TRUE if the first rect fully includes the second one
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Modifies and returns the given Rect, with its values shifted according the the given parameters
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.StringExtensions.IsNullOrEmpty(System.String,System.Boolean)">
             <summary>
             Returns TRUE if the string is null or empty

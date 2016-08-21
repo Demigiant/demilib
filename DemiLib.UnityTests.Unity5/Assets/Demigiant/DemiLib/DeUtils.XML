@@ -28,7 +28,7 @@
         </member>
         <member name="T:DG.DeUtils.DeRectUtils">
             <summary>
-            Utils for structs (since they can't directly work with extension methods)
+            Utils for structs
             </summary>
         </member>
         <member name="M:DG.DeUtils.DeRectUtils.Add(UnityEngine.Rect,UnityEngine.Rect)">
