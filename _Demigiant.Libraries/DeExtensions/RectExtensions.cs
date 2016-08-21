@@ -50,9 +50,45 @@ namespace DG.DeExtensions
         /// <summary>
         /// Modifies and returns the given Rect, with its values shifted according the the given parameters
         /// </summary>
-        public static Rect Shift(this Rect rect, float x, float y, float width, float height)
+        public static Rect Shift(this Rect r, float x, float y, float width, float height)
         {
-            return new Rect(rect.x + x, rect.y + y, rect.width + width, rect.height + height);
+            return new Rect(r.x + x, r.y + y, r.width + width, r.height + height);
+        }
+
+        /// <summary>
+        /// Sets the x of this Rect and returns it
+        /// </summary>
+        public static Rect SetX(this Rect r, float value)
+        {
+            r.x = value;
+            return r;
+        }
+
+        /// <summary>
+        /// Sets the y of this Rect and returns it
+        /// </summary>
+        public static Rect SetY(this Rect r, float value)
+        {
+            r.y = value;
+            return r;
+        }
+
+        /// <summary>
+        /// Sets the height of this Rect and returns it
+        /// </summary>
+        public static Rect SetHeight(this Rect r, float value)
+        {
+            r.height = value;
+            return r;
+        }
+
+        /// <summary>
+        /// Sets the width of this Rect and returns it
+        /// </summary>
+        public static Rect SetWidth(this Rect r, float value)
+        {
+            r.width = value;
+            return r;
         }
     }
 }

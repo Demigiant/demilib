@@ -96,6 +96,26 @@
             Modifies and returns the given Rect, with its values shifted according the the given parameters
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetX(UnityEngine.Rect,System.Single)">
+            <summary>
+            Sets the x of this Rect and returns it
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetY(UnityEngine.Rect,System.Single)">
+            <summary>
+            Sets the y of this Rect and returns it
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetHeight(UnityEngine.Rect,System.Single)">
+            <summary>
+            Sets the height of this Rect and returns it
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetWidth(UnityEngine.Rect,System.Single)">
+            <summary>
+            Sets the width of this Rect and returns it
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.StringExtensions.IsNullOrEmpty(System.String,System.Boolean)">
             <summary>
             Returns TRUE if the string is null or empty

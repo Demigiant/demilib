@@ -21,7 +21,7 @@ namespace DG.DeExtensions
         /// </summary>
         public static string ToHex(this Color color)
         {
-            return color.r.ToString("x2") + color.g.ToString("x2") + color.b.ToString("x2");
+            return ToHex((Color32)color);
         }
 
         /// <summary>
