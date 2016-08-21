@@ -9,6 +9,11 @@
             Returns a HEX version of the given Unity Color, without the initial #
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.ColorExtensions.ToHex(UnityEngine.Color)">
+            <summary>
+            Returns a HEX version of the given Unity Color, without the initial #
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.ColorExtensions.SetAlpha(UnityEngine.Color,System.Single)">
             <summary>
             Changes the alpha of this color and returns it
