@@ -4,6 +4,7 @@
 
 // Based on code by mvi for the hex-to-color/color-to-hex conversion: http://wiki.unity3d.com/index.php?title=HexConverter
 
+using System;
 using UnityEngine;
 
 namespace DG.DeUtils
@@ -14,6 +15,7 @@ namespace DG.DeUtils
         /// Converts a HEX color to a Unity Color
         /// </summary>
         /// <param name="hex">The HEX color (either with or without the initial #)</param>
+        [Obsolete("DeRectUtils.HexToColor is deprecated, use the myColor.HexToColor extension instead (in the DeExtensions library).")]
         public static Color HexToColor(string hex)
         {
             if (hex[0] == '#') hex = hex.Substring(1);
@@ -26,6 +28,7 @@ namespace DG.DeUtils
         /// <summary>
         /// Returns a HEX version of the given Unity Color, without the initial #
         /// </summary>
+        [Obsolete("DeRectUtils.ColorToHex is deprecated, use the myColor.ColorToHex extension instead (in the DeExtensions library).")]
         public static string ColorToHex(Color32 color)
         {
             return color.r.ToString("x2") + color.g.ToString("x2") + color.b.ToString("x2");
@@ -34,6 +37,7 @@ namespace DG.DeUtils
         /// <summary>
         /// Returns a clone of the given Color with the alpha changed to the given value
         /// </summary>
+        [Obsolete("DeRectUtils.SetAlpha is deprecated, use the myColor.SetAlpha extension instead (in the DeExtensions library).")]
         public static Color ChangeAlpha(Color color, float alpha)
         {
             color.a = alpha;
