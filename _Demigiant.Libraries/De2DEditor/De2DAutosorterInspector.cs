@@ -67,22 +67,22 @@ namespace DG.De2DEditor
         static void Reorder()
         {
             foreach (De2DAutosorter de2DAutosorter in _Subscribed) {
-                SpriteRenderer[] srs = de2DAutosorter.GetComponentsInChildren<SpriteRenderer>(true);
+                Renderer[] rs = de2DAutosorter.GetComponentsInChildren<Renderer>(true);
                 int sortIncrement = 0;
                 switch (de2DAutosorter.sortMode) {
                 case SortMode.OrderInLayer:
-                    foreach (SpriteRenderer sr in srs) {
-                        if (de2DAutosorter.ignoreEditorOnly && IsEditorOnly(sr.transform)) continue;
-                        sr.sortingOrder = de2DAutosorter.sortFrom + sortIncrement;
-                        SetLocalZ(sr.transform, 0);
+                    foreach (Renderer r in rs) {
+                        if (de2DAutosorter.ignoreEditorOnly && IsEditorOnly(r.transform)) continue;
+                        r.sortingOrder = de2DAutosorter.sortFrom + sortIncrement;
+                        SetLocalZ(r.transform, 0);
                         sortIncrement++;
                     }
                     break;
                 case SortMode.LocalZAxis:
-                    foreach (SpriteRenderer sr in srs) {
-                        if (de2DAutosorter.ignoreEditorOnly && IsEditorOnly(sr.transform)) continue;
-                        sr.sortingOrder = de2DAutosorter.sortFrom;
-                        SetLocalZ(sr.transform, -sortIncrement * de2DAutosorter.zShift);
+                    foreach (Renderer r in rs) {
+                        if (de2DAutosorter.ignoreEditorOnly && IsEditorOnly(r.transform)) continue;
+                        r.sortingOrder = de2DAutosorter.sortFrom;
+                        SetLocalZ(r.transform, -sortIncrement * de2DAutosorter.zShift);
                         sortIncrement++;
                     }
                     break;
