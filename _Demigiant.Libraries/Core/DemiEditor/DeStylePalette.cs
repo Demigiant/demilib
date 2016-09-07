@@ -197,7 +197,7 @@ namespace DG.DemiEditor
             def = new GUIStyle(GUI.skin.button);
             tool = new GUIStyle(EditorStyles.toolbarButton).ContentOffsetY(-1);
             toolL = new GUIStyle(EditorStyles.toolbarButton).Height(23).ContentOffsetY(0);
-            toolS = new GUIStyle(EditorStyles.toolbarButton).Height(13).ContentOffsetY(0);
+            toolS = new GUIStyle(EditorStyles.toolbarButton).Height(13).ContentOffsetY(0).Padding(0);
             toolIco = new GUIStyle(tool).StretchWidth(false).Width(22).ContentOffsetX(-1);
 //            toolFoldoutClosed = new GUIStyle(GUI.skin.button) {
 //                alignment = TextAnchor.UpperLeft,
