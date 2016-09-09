@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
@@ -24,9 +25,21 @@ namespace DG.DemiEditor
         {
             object obj = property.serializedObject.targetObject;
             string[] paths = property.propertyPath.Split('.');
-            foreach (string part in paths) {
+            int len = paths.Length;
+            for (int i = 0; i < len; i++) {
+                string part = paths[i];
                 if (part == "Array") {
                     // Array or list
+                    if (i < len - 2) {
+                        // Mid element array, store obj and continue
+                        string strIndex = paths[i + 1];
+                        strIndex = strIndex.Substring(strIndex.IndexOf("[") + 1);
+                        strIndex = strIndex.Substring(0, strIndex.Length - 1);
+                        obj = ((IList)obj)[Convert.ToInt32(strIndex)];
+                        i++;
+                        continue;
+                    }
+                    // Final obj is list element, find and return it
                     int index = property.GetIndexInArray(); // Can be out of range in case the element had just been created
                     IList<T> iList = (IList<T>)obj;
                     return iList.Count - 1 < index ? default(T) : iList[index];
