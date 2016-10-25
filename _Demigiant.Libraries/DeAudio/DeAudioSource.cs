@@ -26,7 +26,7 @@ namespace DG.DeAudio
         public bool isPaused { get; private set; }
         public AudioClip clip { get { return audioSource.clip; } }
         public float pitch { get { return audioSource.pitch; } set { audioSource.pitch = value; } }
-        public bool loop { get { return audioSource.loop; } }
+        public bool loop { get { return audioSource.loop; } set { audioSource.loop = value; } }
         /// <summary>Unscaled volume (doesn't include modifiers caused by global and group volumes)</summary>
         public float unscaledVolume { get; private set; }
         /// <summary>Current volume (including modifiers caused by global and group volumes)</summary>
