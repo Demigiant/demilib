@@ -25,8 +25,10 @@ namespace DG.DeAudio
         /// <summary>TRUE if the clip was playing and has been paused - FALSE if it was/is stopped</summary>
         public bool isPaused { get; private set; }
         public AudioClip clip { get { return audioSource.clip; } }
+        public float duration { get { if (clip == null) return 0; return clip.length; } }
         public float pitch { get { return audioSource.pitch; } set { audioSource.pitch = value; } }
         public bool loop { get { return audioSource.loop; } set { audioSource.loop = value; } }
+        public float time { get { return audioSource.time; } set { audioSource.time = value; } }
         /// <summary>Unscaled volume (doesn't include modifiers caused by global and group volumes)</summary>
         public float unscaledVolume { get; private set; }
         /// <summary>Current volume (including modifiers caused by global and group volumes)</summary>
@@ -147,6 +149,35 @@ namespace DG.DeAudio
         public void StopIfPaused()
         {
             if (isPaused) Stop();
+        }
+
+        /// <summary>
+        /// Sends this source's clip to the given time position
+        /// </summary>
+        public void Seek(float time)
+        {
+            if (clip == null) return;
+            if (time >= clip.length) {
+                Debug.Log(string.Format("{0}DeAudioSource.GotoTime({1}): invalid seek position (length of clip is {2})", DeAudioManager.LogPrefix, time, clip.length));
+                return;
+            }
+
+            audioSource.time = time;
+        }
+
+        /// <summary>
+        /// Sends this source's clip to the given percentage position, 0 to 1 (but beware: 1 can't be seeked because it's the end of the clip),
+        /// and returns the actual time position where the source went.
+        /// </summary>
+        public void SeekPercentage(float percentage)
+        {
+            if (clip == null) return;
+            if (percentage >= 1) {
+                Debug.Log(string.Format("{0}DeAudioSource.GotoTimePercentage({1}): invalid seek position (can't seek to end of clip)", DeAudioManager.LogPrefix, percentage));
+                return;
+            }
+
+            audioSource.time = clip.length * percentage;
         }
 
         #region Tweens

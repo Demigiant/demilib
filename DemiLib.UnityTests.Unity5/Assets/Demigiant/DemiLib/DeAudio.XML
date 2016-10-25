@@ -434,6 +434,17 @@
             If this source was paused, stops any sound connected to it
             </summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioSource.Seek(System.Single)">
+            <summary>
+            Sends this source's clip to the given time position
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioSource.SeekPercentage(System.Single)">
+            <summary>
+            Sends this source's clip to the given percentage position, 0 to 1 (but beware: 1 can't be seeked because it's the end of the clip),
+            and returns the actual time position where the source went.
+            </summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioSource.FadeOut(System.Single,System.Boolean,DG.DeAudio.FadeBehaviour,DG.Tweening.TweenCallback)">
             <summary>Fades out this source's volume</summary>
         </member>

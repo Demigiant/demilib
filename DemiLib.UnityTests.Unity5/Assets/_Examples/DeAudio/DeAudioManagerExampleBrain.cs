@@ -21,11 +21,11 @@ public class DeAudioManagerExampleBrain : MonoBehaviour
     public DeAudioClipData musicA;
     public DeAudioClipData musicB;
 
-    void Start()
+    IEnumerator Start()
     {
         switch (initMode) {
         case InitMode.Simple:
-    		// Create a new DeAudioManager withou any group (which means only the implicit GLOBAL group)
+    		// Create a new DeAudioManager without any group (which means only the implicit GLOBAL group)
             DeAudioManager.Init();
             break;
         case InitMode.InstantiateDeAudioManagerPrefab:
@@ -40,6 +40,13 @@ public class DeAudioManagerExampleBrain : MonoBehaviour
             });
             break;
         }
+
+        DeAudioSource s = DeAudioManager.Play(musicA);
+        Debug.Log(s.time +  "/" + s.duration);
+        yield return new WaitForSeconds(2);
+        Debug.Log(s.time);
+        s.SeekPercentage(0);
+        Debug.Log(">>>> " + s.time);
     }
 
     public void PlayFXA()
