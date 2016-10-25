@@ -45,7 +45,7 @@ public class DeAudioManagerExampleBrain : MonoBehaviour
         Debug.Log(s.time +  "/" + s.duration);
         yield return new WaitForSeconds(2);
         Debug.Log(s.time);
-        s.SeekPercentage(0);
+        s.SeekPercentage(40);
         Debug.Log(">>>> " + s.time);
     }
 

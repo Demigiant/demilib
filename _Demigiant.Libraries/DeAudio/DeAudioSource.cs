@@ -157,11 +157,11 @@ namespace DG.DeAudio
         public void Seek(float time)
         {
             if (clip == null) return;
-            if (time >= clip.length) {
-                Debug.Log(string.Format("{0}DeAudioSource.GotoTime({1}): invalid seek position (length of clip is {2})", DeAudioManager.LogPrefix, time, clip.length));
-                return;
-            }
 
+            if (time >= clip.length) {
+                Debug.LogWarning(string.Format("{0}DeAudioSource.GotoTime({1}): invalid seek position (length of clip is {2}), going to nearest one", DeAudioManager.LogPrefix, time, clip.length));
+                time = clip.length - 0.05f;
+            }
             audioSource.time = time;
         }
 
@@ -172,12 +172,11 @@ namespace DG.DeAudio
         public void SeekPercentage(float percentage)
         {
             if (clip == null) return;
-            if (percentage >= 1) {
-                Debug.Log(string.Format("{0}DeAudioSource.GotoTimePercentage({1}): invalid seek position (can't seek to end of clip)", DeAudioManager.LogPrefix, percentage));
-                return;
-            }
 
-            audioSource.time = clip.length * percentage;
+            if (percentage >= 1) {
+                Debug.LogWarning(string.Format("{0}DeAudioSource.GotoTimePercentage({1}): invalid seek position (can't seek to end of clip), going to nearest one", DeAudioManager.LogPrefix, percentage));
+                audioSource.time = clip.length - 0.05f;
+            } else audioSource.time = clip.length * percentage;
         }
 
         #region Tweens
