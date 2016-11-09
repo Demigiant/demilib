@@ -75,11 +75,13 @@ namespace DG.DeAudio
         /// </summary>
         public DeAudioSource Play(DeAudioClipData clipData, float? volume = null, float? pitch = null, bool? loop = null)
         {
-            return PlayFrom(clipData.clip, 0,
+            DeAudioSource src = PlayFrom(clipData.clip, 0,
                 volume == null ? clipData.volume : (float)volume,
                 pitch == null ? clipData.pitch : (float)pitch,
                 loop == null ? clipData.loop : (bool)loop
             );
+            src.targetVolume = clipData.volume;
+            return src;
         }
         /// <summary>
         /// Plays the given sound with the given options.
@@ -93,11 +95,13 @@ namespace DG.DeAudio
         /// </summary>
         public DeAudioSource PlayFrom(DeAudioClipData clipData, float fromTime, float? volume = null, float? pitch = null, bool? loop = null)
         {
-            return PlayFrom(clipData.clip, fromTime,
+            DeAudioSource src = PlayFrom(clipData.clip, fromTime,
                 volume == null ? clipData.volume : (float)volume,
                 pitch == null ? clipData.pitch : (float)pitch,
                 loop == null ? clipData.loop : (bool)loop
             );
+            src.targetVolume = clipData.volume;
+            return src;
         }
         /// <summary>
         /// Plays the given sound with the given options from the given time.
@@ -254,22 +258,29 @@ namespace DG.DeAudio
         // - returns an existing non playing source if available
         // - creates a new source if all existing are busy and maxSources allows it
         // - return NULL if none of the previous options work
+        // Also sets the src targetVolume to 1
         DeAudioSource GetAvailableSource()
         {
             int len = sources.Count;
             for (int i = 0; i < len; ++i) {
                 DeAudioSource s = sources[i];
-                if (s.isFree) return s;
+                if (s.isFree) {
+                    s.targetVolume = 1;
+                    return s;
+                }
             }
             // No free sources...
             if (maxSources < 0 || len < maxSources) {
                 // Create new source
                 DeAudioSource s = new DeAudioSource(this, _sourcesContainer);
+                s.targetVolume = 1;
                 sources.Add(s);
                 return s;
             } else if (recycle) {
                 // Recycle oldest source
-                return GetOldestSource();
+                DeAudioSource src = GetOldestSource();
+                src.targetVolume = 1;
+                return src;
             } else {
                 // All sources busy and can't be recycled
                 return null;

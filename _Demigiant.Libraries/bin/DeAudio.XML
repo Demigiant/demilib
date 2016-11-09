@@ -380,11 +380,14 @@
         <member name="P:DG.DeAudio.DeAudioSource.isPaused">
             <summary>TRUE if the clip was playing and has been paused - FALSE if it was/is stopped</summary>
         </member>
+        <member name="F:DG.DeAudio.DeAudioSource.targetVolume">
+            <summary>Target volume to use when fading in (taken by DeAudioClipData, but can also be set manually)</summary>
+        </member>
         <member name="P:DG.DeAudio.DeAudioSource.unscaledVolume">
-            <summary>Unscaled volume (doesn't include modifiers caused by global and group volumes)</summary>
+            <summary>Unscaled volume (doesn't include modifiers caused by global, group and target volumes)</summary>
         </member>
         <member name="P:DG.DeAudio.DeAudioSource.volume">
-            <summary>Current volume (including modifiers caused by global and group volumes)</summary>
+            <summary>Current volume (including modifiers caused by global, group and target volumes)</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioSource.Play(DG.DeAudio.DeAudioClipData)">
             <summary>

@@ -29,14 +29,16 @@ namespace DG.DeAudio
         public float pitch { get { return audioSource.pitch; } set { audioSource.pitch = value; } }
         public bool loop { get { return audioSource.loop; } set { audioSource.loop = value; } }
         public float time { get { return audioSource.time; } set { audioSource.time = value; } }
-        /// <summary>Unscaled volume (doesn't include modifiers caused by global and group volumes)</summary>
+        /// <summary>Target volume to use when fading in (taken by DeAudioClipData, but can also be set manually)</summary>
+        public float targetVolume = 1;
+        /// <summary>Unscaled volume (doesn't include modifiers caused by global, group and target volumes)</summary>
         public float unscaledVolume { get; private set; }
-        /// <summary>Current volume (including modifiers caused by global and group volumes)</summary>
+        /// <summary>Current volume (including modifiers caused by global, group and target volumes)</summary>
         public float volume {
             get { return audioSource.volume; }
             set {
                 unscaledVolume = value;
-                audioSource.volume = value * audioGroup.fooVolume * DeAudioManager.globalVolume;
+                audioSource.volume = value * targetVolume * audioGroup.fooVolume * DeAudioManager.globalVolume;
             }
         }
 

@@ -30,7 +30,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "0.6.130";
+        public const string Version = "0.6.140";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
@@ -132,7 +132,7 @@ namespace DG.DeAudio
         /// </summary>
         public static DeAudioSource Play(DeAudioClipData clipData, float? volume = null, float? pitch = null, bool? loop = null)
         {
-            return PlayFrom(clipData.groupId, clipData.clip, 0,
+            return PlayFrom(clipData, 0,
                 volume == null ? clipData.volume : (float)volume,
                 pitch == null ? clipData.pitch : (float)pitch,
                 loop == null ? clipData.loop : (bool)loop
@@ -160,11 +160,13 @@ namespace DG.DeAudio
         /// </summary>
         public static DeAudioSource PlayFrom(DeAudioClipData clipData, float fromTime, float? volume = null, float? pitch = null, bool? loop = null)
         {
-            return PlayFrom(clipData.groupId, clipData.clip, fromTime,
+            DeAudioSource src = PlayFrom(clipData.groupId, clipData.clip, fromTime,
                 volume == null ? clipData.volume : (float)volume,
                 pitch == null ? clipData.pitch : (float)pitch,
                 loop == null ? clipData.loop : (bool)loop
             );
+            src.targetVolume = clipData.volume;
+            return src;
         }
         /// <summary>
         /// Plays the given sound with the given options, using the given group id, and from the given time.
