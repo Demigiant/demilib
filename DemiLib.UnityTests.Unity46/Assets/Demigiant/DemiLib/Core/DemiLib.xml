@@ -4,6 +4,30 @@
         <name>DemiLib</name>
     </assembly>
     <members>
+        <member name="M:DG.DemiLib.Attributes.DeColoredLabelAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Colors the prefix label for the following property
+            </summary>
+            <param name="textColor">Prefix label color</param>
+            <param name="bgColor">Prefix label bg color</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeHeaderAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Draws a header with a color and background color
+            </summary>
+            <param name="text">Text</param>
+            <param name="textColor">Color hex (no #) for text, leave NULL to use default</param>
+            <param name="bgColor">Color hex (no #) for bg, leave NULL to use no bg color</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeHeaderAttribute.#ctor(System.String,UnityEngine.TextAnchor,System.String,System.String)">
+            <summary>
+            Draws a header with a color and background color
+            </summary>
+            <param name="text">Text</param>
+            <param name="textAnchor">TextAnchor</param>
+            <param name="textColor">Color hex (no #) for text, leave NULL to use default</param>
+            <param name="bgColor">Color hex (no #) for bg, leave NULL to use no bg color</param>
+        </member>
         <member name="F:DG.DemiLib.Core.GUIUtils.isProSkin">
             <summary>
             Set when calling <code>DeGUI.BeginGUI</code>

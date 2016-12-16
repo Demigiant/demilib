@@ -58,6 +58,19 @@ namespace DG.DemiEditor
             }
             _clearConsoleMI.Invoke(null,null);
         }
+
+        public static Color HexToColor(string hex)
+        {
+            if (hex[0] == '#') hex = hex.Substring(1);
+            float r = (HexToInt(hex[1]) + HexToInt(hex[0]) * 16f) / 255f;
+            float g = (HexToInt(hex[3]) + HexToInt(hex[2]) * 16f) / 255f;
+            float b = (HexToInt(hex[5]) + HexToInt(hex[4]) * 16f) / 255f;
+            return new Color(r, g, b, 1);
+        }
+        static int HexToInt(char hexVal)
+        {
+            return int.Parse(hexVal.ToString(), System.Globalization.NumberStyles.HexNumber);
+        }
     }
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████

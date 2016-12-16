@@ -50,7 +50,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributesManagers\ScriptExecutionOrderManager.cs" />
+    <Compile Include="AttributesManagers\DeColoredLabelPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeHeaderPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
     <Compile Include="Core\DeGUIScope.cs" />
     <Compile Include="DeEditorFileUtils.cs" />
     <Compile Include="DeEditorPanelUtils.cs" />
@@ -77,6 +79,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>call $(SolutionDir)PostBuild_Core_Editor.bat $(SolutionDir) $(TargetDir) $(TargetFileName) $(TargetName)</PostBuildEvent>

@@ -45,8 +45,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DeColoredLabelAttribute.cs" />
+    <Compile Include="Attributes\DeHeaderAttribute.cs" />
     <Compile Include="Core\GUIUtils.cs" />
-    <Compile Include="Attributes\ScriptExecutionOrder.cs" />
+    <Compile Include="Attributes\DeScriptExecutionOrderAttribute.cs" />
     <Compile Include="DeColorPalette.cs" />
     <Compile Include="DeSkinColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

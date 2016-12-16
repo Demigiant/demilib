@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeColorUtils.cs" />
+    <Compile Include="DeLayerUtils.cs" />
     <Compile Include="DeMathUtils.cs" />
     <Compile Include="DeRectUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

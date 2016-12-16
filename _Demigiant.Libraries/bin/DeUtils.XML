@@ -20,6 +20,11 @@
             Returns a clone of the given Color with the alpha changed to the given value
             </summary>
         </member>
+        <member name="M:DG.DeUtils.DeLayerUtils.LayerMaskToIndex(UnityEngine.LayerMask)">
+            <summary>
+            Returns the int value of the given LayerMask
+            </summary>
+        </member>
         <member name="M:DG.DeUtils.DeMathUtils.ClampAngle(System.Single,System.Single,System.Single)">
             <summary>
             Clamps an angle between the given values.

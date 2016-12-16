@@ -7,11 +7,11 @@ using System;
 #pragma warning disable 1591
 namespace DG.DemiLib.Attributes
 {
-    public class ScriptExecutionOrder : Attribute
+    public class DeScriptExecutionOrderAttribute : Attribute
     {
         public int order;
 
-        public ScriptExecutionOrder(int order)
+        public DeScriptExecutionOrderAttribute(int order)
         {
             this.order = order;
         }

@@ -10,15 +10,15 @@ using UnityEditor;
 namespace DG.DemiEditor.AttributesManagers
 {
     [InitializeOnLoad]
-    public class ScriptExecutionOrderManager
+    public class DeScriptExecutionOrderManager
     {
-        static ScriptExecutionOrderManager()
+        static DeScriptExecutionOrderManager()
         {
             foreach (MonoScript monoScript in MonoImporter.GetAllRuntimeMonoScripts()) {
                 if (monoScript.GetClass() == null) continue;
-                foreach (Attribute a in Attribute.GetCustomAttributes(monoScript.GetClass(), typeof(ScriptExecutionOrder))) {
+                foreach (Attribute a in Attribute.GetCustomAttributes(monoScript.GetClass(), typeof(DeScriptExecutionOrderAttribute))) {
                     int currentOrder = MonoImporter.GetExecutionOrder(monoScript);
-                    int newOrder = ((ScriptExecutionOrder)a).order;
+                    int newOrder = ((DeScriptExecutionOrderAttribute)a).order;
                     if (currentOrder != newOrder) MonoImporter.SetExecutionOrder(monoScript, newOrder);
                 }
             }
