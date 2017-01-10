@@ -26,26 +26,26 @@ public class DeAttributesExample : MonoBehaviour
     [DeComment("You can choose to disable or completely hide a property based on given conditions")]
     [DeColoredLabel("ffffff", "222222")]
     public float conditioningFloat = 10;
-    [DeConditional("conditioningFloat", 10f)]
+    [DeConditional("conditioningFloat", 10f, FloatCondition.Is, ConditionalBehaviour.Hide)]
     public string conditionalS00 = "Visible if conditioningFloat == 10";
-    [DeConditional("conditioningFloat", 10f, FloatCondition.LessThan, ConditionalBehaviour.Disable)]
+    [DeConditional("conditioningFloat", 10f, FloatCondition.LessThan)]
     public string conditionalS01 = "Enabled if conditioningFloat < 10";
-    [DeConditional("conditioningFloat", 10f, FloatCondition.GreaterOrEqual, ConditionalBehaviour.Disable)]
+    [DeConditional("conditioningFloat", 10f, FloatCondition.GreaterOrEqual)]
     public string conditionalS02 = "Enabled if conditioningFloat >= 10";
     [DeColoredLabel("ffffff", "222222")]
     public int conditioningInt = 69;
-    [DeConditional("conditioningInt", 45, IntCondition.Is, ConditionalBehaviour.Disable)]
+    [DeConditional("conditioningInt", 45)]
     public string conditionalS10 = "Enabled if conditioningInt == 45";
     [DeColoredLabel("ffffff", "222222")]
     public string conditioningString = "Gino";
-    [DeConditional("conditioningString", "Gino", StringCondition.Is, ConditionalBehaviour.Disable)]
+    [DeConditional("conditioningString", "Gino")]
     public string conditionalS20 = "Enabled if conditioningString == \"Gino\"";
-    [DeConditional("conditioningString", "", StringCondition.IsNot, ConditionalBehaviour.Disable)]
+    [DeConditional("conditioningString", "", StringCondition.IsNot)]
     public string conditionalS21 = "Enabled if conditioningString != \"\"";
     [DeColoredLabel("ffffff", "222222")]
     public bool conditioningBool = true;
-    [DeConditional("conditioningBool", true, ConditionalBehaviour.Disable)]
+    [DeConditional("conditioningBool", true)]
     public string conditionalS30 = "Enabled if conditioningBool is TRUE";
-    [DeConditional("conditioningBool", false, ConditionalBehaviour.Disable)]
+    [DeConditional("conditioningBool", false)]
     public string conditionalS31 = "Enabled if conditioningBool is FALSE";
 }

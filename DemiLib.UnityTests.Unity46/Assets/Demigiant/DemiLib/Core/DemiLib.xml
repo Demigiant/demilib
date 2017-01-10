@@ -23,6 +23,37 @@
             <para>Shows a comment in the Inspector</para>
             </summary>
         </member>
+        <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.Boolean)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (boolean)</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.String,DG.DemiLib.Attributes.StringCondition)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (string)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.Single,DG.DemiLib.Attributes.FloatCondition)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.Int32,DG.DemiLib.Attributes.IntCondition)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
         <member name="T:DG.DemiLib.Attributes.DeConditionalAttribute">
             <summary>
             <code>Property attribute</code>
