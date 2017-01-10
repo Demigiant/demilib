@@ -9,3 +9,5 @@ Developed by Daniele Giardini - http://www.demigiant.com
 ![DeAudioManager](screenshots/DeAudioManager_inspector.png "DeAudioManager")
 
 ![Scenes Panel](screenshots/DeEditorTools_scenespanel.png "Scenes Panel")
+
+![DeAttributes](screenshots/DeAttributes_examples.png "DeAttributes")
