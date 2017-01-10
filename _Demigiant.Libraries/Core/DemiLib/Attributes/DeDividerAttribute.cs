@@ -7,6 +7,9 @@ using UnityEngine;
 #pragma warning disable 1591
 namespace DG.DemiLib.Attributes
 {
+    /// <summary>
+    /// Decorator
+    /// </summary>
     public class DeDividerAttribute : PropertyAttribute
     {
         public int height;

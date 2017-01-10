@@ -11,7 +11,7 @@ namespace DG.DemiEditor.AttributesManagers
     [CustomPropertyDrawer(typeof(DeHeaderAttribute))]
     public class DeHeaderPropertyDrawer : DecoratorDrawer
     {
-        const int _HeaderH = 16;
+//        const int _HeaderH = 16;
         const int _MarginTop = 6;
         const int _MarginBottom = 3;
         bool _stylesSet;
@@ -19,7 +19,8 @@ namespace DG.DemiEditor.AttributesManagers
 
         public override float GetHeight()
         {
-            return _HeaderH + _MarginTop + _MarginBottom;
+            DeHeaderAttribute attr = (DeHeaderAttribute)attribute;
+            return attr.fontSize + 5 + _MarginTop + _MarginBottom;
         }
 
         public override void OnGUI(Rect position)
@@ -28,7 +29,7 @@ namespace DG.DemiEditor.AttributesManagers
             SetStyles(attr);
 
             Rect headerPos = position;
-            headerPos.height = _HeaderH;
+            headerPos.height = attr.fontSize + 5;
             headerPos.y += _MarginTop;
 
             Color defBgColor = GUI.backgroundColor;
@@ -43,7 +44,7 @@ namespace DG.DemiEditor.AttributesManagers
 
             _stylesSet = true;
 
-            _attributeStyle = new GUIStyle(GUI.skin.label).Add(FontStyle.Bold, attr.textAnchor);
+            _attributeStyle = new GUIStyle(GUI.skin.label).Add(attr.textAnchor, attr.fontStyle, attr.fontSize);
             if (attr.textColor != null) _attributeStyle.Add(DeEditorUtils.HexToColor(attr.textColor));
             if (attr.bgColor != null) _attributeStyle.Background(Texture2D.whiteTexture);
         }

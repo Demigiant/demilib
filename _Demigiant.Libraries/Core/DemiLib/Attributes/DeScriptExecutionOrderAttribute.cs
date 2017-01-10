@@ -7,6 +7,9 @@ using System;
 #pragma warning disable 1591
 namespace DG.DemiLib.Attributes
 {
+    /// <summary>
+    /// Class attribute
+    /// </summary>
     public class DeScriptExecutionOrderAttribute : Attribute
     {
         public int order;

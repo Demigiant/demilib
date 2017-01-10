@@ -4,12 +4,22 @@
         <name>DemiLib</name>
     </assembly>
     <members>
+        <member name="T:DG.DemiLib.Attributes.DeColoredLabelAttribute">
+            <summary>
+            Property attribute
+            </summary>
+        </member>
         <member name="M:DG.DemiLib.Attributes.DeColoredLabelAttribute.#ctor(System.String,System.String)">
             <summary>
             Colors the prefix label for the following property
             </summary>
             <param name="textColor">Prefix label color</param>
             <param name="bgColor">Prefix label bg color</param>
+        </member>
+        <member name="T:DG.DemiLib.Attributes.DeDividerAttribute">
+            <summary>
+            Decorator
+            </summary>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeDividerAttribute.#ctor(System.Int32,System.String,System.Int32,System.Int32)">
             <summary>
@@ -20,15 +30,22 @@
             <param name="marginTop">Top margin</param>
             <param name="marginBottom">Bottom margin</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeHeaderAttribute.#ctor(System.String,System.String,System.String)">
+        <member name="T:DG.DemiLib.Attributes.DeHeaderAttribute">
+            <summary>
+            Decorator
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeHeaderAttribute.#ctor(System.String,System.String,System.String,UnityEngine.FontStyle,System.Int32)">
             <summary>
             Draws a header with a color and background color
             </summary>
             <param name="text">Text</param>
             <param name="textColor">Color hex (no #) for text, leave NULL to use default</param>
             <param name="bgColor">Color hex (no #) for bg, leave NULL to use no bg color</param>
+            <param name="fontStyle">Font style</param>
+            <param name="fontSize">Font size</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeHeaderAttribute.#ctor(System.String,UnityEngine.TextAnchor,System.String,System.String)">
+        <member name="M:DG.DemiLib.Attributes.DeHeaderAttribute.#ctor(System.String,UnityEngine.TextAnchor,System.String,System.String,UnityEngine.FontStyle,System.Int32)">
             <summary>
             Draws a header with a color and background color
             </summary>
@@ -36,6 +53,13 @@
             <param name="textAnchor">TextAnchor</param>
             <param name="textColor">Color hex (no #) for text, leave NULL to use default</param>
             <param name="bgColor">Color hex (no #) for bg, leave NULL to use no bg color</param>
+            <param name="fontStyle">Font style</param>
+            <param name="fontSize">Font size</param>
+        </member>
+        <member name="T:DG.DemiLib.Attributes.DeScriptExecutionOrderAttribute">
+            <summary>
+            Class attribute
+            </summary>
         </member>
         <member name="F:DG.DemiLib.Core.GUIUtils.isProSkin">
             <summary>

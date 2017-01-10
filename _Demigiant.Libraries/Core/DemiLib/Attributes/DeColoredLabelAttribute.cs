@@ -7,6 +7,9 @@ using UnityEngine;
 #pragma warning disable 1591
 namespace DG.DemiLib.Attributes
 {
+    /// <summary>
+    /// Property attribute
+    /// </summary>
     public class DeColoredLabelAttribute : PropertyAttribute
     {
         public string textColor, bgColor;
