@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using DG.DeAudio;
 using DG.DemiEditor;
+using DG.Tweening;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -98,6 +99,7 @@ namespace DG.DeAudioEditor
             EditorGUIUtility.labelWidth = 96;
             _src.logInfo = DeGUILayout.ToggleButton(_src.logInfo, "Output Additional Info Logs");
             _src.fooGlobalVolume = EditorGUILayout.Slider("Global Volume", _src.fooGlobalVolume, 0, 1);
+            _src.fadeEase = (Ease)EditorGUILayout.EnumPopup("Fade Ease", _src.fadeEase);
 
             // AUDIO GROUPS //
 

@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributesManagers\DeColoredLabelPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeDividerPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeHeaderPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
     <Compile Include="Core\DeGUIScope.cs" />

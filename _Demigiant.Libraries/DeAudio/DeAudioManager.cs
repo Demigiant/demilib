@@ -21,6 +21,7 @@ namespace DG.DeAudio
         public bool logInfo = false;
         public DeAudioGroup[] fooAudioGroups;
         public float fooGlobalVolume = 1;
+        public Ease fadeEase = Ease.Linear;
         /// <summary>Used internally inside Unity Editor, as a trick to update DeAudioManager's inspector at every frame</summary>
         public int inspectorUpdater;
 
@@ -30,7 +31,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "0.6.140";
+        public const string Version = "0.6.150";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
@@ -323,7 +324,7 @@ namespace DG.DeAudio
         {
             _fadeTween.Kill();
             _fadeTween = DOTween.To(() => globalVolume, x => globalVolume = x, to, duration)
-                .SetTarget(I).SetUpdate(ignoreTimeScale).SetEase(Ease.Linear);
+                .SetTarget(I).SetUpdate(ignoreTimeScale).SetEase(I.fadeEase);
             switch (onCompleteBehaviour) {
             case FadeBehaviour.Stop:
                 _fadeTween.OnStepComplete(Stop);

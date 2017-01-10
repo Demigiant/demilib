@@ -203,7 +203,7 @@ namespace DG.DeAudio
         {
             _fadeTween.Kill();
             _fadeTween = DOTween.To(() => volume, x => volume = x, to, duration)
-                .SetTarget(this).SetUpdate(ignoreTimeScale).SetEase(Ease.Linear);
+                .SetTarget(this).SetUpdate(ignoreTimeScale).SetEase(DeAudioManager.I.fadeEase);
             switch (onCompleteBehaviour) {
             case FadeBehaviour.Stop:
                 _fadeTween.OnStepComplete(Stop);

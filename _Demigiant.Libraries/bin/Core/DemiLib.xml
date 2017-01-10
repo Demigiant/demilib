@@ -11,6 +11,15 @@
             <param name="textColor">Prefix label color</param>
             <param name="bgColor">Prefix label bg color</param>
         </member>
+        <member name="M:DG.DemiLib.Attributes.DeDividerAttribute.#ctor(System.Int32,System.String,System.Int32,System.Int32)">
+            <summary>
+            Draws a divider with the given size, color and margins
+            </summary>
+            <param name="height">Divider height</param>
+            <param name="hexColor">Hex color (# optional)</param>
+            <param name="marginTop">Top margin</param>
+            <param name="marginBottom">Bottom margin</param>
+        </member>
         <member name="M:DG.DemiLib.Attributes.DeHeaderAttribute.#ctor(System.String,System.String,System.String)">
             <summary>
             Draws a header with a color and background color
