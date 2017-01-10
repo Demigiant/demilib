@@ -4,15 +4,15 @@
 
 using UnityEngine;
 
-#pragma warning disable 1591
 namespace DG.DemiLib.Attributes
 {
     /// <summary>
-    /// Property attribute
+    /// <code>Property attribute</code>
+    /// <para>Draws the label with the given color and background</para>
     /// </summary>
     public class DeColoredLabelAttribute : PropertyAttribute
     {
-        public string textColor, bgColor;
+        internal string textColor, bgColor;
 
         /// <summary>
         /// Colors the prefix label for the following property

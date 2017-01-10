@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\DeColoredLabelAttribute.cs" />
+    <Compile Include="Attributes\DeCommentAttribute.cs" />
+    <Compile Include="Attributes\DeConditionalAttribute.cs" />
     <Compile Include="Attributes\DeDividerAttribute.cs" />
     <Compile Include="Attributes\DeHeaderAttribute.cs" />
     <Compile Include="Core\GUIUtils.cs" />

@@ -4,19 +4,19 @@
 
 using UnityEngine;
 
-#pragma warning disable 1591
 namespace DG.DemiLib.Attributes
 {
     /// <summary>
-    /// Decorator
+    /// <code>Decorator</code>
+    /// <para>Draws a header in the inspector</para>
     /// </summary>
     public class DeHeaderAttribute : PropertyAttribute
     {
-        public string text;
-        public string textColor, bgColor;
-        public TextAnchor textAnchor = TextAnchor.MiddleLeft;
-        public FontStyle fontStyle;
-        public int fontSize;
+        internal string text;
+        internal string textColor, bgColor;
+        internal TextAnchor textAnchor = TextAnchor.MiddleLeft;
+        internal FontStyle fontStyle;
+        internal int fontSize;
 
         /// <summary>
         /// Draws a header with a color and background color

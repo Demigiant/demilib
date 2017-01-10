@@ -4,17 +4,17 @@
 
 using UnityEngine;
 
-#pragma warning disable 1591
 namespace DG.DemiLib.Attributes
 {
     /// <summary>
-    /// Decorator
+    /// <code>Decorator</code>
+    /// <para>Draws a divider in the Inspector</para>
     /// </summary>
     public class DeDividerAttribute : PropertyAttribute
     {
-        public int height;
-        public string hexColor;
-        public int marginTop, marginBottom;
+        internal int height;
+        internal string hexColor;
+        internal int marginTop, marginBottom;
 
         /// <summary>
         /// Draws a divider with the given size, color and margins

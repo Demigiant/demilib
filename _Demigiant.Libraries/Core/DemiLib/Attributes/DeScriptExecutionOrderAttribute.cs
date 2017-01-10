@@ -4,16 +4,20 @@
 
 using System;
 
-#pragma warning disable 1591
 namespace DG.DemiLib.Attributes
 {
     /// <summary>
-    /// Class attribute
+    /// <code>Class attribute</code>
+    /// <para>Sets the script execution order index</para>
     /// </summary>
     public class DeScriptExecutionOrderAttribute : Attribute
     {
-        public int order;
+        internal int order;
 
+        /// <summary>
+        /// Sets the script execution order for this class
+        /// </summary>
+        /// <param name="order">Script execution order index</param>
         public DeScriptExecutionOrderAttribute(int order)
         {
             this.order = order;

@@ -6,7 +6,8 @@
     <members>
         <member name="T:DG.DemiLib.Attributes.DeColoredLabelAttribute">
             <summary>
-            Property attribute
+            <code>Property attribute</code>
+            <para>Draws the label with the given color and background</para>
             </summary>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeColoredLabelAttribute.#ctor(System.String,System.String)">
@@ -16,9 +17,57 @@
             <param name="textColor">Prefix label color</param>
             <param name="bgColor">Prefix label bg color</param>
         </member>
+        <member name="T:DG.DemiLib.Attributes.DeCommentAttribute">
+            <summary>
+            <code>Decorator</code>
+            <para>Shows a comment in the Inspector</para>
+            </summary>
+        </member>
+        <member name="T:DG.DemiLib.Attributes.DeConditionalAttribute">
+            <summary>
+            <code>Property attribute</code>
+            <para>Shows/hides or enables/disables the property depending on the given conditions</para>
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.Boolean,DG.DemiLib.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (boolean)</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.String,DG.DemiLib.Attributes.StringCondition,DG.DemiLib.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (string)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.Single,DG.DemiLib.Attributes.FloatCondition,DG.DemiLib.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.Int32,DG.DemiLib.Attributes.IntCondition,DG.DemiLib.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
         <member name="T:DG.DemiLib.Attributes.DeDividerAttribute">
             <summary>
-            Decorator
+            <code>Decorator</code>
+            <para>Draws a divider in the Inspector</para>
             </summary>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeDividerAttribute.#ctor(System.Int32,System.String,System.Int32,System.Int32)">
@@ -32,7 +81,8 @@
         </member>
         <member name="T:DG.DemiLib.Attributes.DeHeaderAttribute">
             <summary>
-            Decorator
+            <code>Decorator</code>
+            <para>Draws a header in the inspector</para>
             </summary>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeHeaderAttribute.#ctor(System.String,System.String,System.String,UnityEngine.FontStyle,System.Int32)">
@@ -58,8 +108,15 @@
         </member>
         <member name="T:DG.DemiLib.Attributes.DeScriptExecutionOrderAttribute">
             <summary>
-            Class attribute
+            <code>Class attribute</code>
+            <para>Sets the script execution order index</para>
             </summary>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeScriptExecutionOrderAttribute.#ctor(System.Int32)">
+            <summary>
+            Sets the script execution order for this class
+            </summary>
+            <param name="order">Script execution order index</param>
         </member>
         <member name="F:DG.DemiLib.Core.GUIUtils.isProSkin">
             <summary>
