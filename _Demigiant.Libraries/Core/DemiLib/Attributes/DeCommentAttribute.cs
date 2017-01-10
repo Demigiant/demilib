@@ -22,12 +22,21 @@ namespace DG.DemiLib.Attributes
     public class DeCommentAttribute : PropertyAttribute
     {
         internal string text;
-        internal CommentType commentType;
+        internal string textColor, bgColor;
+        internal int marginBottom;
 
-        public DeCommentAttribute(string text, CommentType commentType = CommentType.Simple)
+        public DeCommentAttribute(string text, int marginBottom = 2)
         {
             this.text = text;
-            this.commentType = commentType;
+            this.marginBottom = marginBottom;
+        }
+
+        public DeCommentAttribute(string text, string textColor, string bgColor, int marginBottom = 2)
+        {
+            this.text = text;
+            this.textColor = textColor;
+            this.bgColor = bgColor;
+            this.marginBottom = marginBottom;
         }
     }
 }

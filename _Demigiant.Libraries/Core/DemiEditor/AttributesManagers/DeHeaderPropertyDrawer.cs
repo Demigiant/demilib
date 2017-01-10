@@ -11,7 +11,6 @@ namespace DG.DemiEditor.AttributesManagers
     [CustomPropertyDrawer(typeof(DeHeaderAttribute))]
     public class DeHeaderPropertyDrawer : DecoratorDrawer
     {
-//        const int _HeaderH = 16;
         const int _MarginTop = 6;
         const int _MarginBottom = 3;
         bool _stylesSet;

@@ -5,21 +5,7 @@
 #pragma warning disable 1591
 namespace DG.DemiLib.Attributes
 {
-    public enum StringCondition
-    {
-        Is,
-        IsNot
-    }
-    public enum FloatCondition
-    {
-        Is,
-        IsNot,
-        GreaterThan,
-        LessThan,
-        GreaterOrEqual,
-        LessOrEqual
-    }
-    public enum IntCondition
+    public enum Condition
     {
         Is,
         IsNot,
@@ -39,17 +25,14 @@ namespace DG.DemiLib.Attributes
     {
         internal enum ValueType
         {
-            Bool, String, Float, Int
+            Bool, String, Number
         }
 
         internal string propertyToCompare;
         internal bool boolValue;
         internal string stringValue;
-        internal float floatValue;
-        internal int intValue;
-        internal StringCondition stringConditionType;
-        internal FloatCondition floatConditionType;
-        internal IntCondition intConditionType;
+        internal float numValue;
+        internal Condition conditionType;
         internal ValueType valueType;
 
         /// <summary>
@@ -70,13 +53,13 @@ namespace DG.DemiLib.Attributes
         /// <param name="propertyToCompare">Name of the property to check for conditions</param>
         /// <param name="value">Property value to compare (string)</param>
         /// <param name="conditionType">Condition type</param>
-        public DeCondition(string propertyToCompare, string value, StringCondition conditionType = StringCondition.Is) : this()
+        public DeCondition(string propertyToCompare, string value, Condition conditionType = Condition.Is) : this()
         {
             this.valueType = ValueType.String;
             //
             this.propertyToCompare = propertyToCompare;
             this.stringValue = value;
-            this.stringConditionType = conditionType;
+            this.conditionType = conditionType;
         }
         /// <summary>
         /// Shows/enables the property only if the condition is met
@@ -84,13 +67,13 @@ namespace DG.DemiLib.Attributes
         /// <param name="propertyToCompare">Name of the property to check for conditions</param>
         /// <param name="value">Property value to compare (float)</param>
         /// <param name="conditionType">Condition type</param>
-        public DeCondition(string propertyToCompare, float value, FloatCondition conditionType = FloatCondition.Is) : this()
+        public DeCondition(string propertyToCompare, float value, Condition conditionType = Condition.Is) : this()
         {
-            this.valueType = ValueType.Float;
+            this.valueType = ValueType.Number;
             //
             this.propertyToCompare = propertyToCompare;
-            this.floatValue = value;
-            this.floatConditionType = conditionType;
+            this.numValue = value;
+            this.conditionType = conditionType;
         }
         /// <summary>
         /// Shows/enables the property only if the condition is met
@@ -98,13 +81,13 @@ namespace DG.DemiLib.Attributes
         /// <param name="propertyToCompare">Name of the property to check for conditions</param>
         /// <param name="value">Property value to compare (float)</param>
         /// <param name="conditionType">Condition type</param>
-        public DeCondition(string propertyToCompare, int value, IntCondition conditionType = IntCondition.Is) : this()
+        public DeCondition(string propertyToCompare, int value, Condition conditionType = Condition.Is) : this()
         {
-            this.valueType = ValueType.Int;
+            this.valueType = ValueType.Number;
             //
             this.propertyToCompare = propertyToCompare;
-            this.intValue = value;
-            this.intConditionType = conditionType;
+            this.numValue = value;
+            this.conditionType = conditionType;
         }
     }
 }

@@ -30,7 +30,7 @@
             <param name="propertyToCompare">Name of the property to check for conditions</param>
             <param name="value">Property value to compare (boolean)</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.String,DG.DemiLib.Attributes.StringCondition)">
+        <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.String,DG.DemiLib.Attributes.Condition)">
             <summary>
             Shows/enables the property only if the condition is met
             </summary>
@@ -38,7 +38,7 @@
             <param name="value">Property value to compare (string)</param>
             <param name="conditionType">Condition type</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.Single,DG.DemiLib.Attributes.FloatCondition)">
+        <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.Single,DG.DemiLib.Attributes.Condition)">
             <summary>
             Shows/enables the property only if the condition is met
             </summary>
@@ -46,7 +46,7 @@
             <param name="value">Property value to compare (float)</param>
             <param name="conditionType">Condition type</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.Int32,DG.DemiLib.Attributes.IntCondition)">
+        <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.Int32,DG.DemiLib.Attributes.Condition)">
             <summary>
             Shows/enables the property only if the condition is met
             </summary>
@@ -68,7 +68,7 @@
             <param name="value">Property value to compare (boolean)</param>
             <param name="behaviour">Behaviour in case condition is not met</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.String,DG.DemiLib.Attributes.StringCondition,DG.DemiLib.Attributes.ConditionalBehaviour)">
+        <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.String,DG.DemiLib.Attributes.Condition,DG.DemiLib.Attributes.ConditionalBehaviour)">
             <summary>
             Shows/enables the property only if the condition is met
             </summary>
@@ -77,7 +77,7 @@
             <param name="conditionType">Condition type</param>
             <param name="behaviour">Behaviour in case condition is not met</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.Single,DG.DemiLib.Attributes.FloatCondition,DG.DemiLib.Attributes.ConditionalBehaviour)">
+        <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.Single,DG.DemiLib.Attributes.Condition,DG.DemiLib.Attributes.ConditionalBehaviour)">
             <summary>
             Shows/enables the property only if the condition is met
             </summary>
@@ -86,7 +86,7 @@
             <param name="conditionType">Condition type</param>
             <param name="behaviour">Behaviour in case condition is not met</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.Int32,DG.DemiLib.Attributes.IntCondition,DG.DemiLib.Attributes.ConditionalBehaviour)">
+        <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.Int32,DG.DemiLib.Attributes.Condition,DG.DemiLib.Attributes.ConditionalBehaviour)">
             <summary>
             Shows/enables the property only if the condition is met
             </summary>

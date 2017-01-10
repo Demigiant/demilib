@@ -14,11 +14,6 @@ namespace DG.DemiEditor.AttributesManagers
         bool _stylesSet;
         GUIStyle _attributeStyle;
 
-//        public override float GetPropertyHeight (SerializedProperty property, GUIContent label)
-//        {
-//            return base.GetPropertyHeight (property, label);
-//        }
-
         public override void OnGUI (Rect position, SerializedProperty property, GUIContent label)
         {
             DeColoredLabelAttribute attr = (DeColoredLabelAttribute)attribute;
@@ -27,8 +22,7 @@ namespace DG.DemiEditor.AttributesManagers
             // Evaluate rects
             Rect labelPos = position;
             labelPos.width = EditorGUIUtility.labelWidth;
-            labelPos.height -= 2;
-            labelPos.y += 1;
+            labelPos.width -= 2;
 
             Color defBgColor = GUI.backgroundColor;
             if (attr.bgColor != null) GUI.backgroundColor = DeEditorUtils.HexToColor(attr.bgColor);
@@ -45,7 +39,7 @@ namespace DG.DemiEditor.AttributesManagers
 
             _stylesSet = true;
 
-            _attributeStyle = EditorStyles.label.Clone(DeEditorUtils.HexToColor(attr.textColor)).Padding(2, 2, 0, 0);
+            _attributeStyle = EditorStyles.label.Clone(DeEditorUtils.HexToColor(attr.textColor)).Padding(2, 2, 1, 0);
             if (attr.bgColor != null) _attributeStyle.Background(Texture2D.whiteTexture);
         }
     }

@@ -20,43 +20,28 @@ namespace DG.DemiEditor.AttributesManagers
             switch (condition.valueType) {
             case DeCondition.ValueType.String:
                 if (targetProp.propertyType != SerializedPropertyType.String) return true;
-                switch (condition.stringConditionType) {
-                case StringCondition.IsNot:
+                switch (condition.conditionType) {
+                case Condition.IsNot:
                     return targetProp.stringValue != condition.stringValue;
                 default:
                     return targetProp.stringValue == condition.stringValue;
                 }
-            case DeCondition.ValueType.Float:
-                if (targetProp.propertyType != SerializedPropertyType.Float) return true;
-                switch (condition.floatConditionType) {
-                case FloatCondition.IsNot:
-                    return !Mathf.Approximately(targetProp.floatValue, condition.floatValue);
-                case FloatCondition.GreaterThan:
-                    return targetProp.floatValue > condition.floatValue;
-                case FloatCondition.GreaterOrEqual:
-                    return targetProp.floatValue >= condition.floatValue;
-                case FloatCondition.LessThan:
-                    return targetProp.floatValue < condition.floatValue;
-                case FloatCondition.LessOrEqual:
-                    return targetProp.floatValue <= condition.floatValue;
+            case DeCondition.ValueType.Number:
+                if (targetProp.propertyType != SerializedPropertyType.Float && targetProp.propertyType != SerializedPropertyType.Integer) return true;
+                float targetVal = targetProp.propertyType == SerializedPropertyType.Float ? targetProp.floatValue : targetProp.intValue;
+                switch (condition.conditionType) {
+                case Condition.IsNot:
+                    return !Mathf.Approximately(targetVal, condition.numValue);
+                case Condition.GreaterThan:
+                    return targetVal > condition.numValue;
+                case Condition.GreaterOrEqual:
+                    return targetVal >= condition.numValue;
+                case Condition.LessThan:
+                    return targetVal < condition.numValue;
+                case Condition.LessOrEqual:
+                    return targetVal <= condition.numValue;
                 default:
-                    return Mathf.Approximately(targetProp.floatValue, condition.floatValue);
-                }
-            case DeCondition.ValueType.Int:
-                if (targetProp.propertyType != SerializedPropertyType.Integer) return true;
-                switch (condition.intConditionType) {
-                case IntCondition.IsNot:
-                    return targetProp.intValue != condition.intValue;
-                case IntCondition.GreaterThan:
-                    return targetProp.intValue > condition.intValue;
-                case IntCondition.GreaterOrEqual:
-                    return targetProp.intValue >= condition.intValue;
-                case IntCondition.LessThan:
-                    return targetProp.intValue < condition.intValue;
-                case IntCondition.LessOrEqual:
-                    return targetProp.intValue <= condition.intValue;
-                default:
-                    return targetProp.intValue == condition.intValue;
+                    return Mathf.Approximately(targetVal, condition.numValue);
                 }
             default: // Bool
                 if (targetProp.propertyType != SerializedPropertyType.Boolean) return true;

@@ -34,7 +34,7 @@ namespace DG.DemiLib.Attributes
         /// <param name="value">Property value to compare (string)</param>
         /// <param name="conditionType">Condition type</param>
         /// <param name="behaviour">Behaviour in case condition is not met</param>
-        public DeConditionalAttribute(string propertyToCompare, string value, StringCondition conditionType = StringCondition.Is, ConditionalBehaviour behaviour = ConditionalBehaviour.Disable)
+        public DeConditionalAttribute(string propertyToCompare, string value, Condition conditionType = Condition.Is, ConditionalBehaviour behaviour = ConditionalBehaviour.Disable)
         {
             this.condition = new DeCondition(propertyToCompare, value, conditionType);
             this.behaviour = behaviour;
@@ -46,7 +46,7 @@ namespace DG.DemiLib.Attributes
         /// <param name="value">Property value to compare (float)</param>
         /// <param name="conditionType">Condition type</param>
         /// <param name="behaviour">Behaviour in case condition is not met</param>
-        public DeConditionalAttribute(string propertyToCompare, float value, FloatCondition conditionType = FloatCondition.Is, ConditionalBehaviour behaviour = ConditionalBehaviour.Disable)
+        public DeConditionalAttribute(string propertyToCompare, float value, Condition conditionType = Condition.Is, ConditionalBehaviour behaviour = ConditionalBehaviour.Disable)
         {
             this.condition = new DeCondition(propertyToCompare, value, conditionType);
             this.behaviour = behaviour;
@@ -58,7 +58,7 @@ namespace DG.DemiLib.Attributes
         /// <param name="value">Property value to compare (float)</param>
         /// <param name="conditionType">Condition type</param>
         /// <param name="behaviour">Behaviour in case condition is not met</param>
-        public DeConditionalAttribute(string propertyToCompare, int value, IntCondition conditionType = IntCondition.Is, ConditionalBehaviour behaviour = ConditionalBehaviour.Disable)
+        public DeConditionalAttribute(string propertyToCompare, int value, Condition conditionType = Condition.Is, ConditionalBehaviour behaviour = ConditionalBehaviour.Disable)
         {
             this.condition = new DeCondition(propertyToCompare, value, conditionType);
             this.behaviour = behaviour;
