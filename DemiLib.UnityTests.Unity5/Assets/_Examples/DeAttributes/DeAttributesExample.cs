@@ -1,6 +1,7 @@
 ﻿using DG.DemiLib.Attributes;
 using UnityEngine;
 
+[DeScriptExecutionOrder(-456)] // Sets the script execution order of this MonoBehaviour to -456
 public class DeAttributesExample : MonoBehaviour
 {
     const string _MainHeaderTextColor = "ffeb42";

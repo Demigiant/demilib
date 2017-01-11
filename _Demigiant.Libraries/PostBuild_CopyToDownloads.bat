@@ -10,8 +10,12 @@ set DemigiantSubdir=Demigiant\DemiLib
 timeout /t 1
 
 :: Complete DemiLib
-set TargetDir=%DownloadsDir%\Complete\%DemigiantSubdir%
+set TargetDir=%DownloadsDir%\DemiLib_Complete\%DemigiantSubdir%
 echo f | xcopy "%StartupDir%\bin" %TargetDir% /Y /I /S
+
+:: Core only
+set TargetDir="%DownloadsDir%\DemiLib_Core\%DemigiantSubdir%"
+echo f | xcopy %StartupDir%\bin\Core %TargetDir%\Core /Y /I /S
 
 :: De2D + Core
 set TargetDir="%DownloadsDir%\De2D_complete\%DemigiantSubdir%"
@@ -42,9 +46,13 @@ start /wait cmd /c del /S %DownloadsDir%\*.pdb
 
 :: ZIP and DELETE
 
-start /wait cmd /c del %DownloadsDir%\Complete.zip
-start /wait cmd /c 7z a %DownloadsDir%\Complete.zip -r %DownloadsDir%\Complete\Demigiant\
-rmdir /S /Q %DownloadsDir%\Complete
+start /wait cmd /c del %DownloadsDir%\DemiLib_Complete.zip
+start /wait cmd /c 7z a %DownloadsDir%\DemiLib_Complete.zip -r %DownloadsDir%\DemiLib_Complete\Demigiant\
+rmdir /S /Q %DownloadsDir%\DemiLib_Complete
+
+start /wait cmd /c del %DownloadsDir%\DemiLib_Core.zip
+start /wait cmd /c 7z a "%DownloadsDir%\DemiLib_Core.zip" -r %DownloadsDir%\DemiLib_Core\Demigiant\
+rmdir /S /Q %DownloadsDir%\DemiLib_Core
 
 start /wait cmd /c del %DownloadsDir%\De2D_complete.zip
 start /wait cmd /c 7z a "%DownloadsDir%\De2D_complete.zip" -r %DownloadsDir%\De2D_complete\Demigiant\

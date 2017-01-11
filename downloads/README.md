@@ -1,7 +1,7 @@
 # DemiLib Downloads
 
 ## Instructions
-Get the "Complete.zip" package to get all the DemiLib stuff, or download a specific configuration with only the files you need.  
+Get the "DemiLib_Complete.zip" package to get all the DemiLib stuff, or download a specific configuration with only the files you need.  
 To download, just right-click on a package and select "Save link as..."
 
 ### IMPORTANT
