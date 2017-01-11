@@ -2,6 +2,7 @@
 // Created: 2016/12/17 14:23
 // License Copyright (c) Daniele Giardini
 
+using System;
 using UnityEngine;
 
 namespace DG.DemiLib.Attributes
@@ -10,6 +11,7 @@ namespace DG.DemiLib.Attributes
     /// <code>Decorator</code>
     /// <para>Draws a divider in the Inspector</para>
     /// </summary>
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeDividerAttribute : PropertyAttribute
     {
         internal int height;

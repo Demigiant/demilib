@@ -2,6 +2,7 @@
 // Created: 2016/12/16 13:29
 // License Copyright (c) Daniele Giardini
 
+using System;
 using UnityEngine;
 
 namespace DG.DemiLib.Attributes
@@ -10,6 +11,7 @@ namespace DG.DemiLib.Attributes
     /// <code>Decorator</code>
     /// <para>Draws a header in the inspector</para>
     /// </summary>
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeHeaderAttribute : PropertyAttribute
     {
         internal string text;

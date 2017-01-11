@@ -21,6 +21,7 @@ namespace DG.DemiEditor.AttributesManagers
         {
             DeCommentAttribute attr = (DeCommentAttribute)attribute;
 
+            DeGUI.BeginGUI();
             SetStyles(attr);
             float w = _positionW <= 0 ? EditorGUIUtility.currentViewWidth : _positionW;
             return _attributeStyle.CalcHeight(new GUIContent(attr.text), w) + attr.marginBottom;
@@ -28,6 +29,7 @@ namespace DG.DemiEditor.AttributesManagers
 
         public override void OnGUI(Rect position)
         {
+            DeGUI.BeginGUI();
             _positionW = position.width;
             DeCommentAttribute attr = (DeCommentAttribute)attribute;
             SetStyles(attr);
@@ -51,7 +53,7 @@ namespace DG.DemiEditor.AttributesManagers
             if (attr.textColor != null) {
                 _attributeStyle.Add(DeEditorUtils.HexToColor(attr.textColor));
                 _attributeStyle.Background(Texture2D.whiteTexture);
-            } else _attributeStyle.Add(new DeSkinColor(0.35f, 0.55f));
+            } else _attributeStyle.Add(new DeSkinColor(0.35f, 0.58f));
         }
     }
 }

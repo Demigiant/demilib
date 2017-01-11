@@ -2,6 +2,7 @@
 // Created: 2016/12/16 18:30
 // License Copyright (c) Daniele Giardini
 
+using System;
 using UnityEngine;
 
 namespace DG.DemiLib.Attributes
@@ -10,6 +11,7 @@ namespace DG.DemiLib.Attributes
     /// <code>Property attribute</code>
     /// <para>Draws the label with the given color and background</para>
     /// </summary>
+    [AttributeUsage(AttributeTargets.Field)]
     public class DeColoredLabelAttribute : PropertyAttribute
     {
         internal string textColor, bgColor;

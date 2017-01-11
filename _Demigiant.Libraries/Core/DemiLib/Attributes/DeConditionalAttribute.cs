@@ -2,6 +2,7 @@
 // Created: 2017/01/10 13:59
 // License Copyright (c) Daniele Giardini
 
+using System;
 using UnityEngine;
 
 #pragma warning disable 1591
@@ -11,6 +12,7 @@ namespace DG.DemiLib.Attributes
     /// <code>Property attribute</code>
     /// <para>Shows/hides or enables/disables the property depending on the given conditions</para>
     /// </summary>
+    [AttributeUsage(AttributeTargets.Field)]
     public class DeConditionalAttribute : PropertyAttribute
     {
         internal DeCondition condition;
