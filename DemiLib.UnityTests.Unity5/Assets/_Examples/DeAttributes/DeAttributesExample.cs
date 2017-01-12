@@ -89,14 +89,14 @@ public class DeAttributesExample : MonoBehaviour
     //
     [DeButton(typeof(DeAttributesExample), "SamplePublic")]
     [DeButton("ffcf40", "ff0000", typeof(DeAttributesExample), "SamplePrivate")]
-    [DeButton(null, "ffcf40", typeof(DeAttributesExample), "SamplePrivateWithParams", "Method with params and custom label", 45, "hellow")]
+    [DeButton("Method with params and custom label", null, "ffcf40", typeof(DeAttributesExample), "SamplePrivateWithParams", 45, "hellow")]
     [DeButton(DePosition.HThirdLeft, typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HThirdMiddle, null, "00ff00", typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HThirdRight, "d39fff", "ac6be3", typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HHalfLeft, typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HHalfRight, typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HDefault, typeof(DeAttributesExample), "SamplePublic")]
-    public string run0 = "Just some buttons above me";
+    public string run0 = "Below me there's DeMethodButtons instead";
 
     public void SamplePublic()
     {
@@ -113,5 +113,18 @@ public class DeAttributesExample : MonoBehaviour
     void SamplePrivateWithParams(float f, string s)
     {
         Debug.Log(string.Format("SamplePrivateWithParams method was called with params: {0}, \"{1}\"", f, s));
+    }
+
+    [DeMethodButton("Custom text no params")]
+    [DeMethodButton("Custom text and params", 1, "CUSTOM!")]
+    void SampleMethod00(string s = null)
+    {
+        Debug.Log(string.Format("SampleMethod0 called, dum dee dum! Custom param: \"{0}\"", s));
+    }
+
+    [DeMethodButton]
+    void SampleMethod_01(string s = null)
+    {
+        Debug.Log(string.Format("SampleMethod1 called, la dee da! Custom param: \"{0}\"", s));
     }
 }

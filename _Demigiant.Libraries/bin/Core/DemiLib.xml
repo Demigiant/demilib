@@ -143,16 +143,16 @@
             Draws a button which will call the given method
             </summary>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(DG.DemiLib.Attributes.DePosition,System.String,System.String,System.Type,System.String,System.String,System.Object[])">
+        <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(System.String,DG.DemiLib.Attributes.DePosition,System.String,System.String,System.Type,System.String,System.Object[])">
             <summary>
             Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
             </summary>
+            <param name="buttonText">Button text</param>
             <param name="position"><see cref="T:DG.DemiLib.Attributes.DePosition"/> of the button relative to Inspector width</param>
             <param name="textShade">Color shade (hex string, without #) for the button text</param>
             <param name="bgShade">Color shade (hex string, without #) for the button background</param>
             <param name="targetType">Type of the class that implements the method to call</param>
             <param name="methodName">Name of the method to call</param>
-            <param name="buttonText">Button text</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(DG.DemiLib.Attributes.DePosition,System.String,System.String,System.Type,System.String,System.Object[])">
@@ -166,15 +166,15 @@
             <param name="methodName">Name of the method to call</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(System.String,System.String,System.Type,System.String,System.String,System.Object[])">
+        <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(System.String,System.String,System.String,System.Type,System.String,System.Object[])">
             <summary>
             Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
             </summary>
+            <param name="buttonText">Button text</param>
             <param name="textShade">Color shade (hex string, without #) for the button text</param>
             <param name="bgShade">Color shade (hex string, without #) for the button background</param>
             <param name="targetType">Type of the class that implements the method to call</param>
             <param name="methodName">Name of the method to call</param>
-            <param name="buttonText">Button text</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(System.String,System.String,System.Type,System.String,System.Object[])">
@@ -187,14 +187,14 @@
             <param name="methodName">Name of the method to call</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(DG.DemiLib.Attributes.DePosition,System.Type,System.String,System.String,System.Object[])">
+        <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(System.String,DG.DemiLib.Attributes.DePosition,System.Type,System.String,System.Object[])">
             <summary>
             Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
             </summary>
+            <param name="buttonText">Button text</param>
             <param name="position"><see cref="T:DG.DemiLib.Attributes.DePosition"/> of the button relative to Inspector width</param>
             <param name="targetType">Type of the class that implements the method to call</param>
             <param name="methodName">Name of the method to call</param>
-            <param name="buttonText">Button text</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(DG.DemiLib.Attributes.DePosition,System.Type,System.String,System.Object[])">
@@ -206,13 +206,13 @@
             <param name="methodName">Name of the method to call</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(System.Type,System.String,System.String,System.Object[])">
+        <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(System.String,System.Type,System.String,System.Object[])">
             <summary>
             Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
             </summary>
+            <param name="buttonText">Button text</param>
             <param name="targetType">Type of the class that implements the method to call</param>
             <param name="methodName">Name of the method to call</param>
-            <param name="buttonText">Button text</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeButtonAttribute.#ctor(System.Type,System.String,System.Object[])">
@@ -222,6 +222,22 @@
             <param name="targetType">Type of the class that implements the method to call</param>
             <param name="methodName">Name of the method to call</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
+        </member>
+        <member name="T:DG.DemiLib.Attributes.DeMethodButtonAttribute">
+            <summary>
+            <code>Method attribute</code>
+            Draws a button which will call the given method
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeMethodButtonAttribute.#ctor(System.String,System.Int32,System.Object[])">
+            <summary>
+            Draws a button which will call the method below.
+            You can add as many DeMethodButton you want to the same method, then use the order parameter to order them correctly
+            (note that the order will count only towards attributes on the same method, not overall).
+            </summary>
+            <param name="buttonText">Button text (if NULL uses a prettified version of the method name)</param>
+            <param name="order">Order in which attributes for the same method will be displayed</param>
+            <param name="parameters">Eventual parameters to pass to the method (higher means lower vertical position)</param>
         </member>
         <member name="F:DG.DemiLib.Attributes.DePosition.HDefault">
             <summary>Default inspector width excluding label-reserved space</summary>

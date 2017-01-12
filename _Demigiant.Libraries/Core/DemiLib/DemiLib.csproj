@@ -52,6 +52,7 @@
     <Compile Include="Attributes\DeDividerAttribute.cs" />
     <Compile Include="Attributes\DeHeaderAttribute.cs" />
     <Compile Include="Attributes\DeButtonAttribute.cs" />
+    <Compile Include="Attributes\DeMethodButtonAttribute.cs" />
     <Compile Include="Attributes\DePosition.cs" />
     <Compile Include="Core\GUIUtils.cs" />
     <Compile Include="Attributes\DeScriptExecutionOrderAttribute.cs" />

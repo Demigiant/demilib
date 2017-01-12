@@ -26,14 +26,14 @@ namespace DG.DemiLib.Attributes
         /// <summary>
         /// Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
         /// </summary>
+        /// <param name="buttonText">Button text</param>
         /// <param name="position"><see cref="DePosition"/> of the button relative to Inspector width</param>
         /// <param name="textShade">Color shade (hex string, without #) for the button text</param>
         /// <param name="bgShade">Color shade (hex string, without #) for the button background</param>
         /// <param name="targetType">Type of the class that implements the method to call</param>
         /// <param name="methodName">Name of the method to call</param>
-        /// <param name="buttonText">Button text</param>
         /// <param name="parameters">Eventual parameters to pass to the method</param>
-        public DeButtonAttribute(DePosition position, string textShade, string bgShade, Type targetType, string methodName, string buttonText, params object[] parameters)
+        public DeButtonAttribute(string buttonText, DePosition position, string textShade, string bgShade, Type targetType, string methodName, params object[] parameters)
         {
             this.text = buttonText;
             this.targetType = targetType;
@@ -65,13 +65,13 @@ namespace DG.DemiLib.Attributes
         /// <summary>
         /// Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
         /// </summary>
+        /// <param name="buttonText">Button text</param>
         /// <param name="textShade">Color shade (hex string, without #) for the button text</param>
         /// <param name="bgShade">Color shade (hex string, without #) for the button background</param>
         /// <param name="targetType">Type of the class that implements the method to call</param>
         /// <param name="methodName">Name of the method to call</param>
-        /// <param name="buttonText">Button text</param>
         /// <param name="parameters">Eventual parameters to pass to the method</param>
-        public DeButtonAttribute(string textShade, string bgShade, Type targetType, string methodName, string buttonText, params object[] parameters)
+        public DeButtonAttribute(string buttonText, string textShade, string bgShade, Type targetType, string methodName, params object[] parameters)
         {
             this.text = buttonText;
             this.targetType = targetType;
@@ -100,12 +100,12 @@ namespace DG.DemiLib.Attributes
         /// <summary>
         /// Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
         /// </summary>
+        /// <param name="buttonText">Button text</param>
         /// <param name="position"><see cref="DePosition"/> of the button relative to Inspector width</param>
         /// <param name="targetType">Type of the class that implements the method to call</param>
         /// <param name="methodName">Name of the method to call</param>
-        /// <param name="buttonText">Button text</param>
         /// <param name="parameters">Eventual parameters to pass to the method</param>
-        public DeButtonAttribute(DePosition position, Type targetType, string methodName, string buttonText, params object[] parameters)
+        public DeButtonAttribute(string buttonText, DePosition position, Type targetType, string methodName, params object[] parameters)
         {
             this.text = buttonText;
             this.targetType = targetType;
@@ -131,11 +131,11 @@ namespace DG.DemiLib.Attributes
         /// <summary>
         /// Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
         /// </summary>
+        /// <param name="buttonText">Button text</param>
         /// <param name="targetType">Type of the class that implements the method to call</param>
         /// <param name="methodName">Name of the method to call</param>
-        /// <param name="buttonText">Button text</param>
         /// <param name="parameters">Eventual parameters to pass to the method</param>
-        public DeButtonAttribute(Type targetType, string methodName, string buttonText, params object[] parameters)
+        public DeButtonAttribute(string buttonText, Type targetType, string methodName, params object[] parameters)
         {
             this.text = buttonText;
             this.targetType = targetType;
@@ -158,14 +158,20 @@ namespace DG.DemiLib.Attributes
 
         #region Helpers
 
-        static string NicifyMethodName(string s)
+        internal static string NicifyMethodName(string s)
         {
             if (string.IsNullOrEmpty(s)) return "";
             StringBuilder result = new StringBuilder(s.Length * 2);
             result.Append(s[0]);
             for (int i = 1; i < s.Length; i++) {
-                if (char.IsUpper(s[i]) && s[i - 1] != ' ') result.Append(' ');
-                result.Append(s[i]);
+                char curr = s[i];
+                char prev = s[i - 1];
+                if (curr == '_') result.Append(' '); // Replace underscores with spaces
+                else {
+                    // Add spaces before numbers and uppercase letters
+                    if (curr != ' ' && (char.IsUpper(curr) && (prev != ' ' && prev != '_') || char.IsNumber(curr) && prev != ' ' && prev != '_' && !char.IsNumber(prev))) result.Append(' ');
+                    result.Append(curr);
+                }
             }
             return result.ToString();
         }
