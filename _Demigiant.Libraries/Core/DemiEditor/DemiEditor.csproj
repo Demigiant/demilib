@@ -58,6 +58,7 @@
     <Compile Include="AttributesManagers\DeHeaderPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeButtonPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
+    <Compile Include="AttributesManagers\GlobalInspector.cs" />
     <Compile Include="Core\DeGUIScope.cs" />
     <Compile Include="DeEditorFileUtils.cs" />
     <Compile Include="DeEditorPanelUtils.cs" />

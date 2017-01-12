@@ -14,23 +14,22 @@ namespace DG.DemiEditor.AttributesManagers
     {
         float _positionW;
 
-        bool _stylesSet;
         GUIStyle _attributeStyle;
 
         public override float GetHeight()
         {
             DeCommentAttribute attr = (DeCommentAttribute)attribute;
 
-            DeGUI.BeginGUI();
             SetStyles(attr);
-            float w = _positionW <= 0 ? EditorGUIUtility.currentViewWidth : _positionW;
-            return _attributeStyle.CalcHeight(new GUIContent(attr.text), w) + attr.marginBottom;
+            float w = _positionW < 2 ? EditorGUIUtility.currentViewWidth : _positionW;
+            float h = _attributeStyle.CalcHeight(new GUIContent(attr.text), w) + attr.marginBottom;
+            return h;
         }
 
         public override void OnGUI(Rect position)
         {
             DeGUI.BeginGUI();
-            _positionW = position.width;
+            if (Event.current.type == EventType.Repaint) _positionW = position.width;
             DeCommentAttribute attr = (DeCommentAttribute)attribute;
             SetStyles(attr);
 
@@ -45,9 +44,7 @@ namespace DG.DemiEditor.AttributesManagers
 
         void SetStyles(DeCommentAttribute attr)
         {
-            if (_stylesSet) return;
-
-            _stylesSet = true;
+            if (_attributeStyle != null) return;
 
             _attributeStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, 9).Padding(4, 3, 2, 3);
             if (attr.textColor != null) {

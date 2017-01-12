@@ -9,9 +9,9 @@ public class DeAttributesExample : MonoBehaviour
     const FontStyle _MainHeaderFontStyle = FontStyle.Bold;
     const int _MainHeaderFontSize = 18;
 
-    // DeHeaders examples
+    // DeHeader examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("DeHeaders examples", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeHeader", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
     [DeComment("Header decorator with various options for colors etc.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeHeader("A default header")]
@@ -25,7 +25,7 @@ public class DeAttributesExample : MonoBehaviour
 
     // DeColoredLabel examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("DeColoredLabel examples", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeColoredLabel", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
     [DeComment("Colors the label of a property in the Inspector", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeColoredLabel("ffd860", "a154df")]
@@ -37,7 +37,7 @@ public class DeAttributesExample : MonoBehaviour
 
     // DeConditional examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("DeConditional examples", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeConditional", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
     [DeComment("You can choose to disable or completely hide a property based on given conditions.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeColoredLabel("ffffff", "222222")]
@@ -67,7 +67,7 @@ public class DeAttributesExample : MonoBehaviour
 
     // DeComment examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("DeComment examples", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeComment", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
     [DeComment("Shows a box with the desired text, with options for colors etc.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeComment("This is how a default DeComment looks like when optional parameters are not used.")]
@@ -75,7 +75,7 @@ public class DeAttributesExample : MonoBehaviour
 
     // DeDivider examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("DeDivider examples", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeDivider", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
     [DeComment("Dividers, with options for color, size and margins", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeDivider]
@@ -84,15 +84,15 @@ public class DeAttributesExample : MonoBehaviour
 
     // DeButton examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("DeButton examples", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeButton", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
     [DeComment("You can place as many DeButton as you want (as long as they're above a field), and use them to call any method of any class.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeButton("Method Test 0", typeof(DeAttributesExample), "SampleMethodTest0")]
     [DeButton("Method Test 1 with params", "ffcf40", typeof(DeAttributesExample), "SampleMethodTest1", 45, "hellow")]
     [DeButton("Method Test 2 (static)", "ffcf40", "ff0000", typeof(DeAttributesExample), "SampleMethodTest2")]
-    [DeButton("H3 Test 3", DePosition.HThirdLeft, "444444", typeof(DeAttributesExample), "SampleMethodTest3")]
+    [DeButton("H3 Test 3", DePosition.HThirdLeft, "666666", typeof(DeAttributesExample), "SampleMethodTest3")]
     [DeButton("H3 Test 4", DePosition.HThirdMiddle, "00ff00", typeof(DeAttributesExample), "SampleMethodTest4")]
-    [DeButton("H3 Test 5", DePosition.HThirdRight, "0000ff", typeof(DeAttributesExample), "SampleMethodTest5")]
+    [DeButton("H3 Test 5", DePosition.HThirdRight, "d39fff", "ac6be3", typeof(DeAttributesExample), "SampleMethodTest5")]
     [DeButton("H2 Test 3", DePosition.HHalfLeft, typeof(DeAttributesExample), "SampleMethodTest3")]
     [DeButton("H2 Test 4", DePosition.HHalfRight, typeof(DeAttributesExample), "SampleMethodTest4")]
     [DeButton("Non-extended Test 5", DePosition.HDefault, typeof(DeAttributesExample), "SampleMethodTest5")]
