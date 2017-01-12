@@ -82,6 +82,30 @@ public class DeAttributesExample : MonoBehaviour
     [DeDivider(4, "ff5e31")]
     [DeDivider(1, "a154df")]
 
+    // DeToggle examples
+    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
+    [DeHeader("█ DeToggle", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeComment("Shows a toggle button instead of the usual checkbox", _MainHeaderTextColor, _MainHeaderBgColor)]
+    //
+    [DeToggleButton(DePosition.HExtended)]
+    public bool aToggle0;
+    [DeToggleButton(DePosition.HExtended)]
+    public bool aToggle1;
+    [DeToggleButton("0", DePosition.HThirdLeft)]
+    public bool bToggle0;
+    [DeToggleButton("1", DePosition.HThirdMiddle)]
+    public bool bToggle1 = true;
+    [DeToggleButton("2", DePosition.HThirdRight)]
+    public bool bToggle2;
+    [DeToggleButton("A", DePosition.HHalfLeft)]
+    public bool cToggle0;
+    [DeToggleButton("B", DePosition.HHalfRight)]
+    public bool cToggle1;
+    [DeToggleButton]
+    public bool anotherToggle0;
+    [DeToggleButton]
+    public bool anotherToggle1;
+
     // DeButton examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
     [DeHeader("█ DeButton", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
@@ -89,7 +113,7 @@ public class DeAttributesExample : MonoBehaviour
     //
     [DeButton(typeof(DeAttributesExample), "SamplePublic")]
     [DeButton("ffcf40", "ff0000", typeof(DeAttributesExample), "SamplePrivate")]
-    [DeButton("Method with params and custom label", null, "ffcf40", typeof(DeAttributesExample), "SamplePrivateWithParams", 45, "hellow")]
+    [DeButton("A Toggle - Method with params and custom label", null, "ffcf40", typeof(DeAttributesExample), "SamplePrivateWithParams", 45, "hellow")]
     [DeButton(DePosition.HThirdLeft, typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HThirdMiddle, null, "00ff00", typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HThirdRight, "d39fff", "ac6be3", typeof(DeAttributesExample), "SamplePublic")]

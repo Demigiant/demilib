@@ -105,6 +105,10 @@ namespace DG.DemiEditor
                 if (_fooPurpleSquare == null) _fooPurpleSquare = LoadSquareTexture("purpleSquare");
                 return _fooPurpleSquare;
         }}
+        public static Texture2D squareBorderCurved { get {
+                if (_fooSquareBorderCurved == null) _fooSquareBorderCurved = LoadSquareTexture("squareBorderCurved");
+                return _fooSquareBorderCurved;
+        }}
         static Texture2D _fooWhiteSquare;
         static Texture2D _fooWhiteSquareAlpha10;
         static Texture2D _fooWhiteSquareAlpha15;
@@ -123,6 +127,7 @@ namespace DG.DemiEditor
         static Texture2D _fooGreenSquare;
         static Texture2D _fooBlueSquare;
         static Texture2D _fooPurpleSquare;
+        static Texture2D _fooSquareBorderCurved;
 
         #endregion
 
@@ -190,7 +195,8 @@ namespace DG.DemiEditor
                         toolFoldoutClosed, toolFoldoutClosedWLabel, toolFoldoutClosedWStretchedLabel,
                         toolFoldoutOpen, toolFoldoutOpenWLabel, toolFoldoutOpenWStretchedLabel,
                         toolLFoldoutClosed, toolLFoldoutClosedWLabel, toolLFoldoutClosedWStretchedLabel,
-                        toolLFoldoutOpen, toolLFoldoutOpenWLabel, toolLFoldoutOpenWStretchedLabel;
+                        toolLFoldoutOpen, toolLFoldoutOpenWLabel, toolLFoldoutOpenWStretchedLabel,
+                        bBlankBorder;
 
         internal void Init()
         {
@@ -235,6 +241,9 @@ namespace DG.DemiEditor
             toolLFoldoutOpen = toolFoldoutOpen.Clone().OverflowTop(-4);
             toolLFoldoutOpenWLabel = toolFoldoutOpenWLabel.Clone().OverflowTop(-4);
             toolLFoldoutOpenWStretchedLabel = toolFoldoutOpenWStretchedLabel.Clone().OverflowTop(-4);
+            // Custom using squareBorder
+            bBlankBorder = new GUIStyle(GUI.skin.button).Add(TextAnchor.MiddleCenter, Color.white).Background(DeStylePalette.squareBorderCurved).PaddingTop(0).PaddingBottom(0).StretchHeight().ContentOffsetY(-1)
+                .Border(new RectOffset(4, 4, 4, 4)).Overflow(-1, -1, 0, 0);
         }
     }
 

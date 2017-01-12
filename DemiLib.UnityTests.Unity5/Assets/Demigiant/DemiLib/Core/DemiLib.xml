@@ -260,6 +260,25 @@
         <member name="F:DG.DemiLib.Attributes.DePosition.HThirdRight">
             <summary>One third of inspector width (extended or default depending on the attribute drawn), right side</summary>
         </member>
+        <member name="T:DG.DemiLib.Attributes.DeToggleButton">
+            <summary>
+            <code>Property attribute</code>
+            Draws a toggle button instead of the usual checkbox, only works with boolean fields.
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeToggleButton.#ctor(System.String,DG.DemiLib.Attributes.DePosition)">
+            <summary>
+            Draws a toggle button instead of the usual checkbox (only works with booleans)
+            </summary>
+            <param name="text">Button label</param>
+            <param name="position"><see cref="T:DG.DemiLib.Attributes.DePosition"/> of the button relative to Inspector width</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeToggleButton.#ctor(DG.DemiLib.Attributes.DePosition)">
+            <summary>
+            Draws a toggle button instead of the usual checkbox (only works with booleans)
+            </summary>
+            <param name="position"><see cref="T:DG.DemiLib.Attributes.DePosition"/> of the button relative to Inspector width</param>
+        </member>
         <member name="T:DG.DemiLib.Attributes.DeScriptExecutionOrderAttribute">
             <summary>
             <code>Class attribute</code>

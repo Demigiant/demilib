@@ -11,7 +11,6 @@ namespace DG.DemiEditor.AttributesManagers
     [CustomPropertyDrawer(typeof(DeColoredLabelAttribute))]
     public class DeColoredLabelPropertyDrawer : PropertyDrawer
     {
-        bool _stylesSet;
         GUIStyle _attributeStyle;
 
         public override void OnGUI (Rect position, SerializedProperty property, GUIContent label)
@@ -35,9 +34,7 @@ namespace DG.DemiEditor.AttributesManagers
 
         void SetStyles(DeColoredLabelAttribute attr)
         {
-            if (_stylesSet) return;
-
-            _stylesSet = true;
+            if (_attributeStyle != null) return;
 
             _attributeStyle = EditorStyles.label.Clone(DeEditorUtils.HexToColor(attr.textColor)).Padding(2, 2, 1, 0);
             if (attr.bgColor != null) _attributeStyle.Background(Texture2D.whiteTexture);

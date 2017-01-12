@@ -194,8 +194,8 @@ namespace DG.DemiEditor
             Color prevColor = GUI.color;
             GUI.backgroundColor = toggled ? cp.bg.toggleOn : cp.bg.toggleOff;
             GUI.contentColor = toggled ? cp.content.toggleOn : cp.content.toggleOff;
-            if (toggled) GUI.color = cp.content.toggleOn;
-            if (guiStyle == null) guiStyle = DeGUI.styles.button.def;
+//            if (toggled) GUI.color = cp.content.toggleOn;
+            if (guiStyle == null) guiStyle = DeGUI.styles.button.bBlankBorder;
             bool clicked = GUI.Button(
                 rect,
                 content,

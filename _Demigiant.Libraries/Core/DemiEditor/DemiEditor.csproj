@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributesManagers\AttributesManagersUtils.cs" />
     <Compile Include="AttributesManagers\DeColoredLabelPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeCommentPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeConditionalPropertyDrawer.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="AttributesManagers\DeButtonPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeMethodButtonEditor.cs" />
     <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
+    <Compile Include="AttributesManagers\DeToggleButtonPropertyDrawer.cs" />
     <Compile Include="DeGlobalInspector.cs" />
     <Compile Include="Core\DeGUIScope.cs" />
     <Compile Include="DeEditorFileUtils.cs" />

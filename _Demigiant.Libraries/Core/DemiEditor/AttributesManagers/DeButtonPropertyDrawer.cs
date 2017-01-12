@@ -13,13 +13,11 @@ namespace DG.DemiEditor.AttributesManagers
     [CustomPropertyDrawer(typeof(DeButtonAttribute))]
     public class DeButtonPropertyDrawer : DecoratorDrawer
     {
-        const int _LineH = 16;
+        const int _LineH = 18;
         const int _MarginBottom = 2;
-        float _h;
 
         public override float GetHeight()
         {
-            _h = _LineH + _MarginBottom;
             DeButtonAttribute attr = (DeButtonAttribute)attribute;
             switch (attr.position) {
             case DePosition.HHalfRight:
@@ -27,7 +25,7 @@ namespace DG.DemiEditor.AttributesManagers
             case DePosition.HThirdRight:
                 return 0.0f;
             default:
-                return _h;
+                return _LineH + _MarginBottom;
             }
         }
 
@@ -35,32 +33,7 @@ namespace DG.DemiEditor.AttributesManagers
         {
             DeButtonAttribute attr = (DeButtonAttribute)attribute;
 
-            Rect r = position;
-            r.height = _LineH;
-            float labelW = EditorGUIUtility.labelWidth;
-            switch (attr.position) {
-            case DePosition.HDefault:
-                r.width -= labelW;
-                r.x += labelW;
-                break;
-            case DePosition.HHalfLeft:
-            case DePosition.HHalfRight:
-                r.width = r.width * 0.5f;
-                r.x += attr.position == DePosition.HHalfLeft ? 0 : r.width;
-                if (attr.position != DePosition.HHalfLeft) r.y -= _LineH + _MarginBottom;
-                break;
-            case DePosition.HThirdLeft:
-            case DePosition.HThirdMiddle:
-            case DePosition.HThirdRight:
-                r.width = r.width * 0.333f;
-                r.x += attr.position == DePosition.HThirdLeft
-                    ? 0
-                    : attr.position == DePosition.HThirdMiddle
-                    ? r.width
-                    : r.width * 2;
-                if (attr.position != DePosition.HThirdLeft) r.y -= _LineH + _MarginBottom;
-                break;
-            }
+            Rect r = AttributesManagersUtils.AdaptRectToDePosition(true, position, attr.position, _LineH, _MarginBottom);
 
             Color defBgColor = GUI.backgroundColor;
             Color defContentColor = GUI.contentColor;
