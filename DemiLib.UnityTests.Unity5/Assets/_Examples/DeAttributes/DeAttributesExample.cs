@@ -96,7 +96,8 @@ public class DeAttributesExample : MonoBehaviour
     [DeButton(DePosition.HHalfLeft, typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HHalfRight, typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HDefault, typeof(DeAttributesExample), "SamplePublic")]
-    public string run0 = "Below me there's DeMethodButtons instead";
+    [TextArea]
+    public string note = "Below me there's DeMethodButtons instead, which are attributes placed directly over a method instead of a field (like the ones above me).";
 
     public void SamplePublic()
     {
