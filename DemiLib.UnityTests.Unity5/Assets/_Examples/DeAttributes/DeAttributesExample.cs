@@ -87,40 +87,31 @@ public class DeAttributesExample : MonoBehaviour
     [DeHeader("█ DeButton", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
     [DeComment("You can place as many DeButton as you want (as long as they're above a field), and use them to call any method of any class.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
-    [DeButton("Method Test 0", typeof(DeAttributesExample), "SampleMethodTest0")]
-    [DeButton("Method Test 1 with params", "ffcf40", typeof(DeAttributesExample), "SampleMethodTest1", 45, "hellow")]
-    [DeButton("Method Test 2 (static)", "ffcf40", "ff0000", typeof(DeAttributesExample), "SampleMethodTest2")]
-    [DeButton("H3 Test 3", DePosition.HThirdLeft, "666666", typeof(DeAttributesExample), "SampleMethodTest3")]
-    [DeButton("H3 Test 4", DePosition.HThirdMiddle, "00ff00", typeof(DeAttributesExample), "SampleMethodTest4")]
-    [DeButton("H3 Test 5", DePosition.HThirdRight, "d39fff", "ac6be3", typeof(DeAttributesExample), "SampleMethodTest5")]
-    [DeButton("H2 Test 3", DePosition.HHalfLeft, typeof(DeAttributesExample), "SampleMethodTest3")]
-    [DeButton("H2 Test 4", DePosition.HHalfRight, typeof(DeAttributesExample), "SampleMethodTest4")]
-    [DeButton("Non-extended Test 5", DePosition.HDefault, typeof(DeAttributesExample), "SampleMethodTest5")]
+    [DeButton(typeof(DeAttributesExample), "SamplePublic")]
+    [DeButton("ffcf40", "ff0000", typeof(DeAttributesExample), "SamplePrivate")]
+    [DeButton(null, "ffcf40", typeof(DeAttributesExample), "SamplePrivateWithParams", "Method with params and custom label", 45, "hellow")]
+    [DeButton(DePosition.HThirdLeft, typeof(DeAttributesExample), "SamplePublic")]
+    [DeButton(DePosition.HThirdMiddle, null, "00ff00", typeof(DeAttributesExample), "SamplePublic")]
+    [DeButton(DePosition.HThirdRight, "d39fff", "ac6be3", typeof(DeAttributesExample), "SamplePublic")]
+    [DeButton(DePosition.HHalfLeft, typeof(DeAttributesExample), "SamplePublic")]
+    [DeButton(DePosition.HHalfRight, typeof(DeAttributesExample), "SamplePublic")]
+    [DeButton(DePosition.HDefault, typeof(DeAttributesExample), "SamplePublic")]
     public string run0 = "Just some buttons above me";
 
-
-    public void SampleMethodTest0()
+    public void SamplePublic()
     {
-        Debug.Log("Public SampleMethodTest 0 was called, wohooo!");
+        Debug.Log("SamplePublic method was called, wohooo!");
     }
-    void SampleMethodTest1(float f, string s)
+    void SamplePrivate()
     {
-        Debug.Log(string.Format("Private SampleMethodTest 1 was called with params: {0}, \"{1}\"", f, s));
+        Debug.Log("SamplePrivate method was called, wohooo!");
     }
-    static void SampleMethodTest2()
+    static void SampleStatic()
     {
-        Debug.Log("Private Static SampleMethodTest2 was called, ta-dah!");
+        Debug.Log("SampleStatic method was called, ta-dah!");
     }
-    void SampleMethodTest3()
+    void SamplePrivateWithParams(float f, string s)
     {
-        Debug.Log("Private SampleMethodTest3 was called, sha-zam!");
-    }
-    void SampleMethodTest4()
-    {
-        Debug.Log("Private SampleMethodTest4 was called, ka-pow!");
-    }
-    void SampleMethodTest5()
-    {
-        Debug.Log("Private SampleMethodTest5 was called, wa-blammo!");
+        Debug.Log(string.Format("SamplePrivateWithParams method was called with params: {0}, \"{1}\"", f, s));
     }
 }
