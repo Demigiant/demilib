@@ -141,10 +141,9 @@ namespace DG.DemiEditor
         {
             Color prevBgColor = GUI.backgroundColor;
             Color prevContentColor = GUI.contentColor;
-            Color prevColor = GUI.color;
             GUI.backgroundColor = toggled ? bgOnColor : bgOffColor;
             GUI.contentColor = toggled ? contenOnColor : contentOffColor;
-            if (guiStyle == null) guiStyle = DeGUI.styles.button.def;
+            if (guiStyle == null) guiStyle = DeGUI.styles.button.bBlankBorder;
             bool clicked = GUILayout.Button(
                 content,
                 guiStyle,
@@ -154,7 +153,7 @@ namespace DG.DemiEditor
                 toggled = !toggled;
                 GUI.changed = true;
             }
-            DeGUI.SetGUIColors(prevBgColor, prevContentColor, prevColor);
+            DeGUI.SetGUIColors(prevBgColor, prevContentColor, null);
             return toggled;
         }
 

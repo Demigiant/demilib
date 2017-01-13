@@ -24,7 +24,7 @@ namespace DG.DemiEditor.AttributesManagers
             if (!isTrue && attr.behaviour == ConditionalBehaviour.Hide) return;
 
             bool wasGUIEnabled = GUI.enabled;
-            GUI.enabled = isTrue;
+            GUI.enabled = isTrue && wasGUIEnabled;
             EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
             EditorGUI.PropertyField(position, property, new GUIContent(" ", label.tooltip));
             GUI.enabled = wasGUIEnabled;
