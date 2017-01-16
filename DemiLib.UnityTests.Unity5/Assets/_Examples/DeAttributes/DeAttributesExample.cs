@@ -74,7 +74,7 @@ public class DeAttributesExample : MonoBehaviour
     [DeHeader("█ DeComment", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
     [DeComment("Shows a box with the desired text, with options for colors etc.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
-    [DeComment("This is how a default DeComment looks like when optional parameters are not used.")]
+    [DeComment("This is how a default DeComment looks like when optional parameters are not used. <b>You can also use <color=#ffd860>rich-text</color></b>.")]
     [DeComment("This one is colored, gosh!\nIt almost looks like a colored DeHeader, if not for the wordWrap.", "ffd860", "a154df")]
 
     // DeDivider examples

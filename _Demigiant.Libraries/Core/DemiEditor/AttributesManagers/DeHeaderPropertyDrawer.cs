@@ -13,7 +13,6 @@ namespace DG.DemiEditor.AttributesManagers
     {
         const int _MarginTop = 6;
         const int _MarginBottom = 3;
-        bool _stylesSet;
         GUIStyle _attributeStyle;
 
         public override float GetHeight()
@@ -39,9 +38,7 @@ namespace DG.DemiEditor.AttributesManagers
 
         void SetStyles(DeHeaderAttribute attr)
         {
-            if (_stylesSet) return;
-
-            _stylesSet = true;
+            if (_attributeStyle != null) return;
 
             _attributeStyle = new GUIStyle(GUI.skin.label).Add(attr.textAnchor, attr.fontStyle, attr.fontSize);
             if (attr.textColor != null) _attributeStyle.Add(DeEditorUtils.HexToColor(attr.textColor));
