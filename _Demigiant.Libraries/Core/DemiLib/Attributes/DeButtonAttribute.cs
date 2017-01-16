@@ -11,7 +11,7 @@ namespace DG.DemiLib.Attributes
 {
     /// <summary>
     /// <code>Decorator + Method caller</code>
-    /// Draws a button which will call the given method
+    /// Draws a button which will call the given method from the given class type
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeButtonAttribute : PropertyAttribute

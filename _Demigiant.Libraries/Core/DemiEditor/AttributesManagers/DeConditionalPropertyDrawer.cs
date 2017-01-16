@@ -14,13 +14,13 @@ namespace DG.DemiEditor.AttributesManagers
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             DeConditionalAttribute attr = (DeConditionalAttribute)attribute;
-            return attr.behaviour == ConditionalBehaviour.Disable || attr.condition.IsTrue(property) ? base.GetPropertyHeight(property, label) : 0;
+            return attr.behaviour == ConditionalBehaviour.Disable || attr.condition.IsTrue(property.serializedObject) ? base.GetPropertyHeight(property, label) : 0;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             DeConditionalAttribute attr = (DeConditionalAttribute)attribute;
-            bool isTrue = attr.condition.IsTrue(property);
+            bool isTrue = attr.condition.IsTrue(property.serializedObject);
             if (!isTrue && attr.behaviour == ConditionalBehaviour.Hide) return;
 
             bool wasGUIEnabled = GUI.enabled;

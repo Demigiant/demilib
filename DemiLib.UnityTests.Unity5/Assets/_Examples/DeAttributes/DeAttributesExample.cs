@@ -7,7 +7,7 @@ public class DeAttributesExample : MonoBehaviour
     const string _MainHeaderTextColor = "ffeb42";
     const string _MainHeaderBgColor = "198519";
     const FontStyle _MainHeaderFontStyle = FontStyle.Bold;
-    const int _MainHeaderFontSize = 18;
+    const int _MainHeaderFontSize = 15;
 
     // DeHeader examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
@@ -35,11 +35,14 @@ public class DeAttributesExample : MonoBehaviour
     [DeColoredLabel("222222", "ffc331")]
     public string aString2 = "Hellow enough";
 
-    // DeConditional examples
+    // DeConditional + DeBegin/EndDisabled examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeConditional", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
-    [DeComment("You can choose to disable or completely hide a property based on given conditions.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    [DeHeader("█ DeConditional + DeBegin/EndDisabled", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeComment("You can choose to disable or completely hide a property based on given conditions. Also, you can disable a group of fields with DeBegin/EndDisabled", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
+    [DeColoredLabel("ffffff", "222222")]
+    public bool groupBool = true;
+    [DeBeginDisabled("groupBool")]
     [DeColoredLabel("ffffff", "222222")]
     public float conditioningFloat = 10;
     [DeConditional("conditioningFloat", 10f, Condition.Is, ConditionalBehaviour.Hide)]
@@ -62,6 +65,7 @@ public class DeAttributesExample : MonoBehaviour
     public bool conditioningBool = true;
     [DeConditional("conditioningBool", true)]
     public string conditionalS30 = "Enabled if conditioningBool is TRUE";
+    [DeEndDisabled]
     [DeConditional("conditioningBool", false)]
     public string conditionalS31 = "Enabled if conditioningBool is FALSE";
 

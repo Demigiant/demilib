@@ -14,7 +14,7 @@ namespace DG.DemiEditor
     [CustomEditor(typeof(MonoBehaviour), true)] [CanEditMultipleObjects]
     public class DeGlobalInspector : Editor
     {
-        static DeGlobalInspector I;
+        public static DeGlobalInspector I { get; private set; }
         DeMethodButtonEditor _methodButtonEditor;
 
         void OnEnable()

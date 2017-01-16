@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DeBeginDisabledAttribute.cs" />
     <Compile Include="Attributes\DeColoredLabelAttribute.cs" />
     <Compile Include="Attributes\DeCommentAttribute.cs" />
     <Compile Include="Attributes\DeCondition.cs" />
