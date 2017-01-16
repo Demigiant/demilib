@@ -56,6 +56,7 @@
     <Compile Include="AttributesManagers\DeBeginDisabledPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeConditionalPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeConditionExtensions.cs" />
+    <Compile Include="AttributesManagers\DeDisabledPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeDividerPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeHeaderPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeButtonPropertyDrawer.cs" />

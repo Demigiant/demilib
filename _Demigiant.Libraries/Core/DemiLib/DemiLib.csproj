@@ -50,6 +50,7 @@
     <Compile Include="Attributes\DeCommentAttribute.cs" />
     <Compile Include="Attributes\DeCondition.cs" />
     <Compile Include="Attributes\DeConditionalAttribute.cs" />
+    <Compile Include="Attributes\DeDisabledAttribute.cs" />
     <Compile Include="Attributes\DeDividerAttribute.cs" />
     <Compile Include="Attributes\DeHeaderAttribute.cs" />
     <Compile Include="Attributes\DeButtonAttribute.cs" />

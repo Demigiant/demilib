@@ -26,8 +26,17 @@ namespace Assets._Examples.DeAttributes
         public string aString1 = "Another string";
         [DeEndDisabled]
         public string endDisabled1 = "Conditioning ends here (included)";
+
         [DeDivider(2, "222222")]
         public string aString2 = "A string";
+
+        [DeDisabled("conditioningBool")]
+        [DeHeader("Multi ranged + enabled")]
+        [DeComment("A ranged value with extra enabled conditions using DeBegin/EndDisabled")]
+        [Range(0, 40)]
+        public float aRanged = 23;
+
+        public string aString3 = "A string";
 
         void AMethod()
         {

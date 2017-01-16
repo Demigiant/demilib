@@ -137,6 +137,44 @@
             <param name="conditionType">Condition type</param>
             <param name="behaviour">Behaviour in case condition is not met</param>
         </member>
+        <member name="T:DG.DemiLib.Attributes.DeDisabledAttribute">
+            <summary>
+            Disables a field if the given condition is not met.
+            Works like DeConditional but:
+            <para>- Is a Decorator, so it can be combined with other attributes</para>- Only allows to disable a field, not to hide it
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeDisabledAttribute.#ctor(System.String,System.Boolean)">
+            <summary>
+            Disables the field if the given condition is TRUE.
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (boolean)</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeDisabledAttribute.#ctor(System.String,System.String,DG.DemiLib.Attributes.Condition)">
+            <summary>
+            Disables the field if the given condition is TRUE.
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (string)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeDisabledAttribute.#ctor(System.String,System.Single,DG.DemiLib.Attributes.Condition)">
+            <summary>
+            Disables the field if the given condition is TRUE.
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeDisabledAttribute.#ctor(System.String,System.Int32,DG.DemiLib.Attributes.Condition)">
+            <summary>
+            Disables the field if the given condition is TRUE.
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
         <member name="T:DG.DemiLib.Attributes.DeDividerAttribute">
             <summary>
             <code>Decorator</code>
