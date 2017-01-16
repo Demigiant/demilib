@@ -9,7 +9,9 @@ namespace DG.DemiLib.Attributes
 {
     /// <summary>
     /// <code>Decorator</code>
-    /// <para>Draws a header in the inspector</para>
+    /// <para>Draws a header in the inspector.</para>
+    /// Extra properties which can be set directly:
+    /// <code>marginTop</code>, <code>marginBottom</code>
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeHeaderAttribute : PropertyAttribute

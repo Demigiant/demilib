@@ -205,7 +205,9 @@
         <member name="T:DG.DemiLib.Attributes.DeHeaderAttribute">
             <summary>
             <code>Decorator</code>
-            <para>Draws a header in the inspector</para>
+            <para>Draws a header in the inspector.</para>
+            Extra properties which can be set directly:
+            <code>marginTop</code>, <code>marginBottom</code>
             </summary>
         </member>
         <member name="F:DG.DemiLib.Attributes.DeHeaderAttribute.marginTop">
