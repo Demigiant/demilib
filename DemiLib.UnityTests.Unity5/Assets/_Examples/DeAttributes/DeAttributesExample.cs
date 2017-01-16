@@ -4,8 +4,8 @@ using UnityEngine;
 [DeScriptExecutionOrder(-456)] // Sets the script execution order of this MonoBehaviour to -456
 public class DeAttributesExample : MonoBehaviour
 {
-    const string _MainHeaderTextColor = "ffeb42";
-    const string _MainHeaderBgColor = "198519";
+    const string _MainHeaderTextColor = "ffe682";
+    const string _MainHeaderBgColor = "1e78ea";
     const FontStyle _MainHeaderFontStyle = FontStyle.Bold;
     const int _MainHeaderFontSize = 15;
 
@@ -19,14 +19,14 @@ public class DeAttributesExample : MonoBehaviour
     [DeHeader("A colored header", "ffd860", "a154df")]
     [DeHeader("A colored header with custom font style and size", "ffffff", "ff5e31", FontStyle.Normal, 9)]
     [DeHeader("More custom font style and size", "380b0b", "ffc331", FontStyle.Italic, 16)]
-    [DeHeader("A right aligned colored header", TextAnchor.MiddleRight, "ffffff", "327dcc")]
+    [DeHeader("A right aligned colored header", TextAnchor.MiddleRight, "ffffff", "ff5458")]
     [DeHeader("Another colored header then an array", "ffffff", "000000")]
     public int[] anArray = new []{ 1, 2, 3 };
 
     // DeColoredLabel examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
     [DeHeader("█ DeColoredLabel", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
-    [DeComment("Colors the label of a property in the Inspector", _MainHeaderTextColor, _MainHeaderBgColor)]
+    [DeComment("Colors the label of a property in the Inspector.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeColoredLabel("ffd860", "a154df")]
     public string aString0 = "Hellow";
@@ -38,35 +38,34 @@ public class DeAttributesExample : MonoBehaviour
     // DeConditional + DeBegin/EndDisabled examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
     [DeHeader("█ DeConditional + DeBegin/EndDisabled", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
-    [DeComment("You can choose to disable or completely hide a property based on given conditions. Also, you can disable a group of fields with DeBegin/EndDisabled", _MainHeaderTextColor, _MainHeaderBgColor)]
+    [DeComment("You can choose to disable or completely hide a property based on given conditions. Also, you can disable a group of fields with <b>DeBegin/EndDisabled</b>.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
-    [DeColoredLabel("ffffff", "222222")]
+    [DeToggleButton("Group Toggle", DePosition.HExtended)]
     public bool groupBool = true;
     [DeBeginDisabled("groupBool")]
-    [DeColoredLabel("ffffff", "222222")]
+    [DeBeginGroup][DeColoredLabel("ffffff", "222222")]
     public float conditioningFloat = 10;
     [DeConditional("conditioningFloat", 10f, Condition.Is, ConditionalBehaviour.Hide)]
     public string conditionalS00 = "Visible if conditioningFloat == 10";
     [DeConditional("conditioningFloat", 10f, Condition.LessThan)]
     public string conditionalS01 = "Enabled if conditioningFloat < 10";
-    [DeConditional("conditioningFloat", 10f, Condition.GreaterOrEqual)]
+    [DeEndGroup][DeConditional("conditioningFloat", 10f, Condition.GreaterOrEqual)]
     public string conditionalS02 = "Enabled if conditioningFloat >= 10";
-    [DeColoredLabel("ffffff", "222222")]
+    [DeBeginGroup][DeColoredLabel("ffffff", "222222")]
     public int conditioningInt = 69;
-    [DeConditional("conditioningInt", 45)]
+    [DeEndGroup][DeConditional("conditioningInt", 45)]
     public string conditionalS10 = "Enabled if conditioningInt == 45";
-    [DeColoredLabel("ffffff", "222222")]
+    [DeBeginGroup][DeColoredLabel("ffffff", "222222")]
     public string conditioningString = "Gino";
     [DeConditional("conditioningString", "Gino")]
     public string conditionalS20 = "Enabled if conditioningString == \"Gino\"";
-    [DeConditional("conditioningString", "", Condition.IsNot)]
+    [DeEndGroup][DeConditional("conditioningString", "", Condition.IsNot)]
     public string conditionalS21 = "Enabled if conditioningString != \"\"";
-    [DeColoredLabel("ffffff", "222222")]
+    [DeBeginGroup][DeColoredLabel("ffffff", "222222")]
     public bool conditioningBool = true;
     [DeConditional("conditioningBool", true)]
     public string conditionalS30 = "Enabled if conditioningBool is TRUE";
-    [DeEndDisabled]
-    [DeConditional("conditioningBool", false)]
+    [DeEndGroup][DeEndDisabled][DeConditional("conditioningBool", false)]
     public string conditionalS31 = "Enabled if conditioningBool is FALSE";
 
     // DeComment examples
@@ -80,7 +79,7 @@ public class DeAttributesExample : MonoBehaviour
     // DeDivider examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
     [DeHeader("█ DeDivider", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
-    [DeComment("Dividers, with options for color, size and margins", _MainHeaderTextColor, _MainHeaderBgColor)]
+    [DeComment("Dividers, with options for color, size and margins.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeDivider]
     [DeDivider(4, "ff5e31")]
@@ -89,7 +88,7 @@ public class DeAttributesExample : MonoBehaviour
     // DeToggle examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
     [DeHeader("█ DeToggle", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
-    [DeComment("Shows a toggle button instead of the usual checkbox", _MainHeaderTextColor, _MainHeaderBgColor)]
+    [DeComment("Shows a toggle button instead of the usual checkbox.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeToggleButton(DePosition.HExtended)]
     public bool aToggle0;
@@ -110,10 +109,26 @@ public class DeAttributesExample : MonoBehaviour
     [DeToggleButton]
     public bool anotherToggle1;
 
+    // DeBeginGroup examples
+    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
+    [DeHeader("█ DeBegin/EndGroup", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeComment("Wraps all the fields between <b>DeBeginGroup</b> and <b>DeEndGroup</b> inside a box-styled gui skin.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    //
+    public bool ungroupedBool;
+    [DeBeginGroup][DeHeader("Main Group", marginTop = 0)][Range(0, 50)]
+    public float groupedSlider = 13;
+    public bool groupedBool1;
+    [DeBeginGroup][DeHeader("Sub Group", marginTop = 0)]
+    public string subgroupedS0 = "This is inside a sub-group";
+    [DeEndGroup]
+    public string subgroupedS1 = "This too";
+    [DeEndGroup]
+    public string groupedS0 = "This is inside the main group";
+
     // DeButton examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeButton", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
-    [DeComment("You can place as many DeButton as you want (as long as they're above a field), and use them to call any method of any class.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    [DeHeader("█ DeButton + DeMethodButton", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeComment("You can place as many DeButton as you want (as long as they're above a field), and use them to call any method of any class. Use <b>DeMethodButton</b> instead to draw a button and directly call the method over which it resides.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeButton(typeof(DeAttributesExample), "SamplePublic")]
     [DeButton("ffcf40", "ff0000", typeof(DeAttributesExample), "SamplePrivate")]

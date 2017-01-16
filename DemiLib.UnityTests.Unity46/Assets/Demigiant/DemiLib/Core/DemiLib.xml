@@ -190,11 +190,29 @@
             <param name="marginTop">Top margin</param>
             <param name="marginBottom">Bottom margin</param>
         </member>
+        <member name="T:DG.DemiLib.Attributes.DeBeginGroupAttribute">
+            <summary>
+            Begins a group that will be drawn inside a box GUIStyle.
+            Must always be closed by a <see cref="T:DG.DemiLib.Attributes.DeEndGroupAttribute"/>.
+            <para>NOTE: doesn't respect order as usual decorators do: the group will contain any other decorators added to the same field</para>
+            </summary>
+        </member>
+        <member name="T:DG.DemiLib.Attributes.DeEndGroupAttribute">
+            <summary>
+            Closes a box group
+            </summary>
+        </member>
         <member name="T:DG.DemiLib.Attributes.DeHeaderAttribute">
             <summary>
             <code>Decorator</code>
             <para>Draws a header in the inspector</para>
             </summary>
+        </member>
+        <member name="F:DG.DemiLib.Attributes.DeHeaderAttribute.marginTop">
+            <summary>Top margin (default = 6)</summary>
+        </member>
+        <member name="F:DG.DemiLib.Attributes.DeHeaderAttribute.marginBottom">
+            <summary>Bottom margin (default = 3)</summary>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeHeaderAttribute.#ctor(System.String,System.String,System.String,UnityEngine.FontStyle,System.Int32)">
             <summary>

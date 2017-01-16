@@ -14,6 +14,11 @@ namespace DG.DemiLib.Attributes
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeHeaderAttribute : PropertyAttribute
     {
+        /// <summary>Top margin (default = 6)</summary>
+        public int marginTop = 6;
+        /// <summary>Bottom margin (default = 3)</summary>
+        public int marginBottom = 3;
+
         internal string text;
         internal string textColor, bgColor;
         internal TextAnchor textAnchor = TextAnchor.MiddleLeft;

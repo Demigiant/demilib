@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributesManagers\AttributesManagersUtils.cs" />
+    <Compile Include="AttributesManagers\DeBeginGroupPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeColoredLabelPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeCommentPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeBeginDisabledPropertyDrawer.cs" />

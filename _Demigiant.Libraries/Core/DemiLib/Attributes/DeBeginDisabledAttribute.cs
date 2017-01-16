@@ -11,7 +11,7 @@ namespace DG.DemiLib.Attributes
     /// Begins a conditional group that will be disabled if the given condition is not met.
     /// Must always be closed by a <see cref="DeEndDisabledAttribute"/>
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeBeginDisabledAttribute : PropertyAttribute
     {
         internal DeCondition condition;
@@ -64,6 +64,6 @@ namespace DG.DemiLib.Attributes
     /// <summary>
     /// Closes a disabled group
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeEndDisabledAttribute : PropertyAttribute {}
 }
