@@ -1,5 +1,5 @@
-                         DemiLib License
-			   Copyright (c) 2015 Daniele Giardini
+DemiLib License  
+Copyright (c) 2017 Daniele Giardini
 			   
 			   
 #NON-LEGALESE SUMMARY
