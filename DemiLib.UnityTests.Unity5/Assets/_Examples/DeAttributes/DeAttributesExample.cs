@@ -35,6 +35,17 @@ public class DeAttributesExample : MonoBehaviour
     [DeColoredLabel("222222", "ffc331")]
     public string aString2 = "Hellow enough";
 
+    // DeImage examples
+    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
+    [DeHeader("█ DeImage", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeComment("Draws the given image with options for max width/height.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    //
+    [DeImage("_Examples/_Images/demilib.png", 150)]
+    public string imgString0 = "A kinda logo!";
+    [DeImage("_Examples/_Images/ncus.png", -1, 200)]
+    [DeImage("_Examples/_Images/goscurry.png", -1, 200)]
+    public string imgString1 = "Images above me!";
+
     // DeConditional + DeBegin/EndDisabled examples
     [DeDivider(2, _MainHeaderBgColor, 3, -3)]
     [DeHeader("█ DeConditional + DeBegin/EndDisabled", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]

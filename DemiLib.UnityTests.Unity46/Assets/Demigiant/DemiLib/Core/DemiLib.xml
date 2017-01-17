@@ -323,6 +323,28 @@
             <param name="methodName">Name of the method to call</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
         </member>
+        <member name="T:DG.DemiLib.Attributes.DeImageAttribute">
+            <summary>
+            <code>Decorator</code>
+            <para>Draws an image in the inspector.</para>
+            Extra properties which can be set directly:
+            <code>marginTop</code>, <code>marginBottom</code>
+            </summary>
+        </member>
+        <member name="F:DG.DemiLib.Attributes.DeImageAttribute.marginTop">
+            <summary>Top margin (default = 2)</summary>
+        </member>
+        <member name="F:DG.DemiLib.Attributes.DeImageAttribute.marginBottom">
+            <summary>Bottom margin (default = 2)</summary>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeImageAttribute.#ctor(System.String,System.Single,System.Single)">
+            <summary>
+            Draws an image in the inspector, and fits it to max width/height if set higher than 0
+            </summary>
+            <param name="filePath">Image filepath, relative to Assets folder.<para>(example: "Images/myImg.png")</para></param>
+            <param name="maxWidth">Max width (if lower than 0 ignores it)</param>
+            <param name="maxHeight">Max height (if lower than 0 ignores it)</param>
+        </member>
         <member name="T:DG.DemiLib.Attributes.DeMethodButtonAttribute">
             <summary>
             <code>Method attribute</code>

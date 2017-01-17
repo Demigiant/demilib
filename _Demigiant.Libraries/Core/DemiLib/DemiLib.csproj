@@ -55,6 +55,7 @@
     <Compile Include="Attributes\DeBeginGroupAttribute.cs" />
     <Compile Include="Attributes\DeHeaderAttribute.cs" />
     <Compile Include="Attributes\DeButtonAttribute.cs" />
+    <Compile Include="Attributes\DeImageAttribute.cs" />
     <Compile Include="Attributes\DeMethodButtonAttribute.cs" />
     <Compile Include="Attributes\DePosition.cs" />
     <Compile Include="Attributes\DeToggleButton.cs" />
