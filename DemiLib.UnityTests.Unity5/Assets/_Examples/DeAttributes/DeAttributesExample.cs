@@ -10,22 +10,21 @@ public class DeAttributesExample : MonoBehaviour
     const int _MainHeaderFontSize = 15;
 
     // DeHeader examples
-    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeHeader", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeHeader", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Header decorator with various options for colors etc.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeHeader("A default header")]
     public float aRandomVariable = -1;
     [DeHeader("A colored header", "ffd860", "a154df")]
-    [DeHeader("A colored header with custom font style and size", "ffffff", "ff5e31", FontStyle.Normal, 9)]
+    [DeHeader("A colored header with custom font style, size, and dividers", "ffffff", "ff5e31", FontStyle.Normal, 9, mode = DeHeaderAttribute.Mode.Dividers)]
+    [DeHeader("A default header with a bottom divider", mode = DeHeaderAttribute.Mode.BottomDivider)]
     [DeHeader("More custom font style and size", "380b0b", "ffc331", FontStyle.Italic, 16)]
     [DeHeader("A right aligned colored header", TextAnchor.MiddleRight, "ffffff", "ff5458")]
     [DeHeader("Another colored header then an array", "ffffff", "000000")]
     public int[] anArray = new []{ 1, 2, 3 };
 
     // DeColoredLabel examples
-    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeColoredLabel", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeColoredLabel", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Colors the label of a property in the Inspector.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeColoredLabel("ffd860", "a154df")]
@@ -36,8 +35,7 @@ public class DeAttributesExample : MonoBehaviour
     public string aString2 = "Hellow enough";
 
     // DeImage examples
-    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeImage", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeImage", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Draws the given image with options for max width/height.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeImage("_Examples/_Images/demilib.png", 150)]
@@ -47,8 +45,7 @@ public class DeAttributesExample : MonoBehaviour
     public string imgString1 = "Images above me!";
 
     // DeConditional + DeBegin/EndDisabled examples
-    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeConditional + DeBegin/EndDisabled", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeConditional + DeBegin/EndDisabled", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("You can choose to disable or completely hide a property based on given conditions. Also, you can disable a group of fields with <b>DeBegin/EndDisabled</b>.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeToggleButton("Group Toggle", DePosition.HExtended)]
@@ -80,16 +77,14 @@ public class DeAttributesExample : MonoBehaviour
     public string conditionalS31 = "Enabled if conditioningBool is FALSE";
 
     // DeComment examples
-    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeComment", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeComment", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Shows a box with the desired text, with options for colors etc.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeComment("This is how a default DeComment looks like when optional parameters are not used. <b>You can also use <color=#ffd860>rich-text</color></b>.")]
     [DeComment("This one is colored, gosh!\nIt almost looks like a colored DeHeader, if not for the wordWrap.", "ffd860", "a154df")]
 
     // DeDivider examples
-    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeDivider", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeDivider", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Dividers, with options for color, size and margins.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeDivider]
@@ -97,8 +92,7 @@ public class DeAttributesExample : MonoBehaviour
     [DeDivider(1, "a154df")]
 
     // DeToggle examples
-    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeToggle", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeToggle", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Shows a toggle button instead of the usual checkbox.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeToggleButton(DePosition.HExtended)]
@@ -121,8 +115,7 @@ public class DeAttributesExample : MonoBehaviour
     public bool anotherToggle1;
 
     // DeBeginGroup examples
-    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeBegin/EndGroup", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeBegin/EndGroup", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Wraps all the fields between <b>DeBeginGroup</b> and <b>DeEndGroup</b> inside a box-styled gui skin.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     public bool ungroupedBool;
@@ -137,8 +130,7 @@ public class DeAttributesExample : MonoBehaviour
     public string groupedS0 = "This is inside the main group";
 
     // DeButton examples
-    [DeDivider(2, _MainHeaderBgColor, 3, -3)]
-    [DeHeader("█ DeButton + DeMethodButton", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize)]
+    [DeHeader("█ DeButton + DeMethodButton", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("You can place as many DeButton as you want (as long as they're above a field), and use them to call any method of any class. Use <b>DeMethodButton</b> instead to draw a button and directly call the method over which it resides.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeButton(typeof(DeAttributesExample), "SamplePublic")]

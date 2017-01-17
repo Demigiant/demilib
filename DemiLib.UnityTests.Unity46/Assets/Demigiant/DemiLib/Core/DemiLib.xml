@@ -207,8 +207,16 @@
             <code>Decorator</code>
             <para>Draws a header in the inspector.</para>
             Extra properties which can be set directly:
-            <code>marginTop</code>, <code>marginBottom</code>
+            <code>mode</code>, <code>marginTop</code>, <code>marginBottom</code>
             </summary>
+        </member>
+        <member name="T:DG.DemiLib.Attributes.DeHeaderAttribute.Mode">
+            <summary>
+            Draw mode
+            </summary>
+        </member>
+        <member name="F:DG.DemiLib.Attributes.DeHeaderAttribute.mode">
+            <summary>Draw mode</summary>
         </member>
         <member name="F:DG.DemiLib.Attributes.DeHeaderAttribute.marginTop">
             <summary>Top margin (default = 6)</summary>

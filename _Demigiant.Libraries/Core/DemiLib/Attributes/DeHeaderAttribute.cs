@@ -11,11 +11,26 @@ namespace DG.DemiLib.Attributes
     /// <code>Decorator</code>
     /// <para>Draws a header in the inspector.</para>
     /// Extra properties which can be set directly:
-    /// <code>marginTop</code>, <code>marginBottom</code>
+    /// <code>mode</code>, <code>marginTop</code>, <code>marginBottom</code>
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeHeaderAttribute : PropertyAttribute
     {
+        /// <summary>
+        /// Draw mode
+        /// </summary>
+        public enum Mode
+        {
+#pragma warning disable 1591
+            Default,
+            TopDivider,
+            BottomDivider,
+            Dividers
+#pragma warning restore 1591
+        }
+
+        /// <summary>Draw mode</summary>
+        public Mode mode = Mode.Default;
         /// <summary>Top margin (default = 6)</summary>
         public int marginTop = 6;
         /// <summary>Bottom margin (default = 3)</summary>
