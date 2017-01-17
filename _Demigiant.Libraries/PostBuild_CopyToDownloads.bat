@@ -5,6 +5,8 @@ set PATH=%PATH%;C:\Program Files\7-Zip\
 set StartupDir=%~dp0
 set DownloadsDir=%StartupDir%..\downloads
 set DemigiantSubdir=Demigiant\DemiLib
+set README=%StartupDir%..\README.md
+set LICENSE=%StartupDir%..\LICENSE.md
 
 :: Wait for other builds to complete
 timeout /t 1
@@ -12,33 +14,47 @@ timeout /t 1
 :: Complete DemiLib
 set TargetDir=%DownloadsDir%\DemiLib_Complete\%DemigiantSubdir%
 echo f | xcopy "%StartupDir%\bin" %TargetDir% /Y /I /S
+echo f | xcopy %README% %TargetDir% /Y
+echo f | xcopy %LICENSE% %TargetDir% /Y
 
 :: Core only
 set TargetDir="%DownloadsDir%\DemiLib_Core\%DemigiantSubdir%"
 echo f | xcopy %StartupDir%\bin\Core %TargetDir%\Core /Y /I /S
+echo f | xcopy %README% %TargetDir% /Y
+echo f | xcopy %LICENSE% %TargetDir% /Y
 
 :: De2D + Core
 set TargetDir="%DownloadsDir%\De2D_complete\%DemigiantSubdir%"
 echo f | xcopy %StartupDir%\bin\Core %TargetDir%\Core /Y /I /S
 echo f | xcopy %StartupDir%\bin\De2D*.* %TargetDir% /Y /I /S
+echo f | xcopy %README% %TargetDir% /Y
+echo f | xcopy %LICENSE% %TargetDir% /Y
 
 :: DeAudio + Core
 set TargetDir="%DownloadsDir%\DeAudio_complete\%DemigiantSubdir%"
 echo f | xcopy %StartupDir%\bin\Core %TargetDir%\Core /Y /I /S
 echo f | xcopy %StartupDir%\bin\DeAudio*.* %TargetDir% /Y /I /S
+echo f | xcopy %README% %TargetDir% /Y
+echo f | xcopy %LICENSE% %TargetDir% /Y
 
 :: DeEditorTools + Core
 set TargetDir=%DownloadsDir%\DeEditorTools_complete\%DemigiantSubdir%
 echo f | xcopy %StartupDir%\bin\Core %TargetDir%\Core /Y /I /S
 echo f | xcopy %StartupDir%\bin\Editor\DeEditorTools.* %TargetDir%\Editor /Y /I /S
+echo f | xcopy %README% %TargetDir% /Y
+echo f | xcopy %LICENSE% %TargetDir% /Y
 
 :: DeExtensions (no core)
 set TargetDir=%DownloadsDir%\DeExtensions_complete\%DemigiantSubdir%
 echo f | xcopy %StartupDir%\bin\DeExtensions.* %TargetDir% /Y /I /S
+echo f | xcopy %README% %TargetDir% /Y
+echo f | xcopy %LICENSE% %TargetDir% /Y
 
 :: DeUtils (no core)
 set TargetDir=%DownloadsDir%\DeUtils_complete\%DemigiantSubdir%
 echo f | xcopy %StartupDir%\bin\DeUtils.* %TargetDir% /Y /I /S
+echo f | xcopy %README% %TargetDir% /Y
+echo f | xcopy %LICENSE% %TargetDir% /Y
 
 :: Delete any leftover tmp or pdb files
 start /wait cmd /c del /S %DownloadsDir%\*.tmp
