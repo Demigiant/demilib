@@ -34,6 +34,7 @@ namespace DG.DemiEditor
 
         public override void OnInspectorGUI()
         {
+            I = this;
             base.OnInspectorGUI();
 
             _methodButtonEditor.Draw();
