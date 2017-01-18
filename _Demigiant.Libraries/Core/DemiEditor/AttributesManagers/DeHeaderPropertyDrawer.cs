@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DG.DemiEditor.AttributesManagers
 {
-    [CustomPropertyDrawer(typeof(DeHeaderAttribute))]
+    [CustomPropertyDrawer(typeof(DeHeaderAttribute), true)]
     public class DeHeaderPropertyDrawer : DecoratorDrawer
     {
         const int _DividerH = 2;
