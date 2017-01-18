@@ -14,6 +14,7 @@ namespace DG.DemiEditor.AttributesManagers
     {
         const int _LineH = 16;
         static GUIStyle _prefabOverrideStyle;
+        static GUIStyle _labelOverrideStyle;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -45,6 +46,13 @@ namespace DG.DemiEditor.AttributesManagers
             Rect r = AttributesManagersUtils.AdaptRectToDePosition(false, position, attr.position, _LineH);
 
             EditorGUI.BeginProperty(position, label, property);
+            if (attr.showLabel) {
+                GUI.Label(
+                    position,
+                    string.IsNullOrEmpty(attr.customLabel) ? label : new GUIContent(attr.customLabel, label.tooltip),
+                    property.prefabOverride ? _labelOverrideStyle : GUI.skin.label
+                );
+            }
             if (!string.IsNullOrEmpty(attr.text)) label.text = attr.text;
             EditorGUI.BeginChangeCheck();
             Color prevColor = GUI.color;
@@ -70,6 +78,7 @@ namespace DG.DemiEditor.AttributesManagers
             if (_prefabOverrideStyle != null) return;
 
             _prefabOverrideStyle = DeGUI.styles.button.bBlankBorder.Clone(FontStyle.Bold);
+            _labelOverrideStyle = new GUIStyle(GUI.skin.label).Add(FontStyle.Bold);
         }
     }
 }

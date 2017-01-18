@@ -105,9 +105,9 @@ public class DeAttributesExample : MonoBehaviour
     [DeHeader("█ DeToggle", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Shows a toggle button instead of the usual checkbox.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
-    [DeToggleButton(DePosition.HExtended)]
+    [DeToggleButton()]
     public bool aToggle0 = true;
-    [DeToggleButton("This one has different colors", DePosition.HExtended, "000000", "fb262d", "", "ffcf8d")]
+    [DeToggleButton("This one has different colors", false, "000000", "fb262d", "", "ffcf8d")]
     public bool aToggle1 = true;
     [DeToggleButton("0", DePosition.HThirdLeft)]
     public bool bToggle0;
@@ -119,9 +119,9 @@ public class DeAttributesExample : MonoBehaviour
     public bool cToggle0;
     [DeToggleButton("B", DePosition.HHalfRight)]
     public bool cToggle1;
-    [DeToggleButton]
+    [DeToggleButton("This one has a label", true, customLabel = "A Custom Label")]
     public bool anotherToggle0;
-    [DeToggleButton]
+    [DeToggleButton(DePosition.HDefault)]
     public bool anotherToggle1;
 
     // DeBeginGroup examples

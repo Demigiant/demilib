@@ -416,8 +416,26 @@
         <member name="T:DG.DemiLib.Attributes.DeToggleButtonAttribute">
             <summary>
             <code>Property attribute</code>
-            Draws a toggle button instead of the usual checkbox, only works with boolean fields.
+            <para>Draws a toggle button instead of the usual checkbox, only works with boolean fields.</para>
+            Extra properties which can be set directly:
+            <code>customLabel</code>
             </summary>
+        </member>
+        <member name="F:DG.DemiLib.Attributes.DeToggleButtonAttribute.customLabel">
+            <summary>
+            Custom label. Used only if the <code>showLabel</code> parameter was set to TRUE
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeToggleButtonAttribute.#ctor(System.String,System.Boolean,System.String,System.String,System.String,System.String)">
+            <summary>
+            Draws a toggle button instead of the usual checkbox (only works with booleans)
+            </summary>
+            <param name="text">Button label</param>
+            <param name="showLabel">If TRUE also shows the property's label</param>
+            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default color)</param>
+            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default color)</param>
+            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default color)</param>
+            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default color)</param>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeToggleButtonAttribute.#ctor(System.String,DG.DemiLib.Attributes.DePosition,System.String,System.String,System.String,System.String)">
             <summary>
