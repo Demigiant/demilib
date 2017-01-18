@@ -9,7 +9,8 @@ using UnityEngine;
 namespace DG.DemiEditor
 {
     /// <summary>
-    /// Used to draw special method attributes
+    /// Used to draw special method attributes.
+    /// If you need another generic inspector, inherit from this and override DoEnable, DoDisable and OnInspectorGUI.
     /// </summary>
     [CustomEditor(typeof(MonoBehaviour), true)] [CanEditMultipleObjects]
     public class DeGlobalInspector : Editor
@@ -18,12 +19,15 @@ namespace DG.DemiEditor
         DeMethodButtonEditor _methodButtonEditor;
 
         void OnEnable()
+        { DoEnable(); }
+        public virtual void DoEnable()
         {
             I = this;
             _methodButtonEditor = new DeMethodButtonEditor(target);
         }
 
-        void OnDisable()
+        void OnDisable() { DoDisable(); }
+        public virtual void DoDisable()
         {
             if (I == this) I = null;
         }

@@ -80,7 +80,7 @@ public class DeAttributesExample : MonoBehaviour
     public string conditionalS21 = "Enabled if conditioningString != \"\"";
     [DeBeginGroup][DeColoredLabel("ffffff", "222222")]
     public bool conditioningBool = true;
-    [DeConditional("conditioningBool", true)]
+    [DeDisabled("conditioningBool")]
     public string conditionalS30 = "Enabled if conditioningBool is TRUE";
     [DeEndGroup][DeEndDisabled][DeConditional("conditioningBool", false)]
     public string conditionalS31 = "Enabled if conditioningBool is FALSE";

@@ -11,7 +11,8 @@
         </member>
         <member name="T:DG.DemiEditor.DeGlobalInspector">
             <summary>
-            Used to draw special method attributes
+            Used to draw special method attributes.
+            If you need another generic inspector, inherit from this and override DoEnable, DoDisable and OnInspectorGUI.
             </summary>
         </member>
         <member name="T:DG.DemiEditor.Core.DeGUIScope">
