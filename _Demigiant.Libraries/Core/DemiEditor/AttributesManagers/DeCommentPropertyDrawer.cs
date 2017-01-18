@@ -37,7 +37,7 @@ namespace DG.DemiEditor.AttributesManagers
             r.height -= attr.marginBottom;
 
             Color defBgColor = GUI.backgroundColor;
-            if (attr.bgColor != null) GUI.backgroundColor = DeEditorUtils.HexToColor(attr.bgColor);
+            if (attr.bgColor != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgColor);
             GUI.Box(r, attr.text, _attributeStyle);
             GUI.backgroundColor = defBgColor;
         }
@@ -48,7 +48,7 @@ namespace DG.DemiEditor.AttributesManagers
 
             _attributeStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, attr.fontSize, Format.RichText).Padding(4, 3, 2, 3);
             if (attr.textColor != null) {
-                _attributeStyle.Add(DeEditorUtils.HexToColor(attr.textColor));
+                _attributeStyle.Add(DeColorPalette.HexToColor(attr.textColor));
                 _attributeStyle.Background(Texture2D.whiteTexture);
             } else _attributeStyle.Add(new DeSkinColor(0.35f, 0.58f));
         }

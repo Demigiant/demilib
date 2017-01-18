@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DG.DemiEditor.AttributesManagers
 {
-    [CustomPropertyDrawer(typeof(DeToggleButton))]
+    [CustomPropertyDrawer(typeof(DeToggleButtonAttribute))]
     public class DeToggleButtonPropertyDrawer : PropertyDrawer
     {
         const int _LineH = 16;
@@ -19,7 +19,7 @@ namespace DG.DemiEditor.AttributesManagers
         {
             if (property.propertyType != SerializedPropertyType.Boolean) return base.GetPropertyHeight(property, label);
 
-            DeToggleButton attr = (DeToggleButton)attribute;
+            DeToggleButtonAttribute attr = (DeToggleButtonAttribute)attribute;
             switch (attr.position) {
             case DePosition.HHalfRight:
             case DePosition.HThirdMiddle:
@@ -40,7 +40,7 @@ namespace DG.DemiEditor.AttributesManagers
             DeGUI.BeginGUI();
             SetStyles();
 
-            DeToggleButton attr = (DeToggleButton)attribute;
+            DeToggleButtonAttribute attr = (DeToggleButtonAttribute)attribute;
 
             Rect r = AttributesManagersUtils.AdaptRectToDePosition(false, position, attr.position, _LineH);
 
@@ -50,7 +50,13 @@ namespace DG.DemiEditor.AttributesManagers
             Color prevColor = GUI.color;
             if (property.hasMultipleDifferentValues) GUI.color = new Color(0.4930259f, 0.625f, 0.4503677f, 1f);
             GUIStyle style = property.prefabOverride ? _prefabOverrideStyle : DeGUI.styles.button.bBlankBorder;
-            bool toggled = DeGUI.ToggleButton(r, property.boolValue, label, style);
+            bool toggled = DeGUI.ToggleButton(r, property.boolValue, label,
+                attr.bgOffColor ?? DeGUI.colors.bg.toggleOff,
+                attr.bgOnColor ?? DeGUI.colors.bg.toggleOn,
+                attr.labelOffColor ?? DeGUI.colors.content.toggleOff,
+                attr.labelOnColor ?? DeGUI.colors.content.toggleOn,
+                style
+            );
             GUI.color = prevColor;
             if (EditorGUI.EndChangeCheck()) {
                 GUI.changed = true;

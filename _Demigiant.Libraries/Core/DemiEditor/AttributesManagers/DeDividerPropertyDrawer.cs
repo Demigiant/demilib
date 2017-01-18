@@ -2,6 +2,7 @@
 // Created: 2016/12/17 14:26
 // License Copyright (c) Daniele Giardini
 
+using DG.DemiLib;
 using DG.DemiLib.Attributes;
 using UnityEditor;
 using UnityEngine;
@@ -27,7 +28,7 @@ namespace DG.DemiEditor.AttributesManagers
             Rect pos = new Rect(position.x, position.y + attr.marginTop, position.width, attr.height);
 
             Color defBgColor = GUI.backgroundColor;
-            GUI.backgroundColor = DeEditorUtils.HexToColor(attr.hexColor);
+            GUI.backgroundColor = DeColorPalette.HexToColor(attr.hexColor);
             GUI.Label(pos, "", _attributeStyle);
             GUI.backgroundColor = defBgColor;
         }

@@ -413,24 +413,32 @@
         <member name="F:DG.DemiLib.Attributes.DePosition.HThirdRight">
             <summary>One third of inspector width (extended or default depending on the attribute drawn), right side</summary>
         </member>
-        <member name="T:DG.DemiLib.Attributes.DeToggleButton">
+        <member name="T:DG.DemiLib.Attributes.DeToggleButtonAttribute">
             <summary>
             <code>Property attribute</code>
             Draws a toggle button instead of the usual checkbox, only works with boolean fields.
             </summary>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeToggleButton.#ctor(System.String,DG.DemiLib.Attributes.DePosition)">
+        <member name="M:DG.DemiLib.Attributes.DeToggleButtonAttribute.#ctor(System.String,DG.DemiLib.Attributes.DePosition,System.String,System.String,System.String,System.String)">
             <summary>
             Draws a toggle button instead of the usual checkbox (only works with booleans)
             </summary>
             <param name="text">Button label</param>
             <param name="position"><see cref="T:DG.DemiLib.Attributes.DePosition"/> of the button relative to Inspector width</param>
+            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default color)</param>
+            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default color)</param>
+            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default color)</param>
+            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default color)</param>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeToggleButton.#ctor(DG.DemiLib.Attributes.DePosition)">
+        <member name="M:DG.DemiLib.Attributes.DeToggleButtonAttribute.#ctor(DG.DemiLib.Attributes.DePosition,System.String,System.String,System.String,System.String)">
             <summary>
             Draws a toggle button instead of the usual checkbox (only works with booleans)
             </summary>
             <param name="position"><see cref="T:DG.DemiLib.Attributes.DePosition"/> of the button relative to Inspector width</param>
+            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default color)</param>
+            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default color)</param>
+            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default color)</param>
+            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default color)</param>
         </member>
         <member name="T:DG.DemiLib.Attributes.DeScriptExecutionOrderAttribute">
             <summary>

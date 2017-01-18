@@ -4,6 +4,7 @@
 
 using System;
 using System.Reflection;
+using DG.DemiLib;
 using DG.DemiLib.Attributes;
 using UnityEditor;
 using UnityEngine;
@@ -37,8 +38,8 @@ namespace DG.DemiEditor.AttributesManagers
 
             Color defBgColor = GUI.backgroundColor;
             Color defContentColor = GUI.contentColor;
-            if (attr.bgShade != null) GUI.backgroundColor = DeEditorUtils.HexToColor(attr.bgShade);
-            if (attr.textShade != null) GUI.contentColor = DeEditorUtils.HexToColor(attr.textShade);
+            if (attr.bgShade != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgShade);
+            if (attr.textShade != null) GUI.contentColor = DeColorPalette.HexToColor(attr.textShade);
             if (GUI.Button(r, attr.text)) {
                 MethodInfo mInfo = attr.targetType.GetMethod(
                     attr.methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static

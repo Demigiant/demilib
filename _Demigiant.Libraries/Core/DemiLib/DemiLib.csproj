@@ -59,7 +59,7 @@
     <Compile Include="Attributes\DeLabelAttribute.cs" />
     <Compile Include="Attributes\DeMethodButtonAttribute.cs" />
     <Compile Include="Attributes\DePosition.cs" />
-    <Compile Include="Attributes\DeToggleButton.cs" />
+    <Compile Include="Attributes\DeToggleButtonAttribute.cs" />
     <Compile Include="Core\GUIUtils.cs" />
     <Compile Include="Attributes\DeScriptExecutionOrderAttribute.cs" />
     <Compile Include="DeColorPalette.cs" />

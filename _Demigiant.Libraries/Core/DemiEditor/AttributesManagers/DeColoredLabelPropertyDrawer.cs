@@ -2,6 +2,7 @@
 // Created: 2016/12/16 18:31
 // License Copyright (c) Daniele Giardini
 
+using DG.DemiLib;
 using DG.DemiLib.Attributes;
 using UnityEditor;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace DG.DemiEditor.AttributesManagers
             labelPos.width -= 2;
 
             Color defBgColor = GUI.backgroundColor;
-            if (attr.bgColor != null) GUI.backgroundColor = DeEditorUtils.HexToColor(attr.bgColor);
+            if (attr.bgColor != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgColor);
             GUI.Label(labelPos, attr.customText == null ? label.text : attr.customText, property.prefabOverride ? _attributeOverrideStyle : _attributeStyle);
             GUI.backgroundColor = defBgColor;
 
@@ -37,7 +38,7 @@ namespace DG.DemiEditor.AttributesManagers
         {
             if (_attributeStyle != null) return;
 
-            _attributeStyle = EditorStyles.label.Clone(DeEditorUtils.HexToColor(attr.textColor)).Padding(2, 2, 1, 0);
+            _attributeStyle = EditorStyles.label.Clone(DeColorPalette.HexToColor(attr.textColor)).Padding(2, 2, 1, 0);
             if (attr.bgColor != null) _attributeStyle.Background(Texture2D.whiteTexture);
             _attributeOverrideStyle = _attributeStyle.Clone(FontStyle.Bold);
         }

@@ -185,27 +185,31 @@ namespace DG.DemiEditor
         public static bool ToggleButton(Rect rect, bool toggled, GUIContent content, GUIStyle guiStyle)
         { return ToggleButton(rect, toggled, content, null, guiStyle); }
         /// <summary>Button that can be toggled on and off</summary>
-        /// <summary>Button that can be toggled on and off</summary>
         public static bool ToggleButton(Rect rect, bool toggled, GUIContent content, DeColorPalette colorPalette, GUIStyle guiStyle = null)
         {
             DeColorPalette cp = colorPalette ?? DeGUI.colors;
+            return ToggleButton(rect, toggled, content, cp.bg.toggleOff, cp.bg.toggleOn, cp.content.toggleOff, cp.content.toggleOn, guiStyle);
+        }
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, string text, Color bgOnColor, Color contentOnColor, GUIStyle guiStyle = null)
+        { return ToggleButton(rect, toggled, new GUIContent(text, ""), DeGUI.colors.bg.toggleOff, bgOnColor, DeGUI.colors.content.toggleOff, contentOnColor, guiStyle); }
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, GUIContent content, Color bgOnColor, Color contentOnColor, GUIStyle guiStyle = null)
+        { return ToggleButton(rect, toggled, content, DeGUI.colors.bg.toggleOff, bgOnColor, DeGUI.colors.content.toggleOff, contentOnColor, guiStyle); }
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, GUIContent content, Color bgOffColor, Color bgOnColor, Color contentOffColor, Color contenOnColor, GUIStyle guiStyle = null)
+        {
             Color prevBgColor = GUI.backgroundColor;
             Color prevContentColor = GUI.contentColor;
-            Color prevColor = GUI.color;
-            GUI.backgroundColor = toggled ? cp.bg.toggleOn : cp.bg.toggleOff;
-            GUI.contentColor = toggled ? cp.content.toggleOn : cp.content.toggleOff;
-//            if (toggled) GUI.color = cp.content.toggleOn;
+            GUI.backgroundColor = toggled ? bgOnColor : bgOffColor;
+            GUI.contentColor = toggled ? contenOnColor : contentOffColor;
             if (guiStyle == null) guiStyle = DeGUI.styles.button.bBlankBorder;
-            bool clicked = GUI.Button(
-                rect,
-                content,
-                guiStyle
-            );
+            bool clicked = GUI.Button(rect, content, guiStyle);
             if (clicked) {
                 toggled = !toggled;
                 GUI.changed = true;
             }
-            SetGUIColors(prevBgColor, prevContentColor, prevColor);
+            SetGUIColors(prevBgColor, prevContentColor, null);
             return toggled;
         }
 

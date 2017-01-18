@@ -106,9 +106,9 @@ public class DeAttributesExample : MonoBehaviour
     [DeComment("Shows a toggle button instead of the usual checkbox.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeToggleButton(DePosition.HExtended)]
-    public bool aToggle0;
-    [DeToggleButton(DePosition.HExtended)]
-    public bool aToggle1;
+    public bool aToggle0 = true;
+    [DeToggleButton("This one has different colors", DePosition.HExtended, "000000", "fb262d", "", "ffcf8d")]
+    public bool aToggle1 = true;
     [DeToggleButton("0", DePosition.HThirdLeft)]
     public bool bToggle0;
     [DeToggleButton("1", DePosition.HThirdMiddle)]

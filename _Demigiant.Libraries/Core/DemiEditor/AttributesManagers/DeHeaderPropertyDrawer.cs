@@ -58,7 +58,7 @@ namespace DG.DemiEditor.AttributesManagers
 
             Color defBgColor = GUI.backgroundColor;
             GUI.backgroundColor = attr.bgColor != null
-                ? DeEditorUtils.HexToColor(attr.bgColor)
+                ? DeColorPalette.HexToColor(attr.bgColor)
                 : (Color)new DeSkinColor(0.45f, 0.5f);
             if (hasTopDivider) GUI.Label(topDividerR, "", _dividerStyle);
             GUI.Label(headerR, attr.text, _attributeStyle);
@@ -71,7 +71,7 @@ namespace DG.DemiEditor.AttributesManagers
             if (_attributeStyle != null) return;
 
             _attributeStyle = new GUIStyle(GUI.skin.label).Add(attr.textAnchor, attr.fontStyle, attr.fontSize).PaddingRight(4);
-            if (attr.textColor != null) _attributeStyle.Add(DeEditorUtils.HexToColor(attr.textColor));
+            if (attr.textColor != null) _attributeStyle.Add(DeColorPalette.HexToColor(attr.textColor));
             if (attr.bgColor != null) _attributeStyle.Background(Texture2D.whiteTexture);
 
             _dividerStyle = new GUIStyle(GUI.skin.label).Margin(0).Padding(0);
