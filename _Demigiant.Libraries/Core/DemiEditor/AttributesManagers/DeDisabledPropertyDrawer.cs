@@ -21,8 +21,6 @@ namespace DG.DemiEditor.AttributesManagers
             bool wasGUIEnabled = GUI.enabled;
             EditorGUI.EndDisabledGroup();
             EditorGUI.BeginDisabledGroup(isTrue || !wasGUIEnabled);
-//            EditorGUI.BeginDisabledGroup(false);
-//            EditorGUI.EndDisabledGroup();
         }
     }
 }

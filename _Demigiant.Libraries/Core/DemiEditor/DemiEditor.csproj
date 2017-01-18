@@ -62,6 +62,7 @@
     <Compile Include="AttributesManagers\DeHeaderPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeButtonPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeImagePropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeLabelPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeMethodButtonEditor.cs" />
     <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
     <Compile Include="AttributesManagers\DeToggleButtonPropertyDrawer.cs" />

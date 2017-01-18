@@ -52,12 +52,13 @@
             <para>Draws the label with the given color and background</para>
             </summary>
         </member>
-        <member name="M:DG.DemiLib.Attributes.DeColoredLabelAttribute.#ctor(System.String,System.String)">
+        <member name="M:DG.DemiLib.Attributes.DeColoredLabelAttribute.#ctor(System.String,System.String,System.String)">
             <summary>
             Colors the prefix label for the following property
             </summary>
             <param name="textColor">Prefix label color</param>
             <param name="bgColor">Prefix label bg color</param>
+            <param name="customText">If not NULL, writes this in the label instead of the regular nicified property name</param>
         </member>
         <member name="T:DG.DemiLib.Attributes.DeCommentAttribute">
             <summary>
@@ -357,6 +358,18 @@
             <param name="filePath">Image filepath, relative to Assets folder.<para>(example: "Images/myImg.png")</para></param>
             <param name="maxWidth">Max width (if lower than 0 ignores it)</param>
             <param name="maxHeight">Max height (if lower than 0 ignores it)</param>
+        </member>
+        <member name="T:DG.DemiLib.Attributes.DeLabelAttribute">
+            <summary>
+            <code>Property attribute</code>
+            <para>Writes custom text as the property label</para>
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeLabelAttribute.#ctor(System.String)">
+            <summary>
+            Writes custem text as label, instead of using the regular nicified property name
+            </summary>
+            <param name="customText">Label</param>
         </member>
         <member name="T:DG.DemiLib.Attributes.DeMethodButtonAttribute">
             <summary>

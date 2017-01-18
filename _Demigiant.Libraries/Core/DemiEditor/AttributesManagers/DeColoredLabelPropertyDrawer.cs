@@ -25,7 +25,7 @@ namespace DG.DemiEditor.AttributesManagers
 
             Color defBgColor = GUI.backgroundColor;
             if (attr.bgColor != null) GUI.backgroundColor = DeEditorUtils.HexToColor(attr.bgColor);
-            GUI.Label(labelPos, label.text, _attributeStyle);
+            GUI.Label(labelPos, attr.customText == null ? label.text : attr.customText, _attributeStyle);
             GUI.backgroundColor = defBgColor;
 
             // Draw property as usual

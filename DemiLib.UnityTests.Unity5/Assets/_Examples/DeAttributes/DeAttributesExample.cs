@@ -23,13 +23,22 @@ public class DeAttributesExample : MonoBehaviour
     [DeHeader("Another colored header then an array", "ffffff", "000000")]
     public int[] anArray = new []{ 1, 2, 3 };
 
+    // DeLabel examples
+    [DeHeader("█ DeLabel", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
+    [DeComment("Writes custom text instead of the regular property label.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    //
+    [DeLabel("1234")]
+    public float aLabel0 = 27;
+    [DeLabel("_%&()")][Tooltip("Can be combined with tooltips")]
+    public float aLabel1 = 49;
+
     // DeColoredLabel examples
     [DeHeader("█ DeColoredLabel", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Colors the label of a property in the Inspector.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     [DeColoredLabel("ffd860", "a154df")]
     public string aString0 = "Hellow";
-    [DeColoredLabel("ffffff", "ff5e31")]
+    [DeColoredLabel("ffffff", "ff5e31", "Custom Label")]
     public string aString1 = "Hellow again";
     [DeColoredLabel("222222", "ffc331")]
     public string aString2 = "Hellow enough";

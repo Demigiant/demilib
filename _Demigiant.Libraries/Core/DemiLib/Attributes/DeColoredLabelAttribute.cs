@@ -15,16 +15,19 @@ namespace DG.DemiLib.Attributes
     public class DeColoredLabelAttribute : PropertyAttribute
     {
         internal string textColor, bgColor;
+        internal string customText;
 
         /// <summary>
         /// Colors the prefix label for the following property
         /// </summary>
         /// <param name="textColor">Prefix label color</param>
         /// <param name="bgColor">Prefix label bg color</param>
-        public DeColoredLabelAttribute(string textColor, string bgColor = null)
+        /// <param name="customText">If not NULL, writes this in the label instead of the regular nicified property name</param>
+        public DeColoredLabelAttribute(string textColor, string bgColor = null, string customText = null)
         {
             this.textColor = textColor;
             this.bgColor = bgColor;
+            this.customText = customText;
         }
     }
 }
