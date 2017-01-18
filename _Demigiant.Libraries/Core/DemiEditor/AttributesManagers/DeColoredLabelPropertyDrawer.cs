@@ -12,6 +12,7 @@ namespace DG.DemiEditor.AttributesManagers
     public class DeColoredLabelPropertyDrawer : PropertyDrawer
     {
         GUIStyle _attributeStyle;
+        GUIStyle _attributeOverrideStyle;
 
         public override void OnGUI (Rect position, SerializedProperty property, GUIContent label)
         {
@@ -25,7 +26,7 @@ namespace DG.DemiEditor.AttributesManagers
 
             Color defBgColor = GUI.backgroundColor;
             if (attr.bgColor != null) GUI.backgroundColor = DeEditorUtils.HexToColor(attr.bgColor);
-            GUI.Label(labelPos, attr.customText == null ? label.text : attr.customText, _attributeStyle);
+            GUI.Label(labelPos, attr.customText == null ? label.text : attr.customText, property.prefabOverride ? _attributeOverrideStyle : _attributeStyle);
             GUI.backgroundColor = defBgColor;
 
             // Draw property as usual
@@ -38,6 +39,7 @@ namespace DG.DemiEditor.AttributesManagers
 
             _attributeStyle = EditorStyles.label.Clone(DeEditorUtils.HexToColor(attr.textColor)).Padding(2, 2, 1, 0);
             if (attr.bgColor != null) _attributeStyle.Background(Texture2D.whiteTexture);
+            _attributeOverrideStyle = _attributeStyle.Clone(FontStyle.Bold);
         }
     }
 }

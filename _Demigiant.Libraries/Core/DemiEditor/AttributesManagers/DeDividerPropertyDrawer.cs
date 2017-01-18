@@ -11,33 +11,30 @@ namespace DG.DemiEditor.AttributesManagers
     [CustomPropertyDrawer(typeof(DeDividerAttribute))]
     public class DeDividerPropertyDrawer : DecoratorDrawer
     {
-        bool _stylesSet;
-        GUIStyle _attributeStyle;
-
-        DeDividerAttribute _attr { get { return (DeDividerAttribute)attribute; } }
+        static GUIStyle _attributeStyle;
 
         public override float GetHeight()
         {
-            return _attr.height + _attr.marginTop + _attr.marginBottom;
+            DeDividerAttribute attr = (DeDividerAttribute)attribute;
+            return attr.height + attr.marginTop + attr.marginBottom;
         }
 
         public override void OnGUI(Rect position)
         {
-            SetStyles(_attr);
+            DeDividerAttribute attr = (DeDividerAttribute)attribute;
+            SetStyles();
 
-            Rect pos = new Rect(position.x, position.y + _attr.marginTop, position.width, _attr.height);
+            Rect pos = new Rect(position.x, position.y + attr.marginTop, position.width, attr.height);
 
             Color defBgColor = GUI.backgroundColor;
-            GUI.backgroundColor = DeEditorUtils.HexToColor(_attr.hexColor);
+            GUI.backgroundColor = DeEditorUtils.HexToColor(attr.hexColor);
             GUI.Label(pos, "", _attributeStyle);
             GUI.backgroundColor = defBgColor;
         }
 
-        void SetStyles(DeDividerAttribute attr)
+        static void SetStyles()
         {
-            if (_stylesSet) return;
-
-            _stylesSet = true;
+            if (_attributeStyle != null) return;
 
             _attributeStyle = new GUIStyle(GUI.skin.label).Margin(0).Padding(0);
             _attributeStyle.Background(Texture2D.whiteTexture);

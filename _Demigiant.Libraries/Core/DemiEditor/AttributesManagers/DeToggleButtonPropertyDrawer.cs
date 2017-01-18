@@ -13,6 +13,7 @@ namespace DG.DemiEditor.AttributesManagers
     public class DeToggleButtonPropertyDrawer : PropertyDrawer
     {
         const int _LineH = 16;
+        static GUIStyle _prefabOverrideStyle;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -37,6 +38,7 @@ namespace DG.DemiEditor.AttributesManagers
             }
 
             DeGUI.BeginGUI();
+            SetStyles();
 
             DeToggleButton attr = (DeToggleButton)attribute;
 
@@ -47,13 +49,21 @@ namespace DG.DemiEditor.AttributesManagers
             EditorGUI.BeginChangeCheck();
             Color prevColor = GUI.color;
             if (property.hasMultipleDifferentValues) GUI.color = new Color(0.4930259f, 0.625f, 0.4503677f, 1f);
-            bool toggled = DeGUI.ToggleButton(r, property.boolValue, label);
+            GUIStyle style = property.prefabOverride ? _prefabOverrideStyle : DeGUI.styles.button.bBlankBorder;
+            bool toggled = DeGUI.ToggleButton(r, property.boolValue, label, style);
             GUI.color = prevColor;
             if (EditorGUI.EndChangeCheck()) {
                 GUI.changed = true;
                 property.boolValue = toggled;
             }
             EditorGUI.EndProperty();
+        }
+
+        static void SetStyles()
+        {
+            if (_prefabOverrideStyle != null) return;
+
+            _prefabOverrideStyle = DeGUI.styles.button.bBlankBorder.Clone(FontStyle.Bold);
         }
     }
 }
