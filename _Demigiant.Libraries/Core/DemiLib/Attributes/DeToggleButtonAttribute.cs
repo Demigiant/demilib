@@ -11,7 +11,7 @@ namespace DG.DemiLib.Attributes
     /// <code>Property attribute</code>
     /// <para>Draws a toggle button instead of the usual checkbox, only works with boolean fields.</para>
     /// Extra properties which can be set directly:
-    /// <code>customLabel</code>
+    /// <code>offText, customLabel</code>
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class DeToggleButtonAttribute : PropertyAttribute
@@ -20,6 +20,8 @@ namespace DG.DemiLib.Attributes
         /// Custom label. Used only if the <code>showLabel</code> parameter was set to TRUE
         /// </summary>
         public string customLabel;
+        /// <summary>Optional text shown when the toggle is OFF</summary>
+        public string offText;
 
         internal string text;
         internal DePosition position;

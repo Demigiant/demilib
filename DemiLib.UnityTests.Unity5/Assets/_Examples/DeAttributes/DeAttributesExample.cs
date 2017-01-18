@@ -121,8 +121,8 @@ public class DeAttributesExample : MonoBehaviour
     public bool cToggle1;
     [DeToggleButton("This one has a label", true, customLabel = "A Custom Label")]
     public bool anotherToggle0;
-    [DeToggleButton(DePosition.HDefault)]
-    public bool anotherToggle1;
+    [DeToggleButton("I'm ON", DePosition.HDefault, offText = "I'm OFF")]
+    public bool anotherToggle1 = true;
 
     // DeBeginGroup examples
     [DeHeader("█ DeBegin/EndGroup", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]

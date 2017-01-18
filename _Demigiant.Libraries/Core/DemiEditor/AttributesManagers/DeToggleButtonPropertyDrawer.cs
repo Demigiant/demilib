@@ -46,6 +46,7 @@ namespace DG.DemiEditor.AttributesManagers
             Rect r = AttributesManagersUtils.AdaptRectToDePosition(false, position, attr.position, _LineH);
 
             EditorGUI.BeginProperty(position, label, property);
+            // Eventual label
             if (attr.showLabel) {
                 GUI.Label(
                     position,
@@ -53,7 +54,12 @@ namespace DG.DemiEditor.AttributesManagers
                     property.prefabOverride ? _labelOverrideStyle : GUI.skin.label
                 );
             }
-            if (!string.IsNullOrEmpty(attr.text)) label.text = attr.text;
+            // Toggle button
+            bool requiresCustomOffText = !property.boolValue && !string.IsNullOrEmpty(attr.offText);
+            bool requiresCustomText = !requiresCustomOffText && !string.IsNullOrEmpty(attr.text);
+            if (requiresCustomText || requiresCustomOffText) {
+                label.text = requiresCustomText ? attr.text : attr.offText;
+            }
             EditorGUI.BeginChangeCheck();
             Color prevColor = GUI.color;
             if (property.hasMultipleDifferentValues) GUI.color = new Color(0.4930259f, 0.625f, 0.4503677f, 1f);

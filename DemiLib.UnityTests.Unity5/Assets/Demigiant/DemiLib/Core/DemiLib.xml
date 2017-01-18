@@ -418,13 +418,16 @@
             <code>Property attribute</code>
             <para>Draws a toggle button instead of the usual checkbox, only works with boolean fields.</para>
             Extra properties which can be set directly:
-            <code>customLabel</code>
+            <code>offText, customLabel</code>
             </summary>
         </member>
         <member name="F:DG.DemiLib.Attributes.DeToggleButtonAttribute.customLabel">
             <summary>
             Custom label. Used only if the <code>showLabel</code> parameter was set to TRUE
             </summary>
+        </member>
+        <member name="F:DG.DemiLib.Attributes.DeToggleButtonAttribute.offText">
+            <summary>Optional text shown when the toggle is OFF</summary>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeToggleButtonAttribute.#ctor(System.String,System.Boolean,System.String,System.String,System.String,System.String)">
             <summary>
