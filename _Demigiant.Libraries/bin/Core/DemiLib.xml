@@ -63,7 +63,12 @@
             <summary>
             <code>Decorator</code>
             <para>Shows a comment in the Inspector</para>
+            Extra properties which can be set directly:
+            <code>fontSize</code>
             </summary>
+        </member>
+        <member name="F:DG.DemiLib.Attributes.DeCommentAttribute.fontSize">
+            <summary>Font size (default = 9)</summary>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeCondition.#ctor(System.String,System.Boolean)">
             <summary>

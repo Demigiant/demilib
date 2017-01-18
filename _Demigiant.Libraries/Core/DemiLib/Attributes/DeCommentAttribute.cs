@@ -19,10 +19,15 @@ namespace DG.DemiLib.Attributes
     /// <summary>
     /// <code>Decorator</code>
     /// <para>Shows a comment in the Inspector</para>
+    /// Extra properties which can be set directly:
+    /// <code>fontSize</code>
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeCommentAttribute : PropertyAttribute
     {
+        /// <summary>Font size (default = 9)</summary>
+        public int fontSize = 9;
+
         internal string text;
         internal string textColor, bgColor;
         internal int marginBottom;

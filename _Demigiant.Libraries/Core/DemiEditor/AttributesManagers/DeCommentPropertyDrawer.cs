@@ -46,7 +46,7 @@ namespace DG.DemiEditor.AttributesManagers
         {
             if (_attributeStyle != null) return;
 
-            _attributeStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, 9, Format.RichText).Padding(4, 3, 2, 3);
+            _attributeStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, attr.fontSize, Format.RichText).Padding(4, 3, 2, 3);
             if (attr.textColor != null) {
                 _attributeStyle.Add(DeEditorUtils.HexToColor(attr.textColor));
                 _attributeStyle.Background(Texture2D.whiteTexture);
