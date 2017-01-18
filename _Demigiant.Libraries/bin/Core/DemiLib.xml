@@ -105,8 +105,13 @@
         <member name="T:DG.DemiLib.Attributes.DeConditionalAttribute">
             <summary>
             <code>Property attribute</code>
-            <para>Shows/hides or enables/disables the property depending on the given conditions</para>
+            <para>Shows/hides or enables/disables the property depending on the given conditions.</para>
+            Extra properties which can be set directly:
+            <code>customLabel</code>
             </summary>
+        </member>
+        <member name="F:DG.DemiLib.Attributes.DeConditionalAttribute.customLabel">
+            <summary>Custom label to use instead of regular nicified property name</summary>
         </member>
         <member name="M:DG.DemiLib.Attributes.DeConditionalAttribute.#ctor(System.String,System.Boolean,DG.DemiLib.Attributes.ConditionalBehaviour)">
             <summary>

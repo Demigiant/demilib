@@ -10,11 +10,16 @@ namespace DG.DemiLib.Attributes
 {
     /// <summary>
     /// <code>Property attribute</code>
-    /// <para>Shows/hides or enables/disables the property depending on the given conditions</para>
+    /// <para>Shows/hides or enables/disables the property depending on the given conditions.</para>
+    /// Extra properties which can be set directly:
+    /// <code>customLabel</code>
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class DeConditionalAttribute : PropertyAttribute
     {
+        /// <summary>Custom label to use instead of regular nicified property name</summary>
+        public string customLabel;
+
         internal DeCondition condition;
         internal ConditionalBehaviour behaviour;
 
