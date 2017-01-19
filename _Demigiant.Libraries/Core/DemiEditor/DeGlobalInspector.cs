@@ -18,26 +18,15 @@ namespace DG.DemiEditor
         public static DeGlobalInspector I { get; private set; }
         DeMethodButtonEditor _methodButtonEditor;
 
-        void OnEnable()
-        { DoEnable(); }
-        public virtual void DoEnable()
-        {
-            I = this;
-            _methodButtonEditor = new DeMethodButtonEditor(target);
-        }
-
-        void OnDisable() { DoDisable(); }
-        public virtual void DoDisable()
-        {
-            if (I == this) I = null;
-        }
-
         public override void OnInspectorGUI()
         {
             I = this;
+            if (_methodButtonEditor == null) _methodButtonEditor = new DeMethodButtonEditor(target);
+
             base.OnInspectorGUI();
 
             _methodButtonEditor.Draw();
+            if (I == this) I = null;
         }
 
         public static void RepaintMe()
