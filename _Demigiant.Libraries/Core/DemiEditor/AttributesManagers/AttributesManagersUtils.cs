@@ -10,6 +10,10 @@ namespace DG.DemiEditor.AttributesManagers
 {
     public static class AttributesManagersUtils
     {
+        
+
+        #region Public Methods
+
         public static Rect AdaptRectToDePosition(bool isDecorator, Rect r, DePosition position, float lineH, float marginBottom = 0)
         {
             r.height = lineH;
@@ -45,5 +49,7 @@ namespace DG.DemiEditor.AttributesManagers
             }
             return r;
         }
+        
+        #endregion
     }
 }

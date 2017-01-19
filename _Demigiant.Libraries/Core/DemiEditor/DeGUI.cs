@@ -2,6 +2,7 @@
 // Created: 2015/04/24 18:27
 
 using System.Collections;
+using System.Reflection;
 using DG.DemiLib;
 using DG.DemiLib.Core;
 using UnityEditor;
@@ -30,6 +31,7 @@ namespace DG.DemiEditor
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
         static string _doubleClickTextFieldId; // ID of selected double click textField
         static int _activePressButtonId = -1;
+        static MethodInfo _defaultPropertyFieldMInfo;
 
         static DeGUI()
         {
@@ -229,6 +231,17 @@ namespace DG.DemiEditor
         #endregion
 
         #region Miscellaneous
+
+        /// <summary>
+        /// Can be used instead of EditorGUI.PropertyField, to draw a serializedProperty without its attributes
+        /// (very useful in case you want to use this from within a PropertyDrawer for that same property,
+        /// since otherwise bad infinite loops might happen)
+        /// </summary>
+        public static void DefaultPropertyField(Rect position, SerializedProperty property, GUIContent label)
+        {
+            if (_defaultPropertyFieldMInfo == null) _defaultPropertyFieldMInfo = typeof(EditorGUI).GetMethod("DefaultPropertyField", BindingFlags.Static | BindingFlags.NonPublic);
+            _defaultPropertyFieldMInfo.Invoke(null, new object[] { position, property, label });
+        }
 
         /// <summary>Box with style and color options</summary>
         public static void Box(Rect rect, Color color, GUIStyle style = null)

@@ -1,4 +1,5 @@
-﻿using DG.DemiLib.Attributes;
+﻿using System.Collections.Generic;
+using DG.DemiLib.Attributes;
 using UnityEngine;
 
 [DeScriptExecutionOrder(-456)] // Sets the script execution order of this MonoBehaviour to -456
@@ -42,6 +43,13 @@ public class DeAttributesExample : MonoBehaviour
     public string aString1 = "Hellow again";
     [DeColoredLabel("222222", "ffc331")]
     public string aString2 = "Hellow enough";
+
+    // DeList examples
+    [DeHeader("█ DeList", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
+    [DeComment("Shows a list with dragging options.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    //
+    [DeList]
+    public int[] aList0 = new []{ 1, 2, 3 };
 
     // DeImage examples
     [DeHeader("█ DeImage", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]

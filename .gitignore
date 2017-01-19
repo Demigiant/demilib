@@ -24,3 +24,4 @@ _Demigiant.Libraries/.git
 .vs
 
 *.xar
+LocalOnly*

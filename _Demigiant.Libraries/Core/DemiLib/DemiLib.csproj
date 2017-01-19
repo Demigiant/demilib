@@ -53,6 +53,7 @@
     <Compile Include="Attributes\DeDisabledAttribute.cs" />
     <Compile Include="Attributes\DeDividerAttribute.cs" />
     <Compile Include="Attributes\DeBeginGroupAttribute.cs" />
+    <Compile Include="Attributes\DeListAttribute.cs" />
     <Compile Include="Attributes\DeHeaderAttribute.cs" />
     <Compile Include="Attributes\DeButtonAttribute.cs" />
     <Compile Include="Attributes\DeImageAttribute.cs" />

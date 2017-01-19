@@ -213,6 +213,12 @@
             Closes a box group
             </summary>
         </member>
+        <member name="T:DG.DemiLib.Attributes.DeListAttribute">
+            <summary>
+            <code>Property attribute</code>
+            <para>Shows a list/array with drag, delete, and add options</para>
+            </summary>
+        </member>
         <member name="T:DG.DemiLib.Attributes.DeHeaderAttribute">
             <summary>
             <code>Decorator</code>

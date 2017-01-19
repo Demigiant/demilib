@@ -4,6 +4,11 @@
         <name>DemiEditor</name>
     </assembly>
     <members>
+        <member name="T:DG.DemiEditor.AttributesManagers.DeListPropertyDrawer">
+            <summary>
+            Note: this propertyDrawer is called only if the list is expanded in the array and has at least one element, and is called for each list element
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.AttributesManagers.DeMethodButtonEditor">
             <summary>
             Implemented by <see cref="T:DG.DemiEditor.DeGlobalInspector"/>
@@ -792,6 +797,13 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.SceneField(UnityEngine.Rect,System.String,UnityEngine.Object)">
             <summary>Scene field</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.DefaultPropertyField(UnityEngine.Rect,UnityEditor.SerializedProperty,UnityEngine.GUIContent)">
+            <summary>
+            Can be used instead of EditorGUI.PropertyField, to draw a serializedProperty without its attributes
+            (very useful in case you want to use this from within a PropertyDrawer for that same property,
+            since otherwise bad infinite loops might happen)
+            </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.Box(UnityEngine.Rect,UnityEngine.Color,UnityEngine.GUIStyle)">
             <summary>Box with style and color options</summary>
