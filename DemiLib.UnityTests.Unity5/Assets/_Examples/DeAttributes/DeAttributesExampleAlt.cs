@@ -2,6 +2,7 @@
 // Created: 2017/01/15 20:10
 // License Copyright (c) Daniele Giardini
 
+using System;
 using System.Collections.Generic;
 using DG.DemiLib.Attributes;
 using UnityEngine;
@@ -19,5 +20,13 @@ namespace Assets._Examples.DeAttributes
         public List<Vector3> aList0 = new List<Vector3>() { Vector3.zero, Vector3.one };
         [DeList]
         public List<GameObject> aListOfGos0;
+        [DeList]
+        public SampleStruct[] sampleStructs;
+    }
+
+    [Serializable]
+    public struct SampleStruct
+    {
+        public float a, b, c;
     }
 }

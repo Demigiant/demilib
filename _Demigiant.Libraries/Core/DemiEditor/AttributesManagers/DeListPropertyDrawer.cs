@@ -15,20 +15,27 @@ namespace DG.DemiEditor.AttributesManagers
     [CustomPropertyDrawer(typeof(DeListAttribute))]
     public class DeListPropertyDrawer : PropertyDrawer
     {
-        const int _LineH = 16;
         const int _SpaceH = 2;
         static GUIStyle _btStyle;
+        int _lineH;
         int _listId = -1;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
+            if (!property.IsArrayElement()) return base.GetPropertyHeight(property, label);
+
+            _lineH = (int)base.GetPropertyHeight(property, label);
             SerializedProperty li = property.serializedObject.FindProperty(fieldInfo.Name);
-            if (IsFirstLIstElement(li, property)) return li.arraySize * _LineH + li.arraySize * _SpaceH;
+            if (IsFirstLIstElement(li, property)) return li.arraySize * _lineH + li.arraySize * _SpaceH;
             return 0;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            if (!property.IsArrayElement()) {
+                EditorGUI.PropertyField(position, property, label);
+                return;
+            }
             if (position.height < 1) return; // Not first list element
 
             DeGUI.BeginGUI();
@@ -51,8 +58,9 @@ namespace DG.DemiEditor.AttributesManagers
                     DeGUIDrag.StartDrag(_listId, DeGlobalInspector.I, iList, i);
                 }
                 GUILayout.Space(-12);
-                Rect r = GUILayoutUtility.GetRect(position.width - 66, _LineH);
+                Rect r = GUILayoutUtility.GetRect(position.width - 66, _lineH);
                 r.y += 2;
+//                EditorGUI.PropertyField(r, el, new GUIContent(""));
                 DeGUI.DefaultPropertyField(r, el, new GUIContent(""));
                 GUILayout.Space(2);
                 if (GUILayout.Button("+", _btStyle, GUILayout.Width(16))) {
@@ -82,11 +90,11 @@ namespace DG.DemiEditor.AttributesManagers
             return list.GetArrayElementAtIndex(0).displayName == element.displayName;
         }
 
-        static void SetStyles()
+        void SetStyles()
         {
             if (_btStyle != null) return;
 
-            _btStyle = DeGUI.styles.button.tool.Clone(9).Height(_LineH).StretchHeight(false).MarginTop(2).PaddingLeft(0).PaddingRight(0);
+            _btStyle = DeGUI.styles.button.tool.Clone(9).Height(_lineH).StretchHeight(false).MarginTop(2).PaddingLeft(0).PaddingRight(0);
         }
     }
 }
