@@ -37,6 +37,13 @@ echo f | xcopy %StartupDir%\bin\DeAudio*.* %TargetDir% /Y /I /S
 echo f | xcopy %README% %TargetDir% /Y
 echo f | xcopy %LICENSE% %TargetDir% /Y
 
+:: DeInspektor + Core
+set TargetDir="%DownloadsDir%\DeInspektor_complete\%DemigiantSubdir%"
+echo f | xcopy %StartupDir%\bin\Core %TargetDir%\Core /Y /I /S
+echo f | xcopy %StartupDir%\bin\DeInspektor*.* %TargetDir% /Y /I /S
+echo f | xcopy %README% %TargetDir% /Y
+echo f | xcopy %LICENSE% %TargetDir% /Y
+
 :: DeEditorTools + Core
 set TargetDir=%DownloadsDir%\DeEditorTools_complete\%DemigiantSubdir%
 echo f | xcopy %StartupDir%\bin\Core %TargetDir%\Core /Y /I /S
@@ -77,6 +84,10 @@ rmdir /S /Q %DownloadsDir%\De2D_complete
 start /wait cmd /c del %DownloadsDir%\DeAudio_complete.zip
 start /wait cmd /c 7z a "%DownloadsDir%\DeAudio_complete (requires DOTween).zip" -r %DownloadsDir%\DeAudio_complete\Demigiant\
 rmdir /S /Q %DownloadsDir%\DeAudio_complete
+
+start /wait cmd /c del %DownloadsDir%\DeInspektor_complete.zip
+start /wait cmd /c 7z a "%DownloadsDir%\DeInspektor_complete.zip" -r %DownloadsDir%\DeInspektor_complete\Demigiant\
+rmdir /S /Q %DownloadsDir%\DeInspektor_complete
 
 start /wait cmd /c del %DownloadsDir%\DeEditorTools_complete.zip
 start /wait cmd /c 7z a %DownloadsDir%\DeEditorTools_complete.zip -r %DownloadsDir%\DeEditorTools_complete\Demigiant\

@@ -50,24 +50,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributesManagers\AttributesManagersUtils.cs" />
-    <Compile Include="AttributesManagers\DeBeginGroupPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeColoredLabelPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeCommentPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeBeginDisabledPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeConditionalPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeConditionExtensions.cs" />
-    <Compile Include="AttributesManagers\DeDisabledPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeDividerPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeHeaderPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeButtonPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeImagePropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeLabelPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeListPropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeMethodButtonEditor.cs" />
-    <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
-    <Compile Include="AttributesManagers\DeToggleButtonPropertyDrawer.cs" />
-    <Compile Include="DeGlobalInspector.cs" />
     <Compile Include="Core\DeGUIScope.cs" />
     <Compile Include="DeEditorFileUtils.cs" />
     <Compile Include="DeEditorPanelUtils.cs" />

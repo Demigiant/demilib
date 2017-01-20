@@ -4,7 +4,7 @@
 
 using System;
 using System.Collections.Generic;
-using DG.DemiLib.Attributes;
+using DG.DeInspektor.Attributes;
 using UnityEngine;
 
 namespace Assets._Examples.DeAttributes

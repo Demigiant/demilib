@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeExtensions", "DeExtension
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeEditorTools", "DeEditorTools\DeEditorTools.csproj", "{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeInspektor", "DeInspektor\DeInspektor.csproj", "{A9B1F4F1-1EE1-4282-AC67-3230FF7A54E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeInspektorEditor", "DeInspektorEditor\DeInspektorEditor.csproj", "{6B7F2E7C-A2D8-48EB-AFB2-30DCEDA231EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +77,14 @@ Global
 		{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1CD2DF6-EB26-4CC8-AC37-990F3C5FD76D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9B1F4F1-1EE1-4282-AC67-3230FF7A54E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9B1F4F1-1EE1-4282-AC67-3230FF7A54E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9B1F4F1-1EE1-4282-AC67-3230FF7A54E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9B1F4F1-1EE1-4282-AC67-3230FF7A54E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B7F2E7C-A2D8-48EB-AFB2-30DCEDA231EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B7F2E7C-A2D8-48EB-AFB2-30DCEDA231EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B7F2E7C-A2D8-48EB-AFB2-30DCEDA231EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B7F2E7C-A2D8-48EB-AFB2-30DCEDA231EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

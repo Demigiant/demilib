@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6B7F2E7C-A2D8-48EB-AFB2-30DCEDA231EE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DG.DeInspektorEditor</RootNamespace>
+    <AssemblyName>DeInspektorEditor</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\DeInspektorEditor.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Editor\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Editor\DeInspektorEditor.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="UnityEditor">
+      <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEditor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AttributesManagers\AttributesManagersUtils.cs" />
+    <Compile Include="AttributesManagers\DeBeginDisabledPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeBeginGroupPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeButtonPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeColoredLabelPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeCommentPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeConditionalPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeConditionExtensions.cs" />
+    <Compile Include="AttributesManagers\DeDisabledPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeDividerPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeHeaderPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeImagePropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeLabelPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeListPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeMethodButtonEditor.cs" />
+    <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
+    <Compile Include="AttributesManagers\DeToggleButtonPropertyDrawer.cs" />
+    <Compile Include="DeGlobalInspector.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\DemiEditor\DemiEditor.csproj">
+      <Project>{3b8f6061-77a9-4111-9e7c-a9ea494d14a0}</Project>
+      <Name>DemiEditor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\DemiLib\DemiLib.csproj">
+      <Project>{c492e28d-fc6d-4988-929b-964db4272a30}</Project>
+      <Name>DemiLib</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\DeInspektor\DeInspektor.csproj">
+      <Project>{a9b1f4f1-1ee1-4282-ac67-3230ff7a54e1}</Project>
+      <Name>DeInspektor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>call $(SolutionDir)PostBuild_Editor.bat $(SolutionDir) $(TargetDir) $(TargetFileName) $(TargetName)</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

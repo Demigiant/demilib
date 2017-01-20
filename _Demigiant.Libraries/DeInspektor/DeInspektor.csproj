@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A9B1F4F1-1EE1-4282-AC67-3230FF7A54E1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DG.DeInspektor</RootNamespace>
+    <AssemblyName>DeInspektor</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\DeInspektor.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\DeInspektor.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="UnityEngine">
+      <HintPath>C:\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\DeBeginDisabledAttribute.cs" />
+    <Compile Include="Attributes\DeBeginGroupAttribute.cs" />
+    <Compile Include="Attributes\DeButtonAttribute.cs" />
+    <Compile Include="Attributes\DeColoredLabelAttribute.cs" />
+    <Compile Include="Attributes\DeCommentAttribute.cs" />
+    <Compile Include="Attributes\DeCondition.cs" />
+    <Compile Include="Attributes\DeConditionalAttribute.cs" />
+    <Compile Include="Attributes\DeDisabledAttribute.cs" />
+    <Compile Include="Attributes\DeDividerAttribute.cs" />
+    <Compile Include="Attributes\DeHeaderAttribute.cs" />
+    <Compile Include="Attributes\DeImageAttribute.cs" />
+    <Compile Include="Attributes\DeLabelAttribute.cs" />
+    <Compile Include="Attributes\DeListAttribute.cs" />
+    <Compile Include="Attributes\DeMethodButtonAttribute.cs" />
+    <Compile Include="Attributes\DePosition.cs" />
+    <Compile Include="Attributes\DeScriptExecutionOrderAttribute.cs" />
+    <Compile Include="Attributes\DeToggleButtonAttribute.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\DemiLib\DemiLib.csproj">
+      <Project>{c492e28d-fc6d-4988-929b-964db4272a30}</Project>
+      <Name>DemiLib</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>call $(SolutionDir)PostBuild_Default.bat $(SolutionDir) $(TargetDir) $(TargetFileName) $(TargetName)</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

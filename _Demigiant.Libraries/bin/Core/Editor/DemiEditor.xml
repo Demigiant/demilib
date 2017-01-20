@@ -4,22 +4,6 @@
         <name>DemiEditor</name>
     </assembly>
     <members>
-        <member name="T:DG.DemiEditor.AttributesManagers.DeListPropertyDrawer">
-            <summary>
-            Note: this propertyDrawer is called only if the list is expanded in the array and has at least one element, and is called for each list element
-            </summary>
-        </member>
-        <member name="T:DG.DemiEditor.AttributesManagers.DeMethodButtonEditor">
-            <summary>
-            Implemented by <see cref="T:DG.DemiEditor.DeGlobalInspector"/>
-            </summary>
-        </member>
-        <member name="T:DG.DemiEditor.DeGlobalInspector">
-            <summary>
-            Used to draw special method attributes.
-            If you need another generic inspector, inherit from this and override DoEnable, DoDisable and OnInspectorGUI.
-            </summary>
-        </member>
         <member name="T:DG.DemiEditor.Core.DeGUIScope">
             <summary>
             Replicates Unity's GUI.Scope with Unity versions older than 5.X.

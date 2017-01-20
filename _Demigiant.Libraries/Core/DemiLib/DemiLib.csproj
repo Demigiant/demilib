@@ -45,24 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\DeBeginDisabledAttribute.cs" />
-    <Compile Include="Attributes\DeColoredLabelAttribute.cs" />
-    <Compile Include="Attributes\DeCommentAttribute.cs" />
-    <Compile Include="Attributes\DeCondition.cs" />
-    <Compile Include="Attributes\DeConditionalAttribute.cs" />
-    <Compile Include="Attributes\DeDisabledAttribute.cs" />
-    <Compile Include="Attributes\DeDividerAttribute.cs" />
-    <Compile Include="Attributes\DeBeginGroupAttribute.cs" />
-    <Compile Include="Attributes\DeListAttribute.cs" />
-    <Compile Include="Attributes\DeHeaderAttribute.cs" />
-    <Compile Include="Attributes\DeButtonAttribute.cs" />
-    <Compile Include="Attributes\DeImageAttribute.cs" />
-    <Compile Include="Attributes\DeLabelAttribute.cs" />
-    <Compile Include="Attributes\DeMethodButtonAttribute.cs" />
-    <Compile Include="Attributes\DePosition.cs" />
-    <Compile Include="Attributes\DeToggleButtonAttribute.cs" />
     <Compile Include="Core\GUIUtils.cs" />
-    <Compile Include="Attributes\DeScriptExecutionOrderAttribute.cs" />
     <Compile Include="DeColorPalette.cs" />
     <Compile Include="DeSkinColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
