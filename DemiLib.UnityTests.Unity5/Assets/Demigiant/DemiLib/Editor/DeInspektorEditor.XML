@@ -11,10 +11,10 @@
         </member>
         <member name="T:DG.DeInspektorEditor.AttributesManagers.DeMethodButtonEditor">
             <summary>
-            Implemented by <see cref="T:DG.DeInspektorEditor.DeGlobalInspector"/>
+            Implemented by <see cref="T:DG.DeInspektorEditor.DeInspektor"/>
             </summary>
         </member>
-        <member name="T:DG.DeInspektorEditor.DeGlobalInspector">
+        <member name="T:DG.DeInspektorEditor.DeInspektor">
             <summary>
             Used to draw special method attributes.
             If you need another generic inspector, inherit from this and override DoEnable, DoDisable and OnInspectorGUI.

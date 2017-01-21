@@ -13,7 +13,7 @@ using UnityEngine;
 namespace DG.DeInspektorEditor.AttributesManagers
 {
     /// <summary>
-    /// Implemented by <see cref="DeGlobalInspector"/>
+    /// Implemented by <see cref="DeInspektor"/>
     /// </summary>
     public class DeMethodButtonEditor
     {

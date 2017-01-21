@@ -34,80 +34,88 @@ namespace DG.DemiEditor
         #region Texture2D
 
         public static Texture2D whiteSquare { get {
-                if (_fooWhiteSquare == null) _fooWhiteSquare = LoadSquareTexture("whiteSquare");
-                return _fooWhiteSquare;
+            if (_fooWhiteSquare == null) _fooWhiteSquare = LoadSquareTexture("whiteSquare");
+            return _fooWhiteSquare;
         }}
         public static Texture2D whiteSquareAlpha10 { get {
-                if (_fooWhiteSquareAlpha10 == null) _fooWhiteSquareAlpha10 = LoadSquareTexture("whiteSquareAlpha10");
-                return _fooWhiteSquareAlpha10;
+            if (_fooWhiteSquareAlpha10 == null) _fooWhiteSquareAlpha10 = LoadSquareTexture("whiteSquareAlpha10");
+            return _fooWhiteSquareAlpha10;
         }}
         public static Texture2D whiteSquareAlpha15 { get {
-                if (_fooWhiteSquareAlpha15 == null) _fooWhiteSquareAlpha15 = LoadSquareTexture("whiteSquareAlpha15");
-                return _fooWhiteSquareAlpha15;
+            if (_fooWhiteSquareAlpha15 == null) _fooWhiteSquareAlpha15 = LoadSquareTexture("whiteSquareAlpha15");
+            return _fooWhiteSquareAlpha15;
         }}
         public static Texture2D whiteSquareAlpha25 { get {
-                if (_fooWhiteSquareAlpha25 == null) _fooWhiteSquareAlpha25 = LoadSquareTexture("whiteSquareAlpha25");
-                return _fooWhiteSquareAlpha25;
+            if (_fooWhiteSquareAlpha25 == null) _fooWhiteSquareAlpha25 = LoadSquareTexture("whiteSquareAlpha25");
+            return _fooWhiteSquareAlpha25;
         }}
         public static Texture2D whiteSquareAlpha50 { get {
-                if (_fooWhiteSquareAlpha50 == null) _fooWhiteSquareAlpha50 = LoadSquareTexture("whiteSquareAlpha50");
-                return _fooWhiteSquareAlpha50;
+            if (_fooWhiteSquareAlpha50 == null) _fooWhiteSquareAlpha50 = LoadSquareTexture("whiteSquareAlpha50");
+            return _fooWhiteSquareAlpha50;
         }}
         public static Texture2D whiteSquareAlpha80 { get {
-                if (_fooWhiteSquareAlpha80 == null) _fooWhiteSquareAlpha80 = LoadSquareTexture("whiteSquareAlpha80");
-                return _fooWhiteSquareAlpha80;
+            if (_fooWhiteSquareAlpha80 == null) _fooWhiteSquareAlpha80 = LoadSquareTexture("whiteSquareAlpha80");
+            return _fooWhiteSquareAlpha80;
         }}
         public static Texture2D blackSquare { get {
-                if (_fooBlackSquare == null) _fooBlackSquare = LoadSquareTexture("blackSquare");
-                return _fooBlackSquare;
+            if (_fooBlackSquare == null) _fooBlackSquare = LoadSquareTexture("blackSquare");
+            return _fooBlackSquare;
         }}
         public static Texture2D blackSquareAlpha10 { get {
-                if (_fooBlackSquareAlpha10 == null) _fooBlackSquareAlpha10 = LoadSquareTexture("blackSquareAlpha10");
-                return _fooBlackSquareAlpha10;
+            if (_fooBlackSquareAlpha10 == null) _fooBlackSquareAlpha10 = LoadSquareTexture("blackSquareAlpha10");
+            return _fooBlackSquareAlpha10;
         }}
         public static Texture2D blackSquareAlpha15 { get {
-                if (_fooBlackSquareAlpha15 == null) _fooBlackSquareAlpha15 = LoadSquareTexture("blackSquareAlpha15");
-                return _fooBlackSquareAlpha15;
+            if (_fooBlackSquareAlpha15 == null) _fooBlackSquareAlpha15 = LoadSquareTexture("blackSquareAlpha15");
+            return _fooBlackSquareAlpha15;
         }}
         public static Texture2D blackSquareAlpha25 { get {
-                if (_fooBlackSquareAlpha25 == null) _fooBlackSquareAlpha25 = LoadSquareTexture("blackSquareAlpha25");
-                return _fooBlackSquareAlpha25;
+            if (_fooBlackSquareAlpha25 == null) _fooBlackSquareAlpha25 = LoadSquareTexture("blackSquareAlpha25");
+            return _fooBlackSquareAlpha25;
         }}
         public static Texture2D blackSquareAlpha50 { get {
-                if (_fooBlackSquareAlpha50 == null) _fooBlackSquareAlpha50 = LoadSquareTexture("blackSquareAlpha50");
-                return _fooBlackSquareAlpha50;
+            if (_fooBlackSquareAlpha50 == null) _fooBlackSquareAlpha50 = LoadSquareTexture("blackSquareAlpha50");
+            return _fooBlackSquareAlpha50;
         }}
         public static Texture2D blackSquareAlpha80 { get {
-                if (_fooBlackSquareAlpha80 == null) _fooBlackSquareAlpha80 = LoadSquareTexture("blackSquareAlpha80");
-                return _fooBlackSquareAlpha80;
+            if (_fooBlackSquareAlpha80 == null) _fooBlackSquareAlpha80 = LoadSquareTexture("blackSquareAlpha80");
+            return _fooBlackSquareAlpha80;
         }}
         public static Texture2D redSquare { get {
-                if (_fooRedSquare == null) _fooRedSquare = LoadSquareTexture("redSquare");
-                return _fooRedSquare;
+            if (_fooRedSquare == null) _fooRedSquare = LoadSquareTexture("redSquare");
+            return _fooRedSquare;
         }}
         public static Texture2D orangeSquare { get {
-                if (_fooOrangeSquare == null) _fooOrangeSquare = LoadSquareTexture("orangeSquare");
-                return _fooOrangeSquare;
+            if (_fooOrangeSquare == null) _fooOrangeSquare = LoadSquareTexture("orangeSquare");
+            return _fooOrangeSquare;
         }}
         public static Texture2D yellowSquare { get {
-                if (_fooYellowSquare == null) _fooYellowSquare = LoadSquareTexture("yellowSquare");
-                return _fooYellowSquare;
+            if (_fooYellowSquare == null) _fooYellowSquare = LoadSquareTexture("yellowSquare");
+            return _fooYellowSquare;
         }}
         public static Texture2D greenSquare { get {
-                if (_fooGreenSquare == null) _fooGreenSquare = LoadSquareTexture("greenSquare");
-                return _fooGreenSquare;
+            if (_fooGreenSquare == null) _fooGreenSquare = LoadSquareTexture("greenSquare");
+            return _fooGreenSquare;
         }}
         public static Texture2D blueSquare { get {
-                if (_fooBlueSquare == null) _fooBlueSquare = LoadSquareTexture("blueSquare");
-                return _fooBlueSquare;
+            if (_fooBlueSquare == null) _fooBlueSquare = LoadSquareTexture("blueSquare");
+            return _fooBlueSquare;
         }}
         public static Texture2D purpleSquare { get {
-                if (_fooPurpleSquare == null) _fooPurpleSquare = LoadSquareTexture("purpleSquare");
-                return _fooPurpleSquare;
+            if (_fooPurpleSquare == null) _fooPurpleSquare = LoadSquareTexture("purpleSquare");
+            return _fooPurpleSquare;
         }}
         public static Texture2D squareBorderCurved { get {
-                if (_fooSquareBorderCurved == null) _fooSquareBorderCurved = LoadSquareTexture("squareBorderCurved");
-                return _fooSquareBorderCurved;
+            if (_fooSquareBorderCurved == null) _fooSquareBorderCurved = LoadSquareTexture("squareBorderCurved");
+            return _fooSquareBorderCurved;
+        }}
+        public static Texture2D squareBorderCurvedAlpha { get {
+            if (_fooSquareBorderCurvedAlpha == null) _fooSquareBorderCurvedAlpha = LoadSquareTexture("squareBorderCurvedAlpha");
+            return _fooSquareBorderCurvedAlpha;
+        }}
+        public static Texture2D squareBorderCurved_darkBordersAlpha { get {
+            if (_fooSquareBorderCurved_darkBordersAlpha == null) _fooSquareBorderCurved_darkBordersAlpha = LoadSquareTexture("squareBorderCurved_darkBordersAlpha");
+            return _fooSquareBorderCurved_darkBordersAlpha;
         }}
         static Texture2D _fooWhiteSquare;
         static Texture2D _fooWhiteSquareAlpha10;
@@ -128,6 +136,8 @@ namespace DG.DemiEditor
         static Texture2D _fooBlueSquare;
         static Texture2D _fooPurpleSquare;
         static Texture2D _fooSquareBorderCurved;
+        static Texture2D _fooSquareBorderCurvedAlpha;
+        static Texture2D _fooSquareBorderCurved_darkBordersAlpha;
 
         #endregion
 
@@ -243,7 +253,7 @@ namespace DG.DemiEditor
             toolLFoldoutOpenWStretchedLabel = toolFoldoutOpenWStretchedLabel.Clone().OverflowTop(-4);
             // Custom using squareBorder
             bBlankBorder = new GUIStyle(GUI.skin.button).Add(TextAnchor.MiddleCenter, Color.white).Background(DeStylePalette.squareBorderCurved)
-                .Padding(1, 1, 0, 0).StretchHeight().ContentOffsetY(-1)
+                .Padding(0, 1, 0, 0).StretchHeight().ContentOffsetY(-1)
                 .Border(new RectOffset(4, 4, 4, 4)).Overflow(-1, -1, 0, 0);
         }
     }

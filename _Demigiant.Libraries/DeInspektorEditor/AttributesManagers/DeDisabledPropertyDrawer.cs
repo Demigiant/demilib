@@ -17,7 +17,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
         public override void OnGUI(Rect position)
         {
             DeDisabledAttribute attr = (DeDisabledAttribute)attribute;
-            bool isTrue = attr.condition.IsTrue(DeGlobalInspector.I.serializedObject);
+            bool isTrue = attr.condition.IsTrue(DeInspektor.I.serializedObject);
 
             bool wasGUIEnabled = GUI.enabled;
             EditorGUI.EndDisabledGroup();

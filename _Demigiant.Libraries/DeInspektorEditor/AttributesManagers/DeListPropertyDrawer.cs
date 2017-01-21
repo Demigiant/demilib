@@ -56,7 +56,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(EditorGUI.indentLevel + 16);
                 if (DeGUILayout.PressButton(i.ToString(), _btStyle, GUILayout.Width(20))) {
-                    DeGUIDrag.StartDrag(_listId, DeGlobalInspector.I, iList, i);
+                    DeGUIDrag.StartDrag(_listId, DeInspektor.I, iList, i);
                 }
                 GUILayout.Space(-12);
                 Rect r = GUILayoutUtility.GetRect(position.width - 66, _lineH);

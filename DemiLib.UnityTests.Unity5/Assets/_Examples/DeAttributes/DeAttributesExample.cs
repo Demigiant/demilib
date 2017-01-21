@@ -10,6 +10,18 @@ public class DeAttributesExample : MonoBehaviour
     const FontStyle _MainHeaderFontStyle = FontStyle.Bold;
     const int _MainHeaderFontSize = 15;
 
+    [DeHeader("██ DeInspektor auto-features", "ffffff", "144f9c", FontStyle.Normal, _MainHeaderFontSize + 10, mode = DeHeaderAttribute.Mode.TopDivider)]
+    [DeComment("These features are automatically implemented by DeInspektor for some types.", "ffffff", "144f9c", fontSize = 12)]
+
+    // DeList examples
+    [DeHeader("█ Array/List", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
+    [DeComment("Shows the array/list with drag/add/delete options. Doesn't require attributes: automatically implemented.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    //
+    public int[] aList0 = new []{ 1, 2, 3 };
+
+    [DeHeader("██ DeInspektor Attributes", "ffffff", "144f9c", FontStyle.Normal, _MainHeaderFontSize + 10, mode = DeHeaderAttribute.Mode.TopDivider)]
+    [DeComment("Attributes that you can add to your class/fields/methods.", "ffffff", "144f9c", fontSize = 12)]
+
     // DeHeader examples
     [DeHeader("█ DeHeader", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Header decorator with various options for colors etc.", _MainHeaderTextColor, _MainHeaderBgColor)]
@@ -43,13 +55,6 @@ public class DeAttributesExample : MonoBehaviour
     public string aString1 = "Hellow again";
     [DeColoredLabel("222222", "ffc331")]
     public string aString2 = "Hellow enough";
-
-    // DeList examples
-    [DeHeader("█ DeList", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
-    [DeComment("Shows a list with dragging options.", _MainHeaderTextColor, _MainHeaderBgColor)]
-    //
-    [DeList]
-    public int[] aList0 = new []{ 1, 2, 3 };
 
     // DeImage examples
     [DeHeader("█ DeImage", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
