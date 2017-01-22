@@ -4,11 +4,6 @@
         <name>DeInspektorEditor</name>
     </assembly>
     <members>
-        <member name="T:DG.DeInspektorEditor.AttributesManagers.DeListPropertyDrawer">
-            <summary>
-            Note: this propertyDrawer is called only if the list is expanded in the array and has at least one element, and is called for each list element
-            </summary>
-        </member>
         <member name="T:DG.DeInspektorEditor.AttributesManagers.DeMethodButtonEditor">
             <summary>
             Implemented by <see cref="T:DG.DeInspektorEditor.DeInspektor"/>

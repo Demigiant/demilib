@@ -13,22 +13,12 @@ namespace Assets._Examples.DeAttributes
     {
         public int[] aListArrayNoAttr = new []{ 1, 2, 3 };
         public SampleStruct[] sampleStructs = new[] {new SampleStruct(), new SampleStruct()};
-//        public GameObject[] sampleGos;
-//        public SampleStruct aSampleStruct = new SampleStruct();
-//        public string aString = "Hellow";
-//        public string aString0 = "Hellow";
-//        public float aFloat = 13;
-//        public TextAnchor anEnum = TextAnchor.LowerLeft;
-
-
-//        [DeList]
-//        public int[] aListArray0 = new []{ 1, 2, 3 };
-//        public string aString1 = "Hellow";
-//        [DeList]
-//        public List<Vector3> aList0 = new List<Vector3>() { Vector3.zero, Vector3.one };
-//        [DeList]
-//        public List<GameObject> aListOfGos0;
-//        [DeList]
+        public GameObject[] sampleGos;
+        public SampleStruct aSampleStruct = new SampleStruct();
+        public string aString = "Hellow";
+        public string aString0 = "Hellow";
+        public float aFloat = 13;
+        public TextAnchor anEnum = TextAnchor.LowerLeft;
     }
 
     [Serializable]
