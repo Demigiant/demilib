@@ -10,16 +10,16 @@ public class DeAttributesExample : MonoBehaviour
     const FontStyle _MainHeaderFontStyle = FontStyle.Bold;
     const int _MainHeaderFontSize = 15;
 
-    [DeHeader("██ DeInspektor auto-features", "ffffff", "144f9c", FontStyle.Normal, _MainHeaderFontSize + 10, mode = DeHeaderAttribute.Mode.TopDivider)]
-    [DeComment("These features are automatically implemented by DeInspektor for some types.", "ffffff", "144f9c", fontSize = 12)]
+    [DeHeader("██ DeInspektor", "ffffff", "144f9c", FontStyle.Normal, _MainHeaderFontSize + 10, mode = DeHeaderAttribute.Mode.TopDivider)]
+    [DeComment("These features are automatically implemented by DeInspektor for some types (you can disable all extra features via Unity's Preferences).", "ffffff", "144f9c", fontSize = 12)]
 
     // DeList examples
     [DeHeader("█ Array/List", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
-    [DeComment("Shows the array/list with drag/add/delete options. Doesn't require attributes: automatically implemented.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    [DeComment("Shows the array/list with drag/add/delete options.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
     public int[] aList0 = new []{ 1, 2, 3 };
 
-    [DeHeader("██ DeInspektor Attributes", "ffffff", "144f9c", FontStyle.Normal, _MainHeaderFontSize + 10, mode = DeHeaderAttribute.Mode.TopDivider)]
+    [DeHeader("██ Attributes", "ffffff", "144f9c", FontStyle.Normal, _MainHeaderFontSize + 10, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Attributes that you can add to your class/fields/methods.", "ffffff", "144f9c", fontSize = 12)]
 
     // DeHeader examples
