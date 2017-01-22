@@ -36,7 +36,7 @@ namespace DG.DeInspektorEditor
 
 //            Debug.Log("<color=#00ff00>>>>>>>>> GUI > " + Event.current.type + " > " + GUIUtility.hotControl + "</color>");
             switch (DeInspektorPrefs.mode) {
-            case DeInspektorPrefs.Mode.SpecialFeatures:
+            case DeInspektorPrefs.Mode.Full:
                 // Inspector with special features like custom lists
                 _listId = -1;
                 Draw(this.serializedObject);

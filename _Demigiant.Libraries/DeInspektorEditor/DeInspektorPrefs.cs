@@ -12,7 +12,7 @@ namespace DG.DeInspektorEditor
         public enum Mode
         {
             Basic,
-            SpecialFeatures
+            Full
         }
 
         public static Mode mode;
@@ -29,7 +29,20 @@ namespace DG.DeInspektorEditor
         [PreferenceItem("DeInspektor")]
         public static void PreferencesGUI()
         {
+            GUILayout.BeginVertical(GUI.skin.box);
             mode = (Mode)EditorGUILayout.EnumPopup("Mode", mode);
+            GUILayout.Space(-3);
+            GUILayout.BeginHorizontal();
+            switch (mode) {
+            case Mode.Full:
+                EditorGUILayout.HelpBox("Special layouts for:\n- lists/arrays", MessageType.Info);
+                break;
+            default:
+                EditorGUILayout.HelpBox("Regular inspector, with only the hidden features necessary to show some DeAttributes", MessageType.Info);
+                break;
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
 
             if (GUI.changed) SaveAll();
         }
