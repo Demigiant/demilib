@@ -20,6 +20,7 @@ namespace DG.DeInspektorEditor
     [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)] [CanEditMultipleObjects]
     public class DeInspektor : Editor
     {
+        public const string Version = "0.5.001";
         public static DeInspektor I { get; private set; }
         static GUIStyle _arrayElementBtStyle;
         DeMethodButtonEditor _methodButtonEditor;
@@ -34,7 +35,6 @@ namespace DG.DeInspektorEditor
             DeGUI.BeginGUI();
             SetStyles();
 
-//            Debug.Log("<color=#00ff00>>>>>>>>> GUI > " + Event.current.type + " > " + GUIUtility.hotControl + "</color>");
             switch (DeInspektorPrefs.mode) {
             case DeInspektorPrefs.Mode.Full:
                 // Inspector with special features like custom lists
@@ -71,7 +71,6 @@ namespace DG.DeInspektorEditor
 
         static void DrawProperty(SerializedProperty property, bool isArrayElement = false, int arrayElementIndex = -1)
         {
-//            Debug.Log("DrawProperty > " + property.name + " > " + property.propertyType + "/" + property.type + " > " + property.isArray);
             if (property.isArray && property.propertyType == SerializedPropertyType.Generic) DrawList(property);
             else DrawDefault(property, isArrayElement, arrayElementIndex);
         }
@@ -85,9 +84,6 @@ namespace DG.DeInspektorEditor
                     GUILayout.Space(8);
                     EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("{0} {1}", iterator.type, arrayElementIndex)), true, new GUILayoutOption[0]);
                 } else EditorGUILayout.PropertyField(iterator, new GUIContent(""), true, new GUILayoutOption[0]);
-//            } else if (iterator.propertyType == SerializedPropertyType.Generic) {
-//                // Generic class/struct (expandable)
-//                EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);
             } else {
                 // Regular property
                 EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);
@@ -96,7 +92,6 @@ namespace DG.DeInspektorEditor
 
         static void DrawList(SerializedProperty iterator)
         {
-//            Debug.Log("DrawList > " + iterator.name + " > " + iterator.propertyType + "/" + iterator.type);
             I._listId++;
 
             // Header
@@ -183,42 +178,6 @@ namespace DG.DeInspektorEditor
         {
             if (I == null) return;
             I.Repaint();
-        }
-
-        #endregion
-
-        #region Helpers
-
-        static bool GoodButton(Rect bounds, string caption) {
-            GUIStyle btnStyle = GUI.skin.FindStyle("button");
-            int controlID = GUIUtility.GetControlID(bounds.GetHashCode(), FocusType.Passive);
-       
-            bool isMouseOver = bounds.Contains(Event.current.mousePosition);
-            bool isDown = GUIUtility.hotControl == controlID;
- 
-            if (GUIUtility.hotControl != 0 && !isDown) {
-                // ignore mouse while some other control has it
-                // (this is the key bit that GUI.Button appears to be missing)
-                isMouseOver = false;
-            }
-       
-            if (Event.current.type == EventType.Repaint) {
-                btnStyle.Draw(bounds, new GUIContent(caption), isMouseOver, isDown, false, false);
-            }
-            switch (Event.current.GetTypeForControl(controlID)) {
-                case EventType.mouseDown:
-                    if (isMouseOver) {  // (note: isMouseOver will be false when another control is hot)
-                        GUIUtility.hotControl = controlID;
-                    }
-                    break;
-               
-                case EventType.mouseUp:
-                    if (GUIUtility.hotControl == controlID) GUIUtility.hotControl = 0;
-                    if (isMouseOver && bounds.Contains(Event.current.mousePosition)) return true;
-                    break;
-            }
- 
-            return false;
         }
 
         #endregion

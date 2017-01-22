@@ -29,6 +29,7 @@ namespace DG.DeInspektorEditor
         [PreferenceItem("DeInspektor")]
         public static void PreferencesGUI()
         {
+            GUILayout.Label("v" + DeInspektor.Version);
             GUILayout.BeginVertical(GUI.skin.box);
             mode = (Mode)EditorGUILayout.EnumPopup("Mode", mode);
             GUILayout.Space(-3);
