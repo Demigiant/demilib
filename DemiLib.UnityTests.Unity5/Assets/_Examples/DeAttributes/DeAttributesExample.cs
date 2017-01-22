@@ -158,7 +158,7 @@ public class DeAttributesExample : MonoBehaviour
     //
     [DeButton(typeof(DeAttributesExample), "SamplePublic")]
     [DeButton("ffcf40", "ff0000", typeof(DeAttributesExample), "SamplePrivate")]
-    [DeButton("A Toggle - Method with params and custom label", null, "ffcf40", typeof(DeAttributesExample), "SamplePrivateWithParams", 45, "hellow")]
+    [DeButton("A Method with params and custom label", null, "ffcf40", typeof(DeAttributesExample), "SamplePrivateWithParams", 45, "hellow")]
     [DeButton(DePosition.HThirdLeft, typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HThirdMiddle, null, "00ff00", typeof(DeAttributesExample), "SamplePublic")]
     [DeButton(DePosition.HThirdRight, "d39fff", "ac6be3", typeof(DeAttributesExample), "SamplePublic")]

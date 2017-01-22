@@ -101,7 +101,7 @@ namespace DG.DeInspektorEditor
 
             // Header
             EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("{0} [{1}]", iterator.displayName, iterator.arraySize)), false, new GUILayoutOption[0]);
-            // Header buttons (trick to draw them correctly even if there's decorators assigned to the current property)
+            // Header buttons (to draw them overlayed correctly even if there's decorators assigned to the current property)
             GUILayout.Space(-18);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
@@ -137,6 +137,9 @@ namespace DG.DeInspektorEditor
             for (int i = 0; i < len; ++i) {
                 SerializedProperty property = iterator.GetArrayElementAtIndex(i);
                 EditorGUILayout.BeginHorizontal();
+                GUILayout.Space(-5);
+                float currLabelW = EditorGUIUtility.labelWidth;
+                EditorGUIUtility.labelWidth -= 25;
                 if (DeGUILayout.PressButton(i.ToString(), _arrayElementBtStyle, GUILayout.Width(18))) {
                     DeGUIDrag.StartDrag(I._listId, I, iList, i);
                 }
@@ -155,6 +158,7 @@ namespace DG.DeInspektorEditor
                     iterator.DeleteArrayElementAtIndex(i);
                     break;
                 }
+                EditorGUIUtility.labelWidth = currLabelW;
                 EditorGUILayout.EndHorizontal();
                 if (DeGUIDrag.Drag(I._listId, iList, i).outcome == DeDragResultType.Accepted) {
                     GUI.changed = true;
