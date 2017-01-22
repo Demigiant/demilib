@@ -59,7 +59,8 @@ namespace DG.DemiEditor
         public static void ExitCurrentEvent()
         {
             DeGUIDrag.EndDrag(false);
-            Event.current.Use();
+//            Event.current.Use();
+            Event.current.type = EventType.Used;
         }
 
         /// <summary>
@@ -160,9 +161,11 @@ namespace DG.DemiEditor
         {
             // NOTE: tried using RepeatButton, but doesn't work if used for dragging
             GUI.Button(rect, content, guiStyle);
-            int controlId = GUIUtility.GetControlID(FocusType.Native);
+//            int controlId = GUIUtility.GetControlID(FocusType.Native);
+            int controlId = GUIUtility.GetControlID(FocusType.Native) - 1; // Changed from prev while working on DeInspektor
             int hotControl = GUIUtility.hotControl;
             bool pressed = _activePressButtonId == -1 && hotControl > 1 && rect.Contains(Event.current.mousePosition);
+            if (pressed) GUIUtility.hotControl = controlId; // Remove control from other elements (added while working on DeInspektor)
             if (pressed && _activePressButtonId != controlId) {
                 _activePressButtonId = controlId;
                 return true;

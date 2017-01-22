@@ -34,10 +34,18 @@ namespace DG.DeInspektorEditor
             DeGUI.BeginGUI();
             SetStyles();
 
-            // Draw default inspector
-//            Debug.Log("<color=#00ff00>>>>>>>>> GUI > " + Event.current.type + "</color>");
-            _listId = 0;
-            Draw(this.serializedObject);
+//            Debug.Log("<color=#00ff00>>>>>>>>> GUI > " + Event.current.type + " > " + GUIUtility.hotControl + "</color>");
+            switch (DeInspektorPrefs.mode) {
+            case DeInspektorPrefs.Mode.SpecialFeatures:
+                // Inspector with special features like custom lists
+                _listId = -1;
+                Draw(this.serializedObject);
+                break;
+            default:
+                // Default inspector with features necessary only to attributes
+                base.OnInspectorGUI();
+                break;
+            }
 
             _methodButtonEditor.Draw();
             if (I == this) I = null;
@@ -89,13 +97,42 @@ namespace DG.DeInspektorEditor
         static void DrawList(SerializedProperty iterator)
         {
 //            Debug.Log("DrawList > " + iterator.name + " > " + iterator.propertyType + "/" + iterator.type);
+            I._listId++;
+
+            // Header
             EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("{0} [{1}]", iterator.displayName, iterator.arraySize)), false, new GUILayoutOption[0]);
+            // Header buttons (trick to draw them correctly even if there's decorators assigned to the current property)
+            GUILayout.Space(-18);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (DeGUILayout.PressButton("+", _arrayElementBtStyle, GUILayout.Width(30))) {
+                bool wasExpanded = iterator.isExpanded;
+                iterator.isExpanded = true;
+                iterator.InsertArrayElementAtIndex(iterator.arraySize);
+                RepaintMe();
+                if (!wasExpanded) {
+                    GUILayout.EndHorizontal();
+                    return;
+                }
+            }
+            GUILayout.Space(2);
+            Color currColor = GUI.backgroundColor;
+            GUI.backgroundColor = Color.red;
+            if (DeGUILayout.PressButton("x", _arrayElementBtStyle, GUILayout.Width(30))) {
+                iterator.isExpanded = false;
+                iterator.ClearArray();
+                DeGUI.ExitCurrentEvent();
+                RepaintMe();
+            }
+            GUI.backgroundColor = currColor;
+            GUILayout.EndHorizontal();
+
             if (!iterator.isExpanded) return;
 
-            I._listId++;
+            // List contents
             FieldInfo fInfo = iterator.serializedObject.targetObject.GetType().GetField(iterator.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             IList iList = fInfo.GetValue(iterator.serializedObject.targetObject) as IList;
-            int len = iList.Count;
+            int len = Mathf.Min(iList.Count, iterator.arraySize);
             Undo.RecordObject(iterator.serializedObject.targetObject, iterator.serializedObject.targetObject.name);
             for (int i = 0; i < len; ++i) {
                 SerializedProperty property = iterator.GetArrayElementAtIndex(i);
@@ -142,6 +179,42 @@ namespace DG.DeInspektorEditor
         {
             if (I == null) return;
             I.Repaint();
+        }
+
+        #endregion
+
+        #region Helpers
+
+        static bool GoodButton(Rect bounds, string caption) {
+            GUIStyle btnStyle = GUI.skin.FindStyle("button");
+            int controlID = GUIUtility.GetControlID(bounds.GetHashCode(), FocusType.Passive);
+       
+            bool isMouseOver = bounds.Contains(Event.current.mousePosition);
+            bool isDown = GUIUtility.hotControl == controlID;
+ 
+            if (GUIUtility.hotControl != 0 && !isDown) {
+                // ignore mouse while some other control has it
+                // (this is the key bit that GUI.Button appears to be missing)
+                isMouseOver = false;
+            }
+       
+            if (Event.current.type == EventType.Repaint) {
+                btnStyle.Draw(bounds, new GUIContent(caption), isMouseOver, isDown, false, false);
+            }
+            switch (Event.current.GetTypeForControl(controlID)) {
+                case EventType.mouseDown:
+                    if (isMouseOver) {  // (note: isMouseOver will be false when another control is hot)
+                        GUIUtility.hotControl = controlID;
+                    }
+                    break;
+               
+                case EventType.mouseUp:
+                    if (GUIUtility.hotControl == controlID) GUIUtility.hotControl = 0;
+                    if (isMouseOver && bounds.Contains(Event.current.mousePosition)) return true;
+                    break;
+            }
+ 
+            return false;
         }
 
         #endregion

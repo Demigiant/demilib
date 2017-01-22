@@ -13,9 +13,9 @@ namespace Assets._Examples.DeAttributes
     {
         public int[] aListArrayNoAttr = new []{ 1, 2, 3 };
         public SampleStruct[] sampleStructs = new[] {new SampleStruct(), new SampleStruct()};
-        public GameObject[] sampleGos;
-        public SampleStruct aSampleStruct = new SampleStruct();
-        public string aString = "Hellow";
+//        public GameObject[] sampleGos;
+//        public SampleStruct aSampleStruct = new SampleStruct();
+//        public string aString = "Hellow";
 //        public string aString0 = "Hellow";
 //        public float aFloat = 13;
 //        public TextAnchor anEnum = TextAnchor.LowerLeft;
