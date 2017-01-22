@@ -17,6 +17,8 @@ namespace DG.DeInspektorEditor
 
         public static Mode mode;
         const string _ModeId = _SavePrefix + "mode";
+        public static bool componentsReordering;
+        const string _ComponentsReorderingId = _SavePrefix + "componentsReordering";
 
         const string _SavePrefix = "DeInspektor_";
 
@@ -24,6 +26,7 @@ namespace DG.DeInspektorEditor
         {
             // Load preferences
             mode = (Mode)EditorPrefs.GetInt(_ModeId, 1);
+            componentsReordering = EditorPrefs.GetBool(_ComponentsReorderingId, true);
         }
 
         [PreferenceItem("DeInspektor")]
@@ -44,6 +47,8 @@ namespace DG.DeInspektorEditor
             }
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
+
+            componentsReordering = EditorGUILayout.Toggle("Reorder Components Buttons", componentsReordering);
 
             if (GUI.changed) SaveAll();
         }

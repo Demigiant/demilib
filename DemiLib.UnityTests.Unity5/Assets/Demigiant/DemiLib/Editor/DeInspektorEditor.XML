@@ -15,5 +15,10 @@
             If you need another generic inspector, inherit from this and override DoEnable, DoDisable and OnInspectorGUI.
             </summary>
         </member>
+        <member name="M:DG.DeInspektorEditor.DeInspektor.DrawReorderingButtons">
+            <summary>
+            Draws buttons to reorder the component on its header
+            </summary>
+        </member>
     </members>
 </doc>

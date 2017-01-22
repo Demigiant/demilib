@@ -2,6 +2,7 @@
 // Created: 2017/01/12 10:47
 // License Copyright (c) Daniele Giardini
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -20,7 +21,7 @@ namespace DG.DeInspektorEditor
     [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)] [CanEditMultipleObjects]
     public class DeInspektor : Editor
     {
-        public const string Version = "0.5.001";
+        public const string Version = "0.5.010";
         public static DeInspektor I { get; private set; }
         static GUIStyle _arrayElementBtStyle;
         DeMethodButtonEditor _methodButtonEditor;
@@ -34,6 +35,8 @@ namespace DG.DeInspektorEditor
             if (_methodButtonEditor == null) _methodButtonEditor = new DeMethodButtonEditor(target);
             DeGUI.BeginGUI();
             SetStyles();
+
+            if (DeInspektorPrefs.componentsReordering) DrawReorderingButtons();
 
             switch (DeInspektorPrefs.mode) {
             case DeInspektorPrefs.Mode.Full:
@@ -178,6 +181,41 @@ namespace DG.DeInspektorEditor
         {
             if (I == null) return;
             I.Repaint();
+        }
+
+        /// <summary>
+        /// Draws buttons to reorder the component on its header
+        /// </summary>
+        public static void DrawReorderingButtons()
+        {
+            GUILayout.Space(-16);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (DeGUILayout.PressButton("▲", DeGUI.styles.button.tool, GUILayout.Width(16))) {
+                Reorder(true);
+            }
+            if (DeGUILayout.PressButton("▼", DeGUI.styles.button.tool, GUILayout.Width(16))) {
+                Reorder(false);
+            }
+            GUILayout.Space(32);
+            GUILayout.EndHorizontal();
+        }
+        static void Reorder(bool up)
+        {
+            foreach (UnityEngine.Object o in I.targets) {
+                Component c = o as Component;
+                Component[] comps = c.GetComponents<Component>();
+                int index = Array.IndexOf(comps, c);
+                if (up && index > 1) {
+                    Undo.RecordObject(c.gameObject, "Move Component Up");
+                    UnityEditorInternal.ComponentUtility.MoveComponentUp(c);
+                    EditorUtility.SetDirty(c.gameObject);
+                } else if (!up && index < comps.Length - 1) {
+                    Undo.RecordObject(c.gameObject, "Move Component Down");
+                    UnityEditorInternal.ComponentUtility.MoveComponentDown(c);
+                    EditorUtility.SetDirty(c.gameObject);
+                }
+            }
         }
 
         #endregion
