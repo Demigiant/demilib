@@ -17,17 +17,22 @@ namespace DG.DeInspektorEditor.AttributesManagers
             SerializedProperty targetProp = serializesObj.FindProperty(condition.propertyToCompare);
             if (targetProp == null) return true;
 
-            switch (condition.valueType) {
-            case DeCondition.ValueType.String:
-                if (targetProp.propertyType != SerializedPropertyType.String) return true;
+            switch (targetProp.propertyType) {
+            case SerializedPropertyType.Boolean:
+                return targetProp.boolValue == condition.boolValue;
+            case SerializedPropertyType.String:
                 switch (condition.conditionType) {
                 case Condition.IsNot:
                     return targetProp.stringValue != condition.stringValue;
+                case Condition.IsNotNullOrEmpty:
+                    return !string.IsNullOrEmpty(targetProp.stringValue);
+                case Condition.IsNullOrEmpty:
+                    return string.IsNullOrEmpty(targetProp.stringValue);
                 default:
                     return targetProp.stringValue == condition.stringValue;
                 }
-            case DeCondition.ValueType.Number:
-                if (targetProp.propertyType != SerializedPropertyType.Float && targetProp.propertyType != SerializedPropertyType.Integer) return true;
+            case SerializedPropertyType.Float:
+            case SerializedPropertyType.Integer:
                 float targetVal = targetProp.propertyType == SerializedPropertyType.Float ? targetProp.floatValue : targetProp.intValue;
                 switch (condition.conditionType) {
                 case Condition.IsNot:
@@ -43,10 +48,16 @@ namespace DG.DeInspektorEditor.AttributesManagers
                 default:
                     return Mathf.Approximately(targetVal, condition.numValue);
                 }
-            default: // Bool
-                if (targetProp.propertyType != SerializedPropertyType.Boolean) return true;
-                return targetProp.boolValue == condition.boolValue;
+            case SerializedPropertyType.ObjectReference:
+                switch (condition.conditionType) {
+                case Condition.IsNotNullOrEmpty:
+                    return targetProp.objectReferenceValue != null;
+                default:
+                    return targetProp.objectReferenceValue == null;
+                }
             }
+
+            return true;
         }
 
         #endregion

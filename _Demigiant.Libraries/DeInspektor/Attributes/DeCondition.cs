@@ -9,6 +9,8 @@ namespace DG.DeInspektor.Attributes
     {
         Is,
         IsNot,
+        IsNullOrEmpty,
+        IsNotNullOrEmpty,
         GreaterThan,
         LessThan,
         GreaterOrEqual,
@@ -23,17 +25,11 @@ namespace DG.DeInspektor.Attributes
 
     public struct DeCondition
     {
-        internal enum ValueType
-        {
-            Bool, String, Number
-        }
-
         internal string propertyToCompare;
         internal bool boolValue;
         internal string stringValue;
         internal float numValue;
         internal Condition conditionType;
-        internal ValueType valueType;
 
         /// <summary>
         /// Shows/enables the property only if the condition is met
@@ -42,8 +38,6 @@ namespace DG.DeInspektor.Attributes
         /// <param name="value">Property value to compare (boolean)</param>
         public DeCondition(string propertyToCompare, bool value) : this()
         {
-            this.valueType = ValueType.Bool;
-            //
             this.propertyToCompare = propertyToCompare;
             this.boolValue = value;
         }
@@ -55,8 +49,6 @@ namespace DG.DeInspektor.Attributes
         /// <param name="conditionType">Condition type</param>
         public DeCondition(string propertyToCompare, string value, Condition conditionType = Condition.Is) : this()
         {
-            this.valueType = ValueType.String;
-            //
             this.propertyToCompare = propertyToCompare;
             this.stringValue = value;
             this.conditionType = conditionType;
@@ -69,8 +61,6 @@ namespace DG.DeInspektor.Attributes
         /// <param name="conditionType">Condition type</param>
         public DeCondition(string propertyToCompare, float value, Condition conditionType = Condition.Is) : this()
         {
-            this.valueType = ValueType.Number;
-            //
             this.propertyToCompare = propertyToCompare;
             this.numValue = value;
             this.conditionType = conditionType;
@@ -83,10 +73,18 @@ namespace DG.DeInspektor.Attributes
         /// <param name="conditionType">Condition type</param>
         public DeCondition(string propertyToCompare, int value, Condition conditionType = Condition.Is) : this()
         {
-            this.valueType = ValueType.Number;
-            //
             this.propertyToCompare = propertyToCompare;
             this.numValue = value;
+            this.conditionType = conditionType;
+        }
+        /// <summary>
+        /// Shows/enables the property only if the condition is met
+        /// </summary>
+        /// <param name="propertyToCompare">Name of the property to check for conditions</param>
+        /// <param name="conditionType">Condition type</param>
+        public DeCondition(string propertyToCompare, Condition conditionType = Condition.IsNotNullOrEmpty) : this()
+        {
+            this.propertyToCompare = propertyToCompare;
             this.conditionType = conditionType;
         }
     }

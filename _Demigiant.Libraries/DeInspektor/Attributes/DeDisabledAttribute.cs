@@ -22,7 +22,7 @@ namespace DG.DeInspektor.Attributes
         /// </summary>
         /// <param name="propertyToCompare">Name of the property to check for conditions</param>
         /// <param name="value">Property value to compare (boolean)</param>
-        public DeDisabledAttribute(string propertyToCompare, bool value = false)
+        public DeDisabledAttribute(string propertyToCompare, bool value)
         {
             this.condition = new DeCondition(propertyToCompare, value);
         }
@@ -55,6 +55,15 @@ namespace DG.DeInspektor.Attributes
         public DeDisabledAttribute(string propertyToCompare, int value, Condition conditionType = Condition.Is)
         {
             this.condition = new DeCondition(propertyToCompare, value, conditionType);
+        }
+        /// <summary>
+        /// Disables the field if the given condition is TRUE.
+        /// </summary>
+        /// <param name="propertyToCompare">Name of the property to check for conditions</param>
+        /// <param name="conditionType">Condition type</param>
+        public DeDisabledAttribute(string propertyToCompare, Condition conditionType = Condition.IsNullOrEmpty)
+        {
+            this.condition = new DeCondition(propertyToCompare, conditionType);
         }
     }
 }

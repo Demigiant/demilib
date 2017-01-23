@@ -41,6 +41,13 @@
             <param name="value">Property value to compare (float)</param>
             <param name="conditionType">Condition type</param>
         </member>
+        <member name="M:DG.DeInspektor.Attributes.DeBeginDisabledAttribute.#ctor(System.String,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Begins a conditional group that wil be disabled if the given condition is TRUE. Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndDisabledAttribute"/>
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="conditionType">Condition type</param>
+        </member>
         <member name="T:DG.DeInspektor.Attributes.DeEndDisabledAttribute">
             <summary>
             Closes a disabled group
@@ -200,6 +207,13 @@
             <param name="value">Property value to compare (float)</param>
             <param name="conditionType">Condition type</param>
         </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="conditionType">Condition type</param>
+        </member>
         <member name="T:DG.DeInspektor.Attributes.DeConditionalAttribute">
             <summary>
             <code>Property attribute</code>
@@ -246,6 +260,14 @@
             <param name="conditionType">Condition type</param>
             <param name="behaviour">Behaviour in case condition is not met</param>
         </member>
+        <member name="M:DG.DeInspektor.Attributes.DeConditionalAttribute.#ctor(System.String,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
         <member name="T:DG.DeInspektor.Attributes.DeDisabledAttribute">
             <summary>
             Disables a field if the given condition is not met.
@@ -282,6 +304,13 @@
             </summary>
             <param name="propertyToCompare">Name of the property to check for conditions</param>
             <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeDisabledAttribute.#ctor(System.String,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Disables the field if the given condition is TRUE.
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
             <param name="conditionType">Condition type</param>
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeDividerAttribute">

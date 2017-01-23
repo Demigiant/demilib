@@ -21,7 +21,7 @@ namespace DG.DeInspektor.Attributes
         /// </summary>
         /// <param name="propertyToCompare">Name of the property to check for conditions</param>
         /// <param name="value">Property value to compare (boolean)</param>
-        public DeBeginDisabledAttribute(string propertyToCompare, bool value = false)
+        public DeBeginDisabledAttribute(string propertyToCompare, bool value)
         {
             this.condition = new DeCondition(propertyToCompare, value);
         }
@@ -54,6 +54,15 @@ namespace DG.DeInspektor.Attributes
         public DeBeginDisabledAttribute(string propertyToCompare, int value, Condition conditionType = Condition.Is)
         {
             this.condition = new DeCondition(propertyToCompare, value, conditionType);
+        }
+        /// <summary>
+        /// Begins a conditional group that wil be disabled if the given condition is TRUE. Must always be closed by a <see cref="DeEndDisabledAttribute"/>
+        /// </summary>
+        /// <param name="propertyToCompare">Name of the property to check for conditions</param>
+        /// <param name="conditionType">Condition type</param>
+        public DeBeginDisabledAttribute(string propertyToCompare, Condition conditionType = Condition.IsNullOrEmpty)
+        {
+            this.condition = new DeCondition(propertyToCompare, conditionType);
         }
     }
 

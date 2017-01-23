@@ -89,14 +89,20 @@ public class DeAttributesExample : MonoBehaviour
     public string conditioningString = "Gino";
     [DeConditional("conditioningString", "Gino")]
     public string conditionalS20 = "Enabled if conditioningString == \"Gino\"";
-    [DeEndGroup][DeConditional("conditioningString", "", Condition.IsNot)]
-    public string conditionalS21 = "Enabled if conditioningString != \"\"";
+    [DeConditional("conditioningString", Condition.IsNotNullOrEmpty)]
+    public string conditionalS21 = "Enabled if conditioningString is not empty";
+    [DeEndGroup][DeConditional("conditioningString", "Pino", Condition.IsNot)]
+    public string conditionalS22 = "Enabled if conditioningString != \"Pino\"";
+    [DeBeginGroup][DeColoredLabel("ffffff", "222222")]
+    public GameObject conditioningObj0;
+    [DeEndGroup][DeConditional("conditioningObj0")]
+    public string conditionalS30 = "Enabled if conditioningObj is not NULL";
     [DeBeginGroup][DeColoredLabel("ffffff", "222222")]
     public bool conditioningBool = true;
     [DeDisabled("conditioningBool")]
-    public string conditionalS30 = "Enabled if conditioningBool is TRUE";
+    public string conditionalS40 = "Enabled if conditioningBool is TRUE";
     [DeEndGroup][DeEndDisabled][DeConditional("conditioningBool", false)]
-    public string conditionalS31 = "Enabled if conditioningBool is FALSE";
+    public string conditionalS41 = "Enabled if conditioningBool is FALSE";
 
     // DeComment examples
     [DeHeader("█ DeComment", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]

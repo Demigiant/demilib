@@ -70,5 +70,16 @@ namespace DG.DeInspektor.Attributes
             this.condition = new DeCondition(propertyToCompare, value, conditionType);
             this.behaviour = behaviour;
         }
+        /// <summary>
+        /// Shows/enables the property only if the condition is met
+        /// </summary>
+        /// <param name="propertyToCompare">Name of the property to check for conditions</param>
+        /// <param name="conditionType">Condition type</param>
+        /// <param name="behaviour">Behaviour in case condition is not met</param>
+        public DeConditionalAttribute(string propertyToCompare, Condition conditionType = Condition.IsNotNullOrEmpty, ConditionalBehaviour behaviour = ConditionalBehaviour.Disable)
+        {
+            this.condition = new DeCondition(propertyToCompare, conditionType);
+            this.behaviour = behaviour;
+        }
     }
 }
