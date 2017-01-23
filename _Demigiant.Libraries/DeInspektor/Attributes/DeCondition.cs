@@ -69,7 +69,7 @@ namespace DG.DeInspektor.Attributes
         /// Shows/enables the property only if the condition is met
         /// </summary>
         /// <param name="propertyToCompare">Name of the property to check for conditions</param>
-        /// <param name="value">Property value to compare (float)</param>
+        /// <param name="value">Property value to compare (int or enum-int)</param>
         /// <param name="conditionType">Condition type</param>
         public DeCondition(string propertyToCompare, int value, Condition conditionType = Condition.Is) : this()
         {

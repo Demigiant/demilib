@@ -55,6 +55,13 @@ namespace DG.DeInspektorEditor.AttributesManagers
                 default:
                     return targetProp.objectReferenceValue == null;
                 }
+            case SerializedPropertyType.Enum:
+                switch (condition.conditionType) {
+                case Condition.Is:
+                    return targetProp.enumValueIndex == (int)condition.numValue;
+                default:
+                    return targetProp.enumValueIndex != (int)condition.numValue;
+                }
             }
 
             return true;
