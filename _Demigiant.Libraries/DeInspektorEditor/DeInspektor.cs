@@ -117,7 +117,7 @@ namespace DG.DeInspektorEditor
             Color currColor = GUI.backgroundColor;
             GUI.backgroundColor = Color.red;
             if (DeGUILayout.PressButton("x", _arrayElementBtStyle, GUILayout.Width(30))) {
-                iterator.isExpanded = false;
+                iterator.isExpanded = true;
                 iterator.ClearArray();
                 DeGUI.ExitCurrentEvent();
                 RepaintMe();
@@ -128,9 +128,18 @@ namespace DG.DeInspektorEditor
             if (!iterator.isExpanded) return;
 
             // List contents
+            IList iList = null;
+            int len;
+            int minListLen = int.MaxValue;
             FieldInfo fInfo = iterator.serializedObject.targetObject.GetType().GetField(iterator.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            IList iList = fInfo.GetValue(iterator.serializedObject.targetObject) as IList;
-            int len = Mathf.Min(iList.Count, iterator.arraySize);
+            foreach (UnityEngine.Object o in I.targets) {
+                IList li = fInfo.GetValue(o) as IList;
+                int l = li.Count;
+                if (l >= minListLen) continue;
+                iList = li;
+                minListLen = l;
+            }
+            len = Mathf.Min(minListLen, iterator.arraySize);
             Undo.RecordObject(iterator.serializedObject.targetObject, iterator.serializedObject.targetObject.name);
             for (int i = 0; i < len; ++i) {
                 SerializedProperty property = iterator.GetArrayElementAtIndex(i);
