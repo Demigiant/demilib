@@ -106,10 +106,10 @@ public class DeAttributesExample : MonoBehaviour
 
     // DeEmptyAlert examples
     [DeHeader("█ DeEmptyAlert", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
-    [DeComment("Only for object references: shows the field in red if empty.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    [DeComment("Only for object references and string: shows the field in red if empty or null.", _MainHeaderTextColor, _MainHeaderBgColor)]
     //
-    [DeEmptyAlert]
-    public GameObject sampleGO;
+    [DeEmptyAlert] public GameObject sampleGO;
+    [DeEmptyAlert] public string sampleString;
 
     // DeComment examples
     [DeHeader("█ DeComment", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]

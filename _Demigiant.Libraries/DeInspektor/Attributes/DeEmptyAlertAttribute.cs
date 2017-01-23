@@ -9,7 +9,7 @@ namespace DG.DeInspektor.Attributes
 {
     /// <summary>
     /// <code>Property attribute</code>
-    /// <para>Only for object reference fields: shows them red if empty</para>
+    /// <para>Only for object reference or string fields: shows them red if empty/null</para>
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class DeEmptyAlertAttribute : PropertyAttribute

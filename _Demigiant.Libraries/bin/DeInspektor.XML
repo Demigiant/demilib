@@ -331,7 +331,7 @@
         <member name="T:DG.DeInspektor.Attributes.DeEmptyAlertAttribute">
             <summary>
             <code>Property attribute</code>
-            <para>Only for object reference fields: shows them red if empty</para>
+            <para>Only for object reference or string fields: shows them red if empty/null</para>
             </summary>
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeHeaderAttribute">

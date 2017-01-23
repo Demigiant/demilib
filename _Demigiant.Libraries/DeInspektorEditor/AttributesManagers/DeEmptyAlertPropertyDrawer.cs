@@ -16,8 +16,12 @@ namespace DG.DeInspektorEditor.AttributesManagers
         {
             Color currBgColor = GUI.backgroundColor;
             Color currContentColor = GUI.contentColor;
-            GUI.backgroundColor = Color.red;
-            GUI.contentColor = DeGUI.colors.content.critical;
+            bool alert = property.propertyType == SerializedPropertyType.ObjectReference && property.objectReferenceValue == null
+                         || property.propertyType == SerializedPropertyType.String && string.IsNullOrEmpty(property.stringValue);
+            if (alert) {
+                GUI.backgroundColor = Color.red;
+                GUI.contentColor = DeGUI.colors.content.critical;
+            }
             EditorGUI.PropertyField(position, property, label);
             GUI.backgroundColor = currBgColor;
             GUI.contentColor = currContentColor;
