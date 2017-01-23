@@ -58,6 +58,7 @@
     <Compile Include="AttributesManagers\DeConditionExtensions.cs" />
     <Compile Include="AttributesManagers\DeDisabledPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeDividerPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeEmptyAlertPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeHeaderPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeImagePropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeLabelPropertyDrawer.cs" />

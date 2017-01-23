@@ -328,6 +328,12 @@
             <param name="marginTop">Top margin</param>
             <param name="marginBottom">Bottom margin</param>
         </member>
+        <member name="T:DG.DeInspektor.Attributes.DeEmptyAlertAttribute">
+            <summary>
+            <code>Property attribute</code>
+            <para>Only for object reference fields: shows them red if empty</para>
+            </summary>
+        </member>
         <member name="T:DG.DeInspektor.Attributes.DeHeaderAttribute">
             <summary>
             <code>Decorator</code>

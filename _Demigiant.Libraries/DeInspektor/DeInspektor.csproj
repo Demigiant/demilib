@@ -52,6 +52,7 @@
     <Compile Include="Attributes\DeConditionalAttribute.cs" />
     <Compile Include="Attributes\DeDisabledAttribute.cs" />
     <Compile Include="Attributes\DeDividerAttribute.cs" />
+    <Compile Include="Attributes\DeEmptyAlertAttribute.cs" />
     <Compile Include="Attributes\DeHeaderAttribute.cs" />
     <Compile Include="Attributes\DeImageAttribute.cs" />
     <Compile Include="Attributes\DeLabelAttribute.cs" />

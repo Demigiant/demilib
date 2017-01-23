@@ -104,6 +104,13 @@ public class DeAttributesExample : MonoBehaviour
     [DeEndGroup][DeEndDisabled][DeConditional("conditioningBool", false)]
     public string conditionalS41 = "Enabled if conditioningBool is FALSE";
 
+    // DeEmptyAlert examples
+    [DeHeader("█ DeEmptyAlert", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
+    [DeComment("Only for object references: shows the field in red if empty.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    //
+    [DeEmptyAlert]
+    public GameObject sampleGO;
+
     // DeComment examples
     [DeHeader("█ DeComment", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("Shows a box with the desired text, with options for colors etc.", _MainHeaderTextColor, _MainHeaderBgColor)]
