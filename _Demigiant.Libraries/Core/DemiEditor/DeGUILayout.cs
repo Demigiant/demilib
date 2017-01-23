@@ -83,7 +83,7 @@ namespace DG.DemiEditor
                     _activePressButtonId = controlId;
                     return true;
                 }
-                GUIUtility.hotControl = -1; // Added while working on DeInspektor
+//                GUIUtility.hotControl = -1; // Added while working on DeInspektor
             }
             if (!pressed && hotControl < 1) _activePressButtonId = -1;
             return false;

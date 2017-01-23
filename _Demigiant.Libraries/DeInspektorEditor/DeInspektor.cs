@@ -147,9 +147,12 @@ namespace DG.DeInspektorEditor
                 GUILayout.Space(-5);
                 float currLabelW = EditorGUIUtility.labelWidth;
                 EditorGUIUtility.labelWidth -= 25;
+                bool wasEnabled = GUI.enabled;
+                if (I.targets.Length > 1) GUI.enabled = false;
                 if (DeGUILayout.PressButton(i.ToString(), _arrayElementBtStyle, GUILayout.Width(18))) {
                     DeGUIDrag.StartDrag(I._listId, I, iList, i);
                 }
+                GUI.enabled = wasEnabled;
                 DrawProperty(property, true, i); // Property
                 GUILayout.Space(-1);
                 if (GUILayout.Button("+", _arrayElementBtStyle, GUILayout.Width(14))) {
