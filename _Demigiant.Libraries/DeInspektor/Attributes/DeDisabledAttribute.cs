@@ -12,7 +12,7 @@ namespace DG.DeInspektor.Attributes
     /// Works like DeConditional but:
     /// <para>- Is a Decorator, so it can be combined with other attributes</para>- Only allows to disable a field, not to hide it
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeDisabledAttribute : PropertyAttribute
     {
         internal DeCondition condition;
