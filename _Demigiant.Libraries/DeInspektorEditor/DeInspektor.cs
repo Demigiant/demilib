@@ -84,7 +84,7 @@ namespace DG.DeInspektorEditor
                 if (iterator.propertyType == SerializedPropertyType.Generic) {
                     // Struct/class as array element: add space to show expand button + use propertyType as label
                     GUILayout.Space(8);
-                    EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("{0} {1}", iterator.type, arrayElementIndex)), true, new GUILayoutOption[0]);
+                    EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("{0} {1}", iterator.displayName, arrayElementIndex)), true, new GUILayoutOption[0]);
                 } else EditorGUILayout.PropertyField(iterator, new GUIContent(""), true, new GUILayoutOption[0]);
             } else {
                 // Regular property
