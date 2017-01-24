@@ -165,10 +165,13 @@ namespace DG.DemiEditor
             int controlId = GUIUtility.GetControlID(FocusType.Native) - 1; // Changed from prev while working on DeInspektor
             int hotControl = GUIUtility.hotControl;
             bool pressed = _activePressButtonId == -1 && hotControl > 1 && rect.Contains(Event.current.mousePosition);
-            if (pressed) GUIUtility.hotControl = controlId; // Remove control from other elements (added while working on DeInspektor)
-            if (pressed && _activePressButtonId != controlId) {
-                _activePressButtonId = controlId;
-                return true;
+            if (pressed) {
+                if (_activePressButtonId == -1 && _activePressButtonId != controlId) {
+                    // Modified while working on DeInspektor
+                    GUIUtility.hotControl = controlId; // Remove control from other elements (added while working on DeInspektor)
+                    _activePressButtonId = controlId;
+                    return true;
+                }
             }
             if (!pressed && hotControl < 1) _activePressButtonId = -1;
             return false;

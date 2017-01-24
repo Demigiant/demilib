@@ -20,7 +20,7 @@ namespace DG.DeInspektorEditor
     [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)] [CanEditMultipleObjects]
     public class DeInspektor : Editor
     {
-        public const string Version = "0.5.125";
+        public const string Version = "0.5.130";
         public static DeInspektor I { get; private set; }
         static GUIStyle _arrayElementBtStyle;
         DeMethodButtonEditor _methodButtonEditor;
@@ -84,7 +84,9 @@ namespace DG.DeInspektorEditor
                 if (iterator.propertyType == SerializedPropertyType.Generic) {
                     // Struct/class as array element: add space to show expand button + use propertyType as label
                     GUILayout.Space(8);
-                    EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("{0} {1}", iterator.type, arrayElementIndex)), true, new GUILayoutOption[0]);
+//                    Debug.Log(iterator.name + " > " + LocalizationDatabase.GetLocalizedString(iterator.displayName));
+//                    EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("{0} {1}", iterator.type, arrayElementIndex)), true, new GUILayoutOption[0]);
+                    EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);
                 } else EditorGUILayout.PropertyField(iterator, new GUIContent(""), true, new GUILayoutOption[0]);
             } else {
                 // Regular property
@@ -97,7 +99,7 @@ namespace DG.DeInspektorEditor
             I._listId++;
 
             // Header
-            EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("{0} [{1}]", iterator.displayName, iterator.arraySize)), false, new GUILayoutOption[0]);
+            EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("[{0}] {1}", iterator.arraySize, iterator.displayName)), false, new GUILayoutOption[0]);
             // Header buttons (to draw them overlayed correctly even if there's decorators assigned to the current property)
             GUILayout.Space(-18);
             GUILayout.BeginHorizontal();
