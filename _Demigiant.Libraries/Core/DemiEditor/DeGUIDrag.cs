@@ -138,7 +138,7 @@ namespace DG.DemiEditor
         {
             if (_dragData == null || _dragId != dragId) return new DeDragResult(DeDragResultType.NoDrag);
             if (_waitingToApplyDrag) {
-                if (Event.current.type == EventType.Repaint) Event.current.Use();
+                if (Event.current.type == EventType.Repaint) Event.current.type = EventType.Used;
                 if (Event.current.type == EventType.Used) ApplyDrag();
                 return new DeDragResult(DeDragResultType.Dragging, _dragData.draggedItemIndex, _dragData.currDragIndex);
             }
@@ -192,7 +192,7 @@ namespace DG.DemiEditor
 
             if (applyDrag) {
                 bool changed = _dragData.currDragIndex < _dragData.draggedItemIndex || _dragData.currDragIndex > _dragData.draggedItemIndex + 1;
-                if (Event.current.type == EventType.Repaint) Event.current.Use();
+                if (Event.current.type == EventType.Repaint) Event.current.type = EventType.Used;
                 else if (Event.current.type == EventType.Used) ApplyDrag();
                 else _waitingToApplyDrag = true;
                 DeDragResultType resultType = changed ? DeDragResultType.Accepted : DeDragResultType.Ineffective;
