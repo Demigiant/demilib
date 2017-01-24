@@ -56,6 +56,7 @@ namespace DG.DeInspektorEditor
         static void SaveAll()
         {
             EditorPrefs.SetInt(_ModeId, (int)mode);
+            EditorPrefs.SetBool(_ComponentsReorderingId, componentsReordering);
         }
     }
 }
