@@ -49,7 +49,6 @@
     <Compile Include="DeLayerUtils.cs" />
     <Compile Include="DeMathUtils.cs" />
     <Compile Include="DeRectUtils.cs" />
-    <Compile Include="DeVectorUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
