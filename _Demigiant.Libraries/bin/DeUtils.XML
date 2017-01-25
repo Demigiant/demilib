@@ -61,5 +61,15 @@
             Modifies and returns the given Rect, with its values shifted according the the given parameters
             </summary>
         </member>
+        <member name="M:DG.DeUtils.DeVector3Utils.AngleY(UnityEngine.Vector3)">
+            <summary>
+            Returns the Y angle in degrees of the given vector (0 to 180, negative if on left, positive if on right), based on world coordinates.
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeVector3Utils.AngleY(UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>
+            Returns the Y angle in degrees between from and to (0 to 180, negative if to is on left, positive if to is on right).
+            </summary>
+        </member>
     </members>
 </doc>

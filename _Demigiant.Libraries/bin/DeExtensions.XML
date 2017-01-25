@@ -128,10 +128,5 @@
             </summary>
             <param name="hex">The HEX color (either with or without the initial #)</param>
         </member>
-        <member name="M:DG.DeExtensions.VectorExtensions.AngleY(UnityEngine.Vector3)">
-            <summary>
-            Returns the Y angle in degrees of the given vector, based on world coordinates.
-            </summary>
-        </member>
     </members>
 </doc>
