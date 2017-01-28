@@ -172,11 +172,21 @@
             <code>Decorator</code><para/>
             Shows a comment in the Inspector
             Extra properties which can be set directly:<para/>
-            - fontSize
+            - fontSize<para/>
+            Normal properties which can be set directly:<para/>
+            - textColor<para/>
+            - bgColor<para/>
+            - marginBottom
             </summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.fontSize">
             <summary>Font size (default = 9)</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.textColor">
+            <summary>Text color</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.bgColor">
+            <summary>Background color</summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.marginBottom">
             <summary>Margin bottom</summary>
@@ -204,6 +214,45 @@
             <param name="text">Text</param>
             <param name="propertyToCompare">Name of the property to check for conditions</param>
             <param name="value">Property value to compare (boolean)</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,System.String,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows a comment if the given condition is met.
+            </summary>
+            <param name="text">Text</param>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (string)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,System.Single,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows a comment if the given condition is met.
+            </summary>
+            <param name="text">Text</param>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,System.Int32,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows a comment if the given condition is met.
+            </summary>
+            <param name="text">Text</param>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (int)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows a comment if the given condition is met.
+            </summary>
+            <param name="text">Text</param>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="conditionType">Condition type</param>
             <param name="behaviour">Behaviour in case condition is not met</param>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,System.Boolean)">
@@ -286,7 +335,7 @@
             Shows/enables the property only if the condition is met
             </summary>
             <param name="propertyToCompare">Name of the property to check for conditions</param>
-            <param name="value">Property value to compare (float)</param>
+            <param name="value">Property value to compare (int)</param>
             <param name="conditionType">Condition type</param>
             <param name="behaviour">Behaviour in case condition is not met</param>
         </member>
