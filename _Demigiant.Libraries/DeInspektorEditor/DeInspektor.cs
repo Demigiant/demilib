@@ -20,7 +20,7 @@ namespace DG.DeInspektorEditor
     [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)] [CanEditMultipleObjects]
     public class DeInspektor : Editor
     {
-        public const string Version = "0.5.130";
+        public const string Version = "0.5.140";
         public static DeInspektor I { get; private set; }
         static GUIStyle _arrayElementBtStyle;
         DeMethodButtonEditor _methodButtonEditor;
@@ -36,6 +36,7 @@ namespace DG.DeInspektorEditor
             SetStyles();
 
             if (DeInspektorPrefs.componentsReordering) DrawReorderingButtons();
+            InjectGUITop();
 
             switch (DeInspektorPrefs.mode) {
             case DeInspektorPrefs.Mode.Full:
@@ -84,8 +85,6 @@ namespace DG.DeInspektorEditor
                 if (iterator.propertyType == SerializedPropertyType.Generic) {
                     // Struct/class as array element: add space to show expand button + use propertyType as label
                     GUILayout.Space(8);
-//                    Debug.Log(iterator.name + " > " + LocalizationDatabase.GetLocalizedString(iterator.displayName));
-//                    EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("{0} {1}", iterator.type, arrayElementIndex)), true, new GUILayoutOption[0]);
                     EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);
                 } else EditorGUILayout.PropertyField(iterator, new GUIContent(""), true, new GUILayoutOption[0]);
             } else {
@@ -197,11 +196,18 @@ namespace DG.DeInspektorEditor
         }
 
         /// <summary>
+        /// Can be used to inject GUI elements before any other default GUI calls.
+        /// </summary>
+        public virtual void InjectGUITop() {}
+
+        /// <summary>
         /// Draws buttons to reorder the component on its header
         /// </summary>
         public static void DrawReorderingButtons()
         {
             GUILayout.Space(-16);
+            bool wasGuiEnabled = GUI.enabled;
+            GUI.enabled = true;
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (DeGUILayout.PressButton("▲", DeGUI.styles.button.tool, GUILayout.Width(16))) {
@@ -212,6 +218,7 @@ namespace DG.DeInspektorEditor
             }
             GUILayout.Space(32);
             GUILayout.EndHorizontal();
+            GUI.enabled = wasGuiEnabled;
         }
         static void Reorder(bool up)
         {
