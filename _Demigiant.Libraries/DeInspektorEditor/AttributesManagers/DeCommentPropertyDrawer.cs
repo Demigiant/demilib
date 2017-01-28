@@ -20,6 +20,8 @@ namespace DG.DeInspektorEditor.AttributesManagers
         public override float GetHeight()
         {
             DeCommentAttribute attr = (DeCommentAttribute)attribute;
+            bool isVisible = attr.behaviour == ConditionalBehaviour.Disable || attr.condition.IsTrue(DeInspektor.I.serializedObject);
+            if (!isVisible) return 0;
 
             SetStyles(attr);
             float w = _positionW < 2 ? EditorGUIUtility.currentViewWidth : _positionW;
@@ -29,18 +31,24 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
         public override void OnGUI(Rect position)
         {
+            DeCommentAttribute attr = (DeCommentAttribute)attribute;
+            bool isTrue = attr.condition.IsTrue(DeInspektor.I.serializedObject);
+            if (!isTrue && attr.behaviour == ConditionalBehaviour.Hide) return;
+
             DeGUI.BeginGUI();
             if (Event.current.type == EventType.Repaint) _positionW = position.width;
-            DeCommentAttribute attr = (DeCommentAttribute)attribute;
             SetStyles(attr);
 
             Rect r = position;
             r.height -= attr.marginBottom;
 
+            bool wasGUIEnabled = GUI.enabled;
+            GUI.enabled = isTrue && wasGUIEnabled;
             Color defBgColor = GUI.backgroundColor;
             if (attr.bgColor != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgColor);
             GUI.Box(r, attr.text, _attributeStyle);
             GUI.backgroundColor = defBgColor;
+            GUI.enabled = wasGUIEnabled;
         }
 
         void SetStyles(DeCommentAttribute attr)

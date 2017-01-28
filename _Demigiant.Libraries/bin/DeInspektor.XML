@@ -178,6 +178,34 @@
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.fontSize">
             <summary>Font size (default = 9)</summary>
         </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.marginBottom">
+            <summary>Margin bottom</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.Int32)">
+            <summary>
+            Shows a comment.
+            </summary>
+            <param name="text">Text</param>
+            <param name="marginBottom">Bottom margin</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Shows a comment.
+            </summary>
+            <param name="text">Text</param>
+            <param name="textColor">Text color</param>
+            <param name="bgColor">Background color</param>
+            <param name="marginBottom">Bottom margin</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,System.Boolean,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows a comment if the given condition is met.
+            </summary>
+            <param name="text">Text</param>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (boolean)</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
         <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,System.Boolean)">
             <summary>
             Shows/enables the property only if the condition is met
