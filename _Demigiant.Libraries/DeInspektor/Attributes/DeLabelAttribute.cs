@@ -8,8 +8,8 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Property attribute</code>
-    /// <para>Writes custom text as the property label</para>
+    /// <code>Property attribute</code><para/>
+    /// Writes custom text as the property label
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class DeLabelAttribute : PropertyAttribute

@@ -9,10 +9,10 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Property attribute</code>
-    /// <para>Shows/hides or enables/disables the property depending on the given conditions.</para>
-    /// Extra properties which can be set directly:
-    /// <code>customLabel</code>
+    /// <code>Property attribute</code><para/>
+    /// Shows/hides or enables/disables the property depending on the given conditions.
+    /// Extra properties which can be set directly:<para/>
+    /// - customLabel
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class DeConditionalAttribute : PropertyAttribute

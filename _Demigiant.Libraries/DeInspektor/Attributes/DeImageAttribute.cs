@@ -8,10 +8,11 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Decorator</code>
-    /// <para>Draws an image in the inspector.</para>
-    /// Extra properties which can be set directly:
-    /// <code>marginTop</code>, <code>marginBottom</code>
+    /// <code>Decorator</code><para/>
+    /// Draws an image in the inspector.<para/>
+    /// Extra properties which can be set directly:<para/>
+    /// - marginTop<para/>
+    /// - marginBottom
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeImageAttribute : PropertyAttribute

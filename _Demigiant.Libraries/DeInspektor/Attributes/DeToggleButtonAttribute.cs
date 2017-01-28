@@ -9,10 +9,11 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Property attribute</code>
-    /// <para>Draws a toggle button instead of the usual checkbox, only works with boolean fields.</para>
-    /// Extra properties which can be set directly:
-    /// <code>offText, customLabel</code>
+    /// <code>Property attribute</code><para/>
+    /// Draws a toggle button instead of the usual checkbox, only works with boolean fields.<para/>
+    /// Extra properties which can be set directly:<para/>
+    /// - offText<para/>, 
+    /// - customLabel
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class DeToggleButtonAttribute : PropertyAttribute

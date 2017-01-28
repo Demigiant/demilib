@@ -8,8 +8,8 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Decorator</code>
-    /// <para>Draws a divider in the Inspector</para>
+    /// <code>Decorator</code><para/>
+    /// Draws a divider in the Inspector
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeDividerAttribute : PropertyAttribute

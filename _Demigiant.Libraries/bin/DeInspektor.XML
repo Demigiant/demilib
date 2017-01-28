@@ -6,6 +6,7 @@
     <members>
         <member name="T:DG.DeInspektor.Attributes.DeBeginDisabledAttribute">
             <summary>
+            <code>Decorator</code><para/>
             Begins a conditional group that will be disabled if the given condition is not met.
             Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndDisabledAttribute"/>
             </summary>
@@ -55,9 +56,10 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeBeginGroupAttribute">
             <summary>
+            <code>Decorator</code><para/>
             Begins a group that will be drawn inside a box GUIStyle.
-            Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndGroupAttribute"/>.
-            <para>NOTE: doesn't respect order as usual decorators do: the group will contain any other decorators added to the same field</para>
+            Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndGroupAttribute"/>.<para/>
+            NOTE: doesn't respect order as usual decorators do: the group will contain any other decorators added to the same field
             </summary>
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeEndGroupAttribute">
@@ -67,7 +69,7 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeButtonAttribute">
             <summary>
-            <code>Decorator + Method caller</code>
+            <code>Decorator + Method caller</code><para/>
             Draws a button which will call the given method from the given class type
             </summary>
         </member>
@@ -153,8 +155,8 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeColoredLabelAttribute">
             <summary>
-            <code>Property attribute</code>
-            <para>Draws the label with the given color and background</para>
+            <code>Property attribute</code><para/>
+            Draws the label with the given color and background
             </summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeColoredLabelAttribute.#ctor(System.String,System.String,System.String)">
@@ -167,10 +169,10 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeCommentAttribute">
             <summary>
-            <code>Decorator</code>
-            <para>Shows a comment in the Inspector</para>
-            Extra properties which can be set directly:
-            <code>fontSize</code>
+            <code>Decorator</code><para/>
+            Shows a comment in the Inspector
+            Extra properties which can be set directly:<para/>
+            - fontSize
             </summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.fontSize">
@@ -216,10 +218,10 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeConditionalAttribute">
             <summary>
-            <code>Property attribute</code>
-            <para>Shows/hides or enables/disables the property depending on the given conditions.</para>
-            Extra properties which can be set directly:
-            <code>customLabel</code>
+            <code>Property attribute</code><para/>
+            Shows/hides or enables/disables the property depending on the given conditions.
+            Extra properties which can be set directly:<para/>
+            - customLabel
             </summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeConditionalAttribute.customLabel">
@@ -270,9 +272,11 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeDisabledAttribute">
             <summary>
+            <code>Decorator</code><para/>
             Disables a field if the given condition is not met.
-            Works like DeConditional but:
-            <para>- Is a Decorator, so it can be combined with other attributes</para>- Only allows to disable a field, not to hide it
+            Works like DeConditional but:<para/>
+            - Is a Decorator, so it can be combined with other attributes<para/>
+            - Only allows to disable a field, not to hide it
             </summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeDisabledAttribute.#ctor(System.String,System.Boolean)">
@@ -315,8 +319,8 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeDividerAttribute">
             <summary>
-            <code>Decorator</code>
-            <para>Draws a divider in the Inspector</para>
+            <code>Decorator</code><para/>
+            Draws a divider in the Inspector
             </summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeDividerAttribute.#ctor(System.Int32,System.String,System.Int32,System.Int32)">
@@ -330,16 +334,18 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeEmptyAlertAttribute">
             <summary>
-            <code>Property attribute</code>
-            <para>Only for object reference or string fields: shows them red if empty/null</para>
+            <code>Property attribute</code><para/>
+            Only for object reference or string fields: shows them red if empty/null
             </summary>
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeHeaderAttribute">
             <summary>
-            <code>Decorator</code>
-            <para>Draws a header in the inspector.</para>
-            Extra properties which can be set directly:
-            <code>mode</code>, <code>marginTop</code>, <code>marginBottom</code>
+            <code>Decorator</code><para/>
+            Draws a header in the inspector.<para/>
+            Extra properties which can be set directly:<para/>
+            - mode<para/>
+            - marginTop<para/>
+            - marginBottom
             </summary>
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeHeaderAttribute.Mode">
@@ -379,10 +385,11 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeImageAttribute">
             <summary>
-            <code>Decorator</code>
-            <para>Draws an image in the inspector.</para>
-            Extra properties which can be set directly:
-            <code>marginTop</code>, <code>marginBottom</code>
+            <code>Decorator</code><para/>
+            Draws an image in the inspector.<para/>
+            Extra properties which can be set directly:<para/>
+            - marginTop<para/>
+            - marginBottom
             </summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeImageAttribute.marginTop">
@@ -401,8 +408,8 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeLabelAttribute">
             <summary>
-            <code>Property attribute</code>
-            <para>Writes custom text as the property label</para>
+            <code>Property attribute</code><para/>
+            Writes custom text as the property label
             </summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeLabelAttribute.#ctor(System.String)">
@@ -413,7 +420,7 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeMethodButtonAttribute">
             <summary>
-            <code>Method attribute</code>
+            <code>Method attribute</code><para/>
             Draws a button which will call the given method
             </summary>
         </member>
@@ -450,8 +457,8 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeScriptExecutionOrderAttribute">
             <summary>
-            <code>Class attribute</code>
-            <para>Sets the script execution order index</para>
+            <code>Class attribute</code><para/>
+            Sets the script execution order index
             </summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeScriptExecutionOrderAttribute.#ctor(System.Int32)">
@@ -462,10 +469,11 @@
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeToggleButtonAttribute">
             <summary>
-            <code>Property attribute</code>
-            <para>Draws a toggle button instead of the usual checkbox, only works with boolean fields.</para>
-            Extra properties which can be set directly:
-            <code>offText, customLabel</code>
+            <code>Property attribute</code><para/>
+            Draws a toggle button instead of the usual checkbox, only works with boolean fields.<para/>
+            Extra properties which can be set directly:<para/>
+            - offText<para/>, 
+            - customLabel
             </summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeToggleButtonAttribute.customLabel">

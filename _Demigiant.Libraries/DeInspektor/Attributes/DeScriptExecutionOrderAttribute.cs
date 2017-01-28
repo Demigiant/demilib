@@ -7,8 +7,8 @@ using System;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Class attribute</code>
-    /// <para>Sets the script execution order index</para>
+    /// <code>Class attribute</code><para/>
+    /// Sets the script execution order index
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class DeScriptExecutionOrderAttribute : Attribute

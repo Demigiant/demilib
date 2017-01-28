@@ -8,8 +8,8 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Property attribute</code>
-    /// <para>Draws the label with the given color and background</para>
+    /// <code>Property attribute</code><para/>
+    /// Draws the label with the given color and background
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class DeColoredLabelAttribute : PropertyAttribute

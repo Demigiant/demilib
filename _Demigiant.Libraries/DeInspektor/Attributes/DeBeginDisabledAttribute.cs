@@ -8,6 +8,7 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
+    /// <code>Decorator</code><para/>
     /// Begins a conditional group that will be disabled if the given condition is not met.
     /// Must always be closed by a <see cref="DeEndDisabledAttribute"/>
     /// </summary>

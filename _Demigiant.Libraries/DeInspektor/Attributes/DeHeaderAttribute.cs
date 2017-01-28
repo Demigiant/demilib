@@ -8,10 +8,12 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Decorator</code>
-    /// <para>Draws a header in the inspector.</para>
-    /// Extra properties which can be set directly:
-    /// <code>mode</code>, <code>marginTop</code>, <code>marginBottom</code>
+    /// <code>Decorator</code><para/>
+    /// Draws a header in the inspector.<para/>
+    /// Extra properties which can be set directly:<para/>
+    /// - mode<para/>
+    /// - marginTop<para/>
+    /// - marginBottom
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeHeaderAttribute : PropertyAttribute

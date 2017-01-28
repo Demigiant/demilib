@@ -8,9 +8,10 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
+    /// <code>Decorator</code><para/>
     /// Begins a group that will be drawn inside a box GUIStyle.
-    /// Must always be closed by a <see cref="DeEndGroupAttribute"/>.
-    /// <para>NOTE: doesn't respect order as usual decorators do: the group will contain any other decorators added to the same field</para>
+    /// Must always be closed by a <see cref="DeEndGroupAttribute"/>.<para/>
+    /// NOTE: doesn't respect order as usual decorators do: the group will contain any other decorators added to the same field
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeBeginGroupAttribute : PropertyAttribute {}

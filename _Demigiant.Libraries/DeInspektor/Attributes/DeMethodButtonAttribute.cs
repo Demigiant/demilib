@@ -7,7 +7,7 @@ using System;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Method attribute</code>
+    /// <code>Method attribute</code><para/>
     /// Draws a button which will call the given method
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]

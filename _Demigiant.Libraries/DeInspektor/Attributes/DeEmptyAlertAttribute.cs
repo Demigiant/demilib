@@ -8,8 +8,8 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Property attribute</code>
-    /// <para>Only for object reference or string fields: shows them red if empty/null</para>
+    /// <code>Property attribute</code><para/>
+    /// Only for object reference or string fields: shows them red if empty/null
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class DeEmptyAlertAttribute : PropertyAttribute

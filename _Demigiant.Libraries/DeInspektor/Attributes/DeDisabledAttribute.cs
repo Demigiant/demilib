@@ -8,9 +8,11 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
+    /// <code>Decorator</code><para/>
     /// Disables a field if the given condition is not met.
-    /// Works like DeConditional but:
-    /// <para>- Is a Decorator, so it can be combined with other attributes</para>- Only allows to disable a field, not to hide it
+    /// Works like DeConditional but:<para/>
+    /// - Is a Decorator, so it can be combined with other attributes<para/>
+    /// - Only allows to disable a field, not to hide it
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeDisabledAttribute : PropertyAttribute

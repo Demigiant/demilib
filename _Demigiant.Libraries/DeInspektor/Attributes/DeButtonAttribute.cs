@@ -9,7 +9,7 @@ using UnityEngine;
 namespace DG.DeInspektor.Attributes
 {
     /// <summary>
-    /// <code>Decorator + Method caller</code>
+    /// <code>Decorator + Method caller</code><para/>
     /// Draws a button which will call the given method from the given class type
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
