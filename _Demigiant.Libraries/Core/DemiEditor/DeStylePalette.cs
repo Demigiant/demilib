@@ -109,6 +109,10 @@ namespace DG.DemiEditor
             if (_fooSquareBorderCurved == null) _fooSquareBorderCurved = LoadSquareTexture("squareBorderCurved");
             return _fooSquareBorderCurved;
         }}
+        public static Texture2D squareBorderCurvedEmpty { get {
+            if (_fooSquareBorderCurvedEmpty == null) _fooSquareBorderCurvedEmpty = LoadSquareTexture("squareBorderCurvedEmpty");
+            return _fooSquareBorderCurvedEmpty;
+        }}
         public static Texture2D squareBorderCurvedAlpha { get {
             if (_fooSquareBorderCurvedAlpha == null) _fooSquareBorderCurvedAlpha = LoadSquareTexture("squareBorderCurvedAlpha");
             return _fooSquareBorderCurvedAlpha;
@@ -136,6 +140,7 @@ namespace DG.DemiEditor
         static Texture2D _fooBlueSquare;
         static Texture2D _fooPurpleSquare;
         static Texture2D _fooSquareBorderCurved;
+        static Texture2D _fooSquareBorderCurvedEmpty;
         static Texture2D _fooSquareBorderCurvedAlpha;
         static Texture2D _fooSquareBorderCurved_darkBordersAlpha;
 
