@@ -11,3 +11,7 @@ Developed by Daniele Giardini - http://www.demigiant.com
 ![Scenes Panel](screenshots/DeEditorTools_scenespanel.png "Scenes Panel")
 
 ![DeAttributes](screenshots/DeAttributes_examples.png "DeAttributes")
+
+![De2D](screenshots/animated/De2D_autoSorter.gif "De2D")
+
+![De2D](screenshots/animated/De2D_sceneContextMenu_align.gif "De2D")
