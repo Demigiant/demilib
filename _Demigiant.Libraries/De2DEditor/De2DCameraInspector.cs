@@ -18,10 +18,7 @@ namespace DG.De2DEditor
 
         #region Unity and GUI Methods
 
-        public static void Subscribe(De2DCamera src)
-        {
-            
-        }
+        public static void Subscribe(De2DCamera src) {}
 
         void OnEnable()
         {

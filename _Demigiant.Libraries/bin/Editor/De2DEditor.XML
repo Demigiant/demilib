@@ -4,5 +4,10 @@
         <name>De2DEditor</name>
     </assembly>
     <members>
+        <member name="T:DG.De2DEditor.De2DScene">
+            <summary>
+            Adds extra features to the Scene panel (like right-click).
+            </summary>
+        </member>
     </members>
 </doc>
