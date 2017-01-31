@@ -81,9 +81,9 @@ namespace DG.DeInspektor.Attributes
         /// <param name="text">Text</param>
         /// <param name="propertyToCompare">Name of the property to check for conditions</param>
         /// <param name="value">Property value to compare (string)</param>
-        /// <param name="conditionType">Condition type</param>
+        /// <param name="conditionType">Condition type (required parameter in this case, to distinguish condition overload from main color settings)</param>
         /// <param name="behaviour">Behaviour in case condition is not met</param>
-        public DeCommentAttribute(string text, string propertyToCompare, string value, Condition conditionType = Condition.Is, ConditionalBehaviour behaviour = ConditionalBehaviour.Hide)
+        public DeCommentAttribute(string text, string propertyToCompare, string value, Condition conditionType, ConditionalBehaviour behaviour = ConditionalBehaviour.Hide)
         {
             this.text = text;
             this.condition = new DeCondition(propertyToCompare, value, conditionType);
