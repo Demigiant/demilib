@@ -8,6 +8,7 @@ using DG.DemiLib.Core;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using DG.DemiEditor.Core;
 
 namespace DG.DemiEditor
 {
@@ -102,6 +103,30 @@ namespace DG.DemiEditor
             if (background != null) GUI.backgroundColor = (Color)background;
             if (content != null) GUI.contentColor = (Color)content;
             if (main != null) GUI.color = (Color)main;
+        }
+
+        public class ColorScope : DeGUIScope
+        {
+            readonly Color _prevBackground;
+            readonly Color _prevContent;
+            readonly Color _prevMain;
+
+            public ColorScope(Color? background, Color? content = null, Color? main = null)
+            {
+                _prevBackground = GUI.backgroundColor;
+                _prevContent = GUI.contentColor;
+                _prevMain = GUI.color;
+                if (background != null) GUI.backgroundColor = (Color)background;
+                if (content != null) GUI.contentColor = (Color)content;
+                if (main != null) GUI.color = (Color)main;
+            }
+
+            protected override void CloseScope()
+            {
+                GUI.backgroundColor = _prevBackground;
+                GUI.contentColor = _prevContent;
+                GUI.color = _prevMain;
+            }
         }
 
         #endregion

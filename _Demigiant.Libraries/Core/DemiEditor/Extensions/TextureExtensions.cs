@@ -16,10 +16,18 @@ namespace DG.DemiEditor
         /// </summary>
         public static void SetGUIFormat(this Texture2D texture, FilterMode filterMode = FilterMode.Point, int maxTextureSize = 32)
         {
-            if (texture.wrapMode == TextureWrapMode.Clamp && texture.filterMode == filterMode && texture.width == maxTextureSize) return;
+            if (texture.wrapMode == TextureWrapMode.Clamp && texture.filterMode == filterMode && texture.width <= maxTextureSize) return;
 
             string path = AssetDatabase.GetAssetPath(texture);
             TextureImporter tImporter = AssetImporter.GetAtPath(path) as TextureImporter;
+            bool reimportRequired = tImporter.textureType != TextureImporterType.GUI
+                || tImporter.npotScale != TextureImporterNPOTScale.None
+                || tImporter.filterMode != filterMode
+                || tImporter.wrapMode != TextureWrapMode.Clamp
+                || tImporter.maxTextureSize != maxTextureSize
+                || tImporter.textureFormat != TextureImporterFormat.AutomaticTruecolor;
+            if (!reimportRequired) return;
+
             tImporter.textureType = TextureImporterType.GUI;
             tImporter.npotScale = TextureImporterNPOTScale.None;
             tImporter.filterMode = filterMode;

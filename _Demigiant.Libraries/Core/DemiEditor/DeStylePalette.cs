@@ -143,6 +143,51 @@ namespace DG.DemiEditor
         static Texture2D _fooSquareBorderCurvedEmpty;
         static Texture2D _fooSquareBorderCurvedAlpha;
         static Texture2D _fooSquareBorderCurved_darkBordersAlpha;
+        public static Texture2D ico_alignTL { get {
+            if (_fooIco_alignTL == null) _fooIco_alignTL = LoadSquareTexture("ico_alignTL");
+            return _fooIco_alignTL;
+        }}
+        public static Texture2D ico_alignTC { get {
+            if (_fooIco_alignTC == null) _fooIco_alignTC = LoadSquareTexture("ico_alignTC");
+            return _fooIco_alignTC;
+        }}
+        public static Texture2D ico_alignTR { get {
+            if (_fooIco_alignTR == null) _fooIco_alignTR = LoadSquareTexture("ico_alignTR");
+            return _fooIco_alignTR;
+        }}
+        public static Texture2D ico_alignCL { get {
+            if (_fooIco_alignCL == null) _fooIco_alignCL = LoadSquareTexture("ico_alignCL");
+            return _fooIco_alignCL;
+        }}
+        public static Texture2D ico_alignCC { get {
+            if (_fooIco_alignCC == null) _fooIco_alignCC = LoadSquareTexture("ico_alignCC");
+            return _fooIco_alignCC;
+        }}
+        public static Texture2D ico_alignCR { get {
+            if (_fooIco_alignCR == null) _fooIco_alignCR = LoadSquareTexture("ico_alignCR");
+            return _fooIco_alignCR;
+        }}
+        public static Texture2D ico_alignBL { get {
+            if (_fooIco_alignBL == null) _fooIco_alignBL = LoadSquareTexture("ico_alignBL");
+            return _fooIco_alignBL;
+        }}
+        public static Texture2D ico_alignBC { get {
+            if (_fooIco_alignBC == null) _fooIco_alignBC = LoadSquareTexture("ico_alignBC");
+            return _fooIco_alignBC;
+        }}
+        public static Texture2D ico_alignBR { get {
+            if (_fooIco_alignBR == null) _fooIco_alignBR = LoadSquareTexture("ico_alignBR");
+            return _fooIco_alignBR;
+        }}
+        static Texture2D _fooIco_alignTL;
+        static Texture2D _fooIco_alignTC;
+        static Texture2D _fooIco_alignTR;
+        static Texture2D _fooIco_alignCL;
+        static Texture2D _fooIco_alignCC;
+        static Texture2D _fooIco_alignCR;
+        static Texture2D _fooIco_alignBL;
+        static Texture2D _fooIco_alignBC;
+        static Texture2D _fooIco_alignBR;
 
         #endregion
 
@@ -173,7 +218,7 @@ namespace DG.DemiEditor
         static Texture2D LoadSquareTexture(string name)
         {
             Texture2D tex = AssetDatabase.LoadAssetAtPath(String.Format("{0}{1}.png", _adbImgsDir, name), typeof(Texture2D)) as Texture2D;
-            tex.SetGUIFormat(FilterMode.Point, 16);
+            tex.SetGUIFormat(FilterMode.Point, 32);
             return tex;
         }
     }

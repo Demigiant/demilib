@@ -4,5 +4,10 @@
         <name>DeEditorTools</name>
     </assembly>
     <members>
+        <member name="T:DG.DeEditorTools.SceneUISystem.SceneUI">
+            <summary>
+            Adds extra features to the Scene panel (like right-click).
+            </summary>
+        </member>
     </members>
 </doc>

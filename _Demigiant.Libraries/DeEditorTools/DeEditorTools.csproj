@@ -46,8 +46,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeEditorToolsPrefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScenesPanel\ScenesPanel.cs" />
+    <Compile Include="SceneUISystem\AlignSubpopup.cs" />
+    <Compile Include="SceneUISystem\SceneUI.cs" />
+    <Compile Include="SceneUISystem\SceneUIPopup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\DemiEditor\DemiEditor.csproj">

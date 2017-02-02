@@ -1,30 +1,42 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
-// Created: 2017/01/31 14:26
+// Created: 2017/02/02 18:41
 // License Copyright (c) Daniele Giardini
 
+using DG.DeEditorTools.SceneUISystem;
 using DG.DemiEditor;
 using UnityEditor;
 using UnityEngine;
 
-namespace DG.De2DEditor
+namespace DG.DeEditorTools
 {
-    public static class De2DPrefs
+    public class DeEditorToolsPrefs
     {
         public static bool enableSceneContextMenu;
-        const string _SavePrefix = "De2D_";
+        const string _SavePrefix = "DeEditorTools_";
         const string _ID_EnableSceneContextMenu = _SavePrefix + "enableSceneContextMenu";
 
-        static De2DPrefs()
+        // Elements to remove from EditorPrefs (possible leftovers from previous versions)
+        static readonly string[] _PrefsToDelete = new [] {
+           "De2D_enableSceneContextMenu" 
+        };
+
+        static DeEditorToolsPrefs()
         {
+            // Delete leftover preferences
+            foreach (string s in _PrefsToDelete) {
+                if (EditorPrefs.HasKey(s)) EditorPrefs.DeleteKey(s);
+            }
             // Load preferences
             enableSceneContextMenu = EditorPrefs.GetBool(_ID_EnableSceneContextMenu, true);
         }
 
-        [PreferenceItem("De2D")]
+        [PreferenceItem("DeEditorTools")]
         public static void PreferencesGUI()
         {
             DeGUI.BeginGUI();
 
+            // SceneUI
+            GUILayout.Label("v" + SceneUI.Version);
             using (new GUILayout.VerticalScope(GUI.skin.box)) {
                 enableSceneContextMenu = DeGUILayout.ToggleButton(enableSceneContextMenu, "Enable Scene ContextMenu", GUILayout.Height(16));
                 GUILayout.Label(
