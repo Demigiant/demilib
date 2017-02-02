@@ -14,4 +14,4 @@ Developed by Daniele Giardini - http://www.demigiant.com
 
 ![De2D](screenshots/animated/De2D_autoSorter.gif "De2D")
 
-![De2D](screenshots/animated/De2D_sceneContextMenu_align.gif "De2D")
+![De2D](screenshots/animated/DeEditorTools_sceneContextMenu_align.gif "De2D")
