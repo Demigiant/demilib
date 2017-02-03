@@ -185,9 +185,13 @@ namespace DG.DemiEditor
         public static bool PressButton(Rect rect, GUIContent content, GUIStyle guiStyle)
         {
             // NOTE: tried using RepeatButton, but doesn't work if used for dragging
+            if (Event.current.type == EventType.MouseUp && _activePressButtonId != -1) {
+                _activePressButtonId = GUIUtility.hotControl = -1;
+                Event.current.Use();
+            }
             GUI.Button(rect, content, guiStyle);
 //            int controlId = GUIUtility.GetControlID(FocusType.Native);
-            int controlId = GUIUtility.GetControlID(FocusType.Native) - 1; // Changed from prev while working on DeInspektor
+            int controlId = DeEditorGUIUtils.GetLastControlId(); // Changed from prev while working on DeInspektor
             int hotControl = GUIUtility.hotControl;
             bool pressed = _activePressButtonId == -1 && hotControl > 1 && rect.Contains(Event.current.mousePosition);
             if (pressed) {

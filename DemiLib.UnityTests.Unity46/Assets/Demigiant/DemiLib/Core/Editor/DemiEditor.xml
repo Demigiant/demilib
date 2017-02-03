@@ -105,6 +105,11 @@
             Gets the script execution order of the given MonoBehaviour
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorGUIUtils.GetLastControlId">
+            <summary>
+            Precisely returns the last controlId assigned to a GUI element
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeEditorPanelUtils">
             <summary>
             Utilities for Editor Panels.

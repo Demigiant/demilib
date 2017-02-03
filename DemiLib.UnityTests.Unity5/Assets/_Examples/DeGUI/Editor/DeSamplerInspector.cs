@@ -103,13 +103,22 @@ public class DeSamplerInspector : Editor
 
         // Draggable list
 
-        for (int i = 0; i < _src.strList.Count; ++i) {
+        for (int i = 0; i < _src.strList0.Count; ++i) {
             DeGUILayout.BeginToolbar();
-            if (DeGUILayout.PressButton("Drag me " + _src.strList[i], DeGUI.styles.button.tool)) {
-                DeGUIDrag.StartDrag(10, this, _src.strList, i);
+            if (DeGUILayout.PressButton("Drag me " + _src.strList0[i], DeGUI.styles.button.tool)) {
+                DeGUIDrag.StartDrag(1, this, _src.strList0, i);
             }
             DeGUILayout.EndToolbar();
-            if (DeGUIDrag.Drag(10, _src.strList, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
+            if (DeGUIDrag.Drag(1, _src.strList0, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
+        }
+        GUILayout.Space(3);
+        for (int i = 0; i < _src.strList1.Count; ++i) {
+            DeGUILayout.BeginToolbar();
+            if (DeGUILayout.PressButton("Drag me " + _src.strList1[i], DeGUI.styles.button.tool)) {
+                DeGUIDrag.StartDrag(2, this, _src.strList1, i);
+            }
+            DeGUILayout.EndToolbar();
+            if (DeGUIDrag.Drag(2, _src.strList1, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
         }
 
         // Container

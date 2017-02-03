@@ -11,7 +11,8 @@ public class DeSampler : MonoBehaviour
     public bool useCustomPalette = true;
     public CustomColorPalette palette = new CustomColorPalette();
     
-    public List<string> strList = new List<string>() {"A", "B", "C"};
+    public List<string> strList0 = new List<string>() {"A", "B", "C"};
+    public List<string> strList1 = new List<string>() {"1", "2", "3"};
     public bool[] toggles = new bool[3];
     public bool foldoutOpen;
 
