@@ -74,7 +74,9 @@ namespace DG.DeEditorTools.Hierarchy
                 Rect dotR = DeEditorToolsPrefs.deHierarchy_indentDot
                     ? new Rect(indentendFullR.x + 5, indentendFullR.y + 4, 8, 8)
                     : new Rect(fullR.x + 5, fullR.y + 4, 8, 8);
-                using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(dotR, DeStylePalette.whiteDot);
+                using (new DeGUI.ColorScope(null, null, color)) {
+                    GUI.DrawTexture(dotR, DeEditorToolsPrefs.deHierarchy_showDotBorder ? DeStylePalette.whiteDot_darkBorder : DeStylePalette.whiteDot);
+                }
             }
             // Border
             if (DeEditorToolsPrefs.deHierarchy_showBorder) {

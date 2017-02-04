@@ -37,5 +37,21 @@ namespace DG.DeEditorTools.Hierarchy
         [MenuItem("GameObject/DeHierarchy/Set Color ▸ Yellow", false, 21)]
         static void SetColorYellow()
         { DeHierarchy.SetColorForSelections(DeHierarchyComponent.HColor.Yellow); }
+
+        [MenuItem("GameObject/DeHierarchy/Set Color ▸ BrightGrey", false, 21)]
+        static void SetColorBrightGrey()
+        { DeHierarchy.SetColorForSelections(DeHierarchyComponent.HColor.BrightGrey); }
+
+        [MenuItem("GameObject/DeHierarchy/Set Color ▸ DarkGrey", false, 21)]
+        static void SetColorDarkGrey()
+        { DeHierarchy.SetColorForSelections(DeHierarchyComponent.HColor.DarkGrey); }
+
+        [MenuItem("GameObject/DeHierarchy/Set Color ▸ Black", false, 21)]
+        static void SetColorBlack()
+        { DeHierarchy.SetColorForSelections(DeHierarchyComponent.HColor.Black); }
+
+        [MenuItem("GameObject/DeHierarchy/Set Color ▸ White", false, 21)]
+        static void SetColorWhite()
+        { DeHierarchy.SetColorForSelections(DeHierarchyComponent.HColor.White); }
     }
 }

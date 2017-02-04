@@ -22,7 +22,11 @@ namespace DG.DemiLib.External
             Orange,
             Purple,
             Red,
-            Yellow
+            Yellow,
+            BrightGrey,
+            DarkGrey,
+            Black,
+            White
         }
 
         #region Serialized
@@ -119,6 +123,10 @@ namespace DG.DemiLib.External
                 case HColor.Purple: return new Color(0.907186f, 0.05406574f, 0.9191176f, 1f);
                 case HColor.Red: return new Color(0.9191176f, 0.1617312f, 0.07434041f, 1f);
                 case HColor.Yellow: return new Color(1f, 0.853854f, 0.03676468f, 1f);
+                case HColor.BrightGrey: return new Color(0.6470588f, 0.6470588f, 0.6470588f, 1f);
+                case HColor.DarkGrey: return new Color(0.3308824f, 0.3308824f, 0.3308824f, 1f);
+                case HColor.Black: return Color.black;
+                case HColor.White: return Color.white;
                 default: return Color.white;
                 }
             }
