@@ -32,6 +32,22 @@ namespace DG.DemiLib.External
         #endregion
 
         /// <summary>
+        /// Removes all items whose gameObject is NULL.
+        /// Returns TRUE if something was removed.
+        /// </summary>
+        public bool RemoveMissingItems()
+        {
+            bool changed = false;
+            for (int i = customizedItems.Count - 1; i > -1; --i) {
+                if (customizedItems[i].gameObject == null) {
+                    changed = true;
+                    customizedItems.RemoveAt(i);
+                }
+            }
+            return changed;
+        }
+
+        /// <summary>
         /// If the item exists sets it, otherwise first creates it and then sets it
         /// </summary>
         public void StoreItemData(GameObject go, HColor hColor)

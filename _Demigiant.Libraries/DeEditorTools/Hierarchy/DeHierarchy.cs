@@ -32,6 +32,11 @@ namespace DG.DeEditorTools.Hierarchy
         static void Refresh()
         {
             ConnectToDeHierarchyComponent(false, true);
+            if (_dehComponent == null) return;
+
+            // Delete customizedItems that refer to objects not in the scene anymore
+            Undo.RecordObject(_dehComponent, "DeHierarchy");
+            if (_dehComponent.RemoveMissingItems()) EditorUtility.SetDirty(_dehComponent);
         }
 
         static void UndoRedoPerformed()
@@ -132,7 +137,10 @@ namespace DG.DeEditorTools.Hierarchy
             if (_dehComponent != null && !forceRefresh) return;
 
             _dehComponent = DeEditorToolsUtils.FindFirstComponentOfType<DeHierarchyComponent>();
-            if (_dehComponent != null || !createIfMissing) return;
+            if (_dehComponent != null || !createIfMissing) {
+                if (_dehComponent != null) SetDeHierarchyGOFlags(_dehComponent.gameObject);
+                return;
+            }
 
             GameObject go = new GameObject(":: DeHierarchy ::");
             SetDeHierarchyGOFlags(go);
