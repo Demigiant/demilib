@@ -17,12 +17,14 @@ namespace DG.DeEditorTools
         public static bool deScene_enableContextMenu;
         public static bool deHierarchy_hideObject;
         public static bool deHierarchy_showDot;
+        public static bool deHierarchy_indentDot;
         public static bool deHierarchy_showBorder;
 
         const string _SavePrefix = "DeEditorTools_";
         const string _ID_DeScene_EnableContextMenu = _SavePrefix + "deScene_enableContextMenu";
         const string _ID_DeHierarchy_HideObject = _SavePrefix + "deHierarchy_hideObject";
         const string _ID_DeHierarchy_ShowDot = _SavePrefix + "deHierarchy_showDot";
+        const string _ID_DeHierarchy_IndentDot = _SavePrefix + "deHierarchy_indentDot";
         const string _ID_DeHierarchy_ShowBorder = _SavePrefix + "deHierarchy_showBorder";
 
         // Elements to remove from EditorPrefs (possible leftovers from previous versions)
@@ -42,6 +44,7 @@ namespace DG.DeEditorTools
             deScene_enableContextMenu = EditorPrefs.GetBool(_ID_DeScene_EnableContextMenu, true);
             deHierarchy_hideObject = EditorPrefs.GetBool(_ID_DeHierarchy_HideObject, false);
             deHierarchy_showDot = EditorPrefs.GetBool(_ID_DeHierarchy_ShowDot, true);
+            deHierarchy_indentDot = EditorPrefs.GetBool(_ID_DeHierarchy_IndentDot, false);
             deHierarchy_showBorder = EditorPrefs.GetBool(_ID_DeHierarchy_ShowBorder, true);
         }
 
@@ -73,6 +76,9 @@ namespace DG.DeEditorTools
                 deHierarchy_hideObject = DeGUILayout.ToggleButton(deHierarchy_hideObject, "Hide DeHierarchy object", GUILayout.Height(16));
                 flagsChanged = EditorGUI.EndChangeCheck();
                 deHierarchy_showDot = EditorGUILayout.Toggle("Show Colored Dot", deHierarchy_showDot);
+                using (new EditorGUI.DisabledScope(!deHierarchy_showDot)) {
+                    deHierarchy_indentDot = EditorGUILayout.Toggle(" └ Indent Dot", deHierarchy_indentDot);
+                }
                 deHierarchy_showBorder = EditorGUILayout.Toggle("Show Colored Border", deHierarchy_showBorder);
                 hierarchyChanged = EditorGUI.EndChangeCheck();
             }
@@ -87,6 +93,7 @@ namespace DG.DeEditorTools
             EditorPrefs.SetBool(_ID_DeScene_EnableContextMenu, deScene_enableContextMenu);
             EditorPrefs.SetBool(_ID_DeHierarchy_HideObject, deHierarchy_hideObject);
             EditorPrefs.SetBool(_ID_DeHierarchy_ShowDot, deHierarchy_showDot);
+            EditorPrefs.SetBool(_ID_DeHierarchy_IndentDot, deHierarchy_indentDot);
             EditorPrefs.SetBool(_ID_DeHierarchy_ShowBorder, deHierarchy_showBorder);
         }
     }

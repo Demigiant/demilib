@@ -53,21 +53,25 @@ namespace DG.DeEditorTools.Hierarchy
             DeHierarchyComponent.CustomizedItem customizedItem = _dehComponent.GetItem(go);
             if (customizedItem == null) return;
 
-            // Store fullRect (border to border of Hierarchy)
-            Rect fullR = selectionRect;
-            fullR.x -= 28;
-            fullR.width += 28;
-            Transform t = go.transform;
-            while (t.parent != null) {
-                t = t.parent;
-                fullR.x -= 14;
-                fullR.width += 14;
-            }
-            Rect prefixR = new Rect(fullR.x + 4, fullR.y + 4, 8, 8);
             Color color = customizedItem.GetColor();
+            // Dot
             if (DeEditorToolsPrefs.deHierarchy_showDot) {
-                using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(prefixR, DeStylePalette.whiteDot);
+                Rect fullR = selectionRect;
+                fullR.x -= 28;
+                fullR.width += 28;
+                Rect indentendFullR = fullR;
+                Transform t = go.transform;
+                while (t.parent != null) {
+                    t = t.parent;
+                    fullR.x -= 14;
+                    fullR.width += 14;
+                }
+                Rect dotR = DeEditorToolsPrefs.deHierarchy_indentDot
+                    ? new Rect(indentendFullR.x + 5, indentendFullR.y + 4, 8, 8)
+                    : new Rect(fullR.x + 5, fullR.y + 4, 8, 8);
+                using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(dotR, DeStylePalette.whiteDot);
             }
+            // Border
             if (DeEditorToolsPrefs.deHierarchy_showBorder) {
                 using (new DeGUI.ColorScope(color)) {
                     GUI.Label(selectionRect, "", _evidenceStyle);

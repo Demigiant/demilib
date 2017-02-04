@@ -10,7 +10,7 @@ namespace DG.DeAudioEditor
 {
     public class MenuItems : MonoBehaviour
     {
-        [MenuItem("GameObject/Demigiant/DeAudioManager", false, 10)]
+        [MenuItem("GameObject/Demigiant/DeAudioManager", false, 20)]
         static void CreateDeAudioManager(MenuCommand menuCommand)
         {
             GameObject go = new GameObject("DeAudioManager");
