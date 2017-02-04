@@ -34,7 +34,7 @@ namespace DG.DeEditorTools.Scene
 
         static void OnSceneGUI(SceneView sceneView)
         {
-            if (!DeEditorToolsPrefs.enableSceneContextMenu) return;
+            if (!DeEditorToolsPrefs.deScene_enableContextMenu) return;
 
             sceneArea = new Rect(
                 0, 0,

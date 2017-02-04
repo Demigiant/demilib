@@ -14,6 +14,8 @@ namespace DG.DeEditorTools.Hierarchy
     {
         static DeHierarchyComponent _dehComponent;
 
+        static GUIStyle _evidenceStyle, _evidencePrefixStyle;
+
         static DeHierarchy()
         {
             EditorApplication.hierarchyWindowChanged -= Refresh;
@@ -43,6 +45,7 @@ namespace DG.DeEditorTools.Hierarchy
             if (_dehComponent == null) return;
 
             DeGUI.BeginGUI();
+            SetStyles();
 
             GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
             if (go == null) return;
@@ -50,20 +53,46 @@ namespace DG.DeEditorTools.Hierarchy
             DeHierarchyComponent.CustomizedItem customizedItem = _dehComponent.GetItem(go);
             if (customizedItem == null) return;
 
-            Rect r = selectionRect;
-            using (new DeGUI.ColorScope(customizedItem.GetColor())) {
-                GUI.Label(r, "", DeGUI.styles.button.bBlankBorder.Clone().Background(DeStylePalette.squareBorderCurvedEmpty));
+            // Store fullRect (border to border of Hierarchy)
+            Rect fullR = selectionRect;
+            fullR.x -= 28;
+            fullR.width += 28;
+            Transform t = go.transform;
+            while (t.parent != null) {
+                t = t.parent;
+                fullR.x -= 14;
+                fullR.width += 14;
             }
+            Rect prefixR = new Rect(fullR.x + 4, fullR.y + 4, 8, 8);
+            Color color = customizedItem.GetColor();
+            if (DeEditorToolsPrefs.deHierarchy_showDot) {
+                using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(prefixR, DeStylePalette.whiteDot);
+            }
+            if (DeEditorToolsPrefs.deHierarchy_showBorder) {
+                using (new DeGUI.ColorScope(color)) {
+                    GUI.Label(selectionRect, "", _evidenceStyle);
+                }
+            }
+        }
+
+        static void SetStyles()
+        {
+            if (_evidenceStyle != null) return;
+
+            _evidenceStyle = DeGUI.styles.button.bBlankBorder.Clone(TextAnchor.MiddleLeft).Background(DeStylePalette.squareBorderCurvedEmpty)
+                .PaddingLeft(3).PaddingTop(2);
         }
 
         #endregion
 
         #region Public Methods
 
-        public static void OnPreferencesRefresh()
+        public static void OnPreferencesRefresh(bool flagsChanged)
         {
-            if (_dehComponent != null) SetDeHierarchyGOFlags(_dehComponent.gameObject);
-            EditorApplication.DirtyHierarchyWindowSorting();
+            if (flagsChanged) {
+                if (_dehComponent != null) SetDeHierarchyGOFlags(_dehComponent.gameObject);
+                EditorApplication.DirtyHierarchyWindowSorting();
+            } else EditorApplication.RepaintHierarchyWindow();
         }
 
         #endregion
@@ -108,7 +137,7 @@ namespace DG.DeEditorTools.Hierarchy
 
         static void SetDeHierarchyGOFlags(GameObject deHierarchyGO)
         {
-            deHierarchyGO.hideFlags = DeEditorToolsPrefs.hideDeHierarchyObject
+            deHierarchyGO.hideFlags = DeEditorToolsPrefs.deHierarchy_hideObject
                 ? HideFlags.DontSaveInBuild | HideFlags.HideInHierarchy
                 : HideFlags.DontSaveInBuild;
         }

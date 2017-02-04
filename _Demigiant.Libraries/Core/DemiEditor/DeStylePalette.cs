@@ -121,6 +121,10 @@ namespace DG.DemiEditor
             if (_fooSquareBorderCurved_darkBordersAlpha == null) _fooSquareBorderCurved_darkBordersAlpha = LoadSquareTexture("squareBorderCurved_darkBordersAlpha");
             return _fooSquareBorderCurved_darkBordersAlpha;
         }}
+        public static Texture2D whiteDot { get {
+            if (_fooWhiteDot == null) _fooWhiteDot = LoadSquareTexture("whiteDot");
+            return _fooWhiteDot;
+        }}
         static Texture2D _fooWhiteSquare;
         static Texture2D _fooWhiteSquareAlpha10;
         static Texture2D _fooWhiteSquareAlpha15;
@@ -143,6 +147,7 @@ namespace DG.DemiEditor
         static Texture2D _fooSquareBorderCurvedEmpty;
         static Texture2D _fooSquareBorderCurvedAlpha;
         static Texture2D _fooSquareBorderCurved_darkBordersAlpha;
+        static Texture2D _fooWhiteDot;
         public static Texture2D ico_alignTL { get {
             if (_fooIco_alignTL == null) _fooIco_alignTL = LoadSquareTexture("ico_alignTL");
             return _fooIco_alignTL;
