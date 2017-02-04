@@ -13,7 +13,7 @@
             <summary>
             Stores a color palette, which can be passed to default DeGUI layouts when calling <code>DeGUI.BeginGUI</code>,
             and changed at any time by calling <code>DeGUI.ChangePalette</code>.
-            You can inherit from this class to create custom color palettes with more color options.
+            You can inherit from this class to create custom color palettes with more hColor options.
             </summary>
         </member>
         <member name="T:DG.DemiLib.DeColorBG">
@@ -30,6 +30,26 @@
             <summary>
             Contains both free and pro skins color variations,
             and automatically returns the correct one when converted to Color
+            </summary>
+        </member>
+        <member name="T:DG.DemiLib.External.DeHierarchyComponent">
+            <summary>
+            Used by DeHierarchy
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.External.DeHierarchyComponent.StoreItemData(UnityEngine.GameObject,DG.DemiLib.External.DeHierarchyComponent.HColor)">
+            <summary>
+            If the item exists sets it, otherwise first creates it and then sets it
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.External.DeHierarchyComponent.RemoveItemData(UnityEngine.GameObject)">
+            <summary>
+            Returns TRUE if the item existed and was removed.
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.External.DeHierarchyComponent.GetItem(UnityEngine.GameObject)">
+            <summary>
+            Returns the customizedItem for the given gameObject, or NULL if none was found
             </summary>
         </member>
     </members>

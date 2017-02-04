@@ -35,10 +35,10 @@ namespace DG.DeInspektor.Attributes
         /// </summary>
         /// <param name="text">Button label</param>
         /// <param name="showLabel">If TRUE also shows the property's label</param>
-        /// <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-        /// <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default color)</param>
-        /// <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-        /// <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default color)</param>
+        /// <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+        /// <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+        /// <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+        /// <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
         public DeToggleButtonAttribute(string text, bool showLabel, string bgOffColor = null, string bgOnColor = null, string labelOffColor = null, string labelOnColor = null)
         {
             this.text = text;
@@ -54,10 +54,10 @@ namespace DG.DeInspektor.Attributes
         /// </summary>
         /// <param name="text">Button label</param>
         /// <param name="position"><see cref="DePosition"/> of the button relative to Inspector width</param>
-        /// <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-        /// <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default color)</param>
-        /// <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-        /// <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default color)</param>
+        /// <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+        /// <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+        /// <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+        /// <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
         public DeToggleButtonAttribute(string text, DePosition position = DePosition.HExtended, string bgOffColor = null, string bgOnColor = null, string labelOffColor = null, string labelOnColor = null)
         {
             this.text = text;
@@ -71,10 +71,10 @@ namespace DG.DeInspektor.Attributes
         /// Draws a toggle button instead of the usual checkbox (only works with booleans)
         /// </summary>
         /// <param name="position"><see cref="DePosition"/> of the button relative to Inspector width</param>
-        /// <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-        /// <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default color)</param>
-        /// <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-        /// <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default color)</param>
+        /// <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+        /// <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+        /// <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+        /// <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
         public DeToggleButtonAttribute(DePosition position = DePosition.HExtended, string bgOffColor = null, string bgOnColor = null, string labelOffColor = null, string labelOnColor = null)
         {
             this.position = position;

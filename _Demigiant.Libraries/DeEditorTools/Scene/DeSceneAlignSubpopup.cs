@@ -8,9 +8,9 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace DG.DeEditorTools.SceneUISystem
+namespace DG.DeEditorTools.Scene
 {
-    public class AlignSubpopup : PopupWindowContent
+    public class DeSceneAlignSubpopup : PopupWindowContent
     {
         enum HorizontalAlignment
         {
@@ -29,7 +29,7 @@ namespace DG.DeEditorTools.SceneUISystem
 
         static GUIStyle _icoBt;
 
-        public AlignSubpopup(Camera alignToCamera, List<SpriteRenderer> spriteRenderers)
+        public DeSceneAlignSubpopup(Camera alignToCamera, List<SpriteRenderer> spriteRenderers)
         {
             _alignToCamera = alignToCamera;
             _spriteRenderers = spriteRenderers;
@@ -60,7 +60,7 @@ namespace DG.DeEditorTools.SceneUISystem
                 }
             }
 
-            if (closeAllPopups) SceneUIPopup.CloseAll();
+            if (closeAllPopups) DeSceneMainPopup.CloseAll();
             else if (Event.current.type == EventType.MouseMove) this.editorWindow.Repaint();
         }
 

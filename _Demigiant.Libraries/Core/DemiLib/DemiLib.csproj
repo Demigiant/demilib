@@ -48,6 +48,7 @@
     <Compile Include="Core\GUIUtils.cs" />
     <Compile Include="DeColorPalette.cs" />
     <Compile Include="DeSkinColor.cs" />
+    <Compile Include="External\DeHierarchyComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -14,6 +14,7 @@ namespace DG.DemiEditor
     {
         static readonly List<DelayedCall> _DelayedCalls = new List<DelayedCall>();
         static MethodInfo _clearConsoleMI;
+        static readonly List<GameObject> _rootGOs = new List<GameObject>(500);
 
         /// <summary>Calls the given action after the given delay</summary>
         public static DelayedCall DelayedCall(float delay, Action callback)
@@ -57,6 +58,28 @@ namespace DG.DemiEditor
                 if (_clearConsoleMI == null) return;
             }
             _clearConsoleMI.Invoke(null,null);
+        }
+
+        /// <summary>
+        /// Returns all components of type T in the currently open scene, or NULL if none could be found.<para/>
+        /// If you're on Unity 5 or later, and have <code>DeEditorTools</code>, use <code>DeEditorToolsUtils.FindAllComponentsOfType</code>
+        /// instead, which is more efficient.
+        /// </summary>
+        public static List<T> FindAllComponentsOfType<T>() where T : Component
+        {
+            GameObject[] allGOs = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
+            if (allGOs == null) return null;
+            List<T> result = null;
+            foreach (GameObject go in allGOs) {
+                if (go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave) continue;
+                T[] components = go.GetComponentsInChildren<T>();
+                if (components.Length == 0) continue;
+                if (result == null) result = new List<T>();
+                foreach (T component in components) {
+                    result.Add(component);
+                }
+            }
+            return result;
         }
     }
 

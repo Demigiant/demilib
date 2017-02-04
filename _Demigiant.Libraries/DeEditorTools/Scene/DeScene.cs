@@ -4,25 +4,25 @@
 
 using System.Collections.Generic;
 using System.Reflection;
+using DG.DemiEditor;
 using UnityEditor;
 using UnityEngine;
 
-namespace DG.DeEditorTools.SceneUISystem
+namespace DG.DeEditorTools.Scene
 {
     /// <summary>
     /// Adds extra features to the Scene panel (like right-click).
     /// </summary>
     [InitializeOnLoad]
-    public class SceneUI
+    public class DeScene
     {
-        public const string Version = "0.2.000";
         public static readonly List<SpriteRenderer> SelectedSpriteRenderers = new List<SpriteRenderer>();
         public static readonly List<Camera> OrthoCams = new List<Camera>();
         public static Rect sceneArea { get; private set; }
         static MethodInfo _mi_resetMouseDown; // Used to reset mouseCursor to arrow instead of pan, in case of right-click
         static bool _popupIsOpen;
 
-        static SceneUI()
+        static DeScene()
         {
             _mi_resetMouseDown = typeof(EditorUtility).GetMethod("ResetMouseDown", BindingFlags.NonPublic | BindingFlags.Static);
             SceneView.onSceneGUIDelegate -= OnSceneGUI;
@@ -52,7 +52,7 @@ namespace DG.DeEditorTools.SceneUISystem
                         if (OrthoCams.Count > 0) {
                             _mi_resetMouseDown.Invoke(null, null); // Reset mouse to prevent panning tool
                             Event.current.Use();
-                            PopupWindow.Show(popupArea, new SceneUIPopup());
+                            PopupWindow.Show(popupArea, new DeSceneMainPopup());
                         }
                     }
                 }
@@ -75,29 +75,11 @@ namespace DG.DeEditorTools.SceneUISystem
             }
         }
 
-        // Returns NULL if no component of type was found
-        static List<T> FindAllComponentsOfType<T>() where T : Component
-        {
-            GameObject[] allGOs = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
-            if (allGOs == null) return null;
-            List<T> result = null;
-            foreach (GameObject go in allGOs) {
-                if (go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave) continue;
-                T[] components = go.GetComponentsInChildren<T>();
-                if (components.Length == 0) continue;
-                if (result == null) result = new List<T>();
-                foreach (T component in components) {
-                    result.Add(component);
-                }
-            }
-            return result;
-        }
-
         // Returns NULL if no ortographic camera was found
         static void FillAllOrthoCams()
         {
             OrthoCams.Clear();
-            List <Camera> allCams = FindAllComponentsOfType<Camera>();
+            List <Camera> allCams = DeEditorUtils.FindAllComponentsOfType<Camera>();
             if (allCams == null) return;
             foreach (Camera cam in allCams) {
                 if (!cam.orthographic) continue;

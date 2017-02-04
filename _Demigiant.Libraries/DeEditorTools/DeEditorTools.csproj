@@ -47,11 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeEditorToolsPrefs.cs" />
+    <Compile Include="DeEditorToolsUtils.cs" />
+    <Compile Include="Hierarchy\DeHierarchy.cs" />
+    <Compile Include="Hierarchy\DeHierarchyComponentInspector.cs" />
+    <Compile Include="Hierarchy\DeHierarchyContextMenu.cs" />
+    <Compile Include="Hierarchy\DeHierarchyPostProcessScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScenesPanel\ScenesPanel.cs" />
-    <Compile Include="SceneUISystem\AlignSubpopup.cs" />
-    <Compile Include="SceneUISystem\SceneUI.cs" />
-    <Compile Include="SceneUISystem\SceneUIPopup.cs" />
+    <Compile Include="Scene\DeSceneAlignSubpopup.cs" />
+    <Compile Include="Scene\DeScene.cs" />
+    <Compile Include="Scene\DeSceneMainPopup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\DemiEditor\DemiEditor.csproj">

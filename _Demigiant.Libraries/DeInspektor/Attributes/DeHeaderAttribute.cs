@@ -45,7 +45,7 @@ namespace DG.DeInspektor.Attributes
         internal int fontSize;
 
         /// <summary>
-        /// Draws a header with a color and background color
+        /// Draws a header with a color and background hColor
         /// </summary>
         /// <param name="text">Text</param>
         /// <param name="textColor">Color hex (no #) for text, leave NULL to use default</param>
@@ -61,7 +61,7 @@ namespace DG.DeInspektor.Attributes
             this.fontSize = fontSize;
         }
         /// <summary>
-        /// Draws a header with a color and background color
+        /// Draws a header with a color and background hColor
         /// </summary>
         /// <param name="text">Text</param>
         /// <param name="textAnchor">TextAnchor</param>

@@ -9,7 +9,7 @@ namespace DG.DemiLib
     /// <summary>
     /// Stores a color palette, which can be passed to default DeGUI layouts when calling <code>DeGUI.BeginGUI</code>,
     /// and changed at any time by calling <code>DeGUI.ChangePalette</code>.
-    /// You can inherit from this class to create custom color palettes with more color options.
+    /// You can inherit from this class to create custom color palettes with more hColor options.
     /// </summary>
     [System.Serializable]
     public class DeColorPalette

@@ -441,7 +441,7 @@
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeHeaderAttribute.#ctor(System.String,System.String,System.String,UnityEngine.FontStyle,System.Int32)">
             <summary>
-            Draws a header with a color and background color
+            Draws a header with a color and background hColor
             </summary>
             <param name="text">Text</param>
             <param name="textColor">Color hex (no #) for text, leave NULL to use default</param>
@@ -451,7 +451,7 @@
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeHeaderAttribute.#ctor(System.String,UnityEngine.TextAnchor,System.String,System.String,UnityEngine.FontStyle,System.Int32)">
             <summary>
-            Draws a header with a color and background color
+            Draws a header with a color and background hColor
             </summary>
             <param name="text">Text</param>
             <param name="textAnchor">TextAnchor</param>
@@ -567,10 +567,10 @@
             </summary>
             <param name="text">Button label</param>
             <param name="showLabel">If TRUE also shows the property's label</param>
-            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default color)</param>
-            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default color)</param>
+            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeToggleButtonAttribute.#ctor(System.String,DG.DeInspektor.Attributes.DePosition,System.String,System.String,System.String,System.String)">
             <summary>
@@ -578,20 +578,20 @@
             </summary>
             <param name="text">Button label</param>
             <param name="position"><see cref="T:DG.DeInspektor.Attributes.DePosition"/> of the button relative to Inspector width</param>
-            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default color)</param>
-            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default color)</param>
+            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeToggleButtonAttribute.#ctor(DG.DeInspektor.Attributes.DePosition,System.String,System.String,System.String,System.String)">
             <summary>
             Draws a toggle button instead of the usual checkbox (only works with booleans)
             </summary>
             <param name="position"><see cref="T:DG.DeInspektor.Attributes.DePosition"/> of the button relative to Inspector width</param>
-            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default color)</param>
-            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default color)</param>
-            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default color)</param>
+            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
         </member>
     </members>
 </doc>

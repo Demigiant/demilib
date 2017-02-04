@@ -8,11 +8,11 @@ using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
 
-namespace DG.DeEditorTools.SceneUISystem
+namespace DG.DeEditorTools.Scene
 {
-    public class SceneUIPopup : PopupWindowContent
+    public class DeSceneMainPopup : PopupWindowContent
     {
-        static SceneUIPopup I;
+        static DeSceneMainPopup I;
         bool _isStartup;
         Vector2 _popupSize = new Vector2(-1, -1);
         readonly Dictionary<int, Rect> _menuItemToRect = new Dictionary<int, Rect>();
@@ -43,7 +43,7 @@ namespace DG.DeEditorTools.SceneUISystem
 
         public override Vector2 GetWindowSize()
         {
-            _popupSize.y = SceneUI.OrthoCams.Count * _ItemH + 1;
+            _popupSize.y = DeScene.OrthoCams.Count * _ItemH + 1;
             return new Vector2(_isStartup ? 400 : _popupSize.x, _popupSize.y);
         }
 
@@ -53,13 +53,13 @@ namespace DG.DeEditorTools.SceneUISystem
             PopupWindowContent prevSubpopup = null;
 
             // MenuItems > Align to camera
-            for (int i = 0; i < SceneUI.OrthoCams.Count; ++i) {
-                Camera cam = SceneUI.OrthoCams[i];
+            for (int i = 0; i < DeScene.OrthoCams.Count; ++i) {
+                Camera cam = DeScene.OrthoCams[i];
                 bool isOver = !_isStartup && _menuItemToRect[i].Contains(Event.current.mousePosition);
                 if (isOver && _hoverItemIndex != i) {
                     _hoverItemIndex = i;
                     prevSubpopup = _currSubpopup;
-                    _currSubpopup = new AlignSubpopup(cam, SceneUI.SelectedSpriteRenderers);
+                    _currSubpopup = new DeSceneAlignSubpopup(cam, DeScene.SelectedSpriteRenderers);
                     _subpopupRect = _menuItemToRect[i];
                     _subpopupRect.x += _popupSize.x - 1;
                     _subpopupRect.y -= _subpopupRect.height;
@@ -68,7 +68,7 @@ namespace DG.DeEditorTools.SceneUISystem
                 }
                 using (new DeGUI.ColorScope(isOver ? new Color(0.2043685f, 0.3257368f, 0.7720588f, 1f) : (Color)new DeSkinColor(0.15f))) {
                     using (new GUILayout.HorizontalScope(_menuItemBox)) {
-                        GUILayout.Label(string.Format("<color=\"{0}\"><b>Align To → </b></color>{1}    ", _EvidenceColor, cam.name), _menuItemLabel, GUILayout.ExpandWidth(!_isStartup));
+                        GUILayout.Label(string.Format("<color=\"{0}\"><b>Align To → </b></hColor>{1}    ", _EvidenceColor, cam.name), _menuItemLabel, GUILayout.ExpandWidth(!_isStartup));
                     }
                 }
                 if (Event.current.type == EventType.Repaint) {
