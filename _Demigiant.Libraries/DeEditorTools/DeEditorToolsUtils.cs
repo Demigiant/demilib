@@ -30,7 +30,7 @@ namespace DG.DeEditorTools
         {
             scene.GetRootGameObjects(_RootGOs);
             foreach (GameObject go in _RootGOs) {
-                if (go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave) continue;
+                if (go.hideFlags == HideFlags.HideInHierarchy || go.hideFlags == HideFlags.HideAndDontSave) continue;
                 T[] components = go.GetComponentsInChildren<T>();
                 if (components.Length == 0) continue;
                 foreach (T component in components) addToList.Add(component);

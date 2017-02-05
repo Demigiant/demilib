@@ -79,7 +79,8 @@ namespace DG.DeEditorTools.Scene
         static void FillAllOrthoCams()
         {
             OrthoCams.Clear();
-            List <Camera> allCams = DeEditorUtils.FindAllComponentsOfType<Camera>();
+//            List <Camera> allCams = DeEditorUtils.FindAllComponentsOfType<Camera>();
+            List<Camera> allCams = DeEditorToolsUtils.FindAllComponentsOfType<Camera>();
             if (allCams == null) return;
             foreach (Camera cam in allCams) {
                 if (!cam.orthographic) continue;
