@@ -68,7 +68,7 @@ namespace DG.DeEditorTools.Scene
                 }
                 using (new DeGUI.ColorScope(isOver ? new Color(0.2043685f, 0.3257368f, 0.7720588f, 1f) : (Color)new DeSkinColor(0.15f))) {
                     using (new GUILayout.HorizontalScope(_menuItemBox)) {
-                        GUILayout.Label(string.Format("<color=\"{0}\"><b>Align To → </b></hColor>{1}    ", _EvidenceColor, cam.name), _menuItemLabel, GUILayout.ExpandWidth(!_isStartup));
+                        GUILayout.Label(string.Format("<color=\"{0}\"><b>Align To → </b></color>{1}    ", _EvidenceColor, cam.name), _menuItemLabel, GUILayout.ExpandWidth(!_isStartup));
                     }
                 }
                 if (Event.current.type == EventType.Repaint) {
