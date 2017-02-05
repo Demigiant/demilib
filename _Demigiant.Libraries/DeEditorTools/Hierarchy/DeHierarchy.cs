@@ -47,6 +47,7 @@ namespace DG.DeEditorTools.Hierarchy
 
         static void ItemOnGUI(int instanceID, Rect selectionRect)
         {
+            if (Event.current.type != EventType.Repaint) return;
             if (_dehComponent == null) return;
 
             DeGUI.BeginGUI();
@@ -85,7 +86,6 @@ namespace DG.DeEditorTools.Hierarchy
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.whiteDot_darkBorder : DeStylePalette.whiteDot;
                     break;
                 }
-//                Rect icoR = new Rect(fullR.x + 5, fullR.y + 4, 8, 8);
                 Rect icoR = new Rect(fullR.x + 9 - icoTexture.width * 0.5f, fullR.y + 8 - icoTexture.height * 0.5f, icoTexture.width, icoTexture.height);
                 using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(icoR, icoTexture);
             }
