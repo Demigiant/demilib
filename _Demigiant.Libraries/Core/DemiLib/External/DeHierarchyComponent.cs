@@ -29,6 +29,13 @@ namespace DG.DemiLib.External
             White
         }
 
+        public enum IcoType
+        {
+            Dot,
+            Star,
+            Cog
+        }
+
         #region Serialized
 
         public List<CustomizedItem> customizedItems = new List<CustomizedItem>();
@@ -54,18 +61,31 @@ namespace DG.DemiLib.External
         /// <summary>
         /// If the item exists sets it, otherwise first creates it and then sets it
         /// </summary>
-        public void StoreItemData(GameObject go, HColor hColor)
+        public void StoreItemColor(GameObject go, HColor hColor)
         {
-            CustomizedItem item = new CustomizedItem(go, hColor);
             foreach (CustomizedItem customizedItem in customizedItems) {
-                if (customizedItem.gameObject == go) {
-                    // Item exists, replace it
-                    customizedItem.hColor = hColor;
-                    return;
-                }
+                if (customizedItem.gameObject != go) continue;
+                // Item exists, replace it
+                customizedItem.hColor = hColor;
+                return;
             }
             // Item doesn't exist, add it
-            customizedItems.Add(item);
+            customizedItems.Add(new CustomizedItem(go, hColor));
+        }
+
+        /// <summary>
+        /// If the item exists sets it, otherwise first creates it and then sets it
+        /// </summary>
+        public void StoreItemIcon(GameObject go, IcoType icoType)
+        {
+            foreach (CustomizedItem customizedItem in customizedItems) {
+                if (customizedItem.gameObject != go) continue;
+                // Item exists, replace it
+                customizedItem.icoType = icoType;
+                return;
+            }
+            // Item doesn't exist, add it
+            customizedItems.Add(new CustomizedItem(go, icoType));
         }
 
         /// <summary>
@@ -106,12 +126,18 @@ namespace DG.DemiLib.External
         public class CustomizedItem
         {
             public GameObject gameObject;
-            public HColor hColor;
+            public HColor hColor = HColor.BrightGrey;
+            public IcoType icoType = IcoType.Dot;
 
             public CustomizedItem(GameObject gameObject, HColor hColor)
             {
                 this.gameObject = gameObject;
                 this.hColor = hColor;
+            }
+            public CustomizedItem(GameObject gameObject, IcoType icoType)
+            {
+                this.gameObject = gameObject;
+                this.icoType = icoType;
             }
 
             public Color GetColor()

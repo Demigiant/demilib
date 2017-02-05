@@ -43,7 +43,12 @@
             Returns TRUE if something was removed.
             </summary>
         </member>
-        <member name="M:DG.DemiLib.External.DeHierarchyComponent.StoreItemData(UnityEngine.GameObject,DG.DemiLib.External.DeHierarchyComponent.HColor)">
+        <member name="M:DG.DemiLib.External.DeHierarchyComponent.StoreItemColor(UnityEngine.GameObject,DG.DemiLib.External.DeHierarchyComponent.HColor)">
+            <summary>
+            If the item exists sets it, otherwise first creates it and then sets it
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.External.DeHierarchyComponent.StoreItemIcon(UnityEngine.GameObject,DG.DemiLib.External.DeHierarchyComponent.IcoType)">
             <summary>
             If the item exists sets it, otherwise first creates it and then sets it
             </summary>

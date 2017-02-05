@@ -59,24 +59,35 @@ namespace DG.DeEditorTools.Hierarchy
             if (customizedItem == null) return;
 
             Color color = customizedItem.GetColor();
-            // Dot
-            if (DeEditorToolsPrefs.deHierarchy_showDot) {
+            // Icon
+            if (DeEditorToolsPrefs.deHierarchy_showIco) {
                 Rect fullR = selectionRect;
                 fullR.x -= 28;
                 fullR.width += 28;
-                Rect indentendFullR = fullR;
-                Transform t = go.transform;
-                while (t.parent != null) {
-                    t = t.parent;
-                    fullR.x -= 14;
-                    fullR.width += 14;
+                if (!DeEditorToolsPrefs.deHierarchy_indentIco) {
+                    // Full rect not indented
+                    Transform t = go.transform;
+                    while (t.parent != null) {
+                        t = t.parent;
+                        fullR.x -= 14;
+                        fullR.width += 14;
+                    }
                 }
-                Rect dotR = DeEditorToolsPrefs.deHierarchy_indentDot
-                    ? new Rect(indentendFullR.x + 5, indentendFullR.y + 4, 8, 8)
-                    : new Rect(fullR.x + 5, fullR.y + 4, 8, 8);
-                using (new DeGUI.ColorScope(null, null, color)) {
-                    GUI.DrawTexture(dotR, DeEditorToolsPrefs.deHierarchy_showDotBorder ? DeStylePalette.whiteDot_darkBorder : DeStylePalette.whiteDot);
+                Texture2D icoTexture;
+                switch (customizedItem.icoType) {
+                case DeHierarchyComponent.IcoType.Star:
+                    icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_star_border : DeStylePalette.ico_star;
+                    break;
+                case DeHierarchyComponent.IcoType.Cog:
+                    icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_cog_border : DeStylePalette.ico_cog;
+                    break;
+                default: // Dot
+                    icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.whiteDot_darkBorder : DeStylePalette.whiteDot;
+                    break;
                 }
+//                Rect icoR = new Rect(fullR.x + 5, fullR.y + 4, 8, 8);
+                Rect icoR = new Rect(fullR.x + 9 - icoTexture.width * 0.5f, fullR.y + 8 - icoTexture.height * 0.5f, icoTexture.width, icoTexture.height);
+                using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(icoR, icoTexture);
             }
             // Border
             if (DeEditorToolsPrefs.deHierarchy_showBorder) {
@@ -121,13 +132,23 @@ namespace DG.DeEditorTools.Hierarchy
                     changed = _dehComponent.RemoveItemData(go) || changed;
                 } else {
                     changed = true;
-                    _dehComponent.StoreItemData(go, hColor);
+                    _dehComponent.StoreItemColor(go, hColor);
                 }
             }
             if (_dehComponent.customizedItems.Count == 0) {
                 Undo.DestroyObjectImmediate(_dehComponent.gameObject);
                 _dehComponent = null;
             } else if (changed) EditorUtility.SetDirty(_dehComponent);
+        }
+
+        // Assumes at least one object is selected
+        internal static void SetIconForSelections(DeHierarchyComponent.IcoType icoType)
+        {
+            ConnectToDeHierarchyComponent(true);
+            Undo.RecordObject(_dehComponent, "DeHierarchy");
+            foreach (GameObject go in Selection.gameObjects) {
+                _dehComponent.StoreItemIcon(go, icoType);
+            }
         }
 
         #endregion

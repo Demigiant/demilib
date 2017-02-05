@@ -194,6 +194,22 @@ namespace DG.DemiEditor
             if (_fooIco_alignBR == null) _fooIco_alignBR = LoadSquareTexture("ico_alignBR");
             return _fooIco_alignBR;
         }}
+        public static Texture2D ico_star { get {
+            if (_fooIco_star == null) _fooIco_star = LoadSquareTexture("ico_star");
+            return _fooIco_star;
+        }}
+        public static Texture2D ico_star_border { get {
+            if (_fooIco_star_border == null) _fooIco_star_border = LoadSquareTexture("ico_star_border");
+            return _fooIco_star_border;
+        }}
+        public static Texture2D ico_cog { get {
+            if (_fooIco_cog == null) _fooIco_cog = LoadSquareTexture("ico_cog");
+            return _fooIco_cog;
+        }}
+        public static Texture2D ico_cog_border { get {
+            if (_fooIco_cog_border == null) _fooIco_cog_border = LoadSquareTexture("ico_cog_border");
+            return _fooIco_cog_border;
+        }}
         static Texture2D _fooIco_alignTL;
         static Texture2D _fooIco_alignTC;
         static Texture2D _fooIco_alignTR;
@@ -203,6 +219,10 @@ namespace DG.DemiEditor
         static Texture2D _fooIco_alignBL;
         static Texture2D _fooIco_alignBC;
         static Texture2D _fooIco_alignBR;
+        static Texture2D _fooIco_star;
+        static Texture2D _fooIco_star_border;
+        static Texture2D _fooIco_cog;
+        static Texture2D _fooIco_cog_border;
 
         #endregion
 
