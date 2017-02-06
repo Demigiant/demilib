@@ -32,6 +32,10 @@ namespace DG.DeEditorTools.Hierarchy
         static void SetIconCog()
         { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Cog); }
 
+        [MenuItem("GameObject/DeHierarchy/Icon/Comment", false, 22)]
+        static void SetIconComment()
+        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Comment); }
+
         #endregion
 
         #region Colors

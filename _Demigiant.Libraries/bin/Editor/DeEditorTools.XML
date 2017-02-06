@@ -17,6 +17,11 @@
             </summary>
             <param name="activeSceneOnly">If TRUE only finds it in the active scene, otherwise in all loaded scenes</param>
         </member>
+        <member name="T:DG.DeEditorTools.Hierarchy.DeHierarchy">
+            <summary>
+            Relies on <see cref="T:DG.DemiLib.External.DeHierarchyComponent"/> in Core library.
+            </summary>
+        </member>
         <member name="T:DG.DeEditorTools.Scene.DeScene">
             <summary>
             Adds extra features to the Scene panel (like right-click).

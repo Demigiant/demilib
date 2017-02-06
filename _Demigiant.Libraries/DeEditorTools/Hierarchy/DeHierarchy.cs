@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace DG.DeEditorTools.Hierarchy
 {
+    /// <summary>
+    /// Relies on <see cref="DeHierarchyComponent"/> in Core library.
+    /// </summary>
     [InitializeOnLoad]
     public class DeHierarchy
     {
@@ -60,6 +63,7 @@ namespace DG.DeEditorTools.Hierarchy
             if (customizedItem == null) return;
 
             Color color = customizedItem.GetColor();
+            if (DeEditorToolsPrefs.deHierarchy_fadeEvidenceWhenInactive && !go.activeSelf) color.a = 0.4f;
             // Icon
             if (DeEditorToolsPrefs.deHierarchy_showIco) {
                 Rect fullR = selectionRect;
@@ -82,11 +86,14 @@ namespace DG.DeEditorTools.Hierarchy
                 case DeHierarchyComponent.IcoType.Cog:
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_cog_border : DeStylePalette.ico_cog;
                     break;
+                case DeHierarchyComponent.IcoType.Comment:
+                    icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_comment_border : DeStylePalette.ico_comment;
+                    break;
                 default: // Dot
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.whiteDot_darkBorder : DeStylePalette.whiteDot;
                     break;
                 }
-                Rect icoR = new Rect(fullR.x + 9 - icoTexture.width * 0.5f, fullR.y + 8 - icoTexture.height * 0.5f, icoTexture.width, icoTexture.height);
+                Rect icoR = new Rect(fullR.x + 9 - icoTexture.width * 0.5f, fullR.y + 9 - icoTexture.height * 0.5f, icoTexture.width, icoTexture.height);
                 using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(icoR, icoTexture);
             }
             // Border

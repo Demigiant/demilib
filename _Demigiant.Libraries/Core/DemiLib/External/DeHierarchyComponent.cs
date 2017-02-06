@@ -33,7 +33,8 @@ namespace DG.DemiLib.External
         {
             Dot,
             Star,
-            Cog
+            Cog,
+            Comment
         }
 
         #region Serialized

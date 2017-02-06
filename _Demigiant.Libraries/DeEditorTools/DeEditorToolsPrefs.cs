@@ -12,7 +12,7 @@ namespace DG.DeEditorTools
 {
     public class DeEditorToolsPrefs
     {
-        const string _Version = "0.5.050";
+        const string _Version = "0.5.070";
 
         public static bool deScene_enableContextMenu;
         public static bool deHierarchy_hideObject;
@@ -20,6 +20,7 @@ namespace DG.DeEditorTools
         public static bool deHierarchy_showIcoBorder;
         public static bool deHierarchy_indentIco;
         public static bool deHierarchy_showBorder;
+        public static bool deHierarchy_fadeEvidenceWhenInactive;
 
         const string _SavePrefix = "DeEditorTools_";
         const string _ID_DeScene_EnableContextMenu = _SavePrefix + "deScene_enableContextMenu";
@@ -28,6 +29,7 @@ namespace DG.DeEditorTools
         const string _ID_DeHierarchy_ShowIcoBorder = _SavePrefix + "deHierarchy_showIcoBorder";
         const string _ID_DeHierarchy_IndentIco = _SavePrefix + "deHierarchy_indentIco";
         const string _ID_DeHierarchy_ShowBorder = _SavePrefix + "deHierarchy_showBorder";
+        const string _ID_DeHierarchy_FadeEvidenceWhenInactive = _SavePrefix + "deHierarchy_fadeEvidenceWhenInactive";
 
         // Elements to remove from EditorPrefs (possible leftovers from previous versions)
         static readonly string[] _PrefsToDelete = new [] {
@@ -52,6 +54,7 @@ namespace DG.DeEditorTools
             deHierarchy_showIcoBorder = EditorPrefs.GetBool(_ID_DeHierarchy_ShowIcoBorder, false);
             deHierarchy_indentIco = EditorPrefs.GetBool(_ID_DeHierarchy_IndentIco, false);
             deHierarchy_showBorder = EditorPrefs.GetBool(_ID_DeHierarchy_ShowBorder, true);
+            deHierarchy_fadeEvidenceWhenInactive = EditorPrefs.GetBool(_ID_DeHierarchy_FadeEvidenceWhenInactive, true);
         }
 
         [PreferenceItem("DeEditorTools")]
@@ -81,12 +84,13 @@ namespace DG.DeEditorTools
                 EditorGUI.BeginChangeCheck();
                 deHierarchy_hideObject = DeGUILayout.ToggleButton(deHierarchy_hideObject, "Hide DeHierarchy GameObject", GUILayout.Height(16));
                 flagsChanged = EditorGUI.EndChangeCheck();
-                deHierarchy_showIco = EditorGUILayout.Toggle("Show Colored Icon", deHierarchy_showIco);
+                deHierarchy_showIco = EditorGUILayout.Toggle("Show colored icon", deHierarchy_showIco);
                 using (new EditorGUI.DisabledScope(!deHierarchy_showIco)) {
-                    deHierarchy_indentIco = EditorGUILayout.Toggle(" └ Indent Icon", deHierarchy_indentIco);
-                    deHierarchy_showIcoBorder = EditorGUILayout.Toggle(" └ Show Icon Outline", deHierarchy_showIcoBorder);
+                    deHierarchy_indentIco = EditorGUILayout.Toggle(" └ Indent icon", deHierarchy_indentIco);
+                    deHierarchy_showIcoBorder = EditorGUILayout.Toggle(" └ Show icon outline", deHierarchy_showIcoBorder);
                 }
-                deHierarchy_showBorder = EditorGUILayout.Toggle("Show Colored Border", deHierarchy_showBorder);
+                deHierarchy_showBorder = EditorGUILayout.Toggle("Show colored border", deHierarchy_showBorder);
+                deHierarchy_fadeEvidenceWhenInactive = EditorGUILayout.Toggle("Fade evidence if object is inactive", deHierarchy_fadeEvidenceWhenInactive);
                 hierarchyChanged = EditorGUI.EndChangeCheck();
             }
 
@@ -103,6 +107,7 @@ namespace DG.DeEditorTools
             EditorPrefs.SetBool(_ID_DeHierarchy_ShowIcoBorder, deHierarchy_showIcoBorder);
             EditorPrefs.SetBool(_ID_DeHierarchy_IndentIco, deHierarchy_indentIco);
             EditorPrefs.SetBool(_ID_DeHierarchy_ShowBorder, deHierarchy_showBorder);
+            EditorPrefs.SetBool(_ID_DeHierarchy_FadeEvidenceWhenInactive, deHierarchy_fadeEvidenceWhenInactive);
         }
     }
 }
