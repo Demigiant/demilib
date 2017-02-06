@@ -63,7 +63,7 @@ namespace DG.DeEditorTools.Hierarchy
             if (customizedItem == null) return;
 
             Color color = customizedItem.GetColor();
-            if (DeEditorToolsPrefs.deHierarchy_fadeEvidenceWhenInactive && !go.activeSelf) color.a = 0.4f;
+            if (DeEditorToolsPrefs.deHierarchy_fadeEvidenceWhenInactive && !go.activeInHierarchy) color.a = 0.4f;
             // Icon
             if (DeEditorToolsPrefs.deHierarchy_showIco) {
                 Rect fullR = selectionRect;
