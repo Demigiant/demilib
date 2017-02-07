@@ -44,19 +44,18 @@ namespace DG.DemiLib.External
         #endregion
 
         /// <summary>
-        /// Removes all items whose gameObject is NULL.
-        /// Returns TRUE if something was removed.
+        /// Returns a list of all items whose gameObject is NULL, or NULL if there's no missing gameObjects.
         /// </summary>
-        public bool RemoveMissingItems()
+        public List<int> MissingItemsIndexes()
         {
-            bool changed = false;
+            List<int> result = null;
             for (int i = customizedItems.Count - 1; i > -1; --i) {
                 if (customizedItems[i].gameObject == null) {
-                    changed = true;
-                    customizedItems.RemoveAt(i);
+                    if (result == null) result = new List<int>();
+                    result.Add(i);
                 }
             }
-            return changed;
+            return result;
         }
 
         /// <summary>

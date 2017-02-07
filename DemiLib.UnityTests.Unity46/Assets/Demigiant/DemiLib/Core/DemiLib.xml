@@ -37,10 +37,9 @@
             Used by DeHierarchy
             </summary>
         </member>
-        <member name="M:DG.DemiLib.External.DeHierarchyComponent.RemoveMissingItems">
+        <member name="M:DG.DemiLib.External.DeHierarchyComponent.MissingItemsIndexes">
             <summary>
-            Removes all items whose gameObject is NULL.
-            Returns TRUE if something was removed.
+            Returns a list of all items whose gameObject is NULL, or NULL if there's no missing gameObjects.
             </summary>
         </member>
         <member name="M:DG.DemiLib.External.DeHierarchyComponent.StoreItemColor(UnityEngine.GameObject,DG.DemiLib.External.DeHierarchyComponent.HColor)">

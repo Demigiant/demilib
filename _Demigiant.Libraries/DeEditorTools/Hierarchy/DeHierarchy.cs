@@ -2,6 +2,7 @@
 // Created: 2017/02/04 11:30
 // License Copyright (c) Daniele Giardini
 
+using System.Collections.Generic;
 using DG.DemiEditor;
 using DG.DemiLib.External;
 using UnityEditor;
@@ -38,8 +39,15 @@ namespace DG.DeEditorTools.Hierarchy
             if (_dehComponent == null) return;
 
             // Delete customizedItems that refer to objects not in the scene anymore
-            Undo.RecordObject(_dehComponent, "DeHierarchy");
-            if (_dehComponent.RemoveMissingItems()) EditorUtility.SetDirty(_dehComponent);
+            // Doesn't call Undo.RecordObject before the operation, because at this point it would mark the scene dirty even if no change is made
+            List<int> missingIndexes = _dehComponent.MissingItemsIndexes();
+            if (missingIndexes != null) {
+                Undo.RecordObject(_dehComponent, "DeHierarchy");
+                foreach (int missingIndex in missingIndexes) {
+                    _dehComponent.customizedItems.RemoveAt(missingIndex);
+                    EditorUtility.SetDirty(_dehComponent);
+                }
+            }
         }
 
         static void UndoRedoPerformed()
@@ -179,9 +187,13 @@ namespace DG.DeEditorTools.Hierarchy
 
         static void SetDeHierarchyGOFlags(GameObject deHierarchyGO)
         {
-            deHierarchyGO.hideFlags = DeEditorToolsPrefs.deHierarchy_hideObject
-                ? HideFlags.DontSaveInBuild | HideFlags.HideInHierarchy
-                : HideFlags.DontSaveInBuild;
+            if (DeEditorToolsPrefs.deHierarchy_hideObject) {
+                if ((deHierarchyGO.hideFlags & (HideFlags.DontSaveInBuild | HideFlags.HideInHierarchy)) == (HideFlags.DontSaveInBuild | HideFlags.HideInHierarchy)) return;
+                deHierarchyGO.hideFlags = HideFlags.DontSaveInBuild | HideFlags.HideInHierarchy;
+            } else {
+                if ((deHierarchyGO.hideFlags | (HideFlags.DontSaveInBuild)) == (HideFlags.DontSaveInBuild)) return;
+                deHierarchyGO.hideFlags = HideFlags.DontSaveInBuild;
+            }
         }
 
         #endregion
