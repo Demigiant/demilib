@@ -36,25 +36,29 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
             Rect r = AttributesManagersUtils.AdaptRectToDePosition(true, position, attr.position, _LineH, _MarginBottom);
 
+            bool disabled = attr.mode == DeButtonMode.NoPlayMode && EditorApplication.isPlayingOrWillChangePlaymode
+                            || attr.mode == DeButtonMode.PlayModeOnly && !EditorApplication.isPlayingOrWillChangePlaymode;
             Color defBgColor = GUI.backgroundColor;
             Color defContentColor = GUI.contentColor;
             if (attr.bgShade != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgShade);
             if (attr.textShade != null) GUI.contentColor = DeColorPalette.HexToColor(attr.textShade);
-            if (GUI.Button(r, attr.text)) {
-                MethodInfo mInfo = attr.targetType.GetMethod(
-                    attr.methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static
-                );
-                if (mInfo == null) Debug.LogWarning(string.Format("Method \"{0}\" missing", attr.methodName));
-                else {
-                    if (mInfo.IsStatic) mInfo.Invoke(null, attr.parameters);
+            using (new EditorGUI.DisabledScope(disabled)) {
+                if (GUI.Button(r, attr.text)) {
+                    MethodInfo mInfo = attr.targetType.GetMethod(
+                        attr.methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static
+                        );
+                    if (mInfo == null) Debug.LogWarning(string.Format("Method \"{0}\" missing", attr.methodName));
                     else {
-                        if (attr.targetType.IsSubclassOf(typeof(Component))) {
-                            // Monobehaviour > find it and call the method directly
-                            Component c = Selection.activeTransform.GetComponent(attr.targetType);
-                            mInfo.Invoke(c, attr.parameters);
-                        } else {
-                            // Normal class > create instance and call method from it
-                            mInfo.Invoke(Activator.CreateInstance(attr.targetType), attr.parameters);
+                        if (mInfo.IsStatic) mInfo.Invoke(null, attr.parameters);
+                        else {
+                            if (attr.targetType.IsSubclassOf(typeof(Component))) {
+                                // Monobehaviour > find it and call the method directly
+                                Component c = Selection.activeTransform.GetComponent(attr.targetType);
+                                mInfo.Invoke(c, attr.parameters);
+                            } else {
+                                // Normal class > create instance and call method from it
+                                mInfo.Invoke(Activator.CreateInstance(attr.targetType), attr.parameters);
+                            }
                         }
                     }
                 }

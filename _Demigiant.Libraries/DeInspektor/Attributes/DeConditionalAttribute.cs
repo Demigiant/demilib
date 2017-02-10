@@ -10,7 +10,7 @@ namespace DG.DeInspektor.Attributes
 {
     /// <summary>
     /// <code>Property attribute</code><para/>
-    /// Shows/hides or enables/disables the property depending on the given conditions.
+    /// Shows/hides or enables/disables the property depending on the given conditions.<para/>
     /// Extra properties which can be set directly:<para/>
     /// - customLabel
     /// </summary>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using DG.DeInspektor.Attributes;
 using DG.DemiEditor;
+using UnityEditor;
 using UnityEngine;
 
 namespace DG.DeInspektorEditor.AttributesManagers
@@ -44,16 +45,20 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
             foreach (MethodInfo mInfo in _buttonMethods) {
                 foreach (DeMethodButtonAttribute attr in _mInfoToAttributes[mInfo]) {
-                    if (GUILayout.Button(string.IsNullOrEmpty(attr.text) ? DeButtonAttribute.NicifyMethodName(mInfo.Name) : attr.text)) {
-                        // Add default value where optional parameters are not present
-                        ParameterInfo[] parmInfos = mInfo.GetParameters();
-                        object[] parameters = new object[parmInfos.Length];
-                        for (int i = 0; i < parameters.Length; ++i) {
-                            if (i < attr.parameters.Length) parameters[i] = attr.parameters[i];
-                            else parameters[i] = parmInfos[i].DefaultValue;
+                    bool disabled = attr.mode == DeButtonMode.NoPlayMode && EditorApplication.isPlayingOrWillChangePlaymode
+                                    || attr.mode == DeButtonMode.PlayModeOnly && !EditorApplication.isPlayingOrWillChangePlaymode;
+                    using (new EditorGUI.DisabledScope(disabled)) {
+                        if (GUILayout.Button(string.IsNullOrEmpty(attr.text) ? DeButtonAttribute.NicifyMethodName(mInfo.Name) : attr.text)) {
+                            // Add default value where optional parameters are not present
+                            ParameterInfo[] parmInfos = mInfo.GetParameters();
+                            object[] parameters = new object[parmInfos.Length];
+                            for (int i = 0; i < parameters.Length; ++i) {
+                                if (i < attr.parameters.Length) parameters[i] = attr.parameters[i];
+                                else parameters[i] = parmInfos[i].DefaultValue;
+                            }
+                            // Invoke
+                            mInfo.Invoke(_target, parameters);
                         }
-                        // Invoke
-                        mInfo.Invoke(_target, parameters);
                     }
                 }
             }

@@ -70,8 +70,13 @@
         <member name="T:DG.DeInspektor.Attributes.DeButtonAttribute">
             <summary>
             <code>Decorator + Method caller</code><para/>
-            Draws a button which will call the given method from the given class type
+            Draws a button which will call the given method from the given class type<para/>
+            Extra properties which can be set directly:<para/>
+            - mode
             </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeButtonAttribute.mode">
+            <summary>Display mode</summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeButtonAttribute.#ctor(System.String,DG.DeInspektor.Attributes.DePosition,System.String,System.String,System.Type,System.String,System.Object[])">
             <summary>
@@ -152,6 +157,20 @@
             <param name="targetType">Type of the class that implements the method to call</param>
             <param name="methodName">Name of the method to call</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeButtonMode">
+            <summary>
+            Appearance of button attributes
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeButtonMode.Default">
+            <summary>Enabled always</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeButtonMode.PlayModeOnly">
+            <summary>Enabled only if application is playing</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeButtonMode.NoPlayMode">
+            <summary>Enabled only if application is not playing</summary>
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeColoredLabelAttribute">
             <summary>
@@ -296,7 +315,7 @@
         <member name="T:DG.DeInspektor.Attributes.DeConditionalAttribute">
             <summary>
             <code>Property attribute</code><para/>
-            Shows/hides or enables/disables the property depending on the given conditions.
+            Shows/hides or enables/disables the property depending on the given conditions.<para/>
             Extra properties which can be set directly:<para/>
             - customLabel
             </summary>
@@ -498,8 +517,13 @@
         <member name="T:DG.DeInspektor.Attributes.DeMethodButtonAttribute">
             <summary>
             <code>Method attribute</code><para/>
-            Draws a button which will call the given method
+            Draws a button which will call the given method<para/>
+            Extra properties which can be set directly:<para/>
+            - mode
             </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.mode">
+            <summary>Display mode</summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeMethodButtonAttribute.#ctor(System.String,System.Int32,System.Object[])">
             <summary>

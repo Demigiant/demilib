@@ -8,11 +8,16 @@ namespace DG.DeInspektor.Attributes
 {
     /// <summary>
     /// <code>Method attribute</code><para/>
-    /// Draws a button which will call the given method
+    /// Draws a button which will call the given method<para/>
+    /// Extra properties which can be set directly:<para/>
+    /// - mode
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class DeMethodButtonAttribute : Attribute
     {
+        /// <summary>Display mode</summary>
+        public DeButtonMode mode = DeButtonMode.Default;
+
         internal string text;
         internal int order;
         internal object[] parameters;

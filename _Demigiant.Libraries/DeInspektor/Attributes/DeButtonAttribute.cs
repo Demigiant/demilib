@@ -10,11 +10,16 @@ namespace DG.DeInspektor.Attributes
 {
     /// <summary>
     /// <code>Decorator + Method caller</code><para/>
-    /// Draws a button which will call the given method from the given class type
+    /// Draws a button which will call the given method from the given class type<para/>
+    /// Extra properties which can be set directly:<para/>
+    /// - mode
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeButtonAttribute : PropertyAttribute
     {
+        /// <summary>Display mode</summary>
+        public DeButtonMode mode = DeButtonMode.Default;
+
         internal Type targetType;
         internal string text;
         internal string methodName;
