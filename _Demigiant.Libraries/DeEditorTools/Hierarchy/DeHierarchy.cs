@@ -38,6 +38,8 @@ namespace DG.DeEditorTools.Hierarchy
             ConnectToDeHierarchyComponent(false, true);
             if (_dehComponent == null) return;
 
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+
             // Delete customizedItems that refer to objects not in the scene anymore
             // Doesn't call Undo.RecordObject before the operation, because at this point it would mark the scene dirty even if no change is made
             List<int> missingIndexes = _dehComponent.MissingItemsIndexes();
