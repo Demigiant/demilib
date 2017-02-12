@@ -8,6 +8,8 @@ namespace DG.DeInspektor.Attributes
     {
         /// <summary>Text inside a box</summary>
         Box,
+        /// <summary>Text inside a box, extended to encompass the full width of the Inspector</summary>
+        BoxExtended,
         /// <summary>Text only</summary>
         TextOnly
     }

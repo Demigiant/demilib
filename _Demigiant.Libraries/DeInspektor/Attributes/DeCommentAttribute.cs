@@ -17,6 +17,7 @@ namespace DG.DeInspektor.Attributes
     /// - bgColor<para/>
     /// - marginBottom
     /// - style
+    /// - textAnchor
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeCommentAttribute : PropertyAttribute
@@ -27,10 +28,12 @@ namespace DG.DeInspektor.Attributes
         public string textColor;
         /// <summary>Background color</summary>
         public string bgColor;
-        /// <summary>Margin bottom</summary>
+        /// <summary>Margin bottom (default = 3)</summary>
         public int marginBottom = 3;
-        /// <summary>Comment style</summary>
+        /// <summary>Comment style (default = Box)</summary>
         public DeCommentStyle style = DeCommentStyle.Box;
+        /// <summary>Text anchor (default = MiddleLeft)</summary>
+        public TextAnchor textAnchor = TextAnchor.MiddleLeft;
 
         internal string text;
         internal DeCondition condition;

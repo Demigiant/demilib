@@ -13,9 +13,10 @@ namespace DG.DeInspektorEditor.AttributesManagers
     [CustomPropertyDrawer(typeof(DeCommentAttribute), true)]
     public class DeCommentPropertyDrawer : DecoratorDrawer
     {
+        const int _ExtendedWidthIncrement = 17;
         float _positionW;
 
-        GUIStyle _boxStyle, _textOnlyStyle;
+        GUIStyle _attrStyle;
 
         public override float GetHeight()
         {
@@ -25,7 +26,8 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
             SetStyles(attr);
             float w = _positionW < 2 ? EditorGUIUtility.currentViewWidth : _positionW;
-            float h = _boxStyle.CalcHeight(new GUIContent(attr.text), w) + attr.marginBottom;
+            if (attr.style == DeCommentStyle.BoxExtended) w += _ExtendedWidthIncrement;
+            float h = _attrStyle.CalcHeight(new GUIContent(attr.text), w) + attr.marginBottom;
             return h;
         }
 
@@ -40,26 +42,40 @@ namespace DG.DeInspektorEditor.AttributesManagers
             SetStyles(attr);
 
             Rect r = position;
+            if (attr.style == DeCommentStyle.BoxExtended) {
+                r.x -= _ExtendedWidthIncrement - 4;
+                r.width += _ExtendedWidthIncrement;
+            }
             r.height -= attr.marginBottom;
 
             bool wasGUIEnabled = GUI.enabled;
             GUI.enabled = isTrue && wasGUIEnabled;
             Color defBgColor = GUI.backgroundColor;
             if (attr.bgColor != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgColor);
-            GUI.Box(r, attr.text, attr.style == DeCommentStyle.Box ? _boxStyle : _textOnlyStyle);
+            else if (attr.style == DeCommentStyle.BoxExtended) GUI.backgroundColor = new Color(0, 0, 0, 0.2f);
+            GUI.Box(r, attr.text, _attrStyle);
             GUI.backgroundColor = defBgColor;
             GUI.enabled = wasGUIEnabled;
         }
 
         void SetStyles(DeCommentAttribute attr)
         {
-            if (_boxStyle != null) return;
+            if (_attrStyle != null) return;
 
-            _boxStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, attr.fontSize, Format.RichText).Padding(4, 4, 3, 3);
-            if (attr.textColor != null) _boxStyle.Add(DeColorPalette.HexToColor(attr.textColor));
-            else _boxStyle.Add(new DeSkinColor(0.35f, 0.58f));
-            if (attr.bgColor != null) _boxStyle.Background(DeStylePalette.squareBorderCurved);
-            _textOnlyStyle = _boxStyle.Clone().Background(null).Padding(2, 0, 0, 0);
+            _attrStyle = new GUIStyle(GUI.skin.box).Add(attr.textAnchor, attr.fontSize, Format.RichText).Padding(4, 4, 3, 4);
+            if (attr.textColor != null) _attrStyle.Add(DeColorPalette.HexToColor(attr.textColor));
+            else _attrStyle.Add(new DeSkinColor(0.35f, 0.58f));
+            switch (attr.style) {
+            case DeCommentStyle.TextOnly:
+                _attrStyle.Background(null).Padding(2, 0, 0, 0);
+                break;
+            case DeCommentStyle.Box:
+                if (attr.bgColor != null) _attrStyle.Background(DeStylePalette.squareBorder);
+                break;
+            case DeCommentStyle.BoxExtended:
+                _attrStyle.Background(Texture2D.whiteTexture);
+                break;
+            }
         }
     }
 }

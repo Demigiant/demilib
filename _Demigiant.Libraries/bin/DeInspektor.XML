@@ -197,6 +197,7 @@
             - bgColor<para/>
             - marginBottom
             - style
+            - textAnchor
             </summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.fontSize">
@@ -209,10 +210,13 @@
             <summary>Background color</summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.marginBottom">
-            <summary>Margin bottom</summary>
+            <summary>Margin bottom (default = 3)</summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.style">
-            <summary>Comment style</summary>
+            <summary>Comment style (default = Box)</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.textAnchor">
+            <summary>Text anchor (default = MiddleLeft)</summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.Int32)">
             <summary>
@@ -283,6 +287,9 @@
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.Box">
             <summary>Text inside a box</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.BoxExtended">
+            <summary>Text inside a box, extended to encompass the full width of the Inspector</summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.TextOnly">
             <summary>Text only</summary>
