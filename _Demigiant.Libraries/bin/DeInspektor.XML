@@ -196,6 +196,7 @@
             - textColor<para/>
             - bgColor<para/>
             - marginBottom
+            - style
             </summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.fontSize">
@@ -209,6 +210,9 @@
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.marginBottom">
             <summary>Margin bottom</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.style">
+            <summary>Comment style</summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.Int32)">
             <summary>
@@ -273,6 +277,15 @@
             <param name="propertyToCompare">Name of the property to check for conditions</param>
             <param name="conditionType">Condition type</param>
             <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeCommentStyle">
+            <summary>Comment style</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.Box">
+            <summary>Text inside a box</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.TextOnly">
+            <summary>Text only</summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,System.Boolean)">
             <summary>

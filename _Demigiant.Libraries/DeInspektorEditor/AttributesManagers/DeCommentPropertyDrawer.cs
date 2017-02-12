@@ -15,7 +15,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
     {
         float _positionW;
 
-        GUIStyle _attributeStyle;
+        GUIStyle _boxStyle, _textOnlyStyle;
 
         public override float GetHeight()
         {
@@ -25,7 +25,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
             SetStyles(attr);
             float w = _positionW < 2 ? EditorGUIUtility.currentViewWidth : _positionW;
-            float h = _attributeStyle.CalcHeight(new GUIContent(attr.text), w) + attr.marginBottom;
+            float h = _boxStyle.CalcHeight(new GUIContent(attr.text), w) + attr.marginBottom;
             return h;
         }
 
@@ -46,20 +46,20 @@ namespace DG.DeInspektorEditor.AttributesManagers
             GUI.enabled = isTrue && wasGUIEnabled;
             Color defBgColor = GUI.backgroundColor;
             if (attr.bgColor != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgColor);
-            GUI.Box(r, attr.text, _attributeStyle);
+            GUI.Box(r, attr.text, attr.style == DeCommentStyle.Box ? _boxStyle : _textOnlyStyle);
             GUI.backgroundColor = defBgColor;
             GUI.enabled = wasGUIEnabled;
         }
 
         void SetStyles(DeCommentAttribute attr)
         {
-            if (_attributeStyle != null) return;
+            if (_boxStyle != null) return;
 
-            _attributeStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, attr.fontSize, Format.RichText).Padding(4, 3, 2, 3);
-            if (attr.textColor != null) {
-                _attributeStyle.Add(DeColorPalette.HexToColor(attr.textColor));
-                _attributeStyle.Background(Texture2D.whiteTexture);
-            } else _attributeStyle.Add(new DeSkinColor(0.35f, 0.58f));
+            _boxStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, attr.fontSize, Format.RichText).Padding(4, 3, 2, 3);
+            if (attr.textColor != null) _boxStyle.Add(DeColorPalette.HexToColor(attr.textColor));
+            else _boxStyle.Add(new DeSkinColor(0.35f, 0.58f));
+            if (attr.bgColor != null) _boxStyle.Background(Texture2D.whiteTexture);
+            _textOnlyStyle = _boxStyle.Clone().Background(null).Padding(2, 0, 0, 0);
         }
     }
 }

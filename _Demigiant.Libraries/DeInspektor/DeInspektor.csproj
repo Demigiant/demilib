@@ -46,10 +46,11 @@
     <Compile Include="Attributes\DeBeginDisabledAttribute.cs" />
     <Compile Include="Attributes\DeBeginGroupAttribute.cs" />
     <Compile Include="Attributes\DeButtonAttribute.cs" />
-    <Compile Include="Attributes\DeButtonMode.cs" />
+    <Compile Include="Attributes\Properties %28no namespace%29\DeButtonMode.cs" />
     <Compile Include="Attributes\DeColoredLabelAttribute.cs" />
     <Compile Include="Attributes\DeCommentAttribute.cs" />
-    <Compile Include="Attributes\DeCondition.cs" />
+    <Compile Include="Attributes\Properties %28no namespace%29\DeCommentStyle.cs" />
+    <Compile Include="Attributes\Properties %28no namespace%29\DeCondition.cs" />
     <Compile Include="Attributes\DeConditionalAttribute.cs" />
     <Compile Include="Attributes\DeDisabledAttribute.cs" />
     <Compile Include="Attributes\DeDividerAttribute.cs" />
@@ -58,7 +59,7 @@
     <Compile Include="Attributes\DeImageAttribute.cs" />
     <Compile Include="Attributes\DeLabelAttribute.cs" />
     <Compile Include="Attributes\DeMethodButtonAttribute.cs" />
-    <Compile Include="Attributes\DePosition.cs" />
+    <Compile Include="Attributes\Properties %28no namespace%29\DePosition.cs" />
     <Compile Include="Attributes\DeScriptExecutionOrderAttribute.cs" />
     <Compile Include="Attributes\DeToggleButtonAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

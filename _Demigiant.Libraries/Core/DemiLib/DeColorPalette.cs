@@ -25,7 +25,8 @@ namespace DG.DemiLib
             float r = (HexToInt(hex[1]) + HexToInt(hex[0]) * 16f) / 255f;
             float g = (HexToInt(hex[3]) + HexToInt(hex[2]) * 16f) / 255f;
             float b = (HexToInt(hex[5]) + HexToInt(hex[4]) * 16f) / 255f;
-            return new Color(r, g, b, 1);
+            float a = hex.Length == 8 ? (HexToInt(hex[7]) + HexToInt(hex[6]) * 16f) / 255f : 1;
+            return new Color(r, g, b, a);
         }
 
         #endregion
