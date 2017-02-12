@@ -55,10 +55,10 @@ namespace DG.DeInspektorEditor.AttributesManagers
         {
             if (_boxStyle != null) return;
 
-            _boxStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, attr.fontSize, Format.RichText).Padding(4, 3, 2, 3);
+            _boxStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, attr.fontSize, Format.RichText).Padding(4, 4, 3, 3);
             if (attr.textColor != null) _boxStyle.Add(DeColorPalette.HexToColor(attr.textColor));
             else _boxStyle.Add(new DeSkinColor(0.35f, 0.58f));
-            if (attr.bgColor != null) _boxStyle.Background(Texture2D.whiteTexture);
+            if (attr.bgColor != null) _boxStyle.Background(DeStylePalette.squareBorderCurved);
             _textOnlyStyle = _boxStyle.Clone().Background(null).Padding(2, 0, 0, 0);
         }
     }
