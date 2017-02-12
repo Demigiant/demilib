@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace DG.DeInspektorEditor.AttributesManagers
 {
-    [CustomPropertyDrawer(typeof(DeDividerAttribute))]
+    [CustomPropertyDrawer(typeof(DeDividerAttribute), true)]
     public class DeDividerPropertyDrawer : DecoratorDrawer
     {
         static GUIStyle _attributeStyle;

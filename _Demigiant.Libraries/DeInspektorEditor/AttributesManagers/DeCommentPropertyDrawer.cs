@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace DG.DeInspektorEditor.AttributesManagers
 {
-    [CustomPropertyDrawer(typeof(DeCommentAttribute))]
+    [CustomPropertyDrawer(typeof(DeCommentAttribute), true)]
     public class DeCommentPropertyDrawer : DecoratorDrawer
     {
         float _positionW;

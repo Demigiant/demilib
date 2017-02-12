@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace DG.DeInspektorEditor.AttributesManagers
 {
-    [CustomPropertyDrawer(typeof(DeColoredLabelAttribute))]
+    [CustomPropertyDrawer(typeof(DeColoredLabelAttribute), true)]
     public class DeColoredLabelPropertyDrawer : PropertyDrawer
     {
         GUIStyle _attributeStyle;

@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DG.DeInspektorEditor.AttributesManagers
 {
-    [CustomPropertyDrawer(typeof(DeToggleButtonAttribute))]
+    [CustomPropertyDrawer(typeof(DeToggleButtonAttribute), true)]
     public class DeToggleButtonPropertyDrawer : PropertyDrawer
     {
         const int _LineH = 16;

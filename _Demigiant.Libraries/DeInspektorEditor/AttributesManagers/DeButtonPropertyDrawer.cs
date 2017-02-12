@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace DG.DeInspektorEditor.AttributesManagers
 {
-    [CustomPropertyDrawer(typeof(DeButtonAttribute))]
+    [CustomPropertyDrawer(typeof(DeButtonAttribute), true)]
     public class DeButtonPropertyDrawer : DecoratorDrawer
     {
         const int _LineH = 18;
