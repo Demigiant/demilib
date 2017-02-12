@@ -54,6 +54,7 @@
     <Compile Include="AttributesManagers\DeButtonPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeColoredLabelPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeCommentPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeComponentDescriptionEditor.cs" />
     <Compile Include="AttributesManagers\DeConditionalPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeConditionExtensions.cs" />
     <Compile Include="AttributesManagers\DeDisabledPropertyDrawer.cs" />

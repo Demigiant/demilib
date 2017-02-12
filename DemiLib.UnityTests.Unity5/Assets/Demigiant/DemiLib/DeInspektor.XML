@@ -158,6 +158,20 @@
             <param name="methodName">Name of the method to call</param>
             <param name="parameters">Eventual parameters to pass to the method</param>
         </member>
+        <member name="T:DG.DeInspektor.Attributes.DeComponentDescriptionAttribute">
+            <summary>
+            <code>Class attribute</code> (MonoBehaviour only)<para/>
+            Shows a description for the given MonoBehaviour before any other field.<para/>
+            Extra properties which can be set directly:<para/>
+            - mode
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeComponentDescriptionAttribute.#ctor(System.String)">
+            <summary>
+            Shows a description for this MonoBehaviour before any other field.
+            </summary>
+            <param name="text">Text</param>
+        </member>
         <member name="T:DG.DeInspektor.Attributes.DeButtonMode">
             <summary>
             Appearance of button attributes
@@ -537,7 +551,7 @@
         <member name="T:DG.DeInspektor.Attributes.DeMethodButtonAttribute">
             <summary>
             <code>Method attribute</code><para/>
-            Draws a button which will call the given method<para/>
+            Draws a button which will call the given method.<para/>
             Extra properties which can be set directly:<para/>
             - mode
             </summary>

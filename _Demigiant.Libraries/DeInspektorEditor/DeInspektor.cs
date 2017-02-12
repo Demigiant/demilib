@@ -20,10 +20,11 @@ namespace DG.DeInspektorEditor
     [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)] [CanEditMultipleObjects]
     public class DeInspektor : Editor
     {
-        public const string Version = "0.5.180";
+        public const string Version = "0.5.190";
         public static DeInspektor I { get; private set; }
         static GUIStyle _arrayElementBtStyle;
         DeMethodButtonEditor _methodButtonEditor;
+        DeComponentDescriptionEditor _componentDescriptionEditor;
         int _listId;
 
         #region GUI
@@ -32,11 +33,14 @@ namespace DG.DeInspektorEditor
         {
             I = this;
             if (_methodButtonEditor == null) _methodButtonEditor = new DeMethodButtonEditor(target);
+            if (_componentDescriptionEditor == null) _componentDescriptionEditor = new DeComponentDescriptionEditor(target);
             DeGUI.BeginGUI();
             SetStyles();
 
             if (DeInspektorPrefs.componentsReordering) DrawReorderingButtons();
             InjectGUITop();
+
+            _componentDescriptionEditor.Draw();
 
             switch (DeInspektorPrefs.mode) {
             case DeInspektorPrefs.Mode.Full:

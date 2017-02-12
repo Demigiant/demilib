@@ -8,7 +8,7 @@ namespace DG.DeInspektor.Attributes
 {
     /// <summary>
     /// <code>Method attribute</code><para/>
-    /// Draws a button which will call the given method<para/>
+    /// Draws a button which will call the given method.<para/>
     /// Extra properties which can be set directly:<para/>
     /// - mode
     /// </summary>

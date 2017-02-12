@@ -3,6 +3,7 @@ using DG.DeInspektor.Attributes;
 using UnityEngine;
 
 [DeScriptExecutionOrder(-456)] // Sets the script execution order of this MonoBehaviour to -456
+[DeComponentDescription("This is a components description made with <b>DeComponentDescription</b>")]
 public class DeAttributesExample : MonoBehaviour
 {
     const string _MainHeaderTextColor = "ffe682";
