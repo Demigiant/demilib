@@ -46,7 +46,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
             foreach (MethodInfo mInfo in _buttonMethods) {
                 foreach (DeMethodButtonAttribute attr in _mInfoToAttributes[mInfo]) {
                     bool disabled = attr.mode == DeButtonMode.NoPlayMode && EditorApplication.isPlayingOrWillChangePlaymode
-                                    || attr.mode == DeButtonMode.PlayModeOnly && !EditorApplication.isPlayingOrWillChangePlaymode;
+                                    || attr.mode == DeButtonMode.PlayModeOnly && !EditorApplication.isPlaying;
                     using (new EditorGUI.DisabledScope(disabled)) {
                         if (GUILayout.Button(string.IsNullOrEmpty(attr.text) ? DeButtonAttribute.NicifyMethodName(mInfo.Name) : attr.text)) {
                             // Add default value where optional parameters are not present

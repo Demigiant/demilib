@@ -37,7 +37,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
             Rect r = AttributesManagersUtils.AdaptRectToDePosition(true, position, attr.position, _LineH, _MarginBottom);
 
             bool disabled = attr.mode == DeButtonMode.NoPlayMode && EditorApplication.isPlayingOrWillChangePlaymode
-                            || attr.mode == DeButtonMode.PlayModeOnly && !EditorApplication.isPlayingOrWillChangePlaymode;
+                            || attr.mode == DeButtonMode.PlayModeOnly && !EditorApplication.isPlaying;
             Color defBgColor = GUI.backgroundColor;
             Color defContentColor = GUI.contentColor;
             if (attr.bgShade != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgShade);
