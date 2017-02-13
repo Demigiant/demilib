@@ -62,5 +62,21 @@
             Returns the customizedItem for the given gameObject, or NULL if none was found
             </summary>
         </member>
+        <member name="T:DG.DemiLib.Range">
+            <summary>
+            A serializable struct including a min and a max float value
+            </summary>
+        </member>
+        <member name="F:DG.DemiLib.Range.min">
+            <summary>Min value</summary>
+        </member>
+        <member name="F:DG.DemiLib.Range.max">
+            <summary>Max value</summary>
+        </member>
+        <member name="M:DG.DemiLib.Range.#ctor(System.Single,System.Single)">
+            <summary>
+            Creates a new Range
+            </summary>
+        </member>
     </members>
 </doc>

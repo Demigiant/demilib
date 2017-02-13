@@ -9,15 +9,15 @@ namespace DG.DeInspektor.Attributes
 {
     /// <summary>
     /// <code>Decorator</code><para/>
-    /// Shows a comment in the Inspector
+    /// Shows a comment in the Inspector.<para/>
     /// Extra properties which can be set directly:<para/>
     /// - fontSize<para/>
+    /// - style<para/>
+    /// - textAnchor<para/>
     /// Normal properties which can be set directly:<para/>
     /// - textColor<para/>
     /// - bgColor<para/>
     /// - marginBottom
-    /// - style
-    /// - textAnchor
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class DeCommentAttribute : PropertyAttribute

@@ -172,6 +172,22 @@
             </summary>
             <param name="text">Text</param>
         </member>
+        <member name="T:DG.DeInspektor.Attributes.DeRangeAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows a float/int value with a slider.
+            Works like Unity's Range attribute, but has extra options for custom label, and also works with DemiLib's <code>Range</code> structs
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeRangeAttribute.#ctor(System.Single,System.Single,System.String)">
+            <summary>
+            Shows a float/int value with a slider.
+            Works like Unity's Range attribute, but has extra options for custom label, and also works with DemiLib's <code>Range</code> structs
+            </summary>
+            <param name="min">Min value</param>
+            <param name="max">Max value</param>
+            <param name="label">Override field label</param>
+        </member>
         <member name="T:DG.DeInspektor.Attributes.DeButtonMode">
             <summary>
             Appearance of button attributes
@@ -203,15 +219,15 @@
         <member name="T:DG.DeInspektor.Attributes.DeCommentAttribute">
             <summary>
             <code>Decorator</code><para/>
-            Shows a comment in the Inspector
+            Shows a comment in the Inspector.<para/>
             Extra properties which can be set directly:<para/>
             - fontSize<para/>
+            - style<para/>
+            - textAnchor<para/>
             Normal properties which can be set directly:<para/>
             - textColor<para/>
             - bgColor<para/>
             - marginBottom
-            - style
-            - textAnchor
             </summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.fontSize">
