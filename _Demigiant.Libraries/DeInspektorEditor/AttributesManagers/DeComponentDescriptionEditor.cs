@@ -27,19 +27,21 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
             SetStyles();
 
+            GUILayout.Space(-1);
             using (new GUILayout.HorizontalScope()) {
-                GUILayout.Space(-10);
-                using (new DeGUI.ColorScope(new DeSkinColor(0.65f, 0.16f))) GUILayout.Box(_attr.text, _attrStyle);
+                GUILayout.Space(-13);
+                Rect r = GUILayoutUtility.GetRect(new GUIContent(_attr.text), _attrStyle);
+                r.width += 4;
+                using (new DeGUI.ColorScope(new DeSkinColor(0.65f, 0.16f))) GUI.Box(r, _attr.text, _attrStyle);
             }
-            GUILayout.Space(-2);
         }
 
         static void SetStyles()
         {
             if (_attrStyle != null) return;
 
-            _attrStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, 9, Format.RichText, new DeSkinColor(0.2f, 0.65f))
-                .Padding(4, 4, 3, 4).Margin(0, 0, 0, 2).Background(Texture2D.whiteTexture).StretchWidth();
+            _attrStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, 9, Format.RichText, new DeSkinColor(0.2f, 0.58f))
+                .Padding(4, 4 + 4, 3, 4).Margin(0, 0, 0, 2).Background(DeStylePalette.whiteSquare_fadeOut_bt).StretchWidth();
         }
     }
 }

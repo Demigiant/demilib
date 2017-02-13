@@ -57,6 +57,10 @@ namespace DG.DemiEditor
             if (_fooWhiteSquareAlpha80 == null) _fooWhiteSquareAlpha80 = LoadSquareTexture("whiteSquareAlpha80");
             return _fooWhiteSquareAlpha80;
         }}
+        public static Texture2D whiteSquare_fadeOut_bt { get {
+            if (_fooWhiteSquare_fadeOut_bt == null) _fooWhiteSquare_fadeOut_bt = LoadSquareTexture("whiteSquare_fadeOut_bt", FilterMode.Bilinear);
+            return _fooWhiteSquare_fadeOut_bt;
+        }}
         public static Texture2D blackSquare { get {
             if (_fooBlackSquare == null) _fooBlackSquare = LoadSquareTexture("blackSquare");
             return _fooBlackSquare;
@@ -143,6 +147,7 @@ namespace DG.DemiEditor
         static Texture2D _fooWhiteSquareAlpha25;
         static Texture2D _fooWhiteSquareAlpha50;
         static Texture2D _fooWhiteSquareAlpha80;
+        static Texture2D _fooWhiteSquare_fadeOut_bt; // Bottom to top
         static Texture2D _fooBlackSquare;
         static Texture2D _fooBlackSquareAlpha10;
         static Texture2D _fooBlackSquareAlpha15;
@@ -265,10 +270,10 @@ namespace DG.DemiEditor
             }
         }
 
-        static Texture2D LoadSquareTexture(string name)
+        static Texture2D LoadSquareTexture(string name, FilterMode filterMode = FilterMode.Point)
         {
             Texture2D tex = AssetDatabase.LoadAssetAtPath(String.Format("{0}{1}.png", _adbImgsDir, name), typeof(Texture2D)) as Texture2D;
-            tex.SetGUIFormat(FilterMode.Point, 32);
+            tex.SetGUIFormat(filterMode, 32);
             return tex;
         }
     }
