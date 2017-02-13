@@ -78,5 +78,10 @@
             Creates a new Range
             </summary>
         </member>
+        <member name="M:DG.DemiLib.Range.RandomWithin">
+            <summary>
+            Returns a random value within this range
+            </summary>
+        </member>
     </members>
 </doc>

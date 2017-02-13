@@ -25,5 +25,14 @@ namespace DG.DemiLib
             this.min = min;
             this.max = max;
         }
+
+        /// <summary>
+        /// Returns a random value within this range
+        /// </summary>
+        public float RandomWithin()
+        {
+            float diff = max - min;
+            return min + UnityEngine.Random.Range(0, diff);
+        }
     }
 }
