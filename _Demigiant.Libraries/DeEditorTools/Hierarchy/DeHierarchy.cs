@@ -99,6 +99,9 @@ namespace DG.DeEditorTools.Hierarchy
                 case DeHierarchyComponent.IcoType.Comment:
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_comment_border : DeStylePalette.ico_comment;
                     break;
+                case DeHierarchyComponent.IcoType.UI:
+                    icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_ui_border : DeStylePalette.ico_ui;
+                    break;
                 default: // Dot
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.whiteDot_darkBorder : DeStylePalette.whiteDot;
                     break;

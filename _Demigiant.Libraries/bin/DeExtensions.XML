@@ -4,15 +4,19 @@
         <name>DeExtensions</name>
     </assembly>
     <members>
-        <member name="M:DG.DeExtensions.ColorExtensions.ToHex(UnityEngine.Color32)">
+        <member name="M:DG.DeExtensions.ColorExtensions.ToHex(UnityEngine.Color32,System.Boolean)">
             <summary>
             Returns a HEX version of the given Unity Color, without the initial #
             </summary>
+            <param name="includeAlpha">If TRUE, also converts the alpha value and returns a hex of 8 characters,
+            otherwise doesn't and returns a hex of 6 characters</param>
         </member>
-        <member name="M:DG.DeExtensions.ColorExtensions.ToHex(UnityEngine.Color)">
+        <member name="M:DG.DeExtensions.ColorExtensions.ToHex(UnityEngine.Color,System.Boolean)">
             <summary>
             Returns a HEX version of the given Unity Color, without the initial #
             </summary>
+            <param name="includeAlpha">If TRUE, also converts the alpha value and returns a hex of 8 characters,
+            otherwise doesn't and returns a hex of 6 characters</param>
         </member>
         <member name="M:DG.DeExtensions.ColorExtensions.SetAlpha(UnityEngine.Color,System.Single)">
             <summary>
@@ -126,7 +130,7 @@
             <summary>
             Converts a HEX color to a Unity Color and returns it
             </summary>
-            <param name="hex">The HEX color (either with or without the initial #)</param>
+            <param name="hex">The HEX color, either with or without the initial # (accepts both regular and short format)</param>
         </member>
     </members>
 </doc>

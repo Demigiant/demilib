@@ -6,9 +6,9 @@
     <members>
         <member name="M:DG.DeUtils.DeColorUtils.HexToColor(System.String)">
             <summary>
-            Converts a HEX color to a Unity Color
+            Converts a HEX color to a Unity Color and returns it
             </summary>
-            <param name="hex">The HEX color (either with or without the initial #)</param>
+            <param name="hex">The HEX color, either with or without the initial # (accepts both regular and short format)</param>
         </member>
         <member name="M:DG.DeUtils.DeColorUtils.ColorToHex(UnityEngine.Color32)">
             <summary>

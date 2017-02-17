@@ -11,17 +11,23 @@ namespace DG.DeExtensions
         /// <summary>
         /// Returns a HEX version of the given Unity Color, without the initial #
         /// </summary>
-        public static string ToHex(this Color32 color)
+        /// <param name="includeAlpha">If TRUE, also converts the alpha value and returns a hex of 8 characters,
+        /// otherwise doesn't and returns a hex of 6 characters</param>
+        public static string ToHex(this Color32 color, bool includeAlpha = false)
         {
-            return color.r.ToString("x2") + color.g.ToString("x2") + color.b.ToString("x2");
+            string result = color.r.ToString("x2") + color.g.ToString("x2") + color.b.ToString("x2");
+            if (includeAlpha) result += color.a.ToString("x2");
+            return result;
         }
 
         /// <summary>
         /// Returns a HEX version of the given Unity Color, without the initial #
         /// </summary>
-        public static string ToHex(this Color color)
+        /// <param name="includeAlpha">If TRUE, also converts the alpha value and returns a hex of 8 characters,
+        /// otherwise doesn't and returns a hex of 6 characters</param>
+        public static string ToHex(this Color color, bool includeAlpha = false)
         {
-            return ToHex((Color32)color);
+            return ToHex((Color32)color, includeAlpha);
         }
 
         /// <summary>

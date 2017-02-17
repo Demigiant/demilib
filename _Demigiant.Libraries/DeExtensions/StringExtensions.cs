@@ -21,14 +21,25 @@ namespace DG.DeExtensions
         /// <summary>
         /// Converts a HEX color to a Unity Color and returns it
         /// </summary>
-        /// <param name="hex">The HEX color (either with or without the initial #)</param>
+        /// <param name="hex">The HEX color, either with or without the initial # (accepts both regular and short format)</param>
         public static Color HexToColor(this string hex)
         {
             if (hex[0] == '#') hex = hex.Substring(1);
-            float r = (HexToInt(hex[1]) + HexToInt(hex[0]) * 16f) / 255f;
-            float g = (HexToInt(hex[3]) + HexToInt(hex[2]) * 16f) / 255f;
-            float b = (HexToInt(hex[5]) + HexToInt(hex[4]) * 16f) / 255f;
-            return new Color(r, g, b, 1);
+            int len = hex.Length;
+            bool isShortFormat = len < 6;
+            if (isShortFormat) {
+                float r = (HexToInt(hex[0]) + HexToInt(hex[0]) * 16f) / 255f;
+                float g = (HexToInt(hex[1]) + HexToInt(hex[1]) * 16f) / 255f;
+                float b = (HexToInt(hex[2]) + HexToInt(hex[2]) * 16f) / 255f;
+                float a = len == 4 ? (HexToInt(hex[3]) + HexToInt(hex[3]) * 16f) / 255f : 1;
+                return new Color(r, g, b, a);
+            } else {
+                float r = (HexToInt(hex[1]) + HexToInt(hex[0]) * 16f) / 255f;
+                float g = (HexToInt(hex[3]) + HexToInt(hex[2]) * 16f) / 255f;
+                float b = (HexToInt(hex[5]) + HexToInt(hex[4]) * 16f) / 255f;
+                float a = len == 8 ? (HexToInt(hex[7]) + HexToInt(hex[6]) * 16f) / 255f : 1;
+                return new Color(r, g, b, a);
+            }
         }
 
         #region Methods
