@@ -14,7 +14,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             DeConditionalAttribute attr = (DeConditionalAttribute)attribute;
-            return attr.behaviour == ConditionalBehaviour.Disable || attr.condition.IsTrue(property.serializedObject) ? base.GetPropertyHeight(property, label) : 0;
+            return attr.behaviour == ConditionalBehaviour.Disable || attr.condition.IsTrue(property.serializedObject) ? base.GetPropertyHeight(property, label) : -2;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
