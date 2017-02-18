@@ -38,11 +38,11 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
             bool disabled = attr.mode == DeButtonMode.NoPlayMode && EditorApplication.isPlayingOrWillChangePlaymode
                             || attr.mode == DeButtonMode.PlayModeOnly && !EditorApplication.isPlaying;
-            Color defBgColor = GUI.backgroundColor;
-            Color defContentColor = GUI.contentColor;
-            if (attr.bgShade != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgShade);
-            if (attr.textShade != null) GUI.contentColor = DeColorPalette.HexToColor(attr.textShade);
             using (new EditorGUI.DisabledScope(disabled)) {
+                Color defBgColor = GUI.backgroundColor;
+                Color defContentColor = GUI.contentColor;
+                if (attr.bgShade != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgShade);
+                if (attr.textShade != null) GUI.contentColor = DeColorPalette.HexToColor(attr.textShade);
                 if (GUI.Button(r, attr.text)) {
                     MethodInfo mInfo = attr.targetType.GetMethod(
                         attr.methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static
@@ -62,9 +62,9 @@ namespace DG.DeInspektorEditor.AttributesManagers
                         }
                     }
                 }
+                GUI.backgroundColor = defBgColor;
+                GUI.contentColor = defContentColor;
             }
-            GUI.backgroundColor = defBgColor;
-            GUI.contentColor = defContentColor;
         }
     }
 }

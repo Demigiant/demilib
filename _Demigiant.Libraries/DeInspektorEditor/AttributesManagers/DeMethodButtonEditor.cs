@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using DG.DeInspektor.Attributes;
 using DG.DemiEditor;
+using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,7 +28,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
             _target = target;
             _buttonMethods = target.GetType().GetMethods(BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
             .Where(
-                m => Attribute.IsDefined(m, typeof(DeMethodButtonAttribute))
+                m => Attribute.IsDefined(m, typeof(DeMethodButtonAttribute), true)
             ).ToList();
             if (_buttonMethods.Count <= 0) return;
 
@@ -48,6 +49,10 @@ namespace DG.DeInspektorEditor.AttributesManagers
                     bool disabled = attr.mode == DeButtonMode.NoPlayMode && EditorApplication.isPlayingOrWillChangePlaymode
                                     || attr.mode == DeButtonMode.PlayModeOnly && !EditorApplication.isPlaying;
                     using (new EditorGUI.DisabledScope(disabled)) {
+                        Color defBgColor = GUI.backgroundColor;
+                        Color defContentColor = GUI.contentColor;
+                        if (attr.bgShade != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgShade);
+                        if (attr.textShade != null) GUI.contentColor = DeColorPalette.HexToColor(attr.textShade);
                         if (GUILayout.Button(string.IsNullOrEmpty(attr.text) ? DeButtonAttribute.NicifyMethodName(mInfo.Name) : attr.text)) {
                             // Add default value where optional parameters are not present
                             ParameterInfo[] parmInfos = mInfo.GetParameters();
@@ -59,6 +64,8 @@ namespace DG.DeInspektorEditor.AttributesManagers
                             // Invoke
                             mInfo.Invoke(_target, parameters);
                         }
+                        GUI.backgroundColor = defBgColor;
+                        GUI.contentColor = defContentColor;
                     }
                 }
             }

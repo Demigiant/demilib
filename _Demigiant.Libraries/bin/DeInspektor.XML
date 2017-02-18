@@ -569,11 +569,19 @@
             <code>Method attribute</code><para/>
             Draws a button which will call the given method.<para/>
             Extra properties which can be set directly:<para/>
-            - mode
+            - mode<para/>
+            - textShade<para/>
+            - bgShade
             </summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.mode">
             <summary>Display mode</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.textShade">
+            <summary>Text shade</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.bgShade">
+            <summary>Background shade</summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeMethodButtonAttribute.#ctor(System.String,System.Int32,System.Object[])">
             <summary>
