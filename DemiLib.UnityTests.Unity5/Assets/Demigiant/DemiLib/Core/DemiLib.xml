@@ -32,6 +32,30 @@
             Content colors
             </summary>
         </member>
+        <member name="T:DG.DemiLib.DeScope">
+             <summary>
+             Extend this to replicate Unity's Scope system with any Unity version.
+             Thanks to Dmitriy Yukhanov for pointing this out and creating an initial version.
+             Expand this class to create scopes.<para/>
+             Example:
+             <code>public class VBoxScope : DeScope
+             {
+                 public VBoxScope(GUIStyle style)
+                 {
+                     BeginVBox(style);
+                 }
+            
+                 protected override void CloseScope()
+                 { 
+                     EndVBox();
+                 }
+             }</code>
+             Usage:
+             <code>using (new VBoxScope(myStyle) {
+                 // Do something
+             }</code>
+             </summary>
+        </member>
         <member name="T:DG.DemiLib.DeSkinColor">
             <summary>
             Contains both free and pro skins color variations,

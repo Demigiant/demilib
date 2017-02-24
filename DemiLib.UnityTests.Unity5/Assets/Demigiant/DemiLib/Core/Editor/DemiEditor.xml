@@ -4,13 +4,6 @@
         <name>DemiEditor</name>
     </assembly>
     <members>
-        <member name="T:DG.DemiEditor.Core.DeGUIScope">
-            <summary>
-            Replicates Unity's GUI.Scope with Unity versions older than 5.X.
-            Thanks to Dmitriy Yukhanov for pointing this out and creating an initial version
-            (which I meant to use until we discovered Unity had implemented it too)
-            </summary>
-        </member>
         <member name="T:DG.DemiEditor.DeEditorFileUtils">
             <summary>
             File utils

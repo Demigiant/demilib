@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Core\GUIUtils.cs" />
     <Compile Include="DeColorPalette.cs" />
+    <Compile Include="DeScope.cs" />
     <Compile Include="DeSkinColor.cs" />
     <Compile Include="External\DeHierarchyComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

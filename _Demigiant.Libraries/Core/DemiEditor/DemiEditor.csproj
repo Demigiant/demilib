@@ -50,7 +50,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\DeGUIScope.cs" />
     <Compile Include="DeEditorFileUtils.cs" />
     <Compile Include="DeEditorGUIUtils.cs" />
     <Compile Include="DeEditorPanelUtils.cs" />

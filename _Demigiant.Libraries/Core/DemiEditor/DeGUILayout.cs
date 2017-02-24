@@ -4,7 +4,6 @@
 using System;
 using System.Collections;
 using System.Reflection;
-using DG.DemiEditor.Core;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
@@ -166,7 +165,7 @@ namespace DG.DemiEditor
 
         #region Toolbars
 
-        public class ToolbarScope : DeGUIScope
+        public class ToolbarScope : DeScope
         {
             public ToolbarScope(params GUILayoutOption[] options)
             { BeginToolbar(options); }
@@ -229,7 +228,7 @@ namespace DG.DemiEditor
 
         #region Miscellaneous
 
-        public class VBoxScope : DeGUIScope
+        public class VBoxScope : DeScope
         {
             public VBoxScope(GUIStyle style)
             { BeginVBox(style); }
