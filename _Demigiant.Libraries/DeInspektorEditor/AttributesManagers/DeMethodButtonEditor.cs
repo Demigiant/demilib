@@ -22,6 +22,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
         readonly UnityEngine.Object _target;
         readonly List<MethodInfo> _buttonMethods;
         readonly Dictionary<MethodInfo, DeMethodButtonAttribute[]> _mInfoToAttributes;
+        GUIStyle _attrStyle;
 
         public DeMethodButtonEditor(UnityEngine.Object target)
         {
@@ -44,8 +45,10 @@ namespace DG.DeInspektorEditor.AttributesManagers
         {
             if (_buttonMethods.Count == 0) return;
 
+            SetStyles();
             foreach (MethodInfo mInfo in _buttonMethods) {
                 foreach (DeMethodButtonAttribute attr in _mInfoToAttributes[mInfo]) {
+                    if (attr.layout == DeLayout.BeginHorizontal) GUILayout.BeginHorizontal();
                     bool disabled = attr.mode == DeButtonMode.NoPlayMode && EditorApplication.isPlayingOrWillChangePlaymode
                                     || attr.mode == DeButtonMode.PlayModeOnly && !EditorApplication.isPlaying;
                     using (new EditorGUI.DisabledScope(disabled)) {
@@ -53,7 +56,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
                         Color defContentColor = GUI.contentColor;
                         if (attr.bgShade != null) GUI.backgroundColor = DeColorPalette.HexToColor(attr.bgShade);
                         if (attr.textShade != null) GUI.contentColor = DeColorPalette.HexToColor(attr.textShade);
-                        if (GUILayout.Button(string.IsNullOrEmpty(attr.text) ? DeButtonAttribute.NicifyMethodName(mInfo.Name) : attr.text)) {
+                        if (GUILayout.Button(string.IsNullOrEmpty(attr.text) ? DeButtonAttribute.NicifyMethodName(mInfo.Name) : attr.text, _attrStyle)) {
                             // Add default value where optional parameters are not present
                             ParameterInfo[] parmInfos = mInfo.GetParameters();
                             object[] parameters = new object[parmInfos.Length];
@@ -67,8 +70,17 @@ namespace DG.DeInspektorEditor.AttributesManagers
                         GUI.backgroundColor = defBgColor;
                         GUI.contentColor = defContentColor;
                     }
+                    if (attr.layout == DeLayout.EndHorizontal) GUILayout.EndHorizontal();
                 }
             }
+        }
+
+        void SetStyles()
+        {
+            if (_attrStyle != null) return;
+
+            _attrStyle = new GUIStyle(GUI.skin.button);
+            _attrStyle.MarginLeft(0).MarginRight(0);
         }
     }
 }

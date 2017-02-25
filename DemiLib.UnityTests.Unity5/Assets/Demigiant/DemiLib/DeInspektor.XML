@@ -571,7 +571,8 @@
             Extra properties which can be set directly:<para/>
             - mode<para/>
             - textShade<para/>
-            - bgShade
+            - bgShade<para/>
+            - layout
             </summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.mode">
@@ -583,6 +584,9 @@
         <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.bgShade">
             <summary>Background shade</summary>
         </member>
+        <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.layout">
+            <summary>Layout changes (default: None)</summary>
+        </member>
         <member name="M:DG.DeInspektor.Attributes.DeMethodButtonAttribute.#ctor(System.String,System.Int32,System.Object[])">
             <summary>
             Draws a button which will call the method below.
@@ -592,6 +596,20 @@
             <param name="buttonText">Button text (if NULL uses a prettified version of the method name)</param>
             <param name="order">Order in which attributes for the same method will be displayed</param>
             <param name="parameters">Eventual parameters to pass to the method (higher means lower vertical position)</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeLayout">
+            <summary>
+            Layout
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeLayout.None">
+            <summary>No layout change</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeLayout.BeginHorizontal">
+            <summary>Begins an horizontal layout before this element</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeLayout.EndHorizontal">
+            <summary>Ends an horizontal layout after this element</summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DePosition.HDefault">
             <summary>Default inspector width excluding label-reserved space</summary>

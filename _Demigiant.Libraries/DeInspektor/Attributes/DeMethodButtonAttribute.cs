@@ -12,7 +12,8 @@ namespace DG.DeInspektor.Attributes
     /// Extra properties which can be set directly:<para/>
     /// - mode<para/>
     /// - textShade<para/>
-    /// - bgShade
+    /// - bgShade<para/>
+    /// - layout
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class DeMethodButtonAttribute : Attribute
@@ -23,6 +24,8 @@ namespace DG.DeInspektor.Attributes
         public string textShade;
         /// <summary>Background shade</summary>
         public string bgShade;
+        /// <summary>Layout changes (default: None)</summary>
+        public DeLayout layout = DeLayout.None;
 
         internal string text;
         internal int order;

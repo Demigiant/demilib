@@ -199,8 +199,8 @@ public class DeAttributesExample : MonoBehaviour
         Debug.Log(string.Format("SamplePrivateWithParams method was called with params: {0}, \"{1}\"", f, s));
     }
 
-    [DeMethodButton("Custom text no params")]
-    [DeMethodButton("Custom text and params", 1, "CUSTOM!")]
+    [DeMethodButton("Custom text no params", layout = DeLayout.BeginHorizontal)]
+    [DeMethodButton("Custom text and params", 0, "CUSTOM!", layout = DeLayout.EndHorizontal)]
     void SampleMethod00(string s = null)
     {
         Debug.Log(string.Format("SampleMethod0 called, dum dee dum! Custom param: \"{0}\"", s));
