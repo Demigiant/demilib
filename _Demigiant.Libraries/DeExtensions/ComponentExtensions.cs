@@ -36,5 +36,16 @@ namespace DG.DeExtensions
             }
             return components;
         }
+
+        /// <summary>
+        /// Returns the Component only if it's in a child, and ignores the parent.
+        /// </summary>
+        /// <param name="includeInactive">If TRUE also searches inactive children</param>
+        public static T GetOnlyComponentInChildren<T>(this MonoBehaviour m, bool includeInactive = false) where T : Component
+        {
+            T component = m.GetComponentInChildren<T>(includeInactive);
+            if (component.transform == m.transform) return null;
+            return component;
+        }
     }
 }

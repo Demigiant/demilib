@@ -29,6 +29,12 @@
             </summary>
             <param name="includeInactive">If TRUE also includes inactive children</param>
         </member>
+        <member name="M:DG.DeExtensions.ComponentExtensions.GetOnlyComponentInChildren``1(UnityEngine.MonoBehaviour,System.Boolean)">
+            <summary>
+            Returns the Component only if it's in a child, and ignores the parent.
+            </summary>
+            <param name="includeInactive">If TRUE also searches inactive children</param>
+        </member>
         <member name="M:DG.DeExtensions.GameObjectExtensions.AwakeAndDeactivate(UnityEngine.GameObject)">
             <summary>
             Activates then immediately deactivates the target gameObject.

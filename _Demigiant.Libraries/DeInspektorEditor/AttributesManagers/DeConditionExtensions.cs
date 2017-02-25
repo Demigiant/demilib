@@ -12,9 +12,9 @@ namespace DG.DeInspektorEditor.AttributesManagers
     {
         #region Public Methods
 
-        public static bool IsTrue(this DeCondition condition, SerializedObject serializesObj)
+        public static bool IsTrue(this DeCondition condition, SerializedObject serializedObj)
         {
-            SerializedProperty targetProp = serializesObj.FindProperty(condition.propertyToCompare);
+            SerializedProperty targetProp = serializedObj.FindProperty(condition.propertyToCompare);
             if (targetProp == null) return true;
 
             switch (targetProp.propertyType) {
