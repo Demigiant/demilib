@@ -138,7 +138,7 @@ namespace DG.DeInspektorEditor
             FieldInfo fInfo = iterator.serializedObject.targetObject.GetType().GetField(iterator.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (UnityEngine.Object o in I.targets) {
                 IList li = fInfo.GetValue(o) as IList;
-                int l = li.Count;
+                int l = li == null ? 0 : li.Count;
                 if (l >= minListLen) continue;
                 iList = li;
                 minListLen = l;
