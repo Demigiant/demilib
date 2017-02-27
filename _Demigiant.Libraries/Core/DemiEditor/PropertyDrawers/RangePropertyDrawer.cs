@@ -11,16 +11,12 @@ namespace DG.DemiEditor.PropertyDrawers
     [CustomPropertyDrawer(typeof(Range))]
     public class RangePropertyDrawer : PropertyDrawer
     {
-        SerializedProperty _min, _max;
-
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (_min == null) {
-                property.Next(true);
-                _min = property.Copy();
-                property.Next(true);
-                _max = property.Copy();
-            }
+            property.Next(true);
+            SerializedProperty min = property.Copy();
+            property.Next(true);
+            SerializedProperty max = property.Copy();
 
             EditorGUI.BeginProperty(position, label, property);
 
@@ -32,24 +28,24 @@ namespace DG.DemiEditor.PropertyDrawers
             float defLabelW = EditorGUIUtility.labelWidth;
             EditorGUIUtility.labelWidth = 28;
             GUIContent subLabel = new GUIContent("Min");
-            EditorGUI.BeginProperty(positionMin, subLabel, _min);
+            EditorGUI.BeginProperty(positionMin, subLabel, min);
             EditorGUI.BeginChangeCheck();
-            float value = EditorGUI.FloatField(positionMin, subLabel, _min.floatValue);
+            float value = EditorGUI.FloatField(positionMin, subLabel, min.floatValue);
             if (EditorGUI.EndChangeCheck()) {
                 GUI.changed = true;
-                if (value > _max.floatValue) value = _max.floatValue;
-                _min.floatValue = value;
+                if (value > max.floatValue) value = max.floatValue;
+                min.floatValue = value;
             }
             EditorGUI.EndProperty();
             //
             subLabel.text = "Max";
-            EditorGUI.BeginProperty(positionMax, subLabel, _max);
+            EditorGUI.BeginProperty(positionMax, subLabel, max);
             EditorGUI.BeginChangeCheck();
-            value = EditorGUI.FloatField(positionMax, subLabel, _max.floatValue);
+            value = EditorGUI.FloatField(positionMax, subLabel, max.floatValue);
             if (EditorGUI.EndChangeCheck()) {
                 GUI.changed = true;
-                if (value < _max.floatValue) value = _min.floatValue;
-                _max.floatValue = value;
+                if (value < max.floatValue) value = min.floatValue;
+                max.floatValue = value;
             }
             EditorGUI.EndProperty();
             EditorGUIUtility.labelWidth = defLabelW;
