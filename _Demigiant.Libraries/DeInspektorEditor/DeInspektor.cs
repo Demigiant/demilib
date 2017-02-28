@@ -20,7 +20,7 @@ namespace DG.DeInspektorEditor
     [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)] [CanEditMultipleObjects]
     public class DeInspektor : Editor
     {
-        public const string Version = "0.5.215";
+        public const string Version = "0.5.220";
         public static DeInspektor I { get; private set; }
         static GUIStyle _arrayElementBtStyle;
         DeMethodButtonEditor _methodButtonEditor;
@@ -133,9 +133,15 @@ namespace DG.DeInspektorEditor
 
             // List contents
             IList iList = null;
-            int len;
             int minListLen = int.MaxValue;
-            FieldInfo fInfo = iterator.serializedObject.targetObject.GetType().GetField(iterator.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            Type type = iterator.serializedObject.targetObject.GetType();
+            FieldInfo fInfo = type.GetField(iterator.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            while (fInfo == null && type != typeof(UnityEngine.Object)) {
+                // Find property in upper inheritance
+                type = type.BaseType;
+                if (type == null) break;
+                fInfo = type.GetField(iterator.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            }
             foreach (UnityEngine.Object o in I.targets) {
                 IList li = fInfo.GetValue(o) as IList;
                 int l = li == null ? 0 : li.Count;
@@ -143,7 +149,7 @@ namespace DG.DeInspektorEditor
                 iList = li;
                 minListLen = l;
             }
-            len = Mathf.Min(minListLen, iterator.arraySize);
+            int len = Mathf.Min(minListLen, iterator.arraySize);
             Undo.RecordObject(iterator.serializedObject.targetObject, iterator.serializedObject.targetObject.name);
             for (int i = 0; i < len; ++i) {
                 SerializedProperty property = iterator.GetArrayElementAtIndex(i);
