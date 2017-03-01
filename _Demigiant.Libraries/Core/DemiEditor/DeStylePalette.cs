@@ -368,7 +368,8 @@ namespace DG.DemiEditor
             toolLFoldoutOpenWStretchedLabel = toolFoldoutOpenWStretchedLabel.Clone().OverflowTop(-4);
             // Custom using squareBorder
             bBlankBorder = new GUIStyle(GUI.skin.button).Add(TextAnchor.MiddleCenter, Color.white).Background(DeStylePalette.squareBorderCurved)
-                .Padding(0, 1, 0, 0).ContentOffsetY(-1)
+                .Padding(0, 1, 1, 2)
+//                .ContentOffsetY(-1)
                 .Border(new RectOffset(4, 4, 4, 4)).Overflow(-1, -1, 0, 0);
         }
     }
