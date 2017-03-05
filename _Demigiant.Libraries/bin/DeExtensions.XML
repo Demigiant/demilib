@@ -138,5 +138,11 @@
             </summary>
             <param name="hex">The HEX color, either with or without the initial # (accepts both regular and short format)</param>
         </member>
+        <member name="M:DG.DeExtensions.StringExtensions.ToEnum``1(System.String)">
+            <summary>
+            Converts the string to the given enum value.
+            Throws an exception if the string can't be converted
+            </summary>
+        </member>
     </members>
 </doc>

@@ -35,7 +35,8 @@ namespace DG.DemiLib.External
             Star,
             Cog,
             Comment,
-            UI
+            UI,
+            Play
         }
 
         #region Serialized

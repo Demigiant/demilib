@@ -2,6 +2,7 @@
 // Created: 2016/03/01 12:29
 // License Copyright (c) Daniele Giardini
 
+using System;
 using UnityEngine;
 
 namespace DG.DeExtensions
@@ -40,6 +41,18 @@ namespace DG.DeExtensions
                 float a = len == 8 ? (HexToInt(hex[7]) + HexToInt(hex[6]) * 16f) / 255f : 1;
                 return new Color(r, g, b, a);
             }
+        }
+
+        /// <summary>
+        /// Converts the string to the given enum value.
+        /// Throws an exception if the string can't be converted
+        /// </summary>
+        public static T ToEnum<T>(this string s) where T : struct, IConvertible
+        {
+            Type tType = typeof(T);
+            if (!tType.IsEnum) throw new ArgumentException("T must be of type Enum");
+
+            return (T)Enum.Parse(tType, s);
         }
 
         #region Methods

@@ -212,6 +212,14 @@ namespace DG.DemiEditor
             if (_fooIco_star_border == null) _fooIco_star_border = LoadSquareTexture("ico_star_border");
             return _fooIco_star_border;
         }}
+        public static Texture2D ico_play { get {
+            if (_fooIco_play == null) _fooIco_play = LoadSquareTexture("ico_play");
+            return _fooIco_play;
+        }}
+        public static Texture2D ico_play_border { get {
+            if (_fooIco_play_border == null) _fooIco_play_border = LoadSquareTexture("ico_play_border");
+            return _fooIco_play_border;
+        }}
         public static Texture2D ico_cog { get {
             if (_fooIco_cog == null) _fooIco_cog = LoadSquareTexture("ico_cog");
             return _fooIco_cog;
@@ -249,6 +257,8 @@ namespace DG.DemiEditor
         static Texture2D _fooIco_star_border;
         static Texture2D _fooIco_cog;
         static Texture2D _fooIco_cog_border;
+        static Texture2D _fooIco_play;
+        static Texture2D _fooIco_play_border;
         static Texture2D _fooIco_comment;
         static Texture2D _fooIco_comment_border;
         static Texture2D _fooIco_ui;
@@ -321,7 +331,7 @@ namespace DG.DemiEditor
                         toolFoldoutOpen, toolFoldoutOpenWLabel, toolFoldoutOpenWStretchedLabel,
                         toolLFoldoutClosed, toolLFoldoutClosedWLabel, toolLFoldoutClosedWStretchedLabel,
                         toolLFoldoutOpen, toolLFoldoutOpenWLabel, toolLFoldoutOpenWStretchedLabel,
-                        bBlankBorder;
+                        bBlankBorder, bBlankBorderCompact;
 
         internal void Init()
         {
@@ -368,9 +378,8 @@ namespace DG.DemiEditor
             toolLFoldoutOpenWStretchedLabel = toolFoldoutOpenWStretchedLabel.Clone().OverflowTop(-4);
             // Custom using squareBorder
             bBlankBorder = new GUIStyle(GUI.skin.button).Add(TextAnchor.MiddleCenter, Color.white).Background(DeStylePalette.squareBorderCurved)
-                .Padding(0, 1, 1, 2)
-//                .ContentOffsetY(-1)
-                .Border(new RectOffset(4, 4, 4, 4)).Overflow(-1, -1, 0, 0);
+                .Padding(0, 1, 1, 2).Border(new RectOffset(4, 4, 4, 4)).Overflow(-1, -1, 0, 0);
+            bBlankBorderCompact = bBlankBorder.Clone().Padding(0, 1, 0, 0).ContentOffsetY(-1);
         }
     }
 
@@ -385,7 +394,7 @@ namespace DG.DemiEditor
             bold = new GUIStyle(GUI.skin.label).Add(FontStyle.Bold);
             wordwrap = new GUIStyle(GUI.skin.label).Add(Format.WordWrap);
             wordwrapRichtText = wordwrap.Clone(Format.RichText);
-            toolbar = new GUIStyle(GUI.skin.label).Add(9).ContentOffset(new Vector2(-2, 0));
+            toolbar = new GUIStyle(GUI.skin.label).Add(9).ContentOffset(new Vector2(-2, 1));
             toolbarL = new GUIStyle(toolbar).ContentOffsetY(3);
             toolbarS = new GUIStyle(toolbar).Add(8, FontStyle.Bold).ContentOffsetY(-2);
             toolbarBox = new GUIStyle(toolbar).ContentOffsetY(0);

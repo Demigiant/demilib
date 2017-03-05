@@ -102,6 +102,9 @@ namespace DG.DeEditorTools.Hierarchy
                 case DeHierarchyComponent.IcoType.UI:
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_ui_border : DeStylePalette.ico_ui;
                     break;
+                case DeHierarchyComponent.IcoType.Play:
+                    icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_play_border : DeStylePalette.ico_play;
+                    break;
                 default: // Dot
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.whiteDot_darkBorder : DeStylePalette.whiteDot;
                     break;

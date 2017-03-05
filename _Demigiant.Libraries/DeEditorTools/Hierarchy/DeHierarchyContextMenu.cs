@@ -24,6 +24,10 @@ namespace DG.DeEditorTools.Hierarchy
         static void SetIconDot()
         { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Dot); }
 
+        [MenuItem("GameObject/DeHierarchy/Icon/Play", false, 22)]
+        static void SetIconPlay()
+        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Play); }
+
         [MenuItem("GameObject/DeHierarchy/Icon/Star", false, 22)]
         static void SetIconStar()
         { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Star); }
