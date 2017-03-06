@@ -48,7 +48,7 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
-        /// Modifies and returns the given Rect, with its values shifted according the the given parameters
+        /// Modifies and returns a copy of the given Rect, with its values shifted according the the given parameters
         /// </summary>
         public static Rect Shift(this Rect r, float x, float y, float width, float height)
         {

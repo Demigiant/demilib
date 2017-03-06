@@ -45,14 +45,18 @@ namespace DG.DeExtensions
 
         /// <summary>
         /// Converts the string to the given enum value.
-        /// Throws an exception if the string can't be converted
+        /// Throws an exception if the string can't be converted.
+        /// If the enum value can't be found, returns the 0 indexed value.<para/>
+        /// NOTE: doesn't use try/catch (TryParse) since on some platforms that won't work.
         /// </summary>
-        public static T ToEnum<T>(this string s) where T : struct, IConvertible
+        public static T ToEnum<T>(this string s, T? defaultValue = null) where T : struct, IConvertible
         {
             Type tType = typeof(T);
             if (!tType.IsEnum) throw new ArgumentException("T must be of type Enum");
 
-            return (T)Enum.Parse(tType, s);
+            if (Enum.IsDefined(tType, s)) return (T)Enum.Parse(tType, s);
+            if (defaultValue == null) throw new ArgumentException("Value not found and defaultValue not set");
+            return (T)defaultValue;
         }
 
         #region Methods

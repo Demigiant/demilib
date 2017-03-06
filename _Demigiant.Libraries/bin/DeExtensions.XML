@@ -103,7 +103,7 @@
         </member>
         <member name="M:DG.DeExtensions.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
             <summary>
-            Modifies and returns the given Rect, with its values shifted according the the given parameters
+            Modifies and returns a copy of the given Rect, with its values shifted according the the given parameters
             </summary>
         </member>
         <member name="M:DG.DeExtensions.RectExtensions.SetX(UnityEngine.Rect,System.Single)">
@@ -138,10 +138,12 @@
             </summary>
             <param name="hex">The HEX color, either with or without the initial # (accepts both regular and short format)</param>
         </member>
-        <member name="M:DG.DeExtensions.StringExtensions.ToEnum``1(System.String)">
+        <member name="M:DG.DeExtensions.StringExtensions.ToEnum``1(System.String,System.Nullable{``0})">
             <summary>
             Converts the string to the given enum value.
-            Throws an exception if the string can't be converted
+            Throws an exception if the string can't be converted.
+            If the enum value can't be found, returns the 0 indexed value.<para/>
+            NOTE: doesn't use try/catch (TryParse) since on some platforms that won't work.
             </summary>
         </member>
     </members>
