@@ -25,5 +25,10 @@
             Draws buttons to reorder the component on its header
             </summary>
         </member>
+        <member name="T:DG.DeInspektorEditor.DeInspektorForScriptableObject">
+            <summary>
+            Inherits from DeInspektor to allow everything to work on ScriptableObjects too
+            </summary>
+        </member>
     </members>
 </doc>

@@ -20,7 +20,7 @@ namespace DG.DeInspektorEditor
     [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)] [CanEditMultipleObjects]
     public class DeInspektor : Editor
     {
-        public const string Version = "0.5.220";
+        public const string Version = "0.5.230";
         public static DeInspektor I { get; private set; }
         static GUIStyle _arrayElementBtStyle;
         DeMethodButtonEditor _methodButtonEditor;
@@ -37,7 +37,7 @@ namespace DG.DeInspektorEditor
             DeGUI.BeginGUI();
             SetStyles();
 
-            if (DeInspektorPrefs.componentsReordering) DrawReorderingButtons();
+            if (DeInspektorPrefs.componentsReordering && !(target is ScriptableObject)) DrawReorderingButtons();
             InjectGUITop();
 
             _componentDescriptionEditor.Draw();

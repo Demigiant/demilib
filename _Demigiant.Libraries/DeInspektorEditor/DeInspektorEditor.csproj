@@ -68,6 +68,7 @@
     <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
     <Compile Include="AttributesManagers\DeToggleButtonPropertyDrawer.cs" />
     <Compile Include="DeInspektor.cs" />
+    <Compile Include="DeInspektorForScriptableObject.cs" />
     <Compile Include="DeInspektorPrefs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
