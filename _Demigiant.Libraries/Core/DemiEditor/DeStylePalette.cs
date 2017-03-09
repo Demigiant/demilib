@@ -244,6 +244,14 @@ namespace DG.DemiEditor
             if (_fooIco_ui_border == null) _fooIco_ui_border = LoadSquareTexture("ico_ui_border");
             return _fooIco_ui_border;
         }}
+        public static Texture2D grid_dark { get {
+            if (_fooGrid_dark == null) _fooGrid_dark = LoadSquareTexture("grid_dark", FilterMode.Point, 64, TextureWrapMode.Repeat);
+            return _fooGrid_dark;
+        }}
+        public static Texture2D grid_bright { get {
+            if (_fooGrid_bright == null) _fooGrid_bright = LoadSquareTexture("grid_bright", FilterMode.Point, 64, TextureWrapMode.Repeat);
+            return _fooGrid_bright;
+        }}
         static Texture2D _fooIco_alignTL;
         static Texture2D _fooIco_alignTC;
         static Texture2D _fooIco_alignTR;
@@ -263,6 +271,8 @@ namespace DG.DemiEditor
         static Texture2D _fooIco_comment_border;
         static Texture2D _fooIco_ui;
         static Texture2D _fooIco_ui_border;
+        static Texture2D _fooGrid_dark;
+        static Texture2D _fooGrid_bright;
 
         #endregion
 
@@ -290,10 +300,10 @@ namespace DG.DemiEditor
             }
         }
 
-        static Texture2D LoadSquareTexture(string name, FilterMode filterMode = FilterMode.Point)
+        static Texture2D LoadSquareTexture(string name, FilterMode filterMode = FilterMode.Point, int maxTextureSize = 32, TextureWrapMode wrapMode = TextureWrapMode.Clamp)
         {
             Texture2D tex = AssetDatabase.LoadAssetAtPath(String.Format("{0}{1}.png", _adbImgsDir, name), typeof(Texture2D)) as Texture2D;
-            tex.SetGUIFormat(filterMode, 32);
+            tex.SetGUIFormat(filterMode, maxTextureSize, wrapMode);
             return tex;
         }
     }

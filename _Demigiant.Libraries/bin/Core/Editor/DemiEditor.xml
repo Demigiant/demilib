@@ -855,6 +855,14 @@
         <member name="M:DG.DemiEditor.DeGUI.FlatDivider(UnityEngine.Rect,System.Nullable{UnityEngine.Color})">
             <summary>Divider</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.BackgroundGrid(UnityEngine.Rect,UnityEngine.Vector2,System.Boolean)">
+            <summary>
+            Draws a background grid
+            </summary>
+            <param name="area">Area rect</param>
+            <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
+            <param name="forceDarkSkin">If TRUE forces a dark skin, otherwise uses a skin that fits with the current Unity's one</param>
+        </member>
         <member name="M:DG.DemiEditor.SerializedPropertyExtensions.CastTo``1(UnityEditor.SerializedProperty)">
             <summary>
             Returns the value of the given property (works like a cast to type).
@@ -896,7 +904,7 @@
             Texture extensions
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.TextureExtensions.SetGUIFormat(UnityEngine.Texture2D,UnityEngine.FilterMode,System.Int32)">
+        <member name="M:DG.DemiEditor.TextureExtensions.SetGUIFormat(UnityEngine.Texture2D,UnityEngine.FilterMode,System.Int32,UnityEngine.TextureWrapMode)">
             <summary>
             Checks that the texture uses the correct import settings, and applies them if they're incorrect.
             </summary>

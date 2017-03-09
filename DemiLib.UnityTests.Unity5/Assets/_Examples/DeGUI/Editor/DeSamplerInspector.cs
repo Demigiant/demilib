@@ -47,6 +47,9 @@ public class DeSamplerInspector : Editor
 
         GUILayout.Space(8);
 
+        if (GUILayout.Button("Open DeGUIEditorSampler")) DeGUIEditorSampler.ShowWindow();
+        GUILayout.Space(4);
+
         switch (_drawMode) {
         case DrawMode.Default:
             DrawDefault();
