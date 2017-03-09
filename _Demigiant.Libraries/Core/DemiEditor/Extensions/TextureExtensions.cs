@@ -18,7 +18,6 @@ namespace DG.DemiEditor
         {
             if (texture.wrapMode == wrapMode && texture.filterMode == filterMode && texture.width <= maxTextureSize) return;
 
-            Debug.Log("REIMPORT");
             string path = AssetDatabase.GetAssetPath(texture);
             TextureImporter tImporter = AssetImporter.GetAtPath(path) as TextureImporter;
             bool reimportRequired = tImporter.textureType != TextureImporterType.GUI
