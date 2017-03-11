@@ -39,11 +39,14 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
-        /// Returns TRUE if the first rect fully includes the second one
+        /// Returns TRUE if the first rect includes the second one
         /// </summary>
-        public static bool Includes(this Rect a, Rect b)
+        /// <param name="full">If TRUE, returns TRUE only if the second rect is fully included,
+        /// otherwise just if some part of it is included</param>
+        public static bool Includes(this Rect a, Rect b, bool full = true)
         {
-            return a.xMin <= b.xMin && a.xMax > b.xMax && a.yMin <= b.yMin && a.yMax >= b.yMax;
+            if (full) return a.xMin <= b.xMin && a.xMax > b.xMax && a.yMin <= b.yMin && a.yMax >= b.yMax;
+            return b.xMax > a.xMin && b.xMin < a.xMax && b.yMax > a.yMin && b.yMin < a.yMax;
         }
 
         /// <summary>

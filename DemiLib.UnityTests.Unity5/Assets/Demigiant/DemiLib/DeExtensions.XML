@@ -95,10 +95,12 @@
             <param name="shrinkOnly">If TRUE (default) only shrinks the rect if needed, if FALSE also enlarges it to fit</param>
             <returns></returns>
         </member>
-        <member name="M:DG.DeExtensions.RectExtensions.Includes(UnityEngine.Rect,UnityEngine.Rect)">
+        <member name="M:DG.DeExtensions.RectExtensions.Includes(UnityEngine.Rect,UnityEngine.Rect,System.Boolean)">
             <summary>
-            Returns TRUE if the first rect fully includes the second one
+            Returns TRUE if the first rect includes the second one
             </summary>
+            <param name="full">If TRUE, returns TRUE only if the second rect is fully included,
+            otherwise just if some part of it is included</param>
         </member>
         <member name="M:DG.DeExtensions.RectExtensions.ResetXY(UnityEngine.Rect)">
             <summary>
@@ -148,6 +150,16 @@
             Throws an exception if the string can't be converted.
             If the enum value can't be found, returns the 0 indexed value.<para/>
             NOTE: doesn't use try/catch (TryParse) since on some platforms that won't work.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.Round(UnityEngine.Vector2)">
+            <summary>
+            Returns a copy of the vector with its values rounded to integers, using Mathf.Round.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.Floor(UnityEngine.Vector2)">
+            <summary>
+            Returns a copy of the vector with its values rounded to integers, using a fast int cast.
             </summary>
         </member>
     </members>
