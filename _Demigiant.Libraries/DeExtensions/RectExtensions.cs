@@ -21,9 +21,8 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
-        /// Resizes the given Rect so it fits proportionally within the given size limits
+        /// Returns a copy of the Rect resized so it fits proportionally within the given size limits
         /// </summary>
-        /// <param name="r">Rect target</param>
         /// <param name="w">Width to fit</param>
         /// <param name="h">Height to fit</param>
         /// <param name="shrinkOnly">If TRUE (default) only shrinks the rect if needed, if FALSE also enlarges it to fit</param>
@@ -48,7 +47,16 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
-        /// Modifies and returns a copy of the given Rect, with its values shifted according the the given parameters
+        /// Returns a copy of the Rect with its X/Y coordinates set to 0
+        /// </summary>
+        public static Rect ResetXY(this Rect r)
+        {
+            r.x = r.y = 0;
+            return r;
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its values shifted according the the given parameters
         /// </summary>
         public static Rect Shift(this Rect r, float x, float y, float width, float height)
         {
@@ -56,7 +64,7 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
-        /// Sets the x of this Rect and returns it
+        /// Returns a copy of the Rect with its X property set to the given value
         /// </summary>
         public static Rect SetX(this Rect r, float value)
         {
@@ -65,7 +73,7 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
-        /// Sets the y of this Rect and returns it
+        /// Returns a copy of the Rect with its Y property set to the given value
         /// </summary>
         public static Rect SetY(this Rect r, float value)
         {
@@ -74,7 +82,7 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
-        /// Sets the height of this Rect and returns it
+        /// Returns a copy of the Rect with its height property set to the given value
         /// </summary>
         public static Rect SetHeight(this Rect r, float value)
         {
@@ -83,7 +91,7 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
-        /// Sets the width of this Rect and returns it
+        /// Returns a copy of the Rect with its width property set to the given value
         /// </summary>
         public static Rect SetWidth(this Rect r, float value)
         {

@@ -33,246 +33,102 @@ namespace DG.DemiEditor
 
         #region Texture2D
 
-        public static Texture2D whiteSquare { get {
-            if (_fooWhiteSquare == null) _fooWhiteSquare = LoadSquareTexture("whiteSquare");
-            return _fooWhiteSquare;
-        }}
-        public static Texture2D whiteSquareAlpha10 { get {
-            if (_fooWhiteSquareAlpha10 == null) _fooWhiteSquareAlpha10 = LoadSquareTexture("whiteSquareAlpha10");
-            return _fooWhiteSquareAlpha10;
-        }}
-        public static Texture2D whiteSquareAlpha15 { get {
-            if (_fooWhiteSquareAlpha15 == null) _fooWhiteSquareAlpha15 = LoadSquareTexture("whiteSquareAlpha15");
-            return _fooWhiteSquareAlpha15;
-        }}
-        public static Texture2D whiteSquareAlpha25 { get {
-            if (_fooWhiteSquareAlpha25 == null) _fooWhiteSquareAlpha25 = LoadSquareTexture("whiteSquareAlpha25");
-            return _fooWhiteSquareAlpha25;
-        }}
-        public static Texture2D whiteSquareAlpha50 { get {
-            if (_fooWhiteSquareAlpha50 == null) _fooWhiteSquareAlpha50 = LoadSquareTexture("whiteSquareAlpha50");
-            return _fooWhiteSquareAlpha50;
-        }}
-        public static Texture2D whiteSquareAlpha80 { get {
-            if (_fooWhiteSquareAlpha80 == null) _fooWhiteSquareAlpha80 = LoadSquareTexture("whiteSquareAlpha80");
-            return _fooWhiteSquareAlpha80;
-        }}
-        public static Texture2D whiteSquare_fadeOut_bt { get {
-            if (_fooWhiteSquare_fadeOut_bt == null) _fooWhiteSquare_fadeOut_bt = LoadSquareTexture("whiteSquare_fadeOut_bt", FilterMode.Bilinear);
-            return _fooWhiteSquare_fadeOut_bt;
-        }}
-        public static Texture2D blackSquare { get {
-            if (_fooBlackSquare == null) _fooBlackSquare = LoadSquareTexture("blackSquare");
-            return _fooBlackSquare;
-        }}
-        public static Texture2D blackSquareAlpha10 { get {
-            if (_fooBlackSquareAlpha10 == null) _fooBlackSquareAlpha10 = LoadSquareTexture("blackSquareAlpha10");
-            return _fooBlackSquareAlpha10;
-        }}
-        public static Texture2D blackSquareAlpha15 { get {
-            if (_fooBlackSquareAlpha15 == null) _fooBlackSquareAlpha15 = LoadSquareTexture("blackSquareAlpha15");
-            return _fooBlackSquareAlpha15;
-        }}
-        public static Texture2D blackSquareAlpha25 { get {
-            if (_fooBlackSquareAlpha25 == null) _fooBlackSquareAlpha25 = LoadSquareTexture("blackSquareAlpha25");
-            return _fooBlackSquareAlpha25;
-        }}
-        public static Texture2D blackSquareAlpha50 { get {
-            if (_fooBlackSquareAlpha50 == null) _fooBlackSquareAlpha50 = LoadSquareTexture("blackSquareAlpha50");
-            return _fooBlackSquareAlpha50;
-        }}
-        public static Texture2D blackSquareAlpha80 { get {
-            if (_fooBlackSquareAlpha80 == null) _fooBlackSquareAlpha80 = LoadSquareTexture("blackSquareAlpha80");
-            return _fooBlackSquareAlpha80;
-        }}
-        public static Texture2D redSquare { get {
-            if (_fooRedSquare == null) _fooRedSquare = LoadSquareTexture("redSquare");
-            return _fooRedSquare;
-        }}
-        public static Texture2D orangeSquare { get {
-            if (_fooOrangeSquare == null) _fooOrangeSquare = LoadSquareTexture("orangeSquare");
-            return _fooOrangeSquare;
-        }}
-        public static Texture2D yellowSquare { get {
-            if (_fooYellowSquare == null) _fooYellowSquare = LoadSquareTexture("yellowSquare");
-            return _fooYellowSquare;
-        }}
-        public static Texture2D greenSquare { get {
-            if (_fooGreenSquare == null) _fooGreenSquare = LoadSquareTexture("greenSquare");
-            return _fooGreenSquare;
-        }}
-        public static Texture2D blueSquare { get {
-            if (_fooBlueSquare == null) _fooBlueSquare = LoadSquareTexture("blueSquare");
-            return _fooBlueSquare;
-        }}
-        public static Texture2D purpleSquare { get {
-            if (_fooPurpleSquare == null) _fooPurpleSquare = LoadSquareTexture("purpleSquare");
-            return _fooPurpleSquare;
-        }}
-        public static Texture2D squareBorder { get {
-            if (_fooSquareBorder == null) _fooSquareBorder = LoadSquareTexture("squareBorder");
-            return _fooSquareBorder;
-        }}
-        public static Texture2D squareBorderCurved { get {
-            if (_fooSquareBorderCurved == null) _fooSquareBorderCurved = LoadSquareTexture("squareBorderCurved");
-            return _fooSquareBorderCurved;
-        }}
-        public static Texture2D squareBorderCurvedEmpty { get {
-            if (_fooSquareBorderCurvedEmpty == null) _fooSquareBorderCurvedEmpty = LoadSquareTexture("squareBorderCurvedEmpty");
-            return _fooSquareBorderCurvedEmpty;
-        }}
-        public static Texture2D squareBorderCurvedAlpha { get {
-            if (_fooSquareBorderCurvedAlpha == null) _fooSquareBorderCurvedAlpha = LoadSquareTexture("squareBorderCurvedAlpha");
-            return _fooSquareBorderCurvedAlpha;
-        }}
-        public static Texture2D squareBorderCurved_darkBordersAlpha { get {
-            if (_fooSquareBorderCurved_darkBordersAlpha == null) _fooSquareBorderCurved_darkBordersAlpha = LoadSquareTexture("squareBorderCurved_darkBordersAlpha");
-            return _fooSquareBorderCurved_darkBordersAlpha;
-        }}
-        public static Texture2D whiteDot { get {
-            if (_fooWhiteDot == null) _fooWhiteDot = LoadSquareTexture("whiteDot");
-            return _fooWhiteDot;
-        }}
-        public static Texture2D whiteDot_darkBorder { get {
-            if (_fooWhiteDot_darkBorder == null) _fooWhiteDot_darkBorder = LoadSquareTexture("whiteDot_darkBorder");
-            return _fooWhiteDot_darkBorder;
-        }}
-        public static Texture2D whiteDot_whiteBorderAlpha { get {
-            if (_fooWhiteDot_whiteBorderAlpha == null) _fooWhiteDot_whiteBorderAlpha = LoadSquareTexture("whiteDot_whiteBorderAlpha");
-            return _fooWhiteDot_whiteBorderAlpha;
-        }}
-        static Texture2D _fooWhiteSquare;
-        static Texture2D _fooWhiteSquareAlpha10;
-        static Texture2D _fooWhiteSquareAlpha15;
-        static Texture2D _fooWhiteSquareAlpha25;
-        static Texture2D _fooWhiteSquareAlpha50;
-        static Texture2D _fooWhiteSquareAlpha80;
-        static Texture2D _fooWhiteSquare_fadeOut_bt; // Bottom to top
-        static Texture2D _fooBlackSquare;
-        static Texture2D _fooBlackSquareAlpha10;
-        static Texture2D _fooBlackSquareAlpha15;
-        static Texture2D _fooBlackSquareAlpha25;
-        static Texture2D _fooBlackSquareAlpha50;
-        static Texture2D _fooBlackSquareAlpha80;
-        static Texture2D _fooRedSquare;
-        static Texture2D _fooOrangeSquare;
-        static Texture2D _fooYellowSquare;
-        static Texture2D _fooGreenSquare;
-        static Texture2D _fooBlueSquare;
-        static Texture2D _fooPurpleSquare;
-        static Texture2D _fooSquareBorder;
-        static Texture2D _fooSquareBorderCurved;
-        static Texture2D _fooSquareBorderCurvedEmpty;
-        static Texture2D _fooSquareBorderCurvedAlpha;
-        static Texture2D _fooSquareBorderCurved_darkBordersAlpha;
-        static Texture2D _fooWhiteDot;
-        static Texture2D _fooWhiteDot_darkBorder;
-        static Texture2D _fooWhiteDot_whiteBorderAlpha;
-        public static Texture2D ico_alignTL { get {
-            if (_fooIco_alignTL == null) _fooIco_alignTL = LoadSquareTexture("ico_alignTL");
-            return _fooIco_alignTL;
-        }}
-        public static Texture2D ico_alignTC { get {
-            if (_fooIco_alignTC == null) _fooIco_alignTC = LoadSquareTexture("ico_alignTC");
-            return _fooIco_alignTC;
-        }}
-        public static Texture2D ico_alignTR { get {
-            if (_fooIco_alignTR == null) _fooIco_alignTR = LoadSquareTexture("ico_alignTR");
-            return _fooIco_alignTR;
-        }}
-        public static Texture2D ico_alignCL { get {
-            if (_fooIco_alignCL == null) _fooIco_alignCL = LoadSquareTexture("ico_alignCL");
-            return _fooIco_alignCL;
-        }}
-        public static Texture2D ico_alignCC { get {
-            if (_fooIco_alignCC == null) _fooIco_alignCC = LoadSquareTexture("ico_alignCC");
-            return _fooIco_alignCC;
-        }}
-        public static Texture2D ico_alignCR { get {
-            if (_fooIco_alignCR == null) _fooIco_alignCR = LoadSquareTexture("ico_alignCR");
-            return _fooIco_alignCR;
-        }}
-        public static Texture2D ico_alignBL { get {
-            if (_fooIco_alignBL == null) _fooIco_alignBL = LoadSquareTexture("ico_alignBL");
-            return _fooIco_alignBL;
-        }}
-        public static Texture2D ico_alignBC { get {
-            if (_fooIco_alignBC == null) _fooIco_alignBC = LoadSquareTexture("ico_alignBC");
-            return _fooIco_alignBC;
-        }}
-        public static Texture2D ico_alignBR { get {
-            if (_fooIco_alignBR == null) _fooIco_alignBR = LoadSquareTexture("ico_alignBR");
-            return _fooIco_alignBR;
-        }}
-        public static Texture2D ico_star { get {
-            if (_fooIco_star == null) _fooIco_star = LoadSquareTexture("ico_star");
-            return _fooIco_star;
-        }}
-        public static Texture2D ico_star_border { get {
-            if (_fooIco_star_border == null) _fooIco_star_border = LoadSquareTexture("ico_star_border");
-            return _fooIco_star_border;
-        }}
-        public static Texture2D ico_play { get {
-            if (_fooIco_play == null) _fooIco_play = LoadSquareTexture("ico_play");
-            return _fooIco_play;
-        }}
-        public static Texture2D ico_play_border { get {
-            if (_fooIco_play_border == null) _fooIco_play_border = LoadSquareTexture("ico_play_border");
-            return _fooIco_play_border;
-        }}
-        public static Texture2D ico_cog { get {
-            if (_fooIco_cog == null) _fooIco_cog = LoadSquareTexture("ico_cog");
-            return _fooIco_cog;
-        }}
-        public static Texture2D ico_cog_border { get {
-            if (_fooIco_cog_border == null) _fooIco_cog_border = LoadSquareTexture("ico_cog_border");
-            return _fooIco_cog_border;
-        }}
-        public static Texture2D ico_comment { get {
-            if (_fooIco_comment == null) _fooIco_comment = LoadSquareTexture("ico_comment");
-            return _fooIco_comment;
-        }}
-        public static Texture2D ico_comment_border { get {
-            if (_fooIco_comment_border == null) _fooIco_comment_border = LoadSquareTexture("ico_comment_border");
-            return _fooIco_comment_border;
-        }}
-        public static Texture2D ico_ui { get {
-            if (_fooIco_ui == null) _fooIco_ui = LoadSquareTexture("ico_ui");
-            return _fooIco_ui;
-        }}
-        public static Texture2D ico_ui_border { get {
-            if (_fooIco_ui_border == null) _fooIco_ui_border = LoadSquareTexture("ico_ui_border");
-            return _fooIco_ui_border;
-        }}
-        public static Texture2D grid_dark { get {
-            if (_fooGrid_dark == null) _fooGrid_dark = LoadSquareTexture("grid_dark", FilterMode.Point, 64, TextureWrapMode.Repeat);
-            return _fooGrid_dark;
-        }}
-        public static Texture2D grid_bright { get {
-            if (_fooGrid_bright == null) _fooGrid_bright = LoadSquareTexture("grid_bright", FilterMode.Point, 64, TextureWrapMode.Repeat);
-            return _fooGrid_bright;
-        }}
-        static Texture2D _fooIco_alignTL;
-        static Texture2D _fooIco_alignTC;
-        static Texture2D _fooIco_alignTR;
-        static Texture2D _fooIco_alignCL;
-        static Texture2D _fooIco_alignCC;
-        static Texture2D _fooIco_alignCR;
-        static Texture2D _fooIco_alignBL;
-        static Texture2D _fooIco_alignBC;
-        static Texture2D _fooIco_alignBR;
-        static Texture2D _fooIco_star;
-        static Texture2D _fooIco_star_border;
-        static Texture2D _fooIco_cog;
-        static Texture2D _fooIco_cog_border;
-        static Texture2D _fooIco_play;
-        static Texture2D _fooIco_play_border;
-        static Texture2D _fooIco_comment;
-        static Texture2D _fooIco_comment_border;
-        static Texture2D _fooIco_ui;
-        static Texture2D _fooIco_ui_border;
-        static Texture2D _fooGrid_dark;
-        static Texture2D _fooGrid_bright;
+        public static Texture2D whiteSquare { get { return LoadTexture(ref _whiteSquare, "whiteSquare"); } }
+        public static Texture2D whiteSquareAlpha10 { get { return LoadTexture(ref _whiteSquareAlpha10, "whiteSquareAlpha10"); } }
+        public static Texture2D whiteSquareAlpha15 { get { return LoadTexture(ref _whiteSquareAlpha15, "whiteSquareAlpha15"); } }
+        public static Texture2D whiteSquareAlpha25 { get { return LoadTexture(ref _whiteSquareAlpha25, "whiteSquareAlpha25"); } }
+        public static Texture2D whiteSquareAlpha50 { get { return LoadTexture(ref _whiteSquareAlpha50, "whiteSquareAlpha50"); } }
+        public static Texture2D whiteSquareAlpha80 { get { return LoadTexture(ref _whiteSquareAlpha80, "whiteSquareAlpha80"); } }
+        public static Texture2D whiteSquare_fadeOut_bt { get { return LoadTexture(ref _whiteSquare_fadeOut_bt, "whiteSquare_fadeOut_bt", FilterMode.Bilinear); } }
+        public static Texture2D blackSquare { get { return LoadTexture(ref _blackSquare, "blackSquare"); } }
+        public static Texture2D blackSquareAlpha10 { get { return LoadTexture(ref _blackSquareAlpha10, "blackSquareAlpha10"); } }
+        public static Texture2D blackSquareAlpha15 { get { return LoadTexture(ref _blackSquareAlpha15, "blackSquareAlpha15"); } }
+        public static Texture2D blackSquareAlpha25 { get { return LoadTexture(ref _blackSquareAlpha25, "blackSquareAlpha25"); } }
+        public static Texture2D blackSquareAlpha50 { get { return LoadTexture(ref _blackSquareAlpha50, "blackSquareAlpha50"); } }
+        public static Texture2D blackSquareAlpha80 { get { return LoadTexture(ref _blackSquareAlpha80, "blackSquareAlpha80"); } }
+        public static Texture2D redSquare { get { return LoadTexture(ref _redSquare, "redSquare"); } }
+        public static Texture2D orangeSquare { get { return LoadTexture(ref _orangeSquare, "orangeSquare"); } }
+        public static Texture2D yellowSquare { get { return LoadTexture(ref _yellowSquare, "yellowSquare"); } }
+        public static Texture2D greenSquare { get { return LoadTexture(ref _greenSquare, "greenSquare"); } }
+        public static Texture2D blueSquare { get { return LoadTexture(ref _blueSquare, "blueSquare"); } }
+        public static Texture2D purpleSquare { get { return LoadTexture(ref _purpleSquare, "purpleSquare"); } }
+        public static Texture2D squareBorder { get { return LoadTexture(ref _squareBorder, "squareBorder"); } }
+        public static Texture2D squareBorderCurved { get { return LoadTexture(ref _squareBorderCurved, "squareBorderCurved"); } }
+        public static Texture2D squareBorderCurvedEmpty { get { return LoadTexture(ref _squareBorderCurvedEmpty, "squareBorderCurvedEmpty"); } }
+        public static Texture2D squareBorderCurvedAlpha { get { return LoadTexture(ref _squareBorderCurvedAlpha, "squareBorderCurvedAlpha"); } }
+        public static Texture2D squareBorderCurved_darkBordersAlpha { get { return LoadTexture(ref _squareBorderCurved_darkBordersAlpha, "squareBorderCurved_darkBordersAlpha"); } }
+        public static Texture2D whiteDot { get { return LoadTexture(ref _whiteDot, "whiteDot"); } }
+        public static Texture2D whiteDot_darkBorder { get { return LoadTexture(ref _whiteDot_darkBorder, "whiteDot_darkBorder"); } }
+        public static Texture2D whiteDot_whiteBorderAlpha { get { return LoadTexture(ref _whiteDot_whiteBorderAlpha, "whiteDot_whiteBorderAlpha"); } }
+        static Texture2D _whiteSquare;
+        static Texture2D _whiteSquareAlpha10;
+        static Texture2D _whiteSquareAlpha15;
+        static Texture2D _whiteSquareAlpha25;
+        static Texture2D _whiteSquareAlpha50;
+        static Texture2D _whiteSquareAlpha80;
+        static Texture2D _whiteSquare_fadeOut_bt; // Bottom to top
+        static Texture2D _blackSquare;
+        static Texture2D _blackSquareAlpha10;
+        static Texture2D _blackSquareAlpha15;
+        static Texture2D _blackSquareAlpha25;
+        static Texture2D _blackSquareAlpha50;
+        static Texture2D _blackSquareAlpha80;
+        static Texture2D _redSquare;
+        static Texture2D _orangeSquare;
+        static Texture2D _yellowSquare;
+        static Texture2D _greenSquare;
+        static Texture2D _blueSquare;
+        static Texture2D _purpleSquare;
+        static Texture2D _squareBorder;
+        static Texture2D _squareBorderCurved;
+        static Texture2D _squareBorderCurvedEmpty;
+        static Texture2D _squareBorderCurvedAlpha;
+        static Texture2D _squareBorderCurved_darkBordersAlpha;
+        static Texture2D _whiteDot;
+        static Texture2D _whiteDot_darkBorder;
+        static Texture2D _whiteDot_whiteBorderAlpha;
+        public static Texture2D ico_alignTL { get { return LoadTexture(ref _ico_alignTL, "ico_alignTL"); } }
+        public static Texture2D ico_alignTC { get { return LoadTexture(ref _ico_alignTC, "ico_alignTC"); } }
+        public static Texture2D ico_alignTR { get { return LoadTexture(ref _ico_alignTR, "ico_alignTR"); } }
+        public static Texture2D ico_alignCL { get { return LoadTexture(ref _ico_alignCL, "ico_alignCL"); } }
+        public static Texture2D ico_alignCC { get { return LoadTexture(ref _ico_alignCC, "ico_alignCC"); } }
+        public static Texture2D ico_alignCR { get { return LoadTexture(ref _ico_alignCR, "ico_alignCR"); } }
+        public static Texture2D ico_alignBL { get { return LoadTexture(ref _ico_alignBL, "ico_alignBL"); } }
+        public static Texture2D ico_alignBC { get { return LoadTexture(ref _ico_alignBC, "ico_alignBC"); } }
+        public static Texture2D ico_alignBR { get { return LoadTexture(ref _ico_alignBR, "ico_alignBR"); } }
+        public static Texture2D ico_star { get { return LoadTexture(ref _ico_star, "ico_star"); } }
+        public static Texture2D ico_star_border { get { return LoadTexture(ref _ico_star_border, "ico_star_border"); } }
+        public static Texture2D ico_play { get { return LoadTexture(ref _ico_play, "ico_play"); } }
+        public static Texture2D ico_play_border { get { return LoadTexture(ref _ico_play_border, "ico_play_border"); } }
+        public static Texture2D ico_cog { get { return LoadTexture(ref _ico_cog, "ico_cog"); } }
+        public static Texture2D ico_cog_border { get { return LoadTexture(ref _ico_cog_border, "ico_cog_border"); } }
+        public static Texture2D ico_comment { get { return LoadTexture(ref _ico_comment, "ico_comment"); } }
+        public static Texture2D ico_comment_border { get { return LoadTexture(ref _ico_comment_border, "ico_comment_border"); } }
+        public static Texture2D ico_ui { get { return LoadTexture(ref _ico_ui, "ico_ui"); } }
+        public static Texture2D ico_ui_border { get { return LoadTexture(ref _ico_ui_border, "ico_ui_border"); } }
+        public static Texture2D grid_dark { get { return LoadTexture(ref _grid_dark, "grid_dark", FilterMode.Point, 64, TextureWrapMode.Repeat); } }
+        public static Texture2D grid_bright { get { return LoadTexture(ref _grid_bright, "grid_bright", FilterMode.Point, 64, TextureWrapMode.Repeat); } }
+        static Texture2D _ico_alignTL;
+        static Texture2D _ico_alignTC;
+        static Texture2D _ico_alignTR;
+        static Texture2D _ico_alignCL;
+        static Texture2D _ico_alignCC;
+        static Texture2D _ico_alignCR;
+        static Texture2D _ico_alignBL;
+        static Texture2D _ico_alignBC;
+        static Texture2D _ico_alignBR;
+        static Texture2D _ico_star;
+        static Texture2D _ico_star_border;
+        static Texture2D _ico_cog;
+        static Texture2D _ico_cog_border;
+        static Texture2D _ico_play;
+        static Texture2D _ico_play_border;
+        static Texture2D _ico_comment;
+        static Texture2D _ico_comment_border;
+        static Texture2D _ico_ui;
+        static Texture2D _ico_ui_border;
+        static Texture2D _grid_dark;
+        static Texture2D _grid_bright;
 
         #endregion
 
@@ -300,11 +156,13 @@ namespace DG.DemiEditor
             }
         }
 
-        static Texture2D LoadSquareTexture(string name, FilterMode filterMode = FilterMode.Point, int maxTextureSize = 32, TextureWrapMode wrapMode = TextureWrapMode.Clamp)
+        static Texture2D LoadTexture(ref Texture2D property, string name, FilterMode filterMode = FilterMode.Point, int maxTextureSize = 32, TextureWrapMode wrapMode = TextureWrapMode.Clamp)
         {
-            Texture2D tex = AssetDatabase.LoadAssetAtPath(String.Format("{0}{1}.png", _adbImgsDir, name), typeof(Texture2D)) as Texture2D;
-            tex.SetGUIFormat(filterMode, maxTextureSize, wrapMode);
-            return tex;
+            if (property == null) {
+                property = AssetDatabase.LoadAssetAtPath(String.Format("{0}{1}.png", _adbImgsDir, name), typeof(Texture2D)) as Texture2D;
+                property.SetGUIFormat(filterMode, maxTextureSize, wrapMode);
+            }
+            return property;
         }
     }
 

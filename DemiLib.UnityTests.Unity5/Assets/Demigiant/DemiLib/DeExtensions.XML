@@ -88,9 +88,8 @@
         </member>
         <member name="M:DG.DeExtensions.RectExtensions.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
             <summary>
-            Resizes the given Rect so it fits proportionally within the given size limits
+            Returns a copy of the Rect resized so it fits proportionally within the given size limits
             </summary>
-            <param name="r">Rect target</param>
             <param name="w">Width to fit</param>
             <param name="h">Height to fit</param>
             <param name="shrinkOnly">If TRUE (default) only shrinks the rect if needed, if FALSE also enlarges it to fit</param>
@@ -101,29 +100,34 @@
             Returns TRUE if the first rect fully includes the second one
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.RectExtensions.ResetXY(UnityEngine.Rect)">
+            <summary>
+            Returns a copy of the Rect with its X/Y coordinates set to 0
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
             <summary>
-            Modifies and returns a copy of the given Rect, with its values shifted according the the given parameters
+            Returns a copy of the Rect with its values shifted according the the given parameters
             </summary>
         </member>
         <member name="M:DG.DeExtensions.RectExtensions.SetX(UnityEngine.Rect,System.Single)">
             <summary>
-            Sets the x of this Rect and returns it
+            Returns a copy of the Rect with its X property set to the given value
             </summary>
         </member>
         <member name="M:DG.DeExtensions.RectExtensions.SetY(UnityEngine.Rect,System.Single)">
             <summary>
-            Sets the y of this Rect and returns it
+            Returns a copy of the Rect with its Y property set to the given value
             </summary>
         </member>
         <member name="M:DG.DeExtensions.RectExtensions.SetHeight(UnityEngine.Rect,System.Single)">
             <summary>
-            Sets the height of this Rect and returns it
+            Returns a copy of the Rect with its height property set to the given value
             </summary>
         </member>
         <member name="M:DG.DeExtensions.RectExtensions.SetWidth(UnityEngine.Rect,System.Single)">
             <summary>
-            Sets the width of this Rect and returns it
+            Returns a copy of the Rect with its width property set to the given value
             </summary>
         </member>
         <member name="M:DG.DeExtensions.StringExtensions.IsNullOrEmpty(System.String,System.Boolean)">

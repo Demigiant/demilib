@@ -267,14 +267,24 @@ namespace DG.DemiEditor
         #region Miscellaneous
 
         /// <summary>
-        /// Can be used instead of EditorGUI.PropertyField, to draw a serializedProperty without its attributes
-        /// (very useful in case you want to use this from within a PropertyDrawer for that same property,
-        /// since otherwise bad infinite loops might happen)
+        /// Draws a background grid
         /// </summary>
-        public static void DefaultPropertyField(Rect position, SerializedProperty property, GUIContent label)
+        /// <param name="area">Area rect</param>
+        /// <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
+        /// <param name="forceDarkSkin">If TRUE forces a dark skin, otherwise uses a skin that fits with the current Unity's one</param>
+        public static void BackgroundGrid(Rect area, Vector2 offset, bool forceDarkSkin = false)
         {
-            if (_defaultPropertyFieldMInfo == null) _defaultPropertyFieldMInfo = typeof(EditorGUI).GetMethod("DefaultPropertyField", BindingFlags.Static | BindingFlags.NonPublic);
-            _defaultPropertyFieldMInfo.Invoke(null, new object[] { position, property, label });
+            if (Event.current.type != EventType.Repaint) return;
+
+            Texture2D gridImg = forceDarkSkin || IsProSkin ? DeStylePalette.grid_dark : DeStylePalette.grid_bright;
+            int gridW = gridImg.width;
+            int gridH = gridImg.height;
+            int shiftX = (int)(gridW - offset.x % gridW);
+            if (shiftX < 0) shiftX = gridW + shiftX;
+            int shiftY = (int)(gridH - offset.y % gridH);
+            if (shiftY < 0) shiftY = gridH + shiftY;
+            Rect bgArea = new Rect(area.x - shiftX, area.yMax, area.width + shiftX, -(area.height + shiftY)); // Inverted becasue tiled texture otherwise would start from BL instead of TL
+            GUI.DrawTextureWithTexCoords(bgArea, gridImg, new Rect(0, 0, bgArea.width / gridW, bgArea.height / gridH));
         }
 
         /// <summary>Box with style and color options</summary>
@@ -285,6 +295,17 @@ namespace DG.DemiEditor
             GUI.backgroundColor = color;
             GUI.Box(rect, "", style);
             GUI.backgroundColor = orColor;
+        }
+
+        /// <summary>
+        /// Can be used instead of EditorGUI.PropertyField, to draw a serializedProperty without its attributes
+        /// (very useful in case you want to use this from within a PropertyDrawer for that same property,
+        /// since otherwise bad infinite loops might happen)
+        /// </summary>
+        public static void DefaultPropertyField(Rect position, SerializedProperty property, GUIContent label)
+        {
+            if (_defaultPropertyFieldMInfo == null) _defaultPropertyFieldMInfo = typeof(EditorGUI).GetMethod("DefaultPropertyField", BindingFlags.Static | BindingFlags.NonPublic);
+            _defaultPropertyFieldMInfo.Invoke(null, new object[] { position, property, label });
         }
 
         /// <summary>Draws a colored square</summary>
@@ -395,27 +416,6 @@ namespace DG.DemiEditor
             if (color != null) GUI.backgroundColor = (Color)color;
             GUI.Box(rect, "", DeGUI.styles.box.flat);
             GUI.backgroundColor = prevBgColor;
-        }
-
-        /// <summary>
-        /// Draws a background grid
-        /// </summary>
-        /// <param name="area">Area rect</param>
-        /// <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
-        /// <param name="forceDarkSkin">If TRUE forces a dark skin, otherwise uses a skin that fits with the current Unity's one</param>
-        public static void BackgroundGrid(Rect area, Vector2 offset, bool forceDarkSkin = false)
-        {
-            if (Event.current.type != EventType.Repaint) return;
-
-            Texture2D gridImg = forceDarkSkin || IsProSkin ? DeStylePalette.grid_dark : DeStylePalette.grid_bright;
-            int gridW = gridImg.width;
-            int gridH = gridImg.height;
-            int shiftX = (int)(gridW - offset.x % gridW);
-            if (shiftX < 0) shiftX = gridW + shiftX;
-            int shiftY = (int)(gridH - offset.y % gridH);
-            if (shiftY < 0) shiftY = gridH + shiftY;
-            Rect bgArea = new Rect(area.x - shiftX, area.yMax, area.width + shiftX, -(area.height + shiftY)); // Inverted becasue tiled texture otherwise would start from BL instead of TL
-            GUI.DrawTextureWithTexCoords(bgArea, gridImg, new Rect(0, 0, bgArea.width / gridW, bgArea.height / gridH));
         }
 
         #endregion

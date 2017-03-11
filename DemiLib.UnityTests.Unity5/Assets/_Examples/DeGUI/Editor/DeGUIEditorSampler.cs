@@ -8,9 +8,9 @@ using UnityEngine;
 
 public class DeGUIEditorSampler : EditorWindow
 {
-		
     const string _Title = "DeGUIEditorSampler";
     Vector2 _scrollPos;
+    static Vector2 _areaShift;
 
     #region Open
 
@@ -26,12 +26,18 @@ public class DeGUIEditorSampler : EditorWindow
     void OnGUI()
     {
         if (Event.current.type == EventType.ValidateCommand && Event.current.commandName == "UndoRedoPerformed") Repaint();
-        _scrollPos = GUILayout.BeginScrollView(_scrollPos);
+//        _scrollPos = GUILayout.BeginScrollView(_scrollPos);
         DeGUI.BeginGUI();
-			
-        DeGUI.BackgroundGrid(new Rect(0, 0, this.position.width, this.position.height), Vector2.zero);
+	    
+        if (Event.current.type == EventType.MouseDrag && Event.current.button == 2) {
+            _areaShift += Event.current.delta;
+            this.Repaint();
+            return;
+        }
 
-        GUILayout.EndScrollView();
+        DeGUI.BackgroundGrid(new Rect(0, 0, this.position.width, this.position.height), _areaShift);
+
+//        GUILayout.EndScrollView();
     }
 
     #endregion

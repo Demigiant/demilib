@@ -787,15 +787,23 @@
         <member name="M:DG.DemiEditor.DeGUI.SceneField(UnityEngine.Rect,System.String,UnityEngine.Object)">
             <summary>Scene field</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.BackgroundGrid(UnityEngine.Rect,UnityEngine.Vector2,System.Boolean)">
+            <summary>
+            Draws a background grid
+            </summary>
+            <param name="area">Area rect</param>
+            <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
+            <param name="forceDarkSkin">If TRUE forces a dark skin, otherwise uses a skin that fits with the current Unity's one</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.Box(UnityEngine.Rect,UnityEngine.Color,UnityEngine.GUIStyle)">
+            <summary>Box with style and color options</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.DefaultPropertyField(UnityEngine.Rect,UnityEditor.SerializedProperty,UnityEngine.GUIContent)">
             <summary>
             Can be used instead of EditorGUI.PropertyField, to draw a serializedProperty without its attributes
             (very useful in case you want to use this from within a PropertyDrawer for that same property,
             since otherwise bad infinite loops might happen)
             </summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUI.Box(UnityEngine.Rect,UnityEngine.Color,UnityEngine.GUIStyle)">
-            <summary>Box with style and color options</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.DrawColoredSquare(UnityEngine.Rect,UnityEngine.Color)">
             <summary>Draws a colored square</summary>
@@ -854,14 +862,6 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.FlatDivider(UnityEngine.Rect,System.Nullable{UnityEngine.Color})">
             <summary>Divider</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUI.BackgroundGrid(UnityEngine.Rect,UnityEngine.Vector2,System.Boolean)">
-            <summary>
-            Draws a background grid
-            </summary>
-            <param name="area">Area rect</param>
-            <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
-            <param name="forceDarkSkin">If TRUE forces a dark skin, otherwise uses a skin that fits with the current Unity's one</param>
         </member>
         <member name="M:DG.DemiEditor.SerializedPropertyExtensions.CastTo``1(UnityEditor.SerializedProperty)">
             <summary>
