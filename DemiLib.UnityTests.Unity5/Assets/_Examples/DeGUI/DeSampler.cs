@@ -1,10 +1,12 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/04/26 13:32
 
+using System;
 using System.Collections.Generic;
 using DG.DeAudio;
 using DG.DemiLib;
 using UnityEngine;
+using _Examples.DeGUI.DeGUINode;
 
 public class DeSampler : MonoBehaviour
 {
@@ -21,4 +23,20 @@ public class DeSampler : MonoBehaviour
     };
 
     public DeAudioClipData deAudioClip;
+
+    // Node System
+
+    public NodeSystem nodeSystem = new NodeSystem();
+
+    // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+    // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
+    // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+    [Serializable]
+    public class NodeSystem
+    {
+        public Vector2 areaShift;
+        public StartNode startNode = new StartNode();
+    }
+
 }

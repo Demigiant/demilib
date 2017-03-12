@@ -56,6 +56,9 @@
     <Compile Include="DeEditorPrefabUtils.cs" />
     <Compile Include="DeEditorUtils.cs" />
     <Compile Include="DeGUIDrag.cs" />
+    <Compile Include="DeGUINodeSystem\ABSDeGUINode.cs" />
+    <Compile Include="DeGUINodeSystem\DeGUINodeData.cs" />
+    <Compile Include="DeGUINodeSystem\DeGUINodeProcess.cs" />
     <Compile Include="DeSkinStyle.cs" />
     <Compile Include="DeEditorSoundUtils.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />

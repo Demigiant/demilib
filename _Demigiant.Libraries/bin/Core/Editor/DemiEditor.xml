@@ -270,6 +270,35 @@
             </summary>
             <param name="applyDrag">If TRUE applies the drag results, otherwise simply cancels the drag</param>
         </member>
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode">
+            <summary>
+            Abstract dynamic class used for every node of the same type
+            (meaning there is only a single recycled instance for all same-type nodes)
+            </summary>
+        </member>
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess">
+            <summary>
+            Main class for DeGUI Node system. Call <see cref="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.BeginGUI(UnityEngine.Rect,UnityEngine.Vector2@)"/> when starting a new nodes area.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.#ctor(UnityEditor.EditorWindow,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a new DeGUINodeProcess.
+            </summary>
+            <param name="editor">EditorWindow for this process</param>
+            <param name="drawBackgroundGrid">If TRUE draws a background grid</param>
+            <param name="forceDarkSkin">If TRUE forces the grid skin to black, otherwise varies based on current Unity free/pro skin</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.BeginGUI(UnityEngine.Rect,UnityEngine.Vector2@)">
+            <summary>
+            Begins a new area for nodes and returns TRUE if the area shift has changed (in case of a drag operation).
+            Doesn't need to be concluded with an End.<para/>
+            Automatically manages area drag operations with middle mouse.
+            Also sets <code>GUI.changed</code> to TRUE if the shift changes.
+            </summary>
+            <param name="nodeArea">Area within which the nodes will be drawn</param>
+            <param name="refAreaShift">Area shift (caused by dragging)</param>
+        </member>
         <member name="T:DG.DemiEditor.DeSkinStyle">
             <summary>
             Contains both free and pro skins GUIStyle variations,

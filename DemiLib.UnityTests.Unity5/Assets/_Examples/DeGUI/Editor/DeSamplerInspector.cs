@@ -7,6 +7,7 @@ using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
 using DG.DemiEditor;
+using _Examples.DeGUI.Editor.DeGUINode;
 
 [CustomEditor(typeof(DeSampler))]
 public class DeSamplerInspector : Editor
@@ -47,7 +48,7 @@ public class DeSamplerInspector : Editor
 
         GUILayout.Space(8);
 
-        if (GUILayout.Button("Open DeGUIEditorSampler")) DeGUIEditorSampler.ShowWindow();
+        if (GUILayout.Button("Open DeGUINodeSampler")) DeGUINodeSampler.ShowWindow(_src);
         GUILayout.Space(4);
 
         switch (_drawMode) {
