@@ -276,9 +276,20 @@
             (meaning there is only a single recycled instance for all same-type nodes)
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode.GetAreas(UnityEngine.Vector2,DG.DemiLib.IEditorGUINode)">
+            <summary>Used to fill <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeData"/></summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode.OnGUI(DG.DemiEditor.DeGUINodeSystem.DeGUINodeData,DG.DemiLib.IEditorGUINode)">
+            <summary>Called only if the node is visible in the current area</summary>
+        </member>
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeInteractionManager">
+            <summary>
+            One per <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess"/>
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess">
             <summary>
-            Main class for DeGUI Node system. Call <see cref="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.BeginGUI(UnityEngine.Rect,UnityEngine.Vector2@)"/> when starting a new nodes area.
+            Main class for DeGUI Node system. Call <see cref="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.Update(UnityEngine.Rect,UnityEngine.Vector2@)"/> every GUI call when starting a nodes area.
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.#ctor(UnityEditor.EditorWindow,System.Boolean,System.Boolean)">
@@ -289,12 +300,12 @@
             <param name="drawBackgroundGrid">If TRUE draws a background grid</param>
             <param name="forceDarkSkin">If TRUE forces the grid skin to black, otherwise varies based on current Unity free/pro skin</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.BeginGUI(UnityEngine.Rect,UnityEngine.Vector2@)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.Update(UnityEngine.Rect,UnityEngine.Vector2@)">
             <summary>
-            Begins a new area for nodes and returns TRUE if the area shift has changed (in case of a drag operation).
+            Updates the main node process and returns TRUE if the area shift or a node position has changed.
             Doesn't need to be concluded with an End.<para/>
-            Automatically manages area drag operations with middle mouse.
-            Also sets <code>GUI.changed</code> to TRUE if the shift changes.
+            Automatically manages area drag operations with middle mouse.<para/>
+            Sets <code>GUI.changed</code> to TRUE if the area is panned or a node is dragged.
             </summary>
             <param name="nodeArea">Area within which the nodes will be drawn</param>
             <param name="refAreaShift">Area shift (caused by dragging)</param>

@@ -58,6 +58,7 @@
     <Compile Include="DeGUIDrag.cs" />
     <Compile Include="DeGUINodeSystem\ABSDeGUINode.cs" />
     <Compile Include="DeGUINodeSystem\DeGUINodeData.cs" />
+    <Compile Include="DeGUINodeSystem\DeGUINodeInteractionManager.cs" />
     <Compile Include="DeGUINodeSystem\DeGUINodeProcess.cs" />
     <Compile Include="DeSkinStyle.cs" />
     <Compile Include="DeEditorSoundUtils.cs" />

@@ -13,7 +13,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
     /// </summary>
     public abstract class ABSDeGUINode
     {
-        DeGUINodeProcess _process;
+        protected DeGUINodeProcess process;
 
         #region CONSTRUCTOR
 
@@ -25,14 +25,18 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         protected internal ABSDeGUINode(DeGUINodeProcess process)
         {
-            _process = process;
+            this.process = process;
         }
 
         #endregion
         
         #region Internal Methods
 
-        protected internal abstract void Draw(Vector2 position, IEditorGUINode iNode, bool isDraggable);
+        /// <summary>Used to fill <see cref="DeGUINodeData"/></summary>
+        protected internal abstract DeGUINodeData GetAreas(Vector2 position, IEditorGUINode iNode);
+
+        /// <summary>Called only if the node is visible in the current area</summary>
+        protected internal abstract void OnGUI(DeGUINodeData guiNodeData, IEditorGUINode iNode);
 
         #endregion
     }

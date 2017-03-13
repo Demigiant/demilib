@@ -29,6 +29,10 @@ namespace _Examples.DeGUI.Editor.DeGUINode
 
         void OnEnable()
         {
+            if (src == null) {
+                Close();
+                return;
+            }
             _nodeProcess = new DeGUINodeProcess(this, true);
         }
 
@@ -37,12 +41,17 @@ namespace _Examples.DeGUI.Editor.DeGUINode
 
         void OnGUI()
         {
+            if (src == null) {
+                Close();
+                return;
+            }
+
             if (Event.current.type == EventType.ValidateCommand && Event.current.commandName == "UndoRedoPerformed") Repaint();
             Undo.RecordObject(src, "DeSampler");
             DG.DemiEditor.DeGUI.BeginGUI();
 
             // Begin Node GUI Process
-            if (_nodeProcess.BeginGUI(this.position.ResetXY(), ref src.nodeSystem.areaShift)) EditorUtility.SetDirty(src);
+            if (_nodeProcess.Update(this.position.ResetXY(), ref src.nodeSystem.areaShift)) EditorUtility.SetDirty(src);
 
             // Draw nodes
             _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);

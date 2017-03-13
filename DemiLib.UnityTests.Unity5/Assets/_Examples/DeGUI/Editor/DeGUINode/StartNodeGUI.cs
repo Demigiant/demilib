@@ -2,6 +2,7 @@
 // Created: 2017/03/12 12:41
 // License Copyright (c) Daniele Giardini
 
+using DG.DeExtensions;
 using DG.DemiEditor;
 using DG.DemiEditor.DeGUINodeSystem;
 using DG.DemiLib;
@@ -14,9 +15,15 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         public StartNodeGUI() {} // Must be implemented but is never used
         public StartNodeGUI(DeGUINodeProcess process) : base(process) {}
 
-        protected override void Draw(Vector2 position, IEditorGUINode iNode, bool isDraggable)
+        protected override DeGUINodeData GetAreas(Vector2 position, IEditorGUINode iNode)
         {
-            GUI.DrawTexture(new Rect(position.x, position.y, DeStylePalette.ico_play.width, DeStylePalette.ico_play.height), DeStylePalette.ico_play);
+            Rect fullR = new Rect(position.x, position.y, DeStylePalette.ico_play.width, DeStylePalette.ico_play.height);
+            return new DeGUINodeData(fullR, fullR);
+        }
+
+        protected override void OnGUI(DeGUINodeData guiNodeData, IEditorGUINode iNode)
+        {
+            GUI.DrawTexture(guiNodeData.fullArea, DeStylePalette.ico_play);
         }
     }
 }
