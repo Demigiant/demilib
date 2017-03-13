@@ -13,22 +13,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
     /// </summary>
     public abstract class ABSDeGUINode
     {
-        protected DeGUINodeProcess process;
-
-        #region CONSTRUCTOR
-
-        // Must be implemented but is never used
-        public ABSDeGUINode()
-        {
-            Debug.LogError("ABSDeGUINode parameterless constructor should never be called");
-        }
-
-        protected internal ABSDeGUINode(DeGUINodeProcess process)
-        {
-            this.process = process;
-        }
-
-        #endregion
+        internal DeGUINodeProcess process; // Set by DeGUINodeProcess when instantiating this
         
         #region Internal Methods
 

@@ -20,7 +20,9 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         public static void ShowWindow(DeSampler src)
         {
             DeGUINodeSampler.src = src;
-            GetWindow(typeof(DeGUINodeSampler), true, _Title);
+            EditorWindow editor = GetWindow(typeof(DeGUINodeSampler), true, _Title);
+            Undo.undoRedoPerformed -= editor.Repaint;
+            Undo.undoRedoPerformed += editor.Repaint;
         }
 
         #endregion
@@ -39,6 +41,8 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         void OnHierarchyChange()
         { Repaint(); }
 
+        void OnDestroy() { Undo.undoRedoPerformed -= Repaint; }
+
         void OnGUI()
         {
             if (src == null) {
@@ -46,15 +50,16 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 return;
             }
 
-            if (Event.current.type == EventType.ValidateCommand && Event.current.commandName == "UndoRedoPerformed") Repaint();
             Undo.RecordObject(src, "DeSampler");
             DG.DemiEditor.DeGUI.BeginGUI();
 
-            // Begin Node GUI Process
-            if (_nodeProcess.Update(this.position.ResetXY(), ref src.nodeSystem.areaShift)) EditorUtility.SetDirty(src);
+            // Node GUI Process
+            using (new DeGUINodeProcessScope(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift)) {
+                // Draw nodes
+                _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);
+            }
 
-            // Draw nodes
-            _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);
+            if (GUI.changed) EditorUtility.SetDirty(src);
         }
 
         #endregion

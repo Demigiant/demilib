@@ -9,20 +9,38 @@ using UnityEngine;
 namespace DG.DemiEditor.DeGUINodeSystem
 {
     /// <summary>
-    /// One per <see cref="DeGUINodeProcess"/>
+    /// One per <see cref="DeGUINodeProcess"/>.
+    /// Partially independent, mainly controlled by process.
     /// </summary>
     public class DeGUINodeInteractionManager
     {
         public enum State
         {
             Inactive,
-            Panning, // Panning the whole area
-            DrawingSelection, // Drawing a rectangular selection
-            DraggingNode // Dragging a node
+            Panning,
+            DrawingSelection,
+            DraggingNode
+        }
+
+        public enum TargetType
+        {
+            None,
+            Background,
+            Node
+        }
+
+        public enum NodeTargetType
+        {
+            None,
+            DraggableArea,
+            NonDraggableArea
         }
 
         public State state { get; private set; }
+        public TargetType mouseTargetType { get; private set; } // Always updated, even no rollover
+        public NodeTargetType nodeTargetType { get; private set; }
         public IEditorGUINode targetNode { get; internal set; }
+        public bool mouseTargetIsLocked { get { return state == State.DraggingNode || state == State.Panning; } }
 
         DeGUINodeProcess _process;
 
@@ -49,6 +67,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _process.editor.Repaint();
                 break;
             }
+        }
+
+        internal void SetMouseTargetType(TargetType targetType, NodeTargetType nodeTargetType = NodeTargetType.None)
+        {
+            this.mouseTargetType = targetType;
+            this.nodeTargetType = nodeTargetType;
         }
 
         internal void Update()

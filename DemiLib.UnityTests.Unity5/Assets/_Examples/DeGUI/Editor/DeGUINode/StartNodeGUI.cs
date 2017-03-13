@@ -12,9 +12,6 @@ namespace _Examples.DeGUI.Editor.DeGUINode
 {
     public class StartNodeGUI : ABSDeGUINode
     {
-        public StartNodeGUI() {} // Must be implemented but is never used
-        public StartNodeGUI(DeGUINodeProcess process) : base(process) {}
-
         protected override DeGUINodeData GetAreas(Vector2 position, IEditorGUINode iNode)
         {
             Rect fullR = new Rect(position.x, position.y, DeStylePalette.ico_play.width, DeStylePalette.ico_play.height);
