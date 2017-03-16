@@ -16,6 +16,8 @@ namespace DG.DemiEditor
         static MethodInfo _clearConsoleMI;
         static readonly List<GameObject> _rootGOs = new List<GameObject>(500);
 
+        #region DelayedCall
+
         /// <summary>Calls the given action after the given delay</summary>
         public static DelayedCall DelayedCall(float delay, Action callback)
         {
@@ -38,6 +40,8 @@ namespace DG.DemiEditor
             _DelayedCalls.Remove(call);
         }
 
+        #endregion
+        
         /// <summary>
         /// Return the size of the editor game view, eventual extra bars excluded (meaning the true size of the game area)
         /// </summary>

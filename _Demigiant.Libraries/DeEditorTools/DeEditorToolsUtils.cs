@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System.Collections.Generic;
+using DG.DemiEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -61,6 +62,34 @@ namespace DG.DeEditorTools
                 if (component != null) return component;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Captures a screenshot of the gameView from the given camera, and returns it as a Texture2D object
+        /// </summary>
+        /// <param name="width">Width</param>
+        /// <param name="height">Height</param>
+        /// <param name="cam">If NULL uses the main camera</param>
+        /// <param name="alpha">If TRUE uses transparency</param>
+        public static Texture2D CaptureGameViewScreenshot(int width, int height, Camera cam = null, bool alpha = false)
+        {
+            Vector2 gameSize = DeEditorUtils.GetGameViewSize();
+            int screenshotW = width;
+            int screenshotH = height;
+
+            Camera screenshotCam = cam == null ? Camera.main : cam;
+            TextureFormat screenshotFormat = alpha ? TextureFormat.ARGB32 : TextureFormat.RGB24;
+            RenderTexture renderT = new RenderTexture(screenshotW, screenshotH, 24);
+            screenshotCam.targetTexture = renderT;
+            Texture2D screenshot = new Texture2D(screenshotW, screenshotH, screenshotFormat, false);
+
+            RenderTexture.active = renderT;
+            screenshotCam.Render();
+            screenshot.ReadPixels(new Rect(0, 0, screenshotW, screenshotH), 0, 0);
+            screenshotCam.targetTexture = null;
+            RenderTexture.active = null;
+
+            return screenshot;
         }
     }
 }
