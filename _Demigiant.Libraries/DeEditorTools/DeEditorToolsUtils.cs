@@ -73,7 +73,6 @@ namespace DG.DeEditorTools
         /// <param name="alpha">If TRUE uses transparency</param>
         public static Texture2D CaptureGameViewScreenshot(int width, int height, Camera cam = null, bool alpha = false)
         {
-            Vector2 gameSize = DeEditorUtils.GetGameViewSize();
             int screenshotW = width;
             int screenshotH = height;
 

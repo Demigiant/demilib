@@ -9,16 +9,18 @@ namespace DG.DemiEditor.DeGUINodeSystem
     public struct DeGUINodeData
     {
         public Rect fullArea, dragArea;
+        public Rect extraArea0;
 
-        public DeGUINodeData(Rect fullArea, Rect dragArea)
+        public DeGUINodeData(Rect fullArea, Rect dragArea, Rect? extraArea0 = null)
         {
             this.fullArea = fullArea;
             this.dragArea = dragArea;
+            this.extraArea0 = extraArea0 == null ? new Rect() : (Rect)extraArea0;
         }
 
         public override string ToString()
         {
-            return string.Format("fullArea: {0} - dragArea: {1}", fullArea, dragArea);
+            return string.Format("fullArea: {0} - dragArea: {1} - extraArea0: {2}", fullArea, dragArea, extraArea0);
         }
     }
 }

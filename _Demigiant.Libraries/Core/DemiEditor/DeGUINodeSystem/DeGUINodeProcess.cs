@@ -60,6 +60,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             } else guiNode = _typeToGUINode[type];
             Vector2 position = new Vector2((int)(node.editor_guiPosition.x + areaShift.x), (int)(node.editor_guiPosition.y + areaShift.y));
             DeGUINodeData guiNodeData = guiNode.GetAreas(position, node);
+
+            // Draw node only if visible in area
             if (NodeIsVisible(guiNodeData.fullArea)) guiNode.OnGUI(guiNodeData, node);
 
             if (Event.current.type == EventType.Layout) _nodeToGUIData.Add(node, guiNodeData);
