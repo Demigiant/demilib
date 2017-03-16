@@ -58,7 +58,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 guiNode = new T { process = this };
                 _typeToGUINode.Add(type, guiNode);
             } else guiNode = _typeToGUINode[type];
-            Vector2 position = new Vector2((int)(node.guiPosition.x + areaShift.x), (int)(node.guiPosition.y + areaShift.y));
+            Vector2 position = new Vector2((int)(node.editor_guiPosition.x + areaShift.x), (int)(node.editor_guiPosition.y + areaShift.y));
             DeGUINodeData guiNodeData = guiNode.GetAreas(position, node);
             if (NodeIsVisible(guiNodeData.fullArea)) guiNode.OnGUI(guiNodeData, node);
 
@@ -103,7 +103,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case 0:
                     if (interactionManager.state == DeGUINodeInteractionManager.State.DraggingNode) {
                         // Drag node
-                        interactionManager.targetNode.guiPosition += Event.current.delta;
+                        interactionManager.targetNode.editor_guiPosition += Event.current.delta;
                         GUI.changed = true;
                         editor.Repaint();
                     }
