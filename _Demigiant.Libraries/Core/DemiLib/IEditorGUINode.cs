@@ -9,6 +9,6 @@ namespace DG.DemiLib
 {
     public interface IEditorGUINode
     {
-        Vector2 editor_guiPosition { get; set; }
+        Vector2 guiPosition { get; set; }
     }
 }

@@ -288,6 +288,9 @@
             Partially independent, mainly controlled by process.
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeInteractionManager.IsDragging(DG.DemiLib.IEditorGUINode)">
+            <summary>Returns TRUE if the given node is currently being dragged</summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess">
             <summary>
             Main class for DeGUI Node system.

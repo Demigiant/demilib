@@ -8,6 +8,7 @@ using DG.DemiLib;
 using UnityEngine;
 using _Examples.DeGUI.DeGUINode;
 
+[ExecuteInEditMode]
 public class DeSampler : MonoBehaviour
 {
     public bool useCustomPalette = true;
@@ -28,6 +29,19 @@ public class DeSampler : MonoBehaviour
 
     public NodeSystem nodeSystem = new NodeSystem();
 
+    void OnEnable()
+    {
+        if (nodeSystem.genericNodes == null) {
+            nodeSystem.genericNodes = new GenericNode[8];
+            for (int i = 0; i < 8; ++i) {
+                GenericNode node = new GenericNode();
+                node.id = i;
+                node.guiPosition = new Vector2(UnityEngine.Random.Range(50, 400), UnityEngine.Random.Range(50, 400));
+                nodeSystem.genericNodes[i] = node;
+            }
+        }
+    }
+
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
     // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
@@ -37,6 +51,7 @@ public class DeSampler : MonoBehaviour
     {
         public Vector2 areaShift;
         public StartNode startNode = new StartNode();
+        public GenericNode[] genericNodes;
     }
 
 }

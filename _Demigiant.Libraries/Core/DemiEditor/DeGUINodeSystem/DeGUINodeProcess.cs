@@ -21,11 +21,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
     {
         public EditorWindow editor { get; private set; }
         public DeGUINodeInteractionManager interactionManager { get; private set; }
+        public DeGUINodeProcessSelection selection { get; private set; }
+        public readonly DeGUINodeProcessOptions options = new DeGUINodeProcessOptions();
         public Rect area { get; private set; }
         public Vector2 areaShift { get; private set; }
 
-        readonly bool _drawBackgroundGrid;
-        readonly bool _forceDarkSkin;
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Dictionary<IEditorGUINode,DeGUINodeData> _nodeToGUIData = new Dictionary<IEditorGUINode,DeGUINodeData>(); // Refilled on Layout event
 
@@ -41,8 +41,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             this.editor = editor;
             interactionManager = new DeGUINodeInteractionManager(this);
-            _drawBackgroundGrid = drawBackgroundGrid;
-            _forceDarkSkin = forceDarkSkin;
+            selection = new DeGUINodeProcessSelection();
+            options.drawBackgroundGrid = drawBackgroundGrid;
+            options.forceDarkSkin = forceDarkSkin;
         }
 
         #endregion
@@ -58,7 +59,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 guiNode = new T { process = this };
                 _typeToGUINode.Add(type, guiNode);
             } else guiNode = _typeToGUINode[type];
-            Vector2 position = new Vector2((int)(node.editor_guiPosition.x + areaShift.x), (int)(node.editor_guiPosition.y + areaShift.y));
+            Vector2 position = new Vector2((int)(node.guiPosition.x + areaShift.x), (int)(node.guiPosition.y + areaShift.y));
             DeGUINodeData guiNodeData = guiNode.GetAreas(position, node);
 
             // Draw node only if visible in area
@@ -86,16 +87,26 @@ namespace DG.DemiEditor.DeGUINodeSystem
             interactionManager.Update();
 
             // Background grid
-            if (_drawBackgroundGrid) DeGUI.BackgroundGrid(area, areaShift, _forceDarkSkin);
+            if (options.drawBackgroundGrid) DeGUI.BackgroundGrid(area, areaShift, options.forceDarkSkin);
 
             // MOUSE EVENTS
             switch (Event.current.type) {
             case EventType.MouseDown:
                 switch (Event.current.button) {
                 case 0:
-                    if (interactionManager.nodeTargetType == DeGUINodeInteractionManager.NodeTargetType.DraggableArea) {
-                        // Mouse pressed on a node's draggable area
-                        interactionManager.SetState(DeGUINodeInteractionManager.State.DraggingNode);
+                    if (interactionManager.mouseTargetType == DeGUINodeInteractionManager.TargetType.Node) {
+                        // LMB pressed on a node
+                        // Select
+                        bool isAlreadySelected = selection.IsSelected(interactionManager.targetNode);
+                        if (Event.current.shift) {
+                            if (isAlreadySelected) selection.Deselect(interactionManager.targetNode);
+                            else selection.Select(interactionManager.targetNode, true);
+                        } else if (!isAlreadySelected) selection.Select(interactionManager.targetNode, false);
+                        //
+                        if (interactionManager.nodeTargetType == DeGUINodeInteractionManager.NodeTargetType.DraggableArea) {
+                            // LMB pressed on a node's draggable area: set state to draggingNodes
+                            interactionManager.SetState(DeGUINodeInteractionManager.State.DraggingNodes);
+                        }
                     }
                     break;
                 }
@@ -103,9 +114,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
             case EventType.MouseDrag:
                 switch (Event.current.button) {
                 case 0:
-                    if (interactionManager.state == DeGUINodeInteractionManager.State.DraggingNode) {
-                        // Drag node
-                        interactionManager.targetNode.editor_guiPosition += Event.current.delta;
+                    if (interactionManager.state == DeGUINodeInteractionManager.State.DraggingNodes) {
+                        // Drag node/s
+                        foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += Event.current.delta;
                         GUI.changed = true;
                         editor.Repaint();
                     }
@@ -136,6 +147,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         #region Methods
 
+        // Store mouse target (even in case of rollovers)
         void StoreMouseTarget()
         {
             if (!area.Contains(Event.current.mousePosition)) {

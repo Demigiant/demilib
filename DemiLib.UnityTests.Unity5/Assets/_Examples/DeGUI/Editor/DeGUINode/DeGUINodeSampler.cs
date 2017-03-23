@@ -6,6 +6,7 @@ using DG.DeExtensions;
 using DG.DemiEditor.DeGUINodeSystem;
 using UnityEditor;
 using UnityEngine;
+using _Examples.DeGUI.DeGUINode;
 
 namespace _Examples.DeGUI.Editor.DeGUINode
 {
@@ -56,7 +57,12 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             // Node GUI Process
             using (new DeGUINodeProcessScope(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift)) {
                 // Draw nodes
+                // Start node
                 _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);
+                // Generic nodes
+                foreach (GenericNode node in src.nodeSystem.genericNodes) {
+                    _nodeProcess.Draw<GenericNodeGUI>(node);
+                }
             }
 
             if (GUI.changed) EditorUtility.SetDirty(src);

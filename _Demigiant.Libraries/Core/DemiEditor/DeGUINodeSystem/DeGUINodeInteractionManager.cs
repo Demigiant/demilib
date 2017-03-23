@@ -19,7 +19,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             Inactive,
             Panning,
             DrawingSelection,
-            DraggingNode
+            DraggingNodes
         }
 
         public enum TargetType
@@ -40,7 +40,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public TargetType mouseTargetType { get; private set; } // Always updated, even no rollover
         public NodeTargetType nodeTargetType { get; private set; }
         public IEditorGUINode targetNode { get; internal set; }
-        public bool mouseTargetIsLocked { get { return state == State.DraggingNode || state == State.Panning; } }
+        public bool mouseTargetIsLocked { get { return state == State.DraggingNodes || state == State.Panning; } }
 
         DeGUINodeProcess _process;
 
@@ -49,6 +49,16 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public DeGUINodeInteractionManager(DeGUINodeProcess process)
         {
             _process = process;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>Returns TRUE if the given node is currently being dragged</summary>
+        public bool IsDragging(IEditorGUINode node)
+        {
+            return state == State.DraggingNodes && targetNode == node;
         }
 
         #endregion
@@ -63,7 +73,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Repaint editor if necessary
             switch (prevState) {
             case State.Panning:
-            case State.DraggingNode:
+            case State.DraggingNodes:
                 _process.editor.Repaint();
                 break;
             }
@@ -81,7 +91,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             case State.Panning:
                 EditorGUIUtility.AddCursorRect(_process.area, MouseCursor.Pan);
                 break;
-            case State.DraggingNode:
+            case State.DraggingNodes:
                 EditorGUIUtility.AddCursorRect(_process.area, MouseCursor.MoveArrow);
                 break;
             }

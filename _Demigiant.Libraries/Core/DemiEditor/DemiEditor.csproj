@@ -60,7 +60,9 @@
     <Compile Include="DeGUINodeSystem\DeGUINodeData.cs" />
     <Compile Include="DeGUINodeSystem\DeGUINodeInteractionManager.cs" />
     <Compile Include="DeGUINodeSystem\DeGUINodeProcess.cs" />
+    <Compile Include="DeGUINodeSystem\DeGUINodeProcessOptions.cs" />
     <Compile Include="DeGUINodeSystem\DeGUINodeProcessScope.cs" />
+    <Compile Include="DeGUINodeSystem\DeGUINodeProcessSelection.cs" />
     <Compile Include="DeSkinStyle.cs" />
     <Compile Include="DeEditorSoundUtils.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
