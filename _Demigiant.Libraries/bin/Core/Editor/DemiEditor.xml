@@ -291,6 +291,12 @@
         <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeInteractionManager.IsDragging(DG.DemiLib.IEditorGUINode)">
             <summary>Returns TRUE if the given node is currently being dragged</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeInteractionManager.Update">
+            <summary>
+            Returns TRUE if a repaint is required
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess">
             <summary>
             Main class for DeGUI Node system.
@@ -320,6 +326,12 @@
             <param name="process">The <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess"/> to use</param>
             <param name="nodeArea">Area within which the nodes will be drawn</param>
             <param name="refAreaShift">Area shift (caused by dragging)</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcessSelection.DeselectAll">
+            <summary>
+            Returns TRUE if something was actually deselected, FALSE if there were no selected nodes
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:DG.DemiEditor.DeSkinStyle">
             <summary>
@@ -913,6 +925,68 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.FlatDivider(UnityEngine.Rect,System.Nullable{UnityEngine.Color})">
             <summary>Divider</summary>
+        </member>
+        <member name="T:DG.DemiEditor.RectExtensions">
+            <summary>
+            Replicates DeExtensions.RectExtensions for internal usage
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.Add(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary>
+            Adds one rect into another, and returns the resulting a
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.Expand(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy or the Rect expanded around its center by the given amount
+            </summary>
+            <param name="amount">Indicates how much to expand the rect on each size</param>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Returns a copy of the Rect resized so it fits proportionally within the given size limits
+            </summary>
+            <param name="w">Width to fit</param>
+            <param name="h">Height to fit</param>
+            <param name="shrinkOnly">If TRUE (default) only shrinks the rect if needed, if FALSE also enlarges it to fit</param>
+            <returns></returns>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.Includes(UnityEngine.Rect,UnityEngine.Rect,System.Boolean)">
+            <summary>
+            Returns TRUE if the first rect includes the second one
+            </summary>
+            <param name="full">If TRUE, returns TRUE only if the second rect is fully included,
+            otherwise just if some part of it is included</param>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.ResetXY(UnityEngine.Rect)">
+            <summary>
+            Returns a copy of the Rect with its X/Y coordinates set to 0
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its values shifted according the the given parameters
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.SetX(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X property set to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.SetY(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its Y property set to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.SetHeight(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its height property set to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.SetWidth(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its width property set to the given value
+            </summary>
         </member>
         <member name="M:DG.DemiEditor.SerializedPropertyExtensions.CastTo``1(UnityEditor.SerializedProperty)">
             <summary>

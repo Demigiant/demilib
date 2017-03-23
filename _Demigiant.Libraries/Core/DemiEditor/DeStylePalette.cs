@@ -53,6 +53,9 @@ namespace DG.DemiEditor
         public static Texture2D blueSquare { get { return LoadTexture(ref _blueSquare, "blueSquare"); } }
         public static Texture2D purpleSquare { get { return LoadTexture(ref _purpleSquare, "purpleSquare"); } }
         public static Texture2D squareBorder { get { return LoadTexture(ref _squareBorder, "squareBorder"); } }
+        public static Texture2D squareBorderEmpty { get { return LoadTexture(ref _squareBorderEmpty, "squareBorderEmpty"); } }
+        public static Texture2D squareBorderThickEmpty { get { return LoadTexture(ref _squareBorderThickEmpty, "squareBorderThickEmpty"); } }
+        public static Texture2D squareBorderAlpha15 { get { return LoadTexture(ref _squareBorderAlpha15, "squareBorderAlpha15"); } }
         public static Texture2D squareBorderCurved { get { return LoadTexture(ref _squareBorderCurved, "squareBorderCurved"); } }
         public static Texture2D squareBorderCurvedEmpty { get { return LoadTexture(ref _squareBorderCurvedEmpty, "squareBorderCurvedEmpty"); } }
         public static Texture2D squareBorderCurvedAlpha { get { return LoadTexture(ref _squareBorderCurvedAlpha, "squareBorderCurvedAlpha"); } }
@@ -80,6 +83,9 @@ namespace DG.DemiEditor
         static Texture2D _blueSquare;
         static Texture2D _purpleSquare;
         static Texture2D _squareBorder;
+        static Texture2D _squareBorderEmpty;
+        static Texture2D _squareBorderThickEmpty;
+        static Texture2D _squareBorderAlpha15;
         static Texture2D _squareBorderCurved;
         static Texture2D _squareBorderCurvedEmpty;
         static Texture2D _squareBorderCurvedAlpha;

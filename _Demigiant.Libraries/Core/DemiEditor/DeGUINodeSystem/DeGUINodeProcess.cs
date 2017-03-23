@@ -28,6 +28,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Dictionary<IEditorGUINode,DeGUINodeData> _nodeToGUIData = new Dictionary<IEditorGUINode,DeGUINodeData>(); // Refilled on Layout event
+        readonly Styles _styles = new Styles();
+        bool _requiresRepaint; // Set to FALSE at each EndGUI
 
         #region CONSTRUCTOR
 
@@ -76,6 +78,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         // Sets <code>GUI.changed</code> to TRUE if the area is panned or a node is dragged.
         internal void BeginGUI(Rect nodeArea, ref Vector2 refAreaShift)
         {
+            _styles.Init();
             area = nodeArea;
             areaShift = refAreaShift;
 
@@ -84,7 +87,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             if (Event.current.type == EventType.Layout) _nodeToGUIData.Clear();
 
             // Update interactionManager
-            interactionManager.Update();
+            if (interactionManager.Update()) _requiresRepaint = true;
 
             // Background grid
             if (options.drawBackgroundGrid) DeGUI.BackgroundGrid(area, areaShift, options.forceDarkSkin);
@@ -94,19 +97,37 @@ namespace DG.DemiEditor.DeGUINodeSystem
             case EventType.MouseDown:
                 switch (Event.current.button) {
                 case 0:
-                    if (interactionManager.mouseTargetType == DeGUINodeInteractionManager.TargetType.Node) {
+                    interactionManager.mousePositionOnLMBPress = Event.current.mousePosition;
+                    switch (interactionManager.mouseTargetType) {
+                    case DeGUINodeInteractionManager.TargetType.Background:
+                        // LMB pressed on background
+                        // Deselect all
+                        if (!Event.current.shift && selection.DeselectAll()) _requiresRepaint = true;
+                        // Start selection drawing
+                        if (Event.current.shift) {
+                            interactionManager.selectionMode = DeGUINodeInteractionManager.SelectionMode.Add;
+                            selection.StoreSnapshot();
+                        }
+                        interactionManager.SetState(DeGUINodeInteractionManager.State.DrawingSelection);
+                        break;
+                    case DeGUINodeInteractionManager.TargetType.Node:
                         // LMB pressed on a node
                         // Select
                         bool isAlreadySelected = selection.IsSelected(interactionManager.targetNode);
                         if (Event.current.shift) {
                             if (isAlreadySelected) selection.Deselect(interactionManager.targetNode);
                             else selection.Select(interactionManager.targetNode, true);
-                        } else if (!isAlreadySelected) selection.Select(interactionManager.targetNode, false);
+                            _requiresRepaint = true;
+                        } else if (!isAlreadySelected) {
+                            selection.Select(interactionManager.targetNode, false);
+                            _requiresRepaint = true;
+                        }
                         //
                         if (interactionManager.nodeTargetType == DeGUINodeInteractionManager.NodeTargetType.DraggableArea) {
                             // LMB pressed on a node's draggable area: set state to draggingNodes
                             interactionManager.SetState(DeGUINodeInteractionManager.State.DraggingNodes);
                         }
+                        break;
                     }
                     break;
                 }
@@ -114,23 +135,47 @@ namespace DG.DemiEditor.DeGUINodeSystem
             case EventType.MouseDrag:
                 switch (Event.current.button) {
                 case 0:
-                    if (interactionManager.state == DeGUINodeInteractionManager.State.DraggingNodes) {
+                    switch (interactionManager.state) {
+                    case DeGUINodeInteractionManager.State.DrawingSelection:
+                        selection.selectionRect = new Rect(
+                            Mathf.Min(interactionManager.mousePositionOnLMBPress.x, Event.current.mousePosition.x),
+                            Mathf.Min(interactionManager.mousePositionOnLMBPress.y, Event.current.mousePosition.y),
+                            Mathf.Abs(Event.current.mousePosition.x - interactionManager.mousePositionOnLMBPress.x),
+                            Mathf.Abs(Event.current.mousePosition.y - interactionManager.mousePositionOnLMBPress.y)
+                        );
+                        if (interactionManager.selectionMode == DeGUINodeInteractionManager.SelectionMode.Add) {
+                            // Add eventual nodes stored when starting to draw
+                            selection.Select(selection.selectedNodesSnapshot, false);
+                        } else selection.DeselectAll();
+                        foreach (KeyValuePair<IEditorGUINode, DeGUINodeData> kvp in _nodeToGUIData) {
+                            if (selection.selectionRect.Includes(kvp.Value.fullArea)) selection.Select(kvp.Key, true);
+                        }
+                        _requiresRepaint = true;
+                        break;
+                    case DeGUINodeInteractionManager.State.DraggingNodes:
                         // Drag node/s
                         foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += Event.current.delta;
-                        GUI.changed = true;
-                        editor.Repaint();
+                        GUI.changed = _requiresRepaint = true;
+                        break;
                     }
                     break;
                 case 2:
                     // Panning
                     interactionManager.SetState(DeGUINodeInteractionManager.State.Panning);
                     refAreaShift = areaShift += Event.current.delta;
-                    GUI.changed = true;
-                    editor.Repaint();
+                    GUI.changed = _requiresRepaint = true;
                     break;
                 }
                 break;
             case EventType.MouseUp:
+                switch (interactionManager.state) {
+                case DeGUINodeInteractionManager.State.DrawingSelection:
+                    interactionManager.selectionMode = DeGUINodeInteractionManager.SelectionMode.Default;
+                    selection.ClearSnapshot();
+                    selection.selectionRect = new Rect();
+                    _requiresRepaint = true;
+                    break;
+                }
                 interactionManager.SetState(DeGUINodeInteractionManager.State.Inactive);
                 break;
             case EventType.ContextClick:
@@ -140,7 +185,30 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         internal void EndGUI()
         {
-            // Unused for now
+            // EVIDENCE SELECTED NODES + DRAW RECTANGULAR SELECTION
+            if (Event.current.type == EventType.Repaint) {
+                // Evidence selected nodes
+                if (options.evidenceSelectedNodes && selection.selectedNodes.Count > 0) {
+                    using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
+                        foreach (IEditorGUINode node in selection.selectedNodes) {
+                            DeGUINodeData data = _nodeToGUIData[node];
+                            GUI.Box(data.fullArea.Expand(3), "", _styles.nodeOutlineThick);
+                        }
+                    }
+                }
+                // Draw selection
+                if (interactionManager.state == DeGUINodeInteractionManager.State.DrawingSelection) {
+                    using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
+                        GUI.Box(selection.selectionRect, "", _styles.selectionRect);
+                    }
+                }
+            }
+
+            // Repaint if necessary
+            if (_requiresRepaint) {
+                editor.Repaint();
+                _requiresRepaint = false;
+            }
         }
 
         #endregion
@@ -184,5 +252,25 @@ namespace DG.DemiEditor.DeGUINodeSystem
         }
 
         #endregion
+
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+        // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+        class Styles
+        {
+            public GUIStyle selectionRect, nodeOutline, nodeOutlineThick;
+            bool _initialized;
+
+            public void Init()
+            {
+                if (_initialized) return;
+
+                _initialized = true;
+                selectionRect = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderAlpha15);
+                nodeOutline = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderEmpty);
+                nodeOutlineThick = nodeOutline.Clone().Border(new RectOffset(5, 5, 5, 5)).Background(DeStylePalette.squareBorderThickEmpty);
+            }
+        }
     }
 }

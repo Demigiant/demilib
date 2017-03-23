@@ -1,12 +1,15 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
-// Created: 2016/08/21 11:57
+// Created: 2017/03/23 12:41
 // License Copyright (c) Daniele Giardini
 
 using UnityEngine;
 
-namespace DG.DeExtensions
+namespace DG.DemiEditor
 {
-    public static class RectExtensions
+    /// <summary>
+    /// Replicates DeExtensions.RectExtensions for internal usage
+    /// </summary>
+    internal static class RectExtensions
     {
         /// <summary>
         /// Adds one rect into another, and returns the resulting a
