@@ -9,6 +9,8 @@ namespace DG.DemiLib
 {
     public interface IEditorGUINode
     {
+        /// <summary>Must be univocal</summary>
+        string id { get; set; }
         Vector2 guiPosition { get; set; }
     }
 }

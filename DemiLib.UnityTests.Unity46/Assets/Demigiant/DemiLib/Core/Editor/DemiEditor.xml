@@ -306,16 +306,25 @@
             - Inside OnGUI, write all your nodes GUI code inside a <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcessScope"/>
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.#ctor(UnityEditor.EditorWindow,System.Boolean,System.Boolean)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.#ctor(UnityEditor.EditorWindow)">
             <summary>
             Creates a new DeGUINodeProcess.
             </summary>
             <param name="editor">EditorWindow for this process</param>
-            <param name="drawBackgroundGrid">If TRUE draws a background grid</param>
-            <param name="forceDarkSkin">If TRUE forces the grid skin to black, otherwise varies based on current Unity free/pro skin</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.Draw``1(DG.DemiLib.IEditorGUINode)">
             <summary>Draws the given node using the given T editor GUINode type</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">
+            <summary>
+            Use this to encapsulate node GUI operations.<para/>
+            Automatically manages area drag operations with middle mouse and node drag operations with left mouse.<para/>
+            Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or sortableNodes changes sorting.
+            </summary>
+            <param name="process">The <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess"/> to use</param>
+            <param name="nodeArea">Area within which the nodes will be drawn</param>
+            <param name="refAreaShift">Area shift (caused by dragging)</param>
+            <param name="sortableNodes">This list will be sorted based on current node draw order</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcessScope.#ctor(DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess,UnityEngine.Rect,UnityEngine.Vector2@)">
             <summary>
@@ -926,23 +935,23 @@
         <member name="M:DG.DemiEditor.DeGUI.FlatDivider(UnityEngine.Rect,System.Nullable{UnityEngine.Color})">
             <summary>Divider</summary>
         </member>
-        <member name="T:DG.DemiEditor.RectExtensions">
+        <member name="T:DG.DemiEditor.Internal.RectExtensions">
             <summary>
             Replicates DeExtensions.RectExtensions for internal usage
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.RectExtensions.Add(UnityEngine.Rect,UnityEngine.Rect)">
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.Add(UnityEngine.Rect,UnityEngine.Rect)">
             <summary>
             Adds one rect into another, and returns the resulting a
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.RectExtensions.Expand(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.Expand(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy or the Rect expanded around its center by the given amount
             </summary>
             <param name="amount">Indicates how much to expand the rect on each size</param>
         </member>
-        <member name="M:DG.DemiEditor.RectExtensions.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
             <summary>
             Returns a copy of the Rect resized so it fits proportionally within the given size limits
             </summary>
@@ -951,39 +960,39 @@
             <param name="shrinkOnly">If TRUE (default) only shrinks the rect if needed, if FALSE also enlarges it to fit</param>
             <returns></returns>
         </member>
-        <member name="M:DG.DemiEditor.RectExtensions.Includes(UnityEngine.Rect,UnityEngine.Rect,System.Boolean)">
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.Includes(UnityEngine.Rect,UnityEngine.Rect,System.Boolean)">
             <summary>
             Returns TRUE if the first rect includes the second one
             </summary>
             <param name="full">If TRUE, returns TRUE only if the second rect is fully included,
             otherwise just if some part of it is included</param>
         </member>
-        <member name="M:DG.DemiEditor.RectExtensions.ResetXY(UnityEngine.Rect)">
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.ResetXY(UnityEngine.Rect)">
             <summary>
             Returns a copy of the Rect with its X/Y coordinates set to 0
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Returns a copy of the Rect with its values shifted according the the given parameters
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.RectExtensions.SetX(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.SetX(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy of the Rect with its X property set to the given value
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.RectExtensions.SetY(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.SetY(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy of the Rect with its Y property set to the given value
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.RectExtensions.SetHeight(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.SetHeight(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy of the Rect with its height property set to the given value
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.RectExtensions.SetWidth(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.SetWidth(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy of the Rect with its width property set to the given value
             </summary>
@@ -1032,6 +1041,16 @@
         <member name="M:DG.DemiEditor.TextureExtensions.SetGUIFormat(UnityEngine.Texture2D,UnityEngine.FilterMode,System.Int32,UnityEngine.TextureWrapMode)">
             <summary>
             Checks that the texture uses the correct import settings, and applies them if they're incorrect.
+            </summary>
+        </member>
+        <member name="T:DG.DeExtensions.ListExtensions">
+            <summary>
+            Replicates parts of DeExtensions.ListExtensions for internal usage
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.ListExtensions.Shift``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32)">
+            <summary>
+            Shifts an item from an index to another, without modifying the list except than by moving elements around
             </summary>
         </member>
     </members>

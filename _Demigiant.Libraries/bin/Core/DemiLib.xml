@@ -92,6 +92,9 @@
             Returns the customizedItem for the given gameObject, or NULL if none was found
             </summary>
         </member>
+        <member name="P:DG.DemiLib.IEditorGUINode.id">
+            <summary>Must be univocal</summary>
+        </member>
         <member name="T:DG.DemiLib.Range">
             <summary>
             A serializable struct including a min and a max float value

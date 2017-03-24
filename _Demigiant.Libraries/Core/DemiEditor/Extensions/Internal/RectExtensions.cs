@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace DG.DemiEditor
+namespace DG.DemiEditor.Internal
 {
     /// <summary>
     /// Replicates DeExtensions.RectExtensions for internal usage

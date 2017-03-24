@@ -36,7 +36,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 Close();
                 return;
             }
-            _nodeProcess = new DeGUINodeProcess(this, true);
+            _nodeProcess = new DeGUINodeProcess(this);
         }
 
         void OnHierarchyChange()
@@ -55,14 +55,14 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             DG.DemiEditor.DeGUI.BeginGUI();
 
             // Node GUI Process
-            using (new DeGUINodeProcessScope(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift)) {
+            using (new DeGUINodeProcessScope<GenericNode>(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
                 // Draw nodes
-                // Start node
-                _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);
                 // Generic nodes
                 foreach (GenericNode node in src.nodeSystem.genericNodes) {
                     _nodeProcess.Draw<GenericNodeGUI>(node);
                 }
+                // Start node (last so it's always over other nodes)
+                _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);
             }
 
             if (GUI.changed) EditorUtility.SetDirty(src);

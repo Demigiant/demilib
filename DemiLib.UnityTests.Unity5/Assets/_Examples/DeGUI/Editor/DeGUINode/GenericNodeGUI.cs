@@ -25,6 +25,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             SetStyles();
             GenericNode node = (GenericNode)iNode;
             GUI.DrawTexture(guiNodeData.fullArea, DeStylePalette.orangeSquare);
+            GUI.Box(guiNodeData.fullArea, "", DG.DemiEditor.DeGUI.styles.box.outline);
             GUI.Label(guiNodeData.fullArea, node.id.ToString(), _labelStyle);
         }
 

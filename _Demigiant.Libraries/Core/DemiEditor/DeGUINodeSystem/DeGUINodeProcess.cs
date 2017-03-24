@@ -4,6 +4,8 @@
 
 using System;
 using System.Collections.Generic;
+using DG.DeExtensions;
+using DG.DemiEditor.Internal;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
@@ -26,8 +28,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Rect area { get; private set; }
         public Vector2 areaShift { get; private set; }
 
-        readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
+        readonly List<IEditorGUINode> _nodes = new List<IEditorGUINode>(); // Used in conjunction with dictionaries to loop them in desired order
         readonly Dictionary<IEditorGUINode,DeGUINodeData> _nodeToGUIData = new Dictionary<IEditorGUINode,DeGUINodeData>(); // Refilled on Layout event
+        readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Styles _styles = new Styles();
         bool _requiresRepaint; // Set to FALSE at each EndGUI
 
@@ -37,15 +40,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// Creates a new DeGUINodeProcess.
         /// </summary>
         /// <param name="editor">EditorWindow for this process</param>
-        /// <param name="drawBackgroundGrid">If TRUE draws a background grid</param>
-        /// <param name="forceDarkSkin">If TRUE forces the grid skin to black, otherwise varies based on current Unity free/pro skin</param>
-        public DeGUINodeProcess(EditorWindow editor, bool drawBackgroundGrid = false, bool forceDarkSkin = false)
+        public DeGUINodeProcess(EditorWindow editor)
         {
             this.editor = editor;
             interactionManager = new DeGUINodeInteractionManager(this);
             selection = new DeGUINodeProcessSelection();
-            options.drawBackgroundGrid = drawBackgroundGrid;
-            options.forceDarkSkin = forceDarkSkin;
         }
 
         #endregion
@@ -67,7 +66,20 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Draw node only if visible in area
             if (NodeIsVisible(guiNodeData.fullArea)) guiNode.OnGUI(guiNodeData, node);
 
-            if (Event.current.type == EventType.Layout) _nodeToGUIData.Add(node, guiNodeData);
+            switch (Event.current.type) {
+            case EventType.Layout:
+                _nodes.Add(node);
+                _nodeToGUIData.Add(node, guiNodeData);
+                break;
+            case EventType.Repaint:
+                // Draw evidence
+                if (options.evidenceSelectedNodes && selection.IsSelected(node)) {
+                    using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
+                        GUI.Box(guiNodeData.fullArea.Expand(3), "", _styles.nodeOutlineThick);
+                    }
+                }
+                break;
+            }
         }
 
         #endregion
@@ -75,8 +87,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         #region Internal Methods
 
         // Updates the main node process.
-        // Sets <code>GUI.changed</code> to TRUE if the area is panned or a node is dragged.
-        internal void BeginGUI(Rect nodeArea, ref Vector2 refAreaShift)
+        // Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or the eventual sortableNodes list is changed.
+        internal void BeginGUI<T>(Rect nodeArea, ref Vector2 refAreaShift, IList<T> sortableNodes = null) where T : IEditorGUINode
         {
             _styles.Init();
             area = nodeArea;
@@ -84,7 +96,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             // Determine mouse target type before clearing nodeGUIData dictionary
             if (!interactionManager.mouseTargetIsLocked) StoreMouseTarget();
-            if (Event.current.type == EventType.Layout) _nodeToGUIData.Clear();
+            if (Event.current.type == EventType.Layout) {
+                _nodes.Clear();
+                _nodeToGUIData.Clear();
+            }
 
             // Update interactionManager
             if (interactionManager.Update()) _requiresRepaint = true;
@@ -127,6 +142,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             // LMB pressed on a node's draggable area: set state to draggingNodes
                             interactionManager.SetState(DeGUINodeInteractionManager.State.DraggingNodes);
                         }
+                        // Update eventual sorting
+                        if (sortableNodes != null) UpdateSorting(sortableNodes);
                         break;
                     }
                     break;
@@ -147,8 +164,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             // Add eventual nodes stored when starting to draw
                             selection.Select(selection.selectedNodesSnapshot, false);
                         } else selection.DeselectAll();
-                        foreach (KeyValuePair<IEditorGUINode, DeGUINodeData> kvp in _nodeToGUIData) {
-                            if (selection.selectionRect.Includes(kvp.Value.fullArea)) selection.Select(kvp.Key, true);
+                        foreach (IEditorGUINode node in _nodes) {
+                            if (selection.selectionRect.Includes(_nodeToGUIData[node].fullArea)) selection.Select(node, true);
                         }
                         _requiresRepaint = true;
                         break;
@@ -188,14 +205,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // EVIDENCE SELECTED NODES + DRAW RECTANGULAR SELECTION
             if (Event.current.type == EventType.Repaint) {
                 // Evidence selected nodes
-                if (options.evidenceSelectedNodes && selection.selectedNodes.Count > 0) {
-                    using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
-                        foreach (IEditorGUINode node in selection.selectedNodes) {
-                            DeGUINodeData data = _nodeToGUIData[node];
-                            GUI.Box(data.fullArea.Expand(3), "", _styles.nodeOutlineThick);
-                        }
-                    }
-                }
+//                if (options.evidenceSelectedNodes && selection.selectedNodes.Count > 0) {
+//                    using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
+//                        foreach (IEditorGUINode node in selection.selectedNodes) {
+//                            GUI.Box(_nodeToGUIData[node].fullArea.Expand(3), "", _styles.nodeOutlineThick);
+//                        }
+//                    }
+//                }
                 // Draw selection
                 if (interactionManager.state == DeGUINodeInteractionManager.State.DrawingSelection) {
                     using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
@@ -224,22 +240,57 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 interactionManager.targetNode = null;
                 return;
             }
-            foreach (KeyValuePair<IEditorGUINode, DeGUINodeData> kvp in _nodeToGUIData) {
-                if (kvp.Value.fullArea.Contains(Event.current.mousePosition)) {
-                    // Mouse on node
-                    interactionManager.targetNode = kvp.Key;
-                    if (_nodeToGUIData[kvp.Key].dragArea.Contains(Event.current.mousePosition)) {
-                        // Mouse on node's drag area
-                        interactionManager.SetMouseTargetType(DeGUINodeInteractionManager.TargetType.Node, DeGUINodeInteractionManager.NodeTargetType.DraggableArea);
-                    } else {
-                        // Mouse on node but outside drag area
-                        interactionManager.SetMouseTargetType(DeGUINodeInteractionManager.TargetType.Node, DeGUINodeInteractionManager.NodeTargetType.NonDraggableArea);
-                    }
-                    return;
-                }
+            for (int i = _nodes.Count - 1; i > -1; --i) {
+                IEditorGUINode node = _nodes[i];
+                DeGUINodeData data = _nodeToGUIData[node];
+                if (!data.fullArea.Contains(Event.current.mousePosition)) continue;
+                // Mouse on node
+                interactionManager.targetNode = node;
+                interactionManager.SetMouseTargetType(
+                    DeGUINodeInteractionManager.TargetType.Node,
+                    data.dragArea.Contains(Event.current.mousePosition)
+                        ? DeGUINodeInteractionManager.NodeTargetType.DraggableArea
+                        : DeGUINodeInteractionManager.NodeTargetType.NonDraggableArea
+                );
+                return;
             }
             interactionManager.SetMouseTargetType(DeGUINodeInteractionManager.TargetType.Background);
             interactionManager.targetNode = null;
+        }
+
+        // Called only if sortableNodes is not NULL and the event is MouseDown
+        void UpdateSorting<T>(IList<T> sortableNodes) where T : IEditorGUINode
+        {
+            int totSelected = selection.selectedNodes.Count;
+            int totSortables = sortableNodes.Count;
+            if (totSelected == 0 || totSortables == 0) return;
+            bool sortingRequired = false;
+            if (totSelected == 1) {
+                // Single selection
+                IEditorGUINode selectedNode = selection.selectedNodes[0];
+                sortingRequired = selectedNode.id != sortableNodes[totSortables - 1].id;
+                if (!sortingRequired) return;
+                for (int i = 0; i < totSortables; ++i) {
+                    if (sortableNodes[i].id != interactionManager.targetNode.id) continue;
+                    sortableNodes.Shift(i, totSortables - 1);
+                    break;
+                }
+            } else {
+                // Multiple selections
+                for (int i = totSortables - 1; i > totSortables - totSelected - 1; --i) {
+                    if (selection.selectedNodes.Contains(sortableNodes[i])) continue;
+                    sortingRequired = true;
+                    break;
+                }
+                if (!sortingRequired) return;
+                int shiftOffset = 0;
+                for (int i = totSortables - 1; i > -1; --i) {
+                    if (!selection.selectedNodes.Contains(sortableNodes[i])) continue;
+                    sortableNodes.Shift(i, totSortables - 1 - shiftOffset);
+                    shiftOffset++;
+                }
+            }
+            GUI.changed = _requiresRepaint = true;
         }
 
         #endregion

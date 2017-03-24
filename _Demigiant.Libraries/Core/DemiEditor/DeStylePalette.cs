@@ -183,8 +183,9 @@ namespace DG.DemiEditor
     public class BoxStyles
     {
         public GUIStyle def,
-                        flat, flatAlpha10, flatAlpha25; // Flat with white background
-        public GUIStyle sticky, stickyTop; // Without any margin (or only top margin)
+                        flat, flatAlpha10, flatAlpha25, // Flat with white background
+                        sticky, stickyTop, // Without any margin (or only top margin)
+                        outline;
 
         internal void Init()
         {
@@ -194,6 +195,7 @@ namespace DG.DemiEditor
             flatAlpha25 = new GUIStyle(def).Background(DeStylePalette.whiteSquareAlpha25);
             sticky = new DeSkinStyle(new GUIStyle(flatAlpha25).MarginTop(-2).MarginBottom(0), new GUIStyle(flatAlpha10).MarginTop(-2).MarginBottom(0));
             stickyTop = new DeSkinStyle(new GUIStyle(flatAlpha25).MarginTop(-2).MarginBottom(7), new GUIStyle(flatAlpha10).MarginTop(-2).MarginBottom(7));
+            outline = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderEmpty);
         }
     }
 

@@ -31,13 +31,13 @@ public class DeSampler : MonoBehaviour
 
     void OnEnable()
     {
-        if (nodeSystem.genericNodes == null) {
-            nodeSystem.genericNodes = new GenericNode[8];
+        if (nodeSystem.genericNodes == null) nodeSystem.genericNodes = new List<GenericNode>();
+        if (nodeSystem.genericNodes.Count == 0) {
             for (int i = 0; i < 8; ++i) {
                 GenericNode node = new GenericNode();
-                node.id = i;
+                node.id = i.ToString();
                 node.guiPosition = new Vector2(UnityEngine.Random.Range(50, 400), UnityEngine.Random.Range(50, 400));
-                nodeSystem.genericNodes[i] = node;
+                nodeSystem.genericNodes.Add(node);
             }
         }
     }
@@ -51,7 +51,7 @@ public class DeSampler : MonoBehaviour
     {
         public Vector2 areaShift;
         public StartNode startNode = new StartNode();
-        public GenericNode[] genericNodes;
+        public List<GenericNode> genericNodes;
     }
 
 }

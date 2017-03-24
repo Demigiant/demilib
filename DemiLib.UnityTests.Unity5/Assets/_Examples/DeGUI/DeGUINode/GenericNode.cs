@@ -11,11 +11,11 @@ namespace _Examples.DeGUI.DeGUINode
     [Serializable]
     public class GenericNode : IEditorGUINode
     {
-        public int id;
+        #region IEditorGUINode
 
-        #region Editor-Only
-
+        [SerializeField] string _id;
         [SerializeField] Vector2 _guiPosition;
+        public string id { get { return _id; } set { _id = value; } }
         public Vector2 guiPosition { get { return _guiPosition; } set { _guiPosition = value; } }
         
         #endregion
