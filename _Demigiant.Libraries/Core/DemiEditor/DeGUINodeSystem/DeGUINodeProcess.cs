@@ -21,10 +21,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
     /// </summary>
     public class DeGUINodeProcess
     {
+        public enum GUIChangeType
+        {
+            None,
+            Pan,
+            DragNodes,
+            SortedNodes
+        }
+
         public EditorWindow editor { get; private set; }
         public DeGUINodeInteractionManager interactionManager { get; private set; }
         public DeGUINodeProcessSelection selection { get; private set; }
         public readonly DeGUINodeProcessOptions options = new DeGUINodeProcessOptions();
+        public GUIChangeType guiChangeType { get; private set; } // Last GUI.changed reason if set by process (reset on process end)
         public Rect area { get; private set; }
         public Vector2 areaShift { get; private set; }
 
@@ -172,6 +181,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     case DeGUINodeInteractionManager.State.DraggingNodes:
                         // Drag node/s
                         foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += Event.current.delta;
+                        guiChangeType = GUIChangeType.DragNodes;
                         GUI.changed = _requiresRepaint = true;
                         break;
                     }
@@ -180,6 +190,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     // Panning
                     interactionManager.SetState(DeGUINodeInteractionManager.State.Panning);
                     refAreaShift = areaShift += Event.current.delta;
+                    guiChangeType = GUIChangeType.Pan;
                     GUI.changed = _requiresRepaint = true;
                     break;
                 }
@@ -204,14 +215,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             // EVIDENCE SELECTED NODES + DRAW RECTANGULAR SELECTION
             if (Event.current.type == EventType.Repaint) {
-                // Evidence selected nodes
-//                if (options.evidenceSelectedNodes && selection.selectedNodes.Count > 0) {
-//                    using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
-//                        foreach (IEditorGUINode node in selection.selectedNodes) {
-//                            GUI.Box(_nodeToGUIData[node].fullArea.Expand(3), "", _styles.nodeOutlineThick);
-//                        }
-//                    }
-//                }
                 // Draw selection
                 if (interactionManager.state == DeGUINodeInteractionManager.State.DrawingSelection) {
                     using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
@@ -219,6 +222,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     }
                 }
             }
+
+            // Clean
+            guiChangeType = GUIChangeType.None;
 
             // Repaint if necessary
             if (_requiresRepaint) {
@@ -290,6 +296,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     shiftOffset++;
                 }
             }
+            guiChangeType = GUIChangeType.SortedNodes;
             GUI.changed = _requiresRepaint = true;
         }
 
