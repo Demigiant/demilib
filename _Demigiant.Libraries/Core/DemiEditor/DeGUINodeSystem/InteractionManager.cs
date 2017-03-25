@@ -9,10 +9,10 @@ using UnityEngine;
 namespace DG.DemiEditor.DeGUINodeSystem
 {
     /// <summary>
-    /// One per <see cref="DeGUINodeProcess"/>.
+    /// One per <see cref="NodeProcess"/>.
     /// Partially independent, mainly controlled by process.
     /// </summary>
-    public class DeGUINodeInteractionManager
+    public class InteractionManager
     {
         public enum State
         {
@@ -43,12 +43,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public bool mouseTargetIsLocked { get { return state == State.DraggingNodes || state == State.Panning; } }
         public Vector2 mousePositionOnLMBPress { get; internal set; } // Stored mouse position last time LMB was pressed
 
-        DeGUINodeProcess _process;
+        NodeProcess _process;
         MouseCursor _currMouseCursor;
 
         #region CONSTRUCTOR
 
-        public DeGUINodeInteractionManager(DeGUINodeProcess process)
+        public InteractionManager(NodeProcess process)
         {
             _process = process;
         }
@@ -101,10 +101,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 break;
             case State.DrawingSelection:
                 switch (_process.selection.selectionMode) {
-                case DeGUISelectionMode.Add:
+                case SelectionManager.Mode.Add:
                     _currMouseCursor = MouseCursor.ArrowPlus;
                     break;
-                case DeGUISelectionMode.Subtract:
+                case SelectionManager.Mode.Subtract:
                     _currMouseCursor = MouseCursor.ArrowMinus;
                     break;
                 }

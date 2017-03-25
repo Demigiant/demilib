@@ -14,19 +14,19 @@ namespace _Examples.DeGUI.Editor.DeGUINode
     {
         GUIStyle _labelStyle;
 
-        protected override DeGUINodeData GetAreas(Vector2 position, IEditorGUINode iNode)
+        protected override NodeGUIData GetAreas(Vector2 position, IEditorGUINode iNode)
         {
             Rect fullR = new Rect(position.x, position.y, 100, 70);
-            return new DeGUINodeData(fullR, fullR);
+            return new NodeGUIData(fullR, fullR);
         }
 
-        protected override void OnGUI(DeGUINodeData guiNodeData, IEditorGUINode iNode)
+        protected override void OnGUI(NodeGUIData nodeGuiData, IEditorGUINode iNode)
         {
             SetStyles();
             GenericNode node = (GenericNode)iNode;
-            GUI.DrawTexture(guiNodeData.fullArea, DeStylePalette.orangeSquare);
-            GUI.Box(guiNodeData.fullArea, "", DG.DemiEditor.DeGUI.styles.box.outline);
-            GUI.Label(guiNodeData.fullArea, node.id.ToString(), _labelStyle);
+            GUI.DrawTexture(nodeGuiData.fullArea, DeStylePalette.orangeSquare);
+            GUI.Box(nodeGuiData.fullArea, "", DG.DemiEditor.DeGUI.styles.box.outline);
+            GUI.Label(nodeGuiData.fullArea, node.id.ToString(), _labelStyle);
         }
 
         void SetStyles()

@@ -6,12 +6,12 @@ using UnityEngine;
 
 namespace DG.DemiEditor.DeGUINodeSystem
 {
-    public struct DeGUINodeData
+    public struct NodeGUIData
     {
         public Rect fullArea, dragArea;
         public Rect extraArea0;
 
-        public DeGUINodeData(Rect fullArea, Rect dragArea, Rect? extraArea0 = null)
+        public NodeGUIData(Rect fullArea, Rect dragArea, Rect? extraArea0 = null)
         {
             this.fullArea = fullArea;
             this.dragArea = dragArea;

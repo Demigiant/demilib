@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DG.DemiEditor.DeGUINodeSystem
 {
-    public class DeGUINodeProcessOptions
+    public class ProcessOptions
     {
         public bool drawBackgroundGrid = true;
         public bool forceDarkSkin = false;

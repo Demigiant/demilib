@@ -13,15 +13,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
     /// </summary>
     public abstract class ABSDeGUINode
     {
-        internal DeGUINodeProcess process; // Set by DeGUINodeProcess when instantiating this
+        internal NodeProcess process; // Set by NodeProcess when instantiating this
         
         #region Internal Methods
 
-        /// <summary>Used to fill <see cref="DeGUINodeData"/></summary>
-        protected internal abstract DeGUINodeData GetAreas(Vector2 position, IEditorGUINode iNode);
+        /// <summary>Used to fill <see cref="NodeGUIData"/></summary>
+        protected internal abstract NodeGUIData GetAreas(Vector2 position, IEditorGUINode iNode);
 
         /// <summary>Called only if the node is visible in the current area</summary>
-        protected internal abstract void OnGUI(DeGUINodeData guiNodeData, IEditorGUINode iNode);
+        protected internal abstract void OnGUI(NodeGUIData nodeGuiData, IEditorGUINode iNode);
 
         #endregion
     }

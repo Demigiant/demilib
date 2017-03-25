@@ -8,9 +8,16 @@ using UnityEngine;
 
 namespace DG.DemiEditor.DeGUINodeSystem
 {
-    public class DeGUINodeProcessSelection
+    public class SelectionManager
     {
-        public DeGUISelectionMode selectionMode { get; internal set; }
+        public enum Mode
+        {
+            Default,
+            Add,
+            Subtract
+        }
+
+        public Mode selectionMode { get; internal set; }
         public readonly List<IEditorGUINode> selectedNodes = new List<IEditorGUINode>();
         internal readonly List<IEditorGUINode> selectedNodesSnapshot = new List<IEditorGUINode>(); // Used by process to store snapshot before starting a new selection
         internal Rect selectionRect; // Updated by process when drawing selection via mouse

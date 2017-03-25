@@ -12,15 +12,15 @@ namespace _Examples.DeGUI.Editor.DeGUINode
 {
     public class StartNodeGUI : ABSDeGUINode
     {
-        protected override DeGUINodeData GetAreas(Vector2 position, IEditorGUINode iNode)
+        protected override NodeGUIData GetAreas(Vector2 position, IEditorGUINode iNode)
         {
             Rect fullR = new Rect(position.x, position.y, DeStylePalette.ico_play.width, DeStylePalette.ico_play.height);
-            return new DeGUINodeData(fullR, fullR);
+            return new NodeGUIData(fullR, fullR);
         }
 
-        protected override void OnGUI(DeGUINodeData guiNodeData, IEditorGUINode iNode)
+        protected override void OnGUI(NodeGUIData nodeGuiData, IEditorGUINode iNode)
         {
-            GUI.DrawTexture(guiNodeData.fullArea, DeStylePalette.ico_play);
+            GUI.DrawTexture(nodeGuiData.fullArea, DeStylePalette.ico_play);
         }
     }
 }

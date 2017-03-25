@@ -8,20 +8,20 @@ using UnityEngine;
 
 namespace DG.DemiEditor.DeGUINodeSystem
 {
-    public class DeGUINodeProcessScope<T> : DeScope where T : IEditorGUINode
+    public class NodeProcessScope<T> : DeScope where T : IEditorGUINode
     {
-        DeGUINodeProcess _process;
+        NodeProcess _process;
 
         /// <summary>
         /// Use this to encapsulate node GUI operations.<para/>
         /// Automatically manages area drag operations with middle mouse and node drag operations with left mouse.<para/>
         /// Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or sortableNodes changes sorting.
         /// </summary>
-        /// <param name="process">The <see cref="DeGUINodeProcess"/> to use</param>
+        /// <param name="process">The <see cref="NodeProcess"/> to use</param>
         /// <param name="nodeArea">Area within which the nodes will be drawn</param>
         /// <param name="refAreaShift">Area shift (caused by dragging)</param>
         /// <param name="sortableNodes">This list will be sorted based on current node draw order</param>
-        public DeGUINodeProcessScope(DeGUINodeProcess process, Rect nodeArea, ref Vector2 refAreaShift, IList<T> sortableNodes = null)
+        public NodeProcessScope(NodeProcess process, Rect nodeArea, ref Vector2 refAreaShift, IList<T> sortableNodes = null)
         {
             _process = process;
             _process.BeginGUI(nodeArea, ref refAreaShift, sortableNodes);
@@ -35,19 +35,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
         }
     }
 
-    public class DeGUINodeProcessScope : DeScope
+    public class NodeProcessScope : DeScope
     {
-        DeGUINodeProcess _process;
+        NodeProcess _process;
 
         /// <summary>
         /// Use this to encapsulate node GUI operations.<para/>
         /// Automatically manages area drag operations with middle mouse and node drag operations with left mouse.<para/>
         /// Sets <code>GUI.changed</code> to TRUE if the area is panned or a node is dragged.
         /// </summary>
-        /// <param name="process">The <see cref="DeGUINodeProcess"/> to use</param>
+        /// <param name="process">The <see cref="NodeProcess"/> to use</param>
         /// <param name="nodeArea">Area within which the nodes will be drawn</param>
         /// <param name="refAreaShift">Area shift (caused by dragging)</param>
-        public DeGUINodeProcessScope(DeGUINodeProcess process, Rect nodeArea, ref Vector2 refAreaShift)
+        public NodeProcessScope(NodeProcess process, Rect nodeArea, ref Vector2 refAreaShift)
         {
             _process = process;
             _process.BeginGUI<IEditorGUINode>(nodeArea, ref refAreaShift);

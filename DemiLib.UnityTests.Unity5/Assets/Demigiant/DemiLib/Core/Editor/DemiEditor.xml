@@ -277,66 +277,66 @@
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode.GetAreas(UnityEngine.Vector2,DG.DemiLib.IEditorGUINode)">
-            <summary>Used to fill <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeData"/></summary>
+            <summary>Used to fill <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeGUIData"/></summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode.OnGUI(DG.DemiEditor.DeGUINodeSystem.DeGUINodeData,DG.DemiLib.IEditorGUINode)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode.OnGUI(DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiLib.IEditorGUINode)">
             <summary>Called only if the node is visible in the current area</summary>
         </member>
-        <member name="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeInteractionManager">
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.InteractionManager">
             <summary>
-            One per <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess"/>.
+            One per <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/>.
             Partially independent, mainly controlled by process.
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeInteractionManager.IsDragging(DG.DemiLib.IEditorGUINode)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.IsDragging(DG.DemiLib.IEditorGUINode)">
             <summary>Returns TRUE if the given node is currently being dragged</summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeInteractionManager.Update">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.Update">
             <summary>
             Returns TRUE if a repaint is required
             </summary>
             <returns></returns>
         </member>
-        <member name="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess">
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess">
             <summary>
             Main class for DeGUI Node system.
-            Create it, then enclose your GUI node calls inside a <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcessScope"/>.<para/>
+            Create it, then enclose your GUI node calls inside a <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope"/>.<para/>
             CODING ORDER:<para/>
-            - Create a <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess"/> to use for your node system (create it once, obviously)<para/>
-            - Inside OnGUI, write all your nodes GUI code inside a <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcessScope"/>
+            - Create a <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/> to use for your node system (create it once, obviously)<para/>
+            - Inside OnGUI, write all your nodes GUI code inside a <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope"/>
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.#ctor(UnityEditor.EditorWindow)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.#ctor(UnityEditor.EditorWindow)">
             <summary>
-            Creates a new DeGUINodeProcess.
+            Creates a new NodeProcess.
             </summary>
             <param name="editor">EditorWindow for this process</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess.Draw``1(DG.DemiLib.IEditorGUINode)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Draw``1(DG.DemiLib.IEditorGUINode)">
             <summary>Draws the given node using the given T editor GUINode type</summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.NodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">
             <summary>
             Use this to encapsulate node GUI operations.<para/>
             Automatically manages area drag operations with middle mouse and node drag operations with left mouse.<para/>
             Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or sortableNodes changes sorting.
             </summary>
-            <param name="process">The <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess"/> to use</param>
+            <param name="process">The <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/> to use</param>
             <param name="nodeArea">Area within which the nodes will be drawn</param>
             <param name="refAreaShift">Area shift (caused by dragging)</param>
             <param name="sortableNodes">This list will be sorted based on current node draw order</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcessScope.#ctor(DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess,UnityEngine.Rect,UnityEngine.Vector2@)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope.#ctor(DG.DemiEditor.DeGUINodeSystem.NodeProcess,UnityEngine.Rect,UnityEngine.Vector2@)">
             <summary>
             Use this to encapsulate node GUI operations.<para/>
             Automatically manages area drag operations with middle mouse and node drag operations with left mouse.<para/>
             Sets <code>GUI.changed</code> to TRUE if the area is panned or a node is dragged.
             </summary>
-            <param name="process">The <see cref="T:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcess"/> to use</param>
+            <param name="process">The <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/> to use</param>
             <param name="nodeArea">Area within which the nodes will be drawn</param>
             <param name="refAreaShift">Area shift (caused by dragging)</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.DeGUINodeProcessSelection.DeselectAll">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.SelectionManager.DeselectAll">
             <summary>
             Returns TRUE if something was actually deselected, FALSE if there were no selected nodes
             </summary>

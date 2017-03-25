@@ -14,7 +14,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
     {
         const string _Title = "DeGUINodeSampler";
         static DeSampler src;
-        DeGUINodeProcess _nodeProcess;
+        NodeProcess _nodeProcess;
 
         #region Open
 
@@ -36,7 +36,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 Close();
                 return;
             }
-            _nodeProcess = new DeGUINodeProcess(this);
+            _nodeProcess = new NodeProcess(this);
         }
 
         void OnHierarchyChange()
@@ -55,7 +55,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             DG.DemiEditor.DeGUI.BeginGUI();
 
             // Node GUI Process
-            using (new DeGUINodeProcessScope<GenericNode>(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
+            using (new NodeProcessScope<GenericNode>(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
                 // Draw nodes
                 // Generic nodes
                 foreach (GenericNode node in src.nodeSystem.genericNodes) {
