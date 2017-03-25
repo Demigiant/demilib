@@ -22,6 +22,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
             DraggingNodes
         }
 
+        // Recorded on mouse down, indicates how the state will change if the user drags the mouse instead of releasing it
+        public enum ReadyFor
+        {
+            Unset,
+            Panning,
+            DrawingSelection,
+            DraggingNodes
+        }
+
         public enum TargetType
         {
             None,
@@ -37,6 +46,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         }
 
         public State state { get; private set; }
+        public ReadyFor readyForState { get; private set; }
         public TargetType mouseTargetType { get; private set; } // Always updated, even on rollover
         public NodeTargetType nodeTargetType { get; private set; }
         public IEditorGUINode targetNode { get; internal set; }
@@ -67,10 +77,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         #region Internal Methods
 
-        internal void SetState(State toState)
+        internal void SetState(State toState, bool resetReadyFor = false)
         {
             State prevState = state;
             state = toState;
+            if (resetReadyFor) readyForState = ReadyFor.Unset;
 
             // Repaint editor if necessary
             switch (prevState) {
@@ -79,6 +90,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _process.editor.Repaint();
                 break;
             }
+        }
+
+        internal void SetReadyFor(ReadyFor value)
+        {
+            readyForState = value;
         }
 
         internal void SetMouseTargetType(TargetType targetType, NodeTargetType nodeTargetType = NodeTargetType.None)

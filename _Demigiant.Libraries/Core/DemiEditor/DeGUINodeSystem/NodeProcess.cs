@@ -132,7 +132,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             selection.selectionMode = SelectionManager.Mode.Add;
                             selection.StoreSnapshot();
                         }
-                        interactionManager.SetState(InteractionManager.State.DrawingSelection);
+                        interactionManager.SetReadyFor(InteractionManager.ReadyFor.DrawingSelection);
                         break;
                     case InteractionManager.TargetType.Node:
                         // LMB pressed on a node
@@ -149,7 +149,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         //
                         if (interactionManager.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
                             // LMB pressed on a node's draggable area: set state to draggingNodes
-                            interactionManager.SetState(InteractionManager.State.DraggingNodes);
+                            interactionManager.SetReadyFor(InteractionManager.ReadyFor.DraggingNodes);
                         }
                         // Update eventual sorting
                         if (sortableNodes != null) UpdateSorting(sortableNodes);
@@ -159,6 +159,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 break;
             case EventType.MouseDrag:
+                switch (interactionManager.readyForState) {
+                case InteractionManager.ReadyFor.DrawingSelection:
+                    interactionManager.SetState(InteractionManager.State.DrawingSelection, true);
+                    break;
+                case InteractionManager.ReadyFor.DraggingNodes:
+                    interactionManager.SetState(InteractionManager.State.DraggingNodes, true);
+                    break;
+                }
                 switch (Event.current.button) {
                 case 0:
                     switch (interactionManager.state) {
@@ -204,7 +212,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     _requiresRepaint = true;
                     break;
                 }
-                interactionManager.SetState(InteractionManager.State.Inactive);
+                interactionManager.SetState(InteractionManager.State.Inactive, true);
                 break;
             case EventType.ContextClick:
                 break;
