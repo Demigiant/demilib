@@ -129,7 +129,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         if (!Event.current.shift && selection.DeselectAll()) _requiresRepaint = true;
                         // Start selection drawing
                         if (Event.current.shift) {
-                            interactionManager.selectionMode = DeGUINodeInteractionManager.SelectionMode.Add;
+                            selection.selectionMode = DeGUISelectionMode.Add;
                             selection.StoreSnapshot();
                         }
                         interactionManager.SetState(DeGUINodeInteractionManager.State.DrawingSelection);
@@ -169,7 +169,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             Mathf.Abs(Event.current.mousePosition.x - interactionManager.mousePositionOnLMBPress.x),
                             Mathf.Abs(Event.current.mousePosition.y - interactionManager.mousePositionOnLMBPress.y)
                         );
-                        if (interactionManager.selectionMode == DeGUINodeInteractionManager.SelectionMode.Add) {
+                        if (selection.selectionMode == DeGUISelectionMode.Add) {
                             // Add eventual nodes stored when starting to draw
                             selection.Select(selection.selectedNodesSnapshot, false);
                         } else selection.DeselectAll();
@@ -198,7 +198,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             case EventType.MouseUp:
                 switch (interactionManager.state) {
                 case DeGUINodeInteractionManager.State.DrawingSelection:
-                    interactionManager.selectionMode = DeGUINodeInteractionManager.SelectionMode.Default;
+                    selection.selectionMode = DeGUISelectionMode.Default;
                     selection.ClearSnapshot();
                     selection.selectionRect = new Rect();
                     _requiresRepaint = true;

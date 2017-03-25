@@ -36,18 +36,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
             NonDraggableArea
         }
 
-        public enum SelectionMode
-        {
-            Default,
-            Add,
-            Subtract
-        }
-
         public State state { get; private set; }
-        public TargetType mouseTargetType { get; private set; } // Always updated, even no rollover
+        public TargetType mouseTargetType { get; private set; } // Always updated, even on rollover
         public NodeTargetType nodeTargetType { get; private set; }
         public IEditorGUINode targetNode { get; internal set; }
-        public SelectionMode selectionMode { get; internal set; }
         public bool mouseTargetIsLocked { get { return state == State.DraggingNodes || state == State.Panning; } }
         public Vector2 mousePositionOnLMBPress { get; internal set; } // Stored mouse position last time LMB was pressed
 
@@ -108,11 +100,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _currMouseCursor = MouseCursor.Pan;
                 break;
             case State.DrawingSelection:
-                switch (selectionMode) {
-                case SelectionMode.Add:
+                switch (_process.selection.selectionMode) {
+                case DeGUISelectionMode.Add:
                     _currMouseCursor = MouseCursor.ArrowPlus;
                     break;
-                case SelectionMode.Subtract:
+                case DeGUISelectionMode.Subtract:
                     _currMouseCursor = MouseCursor.ArrowMinus;
                     break;
                 }
@@ -126,9 +118,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 break;
             }
 
-            if (_currMouseCursor != MouseCursor.Arrow) {
-                EditorGUIUtility.AddCursorRect(_process.area, _currMouseCursor);
-            }
+            if (_currMouseCursor != MouseCursor.Arrow) EditorGUIUtility.AddCursorRect(_process.area, _currMouseCursor);
             return _currMouseCursor == prevMouseCursor;
         }
 
