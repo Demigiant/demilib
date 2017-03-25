@@ -63,6 +63,13 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 }
                 // Start node (last so it's always over other nodes)
                 _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);
+
+                // Log process state
+                switch (_nodeProcess.interactionManager.state) {
+                case InteractionManager.State.DoubleClick:
+                    Debug.Log("<color=#00ff00>DoubleClick > " + _nodeProcess.interactionManager.mouseTargetType + (_nodeProcess.interactionManager.targetNode == null ? "" : " > " + _nodeProcess.interactionManager.targetNode.id) + "</color>");
+                    break;
+                }
             }
 
             if (GUI.changed) EditorUtility.SetDirty(src);
