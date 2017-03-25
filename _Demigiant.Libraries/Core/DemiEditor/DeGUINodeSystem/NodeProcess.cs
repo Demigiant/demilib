@@ -41,7 +41,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Dictionary<IEditorGUINode,NodeGUIData> _nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Styles _styles = new Styles();
-        bool _requiresRepaint; // Set to FALSE at each EndGUI
+        bool _repaintOnEnd; // Set to FALSE at each EndGUI
+        bool _resetInteractionOnEnd;
 
         #region CONSTRUCTOR
 
@@ -111,7 +112,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             }
 
             // Update interactionManager
-            if (interactionManager.Update()) _requiresRepaint = true;
+            if (interactionManager.Update()) _repaintOnEnd = true;
 
             // Background grid
             if (options.drawBackgroundGrid) DeGUI.BackgroundGrid(area, areaShift, options.forceDarkSkin);
@@ -126,7 +127,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     case InteractionManager.TargetType.Background:
                         // LMB pressed on background
                         // Deselect all
-                        if (!Event.current.shift && selection.DeselectAll()) _requiresRepaint = true;
+                        if (!Event.current.shift && selection.DeselectAll()) _repaintOnEnd = true;
                         // Start selection drawing
                         if (Event.current.shift) {
                             selection.selectionMode = SelectionManager.Mode.Add;
@@ -141,10 +142,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         if (Event.current.shift) {
                             if (isAlreadySelected) selection.Deselect(interactionManager.targetNode);
                             else selection.Select(interactionManager.targetNode, true);
-                            _requiresRepaint = true;
+                            _repaintOnEnd = true;
                         } else if (!isAlreadySelected) {
                             selection.Select(interactionManager.targetNode, false);
-                            _requiresRepaint = true;
+                            _repaintOnEnd = true;
                         }
                         //
                         if (interactionManager.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
@@ -184,13 +185,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         foreach (IEditorGUINode node in _nodes) {
                             if (selection.selectionRect.Includes(_nodeToGUIData[node].fullArea)) selection.Select(node, true);
                         }
-                        _requiresRepaint = true;
+                        _repaintOnEnd = true;
                         break;
                     case InteractionManager.State.DraggingNodes:
                         // Drag node/s
                         foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += Event.current.delta;
                         guiChangeType = GUIChangeType.DragNodes;
-                        GUI.changed = _requiresRepaint = true;
+                        GUI.changed = _repaintOnEnd = true;
                         break;
                     }
                     break;
@@ -199,7 +200,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     interactionManager.SetState(InteractionManager.State.Panning);
                     refAreaShift = areaShift += Event.current.delta;
                     guiChangeType = GUIChangeType.Pan;
-                    GUI.changed = _requiresRepaint = true;
+                    GUI.changed = _repaintOnEnd = true;
                     break;
                 }
                 break;
@@ -209,12 +210,18 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     selection.selectionMode = SelectionManager.Mode.Default;
                     selection.ClearSnapshot();
                     selection.selectionRect = new Rect();
-                    _requiresRepaint = true;
+                    _repaintOnEnd = true;
                     break;
                 }
-                interactionManager.SetState(InteractionManager.State.Inactive, true);
+                bool isLMBDoubleClick = interactionManager.EvaluateMouseUp();
+                if (isLMBDoubleClick) {
+                    interactionManager.SetState(InteractionManager.State.DoubleClick, true);
+                    _resetInteractionOnEnd = true;
+                } else interactionManager.SetState(InteractionManager.State.Inactive);
                 break;
             case EventType.ContextClick:
+                interactionManager.SetState(InteractionManager.State.ContextClick);
+                _resetInteractionOnEnd = true;
                 break;
             }
         }
@@ -234,10 +241,16 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Clean
             guiChangeType = GUIChangeType.None;
 
-            // Repaint if necessary
-            if (_requiresRepaint) {
+            // EXTRA END ACTIONS
+            // Reset interaction
+            if (_resetInteractionOnEnd) {
+                _resetInteractionOnEnd = false;
+                interactionManager.SetState(InteractionManager.State.Inactive);
+            }
+            // Repaint
+            if (_repaintOnEnd) {
+                _repaintOnEnd = false;
                 editor.Repaint();
-                _requiresRepaint = false;
             }
         }
 
@@ -305,7 +318,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
             }
             guiChangeType = GUIChangeType.SortedNodes;
-            GUI.changed = _requiresRepaint = true;
+            GUI.changed = _repaintOnEnd = true;
         }
 
         #endregion

@@ -19,7 +19,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
             Inactive,
             Panning,
             DrawingSelection,
-            DraggingNodes
+            DraggingNodes,
+            ContextClick,
+            DoubleClick // Only if valid (meaning on same target it started)
         }
 
         // Recorded on mouse down, indicates how the state will change if the user drags the mouse instead of releasing it
@@ -53,8 +55,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public bool mouseTargetIsLocked { get { return state == State.DraggingNodes || state == State.Panning; } }
         public Vector2 mousePositionOnLMBPress { get; internal set; } // Stored mouse position last time LMB was pressed
 
-        NodeProcess _process;
+        const float _DoubleClickTime = 0.5f;
+        readonly NodeProcess _process;
         MouseCursor _currMouseCursor;
+        MouseSnapshot _lastLMBUpSnapshot;
 
         #region CONSTRUCTOR
 
@@ -103,6 +107,28 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.nodeTargetType = nodeTargetType;
         }
 
+        // Used to evaluate correct state on mouseUp and eventual LMB double-click.
+        // Returns TRUE if a valid double-click happened.
+        internal bool EvaluateMouseUp()
+        {
+            if (Event.current.button != 0) {
+                // Right or Middle mouse button pressed: reset double-click counter
+                _lastLMBUpSnapshot.Reset();
+                return false;
+            }
+            bool isDoubleClick = _lastLMBUpSnapshot.time > 0f
+                                 && Time.realtimeSinceStartup - _lastLMBUpSnapshot.time <= _DoubleClickTime
+                                 && _lastLMBUpSnapshot.mouseTargetType == mouseTargetType
+                                 && (mouseTargetType != TargetType.Node || targetNode.id == _lastLMBUpSnapshot.targetNodeId);
+            if (isDoubleClick) {
+                _lastLMBUpSnapshot.Reset();
+                return true;
+            }
+            // First click
+            _lastLMBUpSnapshot = new MouseSnapshot(Time.realtimeSinceStartup, mouseTargetType, targetNode == null ? null : targetNode.id);
+            return false;
+        }
+
         /// <summary>
         /// Returns TRUE if a repaint is required
         /// </summary>
@@ -139,5 +165,30 @@ namespace DG.DemiEditor.DeGUINodeSystem
         }
 
         #endregion
+
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+        // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+        struct MouseSnapshot
+        {
+            public float time;
+            public TargetType mouseTargetType;
+            public string targetNodeId;
+
+            public MouseSnapshot(float time, TargetType mouseTargetType, string targetNodeId)
+            {
+                this.time = time;
+                this.mouseTargetType = mouseTargetType;
+                this.targetNodeId = targetNodeId;
+            }
+
+            public void Reset()
+            {
+                time = 0;
+                mouseTargetType = TargetType.None;
+                targetNodeId = null;
+            }
+        }
     }
 }
