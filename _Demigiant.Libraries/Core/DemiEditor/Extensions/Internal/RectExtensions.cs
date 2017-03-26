@@ -34,6 +34,16 @@ namespace DG.DemiEditor.Internal
         }
 
         /// <summary>
+        /// Returns a copy or the Rect contracted around its center by the given amount
+        /// </summary>
+        /// <param name="amount">Indicates how much to contract the rect on each size</param>
+        public static Rect Contract(this Rect r, float amount)
+        {
+            float exSize = amount * 2;
+            return r.Shift(amount, amount, -exSize, -exSize);
+        }
+
+        /// <summary>
         /// Returns a copy of the Rect resized so it fits proportionally within the given size limits
         /// </summary>
         /// <param name="w">Width to fit</param>

@@ -53,8 +53,9 @@ namespace DG.DemiEditor
         public static Texture2D blueSquare { get { return LoadTexture(ref _blueSquare, "blueSquare"); } }
         public static Texture2D purpleSquare { get { return LoadTexture(ref _purpleSquare, "purpleSquare"); } }
         public static Texture2D squareBorder { get { return LoadTexture(ref _squareBorder, "squareBorder"); } }
-        public static Texture2D squareBorderEmpty { get { return LoadTexture(ref _squareBorderEmpty, "squareBorderEmpty"); } }
-        public static Texture2D squareBorderThickEmpty { get { return LoadTexture(ref _squareBorderThickEmpty, "squareBorderThickEmpty"); } }
+        public static Texture2D squareBorderEmpty01 { get { return LoadTexture(ref _squareBorderEmpty01, "squareBorderEmpty01"); } }
+        public static Texture2D squareBorderEmpty02 { get { return LoadTexture(ref _squareBorderEmpty02, "squareBorderEmpty02"); } }
+        public static Texture2D squareBorderEmpty03 { get { return LoadTexture(ref _squareBorderEmpty03, "squareBorderEmpty03"); } }
         public static Texture2D squareBorderAlpha15 { get { return LoadTexture(ref _squareBorderAlpha15, "squareBorderAlpha15"); } }
         public static Texture2D squareBorderCurved { get { return LoadTexture(ref _squareBorderCurved, "squareBorderCurved"); } }
         public static Texture2D squareBorderCurvedEmpty { get { return LoadTexture(ref _squareBorderCurvedEmpty, "squareBorderCurvedEmpty"); } }
@@ -83,8 +84,9 @@ namespace DG.DemiEditor
         static Texture2D _blueSquare;
         static Texture2D _purpleSquare;
         static Texture2D _squareBorder;
-        static Texture2D _squareBorderEmpty;
-        static Texture2D _squareBorderThickEmpty;
+        static Texture2D _squareBorderEmpty01;
+        static Texture2D _squareBorderEmpty02;
+        static Texture2D _squareBorderEmpty03;
         static Texture2D _squareBorderAlpha15;
         static Texture2D _squareBorderCurved;
         static Texture2D _squareBorderCurvedEmpty;
@@ -185,7 +187,7 @@ namespace DG.DemiEditor
         public GUIStyle def,
                         flat, flatAlpha10, flatAlpha25, // Flat with white background
                         sticky, stickyTop, // Without any margin (or only top margin)
-                        outline;
+                        outline01, outline02, outline03;
 
         internal void Init()
         {
@@ -195,7 +197,9 @@ namespace DG.DemiEditor
             flatAlpha25 = new GUIStyle(def).Background(DeStylePalette.whiteSquareAlpha25);
             sticky = new DeSkinStyle(new GUIStyle(flatAlpha25).MarginTop(-2).MarginBottom(0), new GUIStyle(flatAlpha10).MarginTop(-2).MarginBottom(0));
             stickyTop = new DeSkinStyle(new GUIStyle(flatAlpha25).MarginTop(-2).MarginBottom(7), new GUIStyle(flatAlpha10).MarginTop(-2).MarginBottom(7));
-            outline = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderEmpty);
+            outline01 = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderEmpty01);
+            outline02 = outline01.Clone().Border(new RectOffset(5, 5, 5, 5)).Background(DeStylePalette.squareBorderEmpty02);
+            outline03 = outline01.Clone().Border(new RectOffset(7, 7, 7, 7)).Background(DeStylePalette.squareBorderEmpty03);
         }
     }
 

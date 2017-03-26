@@ -951,6 +951,12 @@
             </summary>
             <param name="amount">Indicates how much to expand the rect on each size</param>
         </member>
+        <member name="M:DG.DemiEditor.Internal.RectExtensions.Contract(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy or the Rect contracted around its center by the given amount
+            </summary>
+            <param name="amount">Indicates how much to contract the rect on each size</param>
+        </member>
         <member name="M:DG.DemiEditor.Internal.RectExtensions.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
             <summary>
             Returns a copy of the Rect resized so it fits proportionally within the given size limits

@@ -30,7 +30,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         }
 
         public EditorWindow editor { get; private set; }
-        public InteractionManager interactionManager { get; private set; }
+        public InteractionManager interaction { get; private set; }
         public SelectionManager selection { get; private set; }
         public readonly ProcessOptions options = new ProcessOptions();
         public GUIChangeType guiChangeType { get; private set; } // Last GUI.changed reason if set by process (reset on process end)
@@ -53,7 +53,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public NodeProcess(EditorWindow editor)
         {
             this.editor = editor;
-            interactionManager = new InteractionManager(this);
+            interaction = new InteractionManager(this);
             selection = new SelectionManager();
         }
 
@@ -105,14 +105,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
             areaShift = refAreaShift;
 
             // Determine mouse target type before clearing nodeGUIData dictionary
-            if (!interactionManager.mouseTargetIsLocked) StoreMouseTarget();
+            if (!interaction.mouseTargetIsLocked) StoreMouseTarget();
             if (Event.current.type == EventType.Layout) {
                 _nodes.Clear();
                 _nodeToGUIData.Clear();
             }
 
-            // Update interactionManager
-            if (interactionManager.Update()) _repaintOnEnd = true;
+            // Update interaction
+            if (interaction.Update()) _repaintOnEnd = true;
 
             // Background grid
             if (options.drawBackgroundGrid) DeGUI.BackgroundGrid(area, areaShift, options.forceDarkSkin);
@@ -122,8 +122,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             case EventType.MouseDown:
                 switch (Event.current.button) {
                 case 0:
-                    interactionManager.mousePositionOnLMBPress = Event.current.mousePosition;
-                    switch (interactionManager.mouseTargetType) {
+                    interaction.mousePositionOnLMBPress = Event.current.mousePosition;
+                    switch (interaction.mouseTargetType) {
                     case InteractionManager.TargetType.Background:
                         // LMB pressed on background
                         // Deselect all
@@ -133,24 +133,24 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             selection.selectionMode = SelectionManager.Mode.Add;
                             selection.StoreSnapshot();
                         }
-                        interactionManager.SetReadyFor(InteractionManager.ReadyFor.DrawingSelection);
+                        interaction.SetReadyFor(InteractionManager.ReadyFor.DrawingSelection);
                         break;
                     case InteractionManager.TargetType.Node:
                         // LMB pressed on a node
                         // Select
-                        bool isAlreadySelected = selection.IsSelected(interactionManager.targetNode);
+                        bool isAlreadySelected = selection.IsSelected(interaction.targetNode);
                         if (Event.current.shift) {
-                            if (isAlreadySelected) selection.Deselect(interactionManager.targetNode);
-                            else selection.Select(interactionManager.targetNode, true);
+                            if (isAlreadySelected) selection.Deselect(interaction.targetNode);
+                            else selection.Select(interaction.targetNode, true);
                             _repaintOnEnd = true;
                         } else if (!isAlreadySelected) {
-                            selection.Select(interactionManager.targetNode, false);
+                            selection.Select(interaction.targetNode, false);
                             _repaintOnEnd = true;
                         }
                         //
-                        if (interactionManager.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
+                        if (interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
                             // LMB pressed on a node's draggable area: set state to draggingNodes
-                            interactionManager.SetReadyFor(InteractionManager.ReadyFor.DraggingNodes);
+                            interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingNodes);
                         }
                         // Update eventual sorting
                         if (sortableNodes != null) UpdateSorting(sortableNodes);
@@ -160,23 +160,23 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 break;
             case EventType.MouseDrag:
-                switch (interactionManager.readyForState) {
+                switch (interaction.readyForState) {
                 case InteractionManager.ReadyFor.DrawingSelection:
-                    interactionManager.SetState(InteractionManager.State.DrawingSelection, true);
+                    interaction.SetState(InteractionManager.State.DrawingSelection, true);
                     break;
                 case InteractionManager.ReadyFor.DraggingNodes:
-                    interactionManager.SetState(InteractionManager.State.DraggingNodes, true);
+                    interaction.SetState(InteractionManager.State.DraggingNodes, true);
                     break;
                 }
                 switch (Event.current.button) {
                 case 0:
-                    switch (interactionManager.state) {
+                    switch (interaction.state) {
                     case InteractionManager.State.DrawingSelection:
                         selection.selectionRect = new Rect(
-                            Mathf.Min(interactionManager.mousePositionOnLMBPress.x, Event.current.mousePosition.x),
-                            Mathf.Min(interactionManager.mousePositionOnLMBPress.y, Event.current.mousePosition.y),
-                            Mathf.Abs(Event.current.mousePosition.x - interactionManager.mousePositionOnLMBPress.x),
-                            Mathf.Abs(Event.current.mousePosition.y - interactionManager.mousePositionOnLMBPress.y)
+                            Mathf.Min(interaction.mousePositionOnLMBPress.x, Event.current.mousePosition.x),
+                            Mathf.Min(interaction.mousePositionOnLMBPress.y, Event.current.mousePosition.y),
+                            Mathf.Abs(Event.current.mousePosition.x - interaction.mousePositionOnLMBPress.x),
+                            Mathf.Abs(Event.current.mousePosition.y - interaction.mousePositionOnLMBPress.y)
                         );
                         if (selection.selectionMode == SelectionManager.Mode.Add) {
                             // Add eventual nodes stored when starting to draw
@@ -197,7 +197,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     break;
                 case 2:
                     // Panning
-                    interactionManager.SetState(InteractionManager.State.Panning);
+                    interaction.SetState(InteractionManager.State.Panning);
                     refAreaShift = areaShift += Event.current.delta;
                     guiChangeType = GUIChangeType.Pan;
                     GUI.changed = _repaintOnEnd = true;
@@ -205,7 +205,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 break;
             case EventType.MouseUp:
-                switch (interactionManager.state) {
+                switch (interaction.state) {
                 case InteractionManager.State.DrawingSelection:
                     selection.selectionMode = SelectionManager.Mode.Default;
                     selection.ClearSnapshot();
@@ -213,14 +213,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     _repaintOnEnd = true;
                     break;
                 }
-                bool isLMBDoubleClick = interactionManager.EvaluateMouseUp();
+                bool isLMBDoubleClick = interaction.EvaluateMouseUp();
                 if (isLMBDoubleClick) {
-                    interactionManager.SetState(InteractionManager.State.DoubleClick, true);
+                    interaction.SetState(InteractionManager.State.DoubleClick, true);
                     _resetInteractionOnEnd = true;
-                } else interactionManager.SetState(InteractionManager.State.Inactive);
+                } else interaction.SetState(InteractionManager.State.Inactive);
                 break;
             case EventType.ContextClick:
-                interactionManager.SetState(InteractionManager.State.ContextClick);
+                interaction.SetState(InteractionManager.State.ContextClick);
                 _resetInteractionOnEnd = true;
                 break;
             }
@@ -231,7 +231,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // EVIDENCE SELECTED NODES + DRAW RECTANGULAR SELECTION
             if (Event.current.type == EventType.Repaint) {
                 // Draw selection
-                if (interactionManager.state == InteractionManager.State.DrawingSelection) {
+                if (interaction.state == InteractionManager.State.DrawingSelection) {
                     using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
                         GUI.Box(selection.selectionRect, "", _styles.selectionRect);
                     }
@@ -245,7 +245,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Reset interaction
             if (_resetInteractionOnEnd) {
                 _resetInteractionOnEnd = false;
-                interactionManager.SetState(InteractionManager.State.Inactive);
+                interaction.SetState(InteractionManager.State.Inactive);
             }
             // Repaint
             if (_repaintOnEnd) {
@@ -263,8 +263,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             if (!area.Contains(Event.current.mousePosition)) {
                 // Mouse out of editor
-                interactionManager.SetMouseTargetType(InteractionManager.TargetType.None);
-                interactionManager.targetNode = null;
+                interaction.SetMouseTargetType(InteractionManager.TargetType.None);
+                interaction.targetNode = null;
                 return;
             }
             for (int i = _nodes.Count - 1; i > -1; --i) {
@@ -272,8 +272,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 NodeGUIData data = _nodeToGUIData[node];
                 if (!data.fullArea.Contains(Event.current.mousePosition)) continue;
                 // Mouse on node
-                interactionManager.targetNode = node;
-                interactionManager.SetMouseTargetType(
+                interaction.targetNode = node;
+                interaction.SetMouseTargetType(
                     InteractionManager.TargetType.Node,
                     data.dragArea.Contains(Event.current.mousePosition)
                         ? InteractionManager.NodeTargetType.DraggableArea
@@ -281,8 +281,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 );
                 return;
             }
-            interactionManager.SetMouseTargetType(InteractionManager.TargetType.Background);
-            interactionManager.targetNode = null;
+            interaction.SetMouseTargetType(InteractionManager.TargetType.Background);
+            interaction.targetNode = null;
         }
 
         // Called only if sortableNodes is not NULL and the event is MouseDown
@@ -298,7 +298,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 sortingRequired = selectedNode.id != sortableNodes[totSortables - 1].id;
                 if (!sortingRequired) return;
                 for (int i = 0; i < totSortables; ++i) {
-                    if (sortableNodes[i].id != interactionManager.targetNode.id) continue;
+                    if (sortableNodes[i].id != interaction.targetNode.id) continue;
                     sortableNodes.Shift(i, totSortables - 1);
                     break;
                 }
@@ -347,8 +347,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
                 _initialized = true;
                 selectionRect = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderAlpha15);
-                nodeOutline = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderEmpty);
-                nodeOutlineThick = nodeOutline.Clone().Border(new RectOffset(5, 5, 5, 5)).Background(DeStylePalette.squareBorderThickEmpty);
+                nodeOutline = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderEmpty01);
+                nodeOutlineThick = nodeOutline.Clone().Border(new RectOffset(5, 5, 5, 5)).Background(DeStylePalette.squareBorderEmpty02);
             }
         }
     }

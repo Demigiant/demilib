@@ -65,9 +65,9 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);
 
                 // Log process state
-                switch (_nodeProcess.interactionManager.state) {
+                switch (_nodeProcess.interaction.state) {
                 case InteractionManager.State.DoubleClick:
-                    Debug.Log("<color=#00ff00>DoubleClick > " + _nodeProcess.interactionManager.mouseTargetType + (_nodeProcess.interactionManager.targetNode == null ? "" : " > " + _nodeProcess.interactionManager.targetNode.id) + "</color>");
+                    Debug.Log("<color=#00ff00>DoubleClick > " + _nodeProcess.interaction.mouseTargetType + (_nodeProcess.interaction.targetNode == null ? "" : " > " + _nodeProcess.interaction.targetNode.id) + "</color>");
                     break;
                 }
             }
