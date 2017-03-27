@@ -140,6 +140,22 @@ namespace DG.DeEditorTools.Hierarchy
             } else EditorApplication.RepaintHierarchyWindow();
         }
 
+        public static void SetColorFor(GameObject go, DeHierarchyComponent.HColor hColor)
+        {
+            Object[] currSelectedObjs = Selection.objects;
+            Selection.activeTransform = go.transform;
+            SetColorForSelections(hColor);
+            Selection.objects = currSelectedObjs;
+        }
+
+        public static void SetIconFor(GameObject go, DeHierarchyComponent.IcoType icoType)
+        {
+            Object[] currSelectedObjs = Selection.objects;
+            Selection.activeTransform = go.transform;
+            SetIconForSelections(icoType);
+            Selection.objects = currSelectedObjs;
+        }
+
         #endregion
 
         #region Internal Methods
