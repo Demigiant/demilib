@@ -204,6 +204,28 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     break;
                 }
                 break;
+//            case EventType.MouseUp:
+//                switch (interaction.state) {
+//                case InteractionManager.State.DrawingSelection:
+//                    selection.selectionMode = SelectionManager.Mode.Default;
+//                    selection.ClearSnapshot();
+//                    selection.selectionRect = new Rect();
+//                    _repaintOnEnd = true;
+//                    break;
+//                }
+//                bool isLMBDoubleClick = interaction.EvaluateMouseUp();
+//                if (isLMBDoubleClick) {
+//                    interaction.SetState(InteractionManager.State.DoubleClick, true);
+//                    _resetInteractionOnEnd = true;
+//                } else interaction.SetState(InteractionManager.State.Inactive);
+//                break;
+            case EventType.ContextClick:
+                interaction.SetState(InteractionManager.State.ContextClick);
+                _resetInteractionOnEnd = true;
+                break;
+            }
+            // RAW MOUSE EVENTS (used to capture mouseUp outside editorWindow
+            switch (Event.current.rawType) {
             case EventType.MouseUp:
                 switch (interaction.state) {
                 case InteractionManager.State.DrawingSelection:
@@ -218,10 +240,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     interaction.SetState(InteractionManager.State.DoubleClick, true);
                     _resetInteractionOnEnd = true;
                 } else interaction.SetState(InteractionManager.State.Inactive);
-                break;
-            case EventType.ContextClick:
-                interaction.SetState(InteractionManager.State.ContextClick);
-                _resetInteractionOnEnd = true;
                 break;
             }
         }
