@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="DeEditorFileUtils.cs" />
     <Compile Include="DeEditorGUIUtils.cs" />
+    <Compile Include="DeEditorHierarchyUtils.cs" />
     <Compile Include="DeEditorPanelUtils.cs" />
     <Compile Include="DeEditorPrefabUtils.cs" />
     <Compile Include="DeEditorUtils.cs" />
