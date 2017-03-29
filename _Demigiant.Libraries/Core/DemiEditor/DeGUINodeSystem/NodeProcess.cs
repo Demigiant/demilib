@@ -85,7 +85,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 // Draw evidence
                 if (options.evidenceSelectedNodes && selection.IsSelected(node)) {
                     using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
-                        GUI.Box(nodeGuiData.fullArea.Expand(3), "", _styles.nodeOutlineThick);
+                        GUI.Box(nodeGuiData.fullArea.Expand(4), "", _styles.nodeSelectionOutline);
                     }
                 }
                 break;
@@ -357,7 +357,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         class Styles
         {
-            public GUIStyle selectionRect, nodeOutline, nodeOutlineThick;
+            public GUIStyle selectionRect, nodeSelectionOutline;
             bool _initialized;
 
             public void Init()
@@ -366,8 +366,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
                 _initialized = true;
                 selectionRect = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderAlpha15);
-                nodeOutline = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderEmpty01);
-                nodeOutlineThick = nodeOutline.Clone().Border(new RectOffset(5, 5, 5, 5)).Background(DeStylePalette.squareBorderEmpty02);
+                nodeSelectionOutline = DeGUI.styles.box.outline01.Clone()
+                    .Border(new RectOffset(5, 5, 5, 5)).Background(DeStylePalette.squareBorderCurvedEmpty);
             }
         }
     }
