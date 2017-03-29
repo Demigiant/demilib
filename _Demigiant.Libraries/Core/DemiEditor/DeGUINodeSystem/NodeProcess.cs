@@ -157,6 +157,22 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         break;
                     }
                     break;
+                case 1:
+                    switch (interaction.mouseTargetType) {
+                    case InteractionManager.TargetType.Background:
+                        // Deselect all nodes
+                        _repaintOnEnd = selection.selectedNodes.Count > 0;
+                        selection.DeselectAll();
+                        break;
+                    case InteractionManager.TargetType.Node:
+                        // If nodes is not selected, select it and deselect others
+                        if (!selection.IsSelected(interaction.targetNode)) {
+                            _repaintOnEnd = true;
+                            selection.Select(interaction.targetNode, false);
+                        }
+                        break;
+                    }
+                    break;
                 }
                 break;
             case EventType.MouseDrag:
