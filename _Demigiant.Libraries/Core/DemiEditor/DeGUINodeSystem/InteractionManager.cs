@@ -55,7 +55,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public bool mouseTargetIsLocked { get { return state == State.DraggingNodes || state == State.Panning; } }
         public Vector2 mousePositionOnLMBPress { get; internal set; } // Stored mouse position last time LMB was pressed
 
-        const float _DoubleClickTime = 0.5f;
+        const float _DoubleClickTime = 0.4f;
+        internal static readonly float MinDragStartupDistance = 10; // Min drag pixels required to actually start some drag operations
         readonly NodeProcess _process;
         MouseCursor _currMouseCursor;
         MouseSnapshot _lastLMBUpSnapshot;

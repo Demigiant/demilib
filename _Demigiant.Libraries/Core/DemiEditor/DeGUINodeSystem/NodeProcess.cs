@@ -181,7 +181,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     interaction.SetState(InteractionManager.State.DrawingSelection, true);
                     break;
                 case InteractionManager.ReadyFor.DraggingNodes:
-                    interaction.SetState(InteractionManager.State.DraggingNodes, true);
+                    if ((Event.current.mousePosition - interaction.mousePositionOnLMBPress).magnitude >= InteractionManager.MinDragStartupDistance) {
+                        interaction.SetState(InteractionManager.State.DraggingNodes, true);
+                    }
                     break;
                 }
                 switch (Event.current.button) {
