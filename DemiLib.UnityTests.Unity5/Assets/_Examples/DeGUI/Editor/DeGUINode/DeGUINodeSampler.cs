@@ -56,6 +56,25 @@ namespace _Examples.DeGUI.Editor.DeGUINode
 
             // Node GUI Process
             using (new NodeProcessScope<GenericNode>(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
+                // EVENTS
+                switch (_nodeProcess.interaction.state) {
+                case InteractionManager.State.ContextClick:
+                    switch (_nodeProcess.interaction.mouseTargetType) {
+                    case InteractionManager.TargetType.Background:
+                        Debug.Log("ContextClick > Background");
+                        break;
+                    case InteractionManager.TargetType.Node:
+                        if (_nodeProcess.selection.selectedNodes.Count == 0) Debug.Log("ContextClick > Unselected node");
+                        else if (_nodeProcess.selection.selectedNodes.Count == 1) Debug.Log("ContextClick > Single selected node");
+                        else Debug.Log("ContextClick > Multiple selected nodes");
+                        break;
+                    }
+                    break;
+                case InteractionManager.State.DoubleClick:
+                    Debug.Log("<color=#00ff00>DoubleClick > " + _nodeProcess.interaction.mouseTargetType + (_nodeProcess.interaction.targetNode == null ? "" : " > " + _nodeProcess.interaction.targetNode.id) + "</color>");
+                    break;
+                }
+
                 // Draw nodes
                 // Generic nodes
                 foreach (GenericNode node in src.nodeSystem.genericNodes) {
@@ -63,13 +82,6 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 }
                 // Start node (last so it's always over other nodes)
                 _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);
-
-                // Log process state
-                switch (_nodeProcess.interaction.state) {
-                case InteractionManager.State.DoubleClick:
-                    Debug.Log("<color=#00ff00>DoubleClick > " + _nodeProcess.interaction.mouseTargetType + (_nodeProcess.interaction.targetNode == null ? "" : " > " + _nodeProcess.interaction.targetNode.id) + "</color>");
-                    break;
-                }
             }
 
             if (GUI.changed) EditorUtility.SetDirty(src);

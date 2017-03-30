@@ -115,7 +115,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
             if (interaction.Update()) _repaintOnEnd = true;
 
             // Background grid
-            if (options.drawBackgroundGrid) DeGUI.BackgroundGrid(area, areaShift, options.forceDarkSkin);
+            if (options.drawBackgroundGrid) {
+                if (options.gridTextureOverride == null) DeGUI.BackgroundGrid(area, areaShift, options.forceDarkSkin);
+                else DeGUI.BackgroundGrid(area, areaShift, options.gridTextureOverride);
+            }
 
             switch (Event.current.type) {
             // MOUSE EVENTS ///////////////////////////////////////////////////////////////////////////////////////////////////////

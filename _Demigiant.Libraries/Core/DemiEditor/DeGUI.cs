@@ -184,7 +184,7 @@ namespace DG.DemiEditor
         public static bool PressButton(Rect rect, GUIContent content, GUIStyle guiStyle)
         {
             // NOTE: tried using RepeatButton, but doesn't work if used for dragging
-            if (Event.current.type == EventType.MouseUp && _activePressButtonId != -1) {
+            if (GUI.enabled && Event.current.type == EventType.MouseUp && _activePressButtonId != -1) {
                 _activePressButtonId = GUIUtility.hotControl = -1;
                 Event.current.Use();
             }
@@ -192,7 +192,7 @@ namespace DG.DemiEditor
 //            int controlId = GUIUtility.GetControlID(FocusType.Native);
             int controlId = DeEditorGUIUtils.GetLastControlId(); // Changed from prev while working on DeInspektor
             int hotControl = GUIUtility.hotControl;
-            bool pressed = _activePressButtonId == -1 && hotControl > 1 && rect.Contains(Event.current.mousePosition);
+            bool pressed = GUI.enabled && _activePressButtonId == -1 && hotControl > 1 && rect.Contains(Event.current.mousePosition);
             if (pressed) {
                 if (_activePressButtonId == -1 && _activePressButtonId != controlId) {
                     // Modified while working on DeInspektor
@@ -267,24 +267,34 @@ namespace DG.DemiEditor
         #region Miscellaneous
 
         /// <summary>
-        /// Draws a background grid
+        /// Draws a background grid using the given grid texture
+        /// </summary>
+        /// <param name="area">Area rect</param>
+        /// <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
+        /// <param name="texture">Texture to use for the grid</param>
+        public static void BackgroundGrid(Rect area, Vector2 offset, Texture2D texture)
+        {
+            if (Event.current.type != EventType.Repaint) return;
+
+            int gridW = texture.width;
+            int gridH = texture.height;
+            int shiftX = (int)(gridW - offset.x % gridW);
+            if (shiftX < 0) shiftX = gridW + shiftX;
+            int shiftY = (int)(gridH - offset.y % gridH);
+            if (shiftY < 0) shiftY = gridH + shiftY;
+            Rect bgArea = new Rect(area.x - shiftX, area.yMax, area.width + shiftX, -(area.height + shiftY)); // Inverted becasue tiled texture otherwise would start from BL instead of TL
+            GUI.DrawTextureWithTexCoords(bgArea, texture, new Rect(0, 0, bgArea.width / gridW, bgArea.height / gridH));
+        }
+        /// <summary>
+        /// Draws a background grid using default grid textures
         /// </summary>
         /// <param name="area">Area rect</param>
         /// <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
         /// <param name="forceDarkSkin">If TRUE forces a dark skin, otherwise uses a skin that fits with the current Unity's one</param>
         public static void BackgroundGrid(Rect area, Vector2 offset, bool forceDarkSkin = false)
         {
-            if (Event.current.type != EventType.Repaint) return;
-
             Texture2D gridImg = forceDarkSkin || IsProSkin ? DeStylePalette.grid_dark : DeStylePalette.grid_bright;
-            int gridW = gridImg.width;
-            int gridH = gridImg.height;
-            int shiftX = (int)(gridW - offset.x % gridW);
-            if (shiftX < 0) shiftX = gridW + shiftX;
-            int shiftY = (int)(gridH - offset.y % gridH);
-            if (shiftY < 0) shiftY = gridH + shiftY;
-            Rect bgArea = new Rect(area.x - shiftX, area.yMax, area.width + shiftX, -(area.height + shiftY)); // Inverted becasue tiled texture otherwise would start from BL instead of TL
-            GUI.DrawTextureWithTexCoords(bgArea, gridImg, new Rect(0, 0, bgArea.width / gridW, bgArea.height / gridH));
+            BackgroundGrid(area, offset, gridImg);
         }
 
         /// <summary>Box with style and color options</summary>

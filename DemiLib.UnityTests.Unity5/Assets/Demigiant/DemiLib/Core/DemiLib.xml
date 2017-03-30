@@ -22,6 +22,11 @@
             </summary>
             <param name="hex">The HEX color, either with or without the initial # (accepts both regular and short format)</param>
         </member>
+        <member name="T:DG.DemiLib.DeColorGlobal">
+            <summary>
+            Global colors
+            </summary>
+        </member>
         <member name="T:DG.DemiLib.DeColorBG">
             <summary>
             Background colors

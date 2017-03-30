@@ -291,6 +291,12 @@
         <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.IsDragging(DG.DemiLib.IEditorGUINode)">
             <summary>Returns TRUE if the given node is currently being dragged</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.HasControlKeyModifier">
+            <summary>
+            Returns TRUE if the control key should be considered valid for this operation
+            (returns TRUE even if it was released within a given timespan)
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.Update">
             <summary>
             Returns TRUE if a repaint is required
@@ -859,9 +865,17 @@
         <member name="M:DG.DemiEditor.DeGUI.SceneField(UnityEngine.Rect,System.String,UnityEngine.Object)">
             <summary>Scene field</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.BackgroundGrid(UnityEngine.Rect,UnityEngine.Vector2,UnityEngine.Texture2D)">
+            <summary>
+            Draws a background grid using the given grid texture
+            </summary>
+            <param name="area">Area rect</param>
+            <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
+            <param name="texture">Texture to use for the grid</param>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.BackgroundGrid(UnityEngine.Rect,UnityEngine.Vector2,System.Boolean)">
             <summary>
-            Draws a background grid
+            Draws a background grid using default grid textures
             </summary>
             <param name="area">Area rect</param>
             <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
