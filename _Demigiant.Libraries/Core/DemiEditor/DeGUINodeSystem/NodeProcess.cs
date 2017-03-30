@@ -117,8 +117,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Background grid
             if (options.drawBackgroundGrid) DeGUI.BackgroundGrid(area, areaShift, options.forceDarkSkin);
 
-            // MOUSE EVENTS
             switch (Event.current.type) {
+            // MOUSE EVENTS ///////////////////////////////////////////////////////////////////////////////////////////////////////
             case EventType.MouseDown:
                 switch (Event.current.button) {
                 case 0:
@@ -226,8 +226,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 interaction.SetState(InteractionManager.State.ContextClick);
                 _resetInteractionOnEnd = true;
                 break;
+            // KEYBOARD EVENTS //////////////////////////////////////////////////////////////////////////////////////////////////////
+            case EventType.KeyUp:
+                switch (Event.current.keyCode) {
+                case KeyCode.A:
+                    if (interaction.HasControlKeyModifier()) {
+                        // CTRL+A > Select all nodes
+                        selection.Select(_nodes, false);
+                    }
+                    break;
+                }
+                break;
             }
-            // RAW MOUSE EVENTS (used to capture mouseUp outside editorWindow
+            // RAW MOUSE EVENTS (used to capture mouseUp outside editorWindow) //////////////////////////////////////////////////////
             switch (Event.current.rawType) {
             case EventType.MouseUp:
                 switch (interaction.state) {

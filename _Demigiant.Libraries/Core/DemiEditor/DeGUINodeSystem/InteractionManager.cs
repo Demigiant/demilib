@@ -54,12 +54,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public IEditorGUINode targetNode { get; internal set; }
         public bool mouseTargetIsLocked { get { return state == State.DraggingNodes || state == State.Panning; } }
         public Vector2 mousePositionOnLMBPress { get; internal set; } // Stored mouse position last time LMB was pressed
+        public bool controlKey { get; private set; } // TRUE when the CTRL key must be considered for key combinations (so it's valid until all keys are released)
 
         const float _DoubleClickTime = 0.4f;
         internal static readonly float MinDragStartupDistance = 10; // Min drag pixels required to actually start some drag operations
         readonly NodeProcess _process;
         MouseCursor _currMouseCursor;
         MouseSnapshot _lastLMBUpSnapshot;
+        float _timeAtControlKeyRelease;
 
         #region CONSTRUCTOR
 
@@ -76,6 +78,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public bool IsDragging(IEditorGUINode node)
         {
             return state == State.DraggingNodes && targetNode == node;
+        }
+
+        /// <summary>
+        /// Returns TRUE if the control key should be considered valid for this operation
+        /// (returns TRUE even if it was released within a given timespan)
+        /// </summary>
+        public bool HasControlKeyModifier()
+        {
+            return Time.realtimeSinceStartup - _timeAtControlKeyRelease < 0.2f;
         }
 
         #endregion
@@ -136,8 +147,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// <returns></returns>
         internal bool Update()
         {
-            MouseCursor prevMouseCursor = _currMouseCursor;
+            // Evaluate control key
+            if (Event.current.type == EventType.KeyUp && (Event.current.keyCode == KeyCode.LeftControl || Event.current.keyCode == KeyCode.RightControl)) {
+                _timeAtControlKeyRelease = Time.realtimeSinceStartup;
+            }
 
+            // Evaluate mouse cursor
+            MouseCursor prevMouseCursor = _currMouseCursor;
             switch (state) {
             case State.Panning:
                 _currMouseCursor = MouseCursor.Pan;
@@ -160,7 +176,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 else _currMouseCursor = MouseCursor.Arrow;
                 break;
             }
-
             if (_currMouseCursor != MouseCursor.Arrow) EditorGUIUtility.AddCursorRect(_process.area, _currMouseCursor);
             return _currMouseCursor == prevMouseCursor;
         }
