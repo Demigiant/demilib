@@ -311,7 +311,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             int totSelected = selection.selectedNodes.Count;
             int totSortables = sortableNodes.Count;
-            if (totSelected == 0 || totSortables == 0) return;
+            if (totSelected == 0 || totSortables == 0 || totSelected >= totSortables) return;
             bool sortingRequired = false;
             if (totSelected == 1) {
                 // Single selection
