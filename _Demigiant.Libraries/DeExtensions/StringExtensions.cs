@@ -3,12 +3,17 @@
 // License Copyright (c) Daniele Giardini
 
 using System;
+using System.Text;
 using UnityEngine;
 
 namespace DG.DeExtensions
 {
     public static class StringExtensions
     {
+        static readonly StringBuilder _Strb = new StringBuilder();
+
+        #region Public Methods
+
         /// <summary>
         /// Returns TRUE if the string is null or empty
         /// </summary>
@@ -44,6 +49,27 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
+        /// Nicifies a string, replacing underscores with spaces, and adding a space before Uppercase letters (except the first character)
+        /// </summary>
+        public static string Nicify(this string s)
+        {
+            if (string.IsNullOrEmpty(s)) return "";
+            _Strb.Length = 0;
+            _Strb.Append(s[0]);
+            for (int i = 1; i < s.Length; i++) {
+                char curr = s[i];
+                char prev = s[i - 1];
+                if (curr == '_') _Strb.Append(' '); // Replace underscores with spaces
+                else {
+                    // Add spaces before numbers and uppercase letters
+                    if (curr != ' ' && (char.IsUpper(curr) && (prev != ' ' && prev != '_') || char.IsNumber(curr) && prev != ' ' && prev != '_' && !char.IsNumber(prev))) _Strb.Append(' ');
+                    _Strb.Append(curr);
+                }
+            }
+            return _Strb.ToString();
+        }
+
+        /// <summary>
         /// Converts the string to the given enum value.
         /// Throws an exception if the string can't be converted.
         /// If the enum value can't be found, returns the 0 indexed value.<para/>
@@ -59,6 +85,8 @@ namespace DG.DeExtensions
             return (T)defaultValue;
         }
 
+        #endregion
+        
         #region Methods
 
         static int HexToInt(char hexVal)
