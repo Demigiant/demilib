@@ -100,6 +100,12 @@
         <member name="P:DG.DemiLib.IEditorGUINode.id">
             <summary>Must be univocal</summary>
         </member>
+        <member name="P:DG.DemiLib.IEditorGUINode.guiPosition">
+            <summary>Node position in editor GUI</summary>
+        </member>
+        <member name="P:DG.DemiLib.IEditorGUINode.connectedNodesIds">
+            <summary>Ids of all forward connected nodes. Length indicates how many forward connections are allowed.</summary>
+        </member>
         <member name="T:DG.DemiLib.Range">
             <summary>
             A serializable struct including a min and a max float value

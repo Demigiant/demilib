@@ -156,6 +156,11 @@
             </summary>
             <param name="hex">The HEX color, either with or without the initial # (accepts both regular and short format)</param>
         </member>
+        <member name="M:DG.DeExtensions.StringExtensions.Nicify(System.String)">
+            <summary>
+            Nicifies a string, replacing underscores with spaces, and adding a space before Uppercase letters (except the first character)
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.StringExtensions.ToEnum``1(System.String,System.Nullable{``0})">
             <summary>
             Converts the string to the given enum value.

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using DG.DeExtensions;
+using DG.DemiEditor.DeGUINodeSystem.Core;
 using DG.DemiEditor.Internal;
 using DG.DemiLib;
 using UnityEditor;
@@ -38,8 +39,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Vector2 areaShift { get; private set; }
 
         readonly List<IEditorGUINode> _nodes = new List<IEditorGUINode>(); // Used in conjunction with dictionaries to loop them in desired order
+        readonly Dictionary<string,IEditorGUINode> _idToNode = new Dictionary<string,IEditorGUINode>();
         readonly Dictionary<IEditorGUINode,NodeGUIData> _nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
+        readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
         readonly Styles _styles = new Styles();
         bool _repaintOnEnd; // Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
@@ -62,7 +65,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         #region Public Methods
 
         /// <summary>Draws the given node using the given T editor GUINode type</summary>
-        public void Draw<T>(IEditorGUINode node) where T : ABSDeGUINode, new()
+        public void Draw<T>(IEditorGUINode node, NodeConnectionOptions? connectionOptions = null) where T : ABSDeGUINode, new()
         {
             ABSDeGUINode guiNode;
             Type type = typeof(T);
@@ -79,7 +82,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
             switch (Event.current.type) {
             case EventType.Layout:
                 _nodes.Add(node);
+                _idToNode.Add(node.id, node);
                 _nodeToGUIData.Add(node, nodeGuiData);
+                _nodeToConnectionOptions.Add(node, connectionOptions == null ? new NodeConnectionOptions(true) : (NodeConnectionOptions)connectionOptions);
                 break;
             case EventType.Repaint:
                 // Draw evidence
@@ -105,10 +110,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
             areaShift = refAreaShift;
 
             // Determine mouse target type before clearing nodeGUIData dictionary
-            if (!interaction.mouseTargetIsLocked) StoreMouseTarget();
+            if (!interaction.mouseTargetIsLocked) EvaluateAndStoreMouseTarget();
             if (Event.current.type == EventType.Layout) {
                 _nodes.Clear();
+                _idToNode.Clear();
                 _nodeToGUIData.Clear();
+                _nodeToConnectionOptions.Clear();
             }
 
             // Update interaction
@@ -151,8 +158,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             _repaintOnEnd = true;
                         }
                         //
-                        if (interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
-                            // LMB pressed on a node's draggable area: set state to draggingNodes
+                        if (Event.current.control) {
+                            // CTRL+Drag on node > drag connection (eventually)
+                            bool canDragConnector = interaction.targetNode.connectedNodesIds.Count >= 1
+                                                    && selection.selectedNodes.Count == 1
+                                                    && _nodeToConnectionOptions[interaction.targetNode].allowManualConnections;
+                            if (canDragConnector) interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingConnector);
+                        } else if (interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
+                            // LMB pressed on a node's draggable area > set state to DraggingNodes
                             interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingNodes);
                         }
                         // Update eventual sorting
@@ -186,6 +199,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case InteractionManager.ReadyFor.DraggingNodes:
                     if ((Event.current.mousePosition - interaction.mousePositionOnLMBPress).magnitude >= InteractionManager.MinDragStartupDistance) {
                         interaction.SetState(InteractionManager.State.DraggingNodes, true);
+                    }
+                    break;
+                case InteractionManager.ReadyFor.DraggingConnector:
+                    if ((Event.current.mousePosition - interaction.mousePositionOnLMBPress).magnitude >= InteractionManager.MinDragStartupDistance) {
+                        interaction.SetState(InteractionManager.State.DraggingConnector, true);
                     }
                     break;
                 }
@@ -251,6 +269,20 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     selection.selectionRect = new Rect();
                     _repaintOnEnd = true;
                     break;
+                case InteractionManager.State.DraggingConnector:
+                    // TODO MouseUp on DraggingConnector > Implement connection indexes higher than 0
+                    IEditorGUINode overNode = GetMouseOverNode();
+                    if (overNode != null && overNode != interaction.targetNode) {
+                        // Create new connection
+                        Connector.dragData.node.connectedNodesIds[0] = overNode.id;
+                        GUI.changed = _repaintOnEnd = true;
+                    } else {
+                        // Disconnect
+                        bool changed = !string.IsNullOrEmpty(Connector.dragData.node.connectedNodesIds[0]);
+                        Connector.dragData.node.connectedNodesIds[0] = null;
+                        if (changed) GUI.changed = _repaintOnEnd = true;
+                    }
+                    break;
                 }
                 bool isLMBDoubleClick = interaction.EvaluateMouseUp();
                 if (isLMBDoubleClick) {
@@ -263,12 +295,44 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         internal void EndGUI()
         {
-            // EVIDENCE SELECTED NODES + DRAW RECTANGULAR SELECTION
             if (Event.current.type == EventType.Repaint) {
-                // Draw selection
-                if (interaction.state == InteractionManager.State.DrawingSelection) {
+                switch (interaction.state) {
+                // DRAW RECTANGULAR SELECTION
+                case InteractionManager.State.DrawingSelection:
+                    // Draw selection
                     using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
                         GUI.Box(selection.selectionRect, "", _styles.selectionRect);
+                    }
+                    break;
+                // DRAW CONNECTOR DRAGGING
+                case InteractionManager.State.DraggingConnector:
+                    Connector.Drag(
+                        interaction.targetNode, _nodeToGUIData[interaction.targetNode], _nodeToConnectionOptions[interaction.targetNode],
+                        Event.current.mousePosition
+                    );
+                    // Evidence possible connection
+                    IEditorGUINode overNode = GetMouseOverNode();
+                    if (overNode != null && overNode != interaction.targetNode) {
+                        using (new DeGUI.ColorScope(DeGUI.colors.global.orange)) {
+                            GUI.Box(_nodeToGUIData[overNode].fullArea.Expand(4), "", _styles.nodeSelectionOutline);
+                        }
+                    }
+                    break;
+                }
+                // DRAW CONNECTIONS BETWEEN NODES
+                for (int i = 0; i < _nodes.Count; ++i) {
+                    IEditorGUINode fromNode = _nodes[i];
+                    List<string> connections = fromNode.connectedNodesIds;
+                    int totConnections = fromNode.connectedNodesIds.Count;
+                    for (int c = 0; c < totConnections; ++c) {
+                        string connId = connections[c];
+                        if (string.IsNullOrEmpty(connId)) continue;
+                        IEditorGUINode toNode = _idToNode[connId];
+                        Connector.Connect(
+                            c, totConnections,
+                            fromNode, _nodeToGUIData[fromNode], _nodeToConnectionOptions[fromNode],
+                            toNode, _nodeToGUIData[toNode], _nodeToConnectionOptions[toNode]
+                        );
                     }
                 }
             }
@@ -293,8 +357,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         #region Methods
 
-        // Store mouse target (even in case of rollovers)
-        void StoreMouseTarget()
+        // Store mouse target (even in case of rollovers) and set related data
+        void EvaluateAndStoreMouseTarget()
         {
             if (!area.Contains(Event.current.mousePosition)) {
                 // Mouse out of editor
@@ -302,15 +366,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 interaction.targetNode = null;
                 return;
             }
-            for (int i = _nodes.Count - 1; i > -1; --i) {
-                IEditorGUINode node = _nodes[i];
-                NodeGUIData data = _nodeToGUIData[node];
-                if (!data.fullArea.Contains(Event.current.mousePosition)) continue;
-                // Mouse on node
-                interaction.targetNode = node;
+            IEditorGUINode targetNode = GetMouseOverNode();
+            if (targetNode != null) {
+                interaction.targetNode = targetNode;
                 interaction.SetMouseTargetType(
                     InteractionManager.TargetType.Node,
-                    data.dragArea.Contains(Event.current.mousePosition)
+                    _nodeToGUIData[targetNode].dragArea.Contains(Event.current.mousePosition)
                         ? InteractionManager.NodeTargetType.DraggableArea
                         : InteractionManager.NodeTargetType.NonDraggableArea
                 );
@@ -318,6 +379,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
             }
             interaction.SetMouseTargetType(InteractionManager.TargetType.Background);
             interaction.targetNode = null;
+        }
+
+        IEditorGUINode GetMouseOverNode()
+        {
+            for (int i = _nodes.Count - 1; i > -1; --i) {
+                IEditorGUINode node = _nodes[i];
+                if (_nodeToGUIData[node].fullArea.Contains(Event.current.mousePosition)) return node;
+            }
+            return null;
         }
 
         // Called only if sortableNodes is not NULL and the event is MouseDown

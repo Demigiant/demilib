@@ -318,7 +318,7 @@
             </summary>
             <param name="editor">EditorWindow for this process</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Draw``1(DG.DemiLib.IEditorGUINode)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Draw``1(DG.DemiLib.IEditorGUINode,System.Nullable{DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions})">
             <summary>Draws the given node using the given T editor GUINode type</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.NodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">

@@ -20,6 +20,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             Panning,
             DrawingSelection,
             DraggingNodes,
+            DraggingConnector,
             ContextClick,
             DoubleClick // Only if valid (meaning on same target it started)
         }
@@ -30,7 +31,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             Unset,
             Panning,
             DrawingSelection,
-            DraggingNodes
+            DraggingNodes,
+            DraggingConnector
         }
 
         public enum TargetType
@@ -52,7 +54,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public TargetType mouseTargetType { get; private set; } // Always updated, even on rollover
         public NodeTargetType nodeTargetType { get; private set; }
         public IEditorGUINode targetNode { get; internal set; }
-        public bool mouseTargetIsLocked { get { return state == State.DraggingNodes || state == State.Panning; } }
+        public bool mouseTargetIsLocked { get { return state == State.DraggingNodes || state == State.DraggingConnector || state == State.Panning; } }
         public Vector2 mousePositionOnLMBPress { get; internal set; } // Stored mouse position last time LMB was pressed
         public bool controlKey { get; private set; } // TRUE when the CTRL key must be considered for key combinations (so it's valid until all keys are released)
 

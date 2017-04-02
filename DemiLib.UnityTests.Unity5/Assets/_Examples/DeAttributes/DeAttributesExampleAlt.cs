@@ -21,6 +21,7 @@ namespace Assets._Examples.DeAttributes
         public int[] aListArrayNoAttr = new []{ 1, 2, 3 };
         public SampleObj[] sampleObjs = new[] {new SampleObj(), new SampleObj()};
         public SampleObjAlt[] sampleObjsAlt = new[] {new SampleObjAlt(), new SampleObjAlt()};
+        [Header("Sample header after array")]
         public string aString = "Hellow";
         public GameObject[] sampleGos;
         public SampleObj aSampleObj = new SampleObj();
