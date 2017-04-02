@@ -232,6 +232,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         guiChangeType = GUIChangeType.DragNodes;
                         GUI.changed = _repaintOnEnd = true;
                         break;
+                    case InteractionManager.State.DraggingConnector:
+                        _repaintOnEnd = true;
+                        break;
                     }
                     break;
                 case 2:
@@ -254,6 +257,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     if (interaction.HasControlKeyModifier()) {
                         // CTRL+A > Select all nodes
                         selection.Select(_nodes, false);
+                        _repaintOnEnd = true;
                     }
                     break;
                 }
@@ -280,7 +284,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         // Disconnect
                         bool changed = !string.IsNullOrEmpty(Connector.dragData.node.connectedNodesIds[0]);
                         Connector.dragData.node.connectedNodesIds[0] = null;
-                        if (changed) GUI.changed = _repaintOnEnd = true;
+                        if (changed) GUI.changed = true;
+                        _repaintOnEnd = true;
                     }
                     break;
                 }

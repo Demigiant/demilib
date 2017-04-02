@@ -2,191 +2,119 @@
 // Created: 2017/04/01 13:59
 // License Copyright (c) Daniele Giardini
 
+using System.Collections.Generic;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
 
 namespace DG.DemiEditor.DeGUINodeSystem.Core
 {
+    /// <summary>
+    /// Always connects a node from BottomOrRight side to TopOrLeft side
+    /// </summary>
     internal static class Connector
     {
         public static readonly DragData dragData = new DragData();
+        const int _LineSize = 2;
+        const int _MaxDistanceForSmartStraight = 120;
+        const int _TangentDistance = 50;
+        const int _TangentDistanceIfInverse = 120; // Tangent distance if TO is behind FROM
 
         #region Public Methods
 
+        /// <summary>
+        /// Always connects from BottomOrRight side to TopOrLeft side
+        /// </summary>
         public static void Connect(
             int connectionIndex, int fromTotConnections,
             IEditorGUINode fromNode, NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, 
             IEditorGUINode toNode, NodeGUIData toGUIData, NodeConnectionOptions toOptions
         ) {
-            // TODO Draw connector between two nodes
-            Vector2 from = EvaluateFromAttachment(fromGUIData, fromOptions, toGUIData, toOptions);
-            Vector2 to = EvaluateToAttachment(from, toGUIData, toOptions);
+            AnchorsData anchorsData = GetAnchors(fromGUIData.fullArea, toGUIData.fullArea, fromOptions.connectorMode);
+            // Line
+            Handles.DrawBezier(anchorsData.fromP, anchorsData.toP, anchorsData.fromTangent, anchorsData.toTangent, Color.cyan, null, _LineSize);
+            Rect arrowR = new Rect(
+                anchorsData.toP.x - DeStylePalette.ico_nodeArrow.width,
+                anchorsData.toP.y - DeStylePalette.ico_nodeArrow.height * 0.5f,
+                DeStylePalette.ico_nodeArrow.width,
+                DeStylePalette.ico_nodeArrow.height
+            );
+            // Arrow
+            Matrix4x4 currGUIMatrix = GUI.matrix;
+            if (anchorsData.arrowRequiresRotation) GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.toP);
+            using (new DeGUI.ColorScope(null, null, Color.cyan)) GUI.DrawTexture(arrowR, DeStylePalette.ico_nodeArrow);
+            GUI.matrix = currGUIMatrix;
         }
 
         public static void Drag(IEditorGUINode fromNode, NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, Vector2 mousePosition)
         {
             dragData.Set(fromNode);
             Vector2 attachP = GetDragAttachPoint(fromGUIData, fromOptions, mousePosition);
-            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.white, null, 5);
-            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.black, null, 3);
+            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.white, null, _LineSize + 2);
+            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.black, null, _LineSize);
         }
 
         #endregion
 
         #region Helpers
 
-        static Vector2 EvaluateFromAttachment(NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, NodeGUIData toGUIData, NodeConnectionOptions toOptions)
+        static AnchorsData GetAnchors(Rect fromArea, Rect toArea, ConnectorMode connectorMode)
         {
-            switch (fromOptions.attachFromMode) {
-            case ConnectorAttachMode.AnySideCenter:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.BottomOrRightCenter:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.TopOrLeftCenter:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.AnyCorner:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.TopCorners:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.LeftCorners:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.RightCorners:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.BottomCorners:
-                // TODO GetAttachments
-                break;
-            //
-//            case ConnectorAttachMode.TopLeft:
-//                return fromGUIData.fullArea.min;
-//            case ConnectorAttachMode.TopCenter:
-//                return new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.min.y);
-//            case ConnectorAttachMode.TopRight:
-//                return new Vector2(fromGUIData.fullArea.max.x, fromGUIData.fullArea.min.y);
-//            case ConnectorAttachMode.MiddleLeft:
-//                return new Vector2(fromGUIData.fullArea.min.x, fromGUIData.fullArea.center.y);
-//            case ConnectorAttachMode.MiddleCenter:
-//                return new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.center.y);
-//            case ConnectorAttachMode.MiddleRight:
-//                return new Vector2(fromGUIData.fullArea.max.x, fromGUIData.fullArea.center.y);
-//            case ConnectorAttachMode.BottomLeft:
-//                return new Vector2(fromGUIData.fullArea.min.x, fromGUIData.fullArea.max.y);
-//            case ConnectorAttachMode.BottomCenter:
-//                return new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.max.y);
-//            case ConnectorAttachMode.BottomRight:
-//                return new Vector2(fromGUIData.fullArea.max.x, fromGUIData.fullArea.max.y);
+            AnchorsData a = new AnchorsData();
+            float distX = toArea.xMin - fromArea.xMax;
+            float distY = toArea.yMin - fromArea.yMax;
+            bool fromIsBottom = fromArea.yMax < toArea.yMin && distY >= distX;
+            a.fromP = fromIsBottom
+                ? new Vector2(fromArea.center.x, fromArea.yMax)
+                : new Vector2(fromArea.xMax, fromArea.center.y);
+            bool toIsTop = toArea.y > a.fromP.y && (fromArea.xMax > toArea.xMin || toArea.yMin - a.fromP.y > toArea.center.x - a.fromP.x);
+            a.toP = toIsTop
+                ? new Vector2(toArea.center.x, toArea.yMin)
+                : new Vector2(toArea.xMin, toArea.center.y);
+            // Set tangents
+            float dist = Vector2.Distance(a.toP, a.fromP);
+            float tangentDistance = a.toP.x < a.fromP.x && a.toP.y < a.fromP.y
+                ? _TangentDistanceIfInverse
+                : Mathf.Min(_TangentDistance, dist * 0.5f);
+            a.isStraight = connectorMode == ConnectorMode.Straight
+                              || connectorMode == ConnectorMode.Smart && dist <= _MaxDistanceForSmartStraight;
+            if (a.isStraight) {
+                a.fromTangent = a.fromP;
+                a.toTangent = a.toP;
+            } else {
+                a.fromTangent = a.fromP + (fromIsBottom ? Vector2.up * tangentDistance : Vector2.right * tangentDistance);
+                a.toTangent = a.toP + (toIsTop? Vector2.up * -tangentDistance : Vector2.right * -tangentDistance);
             }
-            throw new System.NotImplementedException();
-        }
-
-        static Vector2 EvaluateToAttachment(Vector2 fromPosition, NodeGUIData toGUIData, NodeConnectionOptions toOptions)
-        {
-            switch (toOptions.attachToMode) {
-            case ConnectorAttachMode.AnySideCenter:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.BottomOrRightCenter:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.TopOrLeftCenter:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.AnyCorner:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.TopCorners:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.LeftCorners:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.RightCorners:
-                // TODO GetAttachments
-                break;
-            case ConnectorAttachMode.BottomCorners:
-                // TODO GetAttachments
-                break;
-            //
-//            case ConnectorAttachMode.TopLeft:
-//                return fromGUIData.fullArea.min;
-//            case ConnectorAttachMode.TopCenter:
-//                return new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.min.y);
-//            case ConnectorAttachMode.TopRight:
-//                return new Vector2(fromGUIData.fullArea.max.x, fromGUIData.fullArea.min.y);
-//            case ConnectorAttachMode.MiddleLeft:
-//                return new Vector2(fromGUIData.fullArea.min.x, fromGUIData.fullArea.center.y);
-//            case ConnectorAttachMode.MiddleCenter:
-//                return new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.center.y);
-//            case ConnectorAttachMode.MiddleRight:
-//                return new Vector2(fromGUIData.fullArea.max.x, fromGUIData.fullArea.center.y);
-//            case ConnectorAttachMode.BottomLeft:
-//                return new Vector2(fromGUIData.fullArea.min.x, fromGUIData.fullArea.max.y);
-//            case ConnectorAttachMode.BottomCenter:
-//                return new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.max.y);
-//            case ConnectorAttachMode.BottomRight:
-//                return new Vector2(fromGUIData.fullArea.max.x, fromGUIData.fullArea.max.y);
+            // Set arrow
+            if (a.isStraight) {
+                a.arrowRequiresRotation = true;
+                a.arrowRotationAngle = -AngleBetween(Vector2.right, a.toP - a.fromP);
+            } else if (toIsTop) {
+                a.arrowRequiresRotation = true;
+                a.arrowRotationAngle = 90;
             }
-            throw new System.NotImplementedException();
+            return a;
         }
 
         static Vector2 GetDragAttachPoint(NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, Vector2 mousePosition)
         {
-            switch (fromOptions.attachFromMode) {
-            case ConnectorAttachMode.AnySideCenter:
-                // TODO GetDragAttachPoint
-                break;
-            case ConnectorAttachMode.BottomOrRightCenter:
-                bool isRight = mousePosition.y < fromGUIData.fullArea.y
-                               || mousePosition.x - fromGUIData.fullArea.xMax >= mousePosition.y - fromGUIData.fullArea.yMax;
-                return isRight
-                    ? new Vector2(fromGUIData.fullArea.xMax, fromGUIData.fullArea.center.y)
-                    : new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.yMax);
-            case ConnectorAttachMode.TopOrLeftCenter:
-                // TODO GetDragAttachPoint
-                break;
-            case ConnectorAttachMode.AnyCorner:
-                // TODO GetDragAttachPoint
-                break;
-            case ConnectorAttachMode.TopCorners:
-                // TODO GetDragAttachPoint
-                break;
-            case ConnectorAttachMode.LeftCorners:
-                // TODO GetDragAttachPoint
-                break;
-            case ConnectorAttachMode.RightCorners:
-                // TODO GetDragAttachPoint
-                break;
-            case ConnectorAttachMode.BottomCorners:
-                // TODO GetDragAttachPoint
-                break;
-            //
-            case ConnectorAttachMode.TopLeft:
-                return fromGUIData.fullArea.min;
-            case ConnectorAttachMode.TopCenter:
-                return new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.min.y);
-            case ConnectorAttachMode.TopRight:
-                return new Vector2(fromGUIData.fullArea.max.x, fromGUIData.fullArea.min.y);
-            case ConnectorAttachMode.MiddleLeft:
-                return new Vector2(fromGUIData.fullArea.min.x, fromGUIData.fullArea.center.y);
-            case ConnectorAttachMode.MiddleCenter:
-                return new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.center.y);
-            case ConnectorAttachMode.MiddleRight:
-                return new Vector2(fromGUIData.fullArea.max.x, fromGUIData.fullArea.center.y);
-            case ConnectorAttachMode.BottomLeft:
-                return new Vector2(fromGUIData.fullArea.min.x, fromGUIData.fullArea.max.y);
-            case ConnectorAttachMode.BottomCenter:
-                return new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.max.y);
-            case ConnectorAttachMode.BottomRight:
-                return new Vector2(fromGUIData.fullArea.max.x, fromGUIData.fullArea.max.y);
-            }
-            throw new System.NotImplementedException();
+            // Bottom or right center
+            bool isRight = mousePosition.y < fromGUIData.fullArea.y
+                           || mousePosition.x - fromGUIData.fullArea.xMax >= mousePosition.y - fromGUIData.fullArea.yMax;
+            return isRight
+                ? new Vector2(fromGUIData.fullArea.xMax, fromGUIData.fullArea.center.y)
+                : new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.yMax);
+        }
+
+        // Returns the angle in degrees between from and to (0 to 180, negative if to is on left, positive if to is on right).
+        static float AngleBetween(Vector2 from, Vector2 to)
+        {
+            from.Normalize();
+            to.Normalize();
+            float angle = Mathf.Acos(Mathf.Clamp(Vector2.Dot(from, to), -1f, 1f)) * 57.29578f;
+            float cross = to.x * from.y - to.y * from.x;
+            if (cross < 0) angle = -angle;
+            return angle;
         }
 
         #endregion
@@ -198,16 +126,23 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         internal class DragData
         {
             public IEditorGUINode node;
-
             public void Reset()
             {
                 node = null;
             }
-
             public void Set(IEditorGUINode node)
             {
                 this.node = node;
             }
+        }
+
+        struct AnchorsData
+        {
+            public Vector2 fromP, toP;
+            public Vector2 fromTangent, toTangent;
+            public bool isStraight;
+            public bool arrowRequiresRotation;
+            public float arrowRotationAngle;
         }
     }
 }

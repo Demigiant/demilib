@@ -282,6 +282,16 @@
         <member name="M:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode.OnGUI(DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiLib.IEditorGUINode)">
             <summary>Called only if the node is visible in the current area</summary>
         </member>
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.Core.Connector">
+            <summary>
+            Always connects a node from BottomOrRight side to TopOrLeft side
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.Connector.Connect(System.Int32,System.Int32,DG.DemiLib.IEditorGUINode,DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions,DG.DemiLib.IEditorGUINode,DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions)">
+            <summary>
+            Always connects from BottomOrRight side to TopOrLeft side
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.InteractionManager">
             <summary>
             One per <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/>.

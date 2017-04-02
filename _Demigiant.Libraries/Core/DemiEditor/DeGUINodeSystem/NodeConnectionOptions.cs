@@ -11,8 +11,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
     {
         public bool allowManualConnections; // If TRUE allows to CTRL+drag to connect the target to another
         public ConnectorMode connectorMode;
-        public ConnectorAttachMode attachFromMode;
-        public ConnectorAttachMode attachToMode;
         public Color startColor; // Color in case of single connection, or start color for multiple connections gradient
         public Color endColor; // End color for multiple connections gradient
 
@@ -23,8 +21,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             this.startColor = new DeSkinColor(0.3f, 0.7f);
             this.endColor = new DeSkinColor(0.5f);
-            this.attachFromMode = ConnectorAttachMode.BottomOrRightCenter;
-            this.attachToMode = ConnectorAttachMode.TopOrLeftCenter;
         }
 
         public NodeConnectionOptions(bool allowManualConnections, ConnectorMode connectorMode, Color startColor, Color endColor)
@@ -33,9 +29,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.connectorMode = connectorMode;
             this.startColor = startColor;
             this.endColor = endColor;
-
-            this.attachFromMode = ConnectorAttachMode.BottomOrRightCenter;
-            this.attachToMode = ConnectorAttachMode.TopOrLeftCenter;
         }
     }
 }

@@ -88,7 +88,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// </summary>
         public bool HasControlKeyModifier()
         {
-            return Time.realtimeSinceStartup - _timeAtControlKeyRelease < 0.2f;
+            return Event.current.control || Time.realtimeSinceStartup - _timeAtControlKeyRelease < 0.2f;
         }
 
         #endregion
@@ -174,12 +174,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _currMouseCursor = MouseCursor.MoveArrow;
                 break;
             default:
-                if (Event.current.shift) _currMouseCursor = MouseCursor.ArrowPlus;
-                else _currMouseCursor = MouseCursor.Arrow;
+                _currMouseCursor = MouseCursor.Arrow;
                 break;
             }
             if (_currMouseCursor != MouseCursor.Arrow) EditorGUIUtility.AddCursorRect(_process.area, _currMouseCursor);
-            return _currMouseCursor == prevMouseCursor;
+            return _currMouseCursor != prevMouseCursor;
         }
 
         #endregion
