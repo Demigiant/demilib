@@ -27,12 +27,15 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         /// </summary>
         public static void Connect(
             int connectionIndex, int fromTotConnections,
-            IEditorGUINode fromNode, NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, 
-            IEditorGUINode toNode, NodeGUIData toGUIData, NodeConnectionOptions toOptions
+            NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, NodeGUIData toGUIData
         ) {
             AnchorsData anchorsData = GetAnchors(fromGUIData.fullArea, toGUIData.fullArea, fromOptions.connectorMode);
+            // x : 1 = index : tot
+            Color color = fromTotConnections < 2
+                ? fromOptions.startColor
+                : fromOptions.gradientColor.Evaluate(connectionIndex / (float)(fromTotConnections - 1));
             // Line
-            Handles.DrawBezier(anchorsData.fromP, anchorsData.toP, anchorsData.fromTangent, anchorsData.toTangent, Color.cyan, null, _LineSize);
+            Handles.DrawBezier(anchorsData.fromP, anchorsData.toP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
             Rect arrowR = new Rect(
                 anchorsData.toP.x - DeStylePalette.ico_nodeArrow.width,
                 anchorsData.toP.y - DeStylePalette.ico_nodeArrow.height * 0.5f,
@@ -42,14 +45,14 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             // Arrow
             Matrix4x4 currGUIMatrix = GUI.matrix;
             if (anchorsData.arrowRequiresRotation) GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.toP);
-            using (new DeGUI.ColorScope(null, null, Color.cyan)) GUI.DrawTexture(arrowR, DeStylePalette.ico_nodeArrow);
+            using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(arrowR, DeStylePalette.ico_nodeArrow);
             GUI.matrix = currGUIMatrix;
         }
 
         public static void Drag(IEditorGUINode fromNode, NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, Vector2 mousePosition)
         {
             dragData.Set(fromNode);
-            Vector2 attachP = GetDragAttachPoint(fromGUIData, fromOptions, mousePosition);
+            Vector2 attachP = GetDragAttachPoint(fromGUIData.fullArea, mousePosition);
             Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.white, null, _LineSize + 2);
             Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.black, null, _LineSize);
         }
@@ -72,12 +75,11 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 ? new Vector2(toArea.center.x, toArea.yMin)
                 : new Vector2(toArea.xMin, toArea.center.y);
             // Set tangents
+            bool isToBehindFrom = a.toP.x < a.fromP.x && a.toP.y < a.fromP.y;
             float dist = Vector2.Distance(a.toP, a.fromP);
-            float tangentDistance = a.toP.x < a.fromP.x && a.toP.y < a.fromP.y
-                ? _TangentDistanceIfInverse
-                : Mathf.Min(_TangentDistance, dist * 0.5f);
+            float tangentDistance = isToBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, dist * 0.5f);
             a.isStraight = connectorMode == ConnectorMode.Straight
-                              || connectorMode == ConnectorMode.Smart && dist <= _MaxDistanceForSmartStraight;
+                              || !isToBehindFrom && connectorMode == ConnectorMode.Smart && dist <= _MaxDistanceForSmartStraight;
             if (a.isStraight) {
                 a.fromTangent = a.fromP;
                 a.toTangent = a.toP;
@@ -96,14 +98,14 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             return a;
         }
 
-        static Vector2 GetDragAttachPoint(NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, Vector2 mousePosition)
+        static Vector2 GetDragAttachPoint(Rect nodeArea, Vector2 mousePosition)
         {
             // Bottom or right center
-            bool isRight = mousePosition.y < fromGUIData.fullArea.y
-                           || mousePosition.x - fromGUIData.fullArea.xMax >= mousePosition.y - fromGUIData.fullArea.yMax;
+            bool isRight = mousePosition.y < nodeArea.y
+                           || mousePosition.x - nodeArea.xMax >= mousePosition.y - nodeArea.yMax;
             return isRight
-                ? new Vector2(fromGUIData.fullArea.xMax, fromGUIData.fullArea.center.y)
-                : new Vector2(fromGUIData.fullArea.center.x, fromGUIData.fullArea.yMax);
+                ? new Vector2(nodeArea.xMax, nodeArea.center.y)
+                : new Vector2(nodeArea.center.x, nodeArea.yMax);
         }
 
         // Returns the angle in degrees between from and to (0 to 180, negative if to is on left, positive if to is on right).

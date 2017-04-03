@@ -333,11 +333,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         string connId = connections[c];
                         if (string.IsNullOrEmpty(connId)) continue;
                         IEditorGUINode toNode = _idToNode[connId];
-                        Connector.Connect(
-                            c, totConnections,
-                            fromNode, _nodeToGUIData[fromNode], _nodeToConnectionOptions[fromNode],
-                            toNode, _nodeToGUIData[toNode], _nodeToConnectionOptions[toNode]
-                        );
+                        Connector.Connect(c, totConnections, _nodeToGUIData[fromNode], _nodeToConnectionOptions[fromNode], _nodeToGUIData[toNode]);
                     }
                 }
             }
