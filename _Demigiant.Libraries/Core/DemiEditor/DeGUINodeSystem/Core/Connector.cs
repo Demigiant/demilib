@@ -53,8 +53,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         {
             dragData.Set(fromNode);
             Vector2 attachP = GetDragAttachPoint(fromGUIData.fullArea, mousePosition);
-            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.white, null, _LineSize + 2);
-            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.black, null, _LineSize);
+            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.black, null, _LineSize + 2);
+            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, DeGUI.colors.global.orange, null, _LineSize);
         }
 
         #endregion

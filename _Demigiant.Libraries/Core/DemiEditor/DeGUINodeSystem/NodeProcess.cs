@@ -301,6 +301,23 @@ namespace DG.DemiEditor.DeGUINodeSystem
         internal void EndGUI()
         {
             if (Event.current.type == EventType.Repaint) {
+                // DRAW CONNECTIONS BETWEEN NODES
+                for (int i = 0; i < _nodes.Count; ++i) {
+                    IEditorGUINode fromNode = _nodes[i];
+                    List<string> connections = fromNode.connectedNodesIds;
+                    int totConnections = fromNode.connectedNodesIds.Count;
+                    for (int c = 0; c < totConnections; ++c) {
+                        string connId = connections[c];
+                        if (string.IsNullOrEmpty(connId)) continue;
+                        if (!_idToNode.ContainsKey(connId)) {
+                            // Node eliminated externally, remove from dictionary
+                            _idToNode.Remove(connId);
+                        } else {
+                            IEditorGUINode toNode = _idToNode[connId];
+                            Connector.Connect(c, totConnections, _nodeToGUIData[fromNode], _nodeToConnectionOptions[fromNode], _nodeToGUIData[toNode]);
+                        }
+                    }
+                }
                 switch (interaction.state) {
                 // DRAW RECTANGULAR SELECTION
                 case InteractionManager.State.DrawingSelection:
@@ -323,18 +340,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         }
                     }
                     break;
-                }
-                // DRAW CONNECTIONS BETWEEN NODES
-                for (int i = 0; i < _nodes.Count; ++i) {
-                    IEditorGUINode fromNode = _nodes[i];
-                    List<string> connections = fromNode.connectedNodesIds;
-                    int totConnections = fromNode.connectedNodesIds.Count;
-                    for (int c = 0; c < totConnections; ++c) {
-                        string connId = connections[c];
-                        if (string.IsNullOrEmpty(connId)) continue;
-                        IEditorGUINode toNode = _idToNode[connId];
-                        Connector.Connect(c, totConnections, _nodeToGUIData[fromNode], _nodeToConnectionOptions[fromNode], _nodeToGUIData[toNode]);
-                    }
                 }
             }
 
