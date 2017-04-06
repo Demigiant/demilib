@@ -23,6 +23,22 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Returns TRUe if a prefab instance has unapplied modifications, ignoring any modifications applied to the transform.<para/>
+        /// NOTE: this a somehow costly operation (since it generates GC)
+        /// </summary>
+        public static bool InstanceHasUnappliedModifications(GameObject instance)
+        {
+            PropertyModification[] mods = PrefabUtility.GetPropertyModifications(instance);
+            for (int i = 0; i < mods.Length; ++i) {
+                string propertyPath = mods[i].propertyPath;
+                int len = propertyPath.Length;
+                if (len > 7 && propertyPath.Substring(0, 7) == "m_Local" || len == 11 && propertyPath == "m_RootOrder") continue;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Completely removes any prefab connection from the given prefab instances.
         /// <para>
         /// Based on RodGreen's method (http://forum.unity3d.com/threads/82883-Breaking-connection-from-gameObject-to-prefab-for-good.?p=726602&amp;viewfull=1#post726602)
