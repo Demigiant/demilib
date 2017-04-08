@@ -17,7 +17,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         protected override NodeGUIData GetAreas(Vector2 position, IEditorGUINode iNode)
         {
             Rect fullR = new Rect(position.x, position.y, 100, 70);
-            return new NodeGUIData(fullR, fullR);
+            return new NodeGUIData(fullR, fullR, new Color(0.91f, 0.48f, 0.04f));
         }
 
         protected override void OnGUI(NodeGUIData nodeGuiData, IEditorGUINode iNode)

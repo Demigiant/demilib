@@ -12,12 +12,23 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Rect fullArea, dragArea;
         public Rect extraArea0;
         public List<Rect> connectorAreas; // Sub areas from which each connector should start - if NULL uses fullArea
+        public Color mainColor; // Node color (used by miniMap and in other occasions)
 
         public NodeGUIData(Rect fullArea, Rect dragArea, Rect? extraArea0 = null)
         {
             this.fullArea = fullArea;
             this.dragArea = dragArea;
             this.extraArea0 = extraArea0 == null ? new Rect() : (Rect)extraArea0;
+            this.mainColor = new Color(0.5f, 0.5f, 0.5f, 1);
+            connectorAreas = null;
+            // TODO Implement connectorAreas
+        }
+        public NodeGUIData(Rect fullArea, Rect dragArea, Color mainColor, Rect? extraArea0 = null)
+        {
+            this.fullArea = fullArea;
+            this.dragArea = dragArea;
+            this.extraArea0 = extraArea0 == null ? new Rect() : (Rect)extraArea0;
+            this.mainColor = mainColor;
             connectorAreas = null;
             // TODO Implement connectorAreas
         }

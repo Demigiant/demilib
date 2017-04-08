@@ -38,12 +38,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Rect area { get; private set; }
         public Vector2 areaShift { get; private set; }
 
-        readonly List<IEditorGUINode> _nodes = new List<IEditorGUINode>(); // Used in conjunction with dictionaries to loop them in desired order
+        internal readonly List<IEditorGUINode> nodes = new List<IEditorGUINode>(); // Used in conjunction with dictionaries to loop them in desired order
+        internal readonly Dictionary<IEditorGUINode,NodeGUIData> nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
         readonly Dictionary<string,IEditorGUINode> _idToNode = new Dictionary<string,IEditorGUINode>();
-        readonly Dictionary<IEditorGUINode,NodeGUIData> _nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
         readonly Styles _styles = new Styles();
+        Minimap _minimap;
         bool _repaintOnEnd; // Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
 
@@ -84,9 +85,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             switch (Event.current.type) {
             case EventType.Layout:
-                _nodes.Add(node);
+                nodes.Add(node);
                 _idToNode.Add(node.id, node);
-                _nodeToGUIData.Add(node, nodeGuiData);
+                nodeToGUIData.Add(node, nodeGuiData);
                 _nodeToConnectionOptions.Add(node, connectionOptions == null ? new NodeConnectionOptions(true) : (NodeConnectionOptions)connectionOptions);
                 break;
             case EventType.Repaint:
@@ -113,13 +114,16 @@ namespace DG.DemiEditor.DeGUINodeSystem
             _styles.Init();
             area = nodeArea;
             areaShift = refAreaShift;
+            if (options.showMinimap) {
+                if (_minimap == null) _minimap = new Minimap(this);
+            } else _minimap = null;
 
             // Determine mouse target type before clearing nodeGUIData dictionary
             if (!interaction.mouseTargetIsLocked) EvaluateAndStoreMouseTarget();
             if (Event.current.type == EventType.Layout) {
-                _nodes.Clear();
+                nodes.Clear();
                 _idToNode.Clear();
-                _nodeToGUIData.Clear();
+                nodeToGUIData.Clear();
                 _nodeToConnectionOptions.Clear();
             }
 
@@ -229,8 +233,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             // Add eventual nodes stored when starting to draw
                             selection.Select(selection.selectedNodesSnapshot, false);
                         } else selection.DeselectAll();
-                        foreach (IEditorGUINode node in _nodes) {
-                            if (selection.selectionRect.Includes(_nodeToGUIData[node].fullArea)) selection.Select(node, true);
+                        foreach (IEditorGUINode node in nodes) {
+                            if (selection.selectionRect.Includes(nodeToGUIData[node].fullArea)) selection.Select(node, true);
                         }
                         _repaintOnEnd = true;
                         break;
@@ -264,7 +268,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case KeyCode.A:
                     if (interaction.HasControlKeyModifier()) {
                         // CTRL+A > Select all nodes
-                        selection.Select(_nodes, false);
+                        selection.Select(nodes, false);
                         _repaintOnEnd = true;
                     }
                     break;
@@ -308,46 +312,51 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         internal void EndGUI()
         {
-            if (Event.current.type == EventType.Repaint) {
-                // DRAW CONNECTIONS BETWEEN NODES
-                for (int i = 0; i < _nodes.Count; ++i) {
-                    IEditorGUINode fromNode = _nodes[i];
-                    List<string> connections = fromNode.connectedNodesIds;
-                    int totConnections = fromNode.connectedNodesIds.Count;
-                    for (int c = 0; c < totConnections; ++c) {
-                        string connId = connections[c];
-                        if (string.IsNullOrEmpty(connId)) continue;
-                        if (!_idToNode.ContainsKey(connId)) {
-                            // Node eliminated externally, remove from dictionary
-                            _idToNode.Remove(connId);
-                        } else {
-                            IEditorGUINode toNode = _idToNode[connId];
-                            Connector.Connect(c, totConnections, _nodeToGUIData[fromNode], _nodeToConnectionOptions[fromNode], _nodeToGUIData[toNode]);
+            // Draw elements if a repaint is not going to be called in the end
+            if (!_repaintOnEnd) {
+                if (Event.current.type == EventType.Repaint) {
+                    // DRAW CONNECTIONS BETWEEN NODES
+                    for (int i = 0; i < nodes.Count; ++i) {
+                        IEditorGUINode fromNode = nodes[i];
+                        List<string> connections = fromNode.connectedNodesIds;
+                        int totConnections = fromNode.connectedNodesIds.Count;
+                        for (int c = 0; c < totConnections; ++c) {
+                            string connId = connections[c];
+                            if (string.IsNullOrEmpty(connId)) continue;
+                            if (!_idToNode.ContainsKey(connId)) {
+                                // Node eliminated externally, remove from dictionary
+                                _idToNode.Remove(connId);
+                            } else {
+                                IEditorGUINode toNode = _idToNode[connId];
+                                Connector.Connect(c, totConnections, nodeToGUIData[fromNode], _nodeToConnectionOptions[fromNode], nodeToGUIData[toNode]);
+                            }
                         }
                     }
-                }
-                switch (interaction.state) {
-                // DRAW RECTANGULAR SELECTION
-                case InteractionManager.State.DrawingSelection:
-                    // Draw selection
-                    using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
-                        GUI.Box(selection.selectionRect, "", _styles.selectionRect);
-                    }
-                    break;
-                // DRAW CONNECTOR DRAGGING
-                case InteractionManager.State.DraggingConnector:
-                    Connector.Drag(
-                        interaction.targetNode, _nodeToGUIData[interaction.targetNode], _nodeToConnectionOptions[interaction.targetNode],
-                        Event.current.mousePosition
-                    );
-                    // Evidence possible connection
-                    IEditorGUINode overNode = GetMouseOverNode();
-                    if (overNode != null && overNode != interaction.targetNode) {
-                        using (new DeGUI.ColorScope(DeGUI.colors.global.orange)) {
-                            GUI.Box(_nodeToGUIData[overNode].fullArea.Expand(4), "", _styles.nodeSelectionOutline);
+                    switch (interaction.state) {
+                    // DRAW RECTANGULAR SELECTION
+                    case InteractionManager.State.DrawingSelection:
+                        // Draw selection
+                        using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
+                            GUI.Box(selection.selectionRect, "", _styles.selectionRect);
                         }
+                        break;
+                    // DRAW CONNECTOR DRAGGING
+                    case InteractionManager.State.DraggingConnector:
+                        Connector.Drag(
+                            interaction.targetNode, nodeToGUIData[interaction.targetNode], _nodeToConnectionOptions[interaction.targetNode],
+                            Event.current.mousePosition
+                        );
+                        // Evidence possible connection
+                        IEditorGUINode overNode = GetMouseOverNode();
+                        if (overNode != null && overNode != interaction.targetNode) {
+                            using (new DeGUI.ColorScope(DeGUI.colors.global.orange)) {
+                                GUI.Box(nodeToGUIData[overNode].fullArea.Expand(4), "", _styles.nodeSelectionOutline);
+                            }
+                        }
+                        break;
                     }
-                    break;
+                    // DRAW MINIMAP
+                    if (_minimap != null) _minimap.Draw();
                 }
             }
 
@@ -363,6 +372,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Repaint
             if (_repaintOnEnd) {
                 _repaintOnEnd = false;
+                if (_minimap != null) _minimap.RefreshMapTextureOnNextPass();
                 editor.Repaint();
             }
         }
@@ -385,7 +395,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 interaction.targetNode = targetNode;
                 interaction.SetMouseTargetType(
                     InteractionManager.TargetType.Node,
-                    _nodeToGUIData[targetNode].dragArea.Contains(Event.current.mousePosition)
+                    nodeToGUIData[targetNode].dragArea.Contains(Event.current.mousePosition)
                         ? InteractionManager.NodeTargetType.DraggableArea
                         : InteractionManager.NodeTargetType.NonDraggableArea
                 );
@@ -397,9 +407,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         IEditorGUINode GetMouseOverNode()
         {
-            for (int i = _nodes.Count - 1; i > -1; --i) {
-                IEditorGUINode node = _nodes[i];
-                if (_nodeToGUIData[node].fullArea.Contains(Event.current.mousePosition)) return node;
+            for (int i = nodes.Count - 1; i > -1; --i) {
+                IEditorGUINode node = nodes[i];
+                if (nodeToGUIData[node].fullArea.Contains(Event.current.mousePosition)) return node;
             }
             return null;
         }
