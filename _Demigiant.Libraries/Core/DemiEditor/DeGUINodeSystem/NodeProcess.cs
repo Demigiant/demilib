@@ -64,8 +64,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         #region Public Methods
 
-        /// <summary>Draws the given node using the given T editor GUINode type</summary>
-        public void Draw<T>(IEditorGUINode node, NodeConnectionOptions? connectionOptions = null) where T : ABSDeGUINode, new()
+        /// <summary>
+        /// Draws the given node using the given T editor GUINode type.
+        /// Retuns the full area of the node
+        /// </summary>
+        public Rect Draw<T>(IEditorGUINode node, NodeConnectionOptions? connectionOptions = null) where T : ABSDeGUINode, new()
         {
             ABSDeGUINode guiNode;
             Type type = typeof(T);
@@ -95,6 +98,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 break;
             }
+
+            return nodeGuiData.fullArea;
         }
 
         #endregion
@@ -198,6 +203,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     break;
                 case InteractionManager.ReadyFor.DraggingNodes:
                     if ((Event.current.mousePosition - interaction.mousePositionOnLMBPress).magnitude >= InteractionManager.MinDragStartupDistance) {
+                        foreach (IEditorGUINode node in selection.selectedNodes) {
+                            node.guiPosition += Event.current.mousePosition - interaction.mousePositionOnLMBPress - Event.current.delta;
+                        }
                         interaction.SetState(InteractionManager.State.DraggingNodes, true);
                     }
                     break;

@@ -37,14 +37,14 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             // Line
             Handles.DrawBezier(anchorsData.fromP, anchorsData.toP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
             Rect arrowR = new Rect(
-                anchorsData.toP.x - DeStylePalette.ico_nodeArrow.width,
-                anchorsData.toP.y - DeStylePalette.ico_nodeArrow.height * 0.5f,
+                anchorsData.arrowP.x - DeStylePalette.ico_nodeArrow.width,
+                anchorsData.arrowP.y - DeStylePalette.ico_nodeArrow.height * 0.5f,
                 DeStylePalette.ico_nodeArrow.width,
                 DeStylePalette.ico_nodeArrow.height
             );
             // Arrow
             Matrix4x4 currGUIMatrix = GUI.matrix;
-            if (anchorsData.arrowRequiresRotation) GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.toP);
+            if (anchorsData.arrowRequiresRotation) GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.arrowP);
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(arrowR, DeStylePalette.ico_nodeArrow);
             GUI.matrix = currGUIMatrix;
         }
@@ -64,26 +64,31 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         static AnchorsData GetAnchors(Rect fromArea, Rect toArea, ConnectorMode connectorMode)
         {
             AnchorsData a = new AnchorsData();
-            float distX = toArea.xMin - fromArea.xMax;
-            float distY = toArea.yMin - fromArea.yMax;
-            bool fromIsBottom = fromArea.yMax < toArea.yMin && distY >= distX;
+            float distX = toArea.x - fromArea.xMax;
+            float distY = toArea.y - fromArea.yMax;
+            bool fromIsBottom = fromArea.yMax < toArea.y && distY >= distX;
             a.fromP = fromIsBottom
                 ? new Vector2(fromArea.center.x, fromArea.yMax)
                 : new Vector2(fromArea.xMax, fromArea.center.y);
-            bool toIsTop = toArea.y > a.fromP.y && (fromArea.xMax > toArea.xMin || toArea.yMin - a.fromP.y > toArea.center.x - a.fromP.x);
+            bool toIsTop = toArea.y > a.fromP.y && (fromArea.xMax > toArea.x || toArea.y - a.fromP.y > toArea.center.x - a.fromP.x);
             a.toP = toIsTop
-                ? new Vector2(toArea.center.x, toArea.yMin)
-                : new Vector2(toArea.xMin, toArea.center.y);
+                ? new Vector2(toArea.center.x, toArea.y)
+                : new Vector2(toArea.x, toArea.center.y);
+            a.arrowP = a.toP;
             // Set tangents
             bool isToBehindFrom = a.toP.x < a.fromP.x && a.toP.y < a.fromP.y;
             float dist = Vector2.Distance(a.toP, a.fromP);
-            float tangentDistance = isToBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, dist * 0.5f);
             a.isStraight = connectorMode == ConnectorMode.Straight
                               || !isToBehindFrom && connectorMode == ConnectorMode.Smart && dist <= _MaxDistanceForSmartStraight;
             if (a.isStraight) {
                 a.fromTangent = a.fromP;
                 a.toTangent = a.toP;
             } else {
+                // Detract arrow size from toP (so curve is nicer and connects better with arrow)
+                if (toIsTop) a.toP.y -= DeStylePalette.ico_nodeArrow.width;
+                else a.toP.x -= DeStylePalette.ico_nodeArrow.width;
+                //
+                float tangentDistance = isToBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, dist * 0.4f);
                 a.fromTangent = a.fromP + (fromIsBottom ? Vector2.up * tangentDistance : Vector2.right * tangentDistance);
                 a.toTangent = a.toP + (toIsTop? Vector2.up * -tangentDistance : Vector2.right * -tangentDistance);
             }
@@ -142,6 +147,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         {
             public Vector2 fromP, toP;
             public Vector2 fromTangent, toTangent;
+            public Vector2 arrowP;
             public bool isStraight;
             public bool arrowRequiresRotation;
             public float arrowRotationAngle;

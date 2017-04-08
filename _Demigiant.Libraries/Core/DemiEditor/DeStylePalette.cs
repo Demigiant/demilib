@@ -65,6 +65,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteDot { get { return LoadTexture(ref _whiteDot, "whiteDot"); } }
         public static Texture2D whiteDot_darkBorder { get { return LoadTexture(ref _whiteDot_darkBorder, "whiteDot_darkBorder"); } }
         public static Texture2D whiteDot_whiteBorderAlpha { get { return LoadTexture(ref _whiteDot_whiteBorderAlpha, "whiteDot_whiteBorderAlpha"); } }
+        public static Texture2D circle { get { return LoadTexture(ref _circle, "circle", FilterMode.Bilinear); } }
         static Texture2D _whiteSquare;
         static Texture2D _whiteSquareAlpha10;
         static Texture2D _whiteSquareAlpha15;
@@ -97,6 +98,7 @@ namespace DG.DemiEditor
         static Texture2D _whiteDot;
         static Texture2D _whiteDot_darkBorder;
         static Texture2D _whiteDot_whiteBorderAlpha;
+        static Texture2D _circle;
         public static Texture2D ico_nodeArrow { get { return LoadTexture(ref _ico_nodeArrow, "ico_nodeArrow", FilterMode.Bilinear, 16); } }
         public static Texture2D ico_alignTL { get { return LoadTexture(ref _ico_alignTL, "ico_alignTL"); } }
         public static Texture2D ico_alignTC { get { return LoadTexture(ref _ico_alignTC, "ico_alignTC"); } }
