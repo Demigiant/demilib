@@ -138,6 +138,12 @@
             </summary>
             <param name="instance"></param>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorPrefabUtils.InstanceHasUnappliedModifications(UnityEngine.GameObject)">
+            <summary>
+            Returns TRUe if a prefab instance has unapplied modifications, ignoring any modifications applied to the transform.<para/>
+            NOTE: this a somehow costly operation (since it generates GC)
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorPrefabUtils.BreakPrefabInstances(System.Collections.Generic.List{UnityEngine.GameObject})">
             <summary>
             Completely removes any prefab connection from the given prefab instances.
@@ -287,7 +293,7 @@
             Always connects a node from BottomOrRight side to TopOrLeft side
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.Connector.Connect(System.Int32,System.Int32,DG.DemiLib.IEditorGUINode,DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions,DG.DemiLib.IEditorGUINode,DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.Connector.Connect(System.Int32,System.Int32,DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions,DG.DemiEditor.DeGUINodeSystem.NodeGUIData)">
             <summary>
             Always connects from BottomOrRight side to TopOrLeft side
             </summary>
@@ -329,7 +335,10 @@
             <param name="editor">EditorWindow for this process</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Draw``1(DG.DemiLib.IEditorGUINode,System.Nullable{DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions})">
-            <summary>Draws the given node using the given T editor GUINode type</summary>
+            <summary>
+            Draws the given node using the given T editor GUINode type.
+            Retuns the full area of the node
+            </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.NodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">
             <summary>
