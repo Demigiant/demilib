@@ -99,7 +99,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 // Draw end node icon
                 if (options.evidenceEndNodes && node.connectedNodesIds.Count > 0 && string.IsNullOrEmpty(node.connectedNodesIds[0])) {
-                    float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 24);
+                    float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 20);
                     Rect r = new Rect(nodeGuiData.fullArea.xMax - icoSize * 0.5f, nodeGuiData.fullArea.yMax - icoSize * 0.5f, icoSize, icoSize);
                     GUI.DrawTexture(r, DeStylePalette.ico_end);
                 }
@@ -162,17 +162,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         break;
                     case InteractionManager.TargetType.Node:
                         // LMB pressed on a node
-                        // Select
-                        bool isAlreadySelected = selection.IsSelected(interaction.targetNode);
-                        if (Event.current.shift) {
-                            if (isAlreadySelected) selection.Deselect(interaction.targetNode);
-                            else selection.Select(interaction.targetNode, true);
-                            _repaintOnEnd = true;
-                        } else if (!isAlreadySelected) {
-                            selection.Select(interaction.targetNode, false);
-                            _repaintOnEnd = true;
-                        }
-                        //
                         if (Event.current.control) {
                             // CTRL+Drag on node > drag connection (eventually)
                             bool canDragConnector = interaction.targetNode.connectedNodesIds.Count >= 1
@@ -180,8 +169,18 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                                     && _nodeToConnectionOptions[interaction.targetNode].allowManualConnections;
                             if (canDragConnector) interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingConnector);
                         } else if (interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
-                            // LMB pressed on a node's draggable area > set state to DraggingNodes
+                            // LMB pressed on a node's draggable area > set readyFor state to DraggingNodes and select node
                             interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingNodes);
+                            // Select
+                            bool isAlreadySelected = selection.IsSelected(interaction.targetNode);
+                            if (Event.current.shift) {
+                                if (isAlreadySelected) selection.Deselect(interaction.targetNode);
+                                else selection.Select(interaction.targetNode, true);
+                                _repaintOnEnd = true;
+                            } else if (!isAlreadySelected) {
+                                selection.Select(interaction.targetNode, false);
+                                _repaintOnEnd = true;
+                            }
                         }
                         // Update eventual sorting
                         if (sortableNodes != null) UpdateSorting(sortableNodes);
