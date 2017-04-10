@@ -54,9 +54,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public TargetType mouseTargetType { get; private set; } // Always updated, even on rollover
         public NodeTargetType nodeTargetType { get; private set; }
         public IEditorGUINode targetNode { get; internal set; }
-        public bool mouseTargetIsLocked { get { return state == State.DraggingNodes || state == State.DraggingConnector || state == State.Panning; } }
         public Vector2 mousePositionOnLMBPress { get; internal set; } // Stored mouse position last time LMB was pressed
         public bool controlKey { get; private set; } // TRUE when the CTRL key must be considered for key combinations (so it's valid until all keys are released)
+        public bool mouseTargetIsLocked {
+            get {
+                switch (state) {
+                    case State.DraggingNodes: case State.DraggingConnector: case State.Panning: return true;
+                }
+                switch (readyForState) {
+                    case ReadyFor.DraggingNodes: case ReadyFor.DraggingConnector: case ReadyFor.Panning: return true;
+                }
+                return false;
+            }
+        }
 
         const float _DoubleClickTime = 0.4f;
         internal static readonly float MinDragStartupDistance = 10; // Min drag pixels required to actually start some drag operations
@@ -95,11 +105,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         #region Internal Methods
 
-        internal void SetState(State toState, bool resetReadyFor = false)
+        // Also resets readyForState
+        internal void SetState(State toState)
         {
             State prevState = state;
             state = toState;
-            if (resetReadyFor) readyForState = ReadyFor.Unset;
+            readyForState = ReadyFor.Unset;
 
             // Repaint editor if necessary
             switch (prevState) {

@@ -20,6 +20,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public bool forceDarkSkin = false; // Ignored if gridTextureOverride != NULL
         public bool evidenceSelectedNodes = true;
         public Color evidenceSelectedNodesColor = new Color(0.13f, 0.48f, 0.91f);
+        public bool evidenceEndNodes = true; // Nodes that have no forward connections
         public bool showMinimap = true;
         public int minimapMaxSize = 150;
         public MinimapResolution minimapResolution = MinimapResolution.Normal;

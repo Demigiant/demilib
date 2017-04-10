@@ -97,6 +97,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         GUI.Box(nodeGuiData.fullArea.Expand(4), "", _styles.nodeSelectionOutline);
                     }
                 }
+                // Draw end node icon
+                if (options.evidenceEndNodes && node.connectedNodesIds.Count > 0 && string.IsNullOrEmpty(node.connectedNodesIds[0])) {
+                    float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 24);
+                    Rect r = new Rect(nodeGuiData.fullArea.xMax - icoSize * 0.5f, nodeGuiData.fullArea.yMax - icoSize * 0.5f, icoSize, icoSize);
+                    GUI.DrawTexture(r, DeStylePalette.ico_end);
+                }
                 break;
             }
 
@@ -203,19 +209,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
             case EventType.MouseDrag:
                 switch (interaction.readyForState) {
                 case InteractionManager.ReadyFor.DrawingSelection:
-                    interaction.SetState(InteractionManager.State.DrawingSelection, true);
+                    interaction.SetState(InteractionManager.State.DrawingSelection);
                     break;
                 case InteractionManager.ReadyFor.DraggingNodes:
                     if ((Event.current.mousePosition - interaction.mousePositionOnLMBPress).magnitude >= InteractionManager.MinDragStartupDistance) {
                         foreach (IEditorGUINode node in selection.selectedNodes) {
                             node.guiPosition += Event.current.mousePosition - interaction.mousePositionOnLMBPress - Event.current.delta;
                         }
-                        interaction.SetState(InteractionManager.State.DraggingNodes, true);
+                        interaction.SetState(InteractionManager.State.DraggingNodes);
                     }
                     break;
                 case InteractionManager.ReadyFor.DraggingConnector:
                     if ((Event.current.mousePosition - interaction.mousePositionOnLMBPress).magnitude >= InteractionManager.MinDragStartupDistance) {
-                        interaction.SetState(InteractionManager.State.DraggingConnector, true);
+                        interaction.SetState(InteractionManager.State.DraggingConnector);
                     }
                     break;
                 }
@@ -303,7 +309,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 bool isLMBDoubleClick = interaction.EvaluateMouseUp();
                 if (isLMBDoubleClick) {
-                    interaction.SetState(InteractionManager.State.DoubleClick, true);
+                    interaction.SetState(InteractionManager.State.DoubleClick);
                     _resetInteractionOnEnd = true;
                 } else interaction.SetState(InteractionManager.State.Inactive);
                 break;
@@ -467,7 +473,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         class Styles
         {
-            public GUIStyle selectionRect, nodeSelectionOutline;
+            public GUIStyle selectionRect, nodeSelectionOutline, endNodeOutline;
             bool _initialized;
 
             public void Init()
@@ -478,6 +484,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 selectionRect = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderAlpha15);
                 nodeSelectionOutline = DeGUI.styles.box.outline01.Clone()
                     .Border(new RectOffset(5, 5, 5, 5)).Background(DeStylePalette.squareBorderCurvedEmpty);
+                endNodeOutline = nodeSelectionOutline.Clone().Background(DeStylePalette.squareCornersEmpty02)
+                    .Border(new RectOffset(7, 7, 7, 7));
             }
         }
     }

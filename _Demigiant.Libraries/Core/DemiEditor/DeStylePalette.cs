@@ -62,6 +62,7 @@ namespace DG.DemiEditor
         public static Texture2D squareBorderCurvedEmpty02 { get { return LoadTexture(ref _squareBorderCurvedEmpty02, "squareBorderCurvedEmpty02"); } }
         public static Texture2D squareBorderCurvedAlpha { get { return LoadTexture(ref _squareBorderCurvedAlpha, "squareBorderCurvedAlpha"); } }
         public static Texture2D squareBorderCurved_darkBordersAlpha { get { return LoadTexture(ref _squareBorderCurved_darkBordersAlpha, "squareBorderCurved_darkBordersAlpha"); } }
+        public static Texture2D squareCornersEmpty02 { get { return LoadTexture(ref _squareCornersEmpty02, "squareCornersEmpty02"); } }
         public static Texture2D whiteDot { get { return LoadTexture(ref _whiteDot, "whiteDot"); } }
         public static Texture2D whiteDot_darkBorder { get { return LoadTexture(ref _whiteDot_darkBorder, "whiteDot_darkBorder"); } }
         public static Texture2D whiteDot_whiteBorderAlpha { get { return LoadTexture(ref _whiteDot_whiteBorderAlpha, "whiteDot_whiteBorderAlpha"); } }
@@ -95,11 +96,13 @@ namespace DG.DemiEditor
         static Texture2D _squareBorderCurvedEmpty02; // More curved
         static Texture2D _squareBorderCurvedAlpha;
         static Texture2D _squareBorderCurved_darkBordersAlpha;
+        static Texture2D _squareCornersEmpty02;
         static Texture2D _whiteDot;
         static Texture2D _whiteDot_darkBorder;
         static Texture2D _whiteDot_whiteBorderAlpha;
         static Texture2D _circle;
         public static Texture2D ico_nodeArrow { get { return LoadTexture(ref _ico_nodeArrow, "ico_nodeArrow", FilterMode.Bilinear, 16); } }
+        public static Texture2D ico_end { get { return LoadTexture(ref _ico_end, "ico_end", FilterMode.Bilinear); } }
         public static Texture2D ico_alignTL { get { return LoadTexture(ref _ico_alignTL, "ico_alignTL"); } }
         public static Texture2D ico_alignTC { get { return LoadTexture(ref _ico_alignTC, "ico_alignTC"); } }
         public static Texture2D ico_alignTR { get { return LoadTexture(ref _ico_alignTR, "ico_alignTR"); } }
@@ -122,6 +125,7 @@ namespace DG.DemiEditor
         public static Texture2D grid_dark { get { return LoadTexture(ref _grid_dark, "grid_dark", FilterMode.Point, 64, TextureWrapMode.Repeat); } }
         public static Texture2D grid_bright { get { return LoadTexture(ref _grid_bright, "grid_bright", FilterMode.Point, 64, TextureWrapMode.Repeat); } }
         static Texture2D _ico_nodeArrow;
+        static Texture2D _ico_end;
         static Texture2D _ico_alignTL;
         static Texture2D _ico_alignTC;
         static Texture2D _ico_alignTR;
