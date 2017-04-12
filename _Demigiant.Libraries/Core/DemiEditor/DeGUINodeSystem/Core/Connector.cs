@@ -31,9 +31,23 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         ) {
             AnchorsData anchorsData = GetAnchors(fromGUIData.fullArea, toGUIData.fullArea, fromOptions.connectorMode);
             // x : 1 = index : tot
-            Color color = fromTotConnections < 2
-                ? fromOptions.startColor
+            Color color = fromTotConnections < 2 || fromOptions.gradientColor == null
+                ? fromOptions.startColor == Color.clear ? fromGUIData.mainColor : fromOptions.startColor
                 : fromOptions.gradientColor.Evaluate(connectionIndex / (float)(fromTotConnections - 1));
+            // Line start point
+            const int fromRWidth = 6; // Height and width are switched if start point is bottom
+            const int fromRHeight = 8;
+            Rect fromR;
+            if (anchorsData.fromIsSide) {
+                fromR = new Rect(anchorsData.fromP.x, anchorsData.fromP.y - fromRHeight * 0.5f, fromRWidth, fromRHeight);
+                anchorsData.fromP.x += fromRWidth;
+                if (anchorsData.isStraight) anchorsData.fromTangent.x += fromRWidth;
+            } else {
+                fromR = new Rect(anchorsData.fromP.x - fromRHeight * 0.5f, anchorsData.fromP.y, fromRHeight, fromRWidth);
+                anchorsData.fromP.y += fromRWidth;
+                if (anchorsData.isStraight) anchorsData.fromTangent.y += fromRWidth;
+            }
+            using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(fromR, DeStylePalette.whiteSquare);
             // Line
             Handles.DrawBezier(anchorsData.fromP, anchorsData.toP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
             Rect arrowR = new Rect(
@@ -75,8 +89,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 ? new Vector2(toArea.center.x, toArea.y)
                 : new Vector2(toArea.x, toArea.center.y);
             a.arrowP = a.toP;
+            a.fromIsSide = !fromIsBottom;
+            a.toIsSide = !toIsTop;
             // Set tangents
-            bool isToBehindFrom = a.toP.x < a.fromP.x && a.toP.y < a.fromP.y;
+            bool isToBehindFrom = a.toP.x < a.fromP.x && a.toP.y < fromArea.yMax;
             float dist = Vector2.Distance(a.toP, a.fromP);
             a.isStraight = connectorMode == ConnectorMode.Straight
                               || !isToBehindFrom && connectorMode == ConnectorMode.Smart && dist <= _MaxDistanceForSmartStraight;
@@ -148,6 +164,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             public Vector2 fromP, toP;
             public Vector2 fromTangent, toTangent;
             public Vector2 arrowP;
+            public bool fromIsSide, toIsSide; // If FALSE it means it's either top (toNode) or bottom (fromNode)
             public bool isStraight;
             public bool arrowRequiresRotation;
             public float arrowRotationAngle;

@@ -56,6 +56,14 @@ namespace _Examples.DeGUI.Editor.DeGUINode
 
             // Node GUI Process
             using (new NodeProcessScope<GenericNode>(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
+                // Draw nodes
+                // Generic nodes
+                foreach (GenericNode node in src.nodeSystem.genericNodes) {
+                    _nodeProcess.Draw<GenericNodeGUI>(node);
+                }
+                // Start node (last so it's always over other nodes)
+                _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);
+                
                 // EVENTS
                 switch (_nodeProcess.interaction.state) {
                 case InteractionManager.State.ContextClick:
@@ -74,14 +82,6 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                     Debug.Log("<color=#00ff00>DoubleClick > " + _nodeProcess.interaction.mouseTargetType + (_nodeProcess.interaction.targetNode == null ? "" : " > " + _nodeProcess.interaction.targetNode.id) + "</color>");
                     break;
                 }
-
-                // Draw nodes
-                // Generic nodes
-                foreach (GenericNode node in src.nodeSystem.genericNodes) {
-                    _nodeProcess.Draw<GenericNodeGUI>(node);
-                }
-                // Start node (last so it's always over other nodes)
-                _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);
             }
 
             if (GUI.changed) EditorUtility.SetDirty(src);

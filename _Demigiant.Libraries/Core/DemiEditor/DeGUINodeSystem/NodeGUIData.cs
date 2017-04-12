@@ -11,8 +11,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
     {
         public Rect fullArea, dragArea;
         public Rect extraArea0;
-        public List<Rect> connectorAreas; // Sub areas from which each connector should start - if NULL uses fullArea
-        public Color mainColor; // Node color (used by miniMap and in other occasions)
+        public List<Rect> connectorAreas; // Sub areas from which each connector should start - if NULL uses fullArea (//TODO)
+        public Color mainColor; // Node color (used by miniMap and as default connector color is no startColor/gradientColor is set)
 
         public NodeGUIData(Rect fullArea, Rect dragArea, Rect? extraArea0 = null)
         {

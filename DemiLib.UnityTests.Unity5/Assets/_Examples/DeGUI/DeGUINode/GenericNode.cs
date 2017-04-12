@@ -12,11 +12,26 @@ namespace _Examples.DeGUI.DeGUINode
     [Serializable]
     public class GenericNode : IEditorGUINode
     {
-        #region IEditorGUINode
+        public enum SampleEnum {
+            A, B, C, D
+        }
 
+        #region Serialized
+
+        public bool boolValue;
+        public string stringValue = "Sample Text";
+        public SampleEnum enumValue = SampleEnum.B;
+        public float floatValue = 3.5f;
+        public Color colorValue = new Color(0.92f, 0.5f, 0.07f);
+        
         [SerializeField] string _id;
         [SerializeField] Vector2 _guiPosition;
         [SerializeField] List<string> _connectedNodesIds = new List<string>() { null };
+
+        #endregion
+        
+        #region IEditorGUINode
+
         public string id { get { return _id; } set { _id = value; } }
         public Vector2 guiPosition { get { return _guiPosition; } set { _guiPosition = value; } }
         public List<string> connectedNodesIds { get { return _connectedNodesIds; } set { _connectedNodesIds = value; } }

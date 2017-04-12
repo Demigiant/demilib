@@ -61,6 +61,7 @@
     <Compile Include="DeGUINodeSystem\ConnectorAttachMode.cs" />
     <Compile Include="DeGUINodeSystem\ConnectorMode.cs" />
     <Compile Include="DeGUINodeSystem\Core\Connector.cs" />
+    <Compile Include="DeGUINodeSystem\Core\Minimap.cs" />
     <Compile Include="DeGUINodeSystem\NodeConnectionOptions.cs" />
     <Compile Include="DeGUINodeSystem\NodeGUIData.cs" />
     <Compile Include="DeGUINodeSystem\InteractionManager.cs" />

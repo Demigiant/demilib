@@ -165,7 +165,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         if (Event.current.control) {
                             // CTRL+Drag on node > drag connection (eventually)
                             bool canDragConnector = interaction.targetNode.connectedNodesIds.Count >= 1
-                                                    && selection.selectedNodes.Count == 1
+//                                                    && selection.selectedNodes.Count == 1
                                                     && _nodeToConnectionOptions[interaction.targetNode].allowManualConnections;
                             if (canDragConnector) interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingConnector);
                         } else if (interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
