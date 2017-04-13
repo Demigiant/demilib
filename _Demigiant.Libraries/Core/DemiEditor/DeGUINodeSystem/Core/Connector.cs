@@ -15,7 +15,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
     internal static class Connector
     {
         public static readonly DragData dragData = new DragData();
-        const int _LineSize = 2;
+        const int _LineSize = 3;
         const int _MaxDistanceForSmartStraight = 120;
         const int _TangentDistance = 50;
         const int _TangentDistanceIfInverse = 120; // Tangent distance if TO is behind FROM
@@ -26,7 +26,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         /// Always connects from BottomOrRight side to TopOrLeft side
         /// </summary>
         public static void Connect(
-            int connectionIndex, int fromTotConnections,
+            NodeProcess process, int connectionIndex, int fromTotConnections,
             NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, NodeGUIData toGUIData
         ) {
             AnchorsData anchorsData = GetAnchors(fromGUIData.fullArea, toGUIData.fullArea, fromOptions.connectorMode);
@@ -58,7 +58,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             );
             // Arrow
             Matrix4x4 currGUIMatrix = GUI.matrix;
-            if (anchorsData.arrowRequiresRotation) GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.arrowP);
+            if (anchorsData.arrowRequiresRotation) GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.arrowP * process.guiScale);
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(arrowR, DeStylePalette.ico_nodeArrow);
             GUI.matrix = currGUIMatrix;
         }

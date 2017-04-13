@@ -37,6 +37,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public GUIChangeType guiChangeType { get; private set; } // Last GUI.changed reason if set by process (reset on process end)
         public Rect area { get; private set; }
         public Vector2 areaShift { get; private set; }
+        public float guiScale { get; private set; }
 
         internal readonly List<IEditorGUINode> nodes = new List<IEditorGUINode>(); // Used in conjunction with dictionaries to loop them in desired order
         internal readonly Dictionary<IEditorGUINode,NodeGUIData> nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
@@ -45,7 +46,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
         readonly Styles _styles = new Styles();
         Minimap _minimap;
-        bool _repaintOnEnd; // Set to FALSE at each EndGUI
+        bool _repaintOnEnd; // If TRUE, repaints the editor during EndGUI. Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
 
         #region CONSTRUCTOR
@@ -59,6 +60,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.editor = editor;
             interaction = new InteractionManager(this);
             selection = new SelectionManager();
+            guiScale = 1f;
         }
 
         #endregion
@@ -123,6 +125,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
             if (options.showMinimap) {
                 if (_minimap == null) _minimap = new Minimap(this);
             } else _minimap = null;
+
+            // Set scale
+            if (!Mathf.Approximately(guiScale, 1)) {
+                GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one * guiScale);
+                area = new Rect(area.x, area.y, area.width / guiScale, area.height / guiScale);
+            }
 
             // Determine mouse target type before clearing nodeGUIData dictionary
             if (!interaction.mouseTargetIsLocked) EvaluateAndStoreMouseTarget();
@@ -267,6 +275,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 interaction.SetState(InteractionManager.State.ContextClick);
                 _resetInteractionOnEnd = true;
                 break;
+            case EventType.ScrollWheel:
+                if (options.mouseWheelScalesGUI) {
+                    bool isScaleUp = Event.current.delta.y < 0;
+                    if (isScaleUp && Mathf.Approximately(options.guiScaleValues[0], guiScale)) break;
+                    if (!isScaleUp && Mathf.Approximately(options.guiScaleValues[options.guiScaleValues.Length - 1], guiScale)) break;
+                    for (int i = 0; i < options.guiScaleValues.Length; ++i) {
+                        if (!Mathf.Approximately(options.guiScaleValues[i], guiScale)) continue;
+                        guiScale = isScaleUp ? options.guiScaleValues[i - 1] : options.guiScaleValues[i + 1];
+                        _repaintOnEnd = true;
+                        break;
+                    }
+                }
+                break;
             // KEYBOARD EVENTS //////////////////////////////////////////////////////////////////////////////////////////////////////
             case EventType.KeyUp:
                 switch (Event.current.keyCode) {
@@ -333,7 +354,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                 _idToNode.Remove(connId);
                             } else {
                                 IEditorGUINode toNode = _idToNode[connId];
-                                Connector.Connect(c, totConnections, nodeToGUIData[fromNode], _nodeToConnectionOptions[fromNode], nodeToGUIData[toNode]);
+                                Connector.Connect(
+                                    this, c, totConnections, nodeToGUIData[fromNode], _nodeToConnectionOptions[fromNode], nodeToGUIData[toNode]
+                                );
                             }
                         }
                     }
@@ -380,6 +403,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 if (_minimap != null) _minimap.RefreshMapTextureOnNextPass();
                 editor.Repaint();
             }
+            // Reset GUI matrix
+            GUI.matrix = Matrix4x4.identity;
         }
 
         #endregion

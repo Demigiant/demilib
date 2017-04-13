@@ -24,5 +24,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public bool showMinimap = true;
         public int minimapMaxSize = 150;
         public MinimapResolution minimapResolution = MinimapResolution.Normal;
+        public bool mouseWheelScalesGUI = true; // If TRUE implements GUI scaling via mouse wheel
+        public float[] guiScaleValues = new float[] { 1f, 0.75f, 0.5f, 0.25f }; // Ordered from max to min, 1f included
     }
 }
