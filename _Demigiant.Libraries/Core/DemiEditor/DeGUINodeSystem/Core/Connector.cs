@@ -58,7 +58,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             );
             // Arrow
             Matrix4x4 currGUIMatrix = GUI.matrix;
-            if (anchorsData.arrowRequiresRotation) GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.arrowP * process.guiScale);
+            if (anchorsData.arrowRequiresRotation) {
+                GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.arrowP * process.guiScale + process.guiScalePositionDiff);
+            }
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(arrowR, DeStylePalette.ico_nodeArrow);
             GUI.matrix = currGUIMatrix;
         }

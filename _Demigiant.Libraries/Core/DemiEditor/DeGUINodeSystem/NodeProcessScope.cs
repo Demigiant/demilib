@@ -15,7 +15,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// <summary>
         /// Use this to encapsulate node GUI operations.<para/>
         /// Automatically manages area drag operations with middle mouse and node drag operations with left mouse.<para/>
-        /// Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or sortableNodes changes sorting.
+        /// Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or sortableNodes changes sorting.<para/>
+        /// Wraps all content inside a GUILayout.BeginArea(nodeArea).
         /// </summary>
         /// <param name="process">The <see cref="NodeProcess"/> to use</param>
         /// <param name="nodeArea">Area within which the nodes will be drawn</param>

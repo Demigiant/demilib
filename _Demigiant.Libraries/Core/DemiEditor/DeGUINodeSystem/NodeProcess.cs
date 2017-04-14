@@ -38,6 +38,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Rect area { get; private set; }
         public Vector2 areaShift { get; private set; }
         public float guiScale { get; private set; }
+        internal Vector2 guiScalePositionDiff { get; private set; } // Used by GUI calls that need to rotate the matrix
 
         internal readonly List<IEditorGUINode> nodes = new List<IEditorGUINode>(); // Used in conjunction with dictionaries to loop them in desired order
         internal readonly Dictionary<IEditorGUINode,NodeGUIData> nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
@@ -120,7 +121,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
         internal void BeginGUI<T>(Rect nodeArea, ref Vector2 refAreaShift, IList<T> sortableNodes = null) where T : IEditorGUINode
         {
             _styles.Init();
-            area = nodeArea;
             areaShift = refAreaShift;
             if (options.showMinimap) {
                 if (_minimap == null) _minimap = new Minimap(this);
@@ -129,8 +129,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Set scale
             if (!Mathf.Approximately(guiScale, 1)) {
                 GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one * guiScale);
-                area = new Rect(area.x, area.y, area.width / guiScale, area.height / guiScale);
             }
+
+            // Scale area size to guiScale and begin GUILayout area (so base node area coordinates are 0,0 and everything is easier and faster)
+            area = new Rect(0, 0, nodeArea.width / guiScale, nodeArea.height / guiScale);
+            guiScalePositionDiff = new Vector2(nodeArea.x - nodeArea.x / guiScale, nodeArea.y - nodeArea.y / guiScale);
+            GUILayout.BeginArea(new Rect(nodeArea.x / guiScale, nodeArea.y / guiScale, area.width, area.height));
 
             // Determine mouse target type before clearing nodeGUIData dictionary
             if (!interaction.mouseTargetIsLocked) EvaluateAndStoreMouseTarget();
@@ -403,7 +407,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 if (_minimap != null) _minimap.RefreshMapTextureOnNextPass();
                 editor.Repaint();
             }
-            // Reset GUI matrix
+
+            // Close area and reset GUI matrix
+            GUILayout.EndArea();
             GUI.matrix = Matrix4x4.identity;
         }
 
