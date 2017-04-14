@@ -55,7 +55,9 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             DG.DemiEditor.DeGUI.BeginGUI();
 
             // Node GUI Process
-            using (new NodeProcessScope<GenericNode>(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
+            Rect nodeArea = this.position.ResetXY().SetY(100).Shift(0, 0, 0, -100);
+            using (new NodeProcessScope<GenericNode>(_nodeProcess, nodeArea, ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
+//            using (new NodeProcessScope<GenericNode>(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
                 // Draw nodes
                 // Generic nodes
                 foreach (GenericNode node in src.nodeSystem.genericNodes) {
@@ -70,6 +72,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                     switch (_nodeProcess.interaction.mouseTargetType) {
                     case InteractionManager.TargetType.Background:
                         Debug.Log("ContextClick > Background");
+                        ContextMenu_Background();
                         break;
                     case InteractionManager.TargetType.Node:
                         if (_nodeProcess.selection.selectedNodes.Count == 0) Debug.Log("ContextClick > Unselected node");
@@ -83,8 +86,25 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                     break;
                 }
             }
+            // Header test
+            DG.DemiEditor.DeGUI.DrawColoredSquare(this.position.ResetXY().SetHeight(100), new Color(0f, 0.84f, 1f, 0.5f));
 
             if (GUI.changed) EditorUtility.SetDirty(src);
+        }
+
+        #endregion
+
+        #region ContextMenus
+
+        void ContextMenu_Background()
+        {
+            GenericMenu menu = new GenericMenu();
+            menu.AddItem(new GUIContent(string.Format("Reset Panning (current: {0},{1}", src.nodeSystem.areaShift.x, src.nodeSystem.areaShift.y)), false, () => {
+                src.nodeSystem.areaShift = Vector2.zero;
+                EditorUtility.SetDirty(src);
+                this.Repaint();
+            });
+            menu.DropDown(new Rect(Event.current.mousePosition.x, Event.current.mousePosition.y, 0, 0));
         }
 
         #endregion

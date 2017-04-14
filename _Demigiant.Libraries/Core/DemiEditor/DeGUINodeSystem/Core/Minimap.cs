@@ -32,8 +32,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         {
             if (_process.nodes.Count == 0) return;
 
-            Rect visibleArea = new Rect(0, 0, _process.area.width, _process.area.height);
-            Rect fullNodesArea = EvaluateFullNodesArea();
+            Rect visibleArea = new Rect(_process.area);
+            Rect relativeArea = visibleArea.ResetXY();
+            Rect fullNodesArea = EvaluateFullNodesArea(); // x/y = TL node corner, width/height = exact size of area occupied by nodes without extra space
             if (fullNodesArea.width < 1 || visibleArea.Includes(fullNodesArea)) return; // Don't draw map if nodes don't exit the visible area
 
             _Styles.Init();
@@ -42,10 +43,13 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             Vector2 shiftFromOriginalNodesAreaPos = new Vector2();
             Rect fullZeroBasedArea = new Rect();
             // Store zero-based full area (nodes plus space in all directions) and shift between original nodes position
-            shiftFromOriginalNodesAreaPos = new Vector2(fullNodesArea.x < 0 ? -fullNodesArea.x : 0, fullNodesArea.y < 0 ? -fullNodesArea.y : 0);
+            shiftFromOriginalNodesAreaPos = new Vector2(
+                fullNodesArea.x - visibleArea.x < 0 ? -fullNodesArea.x : -visibleArea.x,
+                fullNodesArea.y - visibleArea.y < 0 ? -fullNodesArea.y : -visibleArea.y
+            );
             fullZeroBasedArea = new Rect(0, 0,
-                Mathf.Abs(Mathf.Min(0, fullNodesArea.x)) + Mathf.Max(fullNodesArea.xMax, visibleArea.xMax),
-                Mathf.Abs(Mathf.Min(0, fullNodesArea.y)) + Mathf.Max(fullNodesArea.yMax, visibleArea.yMax)
+                Mathf.Abs(Mathf.Min(0, fullNodesArea.x - visibleArea.x)) + Mathf.Max(fullNodesArea.xMax - visibleArea.x, relativeArea.xMax),
+                Mathf.Abs(Mathf.Min(0, fullNodesArea.y - visibleArea.y)) + Mathf.Max(fullNodesArea.yMax - visibleArea.y, relativeArea.yMax)
             );
             if (fullZeroBasedArea.width > fullZeroBasedArea.height) {
                 areaW = maxSize;
@@ -62,15 +66,15 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             GUI.DrawTexture(area, DeStylePalette.blackSquareAlpha80);
             // Visible area overlay
             Rect innerArea = new Rect(area.x, area.y,
-                area.width * visibleArea.width / fullZeroBasedArea.width,
-                area.height * visibleArea.height / fullZeroBasedArea.height
+                area.width * relativeArea.width / fullZeroBasedArea.width,
+                area.height * relativeArea.height / fullZeroBasedArea.height
             );
-            if (fullNodesArea.x < 0) {
+            if (fullNodesArea.x < visibleArea.x) {
                 float extraXL = Mathf.Abs(fullNodesArea.x);
                 float emptyX = extraXL + Mathf.Max(0, fullNodesArea.xMax - visibleArea.xMax);
                 innerArea.x += (area.width - innerArea.width) * (extraXL / emptyX);
             }
-            if (fullNodesArea.y < 0) {
+            if (fullNodesArea.y < visibleArea.y) {
                 float extraYL = Mathf.Abs(fullNodesArea.y);
                 float emptyY = extraYL + Mathf.Max(0, fullNodesArea.yMax - visibleArea.yMax);
                 innerArea.y += (area.height - innerArea.height) * (extraYL / emptyY);
@@ -151,7 +155,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         class Styles
         {
-            public GUIStyle area, visibleArea, visibleAreaOverlay;
+            public GUIStyle visibleArea, visibleAreaOverlay;
             bool _initialized;
 
             public void Init()
@@ -159,7 +163,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 if (_initialized) return;
 
                 _initialized = true;
-                area = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.blackSquareAlpha80);
                 visibleArea = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.whiteSquareAlpha15);
                 visibleAreaOverlay = new GUIStyle(GUI.skin.box);
             }
