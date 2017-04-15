@@ -150,8 +150,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             // Background grid
             if (options.drawBackgroundGrid) {
-                if (options.gridTextureOverride == null) DeGUI.BackgroundGrid(area, areaShift, options.forceDarkSkin);
-                else DeGUI.BackgroundGrid(area, areaShift, options.gridTextureOverride);
+                if (options.gridTextureOverride == null) DeGUI.BackgroundGrid(area, areaShift, options.forceDarkSkin, 1 / guiScale);
+                else DeGUI.BackgroundGrid(area, areaShift, options.gridTextureOverride, 1 / guiScale);
             }
 
             switch (Event.current.type) {

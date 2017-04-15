@@ -272,12 +272,13 @@ namespace DG.DemiEditor
         /// <param name="area">Area rect</param>
         /// <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
         /// <param name="texture">Texture to use for the grid</param>
-        public static void BackgroundGrid(Rect area, Vector2 offset, Texture2D texture)
+        /// <param name="scale">Eventual scale to apply to the grid</param>
+        public static void BackgroundGrid(Rect area, Vector2 offset, Texture2D texture, float scale = 1)
         {
             if (Event.current.type != EventType.Repaint) return;
 
-            int gridW = texture.width;
-            int gridH = texture.height;
+            int gridW = (int)(texture.width * scale);
+            int gridH = (int)(texture.height * scale);
             int shiftX = (int)(gridW - offset.x % gridW);
             if (shiftX < 0) shiftX = gridW + shiftX;
             int shiftY = (int)(gridH - offset.y % gridH);
@@ -291,10 +292,11 @@ namespace DG.DemiEditor
         /// <param name="area">Area rect</param>
         /// <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
         /// <param name="forceDarkSkin">If TRUE forces a dark skin, otherwise uses a skin that fits with the current Unity's one</param>
-        public static void BackgroundGrid(Rect area, Vector2 offset, bool forceDarkSkin = false)
+        /// <param name="scale">Eventual scale to apply to the grid</param>
+        public static void BackgroundGrid(Rect area, Vector2 offset, bool forceDarkSkin = false, float scale = 1)
         {
             Texture2D gridImg = forceDarkSkin || IsProSkin ? DeStylePalette.grid_dark : DeStylePalette.grid_bright;
-            BackgroundGrid(area, offset, gridImg);
+            BackgroundGrid(area, offset, gridImg, scale);
         }
 
         /// <summary>Box with style and color options</summary>

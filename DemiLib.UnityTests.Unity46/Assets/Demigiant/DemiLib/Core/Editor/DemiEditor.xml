@@ -885,21 +885,23 @@
         <member name="M:DG.DemiEditor.DeGUI.SceneField(UnityEngine.Rect,System.String,UnityEngine.Object)">
             <summary>Scene field</summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUI.BackgroundGrid(UnityEngine.Rect,UnityEngine.Vector2,UnityEngine.Texture2D)">
+        <member name="M:DG.DemiEditor.DeGUI.BackgroundGrid(UnityEngine.Rect,UnityEngine.Vector2,UnityEngine.Texture2D,System.Single)">
             <summary>
             Draws a background grid using the given grid texture
             </summary>
             <param name="area">Area rect</param>
             <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
             <param name="texture">Texture to use for the grid</param>
+            <param name="scale">Eventual scale to apply to the grid</param>
         </member>
-        <member name="M:DG.DemiEditor.DeGUI.BackgroundGrid(UnityEngine.Rect,UnityEngine.Vector2,System.Boolean)">
+        <member name="M:DG.DemiEditor.DeGUI.BackgroundGrid(UnityEngine.Rect,UnityEngine.Vector2,System.Boolean,System.Single)">
             <summary>
             Draws a background grid using default grid textures
             </summary>
             <param name="area">Area rect</param>
             <param name="offset">Offset from 0, 0 position (used when area has been dragged)</param>
             <param name="forceDarkSkin">If TRUE forces a dark skin, otherwise uses a skin that fits with the current Unity's one</param>
+            <param name="scale">Eventual scale to apply to the grid</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.Box(UnityEngine.Rect,UnityEngine.Color,UnityEngine.GUIStyle)">
             <summary>Box with style and color options</summary>
