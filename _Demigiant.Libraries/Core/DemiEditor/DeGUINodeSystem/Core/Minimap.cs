@@ -32,7 +32,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         {
             if (_process.nodes.Count == 0) return;
 
-            Rect visibleArea = new Rect(_process.area);
+            Rect visibleArea = new Rect(_process.relativeArea);
             Rect relativeArea = visibleArea.ResetXY();
             Rect fullNodesArea = EvaluateFullNodesArea(); // x/y = TL node corner, width/height = exact size of area occupied by nodes without extra space
             if (fullNodesArea.width < 1 || visibleArea.Includes(fullNodesArea)) return; // Don't draw map if nodes don't exit the visible area

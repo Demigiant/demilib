@@ -35,7 +35,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public SelectionManager selection { get; private set; }
         public readonly ProcessOptions options = new ProcessOptions();
         public GUIChangeType guiChangeType { get; private set; } // Last GUI.changed reason if set by process (reset on process end)
-        public Rect area { get; private set; }
+        /// <summary>Full area without zeroed coordinates</summary>
+        public Rect position { get; private set; }
+        /// <summary>Position with zeroed coordinates (used by all node GUI since it's inside a GUILayout(area))</summary>
+        public Rect relativeArea { get; private set; }
         public Vector2 areaShift { get; private set; }
         public float guiScale { get; private set; }
         internal Vector2 guiScalePositionDiff { get; private set; } // Used by GUI calls that need to rotate the matrix
@@ -81,8 +84,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 guiNode = new T { process = this };
                 _typeToGUINode.Add(type, guiNode);
             } else guiNode = _typeToGUINode[type];
-            Vector2 position = new Vector2((int)(node.guiPosition.x + area.x + areaShift.x), (int)(node.guiPosition.y + area.y + areaShift.y));
-            NodeGUIData nodeGuiData = guiNode.GetAreas(position, node);
+            Vector2 nodePosition = new Vector2((int)(node.guiPosition.x + relativeArea.x + areaShift.x), (int)(node.guiPosition.y + relativeArea.y + areaShift.y));
+            NodeGUIData nodeGuiData = guiNode.GetAreas(nodePosition, node);
 
             // Draw node only if visible in area
             if (NodeIsVisible(nodeGuiData.fullArea)) guiNode.OnGUI(nodeGuiData, node);
@@ -122,6 +125,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         internal void BeginGUI<T>(Rect nodeArea, ref Vector2 refAreaShift, IList<T> sortableNodes = null) where T : IEditorGUINode
         {
             _styles.Init();
+            position = nodeArea;
             areaShift = refAreaShift;
             if (options.showMinimap) {
                 if (_minimap == null) _minimap = new Minimap(this);
@@ -133,9 +137,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
             }
 
             // Scale area size to guiScale and begin GUILayout area (so base node area coordinates are 0,0 and everything is easier and faster)
-            area = new Rect(0, 0, nodeArea.width / guiScale, nodeArea.height / guiScale);
+            relativeArea = new Rect(0, 0, nodeArea.width / guiScale, nodeArea.height / guiScale);
             guiScalePositionDiff = new Vector2(nodeArea.x - nodeArea.x / guiScale, nodeArea.y - nodeArea.y / guiScale);
-            GUILayout.BeginArea(new Rect(nodeArea.x / guiScale, nodeArea.y / guiScale, area.width, area.height));
+            GUILayout.BeginArea(new Rect(nodeArea.x / guiScale, nodeArea.y / guiScale, relativeArea.width, relativeArea.height));
 
             // Determine mouse target type before clearing nodeGUIData dictionary
             if (!interaction.mouseTargetIsLocked) EvaluateAndStoreMouseTarget();
@@ -151,8 +155,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             // Background grid
             if (options.drawBackgroundGrid) {
-                if (options.gridTextureOverride == null) DeGUI.BackgroundGrid(area, areaShift, options.forceDarkSkin, 1 / guiScale);
-                else DeGUI.BackgroundGrid(area, areaShift, options.gridTextureOverride, 1 / guiScale);
+                if (options.gridTextureOverride == null) DeGUI.BackgroundGrid(relativeArea, areaShift, options.forceDarkSkin, 1 / guiScale);
+                else DeGUI.BackgroundGrid(relativeArea, areaShift, options.gridTextureOverride, 1 / guiScale);
             }
 
             switch (Event.current.type) {
@@ -428,7 +432,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         // Store mouse target (even in case of rollovers) and set related data
         void EvaluateAndStoreMouseTarget()
         {
-            if (!area.Contains(Event.current.mousePosition)) {
+            if (!relativeArea.Contains(Event.current.mousePosition)) {
                 // Mouse out of editor
                 interaction.SetMouseTargetType(InteractionManager.TargetType.None);
                 interaction.targetNode = null;
@@ -500,7 +504,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         bool NodeIsVisible(Rect nodeArea)
         {
-            return nodeArea.xMax > area.xMin && nodeArea.xMin < area.xMax && nodeArea.yMax > area.yMin && nodeArea.yMin < area.yMax;
+            return nodeArea.xMax > relativeArea.xMin && nodeArea.xMin < relativeArea.xMax && nodeArea.yMax > relativeArea.yMin && nodeArea.yMin < relativeArea.yMax;
         }
 
         #endregion

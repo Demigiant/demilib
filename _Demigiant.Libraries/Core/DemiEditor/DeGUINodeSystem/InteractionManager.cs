@@ -188,7 +188,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _currMouseCursor = MouseCursor.Arrow;
                 break;
             }
-            if (_currMouseCursor != MouseCursor.Arrow) EditorGUIUtility.AddCursorRect(_process.area, _currMouseCursor);
+            if (_currMouseCursor != MouseCursor.Arrow) EditorGUIUtility.AddCursorRect(_process.relativeArea, _currMouseCursor);
             return _currMouseCursor != prevMouseCursor;
         }
 

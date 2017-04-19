@@ -328,6 +328,12 @@
             - Inside OnGUI, write all your nodes GUI code inside a <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope"/>
             </summary>
         </member>
+        <member name="P:DG.DemiEditor.DeGUINodeSystem.NodeProcess.position">
+            <summary>Full area without zeroed coordinates</summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeGUINodeSystem.NodeProcess.relativeArea">
+            <summary>Position with zeroed coordinates (used by all node GUI since it's inside a GUILayout(area))</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.#ctor(UnityEditor.EditorWindow)">
             <summary>
             Creates a new NodeProcess.
