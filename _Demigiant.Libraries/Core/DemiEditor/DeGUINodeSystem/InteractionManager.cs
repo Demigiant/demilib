@@ -98,7 +98,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// </summary>
         public bool HasControlKeyModifier()
         {
-            return Event.current.control || Time.realtimeSinceStartup - _timeAtControlKeyRelease < 0.2f;
+            return Event.current.control || Event.current.command || Time.realtimeSinceStartup - _timeAtControlKeyRelease < 0.2f;
         }
 
         #endregion
@@ -161,7 +161,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         internal bool Update()
         {
             // Evaluate control key
-            if (Event.current.type == EventType.KeyUp && (Event.current.keyCode == KeyCode.LeftControl || Event.current.keyCode == KeyCode.RightControl)) {
+            if (Event.current.type == EventType.KeyUp && (Event.current.keyCode == KeyCode.LeftControl || Event.current.keyCode == KeyCode.RightControl || Event.current.keyCode == KeyCode.LeftCommand || Event.current.keyCode == KeyCode.RightCommand)) {
                 _timeAtControlKeyRelease = Time.realtimeSinceStartup;
             }
 

@@ -48,6 +48,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Dictionary<string,IEditorGUINode> _idToNode = new Dictionary<string,IEditorGUINode>();
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
+        readonly List<IEditorGUINode> _tmp_nodes = new List<IEditorGUINode>(); // Used for temporary operations
         readonly Styles _styles = new Styles();
         Minimap _minimap;
         bool _helpPanelActive;
@@ -101,7 +102,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 // Draw evidence
                 if (options.evidenceSelectedNodes && selection.IsSelected(node)) {
                     using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
-                        GUI.Box(nodeGuiData.fullArea.Expand(4), "", _styles.nodeSelectionOutline);
+                        GUI.Box(nodeGuiData.fullArea.Expand(6), "", _styles.nodeSelectionOutline);
                     }
                 }
                 // Draw end node icon
@@ -179,7 +180,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         break;
                     case InteractionManager.TargetType.Node:
                         // LMB pressed on a node
-                        if (Event.current.control) {
+                        if (Event.current.control || Event.current.command) {
                             // CTRL+Drag on node > drag connection (eventually)
                             bool canDragConnector = interaction.targetNode.connectedNodesIds.Count >= 1
                                                     && _nodeToConnectionOptions[interaction.targetNode].allowManualConnections;
@@ -190,10 +191,18 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             // Select
                             bool isAlreadySelected = selection.IsSelected(interaction.targetNode);
                             if (Event.current.shift) {
-                                if (isAlreadySelected) selection.Deselect(interaction.targetNode);
-                                else selection.Select(interaction.targetNode, true);
+                                if (Event.current.alt) {
+                                    // Select this plus all forward connected nodes
+                                    if (!isAlreadySelected) selection.Select(interaction.targetNode, true);
+                                    SelectAllForwardConnectedNodes(interaction.targetNode);
+                                } else {
+                                    // Add or remove from selection
+                                    if (isAlreadySelected) selection.Deselect(interaction.targetNode);
+                                    else selection.Select(interaction.targetNode, true);
+                                }
                                 _repaintOnEnd = true;
                             } else if (!isAlreadySelected) {
+                                // If unselected, select and deselect all others
                                 selection.Select(interaction.targetNode, false);
                                 _repaintOnEnd = true;
                             }
@@ -260,7 +269,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         _repaintOnEnd = true;
                         break;
                     case InteractionManager.State.DraggingNodes:
-                        // Drag node/s
+                        // Drag selected nodes
                         foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += Event.current.delta;
                         guiChangeType = GUIChangeType.DragNodes;
                         GUI.changed = _repaintOnEnd = true;
@@ -496,6 +505,24 @@ namespace DG.DemiEditor.DeGUINodeSystem
             }
             guiChangeType = GUIChangeType.SortedNodes;
             GUI.changed = _repaintOnEnd = true;
+        }
+
+        // Adds all forward connected nodes to selection, paying attention not to select a node twice
+        void SelectAllForwardConnectedNodes(IEditorGUINode fromNode)
+        {
+            _tmp_nodes.Clear(); // used to store nodes for which we already parsed forward connections
+            SelectAllForwardConnectedNodes_Select(fromNode);
+        }
+        void SelectAllForwardConnectedNodes_Select(IEditorGUINode fromNode)
+        {
+            foreach (string id in fromNode.connectedNodesIds) {
+                if (string.IsNullOrEmpty(id)) continue;
+                IEditorGUINode forwardConnectedNode = _idToNode[id];
+                if (_tmp_nodes.Contains(forwardConnectedNode)) continue;
+                _tmp_nodes.Add(forwardConnectedNode);
+                selection.Select(forwardConnectedNode, true);
+                SelectAllForwardConnectedNodes_Select(forwardConnectedNode);
+            }
         }
 
         #endregion
