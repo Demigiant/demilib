@@ -47,6 +47,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
         readonly Styles _styles = new Styles();
         Minimap _minimap;
+        bool _helpPanelActive;
         bool _repaintOnEnd; // If TRUE, repaints the editor during EndGUI. Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
 
@@ -177,7 +178,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         if (Event.current.control) {
                             // CTRL+Drag on node > drag connection (eventually)
                             bool canDragConnector = interaction.targetNode.connectedNodesIds.Count >= 1
-//                                                    && selection.selectedNodes.Count == 1
                                                     && _nodeToConnectionOptions[interaction.targetNode].allowManualConnections;
                             if (canDragConnector) interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingConnector);
                         } else if (interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
@@ -281,6 +281,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 break;
             case EventType.ScrollWheel:
                 if (options.mouseWheelScalesGUI) {
+                    // Zoom
                     bool isScaleUp = Event.current.delta.y < 0;
                     if (isScaleUp && Mathf.Approximately(options.guiScaleValues[0], guiScale)) break;
                     if (!isScaleUp && Mathf.Approximately(options.guiScaleValues[options.guiScaleValues.Length - 1], guiScale)) break;
@@ -295,6 +296,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // KEYBOARD EVENTS //////////////////////////////////////////////////////////////////////////////////////////////////////
             case EventType.KeyUp:
                 switch (Event.current.keyCode) {
+                case KeyCode.F1:
+                    // Help Panel
+                    _helpPanelActive = !_helpPanelActive;
+                    _repaintOnEnd = true;
+                    break;
                 case KeyCode.A:
                     if (interaction.HasControlKeyModifier()) {
                         // CTRL+A > Select all nodes
@@ -387,8 +393,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         }
                         break;
                     }
-                    // DRAW MINIMAP
+                    // MINIMAP
                     if (_minimap != null) _minimap.Draw();
+                    // HELP PANEL
+                    if (_helpPanelActive) HelpPanel.Draw(this);
                 }
             }
 

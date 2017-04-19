@@ -57,7 +57,6 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             // Node GUI Process
             Rect nodeArea = this.position.ResetXY().SetY(100).Shift(0, 0, 0, -100);
             using (new NodeProcessScope<GenericNode>(_nodeProcess, nodeArea, ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
-//            using (new NodeProcessScope<GenericNode>(_nodeProcess, this.position.ResetXY(), ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
                 // Draw nodes
                 // Generic nodes
                 foreach (GenericNode node in src.nodeSystem.genericNodes) {
@@ -99,7 +98,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         void ContextMenu_Background()
         {
             GenericMenu menu = new GenericMenu();
-            menu.AddItem(new GUIContent(string.Format("Reset Panning (current: {0},{1}", src.nodeSystem.areaShift.x, src.nodeSystem.areaShift.y)), false, () => {
+            menu.AddItem(new GUIContent(string.Format("Reset Panning (current: {0},{1})", src.nodeSystem.areaShift.x, src.nodeSystem.areaShift.y)), false, () => {
                 src.nodeSystem.areaShift = Vector2.zero;
                 EditorUtility.SetDirty(src);
                 this.Repaint();
