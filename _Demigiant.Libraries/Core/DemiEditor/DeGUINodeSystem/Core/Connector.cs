@@ -16,7 +16,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
     {
         public static readonly DragData dragData = new DragData();
         const int _LineSize = 3;
-        const int _MaxDistanceForSmartStraight = 120;
+        const int _MaxDistanceForSmartStraight = 40; // was 120
         const int _TangentDistance = 50;
         const int _TangentDistanceIfInverse = 120; // Tangent distance if TO is behind FROM
 

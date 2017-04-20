@@ -51,7 +51,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             node.enumValue = (GenericNode.SampleEnum)EditorGUI.EnumPopup(r, node.enumValue);
 
             // Outline
-            GUI.Box(nodeGuiData.fullArea.Expand(1), "", DG.DemiEditor.DeGUI.styles.box.outline01);
+//            GUI.Box(nodeGuiData.fullArea.Expand(1), "", DG.DemiEditor.DeGUI.styles.box.outline01);
         }
 
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████

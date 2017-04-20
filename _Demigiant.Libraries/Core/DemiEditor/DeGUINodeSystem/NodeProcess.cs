@@ -91,7 +91,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
             NodeGUIData nodeGuiData = guiNode.GetAreas(nodePosition, node);
 
             // Draw node only if visible in area
-            if (NodeIsVisible(nodeGuiData.fullArea)) guiNode.OnGUI(nodeGuiData, node);
+            if (NodeIsVisible(nodeGuiData.fullArea)) {
+                guiNode.OnGUI(nodeGuiData, node);
+                // Fade out unselected nodes if there's others that are selected
+                bool faded = selection.selectedNodes.Count > 0 && !selection.IsSelected(node);
+                if (faded) GUI.DrawTexture(nodeGuiData.fullArea, DeStylePalette.blackSquareAlpha50);
+            }
 
             switch (Event.current.type) {
             case EventType.Layout:
@@ -104,7 +109,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 // Draw evidence
                 if (options.evidenceSelectedNodes && selection.IsSelected(node)) {
                     using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
-                        GUI.Box(nodeGuiData.fullArea.Expand(6), "", _styles.nodeSelectionOutline);
+                        GUI.Box(nodeGuiData.fullArea.Expand(5), "", _styles.nodeSelectionOutlineThick);
                     }
                 }
                 // Draw end node icon
@@ -178,6 +183,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             selection.selectionMode = SelectionManager.Mode.Add;
                             selection.StoreSnapshot();
                         }
+                        UnfocusAll();
                         interaction.SetReadyFor(InteractionManager.ReadyFor.DrawingSelection);
                         break;
                     case InteractionManager.TargetType.Node:
@@ -188,11 +194,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                                     && _nodeToConnectionOptions[interaction.targetNode].allowManualConnections;
                             if (canDragConnector) {
                                 interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingConnector);
+                                UnfocusAll();
                                 Event.current.Use();
                             }
                         } else if (interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
                             // LMB pressed on a node's draggable area > set readyFor state to DraggingNodes and select node
                             interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingNodes);
+                            UnfocusAll();
                             // Select
                             bool isAlreadySelected = selection.IsSelected(interaction.targetNode);
                             if (Event.current.shift) {
@@ -297,7 +305,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _resetInteractionOnEnd = true;
                 break;
             case EventType.ScrollWheel:
-                if (options.mouseWheelScalesGUI) {
+                if (options.mouseWheelScalesGUI && (Event.current.control || Event.current.command)) {
                     // Zoom
                     bool isScaleUp = Event.current.delta.y < 0;
                     if (isScaleUp && Mathf.Approximately(options.guiScaleValues[0], guiScale)) break;
@@ -374,8 +382,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         for (int i = 1; i < selection.selectedNodes.Count; ++i) {
                             fullEvidenceR = fullEvidenceR.Add(nodeToGUIData[selection.selectedNodes[i]].fullArea);
                         }
-                        using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor.SetAlpha(0.3f))) {
-                            GUI.Box(fullEvidenceR.Expand(6), "", _styles.nodeSelectionOutline);
+                        using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor.SetAlpha(0.4f))) {
+                            GUI.Box(fullEvidenceR.Expand(5), "", _styles.nodeSelectionOutline);
                         }
                     }
                     // DRAW CONNECTIONS BETWEEN NODES
@@ -411,17 +419,17 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         // Evidence origin
                         DeGUI.DrawColoredSquare(interaction.targetNodeConnectorArea.Expand(3), DeGUI.colors.global.orange.SetAlpha(0.32f));
                         using (new DeGUI.ColorScope(DeGUI.colors.global.black)) {
-                            GUI.Box(interaction.targetNodeConnectorArea.Expand(2), "", _styles.nodeSelectionOutline);
-                            GUI.Box(interaction.targetNodeConnectorArea.Expand(4), "", _styles.nodeSelectionOutline);
+                            GUI.Box(interaction.targetNodeConnectorArea.Expand(2), "", _styles.nodeSelectionOutlineThick);
+                            GUI.Box(interaction.targetNodeConnectorArea.Expand(4), "", _styles.nodeSelectionOutlineThick);
                         }
                         using (new DeGUI.ColorScope(DeGUI.colors.global.orange)) {
-                            GUI.Box(interaction.targetNodeConnectorArea.Expand(3), "", _styles.nodeSelectionOutline);
+                            GUI.Box(interaction.targetNodeConnectorArea.Expand(3), "", _styles.nodeSelectionOutlineThick);
                         }
                         // Evidence possible connection
                         IEditorGUINode overNode = GetMouseOverNode();
                         if (overNode != null && overNode != interaction.targetNode) {
                             using (new DeGUI.ColorScope(DeGUI.colors.global.orange)) {
-                                GUI.Box(nodeToGUIData[overNode].fullArea.Expand(4), "", _styles.nodeSelectionOutline);
+                                GUI.Box(nodeToGUIData[overNode].fullArea.Expand(4), "", _styles.nodeSelectionOutlineThick);
                             }
                         }
                         break;
@@ -570,6 +578,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         #region Helpers
 
+        void UnfocusAll()
+        {
+            if (GUIUtility.keyboardControl > 0) _repaintOnEnd = true;
+            GUI.FocusControl(null);
+        }
+
         bool NodeIsVisible(Rect nodeArea)
         {
             return nodeArea.xMax > relativeArea.xMin && nodeArea.xMin < relativeArea.xMax && nodeArea.yMax > relativeArea.yMin && nodeArea.yMin < relativeArea.yMax;
@@ -583,7 +597,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         class Styles
         {
-            public GUIStyle selectionRect, nodeSelectionOutline, endNodeOutline;
+            public GUIStyle selectionRect, nodeSelectionOutline, nodeSelectionOutlineThick, endNodeOutline;
             bool _initialized;
 
             public void Init()
@@ -594,7 +608,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 selectionRect = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderAlpha15);
                 nodeSelectionOutline = DeGUI.styles.box.outline01.Clone()
                     .Border(new RectOffset(5, 5, 5, 5)).Background(DeStylePalette.squareBorderCurvedEmpty);
-                endNodeOutline = nodeSelectionOutline.Clone().Background(DeStylePalette.squareCornersEmpty02)
+                nodeSelectionOutlineThick = nodeSelectionOutline.Clone().Background(DeStylePalette.squareBorderCurvedEmptyThick);
+                endNodeOutline = nodeSelectionOutlineThick.Clone().Background(DeStylePalette.squareCornersEmpty02)
                     .Border(new RectOffset(7, 7, 7, 7));
             }
         }

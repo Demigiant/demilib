@@ -24,7 +24,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             strb.Append("<size=20><color=#0e98f8>HELP PANEL (F1)</color></size>")
                 // MOUSE
                 .AppendHeader("MOUSE")
-                .AppendKey("LMB").AppendTarget("background").AppendDescription("Deselect all")
                 .AppendKey("LMB + SHIFT").AppendTarget("node").AppendDescription("Add/remove node from selection")
                 .AppendKey("LMB + SHFIT + ALT").AppendTarget("node").AppendDescription("Add node plus all forward connected nodes to selection")
                 .AppendKey("LMB-Drag").AppendTarget("background").AppendDescription("Draw new nodes selection rect - <i>clears previous selection</i>")
@@ -33,7 +32,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 .AppendKey("LMB-Drag + CTRL").AppendTarget("node").AppendDescription("Drag new connection from node - <i>if node allows it</i>")
                 .AppendKey("RMB").AppendDescription("Context menu")
                 .AppendKey("MMB-Drag").AppendDescription("Area panning")
-                .AppendKey("Scrollwheel").AppendDescription("Zoom in/out")
+                .AppendKey("Scrollwheel + CTRL").AppendDescription("Zoom in/out")
                 // KEYBOARD
                 .AppendHeader("KEYBOARD")
                 .AppendKey("F1").AppendDescription("Open/close this panel")
