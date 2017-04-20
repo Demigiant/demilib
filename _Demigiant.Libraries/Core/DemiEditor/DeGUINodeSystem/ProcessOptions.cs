@@ -19,6 +19,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Texture2D gridTextureOverride;
         public bool forceDarkSkin = false; // Ignored if gridTextureOverride != NULL
         public bool evidenceSelectedNodes = true;
+        public bool evidenceSelectedNodesArea = true; // Draws an outline around the whole area of all selected nodes
         public Color evidenceSelectedNodesColor = new Color(0.13f, 0.48f, 0.91f);
         public bool evidenceEndNodes = true; // Nodes that have no forward connections
         public bool showMinimap = true;

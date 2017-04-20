@@ -368,6 +368,16 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Draw elements if a repaint is not going to be called in the end
             if (!_repaintOnEnd) {
                 if (Event.current.type == EventType.Repaint) {
+                    // EVIDENCE FULL SELECTION AREA
+                    if (options.evidenceSelectedNodesArea && selection.selectedNodes.Count > 1) {
+                        Rect fullEvidenceR = nodeToGUIData[selection.selectedNodes[0]].fullArea;
+                        for (int i = 1; i < selection.selectedNodes.Count; ++i) {
+                            fullEvidenceR = fullEvidenceR.Add(nodeToGUIData[selection.selectedNodes[i]].fullArea);
+                        }
+                        using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor.SetAlpha(0.3f))) {
+                            GUI.Box(fullEvidenceR.Expand(6), "", _styles.nodeSelectionOutline);
+                        }
+                    }
                     // DRAW CONNECTIONS BETWEEN NODES
                     for (int i = 0; i < nodes.Count; ++i) {
                         IEditorGUINode fromNode = nodes[i];
@@ -399,9 +409,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     case InteractionManager.State.DraggingConnector:
                         Connector.Drag(interaction, Event.current.mousePosition);
                         // Evidence origin
-                        Color fromConnectionColor = DeGUI.colors.global.orange;
-                        fromConnectionColor.a = 0.3f;
-                        DeGUI.DrawColoredSquare(interaction.targetNodeConnectorArea.Expand(3), fromConnectionColor);
+                        DeGUI.DrawColoredSquare(interaction.targetNodeConnectorArea.Expand(3), DeGUI.colors.global.orange.SetAlpha(0.32f));
+                        using (new DeGUI.ColorScope(DeGUI.colors.global.black)) {
+                            GUI.Box(interaction.targetNodeConnectorArea.Expand(2), "", _styles.nodeSelectionOutline);
+                            GUI.Box(interaction.targetNodeConnectorArea.Expand(4), "", _styles.nodeSelectionOutline);
+                        }
                         using (new DeGUI.ColorScope(DeGUI.colors.global.orange)) {
                             GUI.Box(interaction.targetNodeConnectorArea.Expand(3), "", _styles.nodeSelectionOutline);
                         }

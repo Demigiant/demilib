@@ -79,6 +79,7 @@
     <Compile Include="DeStylePalette.cs" />
     <Compile Include="DeGUILayout.cs" />
     <Compile Include="DeGUI.cs" />
+    <Compile Include="Extensions\Internal\ColorExtensions.cs" />
     <Compile Include="Extensions\Internal\ListExtensions.cs" />
     <Compile Include="Extensions\Internal\RectExtensions.cs" />
     <Compile Include="Extensions\SerializedPropertyExtensions.cs" />
