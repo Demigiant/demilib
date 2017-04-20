@@ -10,7 +10,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 {
     internal class SnappingManager
     {
-        public bool hasSnap { get; private set; }
         public bool hasSnapX { get; private set; }
         public bool hasSnapY { get; private set; }
         public bool showVerticalGuide { get; private set; }
@@ -19,7 +18,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         public float snapY { get; private set; }
 
         const float _MaxSnappingDistance = 7;
-        const float _BorderSnapping = 20; // Distance at which nodes will snap to each other when on different lines
+        const float _NearSnapping = 20; // Distance at which nodes will snap to each other when on different lines
         readonly List<float> _topSnappingPs = new List<float>();
         readonly List<float> _bottomSnappingPs = new List<float>();
         readonly List<float> _leftSnappingPs = new List<float>();
@@ -31,50 +30,95 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             IEditorGUINode forNode, Rect forArea, List<IEditorGUINode> allNodes, List<IEditorGUINode> excludedNodes,
             Dictionary<IEditorGUINode, NodeGUIData> nodeToGuiData
         ){
-            hasSnap = hasSnapX = hasSnapY = showHorizontalGuide = showVerticalGuide = false;
+            hasSnapX = hasSnapY = showHorizontalGuide = showVerticalGuide = false;
             _topSnappingPs.Clear();
             _bottomSnappingPs.Clear();
             _leftSnappingPs.Clear();
             _rightSnappingPs.Clear();
+            bool hasNearSnappingX = false;
+            bool hasNearSnappingY = false;
+            bool hasBorderSnapping = false;
             bool hasTopSnappingPs = false;
             bool hasBottomSnappingPs = false;
             bool hasLeftSnappingPs = false;
             bool hasRightSnappingPs = false;
 
+            if (Event.current.alt) return; // ALT pressed - no snapping
+
             // Find snapping points and store them
             int len = allNodes.Count;
+            // Near snapping
             for (int i = 0; i < len; ++i) {
                 IEditorGUINode node = allNodes[i];
                 if (node == forNode || excludedNodes.Contains(node)) continue;
-                Rect area = nodeToGuiData[node].fullArea;
-                if (ValuesAreWithinRange(forArea.x, area.x)) {
-                    _leftSnappingPs.Add(area.x);
-                    hasSnap = hasSnapX = showVerticalGuide = hasLeftSnappingPs = true;
-                } else if (ValuesAreWithinRange(forArea.x, area.xMax)) {
-                    _rightSnappingPs.Add(area.xMax);
-                    hasSnap = hasSnapX = showVerticalGuide = hasRightSnappingPs = true;
+                Rect toArea = nodeToGuiData[node].fullArea;
+                if (!hasNearSnappingX && forArea.yMax > toArea.y && forArea.y < toArea.yMax) {
+                    // Within nearSnappingX range
+                    // Check rightToLeft then leftToRight
+                    if (forArea.xMax < toArea.x && toArea.x - forArea.xMax <= _NearSnapping) {
+                        hasSnapX = hasNearSnappingX = true;
+                        snapX = toArea.x - forArea.width - _NearSnapping;
+                        if (hasNearSnappingY) break;
+                    } else if (forArea.x > toArea.xMax && forArea.x - toArea.xMax <= _NearSnapping) {
+                        hasSnapX = hasNearSnappingX = true;
+                        snapX = toArea.xMax + _NearSnapping;
+                        if (hasNearSnappingY) break;
+                    }
                 }
-                if (ValuesAreWithinRange(forArea.y, area.y)) {
-                    _topSnappingPs.Add(area.y);
-                    hasSnap = hasSnapY = showHorizontalGuide = hasTopSnappingPs = true;
-                } else if (ValuesAreWithinRange(forArea.y, area.yMax)) {
-                    _bottomSnappingPs.Add(area.yMax);
-                    hasSnap = hasSnapY = showHorizontalGuide = hasBottomSnappingPs = true;
+                if (!hasNearSnappingY && forArea.xMax >= toArea.x && forArea.x < toArea.xMax) {
+                    // Within nearSnappingY range
+                    // Check bottomToTop then topToBottom
+                    if (forArea.yMax < toArea.y && toArea.y - forArea.yMax <= _NearSnapping) {
+                        hasSnapY = hasNearSnappingY = true;
+                        snapY = toArea.y - forArea.height - _NearSnapping;
+                        if (hasNearSnappingX) break;
+                    } else if (forArea.y > toArea.yMax && forArea.y - toArea.yMax <= _NearSnapping) {
+                        hasSnapY = hasNearSnappingY = true;
+                        snapY = toArea.yMax + _NearSnapping;
+                        if (hasNearSnappingX) break;
+                    }
                 }
             }
-
-            // Find closes snapping point
-            if (hasLeftSnappingPs) snapX = FindNearestValueTo(forArea.x, _leftSnappingPs);
-            else if (hasRightSnappingPs) snapX = FindNearestValueTo(forArea.x, _rightSnappingPs);
-            if (hasTopSnappingPs) snapY = FindNearestValueTo(forArea.y, _topSnappingPs);
-            else if (hasBottomSnappingPs) snapY = FindNearestValueTo(forArea.y, _bottomSnappingPs);
+            if (!hasNearSnappingX || !hasNearSnappingY) {
+                // Border snapping
+                for (int i = 0; i < len; ++i) {
+                    IEditorGUINode node = allNodes[i];
+                    if (node == forNode || excludedNodes.Contains(node)) continue;
+                    Rect toArea = nodeToGuiData[node].fullArea;
+                    if (!hasNearSnappingX) {
+                        if (ValuesAreWithinBorderSnappingRange(forArea.x, toArea.x)) {
+                            _leftSnappingPs.Add(toArea.x);
+                            hasSnapX = showVerticalGuide = hasBorderSnapping = hasLeftSnappingPs = true;
+                        } else if (ValuesAreWithinBorderSnappingRange(forArea.x, toArea.xMax)) {
+                            _rightSnappingPs.Add(toArea.xMax);
+                            hasSnapX = showVerticalGuide = hasBorderSnapping = hasRightSnappingPs = true;
+                        }
+                    }
+                    if (!hasNearSnappingY) {
+                        if (ValuesAreWithinBorderSnappingRange(forArea.y, toArea.y)) {
+                            _topSnappingPs.Add(toArea.y);
+                            hasSnapY = showHorizontalGuide = hasBorderSnapping = hasTopSnappingPs = true;
+                        } else if (ValuesAreWithinBorderSnappingRange(forArea.y, toArea.yMax)) {
+                            _bottomSnappingPs.Add(toArea.yMax);
+                            hasSnapY = showHorizontalGuide = hasBorderSnapping = hasBottomSnappingPs = true;
+                        }
+                    }
+                }
+                // Find closes snapping point
+                if (hasBorderSnapping) {
+                    if (hasLeftSnappingPs) snapX = FindNearestValueTo(forArea.x, _leftSnappingPs);
+                    else if (hasRightSnappingPs) snapX = FindNearestValueTo(forArea.x, _rightSnappingPs);
+                    if (hasTopSnappingPs) snapY = FindNearestValueTo(forArea.y, _topSnappingPs);
+                    else if (hasBottomSnappingPs) snapY = FindNearestValueTo(forArea.y, _bottomSnappingPs);
+                }
+            }
         }
 
         #endregion
 
         #region Helpers
 
-        bool ValuesAreWithinRange(float a, float b)
+        bool ValuesAreWithinBorderSnappingRange(float a, float b)
         {
             return Mathf.Abs(a - b) <= _MaxSnappingDistance;
         }

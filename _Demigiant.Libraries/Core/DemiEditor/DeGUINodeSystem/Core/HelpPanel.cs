@@ -11,7 +11,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 {
     internal static class HelpPanel
     {
-        const int _OuterPadding = 6;
         const int _InnerPadding = 8;
         static readonly string _Content;
         static readonly Styles _Styles = new Styles();
@@ -26,13 +25,12 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 // MOUSE
                 .AppendHeader("MOUSE")
                 .AppendKey("LMB").AppendTarget("background").AppendDescription("Deselect all")
-                .AppendKey("LMB").AppendTarget("node draggable area").AppendDescription("Select node and deselect all others")
-                .AppendKey("LMB + SHIFT").AppendTarget("node draggable area").AppendDescription("Add/remove node from selection")
-                .AppendKey("LMB + SHFIT + ALT").AppendTarget("node draggable area").AppendDescription("Add node plus all forward connected nodes to selection")
+                .AppendKey("LMB + SHIFT").AppendTarget("node").AppendDescription("Add/remove node from selection")
+                .AppendKey("LMB + SHFIT + ALT").AppendTarget("node").AppendDescription("Add node plus all forward connected nodes to selection")
                 .AppendKey("LMB-Drag").AppendTarget("background").AppendDescription("Draw new nodes selection rect - <i>clears previous selection</i>")
                 .AppendKey("LMB-Drag + SHIFT").AppendTarget("background").AppendDescription("Draw new nodes selection rect - <i>will add nodes to current selection</i>")
-                .AppendKey("LMB-Drag").AppendTarget("node draggable area").AppendDescription("Drag selected nodes")
-                .AppendKey("LMB-Drag + CTRL").AppendTarget("node draggable area").AppendDescription("Drag new connection from node - <i>if node allows it</i>")
+                .AppendKey("LMB-Drag + ALT").AppendTarget("node").AppendDescription("Drag selected nodes without snapping")
+                .AppendKey("LMB-Drag + CTRL").AppendTarget("node").AppendDescription("Drag new connection from node - <i>if node allows it</i>")
                 .AppendKey("RMB").AppendDescription("Context menu")
                 .AppendKey("MMB-Drag").AppendDescription("Area panning")
                 .AppendKey("Scrollwheel").AppendDescription("Zoom in/out")
@@ -61,9 +59,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 process.relativeArea.x, process.relativeArea.y,
                 process.relativeArea.width * process.guiScale, process.relativeArea.height * process.guiScale
             );
-            area = area.Shift(_OuterPadding, _OuterPadding, -_OuterPadding * 2, -_OuterPadding * 2);
             GUI.DrawTexture(area, DeStylePalette.blackSquareAlpha80);
-            using (new DeGUI.ColorScope(new DeSkinColor(0.3f))) GUI.Box(area, "", DeGUI.styles.box.outline01);
 
             // Content
             Rect contentR = area.Shift(_InnerPadding, _InnerPadding, -_InnerPadding * 2, -_InnerPadding * 2);

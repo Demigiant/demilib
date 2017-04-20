@@ -20,7 +20,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         List<IEditorGUINode> _allNodesRef;
         Dictionary<IEditorGUINode, NodeGUIData> _nodeToGuiDataRef;
         List<IEditorGUINode> _draggedNodesRef;
-        bool _lastDragWasSnapped;
+        bool _lastDragWasSnappedOnX, _lastDragWasSnappedOnY;
 
         #region CONSTRUCTOR
 
@@ -41,7 +41,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             _allNodesRef = allNodes;
             _nodeToGuiDataRef = nodeToGuiData;
             _draggedNodesRef = draggedNodes;
-            _lastDragWasSnapped = false;
+            _lastDragWasSnappedOnX = false;
+            _lastDragWasSnappedOnY = false;
             nodeToFullDragPosition.Clear();
             foreach (IEditorGUINode node in _draggedNodesRef) nodeToFullDragPosition.Add(node, node.guiPosition);
         }
@@ -54,13 +55,23 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             mainArea.y = mainFullP.y + _process.areaShift.y;
             Vector2 snappedDelta = delta;
             _snapper.EvaluateSnapping(_mainNode, mainArea,  _allNodesRef, _draggedNodesRef, _nodeToGuiDataRef);
-            if (_snapper.hasSnapX) snappedDelta.x = _snapper.snapX - (_mainNode.guiPosition.x + _process.areaShift.x);
-            if (_snapper.hasSnapY) snappedDelta.y = _snapper.snapY - (_mainNode.guiPosition.y + _process.areaShift.y);
-            if (_snapper.hasSnap) _lastDragWasSnapped = true;
-            else if (_lastDragWasSnapped) {
+            if (_snapper.hasSnapX) {
+                _lastDragWasSnappedOnX = true;
+                snappedDelta.x = _snapper.snapX - (_mainNode.guiPosition.x + _process.areaShift.x);
+            } else if (_lastDragWasSnappedOnX) {
                 // Readapt from snapped to unsnapped position
-                _mainNode.guiPosition = mainFullP;
-                _lastDragWasSnapped = false;
+                Vector2 diff = new Vector2(mainFullP.x - _mainNode.guiPosition.x, 0);
+                foreach (IEditorGUINode node in _draggedNodesRef) node.guiPosition += diff;
+                _lastDragWasSnappedOnX = false;
+            }
+            if (_snapper.hasSnapY) {
+                _lastDragWasSnappedOnY = true;
+                snappedDelta.y = _snapper.snapY - (_mainNode.guiPosition.y + _process.areaShift.y);
+            } else if (_lastDragWasSnappedOnY) {
+                // Readapt from snapped to unsnapped position
+                Vector2 diff = new Vector2(0, mainFullP.y - _mainNode.guiPosition.y);
+                foreach (IEditorGUINode node in _draggedNodesRef) node.guiPosition += diff;
+                _lastDragWasSnappedOnY = false;
             }
             foreach (IEditorGUINode node in _draggedNodesRef) {
                 nodeToFullDragPosition[node] += delta;
