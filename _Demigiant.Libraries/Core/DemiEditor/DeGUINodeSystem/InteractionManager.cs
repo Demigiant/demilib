@@ -54,8 +54,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public TargetType mouseTargetType { get; private set; } // Always updated, even on rollover
         public NodeTargetType nodeTargetType { get; private set; }
         public IEditorGUINode targetNode { get; internal set; }
+        public Rect targetNodeConnectorArea { get; internal set; } // Connector rect (sub-area in cases where targetNode has multiple forward connections)
+        public int targetNodeConnectorAreaIndex { get; internal set; }
         public Vector2 mousePositionOnLMBPress { get; internal set; } // Stored mouse position last time LMB was pressed
-        public bool controlKey { get; private set; } // TRUE when the CTRL key must be considered for key combinations (so it's valid until all keys are released)
         public bool mouseTargetIsLocked {
             get {
                 switch (state) {

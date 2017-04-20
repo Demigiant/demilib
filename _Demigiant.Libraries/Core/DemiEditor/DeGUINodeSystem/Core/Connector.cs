@@ -28,9 +28,11 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         public static void Connect(
             NodeProcess process, int connectionIndex, int fromTotConnections,
             NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, NodeGUIData toGUIData
-        ) {
-            AnchorsData anchorsData = GetAnchors(fromGUIData.fullArea, toGUIData.fullArea, fromOptions.connectorMode);
-            // x : 1 = index : tot
+        )
+        {
+            bool useSubFromAreas = fromGUIData.connectorAreas != null;
+            Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
+            AnchorsData anchorsData = GetAnchors(fromArea, toGUIData.fullArea, fromOptions.connectorMode, useSubFromAreas);
             Color color = fromTotConnections < 2 || fromOptions.gradientColor == null
                 ? fromOptions.startColor == Color.clear ? fromGUIData.mainColor : fromOptions.startColor
                 : fromOptions.gradientColor.Evaluate(connectionIndex / (float)(fromTotConnections - 1));
@@ -65,10 +67,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             GUI.matrix = currGUIMatrix;
         }
 
-        public static void Drag(IEditorGUINode fromNode, NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, Vector2 mousePosition)
+        public static void Drag(InteractionManager interaction, Vector2 mousePosition)
         {
-            dragData.Set(fromNode);
-            Vector2 attachP = GetDragAttachPoint(fromGUIData.fullArea, mousePosition);
+            dragData.Set(interaction.targetNode);
+            Vector2 attachP = GetDragAttachPoint(interaction.targetNodeConnectorArea, mousePosition);
             Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.black, null, _LineSize + 2);
             Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, DeGUI.colors.global.orange, null, _LineSize);
         }
@@ -77,12 +79,12 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         #region Helpers
 
-        static AnchorsData GetAnchors(Rect fromArea, Rect toArea, ConnectorMode connectorMode)
+        static AnchorsData GetAnchors(Rect fromArea, Rect toArea, ConnectorMode connectorMode, bool sideOnly)
         {
             AnchorsData a = new AnchorsData();
             float distX = toArea.x - fromArea.xMax;
             float distY = toArea.y - fromArea.yMax;
-            bool fromIsBottom = fromArea.yMax < toArea.y && distY >= distX;
+            bool fromIsBottom = !sideOnly && fromArea.yMax < toArea.y && distY >= distX;
             a.fromP = fromIsBottom
                 ? new Vector2(fromArea.center.x, fromArea.yMax)
                 : new Vector2(fromArea.xMax, fromArea.center.y);

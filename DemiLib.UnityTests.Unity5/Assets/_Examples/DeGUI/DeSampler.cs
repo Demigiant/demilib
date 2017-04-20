@@ -34,9 +34,14 @@ public class DeSampler : MonoBehaviour
         if (nodeSystem.genericNodes == null) nodeSystem.genericNodes = new List<GenericNode>();
         if (nodeSystem.genericNodes.Count == 0) {
             for (int i = 0; i < 8; ++i) {
-                GenericNode node = new GenericNode();
-                node.id = i.ToString();
-                node.guiPosition = new Vector2(UnityEngine.Random.Range(50, 400), UnityEngine.Random.Range(50, 400));
+                GenericNode node = new GenericNode {
+                    id = i.ToString(),
+                    guiPosition = new Vector2(UnityEngine.Random.Range(50, 400), UnityEngine.Random.Range(50, 400))
+                };
+                if (i < 2) {
+                    node.type = NodeType.Multi;
+                    while (node.connectedNodesIds.Count < 3) node.connectedNodesIds.Add(null);
+                } else node.type = NodeType.Generic;
                 nodeSystem.genericNodes.Add(node);
             }
         }

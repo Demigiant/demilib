@@ -58,9 +58,22 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             Rect nodeArea = this.position.ResetXY().SetY(100).Shift(0, 0, 0, -100);
             using (new NodeProcessScope<GenericNode>(_nodeProcess, nodeArea, ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
                 // Draw nodes
-                // Generic nodes
+                // Generic and multi nodes
+                Gradient multiGradient = new Gradient() {
+                    colorKeys = new GradientColorKey[] {new GradientColorKey(Color.yellow, 0), new GradientColorKey(new Color(1f, 0.46f, 0f), 1)}
+                };
+                NodeConnectionOptions multiNodeConnOptions = new NodeConnectionOptions(true) {
+                    gradientColor = multiGradient
+                };
                 foreach (GenericNode node in src.nodeSystem.genericNodes) {
-                    _nodeProcess.Draw<GenericNodeGUI>(node);
+                    switch (node.type) {
+                    case NodeType.Multi:
+                        _nodeProcess.Draw<MultiNodeGUI>(node, multiNodeConnOptions);
+                        break;
+                    default:
+                        _nodeProcess.Draw<GenericNodeGUI>(node);
+                        break;
+                    }
                 }
                 // Start node (last so it's always over other nodes)
                 _nodeProcess.Draw<StartNodeGUI>(src.nodeSystem.startNode);

@@ -186,7 +186,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             // CTRL+Drag on node > drag connection (eventually)
                             bool canDragConnector = interaction.targetNode.connectedNodesIds.Count >= 1
                                                     && _nodeToConnectionOptions[interaction.targetNode].allowManualConnections;
-                            if (canDragConnector) interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingConnector);
+                            if (canDragConnector) {
+                                interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingConnector);
+                                Event.current.Use();
+                            }
                         } else if (interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
                             // LMB pressed on a node's draggable area > set readyFor state to DraggingNodes and select node
                             interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingNodes);
@@ -340,7 +343,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     IEditorGUINode overNode = GetMouseOverNode();
                     if (overNode != null && overNode != interaction.targetNode) {
                         // Create new connection
-                        Connector.dragData.node.connectedNodesIds[0] = overNode.id;
+                        Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] = overNode.id;
                         GUI.changed = _repaintOnEnd = true;
                     } else {
                         // Disconnect
@@ -394,10 +397,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         break;
                     // DRAW CONNECTOR DRAGGING
                     case InteractionManager.State.DraggingConnector:
-                        Connector.Drag(
-                            interaction.targetNode, nodeToGUIData[interaction.targetNode], _nodeToConnectionOptions[interaction.targetNode],
-                            Event.current.mousePosition
-                        );
+                        Connector.Drag(interaction, Event.current.mousePosition);
+                        // Evidence origin
+                        Color fromConnectionColor = DeGUI.colors.global.orange;
+                        fromConnectionColor.a = 0.3f;
+                        DeGUI.DrawColoredSquare(interaction.targetNodeConnectorArea.Expand(3), fromConnectionColor);
+                        using (new DeGUI.ColorScope(DeGUI.colors.global.orange)) {
+                            GUI.Box(interaction.targetNodeConnectorArea.Expand(3), "", _styles.nodeSelectionOutline);
+                        }
                         // Evidence possible connection
                         IEditorGUINode overNode = GetMouseOverNode();
                         if (overNode != null && overNode != interaction.targetNode) {
@@ -453,6 +460,25 @@ namespace DG.DemiEditor.DeGUINodeSystem
             IEditorGUINode targetNode = GetMouseOverNode();
             if (targetNode != null) {
                 interaction.targetNode = targetNode;
+                NodeGUIData nodeGuiData = nodeToGUIData[targetNode];
+                interaction.targetNodeConnectorAreaIndex = 0;
+                interaction.targetNodeConnectorArea = nodeGuiData.fullArea;
+                if (nodeGuiData.dragArea.Contains(Event.current.mousePosition)) {
+                    // Mouse on draggable area
+                    interaction.SetMouseTargetType(InteractionManager.TargetType.Node, InteractionManager.NodeTargetType.DraggableArea);
+                } else {
+                    // Mouse on non-draggable area: check if a sub connectorArea should be stored
+                    interaction.SetMouseTargetType(InteractionManager.TargetType.Node, InteractionManager.NodeTargetType.NonDraggableArea);
+                    if (targetNode.connectedNodesIds.Count > 1) {
+                        for (int i = 0; i < targetNode.connectedNodesIds.Count; ++i) {
+                            Rect connectorArea = nodeGuiData.connectorAreas[i];
+                            if (!connectorArea.Contains(Event.current.mousePosition)) continue;
+                            interaction.targetNodeConnectorAreaIndex = i;
+                            interaction.targetNodeConnectorArea = connectorArea;
+                            break;
+                        }
+                    }
+                }
                 interaction.SetMouseTargetType(
                     InteractionManager.TargetType.Node,
                     nodeToGUIData[targetNode].dragArea.Contains(Event.current.mousePosition)
