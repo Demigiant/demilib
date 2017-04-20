@@ -54,7 +54,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             mainArea.x = mainFullP.x + _process.areaShift.x;
             mainArea.y = mainFullP.y + _process.areaShift.y;
             Vector2 snappedDelta = delta;
-            _snapper.EvaluateSnapping(_mainNode, mainArea,  _allNodesRef, _draggedNodesRef, _nodeToGuiDataRef);
+            _snapper.EvaluateSnapping(_mainNode, mainArea,  _allNodesRef, _draggedNodesRef, _nodeToGuiDataRef, _process.relativeArea);
             if (_snapper.hasSnapX) {
                 _lastDragWasSnappedOnX = true;
                 snappedDelta.x = _snapper.snapX - (_mainNode.guiPosition.x + _process.areaShift.x);
@@ -82,7 +82,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         // Called on NodeProcess.EndGUI, repaint only - draws eventual horizontal/vertical guides
         public void EndGUI()
         {
-            const float guideSize = 2;
+            float guideSize = 2 / _process.guiScale;
             if (_snapper.showHorizontalGuide) {
                 Vector2 fromP = new Vector2(0, _snapper.snapY);
                 Vector2 toP = new Vector2(_process.relativeArea.width, _snapper.snapY);

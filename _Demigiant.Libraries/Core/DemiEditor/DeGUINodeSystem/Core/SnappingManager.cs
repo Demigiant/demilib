@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System.Collections.Generic;
+using DG.DemiEditor.Internal;
 using DG.DemiLib;
 using UnityEngine;
 
@@ -28,7 +29,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         public void EvaluateSnapping(
             IEditorGUINode forNode, Rect forArea, List<IEditorGUINode> allNodes, List<IEditorGUINode> excludedNodes,
-            Dictionary<IEditorGUINode, NodeGUIData> nodeToGuiData
+            Dictionary<IEditorGUINode, NodeGUIData> nodeToGuiData, Rect processRelativeArea
         ){
             hasSnapX = hasSnapY = showHorizontalGuide = showVerticalGuide = false;
             _topSnappingPs.Clear();
@@ -85,6 +86,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                     IEditorGUINode node = allNodes[i];
                     if (node == forNode || excludedNodes.Contains(node)) continue;
                     Rect toArea = nodeToGuiData[node].fullArea;
+                    if (!processRelativeArea.Overlaps(toArea)) continue;
                     if (!hasNearSnappingX) {
                         if (ValuesAreWithinBorderSnappingRange(forArea.x, toArea.x)) {
                             _leftSnappingPs.Add(toArea.x);
