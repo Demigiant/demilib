@@ -61,8 +61,10 @@
     <Compile Include="DeGUINodeSystem\ConnectorAttachMode.cs" />
     <Compile Include="DeGUINodeSystem\ConnectorMode.cs" />
     <Compile Include="DeGUINodeSystem\Core\Connector.cs" />
+    <Compile Include="DeGUINodeSystem\Core\NodeDragManager.cs" />
     <Compile Include="DeGUINodeSystem\Core\HelpPanel.cs" />
     <Compile Include="DeGUINodeSystem\Core\Minimap.cs" />
+    <Compile Include="DeGUINodeSystem\Core\SnappingManager.cs" />
     <Compile Include="DeGUINodeSystem\NodeConnectionOptions.cs" />
     <Compile Include="DeGUINodeSystem\NodeGUIData.cs" />
     <Compile Include="DeGUINodeSystem\InteractionManager.cs" />

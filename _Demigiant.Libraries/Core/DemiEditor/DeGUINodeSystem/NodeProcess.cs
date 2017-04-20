@@ -48,6 +48,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Dictionary<string,IEditorGUINode> _idToNode = new Dictionary<string,IEditorGUINode>();
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
+        readonly NodeDragManager _nodeDragManager;
         readonly List<IEditorGUINode> _tmp_nodes = new List<IEditorGUINode>(); // Used for temporary operations
         readonly Styles _styles = new Styles();
         Minimap _minimap;
@@ -67,6 +68,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             interaction = new InteractionManager(this);
             selection = new SelectionManager();
             guiScale = 1f;
+            _nodeDragManager = new NodeDragManager(this);
         }
 
         #endregion
@@ -237,9 +239,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     break;
                 case InteractionManager.ReadyFor.DraggingNodes:
                     if ((Event.current.mousePosition - interaction.mousePositionOnLMBPress).magnitude >= InteractionManager.MinDragStartupDistance) {
-                        foreach (IEditorGUINode node in selection.selectedNodes) {
-                            node.guiPosition += Event.current.mousePosition - interaction.mousePositionOnLMBPress - Event.current.delta;
-                        }
+                        _nodeDragManager.BeginDrag(interaction.targetNode, selection.selectedNodes, nodes, nodeToGUIData);
+                        _nodeDragManager.ApplyDrag(Event.current.mousePosition - interaction.mousePositionOnLMBPress - Event.current.delta);
                         interaction.SetState(InteractionManager.State.DraggingNodes);
                     }
                     break;
@@ -270,7 +271,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         break;
                     case InteractionManager.State.DraggingNodes:
                         // Drag selected nodes
-                        foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += Event.current.delta;
+                        _nodeDragManager.ApplyDrag(Event.current.delta);
                         guiChangeType = GUIChangeType.DragNodes;
                         GUI.changed = _repaintOnEnd = true;
                         break;
@@ -406,6 +407,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         }
                         break;
                     }
+                    // NODE DRAGGING GUIDES
+                    if (interaction.state == InteractionManager.State.DraggingNodes) _nodeDragManager.EndGUI();
                     // MINIMAP
                     if (_minimap != null) _minimap.Draw();
                     // HELP PANEL
