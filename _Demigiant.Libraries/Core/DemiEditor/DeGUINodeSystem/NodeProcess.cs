@@ -27,7 +27,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             None,
             Pan,
             DragNodes,
-            SortedNodes
+            SortedNodes,
+            DeletedNodes
         }
 
         public EditorWindow editor { get; private set; }
@@ -50,6 +51,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
         readonly NodeDragManager _nodeDragManager;
         readonly List<IEditorGUINode> _tmp_nodes = new List<IEditorGUINode>(); // Used for temporary operations
+        readonly List<string> _tmp_string = new List<string>(); // Used for temporary operations
         readonly Styles _styles = new Styles();
         Minimap _minimap;
         bool _helpPanelActive;
@@ -129,8 +131,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         #region Internal Methods
 
         // Updates the main node process.
-        // Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or the eventual sortableNodes list is changed.
-        internal void BeginGUI<T>(Rect nodeArea, ref Vector2 refAreaShift, IList<T> sortableNodes = null) where T : IEditorGUINode
+        // Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or controlNodes are reordered or deleted.
+        internal void BeginGUI<T>(Rect nodeArea, ref Vector2 refAreaShift, IList<T> controlNodes) where T : IEditorGUINode
         {
             _styles.Init();
             position = nodeArea;
@@ -221,7 +223,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             }
                         }
                         // Update eventual sorting
-                        if (sortableNodes != null) UpdateSorting(sortableNodes);
+                        if (controlNodes != null) UpdateSorting(controlNodes);
                         break;
                     }
                     break;
@@ -324,6 +326,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case KeyCode.F1:
                     // Help Panel
                     _helpPanelActive = !_helpPanelActive;
+                    _repaintOnEnd = true;
+                    break;
+                case KeyCode.Delete:
+                case KeyCode.Backspace:
+                    // Delete selected nodes
+                    if (selection.selectedNodes.Count == 0) break;
+                    DeleteSelectedNodes(controlNodes);
+                    selection.DeselectAll();
+                    guiChangeType = GUIChangeType.DeletedNodes;
                     _repaintOnEnd = true;
                     break;
                 case KeyCode.A:
@@ -520,7 +531,27 @@ namespace DG.DemiEditor.DeGUINodeSystem
             return null;
         }
 
-        // Called only if sortableNodes is not NULL and the event is MouseDown
+        // Deletes all selected nodes if they're part of the given list,
+        // and removes their ID from any other node that referenced them as a connection
+        void DeleteSelectedNodes<T>(IList<T> removeFrom) where T : IEditorGUINode
+        {
+            _tmp_string.Clear(); // Used to store ids to remove
+            // Delete nodes
+            foreach (IEditorGUINode selectedNode in selection.selectedNodes) {
+                int index = IndexOfNodeById(selectedNode.id, removeFrom);
+                if (index == -1) continue;
+                _tmp_string.Add(selectedNode.id);
+                removeFrom.RemoveAt(index);
+            }
+            // Remove references to deleted nodes from connections
+            foreach (T node in removeFrom) {
+                for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
+                    if (_tmp_string.Contains(node.connectedNodesIds[i])) node.connectedNodesIds[i] = null;
+                }
+            }
+        }
+
+        // Called only if controlNodes is not NULL and the event is MouseDown
         void UpdateSorting<T>(IList<T> sortableNodes) where T : IEditorGUINode
         {
             int totSelected = selection.selectedNodes.Count;
@@ -587,6 +618,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
         bool NodeIsVisible(Rect nodeArea)
         {
             return nodeArea.xMax > relativeArea.xMin && nodeArea.xMin < relativeArea.xMax && nodeArea.yMax > relativeArea.yMin && nodeArea.yMin < relativeArea.yMax;
+        }
+
+        int IndexOfNodeById<T>(string id, IList<T> lookInto) where T : IEditorGUINode
+        {
+            for (int i = 0; i < lookInto.Count; ++i) {
+                if (lookInto[i].id == id) return i;
+            }
+            return -1;
         }
 
         #endregion

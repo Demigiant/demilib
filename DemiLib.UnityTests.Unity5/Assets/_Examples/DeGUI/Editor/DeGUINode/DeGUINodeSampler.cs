@@ -22,9 +22,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         public static void ShowWindow(DeSampler src)
         {
             DeGUINodeSampler.src = src;
-            EditorWindow editor = GetWindow(typeof(DeGUINodeSampler), true, _Title);
-            Undo.undoRedoPerformed -= editor.Repaint;
-            Undo.undoRedoPerformed += editor.Repaint;
+            GetWindow(typeof(DeGUINodeSampler), true, _Title);
         }
 
         #endregion
@@ -35,6 +33,8 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         {
             if (src == null) src = DeEditorToolsUtils.FindFirstComponentOfType<DeSampler>();
             _nodeProcess = new NodeProcess(this);
+            Undo.undoRedoPerformed -= this.Repaint;
+            Undo.undoRedoPerformed += this.Repaint;
         }
 
         void OnHierarchyChange()

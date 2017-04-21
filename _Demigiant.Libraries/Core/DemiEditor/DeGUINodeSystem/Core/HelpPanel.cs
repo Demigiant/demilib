@@ -36,6 +36,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 // KEYBOARD
                 .AppendHeader("KEYBOARD")
                 .AppendKey("F1").AppendDescription("Open/close this panel")
+                .AppendKey("DELETE/BACKSPACE").AppendDescription("Delete selected nodes - <i>if allowed</i>")
                 .AppendKey("CTRL + A").AppendDescription("Select all nodes")
                 ;
 
