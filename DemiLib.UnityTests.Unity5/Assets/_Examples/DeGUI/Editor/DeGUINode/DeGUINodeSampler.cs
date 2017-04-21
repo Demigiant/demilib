@@ -2,6 +2,7 @@
 // Created: 2017/03/09 11:43
 // License Copyright (c) Daniele Giardini
 
+using DG.DeEditorTools;
 using DG.DeExtensions;
 using DG.DemiEditor.DeGUINodeSystem;
 using UnityEditor;
@@ -32,10 +33,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
 
         void OnEnable()
         {
-            if (src == null) {
-                Close();
-                return;
-            }
+            if (src == null) src = DeEditorToolsUtils.FindFirstComponentOfType<DeSampler>();
             _nodeProcess = new NodeProcess(this);
         }
 
