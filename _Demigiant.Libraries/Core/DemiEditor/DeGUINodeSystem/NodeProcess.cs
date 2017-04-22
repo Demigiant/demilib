@@ -321,6 +321,32 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 break;
             // KEYBOARD EVENTS //////////////////////////////////////////////////////////////////////////////////////////////////////
+            case EventType.KeyDown:
+                switch (Event.current.keyCode) {
+                case KeyCode.UpArrow:
+                case KeyCode.DownArrow:
+                case KeyCode.LeftArrow:
+                case KeyCode.RightArrow:
+                    // Move selected nodes (on key down so it can repeat when keeping they key pressed)
+                    if (selection.selectedNodes.Count == 0) break;
+                    Vector2 shift = Vector2.zero;
+                    switch (Event.current.keyCode) {
+                    case KeyCode.UpArrow: shift.y = -1;
+                        break;
+                    case KeyCode.DownArrow: shift.y = 1;
+                        break;
+                    case KeyCode.LeftArrow: shift.x = -1;
+                        break;
+                    case KeyCode.RightArrow: shift.x = 1;
+                        break;
+                    }
+                    if (Event.current.shift) shift *= 10;
+                    foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += shift;
+                    guiChangeType = GUIChangeType.DragNodes;
+                    GUI.changed = _repaintOnEnd = true;
+                    break;
+                }
+                break;
             case EventType.KeyUp:
                 switch (Event.current.keyCode) {
                 case KeyCode.F1:
@@ -335,7 +361,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     DeleteSelectedNodes(controlNodes);
                     selection.DeselectAll();
                     guiChangeType = GUIChangeType.DeletedNodes;
-                    _repaintOnEnd = true;
+                    GUI.changed = _repaintOnEnd = true;
                     break;
                 case KeyCode.A:
                     if (interaction.HasControlKeyModifier()) {
