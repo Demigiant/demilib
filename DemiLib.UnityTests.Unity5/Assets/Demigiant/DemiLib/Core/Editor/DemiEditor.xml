@@ -295,7 +295,10 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.Connector.Connect(DG.DemiEditor.DeGUINodeSystem.NodeProcess,System.Int32,System.Int32,DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions,DG.DemiEditor.DeGUINodeSystem.NodeGUIData)">
             <summary>
-            Always connects from BottomOrRight side to TopOrLeft side
+            Always connects from BottomOrRight side to TopOrLeft side.
+            If ALT is pressed shows the delete connection button.
+            Called during Repaint or MouseDown/Up.
+            Returns TRUE if the connection was deleted using the delete connection button.
             </summary>
         </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.InteractionManager">

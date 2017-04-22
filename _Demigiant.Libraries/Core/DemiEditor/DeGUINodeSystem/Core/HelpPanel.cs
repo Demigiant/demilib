@@ -37,7 +37,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 .AppendHeader("KEYBOARD")
                 .AppendKey("F1").AppendDescription("Open/close this panel")
                 .AppendKey("DELETE/BACKSPACE").AppendDescription("Delete selected nodes - <i>if allowed</i>")
+                .AppendKey("ALT").AppendDescription("Show extra UI buttons")
                 .AppendKey("CTRL + A").AppendDescription("Select all nodes")
+                .AppendKey("UP/DOWN/LEFT/RIGHT ARROW").AppendDescription("Move selected nodes by 1 pixel")
+                .AppendKey("UP/DOWN/LEFT/RIGHT ARROW + SHIFT").AppendDescription("Move selected nodes by 10 pixels")
                 ;
 
             _Content = strb.ToString();

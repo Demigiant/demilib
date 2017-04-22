@@ -9,6 +9,7 @@ using DG.DemiEditor.DeGUINodeSystem;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
+using _Examples.DeGUI.DeGUINode;
 
 namespace _Examples.DeGUI.Editor.DeGUINode
 {
@@ -30,11 +31,13 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         protected override void OnGUI(NodeGUIData nodeGuiData, IEditorGUINode iNode)
         {
             _Styles.Init();
+            GenericNode node = (GenericNode)iNode;
 
             // Background
             DG.DemiEditor.DeGUI.DrawColoredSquare(nodeGuiData.fullArea, DG.DemiEditor.DeGUI.colors.global.yellow);
             // Header
             DG.DemiEditor.DeGUI.DrawColoredSquare(nodeGuiData.dragArea, new Color(0, 0, 0, 0.3f));
+            GUI.Label(nodeGuiData.dragArea, node.id.ToString(), _Styles.headerLabelStyle);
 
             // Lines
             for (int i = 0; i < 3; ++i) {

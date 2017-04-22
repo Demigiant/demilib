@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System.Collections.Generic;
+using DG.DemiEditor.Internal;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
@@ -15,21 +16,30 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
     internal static class Connector
     {
         public static readonly DragData dragData = new DragData();
+
         const int _LineSize = 3;
         const int _MaxDistanceForSmartStraight = 40; // was 120
         const int _TangentDistance = 50;
         const int _TangentDistanceIfInverse = 120; // Tangent distance if TO is behind FROM
+        static readonly Styles _Styles = new Styles();
 
         #region Public Methods
 
         /// <summary>
-        /// Always connects from BottomOrRight side to TopOrLeft side
+        /// Always connects from BottomOrRight side to TopOrLeft side.
+        /// If ALT is pressed shows the delete connection button.
+        /// Called during Repaint or MouseDown/Up.
+        /// Returns TRUE if the connection was deleted using the delete connection button.
         /// </summary>
-        public static void Connect(
-            NodeProcess process, int connectionIndex, int fromTotConnections,
-            NodeGUIData fromGUIData, NodeConnectionOptions fromOptions, NodeGUIData toGUIData
+        public static bool Connect(
+            NodeProcess process, int connectionIndex,
+            int fromTotConnections, NodeGUIData fromGUIData, NodeConnectionOptions fromOptions,
+            NodeGUIData toGUIData
         )
         {
+            _Styles.Init();
+            bool altMode = Event.current.alt;
+
             bool useSubFromAreas = fromGUIData.connectorAreas != null;
             Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
             AnchorsData anchorsData = GetAnchors(fromArea, toGUIData.fullArea, fromOptions.connectorMode, useSubFromAreas);
@@ -51,20 +61,33 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             }
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(fromR, DeStylePalette.whiteSquare);
             // Line
-            Handles.DrawBezier(anchorsData.fromP, anchorsData.toP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
+            Handles.DrawBezier(anchorsData.fromP, anchorsData.toNicerP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
+            // Arrow
             Rect arrowR = new Rect(
                 anchorsData.arrowP.x - DeStylePalette.ico_nodeArrow.width,
                 anchorsData.arrowP.y - DeStylePalette.ico_nodeArrow.height * 0.5f,
                 DeStylePalette.ico_nodeArrow.width,
                 DeStylePalette.ico_nodeArrow.height
             );
-            // Arrow
             Matrix4x4 currGUIMatrix = GUI.matrix;
             if (anchorsData.arrowRequiresRotation) {
                 GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.arrowP * process.guiScale + process.guiScalePositionDiff);
             }
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(arrowR, DeStylePalette.ico_nodeArrow);
             GUI.matrix = currGUIMatrix;
+            // Delete connection button (placed at center of line)
+            if (altMode) {
+                Vector2 midP = anchorsData.fromTangent + (anchorsData.toTangent - anchorsData.fromTangent) * 0.5f;
+                Vector2 midPAlt = anchorsData.fromP + (anchorsData.toNicerP - anchorsData.fromP) * 0.5f;
+                midP += (midPAlt - midP) * 0.25f;
+                Rect btR = new Rect(midP.x - 5, midP.y - 5, 10, 10);
+                using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(btR.Expand(2), DeStylePalette.circle);
+                using (new DeGUI.ColorScope(null, null, DeGUI.colors.global.red)) {
+                    if (GUI.Button(btR, "", _Styles.btDelete)) return true;
+                }
+                GUI.DrawTexture(btR.Contract(2), DeStylePalette.ico_delete);
+            }
+            return false;
         }
 
         public static void Drag(InteractionManager interaction, Vector2 mousePosition)
@@ -79,8 +102,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         #region Helpers
 
-        static AnchorsData GetAnchors(Rect fromArea, Rect toArea, ConnectorMode connectorMode, bool sideOnly)
-        {
+        static AnchorsData GetAnchors(Rect fromArea, Rect toArea, ConnectorMode connectorMode, bool sideOnly){
             AnchorsData a = new AnchorsData();
             float distX = toArea.x - fromArea.xMax;
             float distY = toArea.y - fromArea.yMax;
@@ -89,7 +111,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 ? new Vector2(fromArea.center.x, fromArea.yMax)
                 : new Vector2(fromArea.xMax, fromArea.center.y);
             bool toIsTop = toArea.y > a.fromP.y && (fromArea.xMax > toArea.x || toArea.y - a.fromP.y > toArea.center.x - a.fromP.x);
-            a.toP = toIsTop
+            a.toP = a.toNicerP = toIsTop
                 ? new Vector2(toArea.center.x, toArea.y)
                 : new Vector2(toArea.x, toArea.center.y);
             a.arrowP = a.toP;
@@ -104,13 +126,11 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 a.fromTangent = a.fromP;
                 a.toTangent = a.toP;
             } else {
-                // Detract arrow size from toP (so curve is nicer and connects better with arrow)
-                if (toIsTop) a.toP.y -= DeStylePalette.ico_nodeArrow.width;
-                else a.toP.x -= DeStylePalette.ico_nodeArrow.width;
-                //
+                if (toIsTop) a.toNicerP.y -= DeStylePalette.ico_nodeArrow.width;
+                else a.toNicerP.x -= DeStylePalette.ico_nodeArrow.width;
                 float tangentDistance = isToBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, dist * 0.4f);
                 a.fromTangent = a.fromP + (fromIsBottom ? Vector2.up * tangentDistance : Vector2.right * tangentDistance);
-                a.toTangent = a.toP + (toIsTop? Vector2.up * -tangentDistance : Vector2.right * -tangentDistance);
+                a.toTangent = a.toNicerP + (toIsTop? Vector2.up * -tangentDistance : Vector2.right * -tangentDistance);
             }
             // Set arrow
             if (a.isStraight) {
@@ -147,7 +167,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         #endregion
 
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
-        // ███ CLASS ███████████████████████████████████████████████████████████████████████████████████████████████████████████
+        // ███ CLASSES █████████████████████████████████████████████████████████████████████████████████████████████████████████
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
         internal class DragData
@@ -166,12 +186,37 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         struct AnchorsData
         {
             public Vector2 fromP, toP;
+            public Vector2 toNicerP; // P adapted in case of curved arrow to make line look nicer
             public Vector2 fromTangent, toTangent;
             public Vector2 arrowP;
             public bool fromIsSide, toIsSide; // If FALSE it means it's either top (toNode) or bottom (fromNode)
             public bool isStraight;
             public bool arrowRequiresRotation;
             public float arrowRotationAngle;
+        }
+
+        struct ConnectionData
+        {
+            public int index, totConnections;
+            public ConnectionData(int index, int totConnections)
+            {
+                this.index = index;
+                this.totConnections = totConnections;
+            }
+        }
+
+        class Styles
+        {
+            public GUIStyle btDelete;
+            bool _initialized;
+
+            public void Init()
+            {
+                if (_initialized) return;
+
+                _initialized = true;
+                btDelete = new GUIStyle().StretchWidth().StretchHeight().Background(DeStylePalette.circle);
+            }
         }
     }
 }

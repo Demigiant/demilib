@@ -104,7 +104,8 @@
             <summary>Node position in editor GUI</summary>
         </member>
         <member name="P:DG.DemiLib.IEditorGUINode.connectedNodesIds">
-            <summary>Ids of all forward connected nodes. Length indicates how many forward connections are allowed.</summary>
+            <summary>Ids of all forward connected nodes. Length indicates how many forward connections are allowed.
+            Min length represents available connections from node.</summary>
         </member>
         <member name="T:DG.DemiLib.Range">
             <summary>

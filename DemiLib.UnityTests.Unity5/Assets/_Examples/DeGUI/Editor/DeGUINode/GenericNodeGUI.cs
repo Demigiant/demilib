@@ -36,7 +36,12 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             DG.DemiEditor.DeGUI.DrawColoredSquare(nodeGuiData.fullArea, node.colorValue);
             // Header
             DG.DemiEditor.DeGUI.DrawColoredSquare(nodeGuiData.dragArea, new Color(0, 0, 0, 0.3f));
-            GUI.Label(nodeGuiData.dragArea, node.id.ToString(), _Styles.headerLabelStyle);
+            GUI.Label(
+                nodeGuiData.dragArea, node.flexibleConnections
+                    ? string.Format("Flexible Connections ({0})", node.connectedNodesIds.Count)
+                    : node.id.ToString(),
+                _Styles.headerLabelStyle
+            );
 
             // Content
             Rect r = nodeGuiData.fullArea.Shift(2, nodeGuiData.dragArea.height + _LineGap, -4, -nodeGuiData.dragArea.height - _LineGap).SetHeight(_LineH);

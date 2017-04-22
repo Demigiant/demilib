@@ -25,6 +25,7 @@ namespace _Examples.DeGUI.DeGUINode
         #region Serialized
 
         public NodeType type;
+        public bool flexibleConnections = false;
         public bool boolValue;
         public string stringValue = "Sample Text";
         public SampleEnum enumValue = SampleEnum.B;

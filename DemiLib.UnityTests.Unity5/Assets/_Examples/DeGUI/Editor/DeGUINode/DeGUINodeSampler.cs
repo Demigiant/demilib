@@ -60,16 +60,14 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 Gradient multiGradient = new Gradient() {
                     colorKeys = new GradientColorKey[] {new GradientColorKey(Color.yellow, 0), new GradientColorKey(new Color(1f, 0.46f, 0f), 1)}
                 };
-                NodeConnectionOptions multiNodeConnOptions = new NodeConnectionOptions(true) {
-                    gradientColor = multiGradient
-                };
+                NodeConnectionOptions multiNodeConnOptions = new NodeConnectionOptions(true, ConnectorMode.Smart, multiGradient);
                 foreach (GenericNode node in src.nodeSystem.genericNodes) {
                     switch (node.type) {
                     case NodeType.Multi:
                         _nodeProcess.Draw<MultiNodeGUI>(node, multiNodeConnOptions);
                         break;
                     default:
-                        _nodeProcess.Draw<GenericNodeGUI>(node);
+                        _nodeProcess.Draw<GenericNodeGUI>(node, new NodeConnectionOptions(true, node.flexibleConnections));
                         break;
                     }
                 }
