@@ -22,6 +22,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         const int _TangentDistance = 50;
         const int _TangentDistanceIfInverse = 120; // Tangent distance if TO is behind FROM
         static readonly Styles _Styles = new Styles();
+        static Color _lineShadowColor = new Color(0, 0, 0, 0.4f);
 
         #region Public Methods
 
@@ -60,7 +61,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 if (anchorsData.isStraight) anchorsData.fromTangent.y += fromRWidth;
             }
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(fromR, DeStylePalette.whiteSquare);
-            // Line
+            // Line (shadow + line)
+            Handles.DrawBezier(
+                anchorsData.fromP, anchorsData.toNicerP, anchorsData.fromTangent, anchorsData.toTangent, _lineShadowColor, null, _LineSize + 2
+            );
             Handles.DrawBezier(anchorsData.fromP, anchorsData.toNicerP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
             // Arrow
             Rect arrowR = new Rect(
