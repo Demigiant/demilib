@@ -60,6 +60,7 @@
     <Compile Include="DeGUINodeSystem\ABSDeGUINode.cs" />
     <Compile Include="DeGUINodeSystem\ConnectorAttachMode.cs" />
     <Compile Include="DeGUINodeSystem\ConnectorMode.cs" />
+    <Compile Include="DeGUINodeSystem\Core\NodesClipboard.cs" />
     <Compile Include="DeGUINodeSystem\Core\Connector.cs" />
     <Compile Include="DeGUINodeSystem\Core\NodeDragManager.cs" />
     <Compile Include="DeGUINodeSystem\Core\HelpPanel.cs" />

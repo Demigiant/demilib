@@ -288,6 +288,11 @@
         <member name="M:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode.OnGUI(DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiLib.IEditorGUINode)">
             <summary>Called only if the node is visible in the current area</summary>
         </member>
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.Core.NodesClipboard">
+            <summary>
+            Stores cloned nodes for pasting
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.Core.Connector">
             <summary>
             Always connects a node from BottomOrRight side to TopOrLeft side

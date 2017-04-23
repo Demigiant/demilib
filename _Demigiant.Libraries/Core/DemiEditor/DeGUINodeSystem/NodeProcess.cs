@@ -54,7 +54,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
         readonly NodeDragManager _nodeDragManager;
-        static readonly List<IEditorGUINode> _NodesClipboard = new List<IEditorGUINode>(); // Nodes copied and currently stored in clipboard
+        readonly NodesClipboard _clipboard = new NodesClipboard();
         readonly List<IEditorGUINode> _tmp_nodes = new List<IEditorGUINode>(); // Used for temporary operations
         readonly List<string> _tmp_string = new List<string>(); // Used for temporary operations
         static readonly Styles _Styles = new Styles();
@@ -90,6 +90,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             selection = new SelectionManager();
             guiScale = 1f;
             _nodeDragManager = new NodeDragManager(this);
+            Undo.undoRedoPerformed -= this.OnUndoRedoCallback;
+            Undo.undoRedoPerformed += this.OnUndoRedoCallback;
         }
 
         #endregion
@@ -249,7 +251,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         break;
                     case InteractionManager.TargetType.Node:
                         // LMB pressed on a node
-                        if (Event.current.control || Event.current.command) {
+                        if (!Event.current.shift && (Event.current.control || Event.current.command)) {
                             // CTRL+Drag on node > drag connection (eventually)
                             NodeConnectionOptions connectionOptions = _nodeToConnectionOptions[interaction.targetNode];
                             bool canDragConnector = connectionOptions.allowManualConnections
@@ -271,9 +273,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                     if (!isAlreadySelected) selection.Select(interaction.targetNode, true);
                                     SelectAllForwardConnectedNodes(interaction.targetNode);
                                 } else {
-                                    // Add or remove from selection
-                                    if (isAlreadySelected) selection.Deselect(interaction.targetNode);
-                                    else selection.Select(interaction.targetNode, true);
+                                    // Add to selection if not already selected
+                                    // (deselection happens on mouseUp instead, for various reasons)
+                                    selection.StoreSnapshot();
+                                    if (!isAlreadySelected) selection.Select(interaction.targetNode, true);
                                 }
                                 _repaintOnEnd = true;
                             } else if (!isAlreadySelected) {
@@ -312,6 +315,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     break;
                 case InteractionManager.ReadyFor.DraggingNodes:
                     if ((Event.current.mousePosition - interaction.mousePositionOnLMBPress).magnitude >= InteractionManager.MinDragStartupDistance) {
+                        if (Event.current.shift && Event.current.control) {
+                            // Clone nodes before starting to drag
+                            CloneAndCopySelectedNodes(controlNodes);
+                            if (PasteNodesFromClipboard(controlNodes, false)) {
+                                // Select copied nodes plus original ones that weren't copied (meaning they were not part of controlNodes)
+                                selection.DeselectAll();
+                                foreach (IEditorGUINode uncopiedNode in _tmp_nodes) selection.Select(uncopiedNode, true);
+                                foreach (IEditorGUINode node in _clipboard.nodes) selection.Select(node, true);
+                                // Set interaction to mirror the new nodes setup
+                                IEditorGUINode clonedTargetNode = _clipboard.GetClipboardCloneByOriginalId(interaction.targetNode.id);
+                                if (clonedTargetNode != null) interaction.targetNode = clonedTargetNode;
+                            }
+                        }
                         _nodeDragManager.BeginDrag(interaction.targetNode, selection.selectedNodes, nodes, nodeToGUIData);
                         _nodeDragManager.ApplyDrag(Event.current.mousePosition - interaction.mousePositionOnLMBPress - Event.current.delta);
                         interaction.SetState(InteractionManager.State.DraggingNodes);
@@ -449,32 +465,30 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case KeyCode.V:
                     if (interaction.HasControlKeyModifier()) {
                         // CTRL+V > Paste copied nodes (which were cloned and in clipboard) and select them
-                        if (_NodesClipboard.Count == 0) break;
-                        selection.DeselectAll();
-                        IEditorGUINode topLeftNode = _NodesClipboard[0];
-                        for (int i = 1; i < _NodesClipboard.Count; ++i) {
-                            IEditorGUINode node = _NodesClipboard[i];
-                            if (node.guiPosition.y <= topLeftNode.guiPosition.x && node.guiPosition.x < topLeftNode.guiPosition.x) {
-                                topLeftNode = node;
-                            }
+                        if (PasteNodesFromClipboard(controlNodes, true)) {
+                            selection.DeselectAll();
+                            foreach (IEditorGUINode node in _clipboard.nodes) selection.Select(node, true);
+                            guiChangeType = GUIChangeType.AddedNodes;
+                            GUI.changed = _repaintOnEnd = true;
                         }
-                        Vector2 offset = Event.current.mousePosition - (topLeftNode.guiPosition + areaShift);
-                        foreach (IEditorGUINode node in _NodesClipboard) {
-                            selection.Select(node, true);
-                            node.guiPosition += offset;
-                            controlNodes.Add((T)node);
-                        }
-                        guiChangeType = GUIChangeType.AddedNodes;
-                        GUI.changed = _repaintOnEnd = true;
                     }
                     break;
                 }
                 break;
             }
-            // RAW MOUSE EVENTS (used to capture mouseUp outside editorWindow) //////////////////////////////////////////////////////
+            // RAW MOUSE EVENTS (used to capture mouseUp also outside editorWindow) //////////////////////////////////////////////////////
             switch (Event.current.rawType) {
             case EventType.MouseUp:
                 switch (interaction.state) {
+                case InteractionManager.State.Inactive:
+                    if (Event.current.shift && interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
+                        // SHIFT + LMB UP on selected node's draggable area: deselect
+                        if (selection.IsSelected(interaction.targetNode) && selection.selectedNodesSnapshot.Contains(interaction.targetNode)) {
+                            selection.Deselect(interaction.targetNode);
+                            _repaintOnEnd = true;
+                        }
+                    }
+                    break;
                 case InteractionManager.State.DrawingSelection:
                     selection.selectionMode = SelectionManager.Mode.Default;
                     selection.ClearSnapshot();
@@ -645,6 +659,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         #region Methods
 
+        void OnUndoRedoCallback()
+        {
+            // Clear selection so it doesn't creates error when trying to draw the selection box after an undo
+            selection.DeselectAll();
+        }
+
         // Store mouse target (even in case of rollovers) and set related data
         void EvaluateAndStoreMouseTarget()
         {
@@ -698,27 +718,32 @@ namespace DG.DemiEditor.DeGUINodeSystem
             return null;
         }
 
+        // Also fill _tmp_nodes with a list of nodes that were not copied (meaning they were not part of controlNodes)
         void CloneAndCopySelectedNodes<T>(IList<T> controlNodes) where T : IEditorGUINode, new()
         {
             if (selection.selectedNodes.Count == 0) return;
 
-            _NodesClipboard.Clear();
+            _clipboard.Clear();
+            _tmp_nodes.Clear();
             List<string> originalIds = new List<string>();
             List<string> cloneIds = new List<string>();
             // Store clones
             foreach (IEditorGUINode node in selection.selectedNodes) {
                 string id = node.id;
-                if (IndexOfNodeById(id, controlNodes) == -1) continue;
+                if (IndexOfNodeById(id, controlNodes) == -1) {
+                    _tmp_nodes.Add(node);
+                    continue;
+                }
                 IEditorGUINode clone = CloneNode<T>(node);
                 if (_onCloneNodeCallback != null && !_onCloneNodeCallback(node, clone)) continue;
-                _NodesClipboard.Add(clone);
+                _clipboard.Add(clone, node.id);
                 originalIds.Add(id);
                 cloneIds.Add(clone.id);
             }
-            if (_NodesClipboard.Count == 0) return;
+            if (_clipboard.nodes.Count == 0) return;
 
             // Replace all interconnected ids with new ones, and eliminate others
-            foreach (IEditorGUINode node in _NodesClipboard) {
+            foreach (IEditorGUINode node in _clipboard.nodes) {
                 IEditorGUINode originalNode = GetNodeById(originalIds[cloneIds.IndexOf(node.id)], controlNodes);
                 NodeConnectionOptions connectionOptions = _nodeToConnectionOptions[originalNode];
                 for (int c = node.connectedNodesIds.Count - 1; c > -1; --c) {
@@ -733,6 +758,34 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     }
                 }
             }
+        }
+
+        // Returns TRUE if something was actually pasted
+        bool PasteNodesFromClipboard<T>(IList<T> controlNodes, bool adaptGuiPositionToMouse) where T : IEditorGUINode
+        {
+            if (_clipboard.nodes.Count == 0) return false;
+
+            Vector2 offset = Vector2.zero;
+            if (adaptGuiPositionToMouse) {
+                // Find top left node to determine offset for paste
+                Vector2 topLeftP = _clipboard.nodes[0].guiPosition;
+                for (int i = 1; i < _clipboard.nodes.Count; ++i) {
+                    IEditorGUINode node = _clipboard.nodes[i];
+                    if (node.guiPosition.x < topLeftP.x) topLeftP.x = node.guiPosition.x;
+                    if (node.guiPosition.y < topLeftP.y) topLeftP.y = node.guiPosition.y;
+                }
+                offset = Event.current.mousePosition - (topLeftP + areaShift);
+            }
+            // Add nodes and also nodeGuiData etc based on original nodes
+            foreach (IEditorGUINode node in _clipboard.nodes) {
+                IEditorGUINode originalNode = GetNodeById(_clipboard.nodeToOriginalId[node], controlNodes);
+                node.guiPosition += offset;
+                controlNodes.Add((T)node);
+                nodeToGUIData.Add(node, nodeToGUIData[originalNode]);
+                _nodeToConnectionOptions.Add(node, _nodeToConnectionOptions[originalNode]);
+                _idToNode.Add(node.id, node);
+            }
+            return true;
         }
 
         // Deletes all selected nodes if they're part of the given list,

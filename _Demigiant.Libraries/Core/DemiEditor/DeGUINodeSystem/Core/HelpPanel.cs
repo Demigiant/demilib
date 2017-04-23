@@ -30,6 +30,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 .AppendKey("LMB-Drag + SHIFT").AppendTarget("background").AppendDescription("Draw new nodes selection rect - <i>will add nodes to current selection</i>")
                 .AppendKey("LMB-Drag + ALT").AppendTarget("node").AppendDescription("Drag selected nodes without snapping")
                 .AppendKey("LMB-Drag + CTRL").AppendTarget("node").AppendDescription("Drag new connection from node - <i>if node allows it</i>")
+                .AppendKey("LMB-Drag + CTRL + SHIFT").AppendTarget("node").AppendDescription("Clone selected nodes and drag them")
                 .AppendKey("RMB").AppendDescription("Context menu")
                 .AppendKey("MMB-Drag").AppendDescription("Area panning")
                 .AppendKey("Scrollwheel + CTRL").AppendDescription("Zoom in/out")
