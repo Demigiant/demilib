@@ -125,6 +125,10 @@ namespace DG.DemiEditor
         public static Texture2D ico_comment_border { get { return LoadTexture(ref _ico_comment_border, "ico_comment_border"); } }
         public static Texture2D ico_ui { get { return LoadTexture(ref _ico_ui, "ico_ui"); } }
         public static Texture2D ico_ui_border { get { return LoadTexture(ref _ico_ui_border, "ico_ui_border"); } }
+        public static Texture2D ico_heart { get { return LoadTexture(ref _ico_heart, "ico_heart"); } }
+        public static Texture2D ico_heart_border { get { return LoadTexture(ref _ico_heart_border, "ico_heart_border"); } }
+        public static Texture2D ico_skull { get { return LoadTexture(ref _ico_skull, "ico_skull"); } }
+        public static Texture2D ico_skull_border { get { return LoadTexture(ref _ico_skull_border, "ico_skull_border"); } }
         public static Texture2D grid_dark { get { return LoadTexture(ref _grid_dark, "grid_dark", FilterMode.Point, 64, TextureWrapMode.Repeat); } }
         public static Texture2D grid_bright { get { return LoadTexture(ref _grid_bright, "grid_bright", FilterMode.Point, 64, TextureWrapMode.Repeat); } }
         static Texture2D _ico_nodeArrow;
@@ -149,6 +153,10 @@ namespace DG.DemiEditor
         static Texture2D _ico_comment_border;
         static Texture2D _ico_ui;
         static Texture2D _ico_ui_border;
+        static Texture2D _ico_heart;
+        static Texture2D _ico_heart_border;
+        static Texture2D _ico_skull;
+        static Texture2D _ico_skull_border;
         static Texture2D _grid_dark;
         static Texture2D _grid_bright;
 

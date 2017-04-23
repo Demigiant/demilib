@@ -20,18 +20,6 @@ namespace DG.DeEditorTools.Hierarchy
 
         #region Icon
 
-        [MenuItem("GameObject/DeHierarchy/Icon/Dot", false, 22)]
-        static void SetIconDot()
-        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Dot); }
-
-        [MenuItem("GameObject/DeHierarchy/Icon/Play", false, 22)]
-        static void SetIconPlay()
-        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Play); }
-
-        [MenuItem("GameObject/DeHierarchy/Icon/Star", false, 22)]
-        static void SetIconStar()
-        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Star); }
-
         [MenuItem("GameObject/DeHierarchy/Icon/Cog", false, 22)]
         static void SetIconCog()
         { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Cog); }
@@ -39,6 +27,26 @@ namespace DG.DeEditorTools.Hierarchy
         [MenuItem("GameObject/DeHierarchy/Icon/Comment", false, 22)]
         static void SetIconComment()
         { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Comment); }
+
+        [MenuItem("GameObject/DeHierarchy/Icon/Dot", false, 22)]
+        static void SetIconDot()
+        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Dot); }
+
+        [MenuItem("GameObject/DeHierarchy/Icon/Heart", false, 22)]
+        static void SetIconHeart()
+        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Heart); }
+
+        [MenuItem("GameObject/DeHierarchy/Icon/Play", false, 22)]
+        static void SetIconPlay()
+        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Play); }
+
+        [MenuItem("GameObject/DeHierarchy/Icon/Skull", false, 22)]
+        static void SetIconSkull()
+        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Skull); }
+
+        [MenuItem("GameObject/DeHierarchy/Icon/Star", false, 22)]
+        static void SetIconStar()
+        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Star); }
 
         [MenuItem("GameObject/DeHierarchy/Icon/UI", false, 22)]
         static void SetIconUI()

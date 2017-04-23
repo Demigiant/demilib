@@ -36,7 +36,9 @@ namespace DG.DemiLib.External
             Cog,
             Comment,
             UI,
-            Play
+            Play,
+            Heart,
+            Skull
         }
 
         #region Serialized
