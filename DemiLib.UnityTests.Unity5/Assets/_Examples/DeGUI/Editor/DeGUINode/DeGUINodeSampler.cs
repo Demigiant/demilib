@@ -2,9 +2,11 @@
 // Created: 2017/03/09 11:43
 // License Copyright (c) Daniele Giardini
 
+using System.Collections.Generic;
 using DG.DeEditorTools;
 using DG.DeExtensions;
 using DG.DemiEditor.DeGUINodeSystem;
+using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
 using _Examples.DeGUI.DeGUINode;
@@ -32,7 +34,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         void OnEnable()
         {
             if (src == null) src = DeEditorToolsUtils.FindFirstComponentOfType<DeSampler>();
-            _nodeProcess = new NodeProcess(this);
+            _nodeProcess = new NodeProcess(this, OnDeleteNodes);
             Undo.undoRedoPerformed -= this.Repaint;
             Undo.undoRedoPerformed += this.Repaint;
         }
@@ -113,6 +115,16 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 this.Repaint();
             });
             menu.DropDown(new Rect(Event.current.mousePosition.x, Event.current.mousePosition.y, 0, 0));
+        }
+
+        #endregion
+
+        #region Callbacks
+
+        bool OnDeleteNodes(List<IEditorGUINode> nodes)
+        {
+            Debug.Log(string.Format("OnDeleteNodes callback > Deleting {0} nodes", nodes.Count));
+            return true;
         }
 
         #endregion

@@ -39,6 +39,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 .AppendKey("DELETE/BACKSPACE").AppendDescription("Delete selected nodes - <i>if allowed</i>")
                 .AppendKey("ALT").AppendDescription("Show extra UI buttons")
                 .AppendKey("CTRL + A").AppendDescription("Select all nodes")
+                .AppendKey("CTRL + C").AppendDescription("Copy selected nodes (a new ID will be auto-generated)")
+                .AppendKey("CTRL + V").AppendDescription("Paste nodes from clipboard")
                 .AppendKey("UP/DOWN/LEFT/RIGHT ARROW").AppendDescription("Move selected nodes by 1 pixel")
                 .AppendKey("UP/DOWN/LEFT/RIGHT ARROW + SHIFT").AppendDescription("Move selected nodes by 10 pixels")
                 ;

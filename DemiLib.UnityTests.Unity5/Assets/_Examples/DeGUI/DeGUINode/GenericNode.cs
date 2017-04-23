@@ -31,6 +31,7 @@ namespace _Examples.DeGUI.DeGUINode
         public SampleEnum enumValue = SampleEnum.B;
         public float floatValue = 3.5f;
         public Color colorValue = new Color(0.92f, 0.5f, 0.07f);
+        public float[] sampleArray = new[] {1f, 2f, 3f};
         
         [SerializeField] string _id;
         [SerializeField] Vector2 _guiPosition;

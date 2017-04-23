@@ -337,16 +337,28 @@
         <member name="P:DG.DemiEditor.DeGUINodeSystem.NodeProcess.relativeArea">
             <summary>Position with zeroed coordinates (used by all node GUI since it's inside a GUILayout(area))</summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.#ctor(UnityEditor.EditorWindow)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.#ctor(UnityEditor.EditorWindow,System.Func{System.Collections.Generic.List{DG.DemiLib.IEditorGUINode},System.Boolean},System.Func{DG.DemiLib.IEditorGUINode,DG.DemiLib.IEditorGUINode,System.Boolean})">
             <summary>
             Creates a new NodeProcess.
             </summary>
             <param name="editor">EditorWindow for this process</param>
+            <param name="onDeleteNodesCallback">Callback called when one or more nodes are going to be deleted.
+            Return FALSE if you want the deletion to be canceled.
+            Can be NULL, in which case it will be ignored</param>
+            <param name="onCloneNodeCallback">Callback called when a node is cloned.
+            Return FALSE if you want the cloning to be canceled.
+            Can be NULL, in which case it will be ignored</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Draw``1(DG.DemiLib.IEditorGUINode,System.Nullable{DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions})">
             <summary>
             Draws the given node using the given T editor GUINode type.
             Retuns the full area of the node
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.CloneNode``1(DG.DemiLib.IEditorGUINode)">
+            <summary>
+            Returns a clone of the given node (clones also lists, but leaves other references as references).
+            A new ID will be automatically generated.
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.NodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">
