@@ -306,6 +306,17 @@
             Returns TRUE if the connection was deleted using the delete connection button.
             </summary>
         </member>
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.KeyModifier">
+            <summary>
+            Returns key modifiers currently pressed
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.KeyModifier.Update">
+            <summary>
+            Call this method to update data required by softCtrl calculations.
+            Automatically called from within a <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1"/>.
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.InteractionManager">
             <summary>
             One per <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/>.
@@ -314,12 +325,6 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.IsDragging(DG.DemiLib.IEditorGUINode)">
             <summary>Returns TRUE if the given node is currently being dragged</summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.HasControlKeyModifier">
-            <summary>
-            Returns TRUE if the control key should be considered valid for this operation
-            (returns TRUE even if it was released within a given timespan)
-            </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.Update">
             <summary>

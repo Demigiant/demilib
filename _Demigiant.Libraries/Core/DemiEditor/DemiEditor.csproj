@@ -66,6 +66,7 @@
     <Compile Include="DeGUINodeSystem\Core\HelpPanel.cs" />
     <Compile Include="DeGUINodeSystem\Core\Minimap.cs" />
     <Compile Include="DeGUINodeSystem\Core\SnappingManager.cs" />
+    <Compile Include="DeGUINodeSystem\KeyModifier.cs" />
     <Compile Include="DeGUINodeSystem\NodeConnectionOptions.cs" />
     <Compile Include="DeGUINodeSystem\NodeGUIData.cs" />
     <Compile Include="DeGUINodeSystem\InteractionManager.cs" />

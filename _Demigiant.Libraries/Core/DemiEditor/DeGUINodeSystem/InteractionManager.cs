@@ -74,7 +74,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly NodeProcess _process;
         MouseCursor _currMouseCursor;
         MouseSnapshot _lastLMBUpSnapshot;
-        float _timeAtControlKeyRelease;
 
         #region CONSTRUCTOR
 
@@ -91,15 +90,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public bool IsDragging(IEditorGUINode node)
         {
             return state == State.DraggingNodes && targetNode == node;
-        }
-
-        /// <summary>
-        /// Returns TRUE if the control key should be considered valid for this operation
-        /// (returns TRUE even if it was released within a given timespan)
-        /// </summary>
-        public bool HasControlKeyModifier()
-        {
-            return Event.current.control || Event.current.command || Time.realtimeSinceStartup - _timeAtControlKeyRelease < 0.2f;
         }
 
         #endregion
@@ -161,11 +151,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// <returns></returns>
         internal bool Update()
         {
-            // Evaluate control key
-            if (Event.current.type == EventType.KeyUp && (Event.current.keyCode == KeyCode.LeftControl || Event.current.keyCode == KeyCode.RightControl || Event.current.keyCode == KeyCode.LeftCommand || Event.current.keyCode == KeyCode.RightCommand)) {
-                _timeAtControlKeyRelease = Time.realtimeSinceStartup;
-            }
-
             // Evaluate mouse cursor
             MouseCursor prevMouseCursor = _currMouseCursor;
             switch (state) {
