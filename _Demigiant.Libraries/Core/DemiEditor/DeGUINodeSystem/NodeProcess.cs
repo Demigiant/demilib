@@ -315,7 +315,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     break;
                 case InteractionManager.ReadyFor.DraggingNodes:
                     if ((Event.current.mousePosition - interaction.mousePositionOnLMBPress).magnitude >= InteractionManager.MinDragStartupDistance) {
-                        if (Event.current.shift && Event.current.control) {
+                        if (Event.current.shift && Event.current.control && options.allowCopyPaste) {
                             // Clone nodes before starting to drag
                             CloneAndCopySelectedNodes(controlNodes);
                             if (PasteNodesFromClipboard(controlNodes, false)) {
@@ -443,7 +443,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case KeyCode.Delete:
                 case KeyCode.Backspace:
                     // Delete selected nodes
-                    if (selection.selectedNodes.Count == 0 || _onDeleteNodesCallback != null && !_onDeleteNodesCallback(selection.selectedNodes)) break;
+                    if (
+                        !options.allowDeletion
+                        || selection.selectedNodes.Count == 0
+                        || _onDeleteNodesCallback != null && !_onDeleteNodesCallback(selection.selectedNodes)
+                    ) break;
                     DeleteSelectedNodesInList(controlNodes);
                     selection.DeselectAll();
                     guiChangeType = GUIChangeType.DeletedNodes;
@@ -459,13 +463,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case KeyCode.C:
                     if (interaction.HasControlKeyModifier()) {
                         // CTRL+C > Clone selected nodes (only if they're part of controlNodes) and place them in the clipboard
-                        CloneAndCopySelectedNodes(controlNodes);
+                        if (options.allowCopyPaste) CloneAndCopySelectedNodes(controlNodes);
                     }
                     break;
                 case KeyCode.V:
                     if (interaction.HasControlKeyModifier()) {
                         // CTRL+V > Paste copied nodes (which were cloned and in clipboard) and select them
-                        if (PasteNodesFromClipboard(controlNodes, true)) {
+                        if (options.allowCopyPaste && PasteNodesFromClipboard(controlNodes, true)) {
                             selection.DeselectAll();
                             foreach (IEditorGUINode node in _clipboard.nodes) selection.Select(node, true);
                             guiChangeType = GUIChangeType.AddedNodes;

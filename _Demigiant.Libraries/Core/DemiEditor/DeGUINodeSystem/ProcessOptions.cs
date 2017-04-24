@@ -15,6 +15,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             Big
         }
 
+        public bool allowDeletion = true;
+        public bool allowCopyPaste = true;
         public bool drawBackgroundGrid = true;
         public Texture2D gridTextureOverride;
         public bool forceDarkSkin = false; // Ignored if gridTextureOverride != NULL
