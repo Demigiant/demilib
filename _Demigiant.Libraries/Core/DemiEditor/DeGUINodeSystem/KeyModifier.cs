@@ -34,9 +34,55 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// </summary>
         public static void Update()
         {
-            // Evaluate control key
-            if (Event.current.type == EventType.KeyUp && (Event.current.keyCode == KeyCode.LeftControl || Event.current.keyCode == KeyCode.RightControl || Event.current.keyCode == KeyCode.LeftCommand || Event.current.keyCode == KeyCode.RightCommand)) {
-                _timeAtControlKeyRelease = Time.realtimeSinceStartup;
+            // Evaluate softControl and space keys
+            if (Event.current.type == EventType.KeyDown) {
+                if (Event.current.keyCode == KeyCode.Space) Extra.space = true;
+            } else if (Event.current.rawType == EventType.KeyUp) {
+                bool isCtrl = Event.current.keyCode == KeyCode.LeftControl || Event.current.keyCode == KeyCode.RightControl
+                              || Event.current.keyCode == KeyCode.LeftCommand || Event.current.keyCode == KeyCode.RightCommand;
+                if (isCtrl) _timeAtControlKeyRelease = Time.realtimeSinceStartup;
+                else if (Event.current.keyCode == KeyCode.Space) Extra.space = false;
+            }
+        }
+
+        /// <summary>
+        /// Returns the given <see cref="KeyCode"/> as an int, or -1 if it's not a number
+        /// </summary>
+        public static int ToInt(KeyCode keycode)
+        {
+            switch (keycode) {
+            case KeyCode.Keypad0:
+            case KeyCode.Alpha0:
+                return 0;
+            case KeyCode.Keypad1:
+            case KeyCode.Alpha1:
+                return 1;
+            case KeyCode.Keypad2:
+            case KeyCode.Alpha2:
+                return 2;
+            case KeyCode.Keypad3:
+            case KeyCode.Alpha3:
+                return 3;
+            case KeyCode.Keypad4:
+            case KeyCode.Alpha4:
+                return 4;
+            case KeyCode.Keypad5:
+            case KeyCode.Alpha5:
+                return 5;
+            case KeyCode.Keypad6:
+            case KeyCode.Alpha6:
+                return 6;
+            case KeyCode.Keypad7:
+            case KeyCode.Alpha7:
+                return 7;
+            case KeyCode.Keypad8:
+            case KeyCode.Alpha8:
+                return 8;
+            case KeyCode.Keypad9:
+            case KeyCode.Alpha9:
+                return 9;
+            default:
+                return -1;
             }
         }
 
@@ -45,6 +91,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
         // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+        public static class Extra
+        {
+            public static bool space { get; internal set; }
+        }
 
         public static class Exclusive
         {

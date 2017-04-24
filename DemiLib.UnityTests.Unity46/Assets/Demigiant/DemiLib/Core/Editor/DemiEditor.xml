@@ -317,6 +317,11 @@
             Automatically called from within a <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1"/>.
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.KeyModifier.ToInt(UnityEngine.KeyCode)">
+            <summary>
+            Returns the given <see cref="T:UnityEngine.KeyCode"/> as an int, or -1 if it's not a number
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.InteractionManager">
             <summary>
             One per <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/>.
