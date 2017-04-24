@@ -116,8 +116,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Draw node only if visible in area
             if (NodeIsVisible(nodeGuiData.fullArea)) {
                 guiNode.OnGUI(nodeGuiData, node);
-                // Fade out unselected nodes if there's others that are selected
-                bool faded = selection.selectedNodes.Count > 0 && !selection.IsSelected(node);
+                // Fade out unselected nodes if there's others that are selected (and more than one)
+                bool faded = selection.selectedNodes.Count > 1 && !selection.IsSelected(node);
                 if (faded) GUI.DrawTexture(nodeGuiData.fullArea, DeStylePalette.blackSquareAlpha50);
             }
 
@@ -261,28 +261,33 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                 UnfocusAll();
                                 Event.current.Use();
                             }
-                        } else if (interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
-                            // LMB pressed on a node's draggable area > set readyFor state to DraggingNodes and select node
-                            interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingNodes);
-                            UnfocusAll();
-                            // Select
+                        } else {
                             bool isAlreadySelected = selection.IsSelected(interaction.targetNode);
-                            if (Event.current.shift) {
-                                if (Event.current.alt) {
-                                    // Select this plus all forward connected nodes
-                                    if (!isAlreadySelected) selection.Select(interaction.targetNode, true);
-                                    SelectAllForwardConnectedNodes(interaction.targetNode);
-                                } else {
-                                    // Add to selection if not already selected
-                                    // (deselection happens on mouseUp instead, for various reasons)
-                                    selection.StoreSnapshot();
-                                    if (!isAlreadySelected) selection.Select(interaction.targetNode, true);
+                            if (interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
+                                // LMB pressed on a node's draggable area > set readyFor state to DraggingNodes and select/deselect node
+                                interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingNodes);
+                                UnfocusAll();
+                                // Select/deselect
+                                if (Event.current.shift) {
+                                    if (Event.current.alt) {
+                                        // Select this plus all forward connected nodes
+                                        if (!isAlreadySelected) selection.Select(interaction.targetNode, true);
+                                        SelectAllForwardConnectedNodes(interaction.targetNode);
+                                    } else {
+                                        // Add to selection if not already selected
+                                        // (deselection happens on mouseUp instead, for various reasons)
+                                        selection.StoreSnapshot();
+                                        if (!isAlreadySelected) selection.Select(interaction.targetNode, true);
+                                    }
+                                    _repaintOnEnd = true;
+                                } else if (!isAlreadySelected) {
+                                    // If unselected, select and deselect all others
+                                    selection.Select(interaction.targetNode, false);
+                                    _repaintOnEnd = true;
                                 }
-                                _repaintOnEnd = true;
-                            } else if (!isAlreadySelected) {
-                                // If unselected, select and deselect all others
-                                selection.Select(interaction.targetNode, false);
-                                _repaintOnEnd = true;
+                            } else {
+                                // LMB on non-draggable area. Just select the node if not already selected
+                                if (!isAlreadySelected) selection.Select(interaction.targetNode, false);
                             }
                         }
                         // Update eventual sorting

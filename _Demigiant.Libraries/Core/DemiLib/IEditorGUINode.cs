@@ -16,6 +16,6 @@ namespace DG.DemiLib
         Vector2 guiPosition { get; set; }
         /// <summary>Ids of all forward connected nodes. Length indicates how many forward connections are allowed.
         /// Min length represents available connections from node.</summary>
-        List<string> connectedNodesIds { get; set; }
+        List<string> connectedNodesIds { get; }
     }
 }
