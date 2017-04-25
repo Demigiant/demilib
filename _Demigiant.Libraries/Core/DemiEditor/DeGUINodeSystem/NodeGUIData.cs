@@ -14,6 +14,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Color mainColor; // Node color (used by miniMap and as default connector color is no startColor/gradientColor is set)
         public List<Rect> connectorAreas; // Sub areas from which each connector should start. If NULL uses fullArea // TODO Implement better?
 
+        public NodeGUIData(Rect fullArea, Color? mainColor = null, Rect? extraArea0 = null)
+        {
+            this.fullArea = fullArea;
+            this.extraArea0 = extraArea0 == null ? new Rect() : (Rect)extraArea0;
+            this.mainColor = mainColor == null ? new Color(0.5f, 0.5f, 0.5f, 1) : (Color)mainColor;
+            dragArea = fullArea;
+            connectorAreas = null;
+        }
         public NodeGUIData(Rect fullArea, Rect dragArea, Rect? extraArea0 = null)
         {
             this.fullArea = fullArea;

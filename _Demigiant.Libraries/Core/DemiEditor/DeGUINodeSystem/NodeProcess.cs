@@ -146,7 +146,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     }
                 }
                 // Draw end node icon
-                if (options.evidenceEndNodes && node.connectedNodesIds.Count > 0 && string.IsNullOrEmpty(node.connectedNodesIds[0])) {
+                bool markAsEndNode = options.evidenceEndNodes && (
+                                         node.connectedNodesIds.Count > 0 && string.IsNullOrEmpty(node.connectedNodesIds[0])
+                                         || _nodeToConnectionOptions[node].flexibleConnections && node.connectedNodesIds.Count == 0
+                                     );
+                if (markAsEndNode) {
                     float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 20);
                     Rect r = new Rect(nodeGuiData.fullArea.xMax - icoSize * 0.5f, nodeGuiData.fullArea.yMax - icoSize * 0.5f, icoSize, icoSize);
                     GUI.DrawTexture(r, DeStylePalette.ico_end);
