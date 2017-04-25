@@ -364,6 +364,12 @@
             Return FALSE if you want the cloning to be canceled.
             Can be NULL, in which case it will be ignored</param>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.RepaintOnEnd">
+            <summary>
+            Tells the process to repaint once the process has ended.
+            Calling this
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Draw``1(DG.DemiLib.IEditorGUINode,System.Nullable{DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions})">
             <summary>
             Draws the given node using the given T editor GUINode type.

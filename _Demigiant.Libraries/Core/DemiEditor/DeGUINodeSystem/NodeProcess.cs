@@ -46,10 +46,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Rect relativeArea { get; private set; }
         public Vector2 areaShift { get; private set; }
         public float guiScale { get; private set; }
+        public readonly Dictionary<IEditorGUINode,NodeGUIData> nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
         internal Vector2 guiScalePositionDiff { get; private set; } // Used by GUI calls that need to rotate the matrix
 
         internal readonly List<IEditorGUINode> nodes = new List<IEditorGUINode>(); // Used in conjunction with dictionaries to loop them in desired order
-        internal readonly Dictionary<IEditorGUINode,NodeGUIData> nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
         readonly Dictionary<string,IEditorGUINode> _idToNode = new Dictionary<string,IEditorGUINode>();
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
@@ -99,6 +99,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
         #region Public Methods
 
         /// <summary>
+        /// Tells the process to repaint once the process has ended.
+        /// Calling this
+        /// </summary>
+        public void RepaintOnEnd()
+        {
+            _repaintOnEnd = true;
+        }
+
+        /// <summary>
         /// Draws the given node using the given T editor GUINode type.
         /// Retuns the full area of the node
         /// </summary>
@@ -129,6 +138,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _nodeToConnectionOptions.Add(node, connectionOptions == null ? new NodeConnectionOptions(true) : (NodeConnectionOptions)connectionOptions);
                 break;
             case EventType.Repaint:
+                nodeToGUIData[node] = nodeGuiData;
                 // Draw evidence
                 if (options.evidenceSelectedNodes && selection.IsSelected(node)) {
                     using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
@@ -288,7 +298,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                 }
                             } else {
                                 // LMB on non-draggable area. Just select the node if not already selected
-                                if (!isAlreadySelected) selection.Select(interaction.targetNode, false);
+                                if (!isAlreadySelected) {
+                                    selection.Select(interaction.targetNode, false);
+                                    _repaintOnEnd = true;
+                                }
                             }
                         }
                         // Update eventual sorting
@@ -300,7 +313,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     switch (interaction.mouseTargetType) {
                     case InteractionManager.TargetType.Background:
                         // Deselect all nodes
-                        _repaintOnEnd = selection.selectedNodes.Count > 0;
+                        if (selection.selectedNodes.Count > 0) _repaintOnEnd = true;
                         selection.DeselectAll();
                         break;
                     case InteractionManager.TargetType.Node:
@@ -404,6 +417,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 break;
             // KEYBOARD EVENTS //////////////////////////////////////////////////////////////////////////////////////////////////////
             case EventType.KeyDown:
+                if (GUIUtility.keyboardControl > 0) break; // Ignore keys if textField is focused
                 switch (Event.current.keyCode) {
                 case KeyCode.LeftAlt:
                 case KeyCode.RightAlt:
@@ -440,6 +454,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     _isAltPressed = false;
                     _repaintOnEnd = true;
                 }
+                if (GUIUtility.keyboardControl > 0) break; // Ignore keys if textField is focused
                 switch (Event.current.keyCode) {
                 case KeyCode.F1:
                     // Help Panel

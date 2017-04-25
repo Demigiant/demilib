@@ -109,7 +109,6 @@ namespace DG.DemiEditor
             readonly Color _prevBackground;
             readonly Color _prevContent;
             readonly Color _prevMain;
-
             public ColorScope(Color? background, Color? content = null, Color? main = null)
             {
                 _prevBackground = GUI.backgroundColor;
@@ -119,12 +118,25 @@ namespace DG.DemiEditor
                 if (content != null) GUI.contentColor = (Color)content;
                 if (main != null) GUI.color = (Color)main;
             }
-
             protected override void CloseScope()
             {
                 GUI.backgroundColor = _prevBackground;
                 GUI.contentColor = _prevContent;
                 GUI.color = _prevMain;
+            }
+        }
+
+        public class CursorColorScope : DeScope
+        {
+            readonly Color _prevColor;
+            public CursorColorScope(Color color)
+            {
+                _prevColor = GUI.skin.settings.cursorColor;
+                GUI.skin.settings.cursorColor = color;
+            }
+            protected override void CloseScope()
+            {
+                GUI.skin.settings.cursorColor = _prevColor;
             }
         }
 
