@@ -299,6 +299,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             } else {
                                 // LMB on non-draggable area. Just select the node if not already selected
                                 if (!isAlreadySelected) {
+                                    UnfocusAll();
                                     selection.Select(interaction.targetNode, false);
                                     _repaintOnEnd = true;
                                 }
