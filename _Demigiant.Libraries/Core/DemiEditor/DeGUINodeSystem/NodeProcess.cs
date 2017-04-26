@@ -650,23 +650,20 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         break;
                     // DRAW CONNECTOR DRAGGING
                     case InteractionManager.State.DraggingConnector:
-                        Connector.Drag(
+                        // Draw drag connector
+                        Color connectionColor = Connector.Drag(
                             interaction, Event.current.mousePosition,
                             nodeToGUIData[interaction.targetNode], _nodeToConnectionOptions[interaction.targetNode]
                         );
                         // Evidence origin
-                        DeGUI.DrawColoredSquare(interaction.targetNodeConnectorArea.Expand(3), DeGUI.colors.global.orange.SetAlpha(0.32f));
-                        using (new DeGUI.ColorScope(DeGUI.colors.global.black)) {
-                            GUI.Box(interaction.targetNodeConnectorArea.Expand(2), "", _Styles.nodeSelectionOutlineThick);
+                        DeGUI.DrawColoredSquare(interaction.targetNodeConnectorArea.Expand(1), connectionColor.SetAlpha(0.32f));
+                        using (new DeGUI.ColorScope(connectionColor)) {
                             GUI.Box(interaction.targetNodeConnectorArea.Expand(4), "", _Styles.nodeSelectionOutlineThick);
-                        }
-                        using (new DeGUI.ColorScope(DeGUI.colors.global.orange)) {
-                            GUI.Box(interaction.targetNodeConnectorArea.Expand(3), "", _Styles.nodeSelectionOutlineThick);
                         }
                         // Evidence possible connection
                         IEditorGUINode overNode = GetMouseOverNode();
                         if (overNode != null && overNode != interaction.targetNode) {
-                            using (new DeGUI.ColorScope(DeGUI.colors.global.orange)) {
+                            using (new DeGUI.ColorScope(connectionColor)) {
                                 GUI.Box(nodeToGUIData[overNode].fullArea.Expand(4), "", _Styles.nodeSelectionOutlineThick);
                             }
                         }

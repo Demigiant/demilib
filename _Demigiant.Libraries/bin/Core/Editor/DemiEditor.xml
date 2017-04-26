@@ -873,6 +873,16 @@
             Sets the GUI colors to the given ones
             </summary>
         </member>
+        <member name="T:DG.DemiEditor.DeGUI.CursorColorScope">
+            <summary>
+            Sets the GUI cursor color to the given ones
+            </summary>
+        </member>
+        <member name="T:DG.DemiEditor.DeGUI.MatrixScope">
+            <summary>
+            Sets the GUI matrix to the given ones
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.ShadedButton(UnityEngine.Rect,UnityEngine.Color,System.String)">
             <summary>Shaded button</summary>
         </member>

@@ -66,10 +66,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             Handles.DrawBezier(anchorsData.fromP, anchorsData.toNicerP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
             // Arrow
             Rect arrowR = new Rect(
-                anchorsData.arrowP.x - DeStylePalette.ico_nodeArrow.width,
-                anchorsData.arrowP.y - DeStylePalette.ico_nodeArrow.height * 0.5f,
-                DeStylePalette.ico_nodeArrow.width,
-                DeStylePalette.ico_nodeArrow.height
+                anchorsData.arrowP.x - DeStylePalette.ico_nodeArrow.width, anchorsData.arrowP.y - DeStylePalette.ico_nodeArrow.height * 0.5f,
+                DeStylePalette.ico_nodeArrow.width, DeStylePalette.ico_nodeArrow.height
             );
             Matrix4x4 currGUIMatrix = GUI.matrix;
             if (anchorsData.arrowRequiresRotation) {
@@ -92,8 +90,11 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             return false;
         }
 
-        public static void Drag(InteractionManager interaction, Vector2 mousePosition, NodeGUIData nodeGuiData, NodeConnectionOptions connectionOptions)
-        {
+        // Returns the connection color
+        public static Color Drag(
+            InteractionManager interaction, Vector2 mousePosition,
+            NodeGUIData nodeGuiData, NodeConnectionOptions connectionOptions
+        ){
             dragData.Set(interaction.targetNode);
             int connectionIndex = connectionOptions.connectionMode == ConnectionMode.Dual
                 ? KeyModifier.Exclusive.ctrl && KeyModifier.Extra.space ? 1 : 0
@@ -101,9 +102,23 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             Color color = GetConnectionColor(
                 connectionIndex, interaction.targetNode.connectedNodesIds.Count, nodeGuiData, connectionOptions
             );
-            Vector2 attachP = GetDragAttachPoint(interaction.targetNodeConnectorArea, mousePosition);
+            Vector2 attachP = interaction.targetNodeConnectorArea.center;
+            // Pointers
+            Rect pointerFrom = new Rect(attachP.x - 4, attachP.y - 4, 8, 8);
+            Rect pointerTo = new Rect(mousePosition.x - 4, mousePosition.y - 4, 8, 8);
+            using (new DeGUI.ColorScope(null, null, Color.black)) {
+                GUI.DrawTexture(pointerFrom.Expand(4), DeStylePalette.circle);
+                GUI.DrawTexture(pointerTo.Expand(4), DeStylePalette.circle);
+            }
+            using (new DeGUI.ColorScope(null, null, color)) {
+                GUI.DrawTexture(pointerFrom, DeStylePalette.circle);
+                GUI.DrawTexture(pointerTo, DeStylePalette.circle);
+            }
+            // Line
             Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.black, null, _LineSize + 2);
             Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, color, null, _LineSize + 2);
+
+            return color;
         }
 
         #endregion
@@ -153,16 +168,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 a.arrowRotationAngle = 90;
             }
             return a;
-        }
-
-        static Vector2 GetDragAttachPoint(Rect nodeArea, Vector2 mousePosition)
-        {
-            // Bottom or right center
-            bool isRight = mousePosition.y < nodeArea.y
-                           || mousePosition.x - nodeArea.xMax >= mousePosition.y - nodeArea.yMax;
-            return isRight
-                ? new Vector2(nodeArea.xMax, nodeArea.center.y)
-                : new Vector2(nodeArea.center.x, nodeArea.yMax);
         }
 
         // Returns the angle in degrees between from and to (0 to 180, negative if to is on left, positive if to is on right).

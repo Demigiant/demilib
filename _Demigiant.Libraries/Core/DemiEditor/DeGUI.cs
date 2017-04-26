@@ -126,6 +126,9 @@ namespace DG.DemiEditor
             }
         }
 
+        /// <summary>
+        /// Sets the GUI cursor color to the given ones
+        /// </summary>
         public class CursorColorScope : DeScope
         {
             readonly Color _prevColor;
@@ -137,6 +140,23 @@ namespace DG.DemiEditor
             protected override void CloseScope()
             {
                 GUI.skin.settings.cursorColor = _prevColor;
+            }
+        }
+
+        /// <summary>
+        /// Sets the GUI matrix to the given ones
+        /// </summary>
+        public class MatrixScope : DeScope
+        {
+            readonly Matrix4x4 _prevMatrix;
+            public MatrixScope(Matrix4x4 matrix)
+            {
+                _prevMatrix = GUI.matrix;
+                GUI.matrix = matrix;
+            }
+            protected override void CloseScope()
+            {
+                GUI.matrix = _prevMatrix;
             }
         }
 
