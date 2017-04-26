@@ -37,8 +37,9 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             // Header
             DG.DemiEditor.DeGUI.DrawColoredSquare(nodeGuiData.dragArea, new Color(0, 0, 0, 0.3f));
             GUI.Label(
-                nodeGuiData.dragArea, node.flexibleConnections
-                    ? string.Format("Flexible Connections ({0})", node.connectedNodesIds.Count)
+                nodeGuiData.dragArea, node.dualConnectionMode
+                    ? node.id + " Dual"
+                    : node.flexibleConnectionMode ? string.Format("{0} Flexible ({1})", node.id, node.connectedNodesIds.Count)
                     : node.id.ToString(),
                 _Styles.headerLabelStyle
             );

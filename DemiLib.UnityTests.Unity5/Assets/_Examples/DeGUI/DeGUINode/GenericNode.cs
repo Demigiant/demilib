@@ -12,7 +12,8 @@ namespace _Examples.DeGUI.DeGUINode
     public enum NodeType
     {
         Generic,
-        Multi
+        Multi,
+        AltConnection // Dual connection
     }
 
     [Serializable]
@@ -25,7 +26,8 @@ namespace _Examples.DeGUI.DeGUINode
         #region Serialized
 
         public NodeType type;
-        public bool flexibleConnections = false;
+        public bool flexibleConnectionMode = false;
+        public bool dualConnectionMode = false;
         public bool boolValue;
         public string stringValue = "Sample Text";
         public SampleEnum enumValue = SampleEnum.B;

@@ -124,6 +124,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             // Draw node only if visible in area
             if (NodeIsVisible(nodeGuiData.fullArea)) {
+                // OnGUI
                 guiNode.OnGUI(nodeGuiData, node);
                 // Fade out unselected nodes if there's others that are selected (and more than one)
                 bool faded = selection.selectedNodes.Count > 1 && !selection.IsSelected(node);
@@ -148,7 +149,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 // Draw end node icon
                 bool markAsEndNode = options.evidenceEndNodes && (
                                          node.connectedNodesIds.Count > 0 && string.IsNullOrEmpty(node.connectedNodesIds[0])
-                                         || _nodeToConnectionOptions[node].flexibleConnections && node.connectedNodesIds.Count == 0
+                                         || _nodeToConnectionOptions[node].connectionMode == ConnectionMode.Flexible && node.connectedNodesIds.Count == 0
                                      );
                 if (markAsEndNode) {
                     float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 20);
@@ -271,7 +272,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             // CTRL+Drag on node > drag connection (eventually)
                             NodeConnectionOptions connectionOptions = _nodeToConnectionOptions[interaction.targetNode];
                             bool canDragConnector = connectionOptions.allowManualConnections
-                                                    && (connectionOptions.flexibleConnections || interaction.targetNode.connectedNodesIds.Count >= 1);
+                                                    && (
+                                                        connectionOptions.connectionMode == ConnectionMode.Flexible
+                                                        || interaction.targetNode.connectedNodesIds.Count >= 1
+                                                    );
                             if (canDragConnector) {
                                 interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingConnector);
                                 UnfocusAll();
@@ -529,7 +533,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     IEditorGUINode overNode = GetMouseOverNode();
                     if (overNode != null && overNode != interaction.targetNode) {
                         // Create new connection
-                        if (_nodeToConnectionOptions[Connector.dragData.node].flexibleConnections) {
+                        NodeConnectionOptions connectionOptions = _nodeToConnectionOptions[Connector.dragData.node];
+                        switch (connectionOptions.connectionMode) {
+                        case ConnectionMode.Dual:
+                            // Alt connection mode > add element to connectedNodeId 0 or 1 depending if SPACE is pressed or not
+                            int connectionIndex = KeyModifier.Exclusive.ctrl && KeyModifier.Extra.space ? 1 : 0;
+                            Connector.dragData.node.connectedNodesIds[connectionIndex] = overNode.id;
+                            GUI.changed = true;
+                            break;
+                        case ConnectionMode.Flexible:
                             // Flexible connection > add new element to connectedNodesIds
                             if (!NodeIsForwardConnectedTo(Connector.dragData.node, overNode.id)) {
                                 bool assignedToExistingConnection = false;
@@ -544,15 +556,17 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                 if (!assignedToExistingConnection) Connector.dragData.node.connectedNodesIds.Add(overNode.id);
                                 GUI.changed = true;
                             }
-                        } else {
+                            break;
+                        default:
                             // Normal connection, use existing connection index
                             Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] = overNode.id;
                             GUI.changed = true;
+                            break;
                         }
                         _repaintOnEnd = true;
                     } else {
                         // Disconnect (unless connectionOptions are set to flexibleConnections)
-                        if (!_nodeToConnectionOptions[Connector.dragData.node].flexibleConnections) {
+                        if (_nodeToConnectionOptions[Connector.dragData.node].connectionMode != ConnectionMode.Flexible) {
                             bool changed = !string.IsNullOrEmpty(Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex]);
                             Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] = null;
                             if (changed) GUI.changed = true;
@@ -597,7 +611,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             if (deletedConnection) {
                                 // Connection deleted, deal with flexibleConnections and non-flexibleConnections
                                 aConnectionWasDeleted = true;
-                                if (_nodeToConnectionOptions[fromNode].flexibleConnections) {
+                                if (_nodeToConnectionOptions[fromNode].connectionMode == ConnectionMode.Flexible) {
                                     totConnections--;
                                     fromNode.connectedNodesIds.RemoveAt(c);
                                 } else {
@@ -636,7 +650,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         break;
                     // DRAW CONNECTOR DRAGGING
                     case InteractionManager.State.DraggingConnector:
-                        Connector.Drag(interaction, Event.current.mousePosition);
+                        Connector.Drag(
+                            interaction, Event.current.mousePosition,
+                            nodeToGUIData[interaction.targetNode], _nodeToConnectionOptions[interaction.targetNode]
+                        );
                         // Evidence origin
                         DeGUI.DrawColoredSquare(interaction.targetNodeConnectorArea.Expand(3), DeGUI.colors.global.orange.SetAlpha(0.32f));
                         using (new DeGUI.ColorScope(DeGUI.colors.global.black)) {
@@ -780,8 +797,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     int replaceIndex = originalIds.IndexOf(node.connectedNodesIds[c]);
                     if (replaceIndex == -1) {
                         // Clear or delete connection
-                        if (connectionOptions.flexibleConnections) node.connectedNodesIds.RemoveAt(c);
-                        else node.connectedNodesIds[c] = null;
+                        switch (connectionOptions.connectionMode) {
+                        case ConnectionMode.Flexible:
+                            node.connectedNodesIds.RemoveAt(c);
+                            break;
+                        default:
+                            node.connectedNodesIds[c] = null;
+                            break;
+                        }
                     } else {
                         // Replace connection ID
                         node.connectedNodesIds[c] = cloneIds[replaceIndex];

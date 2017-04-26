@@ -58,6 +58,7 @@
     <Compile Include="DeEditorUtils.cs" />
     <Compile Include="DeGUIDrag.cs" />
     <Compile Include="DeGUINodeSystem\ABSDeGUINode.cs" />
+    <Compile Include="DeGUINodeSystem\ConnectionMode.cs" />
     <Compile Include="DeGUINodeSystem\ConnectorAttachMode.cs" />
     <Compile Include="DeGUINodeSystem\ConnectorMode.cs" />
     <Compile Include="DeGUINodeSystem\Core\NodesClipboard.cs" />

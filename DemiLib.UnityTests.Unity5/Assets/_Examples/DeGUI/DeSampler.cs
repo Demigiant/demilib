@@ -44,9 +44,13 @@ public class DeSampler : MonoBehaviour
                 } else {
                     node.type = NodeType.Generic;
                     if (i < 4) {
-                        node.id = i + " (Flexible Connections)";
-                        node.flexibleConnections = true;
+                        // Flexible
+                        node.flexibleConnectionMode = true;
                         node.connectedNodesIds.Clear();
+                    } else if (i > 6) {
+                        // Dual
+                        node.dualConnectionMode = true;
+                        while (node.connectedNodesIds.Count < 2) node.connectedNodesIds.Add(null);
                     }
                 }
                 nodeSystem.genericNodes.Add(node);

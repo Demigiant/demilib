@@ -11,9 +11,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
     {
         // If TRUE allows to CTRL+drag to connect the target to another
         public bool allowManualConnections;
-        // If TRUE the connectedNodesIds list will be automatically increased/decreased when adding/removing connections
-        // (otherwise connectedNodesIds will have to be increased via custom code)
-        public bool flexibleConnections;
+        // Connection mode
+        public ConnectionMode connectionMode;
         // Connector mode
         public ConnectorMode connectorMode;
         // Color in case of single connection or NULL gradientColor, replaced by NodeGUIData.mainColor if it's set to Color.clear
@@ -26,15 +25,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.allowManualConnections = allowManualConnections;
             this.connectorMode = connectorMode;
 
-            this.flexibleConnections = false;
+            this.connectionMode = ConnectionMode.Normal;
             this.startColor = Color.clear;
             gradientColor = null;
         }
 
-        public NodeConnectionOptions(bool allowManualConnections, bool flexibleConnections, ConnectorMode connectorMode = ConnectorMode.Smart)
+        public NodeConnectionOptions(bool allowManualConnections, ConnectionMode connectionMode, ConnectorMode connectorMode = ConnectorMode.Smart)
         {
             this.allowManualConnections = allowManualConnections;
-            this.flexibleConnections = flexibleConnections;
+            this.connectionMode = connectionMode;
             this.connectorMode = connectorMode;
 
             this.startColor = Color.clear;
@@ -47,14 +46,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.connectorMode = connectorMode;
             this.gradientColor = gradientColor;
 
+            this.connectionMode = ConnectionMode.Normal;
             this.startColor = Color.clear;
-            this.flexibleConnections = false;
         }
 
-        public NodeConnectionOptions(bool allowManualConnections, bool flexibleConnections, ConnectorMode connectorMode, Gradient gradientColor)
+        public NodeConnectionOptions(bool allowManualConnections, ConnectionMode connectionMode, ConnectorMode connectorMode, Gradient gradientColor)
         {
             this.allowManualConnections = allowManualConnections;
-            this.flexibleConnections = flexibleConnections;
+            this.connectionMode = connectionMode;
             this.connectorMode = connectorMode;
             this.gradientColor = gradientColor;
 
@@ -68,17 +67,16 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.startColor = startColor;
             this.gradientColor = gradientColor;
 
-            this.flexibleConnections = false;
+            this.connectionMode = ConnectionMode.Normal;
         }
 
-        public NodeConnectionOptions(bool allowManualConnections, bool flexibleConnections, ConnectorMode connectorMode, Color startColor, Gradient gradientColor = null)
+        public NodeConnectionOptions(bool allowManualConnections, ConnectionMode connectionMode, ConnectorMode connectorMode, Color startColor, Gradient gradientColor = null)
         {
             this.allowManualConnections = allowManualConnections;
-            this.flexibleConnections = flexibleConnections;
+            this.connectionMode = connectionMode;
             this.connectorMode = connectorMode;
             this.startColor = startColor;
             this.gradientColor = gradientColor;
-
         }
     }
 }

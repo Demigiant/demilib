@@ -41,12 +41,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             _Styles.Init();
             bool altMode = Event.current.alt;
 
-            bool useSubFromAreas = fromGUIData.connectorAreas != null;
+            bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual && fromGUIData.connectorAreas != null;
             Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
-            AnchorsData anchorsData = GetAnchors(fromArea, toGUIData.fullArea, fromOptions.connectorMode, useSubFromAreas);
-            Color color = fromTotConnections < 2 || fromOptions.gradientColor == null
-                ? fromOptions.startColor == Color.clear ? fromGUIData.mainColor : fromOptions.startColor
-                : fromOptions.gradientColor.Evaluate(connectionIndex / (float)(fromTotConnections - 1));
+            AnchorsData anchorsData = GetAnchors(connectionIndex, fromArea, toGUIData.fullArea, fromOptions, useSubFromAreas);
+            Color color = GetConnectionColor(connectionIndex, fromTotConnections, fromGUIData, fromOptions);
             // Line start point
             const int fromRWidth = 6; // Height and width are switched if start point is bottom
             const int fromRHeight = 8;
@@ -94,19 +92,25 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             return false;
         }
 
-        public static void Drag(InteractionManager interaction, Vector2 mousePosition)
+        public static void Drag(InteractionManager interaction, Vector2 mousePosition, NodeGUIData nodeGuiData, NodeConnectionOptions connectionOptions)
         {
             dragData.Set(interaction.targetNode);
+            int connectionIndex = connectionOptions.connectionMode == ConnectionMode.Dual
+                ? KeyModifier.Exclusive.ctrl && KeyModifier.Extra.space ? 1 : 0
+                : interaction.targetNodeConnectorAreaIndex;
+            Color color = GetConnectionColor(
+                connectionIndex, interaction.targetNode.connectedNodesIds.Count, nodeGuiData, connectionOptions
+            );
             Vector2 attachP = GetDragAttachPoint(interaction.targetNodeConnectorArea, mousePosition);
             Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.black, null, _LineSize + 2);
-            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, DeGUI.colors.global.orange, null, _LineSize);
+            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, color, null, _LineSize + 2);
         }
 
         #endregion
 
         #region Helpers
 
-        static AnchorsData GetAnchors(Rect fromArea, Rect toArea, ConnectorMode connectorMode, bool sideOnly){
+        static AnchorsData GetAnchors(int connectionIndex, Rect fromArea, Rect toArea, NodeConnectionOptions connectionOptions, bool sideOnly){
             AnchorsData a = new AnchorsData();
             float distX = toArea.x - fromArea.xMax;
             float distY = toArea.y - fromArea.yMax;
@@ -114,6 +118,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             a.fromP = fromIsBottom
                 ? new Vector2(fromArea.center.x, fromArea.yMax)
                 : new Vector2(fromArea.xMax, fromArea.center.y);
+            if (connectionOptions.connectionMode == ConnectionMode.Dual) {
+                if (fromIsBottom) a.fromP.x += connectionIndex == 1 ? 4 : -4;
+                else a.fromP.y += connectionIndex == 1 ? 4 : -4;
+            }
             bool toIsTop = toArea.y > a.fromP.y && (fromArea.xMax > toArea.x || toArea.y - a.fromP.y > toArea.center.x - a.fromP.x);
             a.toP = a.toNicerP = toIsTop
                 ? new Vector2(toArea.center.x, toArea.y)
@@ -124,8 +132,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             // Set tangents
             bool isToBehindFrom = a.toP.x < a.fromP.x && a.toP.y < fromArea.yMax;
             float dist = Vector2.Distance(a.toP, a.fromP);
-            a.isStraight = connectorMode == ConnectorMode.Straight
-                              || !isToBehindFrom && connectorMode == ConnectorMode.Smart && dist <= _MaxDistanceForSmartStraight;
+            a.isStraight = connectionOptions.connectorMode == ConnectorMode.Straight
+                              || !isToBehindFrom && connectionOptions.connectorMode == ConnectorMode.Smart && dist <= _MaxDistanceForSmartStraight;
             if (a.isStraight) {
                 a.fromTangent = a.fromP;
                 a.toTangent = a.toP;
@@ -166,6 +174,13 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             float cross = to.x * from.y - to.y * from.x;
             if (cross < 0) angle = -angle;
             return angle;
+        }
+
+        static Color GetConnectionColor(int connectionIndex, int totConnections, NodeGUIData nodeGuiData, NodeConnectionOptions connectionOptions)
+        {
+            return totConnections < 2 || connectionOptions.gradientColor == null
+                ? connectionOptions.startColor == Color.clear ? nodeGuiData.mainColor : connectionOptions.startColor
+                : connectionOptions.gradientColor.Evaluate(connectionIndex / (float)(totConnections - 1));
         }
 
         #endregion

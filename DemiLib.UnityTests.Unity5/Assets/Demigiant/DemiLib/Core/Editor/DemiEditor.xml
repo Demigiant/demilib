@@ -292,6 +292,18 @@
         <member name="M:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode.OnGUI(DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiLib.IEditorGUINode)">
             <summary>Called only if the node is visible in the current area</summary>
         </member>
+        <member name="F:DG.DemiEditor.DeGUINodeSystem.ConnectionMode.Flexible">
+            <summary>
+            The connectedNodesIds list will be automatically increased/decreased when adding/removing connections
+            (otherwise connectedNodesIds will have to be increased via custom code)
+            </summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeGUINodeSystem.ConnectionMode.Dual">
+            <summary>
+            Requires only two connectedNodesIds (no more, no less), 
+            uses regular CTRL+Drag to connect connection 0, CTRL+SPACE+Drag to connect connection 1
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.Core.NodesClipboard">
             <summary>
             Stores cloned nodes for pasting
