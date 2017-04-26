@@ -19,7 +19,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         public float snapY { get; private set; }
 
         const float _MaxSnappingDistance = 7;
-        const float _NearSnapping = 20; // Distance at which nodes will snap to each other when on different lines
+        const float _NearSnapping = 12; // Distance at which nodes will snap to each other when on different lines
         readonly List<float> _topSnappingPs = new List<float>();
         readonly List<float> _bottomSnappingPs = new List<float>();
         readonly List<float> _leftSnappingPs = new List<float>();
