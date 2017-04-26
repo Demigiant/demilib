@@ -123,8 +123,10 @@ namespace DG.DemiEditor
         /// <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
         /// <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
         /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
-        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex)
-        { return Drag(dragId, draggableList, currDraggableItemIndex, DefaultDragColor); }
+        /// <param name="lastGUIRect">If NULL will calculate this automatically using <see cref="GUILayoutUtility.GetLastRect"/>.
+        /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
+        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null)
+        { return Drag(dragId, draggableList, currDraggableItemIndex, DefaultDragColor, lastGUIRect); }
 
         /// <summary>
         /// Call this after each draggable GUI block, to calculate and draw the current drag state
@@ -134,7 +136,9 @@ namespace DG.DemiEditor
         /// <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
         /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
         /// <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
-        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor)
+        /// <param name="lastGUIRect">If NULL will calculate this automatically using <see cref="GUILayoutUtility.GetLastRect"/>.
+        /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
+        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor, Rect? lastGUIRect = null)
         {
             if (_dragData == null || _dragId != dragId) return new DeDragResult(DeDragResultType.NoDrag);
             if (_waitingToApplyDrag) {
@@ -148,7 +152,7 @@ namespace DG.DemiEditor
             if (currDraggableItemIndex == 0 && Event.current.type == EventType.Repaint) _dragData.currDragSet = false;
             if (!_dragData.currDragSet) {
                 // Find and store eventual drag position
-                Rect lastRect = GUILayoutUtility.GetLastRect();
+                Rect lastRect = lastGUIRect == null ? GUILayoutUtility.GetLastRect() : (Rect)lastGUIRect;
                 float lastRectMiddleY = lastRect.yMin + lastRect.height * 0.5f;
                 float mouseY = Event.current.mousePosition.y;
                 if (currDraggableItemIndex <= listCount - 1 && mouseY <= lastRectMiddleY) {
@@ -165,7 +169,7 @@ namespace DG.DemiEditor
                 // Evidence dragged pool
                 Color selectionColor = dragEvidenceColor;
                 selectionColor.a = 0.35f;
-                if (_dragDelayElapsed) DeGUI.FlatDivider(GUILayoutUtility.GetLastRect(), selectionColor);
+                if (_dragDelayElapsed) DeGUI.FlatDivider(lastGUIRect == null ? GUILayoutUtility.GetLastRect() : (Rect)lastGUIRect, selectionColor);
             }
 
             if (GUIUtility.hotControl < 1) {
