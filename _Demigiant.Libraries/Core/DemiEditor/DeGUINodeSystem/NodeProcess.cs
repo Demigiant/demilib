@@ -623,9 +623,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             _idToNode.Remove(connId);
                         } else {
                             IEditorGUINode toNode = _idToNode[connId];
-                            bool deletedConnection = Connector.Connect(
-                                this, c, totConnections, nodeToGUIData[fromNode], _nodeToConnectionOptions[fromNode], nodeToGUIData[toNode]
-                            );
+                            bool deletedConnection = Connector.Connect(this, c, totConnections, _nodeToConnectionOptions[fromNode], fromNode, toNode);
                             if (deletedConnection) {
                                 // Connection deleted, deal with flexibleConnections and non-flexibleConnections
                                 aConnectionWasDeleted = true;

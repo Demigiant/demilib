@@ -35,16 +35,17 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         /// Returns TRUE if the connection was deleted using the delete connection button.
         /// </summary>
         public static bool Connect(
-            NodeProcess process, int connectionIndex,
-            int fromTotConnections, NodeGUIData fromGUIData, NodeConnectionOptions fromOptions,
-            NodeGUIData toGUIData
+            NodeProcess process, int connectionIndex, int fromTotConnections, NodeConnectionOptions fromOptions,
+            IEditorGUINode fromNode, IEditorGUINode toNode
         )
         {
             _Styles.Init();
+            NodeGUIData fromGUIData = process.nodeToGUIData[fromNode];
+            NodeGUIData toGUIData = process.nodeToGUIData[toNode];
 
             bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual && fromGUIData.connectorAreas != null;
             Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
-            AnchorsData anchorsData = GetAnchors(connectionIndex, fromArea, toGUIData.fullArea, fromOptions, useSubFromAreas);
+            AnchorsData anchorsData = GetAnchors(process, connectionIndex, fromNode, fromArea, toNode, toGUIData.fullArea, fromOptions, useSubFromAreas);
             Color color = GetConnectionColor(connectionIndex, fromTotConnections, fromGUIData, fromOptions);
             // Line (shadow + line)
             Handles.DrawBezier(
@@ -117,11 +118,15 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         #region Helpers
 
-        static AnchorsData GetAnchors(int connectionIndex, Rect fromArea, Rect toArea, NodeConnectionOptions connectionOptions, bool sideOnly){
+        static AnchorsData GetAnchors(
+            NodeProcess process, int connectionIndex, IEditorGUINode fromNode, Rect fromArea, IEditorGUINode toNode, Rect toArea,
+            NodeConnectionOptions connectionOptions, bool sideOnly
+        ){
             AnchorsData a = new AnchorsData();
             float distX = toArea.x - fromArea.xMax;
             float distY = toArea.y - fromArea.yMax;
-            bool fromIsBottom = !sideOnly && fromArea.yMax < toArea.y && distY >= distX;
+            bool fromIsBottom = !sideOnly && fromArea.yMax < toArea.y && distY >= distX
+                && FromAnchorCanBeBottom(process, fromNode, fromArea, toNode, toArea);
             a.fromMarkP = fromIsBottom
                 ? new Vector2(fromArea.center.x, fromArea.yMax)
                 : new Vector2(fromArea.xMax, fromArea.center.y);
@@ -134,7 +139,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             if (fromIsBottom) a.fromLineP.y += FromSquareWidth;
             else a.fromLineP.x += FromSquareWidth;
             //
-            bool toIsTop = toArea.y > a.fromMarkP.y && (fromArea.xMax > toArea.x || toArea.y - a.fromMarkP.y > toArea.center.x - a.fromMarkP.x);
+            bool toIsTop = toArea.y > a.fromMarkP.y
+                && (fromArea.xMax > toArea.x || toArea.y - a.fromMarkP.y > toArea.center.x - a.fromMarkP.x)
+                && ToAnchorCanBeTop(process, fromNode, fromArea, toNode, toArea);
             a.toArrowP = a.toLineP = toIsTop
                 ? new Vector2(toArea.center.x, toArea.y)
                 : new Vector2(toArea.x, toArea.center.y);
@@ -151,7 +158,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             } else {
                 if (toIsTop) a.toLineP.y -= DeStylePalette.ico_nodeArrow.width;
                 else a.toLineP.x -= DeStylePalette.ico_nodeArrow.width;
-                float tangentDistance = isToBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, dist * 0.4f);
+                float axisDistance = a.fromIsSide ? Mathf.Abs(a.toArrowP.x - a.fromLineP.x) : Mathf.Abs(a.toArrowP.y - a.fromLineP.y);
+                float tangentDistance = isToBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, axisDistance * 0.2f + dist * 0.2f);
+//                float tangentDistance = isToBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, dist * 0.4f);
                 a.fromTangent = a.fromLineP + (fromIsBottom ? Vector2.up * tangentDistance : Vector2.right * tangentDistance);
                 a.toTangent = a.toLineP + (toIsTop? Vector2.up * -tangentDistance : Vector2.right * -tangentDistance);
             }
@@ -164,6 +173,30 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 a.arrowRotationAngle = 90;
             }
             return a;
+        }
+
+        static bool FromAnchorCanBeBottom(NodeProcess process, IEditorGUINode fromNode, Rect fromArea, IEditorGUINode toNode, Rect toArea)
+        {
+            if (toArea.xMax <= fromArea.center.x) return true;
+            foreach (IEditorGUINode node in process.nodes) {
+                if (node == fromNode || node == toNode) continue;
+                Rect r = process.nodeToGUIData[node].fullArea;
+                if (r.y > toArea.center.y || r.yMax < fromArea.yMax || r.x > fromArea.center.x || r.xMax < fromArea.center.x) continue;
+                return false;
+            }
+            return true;
+        }
+
+        static bool ToAnchorCanBeTop(NodeProcess process, IEditorGUINode fromNode, Rect fromArea, IEditorGUINode toNode, Rect toArea)
+        {
+            if (toArea.x < fromArea.x) return true;
+            foreach (IEditorGUINode node in process.nodes) {
+                if (node == fromNode || node == toNode) continue;
+                Rect r = process.nodeToGUIData[node].fullArea;
+                if (r.y > toArea.y || r.yMax < fromArea.center.y || r.x > toArea.center.x || r.xMax < toArea.x) continue;
+                return false;
+            }
+            return true;
         }
 
         // Returns the angle in degrees between from and to (0 to 180, negative if to is on left, positive if to is on right).

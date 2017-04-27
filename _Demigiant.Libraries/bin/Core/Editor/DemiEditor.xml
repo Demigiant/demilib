@@ -314,7 +314,7 @@
             Always connects a node from BottomOrRight side to TopOrLeft side
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.Connector.Connect(DG.DemiEditor.DeGUINodeSystem.NodeProcess,System.Int32,System.Int32,DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions,DG.DemiEditor.DeGUINodeSystem.NodeGUIData)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.Connector.Connect(DG.DemiEditor.DeGUINodeSystem.NodeProcess,System.Int32,System.Int32,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions,DG.DemiLib.IEditorGUINode,DG.DemiLib.IEditorGUINode)">
             <summary>
             Always connects from BottomOrRight side to TopOrLeft side.
             If ALT is pressed shows the delete connection button.
