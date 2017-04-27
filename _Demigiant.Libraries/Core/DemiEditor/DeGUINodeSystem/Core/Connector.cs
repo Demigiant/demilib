@@ -21,6 +21,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         const int _MaxDistanceForSmartStraight = 40; // was 120
         const int _TangentDistance = 50;
         const int _TangentDistanceIfInverse = 120; // Tangent distance if TO is behind FROM
+        const int FromSquareWidth = 6; // Height and width are switched if start point is bottom
+        const int FromSquareHeight = 8;
         static readonly Styles _Styles = new Styles();
         static Color _lineShadowColor = new Color(0, 0, 0, 0.4f);
 
@@ -39,46 +41,36 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         )
         {
             _Styles.Init();
-            bool altMode = Event.current.alt;
 
             bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual && fromGUIData.connectorAreas != null;
             Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
             AnchorsData anchorsData = GetAnchors(connectionIndex, fromArea, toGUIData.fullArea, fromOptions, useSubFromAreas);
             Color color = GetConnectionColor(connectionIndex, fromTotConnections, fromGUIData, fromOptions);
-            // Line start point
-            const int fromRWidth = 6; // Height and width are switched if start point is bottom
-            const int fromRHeight = 8;
-            Rect fromR;
-            if (anchorsData.fromIsSide) {
-                fromR = new Rect(anchorsData.fromP.x, anchorsData.fromP.y - fromRHeight * 0.5f, fromRWidth, fromRHeight);
-                anchorsData.fromP.x += fromRWidth;
-                if (anchorsData.isStraight) anchorsData.fromTangent.x += fromRWidth;
-            } else {
-                fromR = new Rect(anchorsData.fromP.x - fromRHeight * 0.5f, anchorsData.fromP.y, fromRHeight, fromRWidth);
-                anchorsData.fromP.y += fromRWidth;
-                if (anchorsData.isStraight) anchorsData.fromTangent.y += fromRWidth;
-            }
-            using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(fromR, DeStylePalette.whiteSquare);
             // Line (shadow + line)
             Handles.DrawBezier(
-                anchorsData.fromP, anchorsData.toNicerP, anchorsData.fromTangent, anchorsData.toTangent, _lineShadowColor, null, _LineSize + 2
+                anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, _lineShadowColor, null, _LineSize + 2
             );
-            Handles.DrawBezier(anchorsData.fromP, anchorsData.toNicerP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
+            Handles.DrawBezier(anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
+            // Line start square
+            Rect fromSquareR = anchorsData.fromIsSide
+                ? new Rect(anchorsData.fromMarkP.x, anchorsData.fromMarkP.y - FromSquareHeight * 0.5f, FromSquareWidth, FromSquareHeight)
+                : new Rect(anchorsData.fromMarkP.x - FromSquareHeight * 0.5f, anchorsData.fromMarkP.y, FromSquareHeight, FromSquareWidth);
+            using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(fromSquareR, DeStylePalette.whiteSquare);
             // Arrow
             Rect arrowR = new Rect(
-                anchorsData.arrowP.x - DeStylePalette.ico_nodeArrow.width, anchorsData.arrowP.y - DeStylePalette.ico_nodeArrow.height * 0.5f,
+                anchorsData.toArrowP.x - DeStylePalette.ico_nodeArrow.width, anchorsData.toArrowP.y - DeStylePalette.ico_nodeArrow.height * 0.5f,
                 DeStylePalette.ico_nodeArrow.width, DeStylePalette.ico_nodeArrow.height
             );
             Matrix4x4 currGUIMatrix = GUI.matrix;
             if (anchorsData.arrowRequiresRotation) {
-                GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.arrowP * process.guiScale + process.guiScalePositionDiff);
+                GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.toArrowP * process.guiScale + process.guiScalePositionDiff);
             }
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(arrowR, DeStylePalette.ico_nodeArrow);
             GUI.matrix = currGUIMatrix;
             // Delete connection button (placed at center of line)
-            if (altMode) {
+            if (KeyModifier.Exclusive.alt) {
                 Vector2 midP = anchorsData.fromTangent + (anchorsData.toTangent - anchorsData.fromTangent) * 0.5f;
-                Vector2 midPAlt = anchorsData.fromP + (anchorsData.toNicerP - anchorsData.fromP) * 0.5f;
+                Vector2 midPAlt = anchorsData.fromLineP + (anchorsData.toLineP - anchorsData.fromLineP) * 0.5f;
                 midP += (midPAlt - midP) * 0.25f;
                 Rect btR = new Rect(midP.x - 5, midP.y - 5, 10, 10);
                 using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(btR.Expand(2), DeStylePalette.circle);
@@ -130,39 +122,43 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             float distX = toArea.x - fromArea.xMax;
             float distY = toArea.y - fromArea.yMax;
             bool fromIsBottom = !sideOnly && fromArea.yMax < toArea.y && distY >= distX;
-            a.fromP = fromIsBottom
+            a.fromMarkP = fromIsBottom
                 ? new Vector2(fromArea.center.x, fromArea.yMax)
                 : new Vector2(fromArea.xMax, fromArea.center.y);
             if (connectionOptions.connectionMode == ConnectionMode.Dual) {
-                if (fromIsBottom) a.fromP.x += connectionIndex == 1 ? 4 : -4;
-                else a.fromP.y += connectionIndex == 1 ? 4 : -4;
+                if (fromIsBottom) a.fromMarkP.x += connectionIndex == 1 ? 4 : -4;
+                else a.fromMarkP.y += connectionIndex == 1 ? 4 : -4;
             }
-            bool toIsTop = toArea.y > a.fromP.y && (fromArea.xMax > toArea.x || toArea.y - a.fromP.y > toArea.center.x - a.fromP.x);
-            a.toP = a.toNicerP = toIsTop
+            // Find correct fromLineP
+            a.fromLineP = a.fromMarkP;
+            if (fromIsBottom) a.fromLineP.y += FromSquareWidth;
+            else a.fromLineP.x += FromSquareWidth;
+            //
+            bool toIsTop = toArea.y > a.fromMarkP.y && (fromArea.xMax > toArea.x || toArea.y - a.fromMarkP.y > toArea.center.x - a.fromMarkP.x);
+            a.toArrowP = a.toLineP = toIsTop
                 ? new Vector2(toArea.center.x, toArea.y)
                 : new Vector2(toArea.x, toArea.center.y);
-            a.arrowP = a.toP;
             a.fromIsSide = !fromIsBottom;
             a.toIsSide = !toIsTop;
             // Set tangents
-            bool isToBehindFrom = a.toP.x < a.fromP.x && a.toP.y < fromArea.yMax;
-            float dist = Vector2.Distance(a.toP, a.fromP);
+            bool isToBehindFrom = a.toArrowP.x < a.fromMarkP.x && a.toArrowP.y < fromArea.yMax;
+            float dist = Vector2.Distance(a.toArrowP, a.fromLineP);
             a.isStraight = connectionOptions.connectorMode == ConnectorMode.Straight
                               || !isToBehindFrom && connectionOptions.connectorMode == ConnectorMode.Smart && dist <= _MaxDistanceForSmartStraight;
             if (a.isStraight) {
-                a.fromTangent = a.fromP;
-                a.toTangent = a.toP;
+                a.fromTangent = a.fromLineP;
+                a.toTangent = a.toArrowP;
             } else {
-                if (toIsTop) a.toNicerP.y -= DeStylePalette.ico_nodeArrow.width;
-                else a.toNicerP.x -= DeStylePalette.ico_nodeArrow.width;
+                if (toIsTop) a.toLineP.y -= DeStylePalette.ico_nodeArrow.width;
+                else a.toLineP.x -= DeStylePalette.ico_nodeArrow.width;
                 float tangentDistance = isToBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, dist * 0.4f);
-                a.fromTangent = a.fromP + (fromIsBottom ? Vector2.up * tangentDistance : Vector2.right * tangentDistance);
-                a.toTangent = a.toNicerP + (toIsTop? Vector2.up * -tangentDistance : Vector2.right * -tangentDistance);
+                a.fromTangent = a.fromLineP + (fromIsBottom ? Vector2.up * tangentDistance : Vector2.right * tangentDistance);
+                a.toTangent = a.toLineP + (toIsTop? Vector2.up * -tangentDistance : Vector2.right * -tangentDistance);
             }
             // Set arrow
             if (a.isStraight) {
                 a.arrowRequiresRotation = true;
-                a.arrowRotationAngle = -AngleBetween(Vector2.right, a.toP - a.fromP);
+                a.arrowRotationAngle = -AngleBetween(Vector2.right, a.toArrowP - a.fromLineP);
             } else if (toIsTop) {
                 a.arrowRequiresRotation = true;
                 a.arrowRotationAngle = 90;
@@ -209,10 +205,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         struct AnchorsData
         {
-            public Vector2 fromP, toP;
-            public Vector2 toNicerP; // P adapted in case of curved arrow to make line look nicer
+            public Vector2 fromMarkP, fromLineP, toArrowP, toLineP;
             public Vector2 fromTangent, toTangent;
-            public Vector2 arrowP;
             public bool fromIsSide, toIsSide; // If FALSE it means it's either top (toNode) or bottom (fromNode)
             public bool isStraight;
             public bool arrowRequiresRotation;
