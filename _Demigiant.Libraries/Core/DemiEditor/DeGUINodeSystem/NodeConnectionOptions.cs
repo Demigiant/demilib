@@ -19,6 +19,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Color startColor;
         // Used in case of multiple connections
         public Gradient gradientColor;
+        // If TRUE never marks this node as end node
+        public bool neverMarkAsEndNode;
 
         public NodeConnectionOptions(bool allowManualConnections, ConnectorMode connectorMode = ConnectorMode.Smart)
         {
@@ -28,6 +30,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.connectionMode = ConnectionMode.Normal;
             this.startColor = Color.clear;
             gradientColor = null;
+            neverMarkAsEndNode = false;
         }
 
         public NodeConnectionOptions(bool allowManualConnections, ConnectionMode connectionMode, ConnectorMode connectorMode = ConnectorMode.Smart)
@@ -37,7 +40,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.connectorMode = connectorMode;
 
             this.startColor = Color.clear;
-            gradientColor = null;
+            this.gradientColor = null;
+            this.neverMarkAsEndNode = false;
         }
 
         public NodeConnectionOptions(bool allowManualConnections, ConnectorMode connectorMode, Gradient gradientColor)
@@ -48,6 +52,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             this.connectionMode = ConnectionMode.Normal;
             this.startColor = Color.clear;
+            this.neverMarkAsEndNode = false;
         }
 
         public NodeConnectionOptions(bool allowManualConnections, ConnectionMode connectionMode, ConnectorMode connectorMode, Gradient gradientColor)
@@ -58,6 +63,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.gradientColor = gradientColor;
 
             this.startColor = Color.clear;
+            this.neverMarkAsEndNode = false;
         }
 
         public NodeConnectionOptions(bool allowManualConnections, ConnectorMode connectorMode, Color startColor, Gradient gradientColor = null)
@@ -68,6 +74,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.gradientColor = gradientColor;
 
             this.connectionMode = ConnectionMode.Normal;
+            this.neverMarkAsEndNode = false;
         }
 
         public NodeConnectionOptions(bool allowManualConnections, ConnectionMode connectionMode, ConnectorMode connectorMode, Color startColor, Gradient gradientColor = null)
@@ -77,6 +84,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.connectorMode = connectorMode;
             this.startColor = startColor;
             this.gradientColor = gradientColor;
+
+            this.neverMarkAsEndNode = false;
         }
     }
 }

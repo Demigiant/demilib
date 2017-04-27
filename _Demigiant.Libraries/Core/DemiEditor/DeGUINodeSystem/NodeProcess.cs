@@ -150,26 +150,28 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 if (options.evidenceEndNodes) {
                     bool markAsEndNode;
                     NodeConnectionOptions connOptions = _nodeToConnectionOptions[node];
-                    switch (connOptions.connectionMode) {
-                    case ConnectionMode.Flexible:
-                        markAsEndNode = node.connectedNodesIds.Count == 0;
-                        break;
-                    case ConnectionMode.Dual:
-                        markAsEndNode = string.IsNullOrEmpty(node.connectedNodesIds[0]) || string.IsNullOrEmpty(node.connectedNodesIds[1]);
-                        break;
-                    default:
-                        markAsEndNode = false;
-                        for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
-                            if (!string.IsNullOrEmpty(node.connectedNodesIds[i])) continue;
-                            markAsEndNode = true;
+                    if (!connOptions.neverMarkAsEndNode) {
+                        switch (connOptions.connectionMode) {
+                        case ConnectionMode.Flexible:
+                            markAsEndNode = node.connectedNodesIds.Count == 0;
+                            break;
+                        case ConnectionMode.Dual:
+                            markAsEndNode = string.IsNullOrEmpty(node.connectedNodesIds[0]) || string.IsNullOrEmpty(node.connectedNodesIds[1]);
+                            break;
+                        default:
+                            markAsEndNode = false;
+                            for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
+                                if (!string.IsNullOrEmpty(node.connectedNodesIds[i])) continue;
+                                markAsEndNode = true;
+                                break;
+                            }
                             break;
                         }
-                        break;
-                    }
-                    if (markAsEndNode) {
-                        float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 20);
-                        Rect r = new Rect(nodeGuiData.fullArea.xMax - icoSize * 0.5f, nodeGuiData.fullArea.yMax - icoSize * 0.5f, icoSize, icoSize);
-                        GUI.DrawTexture(r, DeStylePalette.ico_end);
+                        if (markAsEndNode) {
+                            float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 20);
+                            Rect r = new Rect(nodeGuiData.fullArea.xMax - icoSize * 0.5f, nodeGuiData.fullArea.yMax - icoSize * 0.5f, icoSize, icoSize);
+                            GUI.DrawTexture(r, DeStylePalette.ico_end);
+                        }
                     }
                 }
                 break;
