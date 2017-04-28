@@ -13,7 +13,21 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
     internal class NodesClipboard
     {
         public readonly List<IEditorGUINode> nodes = new List<IEditorGUINode>();
-        public readonly Dictionary<IEditorGUINode,string> nodeToOriginalId = new Dictionary<IEditorGUINode, string>(); // Node to id before cloning
+        public readonly Dictionary<IEditorGUINode,string> nodeToOriginalId = new Dictionary<IEditorGUINode,string>();
+        public readonly Dictionary<IEditorGUINode,IEditorGUINode> nodeToOriginalNode = new Dictionary<IEditorGUINode,IEditorGUINode>();
+        public readonly Dictionary<IEditorGUINode,NodeGUIData> nodeToOriginalGuiData = new Dictionary<IEditorGUINode,NodeGUIData>();
+        public readonly Dictionary<IEditorGUINode,NodeConnectionOptions> nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
+
+        NodeProcess _process;
+
+        #region CONSTRUCTOR
+
+        public NodesClipboard(NodeProcess process)
+        {
+            _process = process;
+        }
+
+        #endregion
 
         #region Public Methods
 
@@ -21,12 +35,18 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         {
             nodes.Clear();
             nodeToOriginalId.Clear();
+            nodeToOriginalNode.Clear();
+            nodeToOriginalGuiData.Clear();
+            nodeToConnectionOptions.Clear();
         }
 
-        public void Add(IEditorGUINode node, string originalId)
+        public void Add(IEditorGUINode node, IEditorGUINode originalNode, NodeConnectionOptions connectionOptions)
         {
             nodes.Add(node);
-            nodeToOriginalId.Add(node, originalId);
+            nodeToOriginalId.Add(node, originalNode.id);
+            nodeToOriginalNode.Add(node, originalNode);
+            nodeToOriginalGuiData.Add(node, _process.nodeToGUIData[originalNode]);
+            nodeToConnectionOptions.Add(node, connectionOptions);
         }
 
         public IEditorGUINode GetClipboardCloneByOriginalId(string id)

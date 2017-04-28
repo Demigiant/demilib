@@ -35,6 +35,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             AddedNodes
         }
 
+        /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
+        public const int SnapOffset = 12;
         public readonly EditorWindow editor;
         public readonly ProcessOptions options = new ProcessOptions();
         public readonly InteractionManager interaction;
@@ -54,7 +56,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
         readonly NodeDragManager _nodeDragManager;
-        readonly NodesClipboard _clipboard = new NodesClipboard();
+        readonly NodesClipboard _clipboard;
         readonly List<IEditorGUINode> _tmp_nodes = new List<IEditorGUINode>(); // Used for temporary operations
         readonly List<string> _tmp_string = new List<string>(); // Used for temporary operations
         static readonly Styles _Styles = new Styles();
@@ -90,6 +92,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             selection = new SelectionManager();
             guiScale = 1f;
             _nodeDragManager = new NodeDragManager(this);
+            _clipboard = new NodesClipboard(this);
             Undo.undoRedoPerformed -= this.OnUndoRedoCallback;
             Undo.undoRedoPerformed += this.OnUndoRedoCallback;
         }
@@ -97,6 +100,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Needs to be called when loading a complete new series of nodes
+        /// </summary>
+        public void Reset()
+        {
+            interaction.Reset();
+            selection.Reset();
+        }
 
         /// <summary>
         /// Tells the process to repaint once the process has ended.
@@ -194,27 +206,29 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 FieldInfo destField = destFields.FirstOrDefault(field => field.Name == srcField.Name);
                 if (destField == null || destField.IsLiteral || srcField.FieldType != destField.FieldType) continue;
                 object srcValue = srcField.GetValue(node);
-                Type valueType = srcValue.GetType();
-                if (valueType.IsArray) {
-                    // Clone Array
-                    Type arrayType = Type.GetType(valueType.FullName.Replace("[]", string.Empty)); 
-                    Array srcArray = srcValue as Array;
-                    Array clonedArray = Array.CreateInstance(arrayType, srcArray.Length);
-                    for (int i = 0; i < srcArray.Length; ++i) clonedArray.SetValue(srcArray.GetValue(i), i);
-                    destField.SetValue(clone, clonedArray);
-                } else if (valueType.IsGenericType) {
-                    // Clone List
-                    Type listType = Type.GetType(valueType.FullName.Replace("[]", string.Empty));
-                    if (listType == null) {
-                        Debug.LogWarning(string.Format("Couldn't clone correctly the {0} field, a shallow copy will be used", srcField.Name));
-                        destField.SetValue(clone, srcField.GetValue(node));
-                    } else {
-                        IList srcList = srcValue as IList;
-                        IList clonedList = Activator.CreateInstance(listType) as IList;
-                        for (int i = 0; i < srcList.Count; ++i) clonedList.Add(srcList[i]);
-                        destField.SetValue(clone, clonedList);
-                    }
-                } else destField.SetValue(clone, srcField.GetValue(node));
+                if (srcValue != null) {
+                    Type valueType = srcValue.GetType();
+                    if (valueType.IsArray) {
+                        // Clone Array
+                        Type arrayType = Type.GetType(valueType.FullName.Replace("[]", string.Empty));
+                        Array srcArray = srcValue as Array;
+                        Array clonedArray = Array.CreateInstance(arrayType, srcArray.Length);
+                        for (int i = 0; i < srcArray.Length; ++i) clonedArray.SetValue(srcArray.GetValue(i), i);
+                        destField.SetValue(clone, clonedArray);
+                    } else if (valueType.IsGenericType) {
+                        // Clone List
+                        Type listType = Type.GetType(valueType.FullName.Replace("[]", string.Empty));
+                        if (listType == null) {
+                            Debug.LogWarning(string.Format("Couldn't clone correctly the {0} field, a shallow copy will be used", srcField.Name));
+                            destField.SetValue(clone, srcField.GetValue(node));
+                        } else {
+                            IList srcList = srcValue as IList;
+                            IList clonedList = Activator.CreateInstance(listType) as IList;
+                            for (int i = 0; i < srcList.Count; ++i) clonedList.Add(srcList[i]);
+                            destField.SetValue(clone, clonedList);
+                        }
+                    } else destField.SetValue(clone, srcField.GetValue(node));
+                }
             }
             clone.id = Guid.NewGuid().ToString();
             return clone;
@@ -444,6 +458,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 break;
             // KEYBOARD EVENTS //////////////////////////////////////////////////////////////////////////////////////////////////////
             case EventType.KeyDown:
+                if (Event.current.keyCode == KeyCode.Escape) UnfocusAll();
                 if (GUIUtility.keyboardControl > 0) break; // Ignore keys if textField is focused
                 switch (Event.current.keyCode) {
                 case KeyCode.LeftAlt:
@@ -796,7 +811,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 IEditorGUINode clone = CloneNode<T>(node);
                 if (_onCloneNodeCallback != null && !_onCloneNodeCallback(node, clone)) continue;
-                _clipboard.Add(clone, node.id);
+                _clipboard.Add(clone, node, _nodeToConnectionOptions[node]);
                 originalIds.Add(id);
                 cloneIds.Add(clone.id);
             }
@@ -844,11 +859,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
             }
             // Add nodes and also nodeGuiData etc based on original nodes
             foreach (IEditorGUINode node in _clipboard.nodes) {
-                IEditorGUINode originalNode = GetNodeById(_clipboard.nodeToOriginalId[node], controlNodes);
                 node.guiPosition += offset;
                 controlNodes.Add((T)node);
-                nodeToGUIData.Add(node, nodeToGUIData[originalNode]);
-                _nodeToConnectionOptions.Add(node, _nodeToConnectionOptions[originalNode]);
+                nodeToGUIData.Add(node, _clipboard.nodeToOriginalGuiData[node]);
+                _nodeToConnectionOptions.Add(node, _clipboard.nodeToConnectionOptions[node]);
                 _idToNode.Add(node.id, node);
             }
             return true;

@@ -17,6 +17,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
             Subtract
         }
 
+        /// <summary>
+        /// Set automatically when a selection ends up selecting a single node,
+        /// reset when deselecting all nodes, selecting multiple nodes, or resetting the <see cref="NodeProcess"/>
+        /// </summary>
+        public IEditorGUINode focusedNode { get; private set; }
         public Mode selectionMode { get; internal set; }
         public readonly List<IEditorGUINode> selectedNodes = new List<IEditorGUINode>();
         internal readonly List<IEditorGUINode> selectedNodesSnapshot = new List<IEditorGUINode>(); // Used by process to store snapshot before starting a new selection
@@ -42,6 +47,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             if (selectedNodes.Count == 0) return false;
             selectedNodes.Clear();
+            focusedNode = null;
             return true;
         }
 
@@ -49,19 +55,34 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             if (!keepExistingSelections) selectedNodes.Clear();
             if (!selectedNodes.Contains(node)) selectedNodes.Add(node);
+            focusedNode = selectedNodes.Count == 1 ? node : null;
         }
 
         public void Select(List<IEditorGUINode> nodes, bool keepExistingSelections)
         {
+            focusedNode = null;
             if (!keepExistingSelections) selectedNodes.Clear();
             foreach (IEditorGUINode node in nodes) {
                 if (!selectedNodes.Contains(node)) selectedNodes.Add(node);
             }
+            focusedNode = selectedNodes.Count == 1 ? selectedNodes[0] : null;
+        }
+
+        public T GetFocusedNode<T>() where T : IEditorGUINode
+        {
+            return focusedNode == null ? default(T) : (T)focusedNode;
         }
 
         #endregion
 
         #region Internal Methods
+
+        internal void Reset()
+        {
+            DeselectAll();
+            ClearSnapshot();
+            focusedNode = null;
+        }
 
         internal void ClearSnapshot()
         {

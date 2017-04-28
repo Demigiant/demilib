@@ -362,6 +362,9 @@
             - Inside OnGUI, write all your nodes GUI code inside a <see cref="!:NodeProcessScope"/>
             </summary>
         </member>
+        <member name="F:DG.DemiEditor.DeGUINodeSystem.NodeProcess.SnapOffset">
+            <summary>Distance at which nodes will be placed when snapping next to each other</summary>
+        </member>
         <member name="P:DG.DemiEditor.DeGUINodeSystem.NodeProcess.position">
             <summary>Full area without zeroed coordinates</summary>
         </member>
@@ -379,6 +382,11 @@
             <param name="onCloneNodeCallback">Callback called when a node is cloned.
             Return FALSE if you want the cloning to be canceled.
             Can be NULL, in which case it will be ignored</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Reset">
+            <summary>
+            Needs to be called when loading a complete new series of nodes
+            </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.RepaintOnEnd">
             <summary>
@@ -413,6 +421,12 @@
             <code>IMPORTANT:</code> this list should be part of your serialized class (MonoBehaviour or ScriptableObject),
             so it will be stored as a reference and modifying one will modify the other.<para/>
             Usually you want to pass all nodes to this except the eventual start node (or nodes that can't be sorted nor deleted).</param>
+        </member>
+        <member name="P:DG.DemiEditor.DeGUINodeSystem.SelectionManager.focusedNode">
+            <summary>
+            Set automatically when a selection ends up selecting a single node,
+            reset when deselecting all nodes, selecting multiple nodes, or resetting the <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/>
+            </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.SelectionManager.DeselectAll">
             <summary>

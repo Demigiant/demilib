@@ -96,19 +96,31 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         #region Internal Methods
 
+        internal void Reset()
+        {
+            SetState(State.Inactive, false);
+            mouseTargetType = TargetType.None;
+            nodeTargetType = NodeTargetType.None;
+            targetNode = null;
+            targetNodeConnectorAreaIndex = 0;
+            _currMouseCursor = MouseCursor.Arrow;
+        }
+
         // Also resets readyForState
-        internal void SetState(State toState)
+        internal void SetState(State toState, bool allowRepaint = true)
         {
             State prevState = state;
             state = toState;
             readyForState = ReadyFor.Unset;
 
             // Repaint editor if necessary
-            switch (prevState) {
-            case State.Panning:
-            case State.DraggingNodes:
-                _process.editor.Repaint();
-                break;
+            if (allowRepaint) {
+                switch (prevState) {
+                case State.Panning:
+                case State.DraggingNodes:
+                    _process.editor.Repaint();
+                    break;
+                }
             }
         }
 

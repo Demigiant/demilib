@@ -19,7 +19,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         public float snapY { get; private set; }
 
         const float _MaxSnappingDistance = 7;
-        const float _NearSnapping = 12; // Distance at which nodes will snap to each other when on different lines
         readonly List<float> _topSnappingPs = new List<float>();
         readonly List<float> _bottomSnappingPs = new List<float>();
         readonly List<float> _leftSnappingPs = new List<float>();
@@ -56,26 +55,26 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 if (!hasNearSnappingX && forArea.yMax > toArea.y && forArea.y < toArea.yMax) {
                     // Within nearSnappingX range
                     // Check rightToLeft then leftToRight
-                    if (forArea.xMax < toArea.x && toArea.x - forArea.xMax <= _NearSnapping) {
+                    if (forArea.xMax < toArea.x && toArea.x - forArea.xMax <= NodeProcess.SnapOffset) {
                         hasSnapX = hasNearSnappingX = true;
-                        snapX = toArea.x - forArea.width - _NearSnapping;
+                        snapX = toArea.x - forArea.width - NodeProcess.SnapOffset;
                         if (hasNearSnappingY) break;
-                    } else if (forArea.x > toArea.xMax && forArea.x - toArea.xMax <= _NearSnapping) {
+                    } else if (forArea.x > toArea.xMax && forArea.x - toArea.xMax <= NodeProcess.SnapOffset) {
                         hasSnapX = hasNearSnappingX = true;
-                        snapX = toArea.xMax + _NearSnapping;
+                        snapX = toArea.xMax + NodeProcess.SnapOffset;
                         if (hasNearSnappingY) break;
                     }
                 }
                 if (!hasNearSnappingY && forArea.xMax >= toArea.x && forArea.x < toArea.xMax) {
                     // Within nearSnappingY range
                     // Check bottomToTop then topToBottom
-                    if (forArea.yMax < toArea.y && toArea.y - forArea.yMax <= _NearSnapping) {
+                    if (forArea.yMax < toArea.y && toArea.y - forArea.yMax <= NodeProcess.SnapOffset) {
                         hasSnapY = hasNearSnappingY = true;
-                        snapY = toArea.y - forArea.height - _NearSnapping;
+                        snapY = toArea.y - forArea.height - NodeProcess.SnapOffset;
                         if (hasNearSnappingX) break;
-                    } else if (forArea.y > toArea.yMax && forArea.y - toArea.yMax <= _NearSnapping) {
+                    } else if (forArea.y > toArea.yMax && forArea.y - toArea.yMax <= NodeProcess.SnapOffset) {
                         hasSnapY = hasNearSnappingY = true;
-                        snapY = toArea.yMax + _NearSnapping;
+                        snapY = toArea.yMax + NodeProcess.SnapOffset;
                         if (hasNearSnappingX) break;
                     }
                 }

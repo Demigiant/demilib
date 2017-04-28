@@ -160,7 +160,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 else a.toLineP.x -= DeStylePalette.ico_nodeArrow.width;
                 float axisDistance = a.fromIsSide ? Mathf.Abs(a.toArrowP.x - a.fromLineP.x) : Mathf.Abs(a.toArrowP.y - a.fromLineP.y);
                 float tangentDistance = isToBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, axisDistance * 0.2f + dist * 0.2f);
-//                float tangentDistance = isToBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, dist * 0.4f);
                 a.fromTangent = a.fromLineP + (fromIsBottom ? Vector2.up * tangentDistance : Vector2.right * tangentDistance);
                 a.toTangent = a.toLineP + (toIsTop? Vector2.up * -tangentDistance : Vector2.right * -tangentDistance);
             }
