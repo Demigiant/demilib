@@ -322,22 +322,6 @@
             Returns TRUE if the connection was deleted using the delete connection button.
             </summary>
         </member>
-        <member name="T:DG.DemiEditor.DeGUINodeSystem.KeyModifier">
-            <summary>
-            Returns key modifiers currently pressed
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.KeyModifier.Update">
-            <summary>
-            Call this method to update data required by softCtrl calculations.
-            Automatically called from within a <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1"/>.
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.KeyModifier.ToInt(UnityEngine.KeyCode)">
-            <summary>
-            Returns the given <see cref="T:UnityEngine.KeyCode"/> as an int, or -1 if it's not a number
-            </summary>
-        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.InteractionManager">
             <summary>
             One per <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/>.
@@ -433,6 +417,23 @@
             Returns TRUE if something was actually deselected, FALSE if there were no selected nodes
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:DG.DemiEditor.DeGUIKey">
+            <summary>
+            Returns key modifiers currently pressed.
+            Requires to be updated at the beginning of every GUI call.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUIKey.Refresh">
+            <summary>
+            Call this method to update data required by softCtrl calculations.
+            Automatically called from within a <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1"/>.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUIKey.ToInt(UnityEngine.KeyCode)">
+            <summary>
+            Returns the given <see cref="T:UnityEngine.KeyCode"/> as an int, or -1 if it's not a number
+            </summary>
         </member>
         <member name="T:DG.DemiEditor.DeSkinStyle">
             <summary>

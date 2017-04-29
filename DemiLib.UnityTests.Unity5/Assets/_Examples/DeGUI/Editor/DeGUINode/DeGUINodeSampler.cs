@@ -55,7 +55,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             DG.DemiEditor.DeGUI.BeginGUI();
 
             // Node GUI Process
-            Rect nodeArea = this.position.ResetXY().SetY(100).Shift(0, 0, 0, -100);
+			Rect nodeArea = this.position.ResetXY().SetY(100).Shift(0, 0, 0, -100);
             using (new NodeProcessScope<GenericNode>(_nodeProcess, nodeArea, ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
                 // Draw nodes
                 // Generic and multi nodes

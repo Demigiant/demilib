@@ -69,7 +69,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(arrowR, DeStylePalette.ico_nodeArrow);
             GUI.matrix = currGUIMatrix;
             // Delete connection button (placed at center of line)
-            if (KeyModifier.Exclusive.alt) {
+            if (DeGUIKey.Exclusive.alt) {
                 Vector2 midP = anchorsData.fromTangent + (anchorsData.toTangent - anchorsData.fromTangent) * 0.5f;
                 Vector2 midPAlt = anchorsData.fromLineP + (anchorsData.toLineP - anchorsData.fromLineP) * 0.5f;
                 midP += (midPAlt - midP) * 0.25f;
@@ -90,7 +90,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         ){
             dragData.Set(interaction.targetNode);
             int connectionIndex = connectionOptions.connectionMode == ConnectionMode.Dual
-                ? KeyModifier.Exclusive.ctrl && KeyModifier.Extra.space ? 1 : 0
+                ? DeGUIKey.Exclusive.ctrl && DeGUIKey.Extra.space ? 1 : 0
                 : interaction.targetNodeConnectorAreaIndex;
             Color color = GetConnectionColor(
                 connectionIndex, interaction.targetNode.connectedNodesIds.Count, nodeGuiData, connectionOptions

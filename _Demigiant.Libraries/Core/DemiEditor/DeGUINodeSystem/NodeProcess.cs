@@ -250,6 +250,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
             } else _minimap = null;
 
             // Set scale
+            // IMPORTANT: scale only works correctly with utility windows,
+            // while scaling the GUI of a dockable window makes the whole window think it's scaled and crop all content
+            // (fuck, half a day wasted to determine the origin of this bug, one hour wasted to realize there's no solution, now give me someone to kill)
             if (!Mathf.Approximately(guiScale, 1)) {
                 GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one * guiScale);
             }
@@ -268,8 +271,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _nodeToConnectionOptions.Clear();
             }
 
-            // Update interaction and KeyModifier
-            KeyModifier.Update();
+            // Update interaction and DeGUIKey
+            DeGUIKey.Refresh();
             if (interaction.Update()) _repaintOnEnd = true;
 
             // Background grid
@@ -287,7 +290,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     switch (interaction.mouseTargetType) {
                     case InteractionManager.TargetType.Background:
                         // LMB pressed on background
-                        if (KeyModifier.Exclusive.shift) {
+                        if (DeGUIKey.Exclusive.shift) {
                             // Prepare for selection drawing in add mode
                             selection.selectionMode = SelectionManager.Mode.Add;
                             selection.StoreSnapshot();
@@ -300,7 +303,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         break;
                     case InteractionManager.TargetType.Node:
                         // LMB pressed on a node
-                        if (KeyModifier.Exclusive.ctrl) {
+                        if (DeGUIKey.Exclusive.ctrl) {
                             // CTRL+Drag on node > drag connection (eventually)
                             NodeConnectionOptions connectionOptions = _nodeToConnectionOptions[interaction.targetNode];
                             bool canDragConnector = connectionOptions.allowManualConnections
@@ -320,12 +323,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                 interaction.SetReadyFor(InteractionManager.ReadyFor.DraggingNodes);
                                 UnfocusAll();
                                 // Select/deselect
-                                if (KeyModifier.Exclusive.shiftAlt) {
+                                if (DeGUIKey.Exclusive.shiftAlt) {
                                     // Select this plus all forward connected nodes
                                     if (!isAlreadySelected) selection.Select(interaction.targetNode, true);
                                     SelectAllForwardConnectedNodes(interaction.targetNode);
                                     _repaintOnEnd = true;
-                                } else if (KeyModifier.Exclusive.shift) {
+                                } else if (DeGUIKey.Exclusive.shift) {
                                     // Add to selection if not already selected
                                     // (deselection happens on mouseUp instead, for various reasons)
                                     selection.StoreSnapshot();
@@ -375,7 +378,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     break;
                 case InteractionManager.ReadyFor.DraggingNodes:
                     if ((Event.current.mousePosition - interaction.mousePositionOnLMBPress).magnitude >= InteractionManager.MinDragStartupDistance) {
-                        if (KeyModifier.Exclusive.ctrlShift && options.allowCopyPaste) {
+                        if (DeGUIKey.Exclusive.ctrlShift && options.allowCopyPaste) {
                             // Clone nodes before starting to drag
                             CloneAndCopySelectedNodes(controlNodes);
                             if (PasteNodesFromClipboard(controlNodes, false)) {
@@ -443,7 +446,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _resetInteractionOnEnd = true;
                 break;
             case EventType.ScrollWheel:
-                if (options.mouseWheelScalesGUI && KeyModifier.Exclusive.ctrl) {
+                if (options.mouseWheelScalesGUI && DeGUIKey.Exclusive.ctrl) {
                     // Zoom
                     bool isScaleUp = Event.current.delta.y < 0;
                     if (isScaleUp && Mathf.Approximately(options.guiScaleValues[0], guiScale)) break;
@@ -472,7 +475,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case KeyCode.LeftArrow:
                 case KeyCode.RightArrow:
                     // Move selected nodes (on key down so it can repeat when keeping they key pressed)
-                    if (selection.selectedNodes.Count == 0 || !KeyModifier.none && !KeyModifier.Exclusive.shift) break;
+                    if (selection.selectedNodes.Count == 0 || !DeGUIKey.none && !DeGUIKey.Exclusive.shift) break;
                     Vector2 shift = Vector2.zero;
                     switch (Event.current.keyCode) {
                     case KeyCode.UpArrow: shift.y = -1;
@@ -484,7 +487,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     case KeyCode.RightArrow: shift.x = 1;
                         break;
                     }
-                    if (KeyModifier.Exclusive.shift) shift *= 10;
+                    if (DeGUIKey.Exclusive.shift) shift *= 10;
                     foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += shift;
                     guiChangeType = GUIChangeType.DragNodes;
                     GUI.changed = _repaintOnEnd = true;
@@ -517,20 +520,20 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     GUI.changed = _repaintOnEnd = true;
                     break;
                 case KeyCode.A:
-                    if (KeyModifier.Exclusive.softCtrl) {
+                    if (DeGUIKey.Exclusive.softCtrl) {
                         // CTRL+A > Select all nodes
                         selection.Select(nodes, false);
                         _repaintOnEnd = true;
                     }
                     break;
                 case KeyCode.C:
-                    if (KeyModifier.Exclusive.softCtrl) {
+                    if (DeGUIKey.Exclusive.softCtrl) {
                         // CTRL+C > Clone selected nodes (only if they're part of controlNodes) and place them in the clipboard
                         if (options.allowCopyPaste) CloneAndCopySelectedNodes(controlNodes);
                     }
                     break;
                 case KeyCode.V:
-                    if (KeyModifier.Exclusive.softCtrl) {
+                    if (DeGUIKey.Exclusive.softCtrl) {
                         // CTRL+V > Paste copied nodes (which were cloned and in clipboard) and select them
                         if (options.allowCopyPaste && PasteNodesFromClipboard(controlNodes, true)) {
                             selection.DeselectAll();
@@ -548,7 +551,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             case EventType.MouseUp:
                 switch (interaction.state) {
                 case InteractionManager.State.Inactive:
-                    if (KeyModifier.Exclusive.shift && interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
+                    if (DeGUIKey.Exclusive.shift && interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
                         // SHIFT + LMB UP on selected node's draggable area: deselect
                         if (selection.IsSelected(interaction.targetNode) && selection.selectedNodesSnapshot.Contains(interaction.targetNode)) {
                             selection.Deselect(interaction.targetNode);
@@ -570,7 +573,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         switch (connectionOptions.connectionMode) {
                         case ConnectionMode.Dual:
                             // Alt connection mode > add element to connectedNodeId 0 or 1 depending if SPACE is pressed or not
-                            int connectionIndex = KeyModifier.Exclusive.ctrl && KeyModifier.Extra.space ? 1 : 0;
+                            int connectionIndex = DeGUIKey.Exclusive.ctrl && DeGUIKey.Extra.space ? 1 : 0;
                             Connector.dragData.node.connectedNodesIds[connectionIndex] = overNode.id;
                             GUI.changed = true;
                             break;
