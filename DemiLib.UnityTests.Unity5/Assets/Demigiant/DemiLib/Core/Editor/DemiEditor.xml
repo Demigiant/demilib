@@ -322,6 +322,24 @@
             Returns TRUE if the connection was deleted using the delete connection button.
             </summary>
         </member>
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.Core.HelpPanel">
+            <summary>
+            You can attach to this
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.HelpPanel.AddContentGroup(System.String,System.String)">
+            <summary>
+            Use this to add a content group to the Help Panel
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.HelpPanel.Definition.AddKey(System.String)">
+            <summary>
+            Add key on new line, automatically formatting these special keys:<para/>
+            /<para/>
+            +<para/>
+            →
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.InteractionManager">
             <summary>
             One per <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/>.

@@ -2,6 +2,7 @@
 // Created: 2017/04/19 12:31
 // License Copyright (c) Daniele Giardini
 
+using System.Collections.Generic;
 using System.Text;
 using DG.DemiEditor.Internal;
 using DG.DemiLib;
@@ -9,53 +10,63 @@ using UnityEngine;
 
 namespace DG.DemiEditor.DeGUINodeSystem.Core
 {
+    /// <summary>
+    /// You can attach to this
+    /// </summary>
     internal static class HelpPanel
     {
-        const int _InnerPadding = 8;
-        static readonly string _Content;
+        static readonly List<ContentGroup> _ContentGroups = new List<ContentGroup>();
+
+        const int _InnerPadding = 11;
         static readonly Styles _Styles = new Styles();
+        static readonly Color _EvidenceColor = new Color(0.05490196f, 0.5960785f, 0.9725491f, 1f);
+        static readonly Color _DescriptionColor = new Color(0.5998054f, 0.7537874f, 0.9485294f, 1f);
+        static readonly Color _DescriptionBGColor = new Color(0.1386786f, 0.2625088f, 0.4191176f, 1f);
+        static readonly Color _KeysColor = new Color(1f, 0.8068966f, 0f, 1f);
+        static readonly Color _RowColor0 = new Color(0.08f,0.08f, 0.08f, 0.94f);
+        static readonly Color _RowColor1 = new Color(0.16f, 0.16f, 0.16f, 0.94f);
+        static Vector2 _scroll;
 
         #region Constructor
 
         static HelpPanel()
         {
-            StringBuilder strb = new StringBuilder();
-
-            strb.Append("<size=20><color=#0e98f8>HELP PANEL (F1)</color></size>")
-                // MOUSE
-                .AppendHeader("MOUSE")
-                .AppendKey("LMB + SHIFT").AppendTarget("node").AppendDescription("Add/remove node from selection")
-                .AppendKey("LMB + SHFIT + ALT").AppendTarget("node").AppendDescription("Add node plus all forward connected nodes to selection")
-                .AppendKey("LMB-Drag").AppendTarget("background").AppendDescription("Draw new nodes selection rect - <i>clears previous selection</i>")
-                .AppendKey("LMB-Drag + SHIFT").AppendTarget("background").AppendDescription("Draw new nodes selection rect - <i>will add nodes to current selection</i>")
-                .AppendKey("LMB-Drag + ALT").AppendTarget("node").AppendDescription("Drag selected nodes without snapping")
-                .AppendKey("LMB-Drag + CTRL").AppendTarget("node").AppendDescription("Drag new connection from node - <i>if node allows it</i>")
-                .AppendKey("LMB-Drag + CTRL + SHIFT").AppendTarget("node").AppendDescription("Clone selected nodes and drag them")
-                .AppendKey("RMB").AppendDescription("Context menu")
-                .AppendKey("MMB-Drag").AppendDescription("Area panning")
-                .AppendKey("Scrollwheel + CTRL").AppendDescription("Zoom in/out")
-                // KEYBOARD
-                .AppendHeader("KEYBOARD")
-                .AppendKey("F1").AppendDescription("Open/close this panel")
-                .AppendKey("DELETE/BACKSPACE").AppendDescription("Delete selected nodes - <i>if allowed</i>")
-                .AppendKey("ALT").AppendDescription("Show extra UI buttons")
-                .AppendKey("CTRL + A").AppendDescription("Select all nodes")
-                .AppendKey("CTRL + C").AppendDescription("Copy selected nodes (a new ID will be auto-generated)")
-                .AppendKey("CTRL + V").AppendDescription("Paste nodes from clipboard")
-                .AppendKey("UP/DOWN/LEFT/RIGHT ARROW").AppendDescription("Move selected nodes by 1 pixel")
-                .AppendKey("UP/DOWN/LEFT/RIGHT ARROW + SHIFT").AppendDescription("Move selected nodes by 10 pixels")
-                ;
-
-            _Content = strb.ToString();
+            // GENERAL
+            ContentGroup general = AddContentGroup("General");
+            general.AppendDefinition("Open/Close Help Panel").AddKey("F1");
+            general.AppendDefinition("Pan area").AddKey("MMB → Drag");
+            general.AppendDefinition("Zoom in/out (if allowed)").AddKey("CTLR+Scrollwheel");
+            general.AppendDefinition("Show extra UI buttons").AddKey("ALT");
+            general.AppendDefinition("Background context menu").AddKey("RMB");
+            // SELECTION
+            ContentGroup selection = AddContentGroup("Selection");
+            selection.AppendDefinition("Select all nodes").AddKey("CTRL+A");
+            selection.AppendDefinition("Draw selection rect").AddKey("LMB → Drag").AddKeyTarget("on background");
+            selection.AppendDefinition("Draw selection rect (add)").AddKey("SHIFT+LMB → Drag").AddKeyTarget("on background");
+            selection.AppendDefinition("Add/Remove node from selection").AddKey("SHIFT+LMB").AddKeyTarget("on node");
+            selection.AppendDefinition("Add node plus all forward connected nodes to selection").AddKey("SHIFT+ALT+LMB").AddKeyTarget("on node");
+            // NODE MANIPULATION
+            ContentGroup nodes = AddContentGroup("Nodes Manipulation");
+            nodes.AppendDefinition("Delete selected nodes").AddKey("DELETE").AddKey("BACKSPACE");
+            nodes.AppendDefinition("Copy selected nodes").AddKey("CTRL+C");
+            nodes.AppendDefinition("Paste nodes").AddKey("CTRL+V");
+            nodes.AppendDefinition("Move selected nodes by 1 pixel").AddKey("ARROWS");
+            nodes.AppendDefinition("Move selected nodes by 10 pixel").AddKey("SHIFT+ARROWS");
+            nodes.AppendDefinition("Disable snapping while dragging nodes").AddKey("ALT");
+            nodes.AppendDefinition("Drag new connection from node (if allowed)").AddKey("CTRL+LMB → Drag");
+            nodes.AppendDefinition("Clone selected nodes and drag them").AddKey("SHIFT+CTRL+LMB → Drag");
+            nodes.AppendDefinition("Node context menu").AddKey("RMB");
         }
 
         #endregion
 
         #region GUI Methods
 
-        // Only called during Repaint
-        public static void Draw(NodeProcess process)
+        // Returns FALSE if the help panel should be closed
+        public static bool Draw(NodeProcess process)
         {
+            if (Event.current.type == EventType.KeyUp && Event.current.keyCode == KeyCode.F1) return false;
+
             _Styles.Init();
             Matrix4x4 prevGuiMatrix = GUI.matrix;
             GUI.matrix = Matrix4x4.TRS(process.position.min - process.position.min / process.guiScale, Quaternion.identity, Vector3.one);
@@ -65,37 +76,45 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 process.relativeArea.x, process.relativeArea.y,
                 process.relativeArea.width * process.guiScale, process.relativeArea.height * process.guiScale
             );
-            GUI.DrawTexture(area, DeStylePalette.blackSquareAlpha80);
+            using (new DeGUI.ColorScope(null, null, new Color(0.14f, 0.14f, 0.14f, 0.6f))) GUI.DrawTexture(area, DeStylePalette.whiteSquare);
 
             // Content
-            Rect contentR = area.Shift(_InnerPadding, _InnerPadding, -_InnerPadding * 2, -_InnerPadding * 2);
-            GUI.Label(contentR, _Content, _Styles.contentLabel);
+            GUILayout.BeginArea(area);
+            _scroll = GUILayout.BeginScrollView(_scroll);
+            GUILayout.Label("Help Panel", _Styles.titleLabel);
+            DeGUILayout.HorizontalDivider(_EvidenceColor, 1, 0, 0);
+            foreach (ContentGroup contentGroup in _ContentGroups) {
+                GUILayout.Label(contentGroup.title, _Styles.groupTitleLabel);
+                if (!string.IsNullOrEmpty(contentGroup.description)) {
+                    using (new DeGUI.ColorScope(_DescriptionBGColor)) GUILayout.Label(contentGroup.description, _Styles.descriptionLabel);
+                }
+                for (int r = 0; r < contentGroup.definitions.Count; ++r) {
+                    Definition definition = contentGroup.definitions[r];
+                    using (new DeGUI.ColorScope(r % 2 == 0 ? _RowColor0 : _RowColor1)) GUILayout.BeginHorizontal(_Styles.rowBox);
+                    GUILayout.Label(definition.definition, _Styles.definitionLabel, GUILayout.Width(320));
+                    GUILayout.Label(definition.keys, _Styles.keysLabel);
+                    GUILayout.EndHorizontal();
+                }
+            }
+            GUILayout.EndScrollView();
+            GUILayout.EndArea();
 
             GUI.matrix = prevGuiMatrix;
+            return true;
         }
 
         #endregion
 
-        #region Helpers
+        #region Public Methods
 
-        static StringBuilder AppendHeader(this StringBuilder strb, string value)
+        /// <summary>
+        /// Use this to add a content group to the Help Panel
+        /// </summary>
+        public static ContentGroup AddContentGroup(string title, string description = null)
         {
-            return strb.Append("\n\n<size=12><color=#0e98f8><b>").Append(value).Append("</b></color></size>");
-        }
-
-        static StringBuilder AppendKey(this StringBuilder strb, string value)
-        {
-            return strb.Append("\n<color=#ff6540>").Append(value).Append("</color>");
-        }
-
-        static StringBuilder AppendTarget(this StringBuilder strb, string value)
-        {
-            return strb.Append("<color=#0e98f8> ▶ </color><color=#ffb407>").Append(value).Append("</color>");
-        }
-
-        static StringBuilder AppendDescription(this StringBuilder strb, string value)
-        {
-            return strb.Append("<color=#0e98f8> ▶ </color>").Append(value);
+            ContentGroup result = new ContentGroup(title, description);
+            _ContentGroups.Add(result);
+            return result;
         }
 
         #endregion
@@ -104,9 +123,60 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
+        public class ContentGroup
+        {
+            internal readonly string title;
+            internal readonly string description;
+            internal readonly List<Definition> definitions = new List<Definition>();
+            internal ContentGroup(string title, string description)
+            {
+                this.title = title;
+                this.description = description;
+            }
+            public Definition AppendDefinition(string value)
+            {
+                Definition definition = new Definition(value);
+                definitions.Add(definition);
+                return definition;
+            }
+        }
+
+        public class Definition
+        {
+            internal readonly string definition;
+            internal string keys;
+            internal Definition(string value)
+            {
+                definition = value;
+                keys = "";
+            }
+            /// <summary>
+            /// Add key on new line, automatically formatting these special keys:<para/>
+            /// /<para/>
+            /// +<para/>
+            /// →
+            /// </summary>
+            public Definition AddKey(string value)
+            {
+                if (string.IsNullOrEmpty(keys)) keys = value;
+                else keys += ",\n" + value;
+                keys = keys.Replace("/", "<color=#ffffff>/</color>");
+                keys = keys.Replace("+", "<color=#ffffff>+</color>");
+                keys = keys.Replace("→", "<color=#ffffff><b>→</b></color>");
+                keys = keys.Replace(",", "<color=#ffffff>,</color>");
+                return this;
+            }
+
+            public Definition AddKeyTarget(string value)
+            {
+                keys = string.Format("{0} <color=#ffffff>{1}</color>", keys, value);
+                return this;
+            }
+        }
+
         class Styles
         {
-            public GUIStyle boxOutline, contentLabel;
+            public GUIStyle rowBox, titleLabel, groupTitleLabel, descriptionLabel, definitionLabel, keysLabel;
             bool _initialized;
 
             public void Init()
@@ -114,7 +184,17 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 if (_initialized) return;
 
                 _initialized = true;
-                contentLabel = new GUIStyle(GUI.skin.label).Add(Color.white, Format.RichText, Format.WordWrap, TextAnchor.UpperLeft);
+                rowBox = new GUIStyle().Margin(0).Padding(0).Background(DeStylePalette.whiteSquare).StretchWidth();
+                titleLabel = new GUIStyle(GUI.skin.label).Add(16, Color.white, Format.RichText).Background(DeStylePalette.blueSquare)
+                    .Padding(_InnerPadding, _InnerPadding, 4, 4).Margin(0).StretchWidth();
+                groupTitleLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, Color.white).Background(DeStylePalette.blueSquare)
+                    .Padding(_InnerPadding, 4, 8, 4).Margin(0).StretchWidth();
+                descriptionLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, _DescriptionColor).Background(DeStylePalette.whiteSquare)
+                    .Padding(_InnerPadding, 4, 4, 4).Margin(0).StretchWidth();
+                definitionLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, new DeSkinColor(0.75f))
+                    .Padding(_InnerPadding, 4, 4, 4).Margin(0);
+                keysLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, Format.RichText, _KeysColor)
+                    .Padding(0, _InnerPadding, 4, 4).Margin(0);
             }
         }
     }

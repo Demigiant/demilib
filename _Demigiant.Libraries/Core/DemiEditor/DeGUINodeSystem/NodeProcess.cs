@@ -249,6 +249,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 if (_minimap == null) _minimap = new Minimap(this);
             } else _minimap = null;
 
+            // Disable GUI if Help Panel is active
+            EditorGUI.BeginDisabledGroup(_helpPanelActive);
+
             // Set scale
             // IMPORTANT: scale only works correctly with utility windows,
             // while scaling the GUI of a dockable window makes the whole window think it's scaled and crop all content
@@ -503,7 +506,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 switch (Event.current.keyCode) {
                 case KeyCode.F1:
                     // Help Panel
-                    _helpPanelActive = !_helpPanelActive;
+                    _helpPanelActive = true;
                     _repaintOnEnd = true;
                     break;
                 case KeyCode.Delete:
@@ -707,8 +710,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     if (interaction.state == InteractionManager.State.DraggingNodes) _nodeDragManager.EndGUI();
                     // MINIMAP
                     if (_minimap != null) _minimap.Draw();
-                    // HELP PANEL
-                    if (_helpPanelActive) HelpPanel.Draw(this);
+                }
+                // HELP PANEL
+                // Re-enables GUI so it can capture F1 to close it
+                if (_helpPanelActive) {
+                    bool wasGUIEnabled = GUI.enabled;
+                    GUI.enabled = true;
+                    _helpPanelActive = HelpPanel.Draw(this);
+                    GUI.enabled = wasGUIEnabled;
+                    if (!_helpPanelActive) _repaintOnEnd = true;
                 }
             }
 
@@ -728,8 +738,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 editor.Repaint();
             }
 
-            // Close area and reset GUI matrix
+            // Close areas and reset GUI matrix
             GUILayout.EndArea();
+            EditorGUI.EndDisabledGroup();
             GUI.matrix = Matrix4x4.identity;
         }
 
