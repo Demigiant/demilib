@@ -64,7 +64,7 @@
     <Compile Include="DeGUINodeSystem\Core\NodesClipboard.cs" />
     <Compile Include="DeGUINodeSystem\Core\Connector.cs" />
     <Compile Include="DeGUINodeSystem\Core\NodeDragManager.cs" />
-    <Compile Include="DeGUINodeSystem\Core\HelpPanel.cs" />
+    <Compile Include="DeGUINodeSystem\HelpPanel.cs" />
     <Compile Include="DeGUINodeSystem\Core\Minimap.cs" />
     <Compile Include="DeGUINodeSystem\Core\SnappingManager.cs" />
     <Compile Include="DeGUIKey.cs" />

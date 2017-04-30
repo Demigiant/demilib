@@ -322,17 +322,17 @@
             Returns TRUE if the connection was deleted using the delete connection button.
             </summary>
         </member>
-        <member name="T:DG.DemiEditor.DeGUINodeSystem.Core.HelpPanel">
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.HelpPanel">
             <summary>
             You can attach to this
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.HelpPanel.AddContentGroup(System.String,System.String)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.HelpPanel.AddContentGroup(System.String,System.String)">
             <summary>
             Use this to add a content group to the Help Panel
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.HelpPanel.Definition.AddKey(System.String)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.HelpPanel.Definition.AddKey(System.String)">
             <summary>
             Add key on new line, automatically formatting these special keys:<para/>
             /<para/>
@@ -400,6 +400,21 @@
             <summary>
             Draws the given node using the given T editor GUINode type.
             Retuns the full area of the node
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.OpenHelpPanel">
+            <summary>
+            Opens the Help Panel
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.CloseHelpPanel">
+            <summary>
+            Closes the Help Panel
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ToggleHelpPanel">
+            <summary>
+            Opens or closes the Help panel based on its current state
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.CloneNode``1(DG.DemiLib.IEditorGUINode)">

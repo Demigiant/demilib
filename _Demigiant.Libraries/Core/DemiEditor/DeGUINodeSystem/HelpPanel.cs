@@ -3,19 +3,17 @@
 // License Copyright (c) Daniele Giardini
 
 using System.Collections.Generic;
-using System.Text;
-using DG.DemiEditor.Internal;
 using DG.DemiLib;
 using UnityEngine;
 
-namespace DG.DemiEditor.DeGUINodeSystem.Core
+namespace DG.DemiEditor.DeGUINodeSystem
 {
     /// <summary>
     /// You can attach to this
     /// </summary>
-    internal static class HelpPanel
+    public class HelpPanel
     {
-        static readonly List<ContentGroup> _ContentGroups = new List<ContentGroup>();
+        public bool isOpen { get; private set; }
 
         const int _InnerPadding = 11;
         static readonly Styles _Styles = new Styles();
@@ -25,12 +23,18 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         static readonly Color _KeysColor = new Color(1f, 0.8068966f, 0f, 1f);
         static readonly Color _RowColor0 = new Color(0.08f,0.08f, 0.08f, 0.94f);
         static readonly Color _RowColor1 = new Color(0.16f, 0.16f, 0.16f, 0.94f);
-        static Vector2 _scroll;
+        NodeProcess _process;
+        readonly List<ContentGroup> _ContentGroups = new List<ContentGroup>();
+        bool _layoutReady; // Used to prevent a repaint until a layout has happened
+        Vector2 _scroll;
 
         #region Constructor
 
-        static HelpPanel()
+        public HelpPanel(NodeProcess nodeProcess)
         {
+            _process = nodeProcess;
+
+            // Write down help content
             // GENERAL
             ContentGroup general = AddContentGroup("General");
             general.AppendDefinition("Open/Close Help Panel").AddKey("F1");
@@ -63,18 +67,27 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         #region GUI Methods
 
         // Returns FALSE if the help panel should be closed
-        public static bool Draw(NodeProcess process)
+        public bool Draw()
         {
-            if (Event.current.type == EventType.KeyUp && Event.current.keyCode == KeyCode.F1) return false;
+            if (Event.current.type == EventType.KeyUp && Event.current.keyCode == KeyCode.F1) {
+                Event.current.Use();
+                return false;
+            }
+
+            // Block and event until the first layout has happened
+            if (!_layoutReady) {
+                if (Event.current.type == EventType.Layout) _layoutReady = true;
+                else return true;
+            }
 
             _Styles.Init();
             Matrix4x4 prevGuiMatrix = GUI.matrix;
-            GUI.matrix = Matrix4x4.TRS(process.position.min - process.position.min / process.guiScale, Quaternion.identity, Vector3.one);
+            GUI.matrix = Matrix4x4.TRS(_process.position.min - _process.position.min / _process.guiScale, Quaternion.identity, Vector3.one);
 
             // Background (adapt area to counter GUI scale)
             Rect area = new Rect(
-                process.relativeArea.x, process.relativeArea.y,
-                process.relativeArea.width * process.guiScale, process.relativeArea.height * process.guiScale
+                _process.relativeArea.x, _process.relativeArea.y,
+                _process.relativeArea.width * _process.guiScale, _process.relativeArea.height * _process.guiScale
             );
             using (new DeGUI.ColorScope(null, null, new Color(0.14f, 0.14f, 0.14f, 0.6f))) GUI.DrawTexture(area, DeStylePalette.whiteSquare);
 
@@ -83,6 +96,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             _scroll = GUILayout.BeginScrollView(_scroll);
             GUILayout.Label("Help Panel", _Styles.titleLabel);
             DeGUILayout.HorizontalDivider(_EvidenceColor, 1, 0, 0);
+            int descriptionWidth = (int)Mathf.Min(area.width * 0.6f, 350);
             foreach (ContentGroup contentGroup in _ContentGroups) {
                 GUILayout.Label(contentGroup.title, _Styles.groupTitleLabel);
                 if (!string.IsNullOrEmpty(contentGroup.description)) {
@@ -91,7 +105,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 for (int r = 0; r < contentGroup.definitions.Count; ++r) {
                     Definition definition = contentGroup.definitions[r];
                     using (new DeGUI.ColorScope(r % 2 == 0 ? _RowColor0 : _RowColor1)) GUILayout.BeginHorizontal(_Styles.rowBox);
-                    GUILayout.Label(definition.definition, _Styles.definitionLabel, GUILayout.Width(320));
+                    GUILayout.Label(definition.definition, _Styles.definitionLabel, GUILayout.Width(descriptionWidth));
                     GUILayout.Label(definition.keys, _Styles.keysLabel);
                     GUILayout.EndHorizontal();
                 }
@@ -110,11 +124,21 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         /// <summary>
         /// Use this to add a content group to the Help Panel
         /// </summary>
-        public static ContentGroup AddContentGroup(string title, string description = null)
+        public ContentGroup AddContentGroup(string title, string description = null)
         {
             ContentGroup result = new ContentGroup(title, description);
             _ContentGroups.Add(result);
             return result;
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal void Open(bool doOpen)
+        {
+            isOpen = doOpen;
+            if (doOpen) _layoutReady = false;
         }
 
         #endregion

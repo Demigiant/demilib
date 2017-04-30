@@ -41,6 +41,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public readonly ProcessOptions options = new ProcessOptions();
         public readonly InteractionManager interaction;
         public readonly SelectionManager selection;
+        public readonly HelpPanel helpPanel;
         public GUIChangeType guiChangeType { get; private set; } // Last GUI.changed reason if set by process (reset on process end)
         /// <summary>Full area without zeroed coordinates</summary>
         public Rect position { get; private set; }
@@ -63,7 +64,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Func<List<IEditorGUINode>,bool> _onDeleteNodesCallback; // Returns FALSE if deletion shouldn't happen
         readonly Func<IEditorGUINode,IEditorGUINode,bool> _onCloneNodeCallback; // Returns FALSE if cloning shouldn't happen
         Minimap _minimap;
-        bool _helpPanelActive;
         bool _repaintOnEnd; // If TRUE, repaints the editor during EndGUI. Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
         bool _isAltPressed; // Used to prevent a repaint when ALT is being kept pressed
@@ -93,6 +93,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             guiScale = 1f;
             _nodeDragManager = new NodeDragManager(this);
             _clipboard = new NodesClipboard(this);
+            helpPanel = new HelpPanel(this);
             Undo.undoRedoPerformed -= this.OnUndoRedoCallback;
             Undo.undoRedoPerformed += this.OnUndoRedoCallback;
         }
@@ -193,6 +194,33 @@ namespace DG.DemiEditor.DeGUINodeSystem
         }
 
         /// <summary>
+        /// Opens the Help Panel
+        /// </summary>
+        public void OpenHelpPanel()
+        {
+            helpPanel.Open(true);
+            _repaintOnEnd = true;
+        }
+
+        /// <summary>
+        /// Closes the Help Panel
+        /// </summary>
+        public void CloseHelpPanel()
+        {
+            helpPanel.Open(false);
+            _repaintOnEnd = true;
+        }
+
+        /// <summary>
+        /// Opens or closes the Help panel based on its current state
+        /// </summary>
+        public void ToggleHelpPanel()
+        {
+            if (helpPanel.isOpen) CloseHelpPanel();
+            else OpenHelpPanel();
+        }
+
+        /// <summary>
         /// Returns a clone of the given node (clones also lists, but leaves other references as references).
         /// A new ID will be automatically generated.
         /// </summary>
@@ -250,7 +278,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             } else _minimap = null;
 
             // Disable GUI if Help Panel is active
-            EditorGUI.BeginDisabledGroup(_helpPanelActive);
+            EditorGUI.BeginDisabledGroup(helpPanel.isOpen);
 
             // Set scale
             // IMPORTANT: scale only works correctly with utility windows,
@@ -506,8 +534,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 switch (Event.current.keyCode) {
                 case KeyCode.F1:
                     // Help Panel
-                    _helpPanelActive = true;
-                    _repaintOnEnd = true;
+                    OpenHelpPanel();
                     break;
                 case KeyCode.Delete:
                 case KeyCode.Backspace:
@@ -713,12 +740,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 // HELP PANEL
                 // Re-enables GUI so it can capture F1 to close it
-                if (_helpPanelActive) {
+                if (helpPanel.isOpen) {
                     bool wasGUIEnabled = GUI.enabled;
                     GUI.enabled = true;
-                    _helpPanelActive = HelpPanel.Draw(this);
+                    bool closeHelpPanel = !helpPanel.Draw();
                     GUI.enabled = wasGUIEnabled;
-                    if (!_helpPanelActive) _repaintOnEnd = true;
+                    if (closeHelpPanel) CloseHelpPanel();
                 }
             }
 
