@@ -51,7 +51,11 @@ namespace DG.DeInspektorEditor.AttributesManagers
                     else {
                         if (mInfo.IsStatic) mInfo.Invoke(null, attr.parameters);
                         else {
-                            if (attr.targetType.IsSubclassOf(typeof(Component))) {
+                            if (attr.targetType.IsSubclassOf(typeof(ScriptableObject))) {
+                                // ScriptableObject > call the method directly from it
+                                mInfo.Invoke(Selection.activeObject, attr.parameters);
+                                EditorUtility.SetDirty(Selection.activeObject);
+                            } else if (attr.targetType.IsSubclassOf(typeof(Component))) {
                                 // Monobehaviour > find it and call the method directly
                                 Component c = Selection.activeTransform.GetComponent(attr.targetType);
                                 mInfo.Invoke(c, attr.parameters);
