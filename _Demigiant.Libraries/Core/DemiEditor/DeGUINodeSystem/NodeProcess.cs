@@ -25,6 +25,16 @@ namespace DG.DemiEditor.DeGUINodeSystem
     /// </summary>
     public class NodeProcess
     {
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+        // ■■■ EVENTS
+
+        public event Action OnDeletedNodes;
+        public event Action OnAddedNodes;
+        void DispatchOnDeletedNodes() { if (OnDeletedNodes != null) OnDeletedNodes(); }
+        void DispatchOnAddedNodes() { if (OnAddedNodes != null) OnAddedNodes(); }
+
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
         public enum GUIChangeType
         {
             None,
@@ -37,7 +47,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
         public const int SnapOffset = 12;
-        public readonly EditorWindow editor;
+        public EditorWindow editor; // Get/set so it can be refreshed if necessary
         public readonly ProcessOptions options = new ProcessOptions();
         public readonly InteractionManager interaction;
         public readonly SelectionManager selection;
@@ -548,6 +558,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     selection.DeselectAll();
                     guiChangeType = GUIChangeType.DeletedNodes;
                     GUI.changed = _repaintOnEnd = true;
+                    DispatchOnDeletedNodes();
                     break;
                 case KeyCode.A:
                     if (DeGUIKey.Exclusive.softCtrl) {
@@ -570,6 +581,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             foreach (IEditorGUINode node in _clipboard.nodes) selection.Select(node, true);
                             guiChangeType = GUIChangeType.AddedNodes;
                             GUI.changed = _repaintOnEnd = true;
+                            DispatchOnAddedNodes();
                         }
                     }
                     break;
