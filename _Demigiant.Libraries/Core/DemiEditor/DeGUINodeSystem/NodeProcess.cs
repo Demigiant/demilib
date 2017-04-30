@@ -68,12 +68,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
         readonly NodeDragManager _nodeDragManager;
         readonly NodesClipboard _clipboard;
+        readonly ContextPanel _contextPanel;
+        Minimap _minimap;
         readonly List<IEditorGUINode> _tmp_nodes = new List<IEditorGUINode>(); // Used for temporary operations
         readonly List<string> _tmp_string = new List<string>(); // Used for temporary operations
         static readonly Styles _Styles = new Styles();
         readonly Func<List<IEditorGUINode>,bool> _onDeleteNodesCallback; // Returns FALSE if deletion shouldn't happen
         readonly Func<IEditorGUINode,IEditorGUINode,bool> _onCloneNodeCallback; // Returns FALSE if cloning shouldn't happen
-        Minimap _minimap;
         bool _repaintOnEnd; // If TRUE, repaints the editor during EndGUI. Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
         bool _isAltPressed; // Used to prevent a repaint when ALT is being kept pressed
@@ -103,6 +104,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             guiScale = 1f;
             _nodeDragManager = new NodeDragManager(this);
             _clipboard = new NodesClipboard(this);
+            _contextPanel = new ContextPanel(this);
             helpPanel = new HelpPanel(this);
             Undo.undoRedoPerformed -= this.OnUndoRedoCallback;
             Undo.undoRedoPerformed += this.OnUndoRedoCallback;
@@ -282,7 +284,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             _Styles.Init();
             position = nodeArea;
-            areaShift = refAreaShift;
+            areaShift = new Vector2((int)refAreaShift.x, (int)refAreaShift.y);
             if (options.showMinimap) {
                 if (_minimap == null) _minimap = new Minimap(this);
             } else _minimap = null;
@@ -325,6 +327,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             switch (Event.current.type) {
             // MOUSE EVENTS ///////////////////////////////////////////////////////////////////////////////////////////////////////
             case EventType.MouseDown:
+                if (_contextPanel.HasMouseOver()) break; // Ignore in case mouse is over ContextPanel
                 switch (Event.current.button) {
                 case 0:
                     interaction.mousePositionOnLMBPress = Event.current.mousePosition;
@@ -476,13 +479,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case 2:
                     // Panning
                     interaction.SetState(InteractionManager.State.Panning);
-                    refAreaShift = areaShift += Event.current.delta;
+                    refAreaShift += Event.current.delta;
                     guiChangeType = GUIChangeType.Pan;
                     GUI.changed = _repaintOnEnd = true;
                     break;
                 }
                 break;
             case EventType.ContextClick:
+                if (_contextPanel.HasMouseOver()) break; // Ignore in case mouse is over ContextPanel
                 interaction.SetState(InteractionManager.State.ContextClick);
                 _resetInteractionOnEnd = true;
                 break;
@@ -593,6 +597,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             case EventType.MouseUp:
                 switch (interaction.state) {
                 case InteractionManager.State.Inactive:
+                    if (_contextPanel.HasMouseOver()) break; // Ignore in case mouse is over ContextPanel
                     if (DeGUIKey.Exclusive.shift && interaction.nodeTargetType == InteractionManager.NodeTargetType.DraggableArea) {
                         // SHIFT + LMB UP on selected node's draggable area: deselect
                         if (selection.IsSelected(interaction.targetNode) && selection.selectedNodesSnapshot.Contains(interaction.targetNode)) {
@@ -750,6 +755,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     // MINIMAP
                     if (_minimap != null) _minimap.Draw();
                 }
+                // CONTEXT PANEL
+                _contextPanel.Draw();
                 // HELP PANEL
                 // Re-enables GUI so it can capture F1 to close it
                 if (helpPanel.isOpen) {

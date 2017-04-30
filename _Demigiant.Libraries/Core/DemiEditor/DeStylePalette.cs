@@ -115,6 +115,12 @@ namespace DG.DemiEditor
         public static Texture2D ico_alignBL { get { return LoadTexture(ref _ico_alignBL, "ico_alignBL"); } }
         public static Texture2D ico_alignBC { get { return LoadTexture(ref _ico_alignBC, "ico_alignBC"); } }
         public static Texture2D ico_alignBR { get { return LoadTexture(ref _ico_alignBR, "ico_alignBR"); } }
+        public static Texture2D ico_alignL { get { return LoadTexture(ref _ico_alignL, "ico_alignL"); } }
+        public static Texture2D ico_alignHC { get { return LoadTexture(ref _ico_alignHC, "ico_alignHC"); } }
+        public static Texture2D ico_alignR { get { return LoadTexture(ref _ico_alignR, "ico_alignR"); } }
+        public static Texture2D ico_alignT { get { return LoadTexture(ref _ico_alignT, "ico_alignT"); } }
+        public static Texture2D ico_alignVC { get { return LoadTexture(ref _ico_alignVC, "ico_alignVC"); } }
+        public static Texture2D ico_alignB { get { return LoadTexture(ref _ico_alignB, "ico_alignB"); } }
         public static Texture2D ico_star { get { return LoadTexture(ref _ico_star, "ico_star"); } }
         public static Texture2D ico_star_border { get { return LoadTexture(ref _ico_star_border, "ico_star_border"); } }
         public static Texture2D ico_play { get { return LoadTexture(ref _ico_play, "ico_play"); } }
@@ -134,7 +140,7 @@ namespace DG.DemiEditor
         static Texture2D _ico_nodeArrow;
         static Texture2D _ico_delete;
         static Texture2D _ico_end;
-        static Texture2D _ico_alignTL;
+        static Texture2D _ico_alignTL; // Icons with square with corners and center
         static Texture2D _ico_alignTC;
         static Texture2D _ico_alignTR;
         static Texture2D _ico_alignCL;
@@ -143,6 +149,12 @@ namespace DG.DemiEditor
         static Texture2D _ico_alignBL;
         static Texture2D _ico_alignBC;
         static Texture2D _ico_alignBR;
+        static Texture2D _ico_alignL; // Simpler align icons
+        static Texture2D _ico_alignHC;
+        static Texture2D _ico_alignR;
+        static Texture2D _ico_alignT;
+        static Texture2D _ico_alignVC;
+        static Texture2D _ico_alignB;
         static Texture2D _ico_star;
         static Texture2D _ico_star_border;
         static Texture2D _ico_cog;
@@ -233,7 +245,8 @@ namespace DG.DemiEditor
                         toolFoldoutOpen, toolFoldoutOpenWLabel, toolFoldoutOpenWStretchedLabel,
                         toolLFoldoutClosed, toolLFoldoutClosedWLabel, toolLFoldoutClosedWStretchedLabel,
                         toolLFoldoutOpen, toolLFoldoutOpenWLabel, toolLFoldoutOpenWStretchedLabel,
-                        bBlankBorder, bBlankBorderCompact;
+                        bBlankBorder, bBlankBorderCompact,
+                        flatWhite;
 
         internal void Init()
         {
@@ -282,6 +295,8 @@ namespace DG.DemiEditor
             bBlankBorder = new GUIStyle(GUI.skin.button).Add(TextAnchor.MiddleCenter, Color.white).Background(DeStylePalette.squareBorderCurved)
                 .Padding(0, 1, 1, 2).Border(new RectOffset(4, 4, 4, 4)).Overflow(-1, -1, 0, 0);
             bBlankBorderCompact = bBlankBorder.Clone().Padding(0, 1, 0, 0).ContentOffsetY(-1);
+            flatWhite = DeGUI.styles.button.tool.Clone(TextAnchor.MiddleCenter).Background(DeStylePalette.whiteSquare).Margin(0).Padding(0)
+                .Border(0, 0, 0, 0).Overflow(0).Height(0).ContentOffset(0, 0);
         }
     }
 

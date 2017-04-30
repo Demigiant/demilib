@@ -39,7 +39,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             ContentGroup general = AddContentGroup("General");
             general.AppendDefinition("Open/Close Help Panel").AddKey("F1");
             general.AppendDefinition("Pan area").AddKey("MMB → Drag");
-            general.AppendDefinition("Zoom in/out (if allowed)").AddKey("CTLR+Scrollwheel");
+            general.AppendDefinition("Zoom in/out (if allowed)").AddKey("CTRL+Scrollwheel");
             general.AppendDefinition("Show extra UI buttons").AddKey("ALT");
             general.AppendDefinition("Background context menu").AddKey("RMB");
             // SELECTION
