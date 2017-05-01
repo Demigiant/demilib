@@ -64,6 +64,12 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             // DRAW MAP
             // Background
             GUI.DrawTexture(area, DeStylePalette.blackSquareAlpha80);
+            // Texture map
+            if (_requiresRefresh || _texture == null) {
+                _requiresRefresh = false;
+                RefreshMapTexture(fullZeroBasedArea, shiftFromOriginalNodesAreaPos);
+            }
+            GUI.DrawTexture(area, _texture, ScaleMode.StretchToFill);
             // Visible area overlay
             Rect innerArea = new Rect(area.x, area.y,
                 area.width * relativeArea.width / fullZeroBasedArea.width,
@@ -79,14 +85,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 float emptyY = extraYL + Mathf.Max(0, fullNodesArea.yMax - visibleArea.yMax);
                 innerArea.y += (area.height - innerArea.height) * (extraYL / emptyY);
             }
-            GUI.Box(innerArea, "", _Styles.visibleArea);
-            GUI.Box(innerArea, "", _Styles.visibleAreaOverlay);
-            // Texture
-            if (_requiresRefresh || _texture == null) {
-                _requiresRefresh = false;
-                RefreshMapTexture(fullZeroBasedArea, shiftFromOriginalNodesAreaPos);
+            using (new DeGUI.ColorScope(null, null, new DeSkinColor(0.4f))) {
+                GUI.Box(innerArea, "", _process.guiScale < 1f ? DeGUI.styles.box.outline02 : DeGUI.styles.box.outline01);
             }
-            GUI.DrawTexture(area, _texture, ScaleMode.StretchToFill);
         }
 
         #endregion
