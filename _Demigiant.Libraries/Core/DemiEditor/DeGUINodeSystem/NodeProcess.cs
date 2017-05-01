@@ -904,7 +904,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         // Returns TRUE if something was actually pasted
         bool PasteNodesFromClipboard<T>(IList<T> controlNodes, bool adaptGuiPositionToMouse) where T : IEditorGUINode
         {
-            if (_clipboard.nodes.Count == 0) return false;
+            if (!_clipboard.hasContent) return false;
 
             Vector2 offset = Vector2.zero;
             if (adaptGuiPositionToMouse) {

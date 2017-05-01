@@ -13,20 +13,33 @@ namespace DG.DemiEditor
     /// </summary>
     public static class DeGUIKey
     {
-        public static bool ctrl { get { return Event.current.control || Event.current.command; }}
-        public static bool softCtrl { get {
-            return (Event.current.control || Event.current.command || Time.realtimeSinceStartup - _timeAtControlKeyRelease < 0.2f);
-        }}
         public static bool shift { get { return Event.current.shift; }}
+        public static bool ctrl { get { return Event.current.control || Event.current.command; }}
         public static bool alt { get { return Event.current.alt; }}
         public static bool none { get { return !ctrl && !shift && !alt; } }
+
+        public static bool softShift { get {
+            return (Event.current.shift || Time.realtimeSinceStartup - _timeAtShiftKeyRelease < _SoftDelay);
+        }}
+        public static bool softCtrl { get {
+            return (Event.current.control || Event.current.command || Time.realtimeSinceStartup - _timeAtCtrlKeyRelease < _SoftDelay);
+        }}
+        public static bool softAlt { get {
+            return (Event.current.alt || Time.realtimeSinceStartup - _timeAtAltKeyRelease < _SoftDelay);
+        }}
 
         public static bool ctrlShiftAlt { get { return ctrl && shift && alt; }}
         public static bool ctrlShift { get { return ctrl && shift; }}
         public static bool ctrlAlt { get { return ctrl && alt; }}
         public static bool shiftAlt { get { return shift && alt; }}
 
-        static float _timeAtControlKeyRelease;
+        public static bool softCtrlShiftAlt { get { return softCtrl && softShift && softAlt; }}
+        public static bool softCtrlShift { get { return softCtrl && softShift; }}
+        public static bool softCtrlAlt { get { return softCtrl && softAlt; }}
+        public static bool softShiftAlt { get { return softShift && softAlt; }}
+
+        const float _SoftDelay = 0.2f;
+        static float _timeAtShiftKeyRelease, _timeAtCtrlKeyRelease, _timeAtAltKeyRelease;
 
         #region Internal Methods
 
@@ -41,11 +54,20 @@ namespace DG.DemiEditor
                 if (Event.current.keyCode == KeyCode.Space) Extra.space = true;
             } else if (Event.current.rawType == EventType.KeyUp) {
                 switch (Event.current.keyCode) {
+                case KeyCode.LeftShift:
+                case KeyCode.RightShift:
+                    _timeAtShiftKeyRelease = Time.realtimeSinceStartup;
+                    break;
                 case KeyCode.LeftControl:
                 case KeyCode.RightControl:
                 case KeyCode.LeftCommand:
                 case KeyCode.RightCommand:
-                    _timeAtControlKeyRelease = Time.realtimeSinceStartup;
+                    _timeAtCtrlKeyRelease = Time.realtimeSinceStartup;
+                    break;
+                case KeyCode.LeftAlt:
+                case KeyCode.RightAlt:
+                case KeyCode.AltGr:
+                    _timeAtAltKeyRelease = Time.realtimeSinceStartup;
                     break;
                 case KeyCode.Space:
                     Extra.space = false;
@@ -108,15 +130,23 @@ namespace DG.DemiEditor
 
         public static class Exclusive
         {
-            public static bool ctrl { get { return DeGUIKey.ctrl && !DeGUIKey.shift && !DeGUIKey.alt; }}
-            public static bool softCtrl { get { return DeGUIKey.softCtrl && !DeGUIKey.shift && !DeGUIKey.alt; }}
             public static bool shift { get { return DeGUIKey.shift && !DeGUIKey.ctrl && !DeGUIKey.alt; }}
+            public static bool ctrl { get { return DeGUIKey.ctrl && !DeGUIKey.shift && !DeGUIKey.alt; }}
             public static bool alt { get { return DeGUIKey.alt && !DeGUIKey.ctrl && !DeGUIKey.shift; }}
 
-            public static bool ctrlShiftAlt { get { return DeGUIKey.ctrl && DeGUIKey.shift && DeGUIKey.alt; }}
+            public static bool softShift { get { return DeGUIKey.softShift && !DeGUIKey.ctrl && !DeGUIKey.alt; }}
+            public static bool softCtrl { get { return DeGUIKey.softCtrl && !DeGUIKey.shift && !DeGUIKey.alt; }}
+            public static bool softAlt { get { return DeGUIKey.softAlt && !DeGUIKey.shift && !DeGUIKey.ctrl; }}
+
+            public static bool ctrlShiftAlt { get { return DeGUIKey.ctrlShiftAlt; }}
             public static bool ctrlShift { get { return DeGUIKey.ctrl && DeGUIKey.shift && !DeGUIKey.alt; }}
             public static bool ctrlAlt { get { return DeGUIKey.ctrl && DeGUIKey.alt && !DeGUIKey.shift; }}
             public static bool shiftAlt { get { return DeGUIKey.shift && DeGUIKey.alt && !DeGUIKey.ctrl; }}
+
+            public static bool softCtrlShiftAlt { get { return DeGUIKey.softCtrlShiftAlt; }}
+            public static bool softCtrlShift { get { return DeGUIKey.softCtrl && DeGUIKey.softShift && !DeGUIKey.alt; }}
+            public static bool softCtrlAlt { get { return DeGUIKey.softCtrl && DeGUIKey.softAlt && !DeGUIKey.shift; }}
+            public static bool softShiftAlt { get { return DeGUIKey.softShift && DeGUIKey.softAlt && !DeGUIKey.ctrl; }}
         }
     }
 }

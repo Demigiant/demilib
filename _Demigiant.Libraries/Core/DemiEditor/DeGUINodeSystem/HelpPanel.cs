@@ -36,30 +36,30 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             // Write down help content
             // GENERAL
-            ContentGroup general = AddContentGroup("General");
-            general.AppendDefinition("Open/Close Help Panel").AddKey("F1");
-            general.AppendDefinition("Pan area").AddKey("MMB → Drag");
-            general.AppendDefinition("Zoom in/out (if allowed)").AddKey("CTRL+Scrollwheel");
-            general.AppendDefinition("Show extra UI buttons").AddKey("ALT");
-            general.AppendDefinition("Background context menu").AddKey("RMB");
+            ContentGroup cGroup = AddContentGroup("General");
+            cGroup.AppendDefinition("Open/Close Help Panel").AddKey("F1");
+            cGroup.AppendDefinition("Pan area").AddKey("MMB → Drag");
+            cGroup.AppendDefinition("Zoom in/out (if allowed)").AddKey("CTRL+Scrollwheel");
+            cGroup.AppendDefinition("Show extra UI buttons").AddKey("ALT");
+            cGroup.AppendDefinition("Background context menu").AddKey("RMB");
             // SELECTION
-            ContentGroup selection = AddContentGroup("Selection");
-            selection.AppendDefinition("Select all nodes").AddKey("CTRL+A");
-            selection.AppendDefinition("Draw selection rect").AddKey("LMB → Drag").AddKeyTarget("on background");
-            selection.AppendDefinition("Draw selection rect (add)").AddKey("SHIFT+LMB → Drag").AddKeyTarget("on background");
-            selection.AppendDefinition("Add/Remove node from selection").AddKey("SHIFT+LMB").AddKeyTarget("on node");
-            selection.AppendDefinition("Add node plus all forward connected nodes to selection").AddKey("SHIFT+ALT+LMB").AddKeyTarget("on node");
+            cGroup = AddContentGroup("Selection");
+            cGroup.AppendDefinition("Select all nodes").AddKey("CTRL+A");
+            cGroup.AppendDefinition("Draw selection rect").AddKey("LMB → Drag").AddKeyTarget("on background");
+            cGroup.AppendDefinition("Draw selection rect (add)").AddKey("SHIFT+LMB → Drag").AddKeyTarget("on background");
+            cGroup.AppendDefinition("Add/Remove node from selection").AddKey("SHIFT+LMB").AddKeyTarget("on node");
+            cGroup.AppendDefinition("Add node plus all forward connected nodes to selection").AddKey("SHIFT+ALT+LMB").AddKeyTarget("on node");
             // NODE MANIPULATION
-            ContentGroup nodes = AddContentGroup("Nodes Manipulation");
-            nodes.AppendDefinition("Delete selected nodes").AddKey("DELETE").AddKey("BACKSPACE");
-            nodes.AppendDefinition("Copy selected nodes").AddKey("CTRL+C");
-            nodes.AppendDefinition("Paste nodes").AddKey("CTRL+V");
-            nodes.AppendDefinition("Move selected nodes by 1 pixel").AddKey("ARROWS");
-            nodes.AppendDefinition("Move selected nodes by 10 pixel").AddKey("SHIFT+ARROWS");
-            nodes.AppendDefinition("Disable snapping while dragging nodes").AddKey("ALT");
-            nodes.AppendDefinition("Drag new connection from node (if allowed)").AddKey("CTRL+LMB → Drag");
-            nodes.AppendDefinition("Clone selected nodes and drag them").AddKey("SHIFT+CTRL+LMB → Drag");
-            nodes.AppendDefinition("Node context menu").AddKey("RMB");
+            cGroup = AddContentGroup("Nodes Manipulation");
+            cGroup.AppendDefinition("Delete selected nodes").AddKey("DELETE").AddKey("BACKSPACE");
+            cGroup.AppendDefinition("Copy selected nodes").AddKey("CTRL+C");
+            cGroup.AppendDefinition("Paste nodes").AddKey("CTRL+V");
+            cGroup.AppendDefinition("Move selected nodes by 1 pixel").AddKey("ARROWS");
+            cGroup.AppendDefinition("Move selected nodes by 10 pixel").AddKey("SHIFT+ARROWS");
+            cGroup.AppendDefinition("Disable snapping while dragging nodes").AddKey("ALT");
+            cGroup.AppendDefinition("Drag new connection from node (if allowed)").AddKey("CTRL+LMB → Drag");
+            cGroup.AppendDefinition("Clone selected nodes and drag them").AddKey("SHIFT+CTRL+LMB → Drag");
+            cGroup.AppendDefinition("Node context menu").AddKey("RMB");
         }
 
         #endregion

@@ -2,8 +2,10 @@
 // Created: 2017/04/23 19:32
 // License Copyright (c) Daniele Giardini
 
+using System;
 using System.Collections.Generic;
 using DG.DemiLib;
+using UnityEditor;
 
 namespace DG.DemiEditor.DeGUINodeSystem.Core
 {
@@ -17,7 +19,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         public readonly Dictionary<IEditorGUINode,IEditorGUINode> nodeToOriginalNode = new Dictionary<IEditorGUINode,IEditorGUINode>();
         public readonly Dictionary<IEditorGUINode,NodeGUIData> nodeToOriginalGuiData = new Dictionary<IEditorGUINode,NodeGUIData>();
         public readonly Dictionary<IEditorGUINode,NodeConnectionOptions> nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
+        public bool hasContent { get { return EditorGUIUtility.systemCopyBuffer == _copyBufferId && nodes.Count > 0; } }
 
+        readonly string _copyBufferId; // Store in OS clipboard to indicate that there's nodes ready to be pasted for this process
         NodeProcess _process;
 
         #region CONSTRUCTOR
@@ -25,6 +29,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         public NodesClipboard(NodeProcess process)
         {
             _process = process;
+            _copyBufferId = "[[[[!?NODES?!]]]]" + Guid.NewGuid().ToString();
         }
 
         #endregion
@@ -47,6 +52,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             nodeToOriginalNode.Add(node, originalNode);
             nodeToOriginalGuiData.Add(node, _process.nodeToGUIData[originalNode]);
             nodeToConnectionOptions.Add(node, connectionOptions);
+            EditorGUIUtility.systemCopyBuffer = _copyBufferId;
         }
 
         public IEditorGUINode GetClipboardCloneByOriginalId(string id)
