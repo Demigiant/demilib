@@ -85,6 +85,26 @@ namespace DG.DeExtensions
             return (T)defaultValue;
         }
 
+        /// <summary>
+        /// Compares a version string (in format #.#.###) with another of the same format,
+        /// and return TRUE if this one is minor. Boths trings must have the same number of dot separators.
+        /// </summary>
+        public static bool VersionIsMinorThan(this string s, string version)
+        {
+            string[] thisV = s.Split('.');
+            string[] otherV = version.Split('.');
+            if (thisV.Length != otherV.Length) throw new ArgumentException("Invalid");
+            for (int i = 0; i < thisV.Length; ++i) {
+                int thisInt = Convert.ToInt32(thisV[i]);
+                int otherInt = Convert.ToInt32(otherV[i]);
+                if (i == thisV.Length - 1) return thisInt < otherInt;
+                else if (thisInt == otherInt) continue;
+                else if (thisInt < otherInt) return true;
+                else if (thisInt > otherInt) return false;
+            }
+            throw new ArgumentException("Invalid");
+        }
+
         #endregion
         
         #region Methods

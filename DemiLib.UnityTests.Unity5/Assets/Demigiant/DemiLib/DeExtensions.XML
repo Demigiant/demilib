@@ -169,6 +169,12 @@
             NOTE: doesn't use try/catch (TryParse) since on some platforms that won't work.
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.StringExtensions.VersionIsMinorThan(System.String,System.String)">
+            <summary>
+            Compares a version string (in format #.#.###) with another of the same format,
+            and return TRUE if this one is minor. Boths trings must have the same number of dot separators.
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.VectorExtensions.Round(UnityEngine.Vector2)">
             <summary>
             Returns a copy of the vector with its values rounded to integers, using Mathf.Round.
