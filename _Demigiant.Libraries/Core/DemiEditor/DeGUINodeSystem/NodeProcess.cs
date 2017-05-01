@@ -28,10 +28,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
         // ■■■ EVENTS
 
-        public event Action OnDeletedNodes;
-        public event Action OnAddedNodes;
-        void DispatchOnDeletedNodes() { if (OnDeletedNodes != null) OnDeletedNodes(); }
-        void DispatchOnAddedNodes() { if (OnAddedNodes != null) OnAddedNodes(); }
+        public event Action<GUIChangeType> OnGUIChange;
+        void DispatchOnGUIChange(GUIChangeType type) { if (OnGUIChange != null) OnGUIChange(type); }
 
         // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
@@ -42,7 +40,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             DragNodes,
             SortedNodes,
             DeletedNodes,
-            AddedNodes
+            AddedNodes,
+            NodeConnection // Node connection changed, added or removed
         }
 
         /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
@@ -470,6 +469,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         _nodeDragManager.ApplyDrag(Event.current.delta);
                         guiChangeType = GUIChangeType.DragNodes;
                         GUI.changed = _repaintOnEnd = true;
+                        DispatchOnGUIChange(GUIChangeType.DragNodes);
                         break;
                     case InteractionManager.State.DraggingConnector:
                         _repaintOnEnd = true;
@@ -482,6 +482,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     refAreaShift += Event.current.delta;
                     guiChangeType = GUIChangeType.Pan;
                     GUI.changed = _repaintOnEnd = true;
+                    DispatchOnGUIChange(GUIChangeType.Pan);
                     break;
                 }
                 break;
@@ -536,6 +537,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += shift;
                     guiChangeType = GUIChangeType.DragNodes;
                     GUI.changed = _repaintOnEnd = true;
+                    DispatchOnGUIChange(GUIChangeType.DragNodes);
                     break;
                 }
                 break;
@@ -562,7 +564,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     selection.DeselectAll();
                     guiChangeType = GUIChangeType.DeletedNodes;
                     GUI.changed = _repaintOnEnd = true;
-                    DispatchOnDeletedNodes();
+                    DispatchOnGUIChange(GUIChangeType.DeletedNodes);
                     break;
                 case KeyCode.A:
                     if (DeGUIKey.Exclusive.softCtrl) {
@@ -585,7 +587,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             foreach (IEditorGUINode node in _clipboard.nodes) selection.Select(node, true);
                             guiChangeType = GUIChangeType.AddedNodes;
                             GUI.changed = _repaintOnEnd = true;
-                            DispatchOnAddedNodes();
+                            DispatchOnGUIChange(GUIChangeType.AddedNodes);
                         }
                     }
                     break;
@@ -621,8 +623,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         case ConnectionMode.Dual:
                             // Alt connection mode > add element to connectedNodeId 0 or 1 depending if SPACE is pressed or not
                             int connectionIndex = DeGUIKey.Exclusive.ctrl && DeGUIKey.Extra.space ? 1 : 0;
-                            Connector.dragData.node.connectedNodesIds[connectionIndex] = overNode.id;
-                            GUI.changed = true;
+                            if (Connector.dragData.node.connectedNodesIds[connectionIndex] != overNode.id) {
+                                Connector.dragData.node.connectedNodesIds[connectionIndex] = overNode.id;
+                                guiChangeType = GUIChangeType.NodeConnection;
+                                GUI.changed = true;
+                                DispatchOnGUIChange(GUIChangeType.NodeConnection);
+                            }
                             break;
                         case ConnectionMode.Flexible:
                             // Flexible connection > add new element to connectedNodesIds
@@ -637,13 +643,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                 }
                                 // Otherwise add new one
                                 if (!assignedToExistingConnection) Connector.dragData.node.connectedNodesIds.Add(overNode.id);
+                                guiChangeType = GUIChangeType.NodeConnection;
                                 GUI.changed = true;
+                                DispatchOnGUIChange(GUIChangeType.NodeConnection);
                             }
                             break;
                         default:
                             // Normal connection, use existing connection index
-                            Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] = overNode.id;
-                            GUI.changed = true;
+                            if (Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] != overNode.id) {
+                                Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] = overNode.id;
+                                guiChangeType = GUIChangeType.NodeConnection;
+                                GUI.changed = true;
+                                DispatchOnGUIChange(GUIChangeType.NodeConnection);
+                            }
                             break;
                         }
                         _repaintOnEnd = true;
@@ -652,7 +664,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         if (_nodeToConnectionOptions[Connector.dragData.node].connectionMode != ConnectionMode.Flexible) {
                             bool changed = !string.IsNullOrEmpty(Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex]);
                             Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] = null;
-                            if (changed) GUI.changed = true;
+                            if (changed) {
+                                guiChangeType = GUIChangeType.NodeConnection;
+                                GUI.changed = true;
+                                DispatchOnGUIChange(GUIChangeType.NodeConnection);
+                            }
                         }
                         _repaintOnEnd = true;
                     }
@@ -703,7 +719,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     }
                 }
                 if (aConnectionWasDeleted) {
+                    guiChangeType = GUIChangeType.NodeConnection;
                     GUI.changed = _repaintOnEnd = true;
+                    DispatchOnGUIChange(GUIChangeType.NodeConnection);
                 }
                 break;
             }
@@ -982,6 +1000,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             }
             guiChangeType = GUIChangeType.SortedNodes;
             GUI.changed = _repaintOnEnd = true;
+            DispatchOnGUIChange(GUIChangeType.SortedNodes);
         }
 
         // Adds all forward connected nodes to selection, paying attention not to select a node twice

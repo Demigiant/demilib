@@ -332,6 +332,12 @@
             Use this to add a content group to the Help Panel
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.HelpPanel.ContentGroup.AppendDefinition(System.String)">
+            <summary>
+            Add definition. Supports rich-text but also these special tags:<para/>
+            - [b][/b]
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.HelpPanel.Definition.AddKey(System.String)">
             <summary>
             Add key on new line, automatically formatting these special keys:<para/>

@@ -15,7 +15,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
     {
         public bool isOpen { get; private set; }
 
-        const int _InnerPadding = 11;
+        const int _InnerPadding = 14;
         static readonly Styles _Styles = new Styles();
         static readonly Color _EvidenceColor = new Color(0.05490196f, 0.5960785f, 0.9725491f, 1f);
         static readonly Color _DescriptionColor = new Color(0.5998054f, 0.7537874f, 0.9485294f, 1f);
@@ -37,7 +37,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Write down help content
             // GENERAL
             ContentGroup cGroup = AddContentGroup("General");
-            cGroup.AppendDefinition("Open/Close Help Panel").AddKey("F1");
+            cGroup.AppendDefinition("Open/Close [b]Help Panel[/b]").AddKey("F1");
             cGroup.AppendDefinition("Pan area").AddKey("MMB → Drag");
             cGroup.AppendDefinition("Zoom in/out (if allowed)").AddKey("CTRL+Scrollwheel");
             cGroup.AppendDefinition("Show extra UI buttons").AddKey("ALT");
@@ -157,6 +157,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 this.title = title;
                 this.description = description;
             }
+            /// <summary>
+            /// Add definition. Supports rich-text but also these special tags:<para/>
+            /// - [b][/b]
+            /// </summary>
             public Definition AppendDefinition(string value)
             {
                 Definition definition = new Definition(value);
@@ -171,7 +175,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             internal string keys;
             internal Definition(string value)
             {
-                definition = value;
+                definition = value.Replace("[b]", "<color=#ffffff><b>");
+                definition = definition.Replace("[/b]", "</b></color>");
                 keys = "";
             }
             /// <summary>
@@ -211,11 +216,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 rowBox = new GUIStyle().Margin(0).Padding(0).Background(DeStylePalette.whiteSquare).StretchWidth();
                 titleLabel = new GUIStyle(GUI.skin.label).Add(16, Color.white, Format.RichText).Background(DeStylePalette.blueSquare)
                     .Padding(_InnerPadding, _InnerPadding, 4, 4).Margin(0).StretchWidth();
-                groupTitleLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, Color.white).Background(DeStylePalette.blueSquare)
+                groupTitleLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, Format.RichText, Color.white).Background(DeStylePalette.blueSquare)
                     .Padding(_InnerPadding, 4, 8, 4).Margin(0).StretchWidth();
-                descriptionLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, _DescriptionColor).Background(DeStylePalette.whiteSquare)
+                descriptionLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, Format.RichText, _DescriptionColor).Background(DeStylePalette.whiteSquare)
                     .Padding(_InnerPadding, 4, 4, 4).Margin(0).StretchWidth();
-                definitionLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, new DeSkinColor(0.75f))
+                definitionLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, Format.RichText, new DeSkinColor(0.75f))
                     .Padding(_InnerPadding, 4, 4, 4).Margin(0);
                 keysLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, Format.RichText, _KeysColor)
                     .Padding(0, _InnerPadding, 4, 4).Margin(0);
