@@ -223,7 +223,7 @@ namespace DG.DemiEditor
         public GUIStyle def,
                         flat, flatAlpha10, flatAlpha25, // Flat with white background
                         sticky, stickyTop, // Without any margin (or only top margin)
-                        outline01, outline02, outline03;
+                        outline01, outline02, outline03, roundOutline01, roundOutline02;
 
         internal void Init()
         {
@@ -236,6 +236,8 @@ namespace DG.DemiEditor
             outline01 = DeGUI.styles.box.flat.Clone().Background(DeStylePalette.squareBorderEmpty01);
             outline02 = outline01.Clone().Border(new RectOffset(5, 5, 5, 5)).Background(DeStylePalette.squareBorderEmpty02);
             outline03 = outline01.Clone().Border(new RectOffset(7, 7, 7, 7)).Background(DeStylePalette.squareBorderEmpty03);
+            roundOutline01 = outline02.Clone().Background(DeStylePalette.squareBorderCurvedEmpty);
+            roundOutline02 = outline02.Clone().Background(DeStylePalette.squareBorderCurvedEmptyThick);
         }
     }
 
