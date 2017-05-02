@@ -78,6 +78,10 @@ public class DeSamplerInspector : Editor
         GUILayout.EndVertical();
         GUILayout.Space(_vSpace);
 
+        // Press button
+
+        DeGUILayout.PressButton("Press Button", DeGUI.styles.button.def);
+
         // Toolbars + toolbar content
 
         using (new DeGUILayout.ToolbarScope()) {
