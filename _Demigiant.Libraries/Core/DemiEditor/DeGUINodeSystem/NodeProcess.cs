@@ -76,7 +76,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Func<IEditorGUINode,IEditorGUINode,bool> _onCloneNodeCallback; // Returns FALSE if cloning shouldn't happen
         bool _repaintOnEnd; // If TRUE, repaints the editor during EndGUI. Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
-        bool _isAltPressed; // Used to prevent a repaint when ALT is being kept pressed
+//        bool _isAltPressed; // Used to prevent a repaint when ALT is being kept pressed
 
         #region CONSTRUCTOR
 
@@ -315,7 +315,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             }
 
             // Update interaction and DeGUIKey
-            DeGUIKey.Refresh();
+            DeGUIKey.KeysRefreshResult refreshResult = DeGUIKey.Refresh("INTERNAL_DeGUINodeProcess");
+            if (refreshResult.pressed.alt || refreshResult.released.alt) _repaintOnEnd = true;
             if (interaction.Update()) _repaintOnEnd = true;
 
             // Background grid
@@ -514,8 +515,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case KeyCode.LeftAlt:
                 case KeyCode.RightAlt:
                 case KeyCode.AltGr:
-                    if (_isAltPressed) break;
-                    _isAltPressed = _repaintOnEnd = true;
+//                    if (_isAltPressed) break;
+//                    _isAltPressed = _repaintOnEnd = true;
                     break;
                 case KeyCode.UpArrow:
                 case KeyCode.DownArrow:
@@ -543,10 +544,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 break;
             case EventType.KeyUp:
-                if (_isAltPressed && !Event.current.alt) {
-                    _isAltPressed = false;
-                    _repaintOnEnd = true;
-                }
+//                if (_isAltPressed && !Event.current.alt) {
+//                    _isAltPressed = false;
+//                    _repaintOnEnd = true;
+//                }
                 if (GUIUtility.keyboardControl > 0) break; // Ignore keys if textField is focused
                 switch (Event.current.keyCode) {
                 case KeyCode.F1:
@@ -595,8 +596,20 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 break;
             }
-            // RAW MOUSE EVENTS (used to capture mouseUp also outside editorWindow) //////////////////////////////////////////////////////
+
             switch (Event.current.rawType) {
+//            // RAW KEY EVENTS ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//            case EventType.KeyDown:
+//                if (_isAltPressed) break;
+//                _isAltPressed = _repaintOnEnd = true;
+//                break;
+//            case EventType.KeyUp:
+//                if (_isAltPressed && !Event.current.alt) {
+//                    _isAltPressed = false;
+//                    _repaintOnEnd = true;
+//                }
+//                break;
+            // RAW MOUSE EVENTS (used to capture mouseUp also outside editorWindow) //////////////////////////////////////////////////////
             case EventType.MouseUp:
                 switch (interaction.state) {
                 case InteractionManager.State.Inactive:

@@ -250,7 +250,7 @@ namespace DG.DemiEditor
                         toolLFoldoutClosed, toolLFoldoutClosedWLabel, toolLFoldoutClosedWStretchedLabel,
                         toolLFoldoutOpen, toolLFoldoutOpenWLabel, toolLFoldoutOpenWStretchedLabel,
                         bBlankBorder, bBlankBorderCompact,
-                        flatWhite;
+                        flatWhite, transparent;
 
         internal void Init()
         {
@@ -301,6 +301,7 @@ namespace DG.DemiEditor
             bBlankBorderCompact = bBlankBorder.Clone().Padding(0, 1, 0, 0).ContentOffsetY(-1);
             flatWhite = DeGUI.styles.button.tool.Clone(TextAnchor.MiddleCenter).Background(DeStylePalette.whiteSquare).Margin(0).Padding(0)
                 .Border(0, 0, 0, 0).Overflow(0).Height(0).ContentOffset(0, 0);
+            transparent = flatWhite.Clone().Background(null);
         }
     }
 

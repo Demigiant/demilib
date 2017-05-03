@@ -180,25 +180,25 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 keys = "";
             }
             /// <summary>
-            /// Add key on new line, automatically formatting these special keys:<para/>
+            /// Add key, automatically formatting these special keys:<para/>
             /// /<para/>
             /// +<para/>
             /// →
             /// </summary>
-            public Definition AddKey(string value)
+            /// <param name="newLine">If TRUE and there's other keys/targets, adds the new key on a new line preceded by a comma</param>
+            public Definition AddKey(string value, bool newLine = true)
             {
                 if (string.IsNullOrEmpty(keys)) keys = value;
-                else keys += ",\n" + value;
-                keys = keys.Replace("/", "<color=#ffffff>/</color>");
+                else keys += (newLine ? ",\n" : "") + value;
+                keys = keys.Replace("\\", "<color=#ffffff>\\</color>");
                 keys = keys.Replace("+", "<color=#ffffff>+</color>");
                 keys = keys.Replace("→", "<color=#ffffff><b>→</b></color>");
                 keys = keys.Replace(",", "<color=#ffffff>,</color>");
                 return this;
             }
-
-            public Definition AddKeyTarget(string value)
+            public Definition AddKeyTarget(string value, bool addSpace = true)
             {
-                keys = string.Format("{0} <color=#ffffff>{1}</color>", keys, value);
+                keys = string.Format("{0}{1}<color=#ffffff>{2}</color>", keys, addSpace ? " " : "", value);
                 return this;
             }
         }

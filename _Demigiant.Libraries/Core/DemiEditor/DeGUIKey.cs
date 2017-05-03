@@ -2,6 +2,7 @@
 // Created: 2017/04/24 12:40
 // License Copyright (c) Daniele Giardini
 
+using System.Collections.Generic;
 using DG.DemiEditor.DeGUINodeSystem;
 using UnityEngine;
 
@@ -40,40 +41,56 @@ namespace DG.DemiEditor
 
         const float _SoftDelay = 0.2f;
         static float _timeAtShiftKeyRelease, _timeAtCtrlKeyRelease, _timeAtAltKeyRelease;
+        static readonly Dictionary<string,Keys> _idToDownKeysAtLastPass = new Dictionary<string, Keys>();
 
         #region Internal Methods
 
         /// <summary>
         /// Call this method to update data required by softCtrl calculations.
-        /// Automatically called from within a <see cref="NodeProcessScope{T}"/>.
+        /// Automatically called from within a <see cref="NodeProcessScope{T}"/>.<para/>
+        /// Returns a <see cref="KeysRefreshResult"/> object with the keys that were just pressed and just released
         /// </summary>
-        public static void Refresh()
+        /// <param name="id">Required to have the correct <see cref="KeysRefreshResult"/> for the given target call</param>
+        public static KeysRefreshResult Refresh(string id)
         {
+            if (!_idToDownKeysAtLastPass.ContainsKey(id)) _idToDownKeysAtLastPass.Add(id, new Keys());
+            Keys downKeysAtLastPass = _idToDownKeysAtLastPass[id];
+            KeysRefreshResult result = new KeysRefreshResult();
             // Evaluate softControl and space keys
             if (Event.current.type == EventType.KeyDown) {
-                if (Event.current.keyCode == KeyCode.Space) Extra.space = true;
+                if (Event.current.keyCode == KeyCode.Space) {
+                    Extra.space = result.pressed.space = true;
+                }
+                result.pressed.shift = shift && !downKeysAtLastPass.shift;
+                result.pressed.ctrl = ctrl && !downKeysAtLastPass.ctrl;
+                result.pressed.alt = alt && !downKeysAtLastPass.alt;
             } else if (Event.current.rawType == EventType.KeyUp) {
                 switch (Event.current.keyCode) {
                 case KeyCode.LeftShift:
                 case KeyCode.RightShift:
+                    result.released.shift = true;
                     _timeAtShiftKeyRelease = Time.realtimeSinceStartup;
                     break;
                 case KeyCode.LeftControl:
                 case KeyCode.RightControl:
                 case KeyCode.LeftCommand:
                 case KeyCode.RightCommand:
+                    result.released.ctrl = true;
                     _timeAtCtrlKeyRelease = Time.realtimeSinceStartup;
                     break;
                 case KeyCode.LeftAlt:
                 case KeyCode.RightAlt:
-                case KeyCode.AltGr:
+//                case KeyCode.AltGr: // Ignore AltGr
+                    result.released.alt = true;
                     _timeAtAltKeyRelease = Time.realtimeSinceStartup;
                     break;
                 case KeyCode.Space:
-                    Extra.space = false;
+                    Extra.space = result.released.space = false;
                     break;
                 }
             }
+            downKeysAtLastPass.Refresh(shift, ctrl, alt, Extra.space);
+            return result;
         }
 
         /// <summary>
@@ -147,6 +164,25 @@ namespace DG.DemiEditor
             public static bool softCtrlShift { get { return DeGUIKey.softCtrl && DeGUIKey.softShift && !DeGUIKey.alt; }}
             public static bool softCtrlAlt { get { return DeGUIKey.softCtrl && DeGUIKey.softAlt && !DeGUIKey.shift; }}
             public static bool softShiftAlt { get { return DeGUIKey.softShift && DeGUIKey.softAlt && !DeGUIKey.ctrl; }}
+        }
+
+        public struct Keys
+        {
+            public bool shift, ctrl, alt;
+            public bool space;
+
+            public void Refresh(bool shift, bool ctrl, bool alt, bool space)
+            {
+                this.shift = shift;
+                this.ctrl = ctrl;
+                this.alt = alt;
+                this.space = space;
+            }
+        }
+
+        public struct KeysRefreshResult
+        {
+            public Keys pressed, released;
         }
     }
 }
