@@ -1,8 +1,10 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/05/01 01:50
 
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
@@ -41,6 +43,8 @@ namespace DG.DemiEditor
         /// </summary>
         public static string assetsPath { get { return projectPath + PathSlash + "Assets"; } }
 
+        static readonly StringBuilder _Strb = new StringBuilder();
+        static readonly Char[] _ValidFilenameChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-()!.$&+- ".ToCharArray();
         static string _fooProjectPath;
 
         #region Constructor
@@ -84,15 +88,47 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
-        /// Converts the given string to a valid filename and returns it.
-        /// Beware: doesn't check for reserved words
+        /// Validates the string as a valid fileName
+        /// (uses commonly accepted characters an all systems instead of system-specific ones).<para/>
+        /// BEWARE: doesn't check for reserved words
         /// </summary>
-        public static string ConvertToValidFilename(string text)
+        /// <param name="s">string to replace</param>
+        /// <param name="minLength">Minimum length for considering the string valid</param>
+        public static bool IsValidFileName(string s, int minLength = 2)
         {
-            string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(Path.GetInvalidFileNameChars()) + ":");
-            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-            return Regex.Replace(text, invalidRegStr, "_");
+            if (string.IsNullOrEmpty(s) || s.Length < minLength) return false;
+            foreach (char c in s) {
+                if (Array.IndexOf(_ValidFilenameChars, c) == -1) return false;
+            }
+            return true;
         }
+
+        /// <summary>
+        /// Returns the given string stripped of any invalid filename characters.<para/>
+        /// BEWARE: doesn't check for reserved words
+        /// </summary>
+        /// <param name="s">string to replace</param>
+        /// <param name="replaceWith">Character to use as replacement for invalid ones</param>
+        public static string ConvertToValidFilename(string s, char replaceWith = '_')
+        {
+            _Strb.Length = 0;
+            char[] schars = s.ToCharArray();
+            foreach (char c in schars) {
+                _Strb.Append(Array.IndexOf(_ValidFilenameChars, c) == -1 ? replaceWith : c);
+            }
+            return _Strb.ToString();
+        }
+
+//        /// <summary>
+//        /// Converts the given string to a valid filename and returns it.
+//        /// Beware: doesn't check for reserved words
+//        /// </summary>
+//        public static string ConvertToValidFilename(string text)
+//        {
+//            string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(Path.GetInvalidFileNameChars()) + ":");
+//            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+//            return Regex.Replace(text, invalidRegStr, "_");
+//        }
 
         /// <summary>
         /// Returns the asset path of the given GUID (relative to Unity project's folder),

@@ -47,11 +47,22 @@
             </summary>
             <param name="adbPath">Path, relative to Unity's project folder</param>
         </member>
-        <member name="M:DG.DemiEditor.DeEditorFileUtils.ConvertToValidFilename(System.String)">
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.IsValidFileName(System.String,System.Int32)">
             <summary>
-            Converts the given string to a valid filename and returns it.
-            Beware: doesn't check for reserved words
+            Validates the string as a valid fileName
+            (uses commonly accepted characters an all systems instead of system-specific ones).<para/>
+            BEWARE: doesn't check for reserved words
             </summary>
+            <param name="s">string to replace</param>
+            <param name="minLength">Minimum length for considering the string valid</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.ConvertToValidFilename(System.String,System.Char)">
+            <summary>
+            Returns the given string stripped of any invalid filename characters.<para/>
+            BEWARE: doesn't check for reserved words
+            </summary>
+            <param name="s">string to replace</param>
+            <param name="replaceWith">Character to use as replacement for invalid ones</param>
         </member>
         <member name="M:DG.DemiEditor.DeEditorFileUtils.GUIDToExistingAssetPath(System.String)">
             <summary>
