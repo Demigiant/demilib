@@ -25,7 +25,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
         {
             if (_attr == null) return;
 
-            SetStyles();
+            SetStyles(_attr);
 
             GUILayout.Space(-1);
             using (new GUILayout.HorizontalScope()) {
@@ -36,11 +36,11 @@ namespace DG.DeInspektorEditor.AttributesManagers
             }
         }
 
-        static void SetStyles()
+        void SetStyles(DeComponentDescriptionAttribute attr)
         {
             if (_attrStyle != null) return;
 
-            _attrStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, 9, Format.RichText, new DeSkinColor(0.2f, 0.58f))
+            _attrStyle = new GUIStyle(GUI.skin.box).Add(TextAnchor.MiddleLeft, attr.fontSize, Format.RichText, new DeSkinColor(0.2f, 0.58f))
                 .Padding(4, 4 + 4, 3, 4).Margin(0, 0, 0, 2).Background(DeStylePalette.whiteSquare_fadeOut_bt).StretchWidth();
         }
     }

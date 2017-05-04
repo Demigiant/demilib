@@ -2,6 +2,7 @@
 // Created: 2015/12/04 15:08
 // License Copyright (c) Daniele Giardini
 
+using System;
 using UnityEngine;
 
 namespace DG.DeExtensions
@@ -51,6 +52,60 @@ namespace DG.DeExtensions
                 if (t.tag == tag) return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Returns ONLY the Components in the children, and ignores the parent.
+        /// </summary>
+        /// <param name="includeInactive">If TRUE also includes inactive children</param>
+        public static T[] GetOnlyComponentsInChildren<T>(this GameObject go, bool includeInactive = false) where T : Component
+        {
+            T[] components = go.GetComponentsInChildren<T>(includeInactive);
+            int len = components.Length;
+            if (len == 0) return components;
+
+            T thisT = go.GetComponent<T>();
+            if (thisT == null) return components;
+
+            T lastT = components[components.Length - 1];
+            len--;
+            Array.Resize(ref components, len);
+            bool requiresShifting = false;
+            for (int i = 0; i < len; ++i) {
+                T f = components[i];
+                if (f == thisT) requiresShifting = true;
+                if (requiresShifting) {
+                    if (i < len - 1) components[i] = components[i + 1];
+                    else components[i] = lastT;
+                }
+            }
+            return components;
+        }
+
+        /// <summary>
+        /// Returns the Component only if it's in a child, and ignores the parent.
+        /// </summary>
+        /// <param name="includeInactive">If TRUE also searches inactive children</param>
+        public static T GetOnlyComponentInChildren<T>(this GameObject go, bool includeInactive = false) where T : Component
+        {
+            T component = go.GetComponentInChildren<T>(includeInactive);
+            if (component.transform == go.transform) return null;
+            return component;
+        }
+
+        /// <summary>
+        /// Finds the component in the given MonoBehaviour or its parents, with options to choose if ignoring inactive objects or not
+        /// </summary>
+        /// <param name="includeInactive">If TRUE also searches inactive parents</param>
+        public static T GetComponentInParentExtended<T>(this GameObject go, bool includeInactive = false) where T : Component
+        {
+            T result = null;
+            Transform target = go.transform;
+            while (target.parent != null && result == null) {
+                if (includeInactive || target.gameObject.activeInHierarchy) result = target.gameObject.GetComponent<T>();
+                target = target.parent;
+            }
+            return result;
         }
     }
 }

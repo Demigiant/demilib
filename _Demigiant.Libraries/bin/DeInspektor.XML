@@ -166,11 +166,12 @@
             - mode
             </summary>
         </member>
-        <member name="M:DG.DeInspektor.Attributes.DeComponentDescriptionAttribute.#ctor(System.String)">
+        <member name="M:DG.DeInspektor.Attributes.DeComponentDescriptionAttribute.#ctor(System.String,System.Int32)">
             <summary>
             Shows a description for this MonoBehaviour before any other field.
             </summary>
             <param name="text">Text</param>
+            <param name="fontSize">Font size</param>
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeRangeAttribute">
             <summary>

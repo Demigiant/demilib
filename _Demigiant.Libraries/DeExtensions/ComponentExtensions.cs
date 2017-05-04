@@ -15,26 +15,7 @@ namespace DG.DeExtensions
         /// <param name="includeInactive">If TRUE also includes inactive children</param>
         public static T[] GetOnlyComponentsInChildren<T>(this MonoBehaviour m, bool includeInactive = false) where T : Component
         {
-            T[] components = m.GetComponentsInChildren<T>(includeInactive);
-            int len = components.Length;
-            if (len == 0) return components;
-
-            T thisT = m.GetComponent<T>();
-            if (thisT == null) return components;
-
-            T lastT = components[components.Length - 1];
-            len--;
-            Array.Resize(ref components, len);
-            bool requiresShifting = false;
-            for (int i = 0; i < len; ++i) {
-                T f = components[i];
-                if (f == thisT) requiresShifting = true;
-                if (requiresShifting) {
-                    if (i < len - 1) components[i] = components[i + 1];
-                    else components[i] = lastT;
-                }
-            }
-            return components;
+            return m.gameObject.GetOnlyComponentsInChildren<T>(includeInactive);
         }
 
         /// <summary>
@@ -43,9 +24,16 @@ namespace DG.DeExtensions
         /// <param name="includeInactive">If TRUE also searches inactive children</param>
         public static T GetOnlyComponentInChildren<T>(this MonoBehaviour m, bool includeInactive = false) where T : Component
         {
-            T component = m.GetComponentInChildren<T>(includeInactive);
-            if (component.transform == m.transform) return null;
-            return component;
+            return m.gameObject.GetOnlyComponentInChildren<T>(includeInactive);
+        }
+
+        /// <summary>
+        /// Finds the component in the given MonoBehaviour or its parents, with options to choose if ignoring inactive objects or not
+        /// </summary>
+        /// <param name="includeInactive">If TRUE also searches inactive parents</param>
+        public static T GetComponentInParentExtended<T>(this MonoBehaviour m, bool includeInactive = false) where T : Component
+        {
+            return m.gameObject.GetComponentInParentExtended<T>(includeInactive);
         }
     }
 }

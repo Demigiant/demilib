@@ -35,6 +35,12 @@
             </summary>
             <param name="includeInactive">If TRUE also searches inactive children</param>
         </member>
+        <member name="M:DG.DeExtensions.ComponentExtensions.GetComponentInParentExtended``1(UnityEngine.MonoBehaviour,System.Boolean)">
+            <summary>
+            Finds the component in the given MonoBehaviour or its parents, with options to choose if ignoring inactive objects or not
+            </summary>
+            <param name="includeInactive">If TRUE also searches inactive parents</param>
+        </member>
         <member name="M:DG.DeExtensions.GameObjectExtensions.AwakeAndDeactivate(UnityEngine.GameObject)">
             <summary>
             Activates then immediately deactivates the target gameObject.
@@ -53,6 +59,24 @@
         </member>
         <member name="M:DG.DeExtensions.GameObjectExtensions.HasOrIsChildOfTag(UnityEngine.GameObject,System.String)">
             <summary>Returns TRUE if the gameObject has or is a child of the given tag</summary>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.GetOnlyComponentsInChildren``1(UnityEngine.GameObject,System.Boolean)">
+            <summary>
+            Returns ONLY the Components in the children, and ignores the parent.
+            </summary>
+            <param name="includeInactive">If TRUE also includes inactive children</param>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.GetOnlyComponentInChildren``1(UnityEngine.GameObject,System.Boolean)">
+            <summary>
+            Returns the Component only if it's in a child, and ignores the parent.
+            </summary>
+            <param name="includeInactive">If TRUE also searches inactive children</param>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.GetComponentInParentExtended``1(UnityEngine.GameObject,System.Boolean)">
+            <summary>
+            Finds the component in the given MonoBehaviour or its parents, with options to choose if ignoring inactive objects or not
+            </summary>
+            <param name="includeInactive">If TRUE also searches inactive parents</param>
         </member>
         <member name="T:DG.DeExtensions.ListExtensions">
             <summary>

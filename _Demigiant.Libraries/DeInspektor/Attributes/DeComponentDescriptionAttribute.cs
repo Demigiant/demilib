@@ -16,14 +16,17 @@ namespace DG.DeInspektor.Attributes
     public class DeComponentDescriptionAttribute : Attribute
     {
         internal string text;
+        internal int fontSize;
 
         /// <summary>
         /// Shows a description for this MonoBehaviour before any other field.
         /// </summary>
         /// <param name="text">Text</param>
-        public DeComponentDescriptionAttribute(string text)
+        /// <param name="fontSize">Font size</param>
+        public DeComponentDescriptionAttribute(string text, int fontSize = 9)
         {
             this.text = text;
+            this.fontSize = fontSize;
         }
     }
 }
