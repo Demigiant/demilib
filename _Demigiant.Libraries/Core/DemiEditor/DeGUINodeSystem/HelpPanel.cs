@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System.Collections.Generic;
+using System.Text;
 using DG.DemiLib;
 using UnityEngine;
 
@@ -27,6 +28,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly List<ContentGroup> _ContentGroups = new List<ContentGroup>();
         bool _layoutReady; // Used to prevent a repaint until a layout has happened
         Vector2 _scroll;
+
+        static readonly StringBuilder _Strb = new StringBuilder();
 
         #region Constructor
 
@@ -98,6 +101,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             DeGUILayout.HorizontalDivider(_EvidenceColor, 1, 0, 0);
             int descriptionWidth = (int)Mathf.Min(area.width * 0.6f, 350);
             foreach (ContentGroup contentGroup in _ContentGroups) {
+                contentGroup.Parse();
                 GUILayout.Label(contentGroup.title, _Styles.groupTitleLabel);
                 if (!string.IsNullOrEmpty(contentGroup.description)) {
                     using (new DeGUI.ColorScope(_DescriptionBGColor)) GUILayout.Label(contentGroup.description, _Styles.descriptionLabel);
@@ -106,7 +110,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     Definition definition = contentGroup.definitions[r];
                     using (new DeGUI.ColorScope(r % 2 == 0 ? _RowColor0 : _RowColor1)) GUILayout.BeginHorizontal(_Styles.rowBox);
                     GUILayout.Label(definition.definition, _Styles.definitionLabel, GUILayout.Width(descriptionWidth));
-                    GUILayout.Label(definition.keys, _Styles.keysLabel);
+                    if (definition.keys != null) GUILayout.Label(definition.keys, _Styles.keysLabel);
                     GUILayout.EndHorizontal();
                 }
             }
@@ -152,6 +156,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             internal readonly string title;
             internal readonly string description;
             internal readonly List<Definition> definitions = new List<Definition>();
+            bool _parsed;
             internal ContentGroup(string title, string description)
             {
                 this.title = title;
@@ -166,6 +171,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 Definition definition = new Definition(value);
                 definitions.Add(definition);
                 return definition;
+            }
+            internal void Parse()
+            {
+                if (_parsed) return;
+                _parsed = true;
+                foreach (Definition definition in definitions) definition.Parse();
             }
         }
 
@@ -190,16 +201,28 @@ namespace DG.DemiEditor.DeGUINodeSystem
             {
                 if (string.IsNullOrEmpty(keys)) keys = value;
                 else keys += (newLine ? ",\n" : "") + value;
-                keys = keys.Replace("\\", "<color=#ffffff>\\</color>");
-                keys = keys.Replace("+", "<color=#ffffff>+</color>");
-                keys = keys.Replace("→", "<color=#ffffff><b>→</b></color>");
-                keys = keys.Replace(",", "<color=#ffffff>,</color>");
                 return this;
             }
             public Definition AddKeyTarget(string value, bool addSpace = true)
             {
                 keys = string.Format("{0}{1}<color=#ffffff>{2}</color>", keys, addSpace ? " " : "", value);
                 return this;
+            }
+
+            internal void Parse()
+            {
+                // Surround chars with tags
+                _Strb.Length = 0;
+                for (int i = 0; i < keys.Length; ++i) {
+                    char c = keys[i];
+                    if (c == '\\' && (i == 0 || keys[i - 1] != '\\')) continue;
+                    if (c == '/' && (i == 0 || keys[i - 1] != '\\' &&  keys[i - 1] != '<')) _Strb.Append("<color=#ffffff>/</color>");
+                    else if (c == '+' && (i == 0 || keys[i - 1] != '\\')) _Strb.Append("<color=#ffffff>+</color>");
+                    else if (c == '→' && (i == 0 || keys[i - 1] != '\\')) _Strb.Append("<color=#ffffff>→</color>");
+                    else if (c == ',' && (i == 0 || keys[i - 1] != '\\')) _Strb.Append("<color=#ffffff>,</color>");
+                    else _Strb.Append(c);
+                }
+                keys = _Strb.ToString();
             }
         }
 
