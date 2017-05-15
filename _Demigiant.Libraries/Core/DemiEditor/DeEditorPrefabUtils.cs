@@ -57,13 +57,15 @@ namespace DG.DemiEditor
             string name = prefabInstance.name;
             Transform transform = prefabInstance.transform;
             Transform parent = transform.parent;
+            int index = transform.GetSiblingIndex();
             // Unparent the GO so that world transforms are preserved.
-            transform.parent = null;
+            transform.SetParent(null);
             // Clone and re-assign.
             GameObject newInstance = (GameObject)Object.Instantiate(prefabInstance);
             newInstance.name = name;
             newInstance.SetActive(prefabInstance.activeSelf);
-            newInstance.transform.parent = parent;
+            newInstance.transform.SetParent(parent);
+            newInstance.transform.SetSiblingIndex(index);
             // Remove old.
             Object.DestroyImmediate(prefabInstance, false);
         }

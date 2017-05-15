@@ -186,8 +186,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
             internal string keys;
             internal Definition(string value)
             {
-                definition = value.Replace("[b]", "<color=#ffffff><b>");
+                definition = value.Replace("[b]", "<color=#eeeeee><b>");
                 definition = definition.Replace("[/b]", "</b></color>");
+                definition = definition.Replace("[e]", "<color=#bcfdf6>");
+                definition = definition.Replace("[/e]", "</color>");
                 keys = "";
             }
             /// <summary>
