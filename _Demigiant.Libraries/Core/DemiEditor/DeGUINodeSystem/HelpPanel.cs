@@ -109,8 +109,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 for (int r = 0; r < contentGroup.definitions.Count; ++r) {
                     Definition definition = contentGroup.definitions[r];
                     using (new DeGUI.ColorScope(r % 2 == 0 ? _RowColor0 : _RowColor1)) GUILayout.BeginHorizontal(_Styles.rowBox);
-                    GUILayout.Label(definition.definition, _Styles.definitionLabel, GUILayout.Width(descriptionWidth));
-                    if (definition.keys != null) GUILayout.Label(definition.keys, _Styles.keysLabel);
+                    if (string.IsNullOrEmpty(definition.keys)) GUILayout.Label(definition.definition, _Styles.definitionLabel);
+                    else {
+                        GUILayout.Label(definition.definition, _Styles.definitionLabel, GUILayout.Width(descriptionWidth));
+                        GUILayout.Label(definition.keys, _Styles.keysLabel);
+                    }
                     GUILayout.EndHorizontal();
                 }
             }
@@ -213,6 +216,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             internal void Parse()
             {
+                if (string.IsNullOrEmpty(keys)) return;
+
                 // Surround chars with tags
                 _Strb.Length = 0;
                 for (int i = 0; i < keys.Length; ++i) {
