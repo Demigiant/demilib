@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace DG.DemiEditor.DeGUINodeSystem
 {
-    public class NodeProcessScope<T> : DeScope where T : IEditorGUINode, new()
+    public class NodeProcessScope<T> : DeScope where T : class, IEditorGUINode, new()
     {
         NodeProcess _process;
 

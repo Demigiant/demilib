@@ -320,6 +320,18 @@
             Stores cloned nodes for pasting
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.NodesClipboard.GetNodesToPaste``1">
+            <summary>
+            Returns a list of pasteable nodes, with their GUID recreated and their connections adapted
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.NodesClipboard.CloneNode``1(DG.DemiLib.IEditorGUINode)">
+            <summary>
+            Returns a clone of the given node (clones also lists, but leaves other references as references).
+            A new ID will be automatically generated.
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.Core.Connector">
             <summary>
             Always connects a node from BottomOrRight side to TopOrLeft side
@@ -433,12 +445,6 @@
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ToggleHelpPanel">
             <summary>
             Opens or closes the Help panel based on its current state
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.CloneNode``1(DG.DemiLib.IEditorGUINode)">
-            <summary>
-            Returns a clone of the given node (clones also lists, but leaves other references as references).
-            A new ID will be automatically generated.
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.NodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">

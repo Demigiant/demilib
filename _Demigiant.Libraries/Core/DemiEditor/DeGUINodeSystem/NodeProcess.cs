@@ -232,55 +232,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
             else OpenHelpPanel();
         }
 
-        /// <summary>
-        /// Returns a clone of the given node (clones also lists, but leaves other references as references).
-        /// A new ID will be automatically generated.
-        /// </summary>
-        public T CloneNode<T>(IEditorGUINode node) where T : IEditorGUINode, new()
-        {
-            T clone = new T();
-            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-            FieldInfo[] srcFields = node.GetType().GetFields(flags);
-            FieldInfo[] destFields = clone.GetType().GetFields(flags);
-            foreach (FieldInfo srcField in srcFields) {
-                FieldInfo destField = destFields.FirstOrDefault(field => field.Name == srcField.Name);
-                if (destField == null || destField.IsLiteral || srcField.FieldType != destField.FieldType) continue;
-                object srcValue = srcField.GetValue(node);
-                if (srcValue != null) {
-                    Type valueType = srcValue.GetType();
-                    if (valueType.IsArray) {
-                        // Clone Array
-                        Type arrayType = Type.GetType(valueType.FullName.Replace("[]", string.Empty));
-                        Array srcArray = srcValue as Array;
-                        Array clonedArray = Array.CreateInstance(arrayType, srcArray.Length);
-                        for (int i = 0; i < srcArray.Length; ++i) clonedArray.SetValue(srcArray.GetValue(i), i);
-                        destField.SetValue(clone, clonedArray);
-                    } else if (valueType.IsGenericType) {
-                        // Clone List
-                        Type listType = Type.GetType(valueType.FullName.Replace("[]", string.Empty));
-                        if (listType == null) {
-                            Debug.LogWarning(string.Format("Couldn't clone correctly the {0} field, a shallow copy will be used", srcField.Name));
-                            destField.SetValue(clone, srcField.GetValue(node));
-                        } else {
-                            IList srcList = srcValue as IList;
-                            IList clonedList = Activator.CreateInstance(listType) as IList;
-                            for (int i = 0; i < srcList.Count; ++i) clonedList.Add(srcList[i]);
-                            destField.SetValue(clone, clonedList);
-                        }
-                    } else destField.SetValue(clone, srcField.GetValue(node));
-                }
-            }
-            clone.id = Guid.NewGuid().ToString();
-            return clone;
-        }
-
         #endregion
 
         #region Internal Methods
 
         // Updates the main node process.
         // Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or controlNodes are reordered or deleted.
-        internal void BeginGUI<T>(Rect nodeArea, ref Vector2 refAreaShift, IList<T> controlNodes) where T : IEditorGUINode, new()
+        internal void BeginGUI<T>(Rect nodeArea, ref Vector2 refAreaShift, IList<T> controlNodes) where T : class, IEditorGUINode, new()
         {
             _Styles.Init();
             position = nodeArea;
@@ -430,9 +388,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                 // Select copied nodes plus original ones that weren't copied (meaning they were not part of controlNodes)
                                 selection.DeselectAll();
                                 foreach (IEditorGUINode uncopiedNode in _tmp_nodes) selection.Select(uncopiedNode, true);
-                                foreach (IEditorGUINode node in _clipboard.nodes) selection.Select(node, true);
+                                foreach (IEditorGUINode node in _clipboard.currClones) selection.Select(node, true);
                                 // Set interaction to mirror the new nodes setup
-                                IEditorGUINode clonedTargetNode = _clipboard.GetClipboardCloneByOriginalId(interaction.targetNode.id);
+                                IEditorGUINode clonedTargetNode = _clipboard.GetCloneByOriginalId(interaction.targetNode.id);
                                 if (clonedTargetNode != null) interaction.targetNode = clonedTargetNode;
                             }
                         }
@@ -581,12 +539,26 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         if (options.allowCopyPaste) CloneAndCopySelectedNodes(controlNodes);
                     }
                     break;
+                case KeyCode.X:
+                    if (DeGUIKey.Exclusive.softCtrl) {
+                        // CTRL+X > Clone selected nodes (only if they're part of controlNodes), place them in the clipboard and delete them
+                        if (options.allowCopyPaste) {
+                            if (CloneAndCopySelectedNodes(controlNodes, true)) {
+                                DeleteSelectedNodesInList(controlNodes);
+                                selection.DeselectAll();
+                                guiChangeType = GUIChangeType.DeletedNodes;
+                                GUI.changed = _repaintOnEnd = true;
+                                DispatchOnGUIChange(GUIChangeType.DeletedNodes);
+                            }
+                        }
+                    }
+                    break;
                 case KeyCode.V:
                     if (DeGUIKey.Exclusive.softCtrl) {
                         // CTRL+V > Paste copied nodes (which were cloned and in clipboard) and select them
                         if (options.allowCopyPaste && PasteNodesFromClipboard(controlNodes, true)) {
                             selection.DeselectAll();
-                            foreach (IEditorGUINode node in _clipboard.nodes) selection.Select(node, true);
+                            foreach (IEditorGUINode node in _clipboard.currClones) selection.Select(node, true);
                             guiChangeType = GUIChangeType.AddedNodes;
                             GUI.changed = _repaintOnEnd = true;
                             DispatchOnGUIChange(GUIChangeType.AddedNodes);
@@ -885,15 +857,16 @@ namespace DG.DemiEditor.DeGUINodeSystem
             return null;
         }
 
-        // Also fill _tmp_nodes with a list of nodes that were not copied (meaning they were not part of controlNodes)
-        void CloneAndCopySelectedNodes<T>(IList<T> controlNodes) where T : IEditorGUINode, new()
+        // Also fill _tmp_nodes with a list of nodes that were not copied
+        // (meaning they were not part of controlNodes or the clone operation callback returned FALSE).
+        // If cut is TRUE deletes the nodes after copying them.
+        // Returns TRUE if something was actually copied/cut
+        bool CloneAndCopySelectedNodes<T>(IList<T> controlNodes, bool cut = false) where T : IEditorGUINode, new()
         {
-            if (selection.selectedNodes.Count == 0) return;
+            if (selection.selectedNodes.Count == 0) return false;
 
-            _clipboard.Clear();
             _tmp_nodes.Clear();
-            List<string> originalIds = new List<string>();
-            List<string> cloneIds = new List<string>();
+            _clipboard.Clear();
             // Store clones
             foreach (IEditorGUINode node in selection.selectedNodes) {
                 string id = node.id;
@@ -901,60 +874,42 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     _tmp_nodes.Add(node);
                     continue;
                 }
-                IEditorGUINode clone = CloneNode<T>(node);
-                if (_onCloneNodeCallback != null && !_onCloneNodeCallback(node, clone)) continue;
-                _clipboard.Add(clone, node, _nodeToConnectionOptions[node]);
-                originalIds.Add(id);
-                cloneIds.Add(clone.id);
-            }
-            if (_clipboard.nodes.Count == 0) return;
-
-            // Replace all interconnected ids with new ones, and eliminate others
-            foreach (IEditorGUINode node in _clipboard.nodes) {
-                IEditorGUINode originalNode = GetNodeById(originalIds[cloneIds.IndexOf(node.id)], controlNodes);
-                NodeConnectionOptions connectionOptions = _nodeToConnectionOptions[originalNode];
-                for (int c = node.connectedNodesIds.Count - 1; c > -1; --c) {
-                    int replaceIndex = originalIds.IndexOf(node.connectedNodesIds[c]);
-                    if (replaceIndex == -1) {
-                        // Clear or delete connection
-                        switch (connectionOptions.connectionMode) {
-                        case ConnectionMode.Flexible:
-                            node.connectedNodesIds.RemoveAt(c);
-                            break;
-                        default:
-                            node.connectedNodesIds[c] = null;
-                            break;
-                        }
-                    } else {
-                        // Replace connection ID
-                        node.connectedNodesIds[c] = cloneIds[replaceIndex];
-                    }
+                IEditorGUINode clone = _clipboard.CloneNode<T>(node); // First batch of clones to see if it's allowed
+                if (_onCloneNodeCallback != null && !_onCloneNodeCallback(node, clone)) {
+                    _tmp_nodes.Add(node);
+                    continue;
                 }
+                _clipboard.Add(node, clone, _nodeToConnectionOptions[node], _onCloneNodeCallback);
             }
+            if (_clipboard.currClones.Count == 0) return false;
+            
+            if (cut) DeleteSelectedNodesInList(controlNodes);
+            return true;
         }
 
         // Returns TRUE if something was actually pasted
-        bool PasteNodesFromClipboard<T>(IList<T> controlNodes, bool adaptGuiPositionToMouse) where T : IEditorGUINode
+        bool PasteNodesFromClipboard<T>(IList<T> controlNodes, bool adaptGuiPositionToMouse) where T : class, IEditorGUINode, new()
         {
             if (!_clipboard.hasContent) return false;
 
+            List<T> clones = _clipboard.GetNodesToPaste<T>();
             Vector2 offset = Vector2.zero;
             if (adaptGuiPositionToMouse) {
                 // Find top left node to determine offset for paste
-                Vector2 topLeftP = _clipboard.nodes[0].guiPosition;
-                for (int i = 1; i < _clipboard.nodes.Count; ++i) {
-                    IEditorGUINode node = _clipboard.nodes[i];
+                Vector2 topLeftP = clones[0].guiPosition;
+                for (int i = 1; i < clones.Count; ++i) {
+                    IEditorGUINode node = clones[i];
                     if (node.guiPosition.x < topLeftP.x) topLeftP.x = node.guiPosition.x;
                     if (node.guiPosition.y < topLeftP.y) topLeftP.y = node.guiPosition.y;
                 }
                 offset = Event.current.mousePosition - (topLeftP + areaShift);
             }
             // Add nodes and also nodeGuiData etc based on original nodes
-            foreach (IEditorGUINode node in _clipboard.nodes) {
+            foreach (T node in clones) {
                 node.guiPosition += offset;
-                controlNodes.Add((T)node);
-                nodeToGUIData.Add(node, _clipboard.nodeToOriginalGuiData[node]);
-                _nodeToConnectionOptions.Add(node, _clipboard.nodeToConnectionOptions[node]);
+                controlNodes.Add(node);
+                nodeToGUIData.Add(node, _clipboard.GetGuiDataByCloneId(node.id));
+                _nodeToConnectionOptions.Add(node, _clipboard.GetConnectionOptionsByCloneId(node.id));
                 _idToNode.Add(node.id, node);
             }
             return true;
@@ -973,7 +928,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 removeFrom.RemoveAt(index);
             }
             // Remove references to deleted nodes from connections
-            foreach (T node in removeFrom) {
+            foreach (IEditorGUINode node in nodes) {
                 for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
                     if (_tmp_string.Contains(node.connectedNodesIds[i])) node.connectedNodesIds[i] = null;
                 }
