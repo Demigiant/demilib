@@ -56,6 +56,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             cGroup = AddContentGroup("Nodes Manipulation");
             cGroup.AppendDefinition("Delete selected nodes").AddKey("DELETE").AddKey("BACKSPACE");
             cGroup.AppendDefinition("Copy selected nodes").AddKey("CTRL+C");
+            cGroup.AppendDefinition("Cut selected nodes").AddKey("CTRL+X");
             cGroup.AppendDefinition("Paste nodes").AddKey("CTRL+V");
             cGroup.AppendDefinition("Move selected nodes by 1 pixel").AddKey("ARROWS");
             cGroup.AppendDefinition("Move selected nodes by 10 pixel").AddKey("SHIFT+ARROWS");
