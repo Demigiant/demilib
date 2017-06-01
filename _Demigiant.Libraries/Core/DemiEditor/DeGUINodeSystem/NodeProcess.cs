@@ -147,11 +147,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
             Vector2 nodePosition = new Vector2((int)(node.guiPosition.x + relativeArea.x + areaShift.x), (int)(node.guiPosition.y + relativeArea.y + areaShift.y));
             NodeGUIData nodeGuiData = guiNode.GetAreas(nodePosition, node);
 
-            // Draw node only if visible in area
+            // Draw node (always, not only when visible, otherwise Unity messes up selections)
+            // OnGUI
+            guiNode.OnGUI(nodeGuiData, node);
+            // Fade out unselected nodes if node is visible and there's others that are selected (and more than one)
             if (NodeIsVisible(nodeGuiData.fullArea)) {
-                // OnGUI
-                guiNode.OnGUI(nodeGuiData, node);
-                // Fade out unselected nodes if there's others that are selected (and more than one)
                 bool faded = selection.selectedNodes.Count > 1 && !selection.IsSelected(node);
                 if (faded) GUI.DrawTexture(nodeGuiData.fullArea, DeStylePalette.blackSquareAlpha50);
             }
