@@ -153,7 +153,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
             // Fade out unselected nodes if node is visible and there's others that are selected (and more than one)
             if (NodeIsVisible(nodeGuiData.fullArea)) {
                 bool faded = selection.selectedNodes.Count > 1 && !selection.IsSelected(node);
-                if (faded) GUI.DrawTexture(nodeGuiData.fullArea, DeStylePalette.blackSquareAlpha50);
+                if (faded) {
+                    using (new DeGUI.ColorScope(null, null, new Color(1, 1, 1, 0.4f))) GUI.DrawTexture(nodeGuiData.fullArea, DeStylePalette.blackSquare);
+                }
             }
 
             switch (Event.current.type) {
