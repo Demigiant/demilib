@@ -142,18 +142,24 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             AnchorsData a = new AnchorsData();
 
             // From/to side
+            bool toSideSetByFrom = false;
             if (sideOnly) a.fromSide = ConnectionSide.Right;
             else {
-                if (toArea.x >= fromArea.center.x) {
+                if (toArea.x >= fromArea.x) {
                     // R/T/B
                     if (toArea.x < fromArea.xMax) {
-                        a.fromSide = toArea.center.y < fromArea.center.y ? ConnectionSide.Top : ConnectionSide.Bottom;
+                        if (FromAnchorCanBeVertical(process, fromNode, fromArea, toNode, toArea)) {
+                            a.fromSide = toArea.center.y < fromArea.center.y ? ConnectionSide.Top : ConnectionSide.Bottom;
+                        } else {
+                            a.fromSide = ConnectionSide.Left;
+                            a.toSide = ConnectionSide.Left;
+                            toSideSetByFrom = true;
+                        }
                     } else {
                         if (toArea.yMax > fromArea.y && toArea.y < fromArea.yMax) a.fromSide = ConnectionSide.Right;
                         else {
                             float dX = toArea.x - fromArea.xMax;
                             float dY = toArea.center.y < fromArea.y ? toArea.center.y - fromArea.y : toArea.center.y - fromArea.yMax;
-//                            if (dX > Mathf.Abs(dY)) a.fromSide = ConnectionSide.Right;
                             if (dX > Mathf.Abs(dY) || !FromAnchorCanBeVertical(process, fromNode, fromArea, toNode, toArea)) a.fromSide = ConnectionSide.Right;
                             else a.fromSide = dY < 0 ? ConnectionSide.Top : ConnectionSide.Bottom;
                         }
@@ -161,7 +167,13 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 } else {
                     // L/T/B
                     if (toArea.xMax > fromArea.x) {
-                        a.fromSide = toArea.center.y < fromArea.center.y ? ConnectionSide.Top : ConnectionSide.Bottom;
+                        if (FromAnchorCanBeVertical(process, fromNode, fromArea, toNode, toArea)) {
+                            a.fromSide = toArea.center.y < fromArea.center.y ? ConnectionSide.Top : ConnectionSide.Bottom;
+                        } else {
+                            a.fromSide = ConnectionSide.Right;
+                            a.toSide = ConnectionSide.Right;
+                            toSideSetByFrom = true;
+                        }
                     } else {
                         if (toArea.yMax > fromArea.y && toArea.y < fromArea.yMax) a.fromSide = ConnectionSide.Left;
                         else {
@@ -174,36 +186,37 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 }
             }
             // To side
-            a.toSide = ConnectionSide.Left;
-            switch (a.fromSide) {
-            case ConnectionSide.Top:
-                a.toSide = ToAnchorCanBeVertical(process, fromNode, fromArea, toNode, toArea)
-                    ? ConnectionSide.Bottom
-                    : toArea.center.x < fromArea.center.x ? ConnectionSide.Right : ConnectionSide.Left;
-                break;
-            case ConnectionSide.Bottom:
-                a.toSide = ToAnchorCanBeVertical(process, fromNode, fromArea, toNode, toArea)
-                    ? ConnectionSide.Top
-                    : toArea.center.x < fromArea.center.x ? ConnectionSide.Right : ConnectionSide.Left;
-                break;
-            case ConnectionSide.Left:
-                a.toSide = ConnectionSide.Right;
-                break;
-            default: // Right
-                if (sideOnly && toArea.x < fromArea.xMax) {
-                    // Right side was forced, see if we can connect to sweeter sides
-                    a.toSide = toArea.center.x >= fromArea.xMax
-                        ? toArea.yMax < fromArea.y ? ConnectionSide.Bottom : ConnectionSide.Top
-                        : ConnectionSide.Right;
-                } else a.toSide = ConnectionSide.Left;
-                break;
+            if (!toSideSetByFrom) {
+                a.toSide = ConnectionSide.Left;
+                switch (a.fromSide) {
+                case ConnectionSide.Top:
+                    a.toSide = ToAnchorCanBeVertical(process, fromNode, fromArea, toNode, toArea)
+                        ? ConnectionSide.Bottom
+                        : toArea.center.x < fromArea.center.x ? ConnectionSide.Right : ConnectionSide.Left;
+                    break;
+                case ConnectionSide.Bottom:
+                    a.toSide = ToAnchorCanBeVertical(process, fromNode, fromArea, toNode, toArea)
+                        ? ConnectionSide.Top
+                        : toArea.center.x < fromArea.center.x ? ConnectionSide.Right : ConnectionSide.Left;
+                    break;
+                case ConnectionSide.Left:
+                    a.toSide = ConnectionSide.Right;
+                    break;
+                default: // Right
+                    if (sideOnly && toArea.x < fromArea.xMax) {
+                        // Right side was forced, see if we can connect to sweeter sides
+                        a.toSide = toArea.center.x >= fromArea.xMax
+                            ? toArea.yMax < fromArea.y ? ConnectionSide.Bottom : ConnectionSide.Top
+                            : ConnectionSide.Right;
+                    } else a.toSide = ConnectionSide.Left;
+                    break;
+                }
             }
             //
             a.fromIsSide = a.fromSide == ConnectionSide.Left || a.fromSide == ConnectionSide.Right;
             a.toIsSide = a.toSide == ConnectionSide.Left || a.toSide == ConnectionSide.Right;
             //
-            int fromDisplacement = sideOnly ? 0 : 0;
-            const int toDisplacement = -0;
+            int fromDisplacement = sideOnly ? 0 : 8;
             switch (a.fromSide) {
             case ConnectionSide.Top:
                 a.fromLineP = a.fromMarkP = new Vector2(fromArea.center.x + fromDisplacement, fromArea.y);
@@ -226,18 +239,23 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 if (connectionOptions.connectionMode == ConnectionMode.Dual) a.fromLineP.y = a.fromMarkP.y += connectionIndex == 1 ? 4 : -4;
                 break;
             }
+            const float maxDistForDirect = 20;
             switch (a.toSide) {
             case ConnectionSide.Top:
-                a.toArrowP = a.toLineP = new Vector2(toArea.center.x + toDisplacement, toArea.y);
+                a.toArrowP = a.toLineP = new Vector2(toArea.center.x, toArea.y);
+                if (Vector2.Distance(a.fromLineP, a.toLineP) < maxDistForDirect) a.toArrowP.x = a.toLineP.x += fromDisplacement;
                 break;
             case ConnectionSide.Bottom:
-                a.toArrowP = a.toLineP = new Vector2(toArea.center.x + toDisplacement, toArea.yMax);
+                a.toArrowP = a.toLineP = new Vector2(toArea.center.x, toArea.yMax);
+                if (Vector2.Distance(a.fromLineP, a.toLineP) < maxDistForDirect) a.toArrowP.x = a.toLineP.x += fromDisplacement;
                 break;
             case ConnectionSide.Left:
-                a.toArrowP = a.toLineP = new Vector2(toArea.x, toArea.center.y + toDisplacement);
+                a.toArrowP = a.toLineP = new Vector2(toArea.x, toArea.center.y);
+                if (Vector2.Distance(a.fromLineP, a.toLineP) < maxDistForDirect) a.toArrowP.y = a.toLineP.y += fromDisplacement;
                 break;
             case ConnectionSide.Right:
-                a.toArrowP = a.toLineP = new Vector2(toArea.xMax, toArea.center.y + toDisplacement);
+                a.toArrowP = a.toLineP = new Vector2(toArea.xMax, toArea.center.y);
+                if (Vector2.Distance(a.fromLineP, a.toLineP) < maxDistForDirect) a.toArrowP.y = a.toLineP.y += fromDisplacement;
                 break;
             }
             // Set tangents + arrows
