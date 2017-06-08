@@ -1,6 +1,7 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2017/04/01 13:59
 // License Copyright (c) Daniele Giardini
+// Legacy saved on 2017/06/08
 
 using System.Collections.Generic;
 using DG.DemiEditor.Internal;
@@ -13,20 +14,15 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
     /// <summary>
     /// Always connects a node from BottomOrRight side to TopOrLeft side
     /// </summary>
-    internal static class Connector
+    internal static class Legacy_Connector
     {
-        enum ConnectionSide
-        {
-            Top, Bottom, Left, Right
-        }
-
         public static readonly DragData dragData = new DragData();
 
         const int _LineSize = 3;
         const int _MaxDistanceForSmartStraight = 40; // was 120
         const int _TangentDistance = 50;
         const int _TangentDistanceIfInverse = 120; // Tangent distance if TO is behind FROM
-        const int FromSquareWidth = 2; // Height and width are switched if start point is top/bottom
+        const int FromSquareWidth = 6; // Height and width are switched if start point is bottom
         const int FromSquareHeight = 8;
         static readonly Styles _Styles = new Styles();
         static Color _lineShadowColor = new Color(0, 0, 0, 0.4f);
@@ -50,7 +46,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
             bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual && fromGUIData.connectorAreas != null;
             Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
-            AnchorsData anchorsData = GetAnchorsAllSides(process, connectionIndex, fromNode, fromArea, toNode, toGUIData.fullArea, fromOptions, useSubFromAreas);
+            AnchorsData anchorsData = GetAnchors(process, connectionIndex, fromNode, fromArea, toNode, toGUIData.fullArea, fromOptions, useSubFromAreas);
             Color color = GetConnectionColor(connectionIndex, fromTotConnections, fromGUIData, fromOptions);
             // Line (shadow + line)
             Handles.DrawBezier(
@@ -58,21 +54,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             );
             Handles.DrawBezier(anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
             // Line start square
-            Rect fromSquareR;
-            switch (anchorsData.fromSide) {
-            case ConnectionSide.Top:
-                fromSquareR = new Rect(anchorsData.fromMarkP.x - FromSquareHeight * 0.5f, anchorsData.fromMarkP.y - FromSquareWidth, FromSquareHeight, FromSquareWidth);
-                break;
-            case ConnectionSide.Bottom:
-                fromSquareR = new Rect(anchorsData.fromMarkP.x - FromSquareHeight * 0.5f, anchorsData.fromMarkP.y, FromSquareHeight, FromSquareWidth);
-                break;
-            case ConnectionSide.Left:
-                fromSquareR = new Rect(anchorsData.fromMarkP.x - FromSquareWidth, anchorsData.fromMarkP.y - FromSquareHeight * 0.5f, FromSquareWidth, FromSquareHeight);
-                break;
-            default: // Right
-                fromSquareR = new Rect(anchorsData.fromMarkP.x, anchorsData.fromMarkP.y - FromSquareHeight * 0.5f, FromSquareWidth, FromSquareHeight);
-                break;
-            }
+            Rect fromSquareR = anchorsData.fromIsSide
+                ? new Rect(anchorsData.fromMarkP.x, anchorsData.fromMarkP.y - FromSquareHeight * 0.5f, FromSquareWidth, FromSquareHeight)
+                : new Rect(anchorsData.fromMarkP.x - FromSquareHeight * 0.5f, anchorsData.fromMarkP.y, FromSquareHeight, FromSquareWidth);
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(fromSquareR, DeStylePalette.whiteSquare);
             // Arrow
             Rect arrowR = new Rect(
@@ -135,158 +119,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         #region Helpers
 
-        static AnchorsData GetAnchorsAllSides(
-            NodeProcess process, int connectionIndex, IEditorGUINode fromNode, Rect fromArea, IEditorGUINode toNode, Rect toArea,
-            NodeConnectionOptions connectionOptions, bool sideOnly
-        ){
-            AnchorsData a = new AnchorsData();
-
-            // From/to side
-            if (sideOnly) a.fromSide = ConnectionSide.Right;
-            else {
-                if (toArea.x >= fromArea.center.x) {
-                    // R/T/B
-                    if (toArea.x < fromArea.xMax) {
-                        a.fromSide = toArea.center.y < fromArea.center.y ? ConnectionSide.Top : ConnectionSide.Bottom;
-                    } else {
-                        if (toArea.yMax > fromArea.y && toArea.y < fromArea.yMax) a.fromSide = ConnectionSide.Right;
-                        else {
-                            float dX = toArea.x - fromArea.xMax;
-                            float dY = toArea.center.y < fromArea.y ? toArea.center.y - fromArea.y : toArea.center.y - fromArea.yMax;
-                            if (dX > Mathf.Abs(dY)) a.fromSide = ConnectionSide.Right;
-                            else a.fromSide = dY < 0 ? ConnectionSide.Top : ConnectionSide.Bottom;
-                        }
-                    }
-                } else {
-                    // L/T/B
-                    if (toArea.xMax > fromArea.x) {
-                        a.fromSide = toArea.center.y < fromArea.center.y ? ConnectionSide.Top : ConnectionSide.Bottom;
-                    } else {
-                        if (toArea.yMax > fromArea.y && toArea.y < fromArea.yMax) a.fromSide = ConnectionSide.Left;
-                        else {
-                            float dX = fromArea.x - toArea.xMax;
-                            float dY = toArea.yMax < fromArea.y ? toArea.yMax - fromArea.y : toArea.y - fromArea.yMax;
-                            if (dX > Mathf.Abs(dY)) a.fromSide = ConnectionSide.Left;
-                            else a.fromSide = dY < 0 ? ConnectionSide.Top : ConnectionSide.Bottom;
-                        }
-                    }
-                }
-            }
-            // To side
-            a.toSide = ConnectionSide.Left;
-            switch (a.fromSide) {
-            case ConnectionSide.Top:
-                a.toSide = ConnectionSide.Bottom;
-                break;
-            case ConnectionSide.Bottom:
-                a.toSide = ConnectionSide.Top;
-                break;
-            case ConnectionSide.Left:
-                a.toSide = ConnectionSide.Right;
-                break;
-            default: // Right
-                a.toSide = ConnectionSide.Left;
-                break;
-            }
-            //
-            a.fromIsSide = a.fromSide == ConnectionSide.Left || a.fromSide == ConnectionSide.Right;
-            a.toIsSide = a.toSide == ConnectionSide.Left || a.toSide == ConnectionSide.Right;
-
-            switch (a.fromSide) {
-            case ConnectionSide.Top:
-                a.fromLineP = a.fromMarkP = new Vector2(fromArea.center.x, fromArea.y);
-                a.fromLineP.y -= FromSquareWidth;
-                if (connectionOptions.connectionMode == ConnectionMode.Dual) a.fromLineP.x = a.fromMarkP.x += connectionIndex == 1 ? 4 : -4;
-                break;
-            case ConnectionSide.Bottom:
-                a.fromLineP = a.fromMarkP = new Vector2(fromArea.center.x, fromArea.yMax);
-                a.fromLineP.y += FromSquareWidth;
-                if (connectionOptions.connectionMode == ConnectionMode.Dual) a.fromLineP.x = a.fromMarkP.x += connectionIndex == 1 ? 4 : -4;
-                break;
-            case ConnectionSide.Left:
-                a.fromLineP = a.fromMarkP = new Vector2(fromArea.x, fromArea.center.y);
-                a.fromLineP.x -= FromSquareWidth;
-                if (connectionOptions.connectionMode == ConnectionMode.Dual) a.fromLineP.y = a.fromMarkP.y += connectionIndex == 1 ? 4 : -4;
-                break;
-            case ConnectionSide.Right:
-                a.fromLineP = a.fromMarkP = new Vector2(fromArea.xMax, fromArea.center.y);
-                a.fromLineP.x += FromSquareWidth;
-                if (connectionOptions.connectionMode == ConnectionMode.Dual) a.fromLineP.y = a.fromMarkP.y += connectionIndex == 1 ? 4 : -4;
-                break;
-            }
-            switch (a.toSide) {
-            case ConnectionSide.Top:
-                a.toArrowP = a.toLineP = new Vector2(toArea.center.x, toArea.y);
-                break;
-            case ConnectionSide.Bottom:
-                a.toArrowP = a.toLineP = new Vector2(toArea.center.x, toArea.yMax);
-                break;
-            case ConnectionSide.Left:
-                a.toArrowP = a.toLineP = new Vector2(toArea.x, toArea.center.y);
-                break;
-            case ConnectionSide.Right:
-                a.toArrowP = a.toLineP = new Vector2(toArea.xMax, toArea.center.y);
-                break;
-            }
-            // Set tangents + arrows
-            bool toIsBehindFrom = a.fromSide == ConnectionSide.Right && a.toArrowP.x < a.fromMarkP.x && a.toArrowP.y < fromArea.yMax;
-            float d = Vector2.Distance(a.toArrowP, a.fromLineP);
-            a.isStraight = connectionOptions.connectorMode == ConnectorMode.Straight
-                              || !toIsBehindFrom && connectionOptions.connectorMode == ConnectorMode.Smart && d <= _MaxDistanceForSmartStraight;
-            if (a.isStraight) {
-                a.fromTangent = a.fromLineP;
-                a.toTangent = a.toArrowP;
-                a.arrowRequiresRotation = true;
-                a.arrowRotationAngle = -AngleBetween(Vector2.right, a.toArrowP - a.fromLineP);
-            } else {
-                float axisDistance = a.fromIsSide ? Mathf.Abs(a.toArrowP.x - a.fromLineP.x) : Mathf.Abs(a.toArrowP.y - a.fromLineP.y);
-                float tangentDistance = toIsBehindFrom ? _TangentDistanceIfInverse : Mathf.Min(_TangentDistance, axisDistance * 0.2f + d * 0.2f);
-                Vector2 fromTangentOffset, toTangentOffset;
-                switch (a.fromSide) {
-                case ConnectionSide.Top:
-                    fromTangentOffset = Vector2.up * -tangentDistance;
-                    break;
-                case ConnectionSide.Bottom:
-                    fromTangentOffset = Vector2.up * tangentDistance;
-                    break;
-                case ConnectionSide.Left:
-                    fromTangentOffset = Vector2.right * -tangentDistance;
-                    break;
-                default: // Right
-                    fromTangentOffset = Vector2.right * tangentDistance;
-                    break;
-                }
-                switch (a.toSide) {
-                case ConnectionSide.Top:
-                    a.toLineP.y -= DeStylePalette.ico_nodeArrow.width;
-                    toTangentOffset = Vector2.up * -tangentDistance;
-                    a.arrowRequiresRotation = true;
-                    a.arrowRotationAngle = 90;
-                    break;
-                case ConnectionSide.Bottom:
-                    a.toLineP.y += DeStylePalette.ico_nodeArrow.width;
-                    toTangentOffset = Vector2.up * tangentDistance;
-                    a.arrowRequiresRotation = true;
-                    a.arrowRotationAngle = -90;
-                    break;
-                case ConnectionSide.Left:
-                    a.toLineP.x -= DeStylePalette.ico_nodeArrow.width;
-                    toTangentOffset = Vector2.right * -tangentDistance;
-                    break;
-                default: // Right
-                    a.toLineP.x += DeStylePalette.ico_nodeArrow.width;
-                    toTangentOffset = Vector2.right * tangentDistance;
-                    a.arrowRequiresRotation = true;
-                    a.arrowRotationAngle = 180;
-                    break;
-                }
-                a.fromTangent = a.fromLineP + fromTangentOffset;
-                a.toTangent = a.toLineP + toTangentOffset;
-            }
-            return a;
-        }
-
-        static AnchorsData GetAnchors_2Sides(
+        static AnchorsData GetAnchors(
             NodeProcess process, int connectionIndex, IEditorGUINode fromNode, Rect fromArea, IEditorGUINode toNode, Rect toArea,
             NodeConnectionOptions connectionOptions, bool sideOnly
         ){
@@ -407,7 +240,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         {
             public Vector2 fromMarkP, fromLineP, toArrowP, toLineP;
             public Vector2 fromTangent, toTangent;
-            public ConnectionSide fromSide, toSide;
             public bool fromIsSide, toIsSide; // If FALSE it means it's either top (toNode) or bottom (fromNode)
             public bool isStraight;
             public bool arrowRequiresRotation;

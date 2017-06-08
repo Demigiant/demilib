@@ -76,6 +76,7 @@
     <Compile Include="DeGUINodeSystem\ProcessOptions.cs" />
     <Compile Include="DeGUINodeSystem\NodeProcessScope.cs" />
     <Compile Include="DeGUINodeSystem\SelectionManager.cs" />
+    <Compile Include="DeGUINodeSystem\zzLegacy\Legacy_Connector.cs" />
     <Compile Include="DeSkinStyle.cs" />
     <Compile Include="DeEditorSoundUtils.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />

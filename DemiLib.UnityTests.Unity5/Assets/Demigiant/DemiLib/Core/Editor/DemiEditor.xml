@@ -345,6 +345,19 @@
             Returns TRUE if the connection was deleted using the delete connection button.
             </summary>
         </member>
+        <member name="T:DG.DemiEditor.DeGUINodeSystem.Core.Legacy_Connector">
+            <summary>
+            Always connects a node from BottomOrRight side to TopOrLeft side
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.Legacy_Connector.Connect(DG.DemiEditor.DeGUINodeSystem.NodeProcess,System.Int32,System.Int32,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions,DG.DemiLib.IEditorGUINode,DG.DemiLib.IEditorGUINode)">
+            <summary>
+            Always connects from BottomOrRight side to TopOrLeft side.
+            If ALT is pressed shows the delete connection button.
+            Called during Repaint or MouseDown/Up.
+            Returns TRUE if the connection was deleted using the delete connection button.
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.HelpPanel">
             <summary>
             You can attach to this
