@@ -111,6 +111,9 @@ namespace DG.DeEditorTools.Hierarchy
                 case DeHierarchyComponent.IcoType.Skull:
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_skull_border : DeStylePalette.ico_skull;
                     break;
+                case DeHierarchyComponent.IcoType.Camera:
+                    icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_camera_border : DeStylePalette.ico_camera;
+                    break;
                 default: // Dot
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.whiteDot_darkBorder : DeStylePalette.whiteDot;
                     break;

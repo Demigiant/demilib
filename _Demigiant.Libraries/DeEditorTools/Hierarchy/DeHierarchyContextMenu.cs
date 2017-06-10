@@ -20,6 +20,10 @@ namespace DG.DeEditorTools.Hierarchy
 
         #region Icon
 
+        [MenuItem("GameObject/DeHierarchy/Icon/Camera", false, 22)]
+        static void SetIconCamera()
+        { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Camera); }
+
         [MenuItem("GameObject/DeHierarchy/Icon/Cog", false, 22)]
         static void SetIconCog()
         { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Cog); }

@@ -38,7 +38,8 @@ namespace DG.DemiLib.External
             UI,
             Play,
             Heart,
-            Skull
+            Skull,
+            Camera,
         }
 
         #region Serialized
