@@ -199,6 +199,16 @@
             and return TRUE if this one is minor. Boths trings must have the same number of dot separators.
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.SetX(UnityEngine.Vector2,System.Single)">
+            <summary>
+            Returns a copy of the vector with its X set to the given value.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.SetY(UnityEngine.Vector2,System.Single)">
+            <summary>
+            Returns a copy of the vector with its Y set to the given value.
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.VectorExtensions.Round(UnityEngine.Vector2)">
             <summary>
             Returns a copy of the vector with its values rounded to integers, using Mathf.Round.
@@ -207,6 +217,21 @@
         <member name="M:DG.DeExtensions.VectorExtensions.Floor(UnityEngine.Vector2)">
             <summary>
             Returns a copy of the vector with its values rounded to integers, using a fast int cast.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.SetX(UnityEngine.Vector3,System.Single)">
+            <summary>
+            Returns a copy of the vector with its X set to the given value.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.SetY(UnityEngine.Vector3,System.Single)">
+            <summary>
+            Returns a copy of the vector with its Y set to the given value.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.SetZ(UnityEngine.Vector3,System.Single)">
+            <summary>
+            Returns a copy of the vector with its Z set to the given value.
             </summary>
         </member>
     </members>

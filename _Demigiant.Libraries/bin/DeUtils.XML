@@ -31,6 +31,17 @@
             </summary>
             Taken from wydoidoit's code on Unity Answers http://answers.unity3d.com/questions/659932/how-do-i-clamp-my-rotation.html
         </member>
+        <member name="M:DG.DeUtils.DeMathUtils.FindLineCircleIntersection(UnityEngine.Vector2,System.Single,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2@,UnityEngine.Vector2@)">
+            <summary>
+            Finds the eventual intersection points between a line and a circle, and returns the total number of intersections
+            </summary>
+            Uses code from Rod Stephens: http://csharphelper.com/blog/2014/09/determine-where-a-line-intersects-a-circle-in-c/
+        </member>
+        <member name="M:DG.DeUtils.DeMathUtils.FindNearestLineCircleIntersection(UnityEngine.Vector2,System.Single,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2@)">
+            <summary>
+            Finds the closest intersection point between a line and a circle, and returns TRUE if it's found, FALSE otherwise
+            </summary>
+        </member>
         <member name="T:DG.DeUtils.DeRectUtils">
             <summary>
             Utils for structs
