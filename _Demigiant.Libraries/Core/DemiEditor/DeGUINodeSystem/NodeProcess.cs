@@ -120,7 +120,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             interaction.Reset();
             selection.Reset();
-            _minimap.RefreshMapTextureOnNextPass();
+            if (_minimap != null) _minimap.RefreshMapTextureOnNextPass();
         }
 
         /// <summary>
