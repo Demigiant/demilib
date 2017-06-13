@@ -42,6 +42,12 @@
             Finds the closest intersection point between a line and a circle, and returns TRUE if it's found, FALSE otherwise
             </summary>
         </member>
+        <member name="M:DG.DeUtils.DeMathUtils.LineToRectangle(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,UnityEngine.Vector2@,UnityEngine.Vector2@,UnityEngine.Vector2@,UnityEngine.Vector2@)">
+            <summary>
+            Finds the clockwise vertices of a rectangle built around the given line with the given width, taking line rotation into account
+            </summary>
+            Uses code from Kromster: https://stackoverflow.com/questions/7854043/drawing-rectangle-between-two-points-with-arbitrary-width
+        </member>
         <member name="T:DG.DeUtils.DeRectUtils">
             <summary>
             Utils for structs
