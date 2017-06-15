@@ -24,7 +24,8 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         public static void ShowWindow(DeSampler src)
         {
             DeGUINodeSampler.src = src;
-            GetWindow(typeof(DeGUINodeSampler), true, _Title);
+//            GetWindow(typeof(DeGUINodeSampler), true, _Title);
+            GetWindow(typeof(DeGUINodeSampler), false, _Title);
         }
 
         #endregion

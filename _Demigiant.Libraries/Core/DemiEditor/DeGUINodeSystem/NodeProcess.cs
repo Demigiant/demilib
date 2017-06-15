@@ -74,9 +74,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
         static readonly Styles _Styles = new Styles();
         readonly Func<List<IEditorGUINode>,bool> _onDeleteNodesCallback; // Returns FALSE if deletion shouldn't happen
         readonly Func<IEditorGUINode,IEditorGUINode,bool> _onCloneNodeCallback; // Returns FALSE if cloning shouldn't happen
+        bool _guiInitialized; // Indicates that eventual calls that require a first GUI call to happen were done
+        bool _isDockableEditor; // Used in conjunction with hack to allow correct GUI scaling on dockable windows
         bool _repaintOnEnd; // If TRUE, repaints the editor during EndGUI. Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
-//        bool _isAltPressed; // Used to prevent a repaint when ALT is being kept pressed
 
         #region CONSTRUCTOR
 
@@ -242,6 +243,17 @@ namespace DG.DemiEditor.DeGUINodeSystem
         // Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or controlNodes are reordered or deleted.
         internal void BeginGUI<T>(Rect nodeArea, ref Vector2 refAreaShift, IList<T> controlNodes) where T : class, IEditorGUINode, new()
         {
+            if (!_guiInitialized) {
+                _guiInitialized = true;
+                _isDockableEditor = DeEditorPanelUtils.IsDockableWindow(editor);
+            }
+
+            if (_isDockableEditor) {
+                // Hack to avoid clipping when zooming on dockable window
+                GUI.EndGroup();
+                nodeArea.y += 22;
+            }
+
             _Styles.Init();
             position = nodeArea;
             areaShift = new Vector2((int)refAreaShift.x, (int)refAreaShift.y);
@@ -253,9 +265,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
             EditorGUI.BeginDisabledGroup(helpPanel.isOpen);
 
             // Set scale
-            // IMPORTANT: scale only works correctly with utility windows,
-            // while scaling the GUI of a dockable window makes the whole window think it's scaled and crop all content
-            // (fuck, half a day wasted to determine the origin of this bug, one hour wasted to realize there's no solution, now give me someone to kill)
             if (!Mathf.Approximately(guiScale, 1)) {
                 GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one * guiScale);
             }
@@ -794,6 +803,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             GUILayout.EndArea();
             EditorGUI.EndDisabledGroup();
             GUI.matrix = Matrix4x4.identity;
+
+            if (_isDockableEditor) GUI.BeginGroup(editor.position.ResetXY().SetY(22)); // Hack to avoid clipping when zooming on dockable window
         }
 
         #endregion

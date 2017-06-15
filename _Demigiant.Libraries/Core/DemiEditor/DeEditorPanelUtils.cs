@@ -2,6 +2,7 @@
 // Created: 2015/11/09 12:36
 // License Copyright (c) Daniele Giardini
 
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
@@ -15,6 +16,7 @@ namespace DG.DemiEditor
     public static class DeEditorPanelUtils
     {
         static Dictionary<EditorWindow, GUIContent> _winTitleContentByEditor;
+        static FieldInfo _fi_editorWindowParent;
 
         #region Public Methods
 
@@ -40,6 +42,24 @@ namespace DG.DemiEditor
                 source = (T)AssetDatabase.LoadAssetAtPath(adbFilePath, typeof(T));
             }
             return source;
+        }
+
+        /// <summary>
+        /// Returns TRUE if the given <see cref="EditorWindow"/> is dockable, FALSE if instead it's a utility window
+        /// </summary>
+        /// <param name="editor"></param>
+        /// <returns></returns>
+        public static bool IsDockableWindow(EditorWindow editor)
+        {
+            if (_fi_editorWindowParent == null) {
+                _fi_editorWindowParent = editor.GetType().GetField("m_Parent", BindingFlags.NonPublic | BindingFlags.Instance);
+            }
+            object parent = _fi_editorWindowParent.GetValue(editor);
+            if (parent == null) {
+                Debug.LogError("DeEditorPanelUtils.IsDockableWindow > parent is NULL, you should call this after the first GUI call happened");
+                return false;
+            }
+            return parent.GetType().ToString() == "UnityEditor.DockArea";
         }
 
         /// <summary>

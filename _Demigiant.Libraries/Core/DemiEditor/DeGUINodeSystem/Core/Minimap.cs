@@ -58,6 +58,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 areaH = maxSize;
                 areaW = areaH * fullZeroBasedArea.width / fullZeroBasedArea.height;
             }
+            areaW /= _process.guiScale;
+            areaH /= _process.guiScale;
 
             Rect area = new Rect(visibleArea.xMax - areaW - 3, visibleArea.yMax - areaH - 3, areaW, areaH);
 

@@ -130,6 +130,13 @@
             <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
             <param name="createFoldersIfMissing">If TRUE also creates the path folders if they don't exist</param>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorPanelUtils.IsDockableWindow(UnityEditor.EditorWindow)">
+            <summary>
+            Returns TRUE if the given <see cref="T:UnityEditor.EditorWindow"/> is dockable, FALSE if instead it's a utility window
+            </summary>
+            <param name="editor"></param>
+            <returns></returns>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorPanelUtils.SetWindowTitle(UnityEditor.EditorWindow,UnityEngine.Texture,System.String)">
             <summary>
             Sets the icon and title of an editor window. Works with older versions of Unity, where the titleContent property wasn't available.
