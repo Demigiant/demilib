@@ -43,10 +43,9 @@ namespace DG.DeInspektorEditor.AttributesManagers
                         EditorGUI.showMixedValue = property.hasMultipleDifferentValues;
                         position = EditorGUI.PrefixLabel(position, label);
                         UnityEngine.Object obj;
+                        Rect imgR;
                         if (property.objectReferenceValue == null) {
-                            obj = EditorGUI.ObjectField(
-                                position, property.objectReferenceValue, isSprite ? typeof(Sprite) : typeof(Texture), true
-                            );
+                            imgR = position;
                         } else {
                             Vector2 textureSize;
                             if (isSprite) {
@@ -58,13 +57,13 @@ namespace DG.DeInspektorEditor.AttributesManagers
                                 Texture texture = (Texture)property.objectReferenceValue;
                                 textureSize = new Vector2(texture.width, texture.height);
                             }
-                            Rect imgR = EvalImageRect(position, textureSize);
-                            using (var check = new EditorGUI.ChangeCheckScope()) {
-                                obj = EditorGUI.ObjectField(
-                                    imgR, property.objectReferenceValue, isSprite ? typeof(Sprite) : typeof(Texture), true
-                                );
-                                if (check.changed) property.objectReferenceValue = obj;
-                            }
+                            imgR = EvalImageRect(position, textureSize);
+                        }
+                        using (var check = new EditorGUI.ChangeCheckScope()) {
+                            obj = EditorGUI.ObjectField(
+                                imgR, property.objectReferenceValue, isSprite ? typeof(Sprite) : typeof(Texture), true
+                            );
+                            if (check.changed) property.objectReferenceValue = obj;
                         }
                     }
                 }
