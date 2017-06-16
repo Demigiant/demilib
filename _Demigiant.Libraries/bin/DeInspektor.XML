@@ -173,6 +173,22 @@
             <param name="text">Text</param>
             <param name="fontSize">Font size</param>
         </member>
+        <member name="T:DG.DeInspektor.Attributes.DeImagePreviewAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows a bigger preview image for the given sprite/texture.<para/>
+            Extra properties which can be set directly:<para/>
+            - emptyAlert<para/>
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeImagePreviewAttribute.emptyAlert">
+            <summary>If TRUE marks this field if no image is present</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeImagePreviewAttribute.#ctor">
+            <summary>
+            Shows a bigger preview image for the given sprite/texture.
+            </summary>
+        </member>
         <member name="T:DG.DeInspektor.Attributes.DeRangeAttribute">
             <summary>
             <code>Property attribute</code><para/>

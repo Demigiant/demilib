@@ -61,6 +61,7 @@
     <Compile Include="AttributesManagers\DeDividerPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeEmptyAlertPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeHeaderPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeImagePreviewPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeImagePropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeLabelPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeMethodButtonEditor.cs" />

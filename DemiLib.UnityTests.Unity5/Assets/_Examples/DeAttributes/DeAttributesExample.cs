@@ -67,6 +67,16 @@ public class DeAttributesExample : MonoBehaviour
     [DeImage("_Examples/_Images/goscurry.png", -1, 200)]
     public string imgString1 = "Images above me!";
 
+    // DeImagePreview examples
+    [DeHeader("█ DeImagePreview", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
+    [DeComment("Shows a texture/sprite with a bigger preview.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    [DeImagePreview(emptyAlert = true)]
+    public Sprite sprite0;
+    [DeImagePreview(emptyAlert = true)]
+    public Texture texture0;
+    [DeImagePreview(emptyAlert = true)]
+    public Texture2D texture2D0;
+
     // DeConditional + DeBegin/EndDisabled examples
     [DeHeader("█ DeConditional + DeBegin/EndDisabled", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
     [DeComment("You can choose to disable or completely hide a property based on given conditions. Also, you can disable a group of fields with <b>DeBegin/EndDisabled</b>.", _MainHeaderTextColor, _MainHeaderBgColor)]
