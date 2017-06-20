@@ -21,5 +21,15 @@
             Allows to set the sortingOrder of Renderers, not just SpriteRenderers
             </summary>
         </member>
+        <member name="T:DG.De2D.UI.DeUIMesh">
+            <summary>
+            Used to draw a custom mesh inside Unity's UI
+            </summary>
+        </member>
+        <member name="M:DG.De2D.UI.DeUIMesh.Draw(UnityEngine.Vector2[],System.Int32[],UnityEngine.Vector2[],UnityEngine.Color)">
+            <summary>
+            Draws a mesh with the given data. Coordinates are Canvas-based.
+            </summary>
+        </member>
     </members>
 </doc>
