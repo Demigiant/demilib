@@ -39,8 +39,6 @@ namespace DG.De2D.UI
 
         #region Methods
 
-
-
         protected override void OnPopulateMesh(VertexHelper vHelper)
         {
             if (_vertices == null || _uvs == null || _trisIndexes == null) return;
