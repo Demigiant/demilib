@@ -31,5 +31,10 @@
             Draws a mesh with the given data. Coordinates are Canvas-based.
             </summary>
         </member>
+        <member name="M:DG.De2D.UI.DeUIMesh.Clear">
+            <summary>
+            Clears the drawn mesh
+            </summary>
+        </member>
     </members>
 </doc>

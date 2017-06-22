@@ -21,6 +21,14 @@ namespace DG.De2D.UI
         
         #endregion
 
+        CanvasRenderer _cRenderer {
+            get {
+                if (_fooCRenderer == null) _fooCRenderer = this.GetComponent<CanvasRenderer>();
+                return _fooCRenderer;
+            }
+        }
+        CanvasRenderer _fooCRenderer;
+
         #region Public Methods
 
         /// <summary>
@@ -28,12 +36,23 @@ namespace DG.De2D.UI
         /// </summary>
         public void Draw(Vector2[] vertices, int[] trisIndexes, Vector2[] uvs, Color color)
         {
+            _cRenderer.cull = false;
             _vertices = vertices;
             _trisIndexes = trisIndexes;
             _uvs = uvs;
             this.color = color;
             SetAllDirty();
         }
+
+        /// <summary>
+        /// Clears the drawn mesh
+        /// </summary>
+        public void Clear()
+        {
+            _cRenderer.cull = true;
+        }
+
+
 
         #endregion
 
