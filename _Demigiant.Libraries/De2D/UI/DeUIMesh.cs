@@ -45,7 +45,7 @@ namespace DG.De2D.UI
         }
 
         /// <summary>
-        /// Clears the drawn mesh
+        /// Clears the drawn mesh (by activating culling so it doesn't show)
         /// </summary>
         public void Clear()
         {

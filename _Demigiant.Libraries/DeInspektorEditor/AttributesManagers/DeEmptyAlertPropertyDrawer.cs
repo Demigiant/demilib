@@ -14,6 +14,8 @@ namespace DG.DeInspektorEditor.AttributesManagers
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            DeGUI.BeginGUI();
+            DeEmptyAlertAttribute attr = (DeEmptyAlertAttribute)attribute;
             Color currBgColor = GUI.backgroundColor;
             Color currContentColor = GUI.contentColor;
             bool alert = property.propertyType == SerializedPropertyType.ObjectReference && property.objectReferenceValue == null
@@ -21,6 +23,9 @@ namespace DG.DeInspektorEditor.AttributesManagers
             if (alert) {
                 GUI.backgroundColor = Color.red;
                 GUI.contentColor = DeGUI.colors.content.critical;
+            } else if (attr.alsoMarkIfOk) {
+                GUI.backgroundColor = Color.green;
+                GUI.contentColor = DeGUI.colors.content.toggleOn;
             }
             EditorGUI.PropertyField(position, property, label);
             GUI.backgroundColor = currBgColor;

@@ -501,6 +501,12 @@
             Only for object reference or string fields: shows them red if empty/null
             </summary>
         </member>
+        <member name="M:DG.DeInspektor.Attributes.DeEmptyAlertAttribute.#ctor(System.Boolean)">
+            <summary>
+            Only for object reference or string fields: shows them red if empty/null
+            </summary>
+            <param name="alsoMarkIfOk">If TRUE, also colorizes the field in green if non-empty</param>
+        </member>
         <member name="T:DG.DeInspektor.Attributes.DeHeaderAttribute">
             <summary>
             <code>Decorator</code><para/>

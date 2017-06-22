@@ -14,6 +14,15 @@ namespace DG.DeInspektor.Attributes
     [AttributeUsage(AttributeTargets.Field)]
     public class DeEmptyAlertAttribute : PropertyAttribute
     {
-        
+        internal bool alsoMarkIfOk;
+
+        /// <summary>
+        /// Only for object reference or string fields: shows them red if empty/null
+        /// </summary>
+        /// <param name="alsoMarkIfOk">If TRUE, also colorizes the field in green if non-empty</param>
+        public DeEmptyAlertAttribute(bool alsoMarkIfOk = true)
+        {
+            this.alsoMarkIfOk = alsoMarkIfOk;
+        }
     }
 }
