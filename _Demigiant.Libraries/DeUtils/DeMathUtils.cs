@@ -109,16 +109,17 @@ namespace DG.DeUtils
         /// Finds the clockwise vertices of a rectangle built around the given line with the given width, taking line rotation into account
         /// </summary>
         /// Uses code from Kromster: https://stackoverflow.com/questions/7854043/drawing-rectangle-between-two-points-with-arbitrary-width
-        public static void LineToRectangle(Vector2 lineP0, Vector2 lineP1, float width, out Vector2 rp0, out Vector2 rp1, out Vector2 rp2, out Vector2 rp3)
+        public static void LineToRectangle(Vector2 fromLineP, Vector2 toLineP, float width, out Vector2 fromP0, out Vector2 fromP1, out Vector2 toP2, out Vector2 toP3)
         {
             float widthHalf = width * 0.5f;
-            Vector2 v = new Vector2(lineP1.x - lineP0.x, lineP1.y - lineP0.y);
+            Vector2 v = new Vector2(toLineP.x - fromLineP.x, toLineP.y - fromLineP.y);
             Vector2 p = new Vector2(v.y, -v.x).normalized; // normalized perpendicular
             Vector2 pMult = new Vector2(p.x * widthHalf, p.y * widthHalf);
-            rp0 = new Vector2(lineP0.x + pMult.x, lineP0.y + pMult.y);
-            rp1 = new Vector2(lineP1.x + pMult.x, lineP1.y + pMult.y);
-            rp2 = new Vector2(lineP1.x - pMult.x, lineP1.y - pMult.y);
-            rp3 = new Vector2(lineP0.x - pMult.x, lineP0.y - pMult.y);
+            if (fromLineP.y < toLineP.y) pMult = new Vector2(-pMult.x, -pMult.y);
+            fromP0 = new Vector2(fromLineP.x + pMult.x, fromLineP.y + pMult.y);
+            fromP1 = new Vector2(fromLineP.x - pMult.x, fromLineP.y - pMult.y);
+            toP2 = new Vector2(toLineP.x - pMult.x, toLineP.y - pMult.y);
+            toP3 = new Vector2(toLineP.x + pMult.x, toLineP.y + pMult.y);
         }
 
         #endregion
