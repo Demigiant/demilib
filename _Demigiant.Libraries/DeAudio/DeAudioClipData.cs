@@ -62,6 +62,16 @@ namespace DG.DeAudio
             DeAudioManager.Pause(this.clip);
         }
 
+        #region Info Methods
+
+        public bool IsPlaying()
+        {
+            if (clip == null) return false;
+            return DeAudioManager.GetAudioGroup(groupId).IsPlaying(clip);
+        }
+
+        #endregion
+
         #endregion
     }
 }

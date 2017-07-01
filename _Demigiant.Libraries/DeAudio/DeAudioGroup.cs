@@ -171,6 +171,20 @@ namespace DG.DeAudio
         public void Unlock(AudioClip clip)
         { IterateOnAllSources(OperationType.UnlockByClip, clip); }
 
+        #region Info Methods
+
+        public bool IsPlaying(AudioClip clip)
+        {
+            if (clip == null) return false;
+            foreach (DeAudioSource src in sources) {
+                if (src.clip != clip) continue;
+                return src.isPlaying;
+            }
+            return false;
+        }
+
+        #endregion
+
         #region Tweens
 
         /// <summary>Fades out this group's volume</summary>

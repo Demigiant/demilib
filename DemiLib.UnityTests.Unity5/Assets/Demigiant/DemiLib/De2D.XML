@@ -33,7 +33,7 @@
         </member>
         <member name="M:DG.De2D.UI.DeUIMesh.Clear">
             <summary>
-            Clears the drawn mesh
+            Clears the drawn mesh (by activating culling so it doesn't show)
             </summary>
         </member>
     </members>
