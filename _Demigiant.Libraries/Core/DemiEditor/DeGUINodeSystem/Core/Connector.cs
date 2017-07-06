@@ -151,8 +151,19 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                         if (FromAnchorCanBeVertical(process, fromNode, fromArea, toNode, toArea)) {
                             a.fromSide = toArea.center.y < fromArea.center.y ? ConnectionSide.Top : ConnectionSide.Bottom;
                         } else {
-                            a.fromSide = ConnectionSide.Left;
-                            a.toSide = ConnectionSide.Left;
+                            bool nearVertSnapOffset = toArea.y > fromArea.yMax && fromArea.yMax - toArea.y <= NodeProcess.SnapOffset;
+                            bool rightToTop = nearVertSnapOffset && fromArea.xMax < toArea.center.x;
+                            bool leftToTop = !rightToTop && fromArea.x > toArea.center.x;
+                            if (rightToTop) {
+                                a.fromSide = ConnectionSide.Right;
+                                a.toSide = ConnectionSide.Top;
+                            } else if (leftToTop) {
+                                a.fromSide = ConnectionSide.Left;
+                                a.toSide = ConnectionSide.Top;
+                            } else {
+                                a.fromSide = ConnectionSide.Left;
+                                a.toSide = ConnectionSide.Left;
+                            }
                             toSideSetByFrom = true;
                         }
                     } else {
@@ -190,12 +201,12 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 a.toSide = ConnectionSide.Left;
                 switch (a.fromSide) {
                 case ConnectionSide.Top:
-                    a.toSide = ToAnchorCanBeVertical(process, fromNode, fromArea, toNode, toArea)
+                    a.toSide = ToAnchorCanBeVertical(process, fromNode, fromArea, a.fromSide, toNode, toArea)
                         ? ConnectionSide.Bottom
                         : toArea.center.x < fromArea.center.x ? ConnectionSide.Right : ConnectionSide.Left;
                     break;
                 case ConnectionSide.Bottom:
-                    a.toSide = ToAnchorCanBeVertical(process, fromNode, fromArea, toNode, toArea)
+                    a.toSide = ToAnchorCanBeVertical(process, fromNode, fromArea, a.fromSide, toNode, toArea)
                         ? ConnectionSide.Top
                         : toArea.center.x < fromArea.center.x ? ConnectionSide.Right : ConnectionSide.Left;
                     break;
@@ -376,6 +387,12 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         static bool FromAnchorCanBeVertical(NodeProcess process, IEditorGUINode fromNode, Rect fromArea, IEditorGUINode toNode, Rect toArea)
         {
             bool isBottom = fromArea.center.y <= toArea.y;
+            if (
+                isBottom
+                && toArea.y - fromArea.yMax <= NodeProcess.SnapOffset
+                && (toArea.center.x > fromArea.xMax + 8 || toArea.center.x < fromArea.x - 8)
+                && Mathf.Abs(fromArea.center.x - toArea.center.x) > 20
+            ) return false;
             foreach (IEditorGUINode node in process.nodes) {
                 if (node == fromNode || node == toNode) continue;
                 Rect r = process.nodeToGUIData[node].fullArea;
@@ -388,9 +405,15 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             }
             return true;
         }
-        static bool ToAnchorCanBeVertical(NodeProcess process, IEditorGUINode fromNode, Rect fromArea, IEditorGUINode toNode, Rect toArea)
+        static bool ToAnchorCanBeVertical(NodeProcess process, IEditorGUINode fromNode, Rect fromArea, ConnectionSide fromSide, IEditorGUINode toNode, Rect toArea)
         {
             bool isTop = fromArea.center.y <= toArea.y;
+            if (
+                isTop
+                && fromSide == ConnectionSide.Bottom && toArea.y - fromArea.yMax <= NodeProcess.SnapOffset
+                && (toArea.xMax < fromArea.center.x - 8 || toArea.x > fromArea.center.x + 8)
+                && Mathf.Abs(fromArea.center.x - toArea.center.x) > 20
+            ) return false;
             foreach (IEditorGUINode node in process.nodes) {
                 if (node == fromNode || node == toNode) continue;
                 Rect r = process.nodeToGUIData[node].fullArea;
