@@ -164,7 +164,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
             internal ContentGroup(string title, string description)
             {
                 this.title = title;
-                this.description = description;
+                if (description != null) {
+                    description = description.Replace("[b]", "<color=#eeeeee><b>");
+                    description = description.Replace("[/b]", "</b></color>");
+                    this.description = description;
+                }
             }
             /// <summary>
             /// Add definition. Supports rich-text but also these special tags:<para/>
