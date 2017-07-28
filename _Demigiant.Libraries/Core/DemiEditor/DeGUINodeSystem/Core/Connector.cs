@@ -390,8 +390,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             if (
                 isBottom
                 && toArea.y - fromArea.yMax <= NodeProcess.SnapOffset
-                && (toArea.center.x > fromArea.xMax + 8 || toArea.center.x < fromArea.x - 8)
-                && Mathf.Abs(fromArea.center.x - toArea.center.x) > 20
+//                && (toArea.center.x > fromArea.xMax + 8 || toArea.center.x < fromArea.x - 8)
+                && (toArea.center.x > fromArea.xMax + 8)
+//                && Mathf.Abs(fromArea.center.x - toArea.center.x) > 20
+                && toArea.center.x - fromArea.center.x > 20
             ) return false;
             foreach (IEditorGUINode node in process.nodes) {
                 if (node == fromNode || node == toNode) continue;
