@@ -421,12 +421,16 @@ namespace DG.DemiEditor
             if (defaultStyle == null) defaultStyle = EditorStyles.label;
             if (editingStyle == null) editingStyle = EditorStyles.textField;
             GUI.SetNextControlName(id);
-            if (_doubleClickTextFieldId != id && Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition)) {
+            bool isMouseDown = Event.current.rawType == EventType.MouseDown;
+            bool isMouseDownInside = isMouseDown && rect.Contains(Event.current.mousePosition);
+            bool forceDeselect = isMouseDown && (_doubleClickTextFieldId == id && !isMouseDownInside || _doubleClickTextFieldId != id && isMouseDownInside);
+            if (isMouseDownInside && _doubleClickTextFieldId != id) {
                 if (Event.current.clickCount == 2) {
+                    forceDeselect = false;
                     // Activate edit mode
                     _doubleClickTextFieldId = id;
                     EditorGUI.FocusTextInControl(id);
-                    DeGUI.ExitCurrentEvent();
+//                    DeGUI.ExitCurrentEvent();
                     if (editor != null) editor.Repaint();
                     else editorWindow.Repaint();
                 } else if (draggableList != null) {
@@ -435,23 +439,28 @@ namespace DG.DemiEditor
                     else DeGUIDrag.StartDrag(dragId, editorWindow, draggableList, draggedItemIndex);
                 }
             }
-            bool selected = _doubleClickTextFieldId == id && GUI.GetNameOfFocusedControl() == id;
+//            bool selected = _doubleClickTextFieldId == id && GUI.GetNameOfFocusedControl() == id;
+            bool selected = _doubleClickTextFieldId == id && (Event.current.type != EventType.Layout || GUI.GetNameOfFocusedControl() == id);
             if (!selected) {
                 EditorGUIUtility.AddCursorRect(rect, MouseCursor.Arrow);
                 if (GUI.GetNameOfFocusedControl() == id) GUIUtility.keyboardControl = 0;
             }
             text = EditorGUI.TextField(rect, text, selected ? editingStyle : defaultStyle);
             // End editing
+            if (forceDeselect) goto Deselect;
             if (!selected) return text;
             if (
                 Event.current.isKey && Event.current.keyCode == KeyCode.Return
                 || Event.current.type == EventType.MouseDown && !rect.Contains(Event.current.mousePosition)
             ) {
-                GUIUtility.keyboardControl = 0;
-                _doubleClickTextFieldId = null;
-                if (editor != null) editor.Repaint();
-                else editorWindow.Repaint();
-            }
+                goto Deselect;
+            } else goto End;
+        Deselect:
+            GUIUtility.keyboardControl = 0;
+            _doubleClickTextFieldId = null;
+            if (editor != null) editor.Repaint();
+            else editorWindow.Repaint();
+        End:
             return text;
         }
 
