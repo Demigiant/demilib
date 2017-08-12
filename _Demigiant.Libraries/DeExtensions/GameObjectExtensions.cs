@@ -101,7 +101,7 @@ namespace DG.DeExtensions
         {
             T result = null;
             Transform target = go.transform;
-            while (target.parent != null && result == null) {
+            while (target != null && result == null) {
                 if (includeInactive || target.gameObject.activeInHierarchy) result = target.gameObject.GetComponent<T>();
                 target = target.parent;
             }
