@@ -89,7 +89,10 @@ namespace DG.DeExtensions
         public static T GetOnlyComponentInChildren<T>(this GameObject go, bool includeInactive = false) where T : Component
         {
             T component = go.GetComponentInChildren<T>(includeInactive);
-            if (component.transform == go.transform) return null;
+            if (component.transform == go.transform) {
+                T[] components = go.GetComponentsInChildren<T>(includeInactive);
+                return components.Length <= 1 ? null : components[1];
+            }
             return component;
         }
 
