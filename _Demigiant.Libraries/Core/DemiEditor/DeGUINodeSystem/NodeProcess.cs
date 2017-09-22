@@ -176,7 +176,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             Texture2D tex = DeStylePalette.tileBars_slanted_alpha;
                             using (new DeGUI.ColorScope(DeGUI.colors.global.red, null, DeGUI.colors.global.red)) {
                                 GUI.DrawTextureWithTexCoords(evArea, tex, new Rect(0, 0, evArea.width / tex.width, evArea.height / tex.height));
-                                GUI.Box(nodeGuiData.fullArea.Expand(3), "", DeGUI.styles.box.outline02);
+//                                GUI.Box(nodeGuiData.fullArea.Expand(3), "", DeGUI.styles.box.outline02); // Removed because causes selection issues
                             }
                         }
                     }
