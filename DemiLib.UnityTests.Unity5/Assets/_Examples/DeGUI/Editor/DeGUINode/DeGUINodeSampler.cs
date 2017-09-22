@@ -24,7 +24,6 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         public static void ShowWindow(DeSampler src)
         {
             DeGUINodeSampler.src = src;
-//            GetWindow(typeof(DeGUINodeSampler), true, _Title);
             GetWindow(typeof(DeGUINodeSampler), false, _Title);
         }
 
@@ -36,6 +35,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
         {
             if (src == null) src = DeEditorToolsUtils.FindFirstComponentOfType<DeSampler>();
             _nodeProcess = new NodeProcess(this, OnDeleteNodes);
+            _nodeProcess.options.evidenceEndNodes = ProcessOptions.EvidenceEndNodesMode.Invasive;
             Undo.undoRedoPerformed -= this.Repaint;
             Undo.undoRedoPerformed += this.Repaint;
         }

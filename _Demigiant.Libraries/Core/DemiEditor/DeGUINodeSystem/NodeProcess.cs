@@ -148,6 +148,41 @@ namespace DG.DemiEditor.DeGUINodeSystem
             Vector2 nodePosition = new Vector2((int)(node.guiPosition.x + relativeArea.x + areaShift.x), (int)(node.guiPosition.y + relativeArea.y + areaShift.y));
             NodeGUIData nodeGuiData = guiNode.GetAreas(nodePosition, node);
 
+            // End node heavy evidence
+            bool evidenceEndNode = options.evidenceEndNodes != ProcessOptions.EvidenceEndNodesMode.None;
+            bool markAsEndNode = false;
+            if (Event.current.type == EventType.Repaint) {
+                if (evidenceEndNode) {
+                    NodeConnectionOptions connOptions = _nodeToConnectionOptions[node];
+                    if (!connOptions.neverMarkAsEndNode) {
+                        switch (connOptions.connectionMode) {
+                        case ConnectionMode.Flexible:
+                            markAsEndNode = node.connectedNodesIds.Count == 0;
+                            break;
+                        case ConnectionMode.Dual:
+                            markAsEndNode = string.IsNullOrEmpty(node.connectedNodesIds[0]) || string.IsNullOrEmpty(node.connectedNodesIds[1]);
+                            break;
+                        default:
+                            markAsEndNode = false;
+                            for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
+                                if (!string.IsNullOrEmpty(node.connectedNodesIds[i])) continue;
+                                markAsEndNode = true;
+                                break;
+                            }
+                            break;
+                        }
+                        if (markAsEndNode && options.evidenceEndNodes == ProcessOptions.EvidenceEndNodesMode.Invasive) {
+                            Rect evArea = nodeGuiData.fullArea.Expand(26);
+                            Texture2D tex = DeStylePalette.tileBars_slanted_alpha;
+                            using (new DeGUI.ColorScope(DeGUI.colors.global.red, null, DeGUI.colors.global.red)) {
+                                GUI.DrawTextureWithTexCoords(evArea, tex, new Rect(0, 0, evArea.width / tex.width, evArea.height / tex.height));
+                                GUI.Box(nodeGuiData.fullArea.Expand(3), "", DeGUI.styles.box.outline02);
+                            }
+                        }
+                    }
+                }
+            }
+
             // Draw node (always, not only when visible, otherwise Unity messes up selections)
             // OnGUI
             guiNode.OnGUI(nodeGuiData, node);
@@ -174,33 +209,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         GUI.Box(nodeGuiData.fullArea.Expand(5), "", _Styles.nodeSelectionOutlineThick);
                     }
                 }
-                // Draw end node icon
-                if (options.evidenceEndNodes) {
-                    bool markAsEndNode;
-                    NodeConnectionOptions connOptions = _nodeToConnectionOptions[node];
-                    if (!connOptions.neverMarkAsEndNode) {
-                        switch (connOptions.connectionMode) {
-                        case ConnectionMode.Flexible:
-                            markAsEndNode = node.connectedNodesIds.Count == 0;
-                            break;
-                        case ConnectionMode.Dual:
-                            markAsEndNode = string.IsNullOrEmpty(node.connectedNodesIds[0]) || string.IsNullOrEmpty(node.connectedNodesIds[1]);
-                            break;
-                        default:
-                            markAsEndNode = false;
-                            for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
-                                if (!string.IsNullOrEmpty(node.connectedNodesIds[i])) continue;
-                                markAsEndNode = true;
-                                break;
-                            }
-                            break;
-                        }
-                        if (markAsEndNode) {
-                            float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 20);
-                            Rect r = new Rect(nodeGuiData.fullArea.xMax - icoSize * 0.5f, nodeGuiData.fullArea.yMax - icoSize * 0.5f, icoSize, icoSize);
-                            GUI.DrawTexture(r, DeStylePalette.ico_end);
-                        }
-                    }
+                // Draw end node icon (determined on Repaint pass before node's OnGUI
+                if (markAsEndNode) {
+                    float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 20);
+                    Rect r = new Rect(nodeGuiData.fullArea.xMax - icoSize * 0.5f, nodeGuiData.fullArea.yMax - icoSize * 0.5f, icoSize, icoSize);
+                    GUI.DrawTexture(r, DeStylePalette.ico_end);
                 }
                 break;
             }

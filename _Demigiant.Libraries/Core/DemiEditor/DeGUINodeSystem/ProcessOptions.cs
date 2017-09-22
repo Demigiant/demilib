@@ -8,6 +8,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
 {
     public class ProcessOptions
     {
+        public enum EvidenceEndNodesMode
+        {
+            None,
+            Icon,
+            Invasive
+        }
         public enum MinimapResolution
         {
             Normal,
@@ -23,7 +29,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public bool evidenceSelectedNodes = true;
         public bool evidenceSelectedNodesArea = true; // Draws an outline around the whole area of all selected nodes
         public Color evidenceSelectedNodesColor = new Color(0.13f, 0.48f, 0.91f);
-        public bool evidenceEndNodes = true; // Nodes that have no forward connections
+        public EvidenceEndNodesMode evidenceEndNodes = EvidenceEndNodesMode.Icon; // Nodes that have no forward connections
         public bool showMinimap = true;
         public int minimapMaxSize = 150;
         public MinimapResolution minimapResolution = MinimapResolution.Normal;
