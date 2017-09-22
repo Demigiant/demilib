@@ -31,6 +31,11 @@
             Draws a mesh with the given data. Coordinates are Canvas-based.
             </summary>
         </member>
+        <member name="M:DG.De2D.UI.DeUIMesh.Draw(UnityEngine.Vector2[],System.Int32[],UnityEngine.Vector2[],UnityEngine.Vector2[],UnityEngine.Color)">
+            <summary>
+            Draws a mesh with the given data. Coordinates are Canvas-based.
+            </summary>
+        </member>
         <member name="M:DG.De2D.UI.DeUIMesh.Clear">
             <summary>
             Clears the drawn mesh (by activating culling so it doesn't show)
