@@ -25,7 +25,9 @@ namespace DG.DeInspektorEditor.AttributesManagers
             if (!isVisible) return 0;
 
             SetStyles(attr);
-            float w = _positionW < 2 ? EditorGUIUtility.currentViewWidth : _positionW;
+            float w = _positionW < 2
+                ? EditorGUIUtility.currentViewWidth - (attr.style == DeCommentStyle.TextInValueArea ? EditorGUIUtility.labelWidth - 2 : 0)
+                : _positionW;
             if (attr.style == DeCommentStyle.BoxExtended) w += _ExtendedWidthIncrement;
             float h = _attrStyle.CalcHeight(new GUIContent(attr.text), w) + attr.marginBottom;
             return h;
@@ -37,11 +39,16 @@ namespace DG.DeInspektorEditor.AttributesManagers
             bool isTrue = attr.condition.IsTrue(DeInspektor.I.serializedObject);
             if (!isTrue && attr.behaviour == ConditionalBehaviour.Hide) return;
 
+
             DeGUI.BeginGUI();
-            if (Event.current.type == EventType.Repaint) _positionW = position.width;
+            float shiftX = attr.style == DeCommentStyle.TextInValueArea ? EditorGUIUtility.labelWidth - 2 : 0;
+
+            if (Event.current.type == EventType.Repaint) _positionW = position.width - shiftX;
             SetStyles(attr);
 
             Rect r = position;
+            r.x += shiftX;
+            r.width = _positionW;
             if (attr.style == DeCommentStyle.BoxExtended) {
                 r.x -= _ExtendedWidthIncrement - 4;
                 r.width += _ExtendedWidthIncrement;
@@ -67,6 +74,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
             else _attrStyle.Add(new DeSkinColor(0.35f, 0.58f));
             switch (attr.style) {
             case DeCommentStyle.TextOnly:
+            case DeCommentStyle.TextInValueArea:
                 _attrStyle.Background(null).Padding(2, 0, 0, 0);
                 break;
             case DeCommentStyle.Box:

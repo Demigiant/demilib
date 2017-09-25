@@ -341,6 +341,9 @@
         <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.TextOnly">
             <summary>Text only</summary>
         </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.TextInValueArea">
+            <summary>Text only, placed inside the value area and not encompassing the label area</summary>
+        </member>
         <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,System.Boolean)">
             <summary>
             Shows/enables the property only if the condition is met

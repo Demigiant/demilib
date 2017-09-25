@@ -11,6 +11,8 @@ namespace DG.DeInspektor.Attributes
         /// <summary>Text inside a box, extended to encompass the full width of the Inspector</summary>
         BoxExtended,
         /// <summary>Text only</summary>
-        TextOnly
+        TextOnly,
+        /// <summary>Text only, placed inside the value area and not encompassing the label area</summary>
+        TextInValueArea
     }
 }
