@@ -65,6 +65,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Dictionary<string,IEditorGUINode> _idToNode = new Dictionary<string,IEditorGUINode>();
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
         readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
+        readonly List<IEditorGUINode> _endGUINodes = new List<IEditorGUINode>(); // Used to draw invasive end node markers before drawing the nodes
         readonly NodeDragManager _nodeDragManager;
         readonly NodesClipboard _clipboard;
         readonly ContextPanel _contextPanel;
@@ -148,40 +149,72 @@ namespace DG.DemiEditor.DeGUINodeSystem
             Vector2 nodePosition = new Vector2((int)(node.guiPosition.x + relativeArea.x + areaShift.x), (int)(node.guiPosition.y + relativeArea.y + areaShift.y));
             NodeGUIData nodeGuiData = guiNode.GetAreas(nodePosition, node);
 
-            // End node heavy evidence
-            bool evidenceEndNode = options.evidenceEndNodes != ProcessOptions.EvidenceEndNodesMode.None;
-            bool markAsEndNode = false;
-            if (Event.current.type == EventType.Repaint) {
-                if (evidenceEndNode) {
-                    NodeConnectionOptions connOptions = _nodeToConnectionOptions[node];
-                    if (!connOptions.neverMarkAsEndNode) {
-                        switch (connOptions.connectionMode) {
-                        case ConnectionMode.Flexible:
-                            markAsEndNode = node.connectedNodesIds.Count == 0;
-                            break;
-                        case ConnectionMode.Dual:
-                            markAsEndNode = string.IsNullOrEmpty(node.connectedNodesIds[0]) || string.IsNullOrEmpty(node.connectedNodesIds[1]);
-                            break;
-                        default:
-                            markAsEndNode = false;
-                            for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
-                                if (!string.IsNullOrEmpty(node.connectedNodesIds[i])) continue;
-                                markAsEndNode = true;
-                                break;
-                            }
-                            break;
-                        }
-                        if (markAsEndNode && options.evidenceEndNodes == ProcessOptions.EvidenceEndNodesMode.Invasive) {
-                            Rect evArea = nodeGuiData.fullArea.Expand(26);
-                            Texture2D tex = DeStylePalette.tileBars_slanted_alpha;
-                            using (new DeGUI.ColorScope(DeGUI.colors.global.red, null, DeGUI.colors.global.red)) {
-                                GUI.DrawTextureWithTexCoords(evArea, tex, new Rect(0, 0, evArea.width / tex.width, evArea.height / tex.height));
-//                                GUI.Box(nodeGuiData.fullArea.Expand(3), "", DeGUI.styles.box.outline02); // Removed because causes selection issues
-                            }
-                        }
-                    }
-                }
-            }
+            // Determine if mark as end node + End node heavy evidence
+//            bool evidenceEndNode = options.evidenceEndNodes != ProcessOptions.EvidenceEndNodesMode.None;
+//            bool markAsEndNode = false;
+//            if (evidenceEndNode) {
+//                switch (Event.current.type) {
+//                case EventType.Layout:
+//                    NodeConnectionOptions connOptions = _nodeToConnectionOptions[node];
+//                    if (!connOptions.neverMarkAsEndNode) {
+//                        switch (connOptions.connectionMode) {
+//                        case ConnectionMode.Flexible:
+//                            markAsEndNode = node.connectedNodesIds.Count == 0;
+//                            break;
+//                        case ConnectionMode.Dual:
+//                            markAsEndNode = string.IsNullOrEmpty(node.connectedNodesIds[0]) || string.IsNullOrEmpty(node.connectedNodesIds[1]);
+//                            break;
+//                        default:
+//                            markAsEndNode = false;
+//                            for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
+//                                if (!string.IsNullOrEmpty(node.connectedNodesIds[i])) continue;
+//                                markAsEndNode = true;
+//                                break;
+//                            }
+//                            break;
+//                        }
+//                        if (markAsEndNode) _endGUINodes.Add(node);
+//                    }
+//                    break;
+//                case EventType.Repaint:
+//                    markAsEndNode = _endGUINodes.Contains(node);
+//                    if (markAsEndNode && options.evidenceEndNodes == ProcessOptions.EvidenceEndNodesMode.Invasive) {
+//                        Rect evArea = nodeGuiData.fullArea.Expand(26);
+//                        Texture2D tex = DeStylePalette.tileBars_slanted_alpha;
+//                        using (new DeGUI.ColorScope(DeGUI.colors.global.red, null, DeGUI.colors.global.red)) {
+//                            GUI.DrawTextureWithTexCoords(evArea, tex, new Rect(0, 0, evArea.width / tex.width, evArea.height / tex.height));
+//                        }
+//                    }
+//                    break;
+//                }
+//            }
+
+
+
+//            if (Event.current.type == EventType.Repaint) {
+//                if (evidenceEndNode) {
+//                    NodeConnectionOptions connOptions = _nodeToConnectionOptions[node];
+//                    if (!connOptions.neverMarkAsEndNode) {
+//                        switch (connOptions.connectionMode) {
+//                        case ConnectionMode.Flexible:
+//                            markAsEndNode = node.connectedNodesIds.Count == 0;
+//                            break;
+//                        case ConnectionMode.Dual:
+//                            markAsEndNode = string.IsNullOrEmpty(node.connectedNodesIds[0]) || string.IsNullOrEmpty(node.connectedNodesIds[1]);
+//                            break;
+//                        default:
+//                            markAsEndNode = false;
+//                            for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
+//                                if (!string.IsNullOrEmpty(node.connectedNodesIds[i])) continue;
+//                                markAsEndNode = true;
+//                                break;
+//                            }
+//                            break;
+//                        }
+//                        
+//                    }
+//                }
+//            }
 
             // Draw node (always, not only when visible, otherwise Unity messes up selections)
             // OnGUI
@@ -194,12 +227,36 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
             }
 
+            bool evidenceEndNode = options.evidenceEndNodes != ProcessOptions.EvidenceEndNodesMode.None;
             switch (Event.current.type) {
             case EventType.Layout:
                 nodes.Add(node);
                 _idToNode.Add(node.id, node);
                 nodeToGUIData.Add(node, nodeGuiData);
                 _nodeToConnectionOptions.Add(node, connectionOptions == null ? new NodeConnectionOptions(true) : (NodeConnectionOptions)connectionOptions);
+                if (evidenceEndNode) {
+                    // Determine if mark as end node
+                    NodeConnectionOptions connOptions = _nodeToConnectionOptions[node];
+                    if (!connOptions.neverMarkAsEndNode) {
+                        bool markAsEndNode = false;
+                        switch (connOptions.connectionMode) {
+                        case ConnectionMode.Flexible:
+                            markAsEndNode = node.connectedNodesIds.Count == 0;
+                            break;
+                        case ConnectionMode.Dual:
+                            markAsEndNode = string.IsNullOrEmpty(node.connectedNodesIds[0]) || string.IsNullOrEmpty(node.connectedNodesIds[1]);
+                            break;
+                        default:
+                            for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
+                                if (!string.IsNullOrEmpty(node.connectedNodesIds[i])) continue;
+                                markAsEndNode = true;
+                                break;
+                            }
+                            break;
+                        }
+                        if (markAsEndNode) _endGUINodes.Add(node);
+                    }
+                }
                 break;
             case EventType.Repaint:
                 nodeToGUIData[node] = nodeGuiData;
@@ -209,8 +266,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         GUI.Box(nodeGuiData.fullArea.Expand(5), "", _Styles.nodeSelectionOutlineThick);
                     }
                 }
-                // Draw end node icon (determined on Repaint pass before node's OnGUI
-                if (markAsEndNode) {
+                // Draw end node icon
+                if (evidenceEndNode && _endGUINodes.Contains(node)) {
                     float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 20);
                     Rect r = new Rect(nodeGuiData.fullArea.xMax - icoSize * 0.5f, nodeGuiData.fullArea.yMax - icoSize * 0.5f, icoSize, icoSize);
                     GUI.DrawTexture(r, DeStylePalette.ico_end);
@@ -294,6 +351,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _idToNode.Clear();
                 nodeToGUIData.Clear();
                 _nodeToConnectionOptions.Clear();
+                _endGUINodes.Clear();
             }
 
             // Update interaction and DeGUIKey
@@ -305,6 +363,18 @@ namespace DG.DemiEditor.DeGUINodeSystem
             if (options.drawBackgroundGrid) {
                 if (options.gridTextureOverride == null) DeGUI.BackgroundGrid(relativeArea, areaShift, options.forceDarkSkin, 1 / guiScale);
                 else DeGUI.BackgroundGrid(relativeArea, areaShift, options.gridTextureOverride, 1 / guiScale);
+            }
+
+            // Nodes heavy evidence
+            if (options.evidenceEndNodes == ProcessOptions.EvidenceEndNodesMode.Invasive && Event.current.type == EventType.Repaint) {
+                foreach (IEditorGUINode guiNode in _endGUINodes) {
+                    NodeGUIData nodeGuiData = nodeToGUIData[guiNode];
+                    Rect evArea = nodeGuiData.fullArea.Expand(options.evidenceEndNodesBackgroundBorder);
+                    Texture2D tex = DeStylePalette.tileBars_slanted;
+                    using (new DeGUI.ColorScope(null, null, options.evidenceEndNodesBackgroundColor)) {
+                        GUI.DrawTextureWithTexCoords(evArea, tex, new Rect(0, 0, evArea.width / tex.width, evArea.height / tex.height));
+                    }
+                }
             }
 
             switch (Event.current.type) {
