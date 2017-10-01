@@ -3,12 +3,40 @@
 // License Copyright (c) Daniele Giardini
 
 using System;
+using System.Reflection;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DG.DeExtensions
 {
     public static class ComponentExtensions
     {
+        public enum CopyMode
+        {
+            /// <summary>Adds the component even if another component of the same type already exists on the target</summary>
+            Add,
+            /// <summary>Adds the component only if the same component doesn't already exist on the target</summary>
+            AddIfMissing,
+        }
+
+        /// <summary>
+        /// Copies a component with all its public and private dynamic fields, and adds it to the given target
+        /// </summary>
+        /// <param name="original">Component to copy</param>
+        /// <param name="to">GameObject to add the component to</param>
+        /// <param name="copyMode">Copy mode</param>
+        /// <param name="removeOriginalComponent">If TRUE, removes the original components after copying it</param>
+        public static T CopyTo<T>(this T original, GameObject to, CopyMode copyMode = CopyMode.AddIfMissing, bool removeOriginalComponent = false) where T : Component
+        {
+            Type type = original.GetType();
+            Component copy = copyMode == CopyMode.AddIfMissing ? to.GetComponent<T>() : null;
+            if (copy == null) copy = to.AddComponent(type);
+            FieldInfo[] fInfos = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (FieldInfo fi in fInfos) fi.SetValue(copy, fi.GetValue(original));
+            if (removeOriginalComponent) Object.Destroy(original);
+            return copy as T;
+        }
+
         /// <summary>
         /// Returns ONLY the Components in the children, and ignores the parent.
         /// </summary>

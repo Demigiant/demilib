@@ -23,6 +23,21 @@
             Changes the alpha of this color and returns it
             </summary>
         </member>
+        <member name="F:DG.DeExtensions.ComponentExtensions.CopyMode.Add">
+            <summary>Adds the component even if another component of the same type already exists on the target</summary>
+        </member>
+        <member name="F:DG.DeExtensions.ComponentExtensions.CopyMode.AddIfMissing">
+            <summary>Adds the component only if the same component doesn't already exist on the target</summary>
+        </member>
+        <member name="M:DG.DeExtensions.ComponentExtensions.CopyTo``1(``0,UnityEngine.GameObject,DG.DeExtensions.ComponentExtensions.CopyMode,System.Boolean)">
+            <summary>
+            Copies a component with all its public and private dynamic fields, and adds it to the given target
+            </summary>
+            <param name="original">Component to copy</param>
+            <param name="to">GameObject to add the component to</param>
+            <param name="copyMode">Copy mode</param>
+            <param name="removeOriginalComponent">If TRUE, removes the original components after copying it</param>
+        </member>
         <member name="M:DG.DeExtensions.ComponentExtensions.GetOnlyComponentsInChildren``1(UnityEngine.MonoBehaviour,System.Boolean)">
             <summary>
             Returns ONLY the Components in the children, and ignores the parent.
