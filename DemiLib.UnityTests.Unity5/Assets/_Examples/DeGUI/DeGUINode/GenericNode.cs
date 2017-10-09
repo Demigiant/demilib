@@ -27,6 +27,7 @@ namespace _Examples.DeGUI.DeGUINode
 
         public NodeType type;
         public bool flexibleConnectionMode = false;
+        public bool normalPlusConnectionMode = false;
         public bool dualConnectionMode = false;
         public bool boolValue;
         public string stringValue = "Sample Text";

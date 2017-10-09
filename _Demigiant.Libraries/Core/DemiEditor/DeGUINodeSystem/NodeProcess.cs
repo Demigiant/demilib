@@ -149,73 +149,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
             Vector2 nodePosition = new Vector2((int)(node.guiPosition.x + relativeArea.x + areaShift.x), (int)(node.guiPosition.y + relativeArea.y + areaShift.y));
             NodeGUIData nodeGuiData = guiNode.GetAreas(nodePosition, node);
 
-            // Determine if mark as end node + End node heavy evidence
-//            bool evidenceEndNode = options.evidenceEndNodes != ProcessOptions.EvidenceEndNodesMode.None;
-//            bool markAsEndNode = false;
-//            if (evidenceEndNode) {
-//                switch (Event.current.type) {
-//                case EventType.Layout:
-//                    NodeConnectionOptions connOptions = _nodeToConnectionOptions[node];
-//                    if (!connOptions.neverMarkAsEndNode) {
-//                        switch (connOptions.connectionMode) {
-//                        case ConnectionMode.Flexible:
-//                            markAsEndNode = node.connectedNodesIds.Count == 0;
-//                            break;
-//                        case ConnectionMode.Dual:
-//                            markAsEndNode = string.IsNullOrEmpty(node.connectedNodesIds[0]) || string.IsNullOrEmpty(node.connectedNodesIds[1]);
-//                            break;
-//                        default:
-//                            markAsEndNode = false;
-//                            for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
-//                                if (!string.IsNullOrEmpty(node.connectedNodesIds[i])) continue;
-//                                markAsEndNode = true;
-//                                break;
-//                            }
-//                            break;
-//                        }
-//                        if (markAsEndNode) _endGUINodes.Add(node);
-//                    }
-//                    break;
-//                case EventType.Repaint:
-//                    markAsEndNode = _endGUINodes.Contains(node);
-//                    if (markAsEndNode && options.evidenceEndNodes == ProcessOptions.EvidenceEndNodesMode.Invasive) {
-//                        Rect evArea = nodeGuiData.fullArea.Expand(26);
-//                        Texture2D tex = DeStylePalette.tileBars_slanted_alpha;
-//                        using (new DeGUI.ColorScope(DeGUI.colors.global.red, null, DeGUI.colors.global.red)) {
-//                            GUI.DrawTextureWithTexCoords(evArea, tex, new Rect(0, 0, evArea.width / tex.width, evArea.height / tex.height));
-//                        }
-//                    }
-//                    break;
-//                }
-//            }
-
-
-
-//            if (Event.current.type == EventType.Repaint) {
-//                if (evidenceEndNode) {
-//                    NodeConnectionOptions connOptions = _nodeToConnectionOptions[node];
-//                    if (!connOptions.neverMarkAsEndNode) {
-//                        switch (connOptions.connectionMode) {
-//                        case ConnectionMode.Flexible:
-//                            markAsEndNode = node.connectedNodesIds.Count == 0;
-//                            break;
-//                        case ConnectionMode.Dual:
-//                            markAsEndNode = string.IsNullOrEmpty(node.connectedNodesIds[0]) || string.IsNullOrEmpty(node.connectedNodesIds[1]);
-//                            break;
-//                        default:
-//                            markAsEndNode = false;
-//                            for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
-//                                if (!string.IsNullOrEmpty(node.connectedNodesIds[i])) continue;
-//                                markAsEndNode = true;
-//                                break;
-//                            }
-//                            break;
-//                        }
-//                        
-//                    }
-//                }
-//            }
-
             // Draw node (always, not only when visible, otherwise Unity messes up selections)
             // OnGUI
             guiNode.OnGUI(nodeGuiData, node);
@@ -728,6 +661,25 @@ namespace DG.DemiEditor.DeGUINodeSystem
                                 DispatchOnGUIChange(GUIChangeType.NodeConnection);
                             }
                             break;
+                        case ConnectionMode.NormalPlus:
+                            // Normal connection > use existing connection index or PLUS one if SPACE is pressed
+                            if (DeGUIKey.Exclusive.ctrl && DeGUIKey.Extra.space) {
+                                // Extra connection
+                                int plusConnectionIndex = Connector.dragData.node.connectedNodesIds.Count - 1;
+                                if (Connector.dragData.node.connectedNodesIds[plusConnectionIndex] != overNode.id) {
+                                    Connector.dragData.node.connectedNodesIds[plusConnectionIndex] = overNode.id;
+                                    guiChangeType = GUIChangeType.NodeConnection;
+                                    GUI.changed = true;
+                                    DispatchOnGUIChange(GUIChangeType.NodeConnection);
+                                }
+                            } else if (Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] != overNode.id) {
+                                // Normal
+                                Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] = overNode.id;
+                                guiChangeType = GUIChangeType.NodeConnection;
+                                GUI.changed = true;
+                                DispatchOnGUIChange(GUIChangeType.NodeConnection);
+                            }
+                            break;
                         default:
                             // Normal connection, use existing connection index
                             if (Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] != overNode.id) {
@@ -788,11 +740,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             if (deletedConnection) {
                                 // Connection deleted, deal with flexibleConnections and non-flexibleConnections
                                 aConnectionWasDeleted = true;
-                                if (_nodeToConnectionOptions[fromNode].connectionMode == ConnectionMode.Flexible) {
+                                ConnectionMode connectionMode = _nodeToConnectionOptions[fromNode].connectionMode;
+                                switch (connectionMode) {
+                                case ConnectionMode.Flexible:
                                     totConnections--;
                                     fromNode.connectedNodesIds.RemoveAt(c);
-                                } else {
+                                    break;
+                                default:
                                     fromNode.connectedNodesIds[c] = null;
+                                    break;
                                 }
                             }
                         }

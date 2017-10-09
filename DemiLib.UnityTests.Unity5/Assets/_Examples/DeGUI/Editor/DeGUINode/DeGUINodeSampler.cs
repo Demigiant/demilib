@@ -63,17 +63,21 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 Gradient multiGradient = new Gradient() {
                     colorKeys = new GradientColorKey[] {new GradientColorKey(Color.yellow, 0), new GradientColorKey(new Color(1f, 0.46f, 0f), 1)}
                 };
+                Gradient normalPlusGradient = new Gradient() {
+                    colorKeys = new GradientColorKey[] {new GradientColorKey(new Color(0.02f, 1f, 0.66f), 0), new GradientColorKey(new Color(0.73f, 0.98f, 0.04f), 1)}
+                };
                 Gradient dualGradient = new Gradient() {
                     colorKeys = new GradientColorKey[] {new GradientColorKey(Color.green, 0), new GradientColorKey(Color.red, 1)}
                 };
                 NodeConnectionOptions normalNodeConnOptions = new NodeConnectionOptions(true, ConnectorMode.Smart);
+                NodeConnectionOptions normalPlusNodeConnOptions = new NodeConnectionOptions(true, ConnectionMode.NormalPlus, ConnectorMode.Smart, Color.red, normalPlusGradient);
                 NodeConnectionOptions multiNodeConnOptions = new NodeConnectionOptions(true, ConnectorMode.Smart, multiGradient);
                 NodeConnectionOptions flexibleNodeConnOptions = new NodeConnectionOptions(true, ConnectionMode.Flexible, ConnectorMode.Smart);
                 NodeConnectionOptions dualNodeConnOptions = new NodeConnectionOptions(true, ConnectionMode.Dual, ConnectorMode.Smart, dualGradient);
                 foreach (GenericNode node in src.nodeSystem.genericNodes) {
                     switch (node.type) {
                     case NodeType.Multi:
-                        _nodeProcess.Draw<MultiNodeGUI>(node, multiNodeConnOptions);
+                        _nodeProcess.Draw<MultiNodeGUI>(node, node.normalPlusConnectionMode ? normalPlusNodeConnOptions : multiNodeConnOptions);
                         break;
                     default:
                         _nodeProcess.Draw<GenericNodeGUI>(

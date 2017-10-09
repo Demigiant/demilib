@@ -15,7 +15,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public ConnectionMode connectionMode;
         // Connector mode
         public ConnectorMode connectorMode;
-        // Color in case of single connection or NULL gradientColor, replaced by NodeGUIData.mainColor if it's set to Color.clear
+        // Color in case of single connection, NULL gradientColor, or extra connection for FlexiblePlus ConnectionMode.
+        // Replaced by NodeGUIData.mainColor if it's set to Color.clear
         public Color startColor;
         // Used in case of multiple connections
         public Gradient gradientColor;

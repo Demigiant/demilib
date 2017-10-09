@@ -15,6 +15,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// Requires only two connectedNodesIds (no more, no less), 
         /// uses regular CTRL+Drag to connect connection 0, CTRL+SPACE+Drag to connect connection 1
         /// </summary>
-        Dual
+        Dual,
+        /// <summary>
+        /// Like <see cref="Normal"/>, but with an extra connection as a last extra index, which is set when pressing CTRL+SPACE+Drag.
+        /// Must always have at least one element in connectedNodesIds
+        /// </summary>
+        NormalPlus
     }
 }

@@ -48,7 +48,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             NodeGUIData fromGUIData = process.nodeToGUIData[fromNode];
             NodeGUIData toGUIData = process.nodeToGUIData[toNode];
 
-            bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual && fromGUIData.connectorAreas != null;
+            bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual
+                                   && fromGUIData.connectorAreas != null
+                                   && (fromOptions.connectionMode != ConnectionMode.NormalPlus || connectionIndex < fromTotConnections - 1);
             Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
             AnchorsData anchorsData = GetAnchorsAllSides(process, connectionIndex, fromNode, fromArea, toNode, toGUIData.fullArea, fromOptions, useSubFromAreas);
             Color color = GetConnectionColor(connectionIndex, fromTotConnections, fromGUIData, fromOptions);
@@ -106,9 +108,18 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             NodeGUIData nodeGuiData, NodeConnectionOptions connectionOptions
         ){
             dragData.Set(interaction.targetNode);
-            int connectionIndex = connectionOptions.connectionMode == ConnectionMode.Dual
-                ? DeGUIKey.Exclusive.ctrl && DeGUIKey.Extra.space ? 1 : 0
-                : interaction.targetNodeConnectorAreaIndex;
+            int connectionIndex;
+            switch (connectionOptions.connectionMode) {
+            case ConnectionMode.Dual:
+                connectionIndex = DeGUIKey.Exclusive.ctrl && DeGUIKey.Extra.space ? 1 : 0;
+                break;
+            case ConnectionMode.NormalPlus:
+                connectionIndex = DeGUIKey.Exclusive.ctrl && DeGUIKey.Extra.space ? interaction.targetNode.connectedNodesIds.Count - 1 : interaction.targetNodeConnectorAreaIndex;
+                break;
+            default:
+                connectionIndex = interaction.targetNodeConnectorAreaIndex;
+                break;
+            }
             Color color = GetConnectionColor(
                 connectionIndex, interaction.targetNode.connectedNodesIds.Count, nodeGuiData, connectionOptions
             );
@@ -465,6 +476,15 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         static Color GetConnectionColor(int connectionIndex, int totConnections, NodeGUIData nodeGuiData, NodeConnectionOptions connectionOptions)
         {
+            if (connectionOptions.connectionMode == ConnectionMode.NormalPlus) {
+                if (connectionIndex == totConnections - 1 || connectionOptions.gradientColor == null) {
+                    // PLUS connection
+                    return connectionOptions.startColor == Color.clear ? nodeGuiData.mainColor : connectionOptions.startColor;
+                } else {
+                    // Regular
+                    return connectionOptions.gradientColor.Evaluate(connectionIndex / (float)(totConnections - 2));
+                }
+            }
             return totConnections < 2 || connectionOptions.gradientColor == null
                 ? connectionOptions.startColor == Color.clear ? nodeGuiData.mainColor : connectionOptions.startColor
                 : connectionOptions.gradientColor.Evaluate(connectionIndex / (float)(totConnections - 1));

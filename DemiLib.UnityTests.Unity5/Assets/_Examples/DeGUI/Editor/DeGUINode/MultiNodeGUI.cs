@@ -37,7 +37,12 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             DG.DemiEditor.DeGUI.DrawColoredSquare(nodeGuiData.fullArea, DG.DemiEditor.DeGUI.colors.global.yellow);
             // Header
             DG.DemiEditor.DeGUI.DrawColoredSquare(nodeGuiData.dragArea, new Color(0, 0, 0, 0.3f));
-            GUI.Label(nodeGuiData.dragArea, node.id.ToString(), _Styles.headerLabelStyle);
+            GUI.Label(
+                nodeGuiData.dragArea, node.normalPlusConnectionMode
+                    ? node.id + " NormalPlus"
+                    : node.id.ToString(),
+                _Styles.headerLabelStyle
+            );
 
             // Lines
             for (int i = 0; i < 3; ++i) {

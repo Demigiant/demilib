@@ -29,32 +29,48 @@ public class DeSampler : MonoBehaviour
 
     public NodeSystem nodeSystem = new NodeSystem();
 
+    void Reset()
+    {
+        nodeSystem.genericNodes = new List<GenericNode>();
+        Generate();
+    }
+
     void OnEnable()
     {
         if (nodeSystem.genericNodes == null) nodeSystem.genericNodes = new List<GenericNode>();
-        if (nodeSystem.genericNodes.Count == 0) {
-            for (int i = 0; i < 8; ++i) {
-                GenericNode node = new GenericNode {
-                    id = i.ToString(),
-                    guiPosition = new Vector2(UnityEngine.Random.Range(50, 400), UnityEngine.Random.Range(50, 400))
-                };
+        if (nodeSystem.genericNodes.Count == 0) Generate();
+    }
+
+    void Generate()
+    {
+        for (int i = 0; i < 8; ++i) {
+            GenericNode node = new GenericNode {
+                id = i.ToString(),
+                guiPosition = new Vector2(UnityEngine.Random.Range(50, 400), UnityEngine.Random.Range(50, 400))
+            };
+            if (i < 3) {
+                node.type = NodeType.Multi;
                 if (i < 2) {
-                    node.type = NodeType.Multi;
+                    // Multi default
                     while (node.connectedNodesIds.Count < 3) node.connectedNodesIds.Add(null);
                 } else {
-                    node.type = NodeType.Generic;
-                    if (i < 4) {
-                        // Flexible
-                        node.flexibleConnectionMode = true;
-                        node.connectedNodesIds.Clear();
-                    } else if (i > 6) {
-                        // Dual
-                        node.dualConnectionMode = true;
-                        while (node.connectedNodesIds.Count < 2) node.connectedNodesIds.Add(null);
-                    }
+                    // NormalPlus
+                    node.normalPlusConnectionMode = true;
+                    while (node.connectedNodesIds.Count < 4) node.connectedNodesIds.Add(null);
                 }
-                nodeSystem.genericNodes.Add(node);
+            } else {
+                node.type = NodeType.Generic;
+                if (i < 6) {
+                    // Flexible
+                    node.flexibleConnectionMode = true;
+                    node.connectedNodesIds.Clear();
+                } else {
+                    // Dual
+                    node.dualConnectionMode = true;
+                    while (node.connectedNodesIds.Count < 2) node.connectedNodesIds.Add(null);
+                }
             }
+            nodeSystem.genericNodes.Add(node);
         }
     }
 
