@@ -107,6 +107,27 @@
             <summary>Ids of all forward connected nodes. Length indicates how many forward connections are allowed.
             Min length represents available connections from node.</summary>
         </member>
+        <member name="T:DG.DemiLib.IntRange">
+            <summary>
+            A serializable struct including a min and a max int value
+            </summary>
+        </member>
+        <member name="F:DG.DemiLib.IntRange.min">
+            <summary>Min value</summary>
+        </member>
+        <member name="F:DG.DemiLib.IntRange.max">
+            <summary>Max value</summary>
+        </member>
+        <member name="M:DG.DemiLib.IntRange.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new Range
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.IntRange.RandomWithin">
+            <summary>
+            Returns a random value within this range (min/max included)
+            </summary>
+        </member>
         <member name="T:DG.DemiLib.Range">
             <summary>
             A serializable struct including a min and a max float value
@@ -125,7 +146,7 @@
         </member>
         <member name="M:DG.DemiLib.Range.RandomWithin">
             <summary>
-            Returns a random value within this range
+            Returns a random value within this range (min/max included)
             </summary>
         </member>
     </members>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DG.DeInspektor.Attributes;
+using DG.DemiLib;
 using UnityEngine;
 
 [DeScriptExecutionOrder(-456)] // Sets the script execution order of this MonoBehaviour to -456
@@ -175,6 +176,15 @@ public class DeAttributesExample : MonoBehaviour
     public string subgroupedS1 = "This too";
     [DeEndGroup]
     public string groupedS0 = "This is inside the main group";
+
+    // Extra structs examples
+    [DeHeader("█ Extra Structs Attributes", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]
+    [DeComment("Attributes for DemiLib's core extra structs.", _MainHeaderTextColor, _MainHeaderBgColor)]
+    //
+    [DeRange(0, 100)]
+    public Range aFloatRange = new Range(3, 10);
+    [DeRange(0, 100)]
+    public IntRange anIntRange = new IntRange(3, 10);
 
     // DeButton examples
     [DeHeader("█ DeButton + DeMethodButton", _MainHeaderTextColor, _MainHeaderBgColor, _MainHeaderFontStyle, _MainHeaderFontSize, mode = DeHeaderAttribute.Mode.TopDivider)]

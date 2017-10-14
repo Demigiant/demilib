@@ -52,6 +52,7 @@
     <Compile Include="External\DeHierarchyComponent.cs" />
     <Compile Include="IEditorGUINode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structs %28no namespace%29\IntRange.cs" />
     <Compile Include="Structs %28no namespace%29\Range.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -9,6 +9,7 @@ using UnityEngine;
 namespace DG.DemiEditor.PropertyDrawers
 {
     [CustomPropertyDrawer(typeof(Range))]
+    [CustomPropertyDrawer(typeof(IntRange))]
     public class RangePropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -17,6 +18,10 @@ namespace DG.DemiEditor.PropertyDrawers
             SerializedProperty min = property.Copy();
             property.Next(true);
             SerializedProperty max = property.Copy();
+
+            bool isIntRange = min.type == "int";
+            float floatVal = 0;
+            int intVal = 0;
 
             EditorGUI.BeginProperty(position, label, property);
 
@@ -30,22 +35,34 @@ namespace DG.DemiEditor.PropertyDrawers
             GUIContent subLabel = new GUIContent("Min");
             EditorGUI.BeginProperty(positionMin, subLabel, min);
             EditorGUI.BeginChangeCheck();
-            float value = EditorGUI.FloatField(positionMin, subLabel, min.floatValue);
+            if (isIntRange) intVal = EditorGUI.IntField(positionMin, subLabel, min.intValue);
+            else floatVal = EditorGUI.FloatField(positionMin, subLabel, min.floatValue);
             if (EditorGUI.EndChangeCheck()) {
                 GUI.changed = true;
-                if (value > max.floatValue) value = max.floatValue;
-                min.floatValue = value;
+                if (isIntRange) {
+                    if (intVal > max.intValue) intVal = max.intValue;
+                    min.intValue = intVal;
+                } else {
+                    if (floatVal > max.floatValue) floatVal = max.floatValue;
+                    min.floatValue = floatVal;
+                }
             }
             EditorGUI.EndProperty();
             //
             subLabel.text = "Max";
             EditorGUI.BeginProperty(positionMax, subLabel, max);
             EditorGUI.BeginChangeCheck();
-            value = EditorGUI.FloatField(positionMax, subLabel, max.floatValue);
+            if (isIntRange) intVal = EditorGUI.IntField(positionMax, subLabel, max.intValue);
+            else floatVal = EditorGUI.FloatField(positionMax, subLabel, max.floatValue);
             if (EditorGUI.EndChangeCheck()) {
                 GUI.changed = true;
-                if (value < max.floatValue) value = min.floatValue;
-                max.floatValue = value;
+                if (isIntRange) {
+                    if (intVal < max.intValue) intVal = min.intValue;
+                    max.intValue = intVal;
+                } else {
+                    if (floatVal < max.floatValue) floatVal = min.floatValue;
+                    max.floatValue = floatVal;
+                }
             }
             EditorGUI.EndProperty();
             EditorGUIUtility.labelWidth = defLabelW;

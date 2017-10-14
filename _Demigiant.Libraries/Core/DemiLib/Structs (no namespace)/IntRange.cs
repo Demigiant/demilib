@@ -1,5 +1,5 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
-// Created: 2017/02/13 17:29
+// Created: 2017/10/14 20:35
 // License Copyright (c) Daniele Giardini
 
 using System;
@@ -7,20 +7,20 @@ using System;
 namespace DG.DemiLib
 {
     /// <summary>
-    /// A serializable struct including a min and a max float value
+    /// A serializable struct including a min and a max int value
     /// </summary>
     [Serializable]
-    public struct Range
+    public struct IntRange
     {
         /// <summary>Min value</summary>
-        public float min;
+        public int min;
         /// <summary>Max value</summary>
-        public float max;
+        public int max;
 
         /// <summary>
         /// Creates a new Range
         /// </summary>
-        public Range(float min, float max)
+        public IntRange(int min, int max)
         {
             this.min = min;
             this.max = max;
@@ -31,7 +31,7 @@ namespace DG.DemiLib
         /// </summary>
         public float RandomWithin()
         {
-            return UnityEngine.Random.Range(min, max);
+            return UnityEngine.Random.Range(min, max + 1);
         }
     }
 }
