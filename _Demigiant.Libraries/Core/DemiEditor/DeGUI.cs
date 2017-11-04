@@ -363,6 +363,22 @@ namespace DG.DemiEditor
             GUI.color = orColor;
         }
 
+        /// <summary>Draws the given texture tiled within the given rect</summary>
+        /// <param name="scale">Eventual scale to apply</param>
+        /// <param name="color">If not NULL, colorizes the texture with this color</param>
+        public static void DrawTiledTexture(Rect rect, Texture2D texture, float scale = 1, Color? color = null)
+        {
+            float w = texture.width * scale;
+            float h = texture.height * scale;
+            if (color == null) GUI.DrawTextureWithTexCoords(rect, texture, new Rect(0, 0, rect.width / w, rect.height / h));
+            else {
+                Color prev = GUI.color;
+                GUI.color = (Color)color;
+                GUI.DrawTextureWithTexCoords(rect, texture, new Rect(0, 0, rect.width / w, rect.height / h));
+                GUI.color = prev;
+            }
+        }
+
         /// <summary>
         /// A text field that becomes editable only on double-click
         /// </summary>

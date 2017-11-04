@@ -1078,6 +1078,11 @@
         <member name="M:DG.DemiEditor.DeGUI.DrawColoredSquare(UnityEngine.Rect,UnityEngine.Color)">
             <summary>Draws a colored square</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.DrawTiledTexture(UnityEngine.Rect,UnityEngine.Texture2D,System.Single,System.Nullable{UnityEngine.Color})">
+            <summary>Draws the given texture tiled within the given rect</summary>
+            <param name="scale">Eventual scale to apply</param>
+            <param name="color">If not NULL, colorizes the texture with this color</param>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.DoubleClickTextField(UnityEngine.Rect,UnityEditor.EditorWindow,System.String,System.String,UnityEngine.GUIStyle,UnityEngine.GUIStyle)">
             <summary>
             A text field that becomes editable only on double-click
