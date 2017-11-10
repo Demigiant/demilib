@@ -48,6 +48,13 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             NodeGUIData fromGUIData = process.nodeToGUIData[fromNode];
             NodeGUIData toGUIData = process.nodeToGUIData[toNode];
 
+            // Prevent connection drawing if area between nodes is not visible
+            if (!fromGUIData.isVisible && !toGUIData.isVisible) {
+                // Verify if area between nodes is visible, otherwise don't draw anything
+                Rect area = fromGUIData.fullArea.Add(toGUIData.fullArea);
+                if (!process.AreaIsVisible(area)) return false;
+            }
+
             bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual
                                    && fromGUIData.connectorAreas != null
                                    && (fromOptions.connectionMode != ConnectionMode.NormalPlus || connectionIndex < fromTotConnections - 1);

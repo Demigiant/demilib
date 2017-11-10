@@ -473,6 +473,11 @@
             Opens or closes the Help panel based on its current state
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.AreaIsVisible(UnityEngine.Rect)">
+            <summary>
+            Returns TRUE if the given area is visible (even if partially) inside the current nodeProcess area
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.NodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">
             <summary>
             Use this to encapsulate node GUI operations.<para/>

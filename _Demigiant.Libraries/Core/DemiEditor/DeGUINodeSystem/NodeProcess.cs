@@ -148,14 +148,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
             } else guiNode = _typeToGUINode[type];
             Vector2 nodePosition = new Vector2((int)(node.guiPosition.x + relativeArea.x + areaShift.x), (int)(node.guiPosition.y + relativeArea.y + areaShift.y));
             NodeGUIData nodeGuiData = guiNode.GetAreas(nodePosition, node);
-            nodeGuiData.isVisible = NodeIsVisible(nodeGuiData.fullArea);
+            nodeGuiData.isVisible = AreaIsVisible(nodeGuiData.fullArea);
 
             // Draw node (always, not only when visible, otherwise Unity messes up selections)
             // OnGUI
             guiNode.OnGUI(nodeGuiData, node);
 
             // Fade out unselected nodes if node is visible and there's others that are selected (and more than one)
-//            if (NodeIsVisible(nodeGuiData.fullArea)) {
+//            if (AreaIsVisible(nodeGuiData.fullArea)) {
             if (nodeGuiData.isVisible) {
                 bool faded = selection.selectedNodes.Count > 1 && !selection.IsSelected(node);
                 if (faded) {
@@ -241,6 +241,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             if (helpPanel.isOpen) CloseHelpPanel();
             else OpenHelpPanel();
+        }
+
+        /// <summary>
+        /// Returns TRUE if the given area is visible (even if partially) inside the current nodeProcess area
+        /// </summary>
+        public bool AreaIsVisible(Rect area)
+        {
+            return area.xMax > relativeArea.xMin && area.xMin < relativeArea.xMax && area.yMax > relativeArea.yMin && area.yMin < relativeArea.yMax;
         }
 
         #endregion
@@ -723,7 +731,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         internal void EndGUI()
         {
             // DRAW CONNECTIONS BETWEEN NODES
-            // Only in case of Repaint or MouseButtonDown/Up
+            // Only in case of Repaint or MouseButtonDown/Up, and if both nodes are visible
             switch (Event.current.type) {
             case EventType.Repaint:
             case EventType.MouseDown:
@@ -1055,11 +1063,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             if (GUIUtility.keyboardControl > 0) _repaintOnEnd = true;
             GUI.FocusControl(null);
-        }
-
-        bool NodeIsVisible(Rect nodeArea)
-        {
-            return nodeArea.xMax > relativeArea.xMin && nodeArea.xMin < relativeArea.xMax && nodeArea.yMax > relativeArea.yMin && nodeArea.yMin < relativeArea.yMax;
         }
 
         bool NodeIsForwardConnectedTo(IEditorGUINode node, string id)
