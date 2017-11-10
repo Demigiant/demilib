@@ -148,12 +148,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
             } else guiNode = _typeToGUINode[type];
             Vector2 nodePosition = new Vector2((int)(node.guiPosition.x + relativeArea.x + areaShift.x), (int)(node.guiPosition.y + relativeArea.y + areaShift.y));
             NodeGUIData nodeGuiData = guiNode.GetAreas(nodePosition, node);
+            nodeGuiData.isVisible = NodeIsVisible(nodeGuiData.fullArea);
 
             // Draw node (always, not only when visible, otherwise Unity messes up selections)
             // OnGUI
             guiNode.OnGUI(nodeGuiData, node);
+
             // Fade out unselected nodes if node is visible and there's others that are selected (and more than one)
-            if (NodeIsVisible(nodeGuiData.fullArea)) {
+//            if (NodeIsVisible(nodeGuiData.fullArea)) {
+            if (nodeGuiData.isVisible) {
                 bool faded = selection.selectedNodes.Count > 1 && !selection.IsSelected(node);
                 if (faded) {
                     using (new DeGUI.ColorScope(null, null, new Color(1, 1, 1, 0.4f))) GUI.DrawTexture(nodeGuiData.fullArea, DeStylePalette.blackSquare);
@@ -193,17 +196,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 break;
             case EventType.Repaint:
                 nodeToGUIData[node] = nodeGuiData;
-                // Draw evidence
-                if (options.evidenceSelectedNodes && selection.IsSelected(node)) {
-                    using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
-                        GUI.Box(nodeGuiData.fullArea.Expand(5), "", _Styles.nodeSelectionOutlineThick);
+                if (nodeGuiData.isVisible) {
+                    // Draw evidence
+                    if (options.evidenceSelectedNodes && selection.IsSelected(node)) {
+                        using (new DeGUI.ColorScope(options.evidenceSelectedNodesColor)) {
+                            GUI.Box(nodeGuiData.fullArea.Expand(5), "", _Styles.nodeSelectionOutlineThick);
+                        }
                     }
-                }
-                // Draw end node icon
-                if (evidenceEndNode && _endGUINodes.Contains(node)) {
-                    float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 20);
-                    Rect r = new Rect(nodeGuiData.fullArea.xMax - icoSize * 0.5f, nodeGuiData.fullArea.yMax - icoSize * 0.5f, icoSize, icoSize);
-                    GUI.DrawTexture(r, DeStylePalette.ico_end);
+                    // Draw end node icon
+                    if (evidenceEndNode && _endGUINodes.Contains(node)) {
+                        float icoSize = Mathf.Min(nodeGuiData.fullArea.height, 20);
+                        Rect r = new Rect(nodeGuiData.fullArea.xMax - icoSize * 0.5f, nodeGuiData.fullArea.yMax - icoSize * 0.5f, icoSize, icoSize);
+                        GUI.DrawTexture(r, DeStylePalette.ico_end);
+                    }
                 }
                 break;
             }

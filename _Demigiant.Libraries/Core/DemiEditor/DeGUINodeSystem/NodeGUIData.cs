@@ -13,8 +13,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Rect extraArea0;
         public Color mainColor; // Node color (used by miniMap and as default connector color is no startColor/gradientColor is set)
         public List<Rect> connectorAreas; // Sub areas from which each connector should start. If NULL uses fullArea // TODO Implement better?
+        public bool isVisible { get; internal set; } // Set by NodeProcess.Draw(node...)
 
-        public NodeGUIData(Rect fullArea, Color? mainColor = null, Rect? extraArea0 = null)
+        public NodeGUIData(Rect fullArea, Color? mainColor = null, Rect? extraArea0 = null) : this()
         {
             this.fullArea = fullArea;
             this.extraArea0 = extraArea0 == null ? new Rect() : (Rect)extraArea0;
@@ -22,7 +23,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             dragArea = fullArea;
             connectorAreas = null;
         }
-        public NodeGUIData(Rect fullArea, Rect dragArea, Rect? extraArea0 = null)
+        public NodeGUIData(Rect fullArea, Rect dragArea, Rect? extraArea0 = null) : this()
         {
             this.fullArea = fullArea;
             this.dragArea = dragArea;
@@ -30,7 +31,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             this.mainColor = new Color(0.5f, 0.5f, 0.5f, 1);
             connectorAreas = null;
         }
-        public NodeGUIData(Rect fullArea, Rect dragArea, Color mainColor, Rect? extraArea0 = null)
+        public NodeGUIData(Rect fullArea, Rect dragArea, Color mainColor, Rect? extraArea0 = null) : this()
         {
             this.fullArea = fullArea;
             this.dragArea = dragArea;

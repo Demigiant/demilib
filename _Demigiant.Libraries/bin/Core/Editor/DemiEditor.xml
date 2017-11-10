@@ -308,7 +308,7 @@
             <summary>Used to fill <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeGUIData"/></summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.ABSDeGUINode.OnGUI(DG.DemiEditor.DeGUINodeSystem.NodeGUIData,DG.DemiLib.IEditorGUINode)">
-            <summary>Called only if the node is visible in the current area</summary>
+            <summary>Called when the node needs to be drawn</summary>
         </member>
         <member name="F:DG.DemiEditor.DeGUINodeSystem.ConnectionMode.Flexible">
             <summary>

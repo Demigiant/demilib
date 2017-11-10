@@ -20,7 +20,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// <summary>Used to fill <see cref="NodeGUIData"/></summary>
         protected internal abstract NodeGUIData GetAreas(Vector2 position, IEditorGUINode iNode);
 
-        /// <summary>Called only if the node is visible in the current area</summary>
+        /// <summary>Called when the node needs to be drawn</summary>
         protected internal abstract void OnGUI(NodeGUIData nodeGuiData, IEditorGUINode iNode);
 
         #endregion
