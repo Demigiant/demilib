@@ -801,7 +801,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         // Draw drag connector
                         Color connectionColor = Connector.Drag(
                             interaction, Event.current.mousePosition,
-                            nodeToGUIData[interaction.targetNode], _nodeToConnectionOptions[interaction.targetNode]
+                            nodeToGUIData[interaction.targetNode], _nodeToConnectionOptions[interaction.targetNode],
+                            options.connectorsThickness + 2
                         );
                         // Evidence origin
                         DeGUI.DrawColoredSquare(interaction.targetNodeConnectorArea.Expand(1), connectionColor.SetAlpha(0.32f));

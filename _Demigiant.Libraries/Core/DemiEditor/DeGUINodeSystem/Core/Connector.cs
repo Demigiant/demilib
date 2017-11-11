@@ -22,7 +22,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         public static readonly DragData dragData = new DragData();
 
-        const int _LineSize = 3;
         const int _MaxDistanceForSmartStraight = 40; // was 120
         const int _TangentDistance = 50;
         const int _TangentDistanceIfInverse = 90; // Tangent distance if TO is behind FROM
@@ -63,9 +62,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             Color color = GetConnectionColor(connectionIndex, fromTotConnections, fromGUIData, fromOptions);
             // Line (shadow + line)
             Handles.DrawBezier(
-                anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, _lineShadowColor, null, _LineSize + 2
+                anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, _lineShadowColor, null, process.options.connectorsThickness + 2
             );
-            Handles.DrawBezier(anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _LineSize);
+            Handles.DrawBezier(anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, color, null, process.options.connectorsThickness);
             // Line start square
             Rect fromSquareR;
             switch (anchorsData.fromSide) {
@@ -112,7 +111,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         // Returns the connection color
         public static Color Drag(
             InteractionManager interaction, Vector2 mousePosition,
-            NodeGUIData nodeGuiData, NodeConnectionOptions connectionOptions
+            NodeGUIData nodeGuiData, NodeConnectionOptions connectionOptions, float lineThickness
         ){
             dragData.Set(interaction.targetNode);
             int connectionIndex;
@@ -143,8 +142,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 GUI.DrawTexture(pointerTo, DeStylePalette.circle);
             }
             // Line
-            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.black, null, _LineSize + 2);
-            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, color, null, _LineSize + 2);
+            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, Color.black, null, lineThickness + 2);
+            Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, color, null, lineThickness);
 
             return color;
         }
