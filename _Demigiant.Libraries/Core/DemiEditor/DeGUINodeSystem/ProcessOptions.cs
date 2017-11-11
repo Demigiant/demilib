@@ -33,6 +33,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public int evidenceEndNodesBackgroundBorder = 26; // BG border for invasive evidence for nodes that have no forward connections
         public Color evidenceEndNodesBackgroundColor = new Color(1, 0, 0, 0.5f); // Color for invasive evidence for nodes that have no forward connections
         public float connectorsThickness = 3; // Thickness of connector lines
+        public bool connectorsShadow = true; // If TRUE, draws a shadow around connector lines (ignores this and always draws it when dragging)
         public bool showMinimap = true;
         public int minimapMaxSize = 150;
         public MinimapResolution minimapResolution = MinimapResolution.Normal;

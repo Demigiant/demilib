@@ -61,9 +61,11 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             AnchorsData anchorsData = GetAnchorsAllSides(process, connectionIndex, fromNode, fromArea, toNode, toGUIData.fullArea, fromOptions, useSubFromAreas);
             Color color = GetConnectionColor(connectionIndex, fromTotConnections, fromGUIData, fromOptions);
             // Line (shadow + line)
-            Handles.DrawBezier(
-                anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, _lineShadowColor, null, process.options.connectorsThickness + 2
-            );
+            if (process.options.connectorsShadow) {
+                Handles.DrawBezier(
+                    anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, _lineShadowColor, null, process.options.connectorsThickness + 2
+                );
+            }
             Handles.DrawBezier(anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, color, null, process.options.connectorsThickness);
             // Line start square
             Rect fromSquareR;
