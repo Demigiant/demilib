@@ -2,9 +2,11 @@
 // Created: 2017/04/19 12:31
 // License Copyright (c) Daniele Giardini
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using DG.DemiLib;
+using UnityEditor;
 using UnityEngine;
 
 namespace DG.DemiEditor.DeGUINodeSystem
@@ -14,6 +16,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
     /// </summary>
     public class HelpPanel
     {
+        #region EVENTS
+
+        public event Action<string> OnEditableNoteChanged;
+        void Dispatch_OnEditableNoteChanged(string changedNote) { if (OnEditableNoteChanged != null) OnEditableNoteChanged(changedNote); }
+
+        #endregion
+
+        public ProjectNotes notes;
         public bool isOpen { get; private set; }
 
         const int _InnerPadding = 14;
@@ -100,6 +110,21 @@ namespace DG.DemiEditor.DeGUINodeSystem
             _scroll = GUILayout.BeginScrollView(_scroll);
             GUILayout.Label("Help Panel", _Styles.titleLabel);
             DeGUILayout.HorizontalDivider(_EvidenceColor, 1, 0, 0);
+            // Project notes
+            if (notes.allowEditableNote || !string.IsNullOrEmpty(notes.note)) {
+                if (!string.IsNullOrEmpty(notes.note)) {
+                    GUILayout.Label(notes.note, _Styles.projectNotes);
+                }
+                if (notes.allowEditableNote) {
+                    EditorGUI.BeginChangeCheck();
+                    Rect r = GUILayoutUtility.GetRect(new GUIContent(notes.editableNote), _Styles.editableProjectNotes);
+                    using (new DeGUI.CursorColorScope(Color.white)) {
+                        notes.editableNote = EditorGUI.TextArea(r, notes.editableNote, _Styles.editableProjectNotes);
+                    }
+                    if (EditorGUI.EndChangeCheck()) Dispatch_OnEditableNoteChanged(notes.editableNote);
+                }
+            }
+            // ContentGroups
             int descriptionWidth = (int)Mathf.Min(area.width * 0.6f, 350);
             foreach (ContentGroup contentGroup in _ContentGroups) {
                 contentGroup.Parse();
@@ -154,6 +179,17 @@ namespace DG.DemiEditor.DeGUINodeSystem
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
         // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+        public struct ProjectNotes
+        {
+            /// <summary>Regular note</summary>
+            public string note;
+            /// <summary>Editable note (activated by setting <see cref="allowEditableNote"/> to TRUE
+            /// (but you will have to save the result somewhere yourself)</summary>
+            public string editableNote;
+            /// <summary>If TRUE shows the <see cref="editableNote"/> textArea</summary>
+            public bool allowEditableNote;
+        }
 
         public class ContentGroup
         {
@@ -240,7 +276,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         class Styles
         {
-            public GUIStyle rowBox, titleLabel, groupTitleLabel, descriptionLabel, definitionLabel, keysLabel;
+            public GUIStyle rowBox, titleLabel, groupTitleLabel, descriptionLabel, definitionLabel, keysLabel,
+                            projectNotes, editableProjectNotes;
             bool _initialized;
 
             public void Init()
@@ -259,6 +296,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     .Padding(_InnerPadding, 4, 4, 4).Margin(0);
                 keysLabel = new GUIStyle(GUI.skin.label).Add(Format.WordWrap, Format.RichText, _KeysColor)
                     .Padding(0, _InnerPadding, 4, 4).Margin(0);
+                projectNotes = DeGUI.styles.label.wordwrap.Clone(Color.white).Margin(0).Padding(_InnerPadding, _InnerPadding, 4, 4)
+                    .Background(DeStylePalette.blackSquare).StretchWidth();
+                editableProjectNotes = EditorStyles.textArea.Clone(Color.white, Format.WordWrap).Margin(0).Padding(_InnerPadding, _InnerPadding, 4, 4)
+                    .Background(DeStylePalette.purpleSquare);
             }
         }
     }

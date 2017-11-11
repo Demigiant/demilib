@@ -381,6 +381,16 @@
             Use this to add a content group to the Help Panel
             </summary>
         </member>
+        <member name="F:DG.DemiEditor.DeGUINodeSystem.HelpPanel.ProjectNotes.note">
+            <summary>Regular note</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeGUINodeSystem.HelpPanel.ProjectNotes.editableNote">
+            <summary>Editable note (activated by setting <see cref="F:DG.DemiEditor.DeGUINodeSystem.HelpPanel.ProjectNotes.allowEditableNote"/> to TRUE
+            (but you will have to save the result somewhere yourself)</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeGUINodeSystem.HelpPanel.ProjectNotes.allowEditableNote">
+            <summary>If TRUE shows the <see cref="F:DG.DemiEditor.DeGUINodeSystem.HelpPanel.ProjectNotes.editableNote"/> textArea</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.HelpPanel.ContentGroup.AppendDefinition(System.String)">
             <summary>
             Add definition. Supports rich-text but also these special tags:<para/>
