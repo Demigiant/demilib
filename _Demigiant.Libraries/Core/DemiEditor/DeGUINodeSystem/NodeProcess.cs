@@ -79,6 +79,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         bool _isDockableEditor; // Used in conjunction with hack to allow correct GUI scaling on dockable windows
         bool _repaintOnEnd; // If TRUE, repaints the editor during EndGUI. Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
+        Vector2 _forceApplyAreaShift; // Used by ShiftAreaTo to apply a shift the next time the process begins
 
         #region CONSTRUCTOR
 
@@ -123,6 +124,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
             interaction.Reset();
             selection.Reset();
             if (_minimap != null) _minimap.RefreshMapTextureOnNextPass();
+        }
+
+        /// <summary>
+        /// Shifts the visible are to the given coordinates and repaints on end
+        /// </summary>
+        public void ShiftAreaTo(Vector2 shift)
+        {
+            _forceApplyAreaShift = shift;
+            RepaintOnEnd();
         }
 
         /// <summary>
@@ -272,6 +282,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             _Styles.Init();
             position = nodeArea;
+            refAreaShift += _forceApplyAreaShift;
+            _forceApplyAreaShift = Vector2.zero;
             areaShift = new Vector2((int)refAreaShift.x, (int)refAreaShift.y);
             if (options.showMinimap) {
                 if (_minimap == null) _minimap = new Minimap(this);
@@ -726,6 +738,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 } else interaction.SetState(InteractionManager.State.Inactive);
                 break;
             }
+
+            // MINIMAP : BUTTON (view drawn after nodes, at end of EndGUI)
+            if (_minimap != null) _minimap.DrawButton();
         }
 
         internal void EndGUI()
@@ -820,9 +835,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     }
                     // NODE DRAGGING GUIDES
                     if (interaction.state == InteractionManager.State.DraggingNodes) _nodeDragManager.EndGUI();
-                    // MINIMAP
-                    if (_minimap != null) _minimap.Draw();
                 }
+                // MINIMAP : VIEW (button drawn before nodes, at end of BeginGUI)
+                if (_minimap != null && Event.current.type != EventType.Layout) _minimap.Draw();
                 // CONTEXT PANEL
                 _contextPanel.Draw();
                 // HELP PANEL

@@ -11,10 +11,14 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 {
     internal class Minimap
     {
+        static readonly Styles _Styles = new Styles();
         NodeProcess _process;
         Texture2D _texture;
         bool _requiresRefresh = true; // TRUE when the texture needs to be refreshed
-        static readonly Styles _Styles = new Styles();
+        // Layout data
+        bool _draw;
+        Rect _area, _visibleArea, _relativeArea, _fullNodesArea, _fullZeroBasedArea;
+        Vector2 _shiftFromOriginalNodesAreaPos;
 
         #region CONSTRUCTOR
 
@@ -27,69 +31,98 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         #region GUI
 
+        // Called to draw button (before nodes are drawn, so they don't cover the interaction)
+        public void DrawButton()
+        {
+            Setup();
+            if (!_draw) return;
+
+            // Button
+            if (_process.options.minimapClickToGoto) {
+                using (new DeGUI.ColorScope(null, null, Color.clear)) {
+                    if (GUI.Button(_area, "")) JumpToMousePosition();
+                }
+            }
+        }
+
         // Called only during Repaint
         public void Draw()
         {
-            if (_process.nodes.Count == 0) return;
-
-            Rect visibleArea = new Rect(_process.relativeArea);
-            Rect relativeArea = visibleArea.ResetXY();
-            Rect fullNodesArea = EvaluateFullNodesArea(); // x/y = TL node corner, width/height = exact size of area occupied by nodes without extra space
-            if (fullNodesArea.width < 1 || visibleArea.Includes(fullNodesArea)) return; // Don't draw map if nodes don't exit the visible area
-
-            _Styles.Init();
-            int maxSize = _process.options.minimapMaxSize;
-            float areaW, areaH;
-            Vector2 shiftFromOriginalNodesAreaPos = new Vector2();
-            Rect fullZeroBasedArea = new Rect();
-            // Store zero-based full area (nodes plus space in all directions) and shift between original nodes position
-            shiftFromOriginalNodesAreaPos = new Vector2(
-                fullNodesArea.x - visibleArea.x < 0 ? -fullNodesArea.x : -visibleArea.x,
-                fullNodesArea.y - visibleArea.y < 0 ? -fullNodesArea.y : -visibleArea.y
-            );
-            fullZeroBasedArea = new Rect(0, 0,
-                Mathf.Abs(Mathf.Min(0, fullNodesArea.x - visibleArea.x)) + Mathf.Max(fullNodesArea.xMax - visibleArea.x, relativeArea.xMax),
-                Mathf.Abs(Mathf.Min(0, fullNodesArea.y - visibleArea.y)) + Mathf.Max(fullNodesArea.yMax - visibleArea.y, relativeArea.yMax)
-            );
-            if (fullZeroBasedArea.width > fullZeroBasedArea.height) {
-                areaW = maxSize;
-                areaH = areaW * fullZeroBasedArea.height / fullZeroBasedArea.width;
-            } else {
-                areaH = maxSize;
-                areaW = areaH * fullZeroBasedArea.width / fullZeroBasedArea.height;
-            }
-            areaW /= _process.guiScale;
-            areaH /= _process.guiScale;
-
-            Rect area = new Rect(visibleArea.xMax - areaW - 3, visibleArea.yMax - areaH - 3, areaW, areaH);
+            if (!_draw) return;
 
             // DRAW MAP
             // Background
-            GUI.DrawTexture(area, DeStylePalette.blackSquareAlpha80);
+            GUI.DrawTexture(_area, DeStylePalette.blackSquareAlpha80);
             // Texture map
             if (_requiresRefresh || _texture == null) {
                 _requiresRefresh = false;
-                RefreshMapTexture(fullZeroBasedArea, shiftFromOriginalNodesAreaPos);
+                RefreshMapTexture(_fullZeroBasedArea, _shiftFromOriginalNodesAreaPos);
             }
-            GUI.DrawTexture(area, _texture, ScaleMode.StretchToFill);
+            GUI.DrawTexture(_area, _texture, ScaleMode.StretchToFill);
             // Visible area overlay
-            Rect innerArea = new Rect(area.x, area.y,
-                area.width * relativeArea.width / fullZeroBasedArea.width,
-                area.height * relativeArea.height / fullZeroBasedArea.height
+            Rect innerArea = new Rect(_area.x, _area.y,
+                _area.width * _relativeArea.width / _fullZeroBasedArea.width,
+                _area.height * _relativeArea.height / _fullZeroBasedArea.height
             );
-            if (fullNodesArea.x < visibleArea.x) {
-                float extraXL = Mathf.Abs(fullNodesArea.x);
-                float emptyX = extraXL + Mathf.Max(0, fullNodesArea.xMax - visibleArea.xMax);
-                innerArea.x += (area.width - innerArea.width) * (extraXL / emptyX);
+            if (_fullNodesArea.x < _visibleArea.x) {
+                float extraXL = Mathf.Abs(_fullNodesArea.x);
+                float emptyX = extraXL + Mathf.Max(0, _fullNodesArea.xMax - _visibleArea.xMax);
+                innerArea.x += (_area.width - innerArea.width) * (extraXL / emptyX);
             }
-            if (fullNodesArea.y < visibleArea.y) {
-                float extraYL = Mathf.Abs(fullNodesArea.y);
-                float emptyY = extraYL + Mathf.Max(0, fullNodesArea.yMax - visibleArea.yMax);
-                innerArea.y += (area.height - innerArea.height) * (extraYL / emptyY);
+            if (_fullNodesArea.y < _visibleArea.y) {
+                float extraYL = Mathf.Abs(_fullNodesArea.y);
+                float emptyY = extraYL + Mathf.Max(0, _fullNodesArea.yMax - _visibleArea.yMax);
+                innerArea.y += (_area.height - innerArea.height) * (extraYL / emptyY);
             }
             using (new DeGUI.ColorScope(null, null, new DeSkinColor(0.4f))) {
                 GUI.Box(innerArea, "", _process.guiScale < 1f ? DeGUI.styles.box.outline02 : DeGUI.styles.box.outline01);
             }
+        }
+
+        // Called when drawing the map button, to setup and store all areas
+        void Setup()
+        {
+            if (Event.current.type != EventType.Repaint) return;
+
+            _draw = true;
+            if (_process.nodes.Count == 0) {
+                _draw = false;
+                return;
+            }
+
+            _visibleArea = new Rect(_process.relativeArea);
+            _relativeArea = _visibleArea.ResetXY();
+            _fullNodesArea = EvaluateFullNodesArea(); // x/y = TL node corner, width/height = exact size of area occupied by nodes without extra space
+            if (_fullNodesArea.width < 1 || _visibleArea.Includes(_fullNodesArea)) {
+                _draw = false;
+                return; // Don't draw map if nodes don't exit the visible area
+            }
+
+            _Styles.Init();
+            int maxSize = _process.options.minimapMaxSize;
+            float areaW, areaH;
+            _shiftFromOriginalNodesAreaPos = new Vector2();
+            _fullZeroBasedArea = new Rect();
+            // Store zero-based full area (nodes plus space in all directions) and shift between original nodes position
+            _shiftFromOriginalNodesAreaPos = new Vector2(
+                _fullNodesArea.x - _visibleArea.x < 0 ? -_fullNodesArea.x : -_visibleArea.x,
+                _fullNodesArea.y - _visibleArea.y < 0 ? -_fullNodesArea.y : -_visibleArea.y
+            );
+            _fullZeroBasedArea = new Rect(0, 0,
+                Mathf.Abs(Mathf.Min(0, _fullNodesArea.x - _visibleArea.x)) + Mathf.Max(_fullNodesArea.xMax - _visibleArea.x, _relativeArea.xMax),
+                Mathf.Abs(Mathf.Min(0, _fullNodesArea.y - _visibleArea.y)) + Mathf.Max(_fullNodesArea.yMax - _visibleArea.y, _relativeArea.yMax)
+            );
+            if (_fullZeroBasedArea.width > _fullZeroBasedArea.height) {
+                areaW = maxSize;
+                areaH = areaW * _fullZeroBasedArea.height / _fullZeroBasedArea.width;
+            } else {
+                areaH = maxSize;
+                areaW = areaH * _fullZeroBasedArea.width / _fullZeroBasedArea.height;
+            }
+            areaW /= _process.guiScale;
+            areaH /= _process.guiScale;
+
+            _area = new Rect(_visibleArea.xMax - areaW - 3, _visibleArea.yMax - areaH - 3, areaW, areaH);
         }
 
         #endregion
@@ -145,6 +178,16 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             }
             // Apply
             _texture.Apply();
+        }
+
+        // Jumps to mouse position in minimap area
+        void JumpToMousePosition()
+        {
+            Vector2 relativeMouseP = Event.current.mousePosition - new Vector2(_area.x, _area.y);
+            float perc = _fullZeroBasedArea.width / _area.width;
+            Vector2 p = _shiftFromOriginalNodesAreaPos - relativeMouseP * perc; // TL corner
+            p += new Vector2(_visibleArea.width * 0.5f, _visibleArea.height * 0.5f);
+            _process.ShiftAreaTo(p);
         }
 
         #endregion

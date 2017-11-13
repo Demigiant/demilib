@@ -456,6 +456,11 @@
             Needs to be called when loading a complete new series of nodes
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ShiftAreaTo(UnityEngine.Vector2)">
+            <summary>
+            Shifts the visible are to the given coordinates and repaints on end
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.RepaintOnEnd">
             <summary>
             Tells the process to repaint once the process has ended.
