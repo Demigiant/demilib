@@ -104,6 +104,24 @@ namespace DG.DemiEditor
             if (main != null) GUI.color = (Color)main;
         }
 
+        public class LabelFieldWidthScope : DeScope
+        {
+            readonly float _prevLabelWidth;
+            readonly float _prevFieldWidth;
+            public LabelFieldWidthScope(float? labelWidth, float? fieldWidth = null)
+            {
+                _prevLabelWidth = EditorGUIUtility.labelWidth;
+                _prevFieldWidth = EditorGUIUtility.fieldWidth;
+                if (labelWidth != null) EditorGUIUtility.labelWidth = (float)labelWidth;
+                if (fieldWidth != null) EditorGUIUtility.fieldWidth = (float)fieldWidth;
+            }
+            protected override void CloseScope()
+            {
+                EditorGUIUtility.labelWidth = _prevLabelWidth;
+                EditorGUIUtility.fieldWidth = _prevFieldWidth;
+            }
+        }
+
         public class ColorScope : DeScope
         {
             readonly Color _prevBackground;
