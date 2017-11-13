@@ -123,6 +123,14 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             _texture.SetPixels32(pixels);
             // Draw the elements
             foreach (IEditorGUINode node in _process.nodes) {
+                bool evidenceAsEndNode = false;
+                if (_process.options.minimapEvidenceEndNodes) {
+                    foreach (string connId in node.connectedNodesIds) {
+                        if (!string.IsNullOrEmpty(connId)) continue;
+                        evidenceAsEndNode = true;
+                        break;
+                    }
+                }
                 NodeGUIData nodeGuiData = _process.nodeToGUIData[node];
                 Rect nodeRect = nodeGuiData.fullArea;
                 int xMin = (int)((nodeRect.x + shift.x) * w / fullZeroBasedArea.width);
@@ -131,7 +139,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 int yMax = (int)((nodeRect.yMax + shift.y) * w / fullZeroBasedArea.height);
                 for (int x = xMin; x < xMax; ++x) {
                     for (int y = yMin; y < yMax; ++y) {
-                        _texture.SetPixel(x, w - y, nodeGuiData.mainColor);
+                        _texture.SetPixel(x, w - y, evidenceAsEndNode ? Color.red : nodeGuiData.mainColor);
                     }
                 }
             }
