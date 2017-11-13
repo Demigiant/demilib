@@ -335,6 +335,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
             }
 
+            // MINIMAP : BUTTON (view drawn after nodes, at end of EndGUI)
+            if (_minimap != null) _minimap.DrawButton();
+
             switch (Event.current.type) {
             // MOUSE EVENTS ///////////////////////////////////////////////////////////////////////////////////////////////////////
             case EventType.MouseDown:
@@ -738,9 +741,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 } else interaction.SetState(InteractionManager.State.Inactive);
                 break;
             }
-
-            // MINIMAP : BUTTON (view drawn after nodes, at end of EndGUI)
-            if (_minimap != null) _minimap.DrawButton();
         }
 
         internal void EndGUI()

@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using DG.DemiEditor.Internal;
 using DG.DemiLib;
+using UnityEditor;
 using UnityEngine;
 
 namespace DG.DemiEditor.DeGUINodeSystem.Core
@@ -37,11 +38,14 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             Setup();
             if (!_draw) return;
 
-            // Button
+            // Button (uses mouseDown and area, button is there only to capture clicks)
             if (_process.options.minimapClickToGoto) {
-                using (new DeGUI.ColorScope(null, null, Color.clear)) {
-                    if (GUI.Button(_area, "")) JumpToMousePosition();
+                EditorGUIUtility.AddCursorRect(_area, MouseCursor.Arrow);
+                if (Event.current.type == EventType.MouseDown && _area.Contains(Event.current.mousePosition)) {
+                    Event.current.Use();
+                    JumpToMousePosition();
                 }
+                using (new DeGUI.ColorScope(null, null, Color.clear)) GUI.Button(_area, "");
             }
         }
 
