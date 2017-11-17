@@ -22,7 +22,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         public static readonly DragData dragData = new DragData();
 
-        const int _MaxDistanceForSmartStraight = 40; // was 120
+        const int _MaxDistanceForSmartStraight = 10; // was 120, then 40
         const int _TangentDistance = 50;
         const int _TangentDistanceIfInverse = 90; // Tangent distance if TO is behind FROM
         const int FromSquareWidth = 2; // Height and width are switched if start point is top/bottom
@@ -293,7 +293,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             bool toIsBehindFrom = a.fromSide == ConnectionSide.Right && a.toArrowP.x < fromArea.center.x;
             float d = Vector2.Distance(a.toArrowP, a.fromLineP);
             a.isStraight = connectionOptions.connectorMode == ConnectorMode.Straight
-                              || !toIsBehindFrom && connectionOptions.connectorMode == ConnectorMode.Smart && d <= _MaxDistanceForSmartStraight;
+                              || !toIsBehindFrom
+                                 && connectionOptions.connectorMode == ConnectorMode.Smart && d <= _MaxDistanceForSmartStraight
+                                 || Mathf.Approximately(a.toLineP.x, a.fromLineP.x) || Mathf.Approximately(a.toLineP.y, a.fromLineP.y);
             if (a.isStraight) {
                 a.fromTangent = a.fromLineP;
                 a.toTangent = a.toArrowP;

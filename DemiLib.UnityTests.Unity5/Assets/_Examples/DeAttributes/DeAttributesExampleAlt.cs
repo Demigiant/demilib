@@ -23,6 +23,9 @@ namespace Assets._Examples.DeAttributes
         public SampleObjAlt[] sampleObjsAlt = new[] {new SampleObjAlt(), new SampleObjAlt()};
         [Header("Sample header after array")]
         public string aString = "Hellow";
+        [DeHeader("Header-comment-divider")]
+        [DeComment("I'm a comment")]
+        [DeDivider(order = 1)]
         public GameObject[] sampleGos;
         public SampleObj aSampleObj = new SampleObj();
         public string aString0 = "Hellow";
