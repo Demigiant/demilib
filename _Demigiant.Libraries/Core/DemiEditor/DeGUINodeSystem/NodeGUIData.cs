@@ -12,6 +12,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Rect fullArea, dragArea;
         public Rect extraArea0;
         public Color mainColor; // Node color (used by miniMap and as default connector color is no startColor/gradientColor is set)
+        public bool disableSnapping; // If TRUE, disables snapping for this node
         public List<Rect> connectorAreas; // Sub areas from which each connector should start. If NULL uses fullArea // TODO Implement better?
         public bool isVisible { get; internal set; } // Set by NodeProcess.Draw(node...)
 

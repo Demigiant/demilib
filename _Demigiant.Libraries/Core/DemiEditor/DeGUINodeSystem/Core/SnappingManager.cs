@@ -43,7 +43,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             bool hasLeftSnappingPs = false;
             bool hasRightSnappingPs = false;
 
-            if (Event.current.alt) return; // ALT pressed - no snapping
+            if (Event.current.alt || nodeToGuiData[forNode].disableSnapping) return; // ALT pressed or snapping disabled - no snapping
 
             // Find snapping points and store them
             int len = allNodes.Count;
@@ -51,7 +51,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             for (int i = 0; i < len; ++i) {
                 IEditorGUINode node = allNodes[i];
                 if (node == forNode || excludedNodes.Contains(node)) continue;
-                Rect toArea = nodeToGuiData[node].fullArea;
+                NodeGUIData nodeGUIData = nodeToGuiData[node];
+                if (nodeGUIData.disableSnapping) continue;
+                Rect toArea = nodeGUIData.fullArea;
                 if (!hasNearSnappingX && forArea.yMax > toArea.y && forArea.y < toArea.yMax) {
                     // Within nearSnappingX range
                     // Check rightToLeft then leftToRight
@@ -84,7 +86,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 for (int i = 0; i < len; ++i) {
                     IEditorGUINode node = allNodes[i];
                     if (node == forNode || excludedNodes.Contains(node)) continue;
-                    Rect toArea = nodeToGuiData[node].fullArea;
+                    NodeGUIData nodeGUIData = nodeToGuiData[node];
+                    if (nodeGUIData.disableSnapping) continue;
+                    Rect toArea = nodeGUIData.fullArea;
                     if (!processRelativeArea.Overlaps(toArea)) continue;
                     if (!hasNearSnappingX) {
                         if (ValuesAreWithinBorderSnappingRange(forArea.x, toArea.x)) {
