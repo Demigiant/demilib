@@ -298,8 +298,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     .Padding(0, _InnerPadding, 4, 4).Margin(0);
                 projectNotes = DeGUI.styles.label.wordwrap.Clone(Color.white).Margin(0).Padding(_InnerPadding, _InnerPadding, 4, 4)
                     .Background(DeStylePalette.blackSquare).StretchWidth();
-                editableProjectNotes = EditorStyles.textArea.Clone(Color.white, Format.WordWrap).Margin(0).Padding(_InnerPadding, _InnerPadding, 4, 4)
-                    .Background(DeStylePalette.purpleSquare);
+                editableProjectNotes = EditorStyles.textArea.Clone(new Color(0.9f, 0.87f, 0.43f), Format.WordWrap).Margin(0).Padding(_InnerPadding, _InnerPadding, 4, 4)
+                    .Background(DeStylePalette.blackSquare);
             }
         }
     }
