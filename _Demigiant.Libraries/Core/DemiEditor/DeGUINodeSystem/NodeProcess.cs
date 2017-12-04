@@ -127,6 +127,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
         }
 
         /// <summary>
+        /// Forces the refresh of the area calculations. Useful if you need them before the first GUI call has run
+        /// </summary>
+        public void ForceRefreshAreas(Rect nodeArea)
+        {
+            position = nodeArea;
+            relativeArea = new Rect(0, 0, nodeArea.width / guiScale, nodeArea.height / guiScale);
+        }
+
+        /// <summary>
         /// Shifts the visible are to the given coordinates and repaints on end
         /// </summary>
         public void ShiftAreaTo(Vector2 shift)
