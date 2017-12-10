@@ -163,6 +163,18 @@
             Returns a copy of the Rect with its values shifted according the the given parameters
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.RectExtensions.ShiftXAndResize(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its x shifted by the given value and its width shrinked/expanded accordingly
+            (so that the xMax value will stay the same as before)
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.ShiftYAndResize(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its y shifted by the given value and its height shrinked/expanded accordingly
+            (so that the yMax value will stay the same as before)
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.RectExtensions.SetX(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy of the Rect with its X property set to the given value

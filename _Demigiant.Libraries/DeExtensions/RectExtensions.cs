@@ -87,6 +87,24 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
+        /// Returns a copy of the Rect with its x shifted by the given value and its width shrinked/expanded accordingly
+        /// (so that the xMax value will stay the same as before)
+        /// </summary>
+        public static Rect ShiftXAndResize(this Rect r, float x)
+        {
+            return new Rect(r.x + x, r.y, r.width - x, r.height);
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its y shifted by the given value and its height shrinked/expanded accordingly
+        /// (so that the yMax value will stay the same as before)
+        /// </summary>
+        public static Rect ShiftYAndResize(this Rect r, float y)
+        {
+            return new Rect(r.x, r.y + y, r.width, r.height - y);
+        }
+
+        /// <summary>
         /// Returns a copy of the Rect with its X property set to the given value
         /// </summary>
         public static Rect SetX(this Rect r, float value)
