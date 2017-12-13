@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using DG.DeExtensions;
 using DG.DemiEditor.DeGUINodeSystem.Core;
+using DG.DemiEditor.DeGUINodeSystem.Core.DebugSystem;
 using DG.DemiEditor.Internal;
 using DG.DemiLib;
 using UnityEditor;
@@ -61,6 +62,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public readonly Dictionary<IEditorGUINode,NodeGUIData> nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
         internal Vector2 guiScalePositionDiff { get; private set; } // Used by GUI calls that need to rotate the matrix
 
+        readonly NodeProcessDebug _debug = new NodeProcessDebug();
         internal readonly List<IEditorGUINode> nodes = new List<IEditorGUINode>(); // Used in conjunction with dictionaries to loop them in desired order
         readonly Dictionary<string,IEditorGUINode> _idToNode = new Dictionary<string,IEditorGUINode>();
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
@@ -282,6 +284,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 _guiInitialized = true;
                 _isDockableEditor = DeEditorPanelUtils.IsDockableWindow(editor);
             }
+            if (options.debug_showFps) _debug.OnNodeProcessStart(interaction.state);
 
             if (_isDockableEditor) {
                 // Hack to avoid clipping when zooming on dockable window
@@ -849,6 +852,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 if (_minimap != null && Event.current.type != EventType.Layout) _minimap.Draw();
                 // CONTEXT PANEL
                 _contextPanel.Draw();
+                // FPSDEBUG PANEL
+                if (options.debug_showFps) _debug.Draw(relativeArea);
                 // HELP PANEL
                 // Re-enables GUI so it can capture F1 to close it
                 if (helpPanel.isOpen) {
@@ -881,6 +886,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             EditorGUI.EndDisabledGroup();
             GUI.matrix = Matrix4x4.identity;
 
+            if (options.debug_showFps) _debug.OnNodeProcessEnd();
             if (_isDockableEditor) GUI.BeginGroup(editor.position.ResetXY().SetY(22)); // Hack to avoid clipping when zooming on dockable window
         }
 

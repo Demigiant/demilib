@@ -62,6 +62,8 @@
     <Compile Include="DeGUINodeSystem\ConnectorAttachMode.cs" />
     <Compile Include="DeGUINodeSystem\ConnectorMode.cs" />
     <Compile Include="DeGUINodeSystem\Core\ContextPanel.cs" />
+    <Compile Include="DeGUINodeSystem\Core\DebugSystem\NodeProcessDebug.cs" />
+    <Compile Include="DeGUINodeSystem\Core\DebugSystem\NodeProcessDebugGUI.cs" />
     <Compile Include="DeGUINodeSystem\Core\NodesClipboard.cs" />
     <Compile Include="DeGUINodeSystem\Core\Connector.cs" />
     <Compile Include="DeGUINodeSystem\Core\NodeDragManager.cs" />

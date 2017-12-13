@@ -58,7 +58,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                                    && fromGUIData.connectorAreas != null
                                    && (fromOptions.connectionMode != ConnectionMode.NormalPlus || connectionIndex < fromTotConnections - 1);
             Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
-            AnchorsData anchorsData = GetAnchorsAllSides(process, connectionIndex, fromNode, fromArea, toNode, toGUIData.fullArea, fromOptions, useSubFromAreas);
+            AnchorsData anchorsData = GetAnchorsAllSides(
+                process, connectionIndex, fromNode, new RectCache(fromArea), toNode,
+                new RectCache(toGUIData.fullArea), fromOptions, useSubFromAreas
+            );
             Color color = GetConnectionColor(connectionIndex, fromTotConnections, fromGUIData, fromOptions);
             // Line (shadow + line)
             if (process.options.connectorsShadow) {
@@ -155,7 +158,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         #region Helpers
 
         static AnchorsData GetAnchorsAllSides(
-            NodeProcess process, int connectionIndex, IEditorGUINode fromNode, Rect fromArea, IEditorGUINode toNode, Rect toArea,
+            NodeProcess process, int connectionIndex, IEditorGUINode fromNode, RectCache fromArea, IEditorGUINode toNode, RectCache toArea,
             NodeConnectionOptions connectionOptions, bool sideOnly
         ){
             AnchorsData a = new AnchorsData();
@@ -405,8 +408,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             return a;
         }
 
-        static bool FromAnchorCanBeVertical(NodeProcess process, IEditorGUINode fromNode, Rect fromArea, IEditorGUINode toNode, Rect toArea)
-        {
+        static bool FromAnchorCanBeVertical(
+            NodeProcess process, IEditorGUINode fromNode, RectCache fromArea, IEditorGUINode toNode, RectCache toArea
+        ){
             bool isBottom = fromArea.center.y <= toArea.y;
             if (
                 isBottom
@@ -416,7 +420,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 //                && Mathf.Abs(fromArea.center.x - toArea.center.x) > 20
                 && toArea.center.x - fromArea.center.x > 20
             ) return false;
-            foreach (IEditorGUINode node in process.nodes) {
+            int len = process.nodes.Count;
+            for (int i = 0; i < len; ++i) {
+                IEditorGUINode node = process.nodes[i];
                 if (node == fromNode || node == toNode) continue;
                 Rect r = process.nodeToGUIData[node].fullArea;
                 if (isBottom) {
@@ -428,8 +434,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             }
             return true;
         }
-        static bool ToAnchorCanBeVertical(NodeProcess process, IEditorGUINode fromNode, Rect fromArea, ConnectionSide fromSide, IEditorGUINode toNode, Rect toArea)
-        {
+        static bool ToAnchorCanBeVertical(
+            NodeProcess process, IEditorGUINode fromNode, RectCache fromArea, ConnectionSide fromSide, IEditorGUINode toNode, RectCache toArea
+        ){
             bool isTop = fromArea.center.y <= toArea.y;
             if (
                 isTop
@@ -437,7 +444,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 && (toArea.xMax < fromArea.center.x - 8 || toArea.x > fromArea.center.x + 8)
                 && Mathf.Abs(fromArea.center.x - toArea.center.x) > 20
             ) return false;
-            foreach (IEditorGUINode node in process.nodes) {
+            int len = process.nodes.Count;
+            for (int i = 0; i < len; ++i) {
+                IEditorGUINode node = process.nodes[i];
                 if (node == fromNode || node == toNode) continue;
                 Rect r = process.nodeToGUIData[node].fullArea;
                 if (isTop) {
@@ -528,6 +537,21 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             public bool isStraight;
             public bool arrowRequiresRotation;
             public float arrowRotationAngle;
+        }
+
+        // A rect that stores its center and max values without recalculating them every time
+        struct RectCache
+        {
+            public float x, y, xMax, yMax;
+            public Vector2 center;
+            public RectCache(Rect rect)
+            {
+                this.x = rect.x;
+                this.y = rect.y;
+                this.xMax = rect.xMax;
+                this.yMax = rect.yMax;
+                this.center = new Vector2(rect.center.x, rect.center.y);
+            }
         }
 
         struct ConnectionData
