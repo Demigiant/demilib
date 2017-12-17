@@ -42,6 +42,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public bool mouseWheelScalesGUI = true; // If TRUE implements GUI scaling via mouse wheel
         public float[] guiScaleValues = new[] { 1, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f }; // Ordered from max to min, 1f included
 
-        public bool debug_showFps;
+        public bool debug_showFps = false; // TEST reset to FALSE afterwards
     }
 }
