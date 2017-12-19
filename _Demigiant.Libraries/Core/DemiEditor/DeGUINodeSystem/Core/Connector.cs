@@ -222,7 +222,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             NodeConnectionOptions connectionOptions, bool sideOnly
         ){
             AnchorsData a = new AnchorsData();
-
             // From/to side
             bool toSideSetByFrom = false;
             if (sideOnly) a.fromSide = ConnectionSide.Right;
