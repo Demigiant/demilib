@@ -77,24 +77,6 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 RefreshAnchorsData();
             }
             NodeGUIData fromGUIData = _process.nodeToGUIData[fromNode];
-//            NodeGUIData toGUIData = process.nodeToGUIData[toNode];
-//
-//            // Prevent connection drawing if area between nodes is not visible
-//            if (!fromGUIData.isVisible && !toGUIData.isVisible) {
-//                // Verify if area between nodes is visible, otherwise don't draw anything
-//                Rect area = fromGUIData.fullArea.Add(toGUIData.fullArea);
-//                if (!process.AreaIsVisible(area)) return false;
-//            }
-//
-//            bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual
-//                                   && fromGUIData.connectorAreas != null
-//                                   && (fromOptions.connectionMode != ConnectionMode.NormalPlus || connectionIndex < fromTotConnections - 1);
-//            Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
-//            AnchorsData anchorsData = GetAnchorsAllSides(
-//                process, connectionIndex, fromNode, new RectCache(fromArea), toNode,
-//                new RectCache(toGUIData.fullArea), fromOptions, useSubFromAreas
-//            );
-//          Upper commented code became code below
             if (!_nodeToAnchorsData.ContainsKey(fromNode)) return false;
             AnchorsData anchorsData = _nodeToAnchorsData[fromNode][connectionIndex];
             if (!anchorsData.isSet) return false;
@@ -196,7 +178,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         void RefreshAnchorsData()
         {
-            Debug.Log("<color=#00ff00>REFRESH</color> " + Event.current.type);
+//            Debug.Log("<color=#00ff00>REFRESH</color> " + Event.current.type);
             _nodeToAnchorsData.Clear();
             for (int i = 0; i < _process.nodes.Count; ++i) {
                 IEditorGUINode fromNode = _process.nodes[i];
