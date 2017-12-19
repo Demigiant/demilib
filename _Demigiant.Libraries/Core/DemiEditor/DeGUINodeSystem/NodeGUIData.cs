@@ -41,6 +41,23 @@ namespace DG.DemiEditor.DeGUINodeSystem
             connectorAreas = null;
         }
 
+        /// <summary>
+        /// Recalculates all rects based on the given Y shift
+        /// </summary>
+        public void ShiftYBy(float value)
+        {
+            fullArea.y += value;
+            dragArea.y += value;
+            extraArea0.y += value;
+            if (connectorAreas != null) {
+                for (int i = 0; i < connectorAreas.Count; ++i) {
+                    Rect r = connectorAreas[i];
+                    r.y += value;
+                    connectorAreas[i] = r;
+                }
+            }
+        }
+
         public override string ToString()
         {
             return string.Format("fullArea: {0} - dragArea: {1} - extraArea0: {2}", fullArea, dragArea, extraArea0);

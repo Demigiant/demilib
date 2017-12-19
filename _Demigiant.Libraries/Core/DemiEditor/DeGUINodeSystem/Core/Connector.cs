@@ -13,7 +13,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
     /// <summary>
     /// Always connects a node from BottomOrRight side to TopOrLeft side
     /// </summary>
-    internal static class Connector
+    internal class Connector
     {
         enum ConnectionSide
         {
@@ -25,12 +25,40 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         const int _MaxDistanceForSmartStraight = 10; // was 120, then 40
         const int _TangentDistance = 50;
         const int _TangentDistanceIfInverse = 90; // Tangent distance if TO is behind FROM
-        const int FromSquareWidth = 2; // Height and width are switched if start point is top/bottom
-        const int FromSquareHeight = 8;
+        const int _FromSquareWidth = 2; // Height and width are switched if start point is top/bottom
+        const int _FromSquareHeight = 8;
         static readonly Styles _Styles = new Styles();
-        static Color _lineShadowColor = new Color(0, 0, 0, 0.4f);
+        static readonly Color _LineShadowColor = new Color(0, 0, 0, 0.4f);
+        bool _anchorsDataRefreshRequired = true;
+        NodeProcess _process;
+        // If dictiontary doesn't contain a node it means it has no connections to draw
+        readonly Dictionary<IEditorGUINode, AnchorsData[]> _nodeToAnchorsData = new Dictionary<IEditorGUINode, AnchorsData[]>();
+
+        public Connector(NodeProcess process)
+        {
+            _process = process;
+            Undo.undoRedoPerformed += () => { _anchorsDataRefreshRequired = true; };
+            process.OnGUIChange += x => {
+                switch (x) {
+                case NodeProcess.GUIChangeType.SortedNodes:
+                    // Don't refresh
+                    break;
+                default:
+//                    Debug.Log("<color=#ff825a>MARK FOR REFRESH VIA OnGUIChange</color> " + Event.current.type);
+                    _anchorsDataRefreshRequired = true;
+                    break;
+                }
+            };
+        }
 
         #region Public Methods
+
+        public void Reset()
+        {
+//            Debug.Log("<color=#ff825a>MARK FOR REFRESH VIA Reset</color> " + Event.current.type);
+            _nodeToAnchorsData.Clear();
+            _anchorsDataRefreshRequired = true;
+        }
 
         /// <summary>
         /// Always connects from BottomOrRight side to TopOrLeft side.
@@ -38,52 +66,61 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         /// Called during Repaint or MouseDown/Up.
         /// Returns TRUE if the connection was deleted using the delete connection button.
         /// </summary>
-        public static bool Connect(
-            NodeProcess process, int connectionIndex, int fromTotConnections, NodeConnectionOptions fromOptions,
-            IEditorGUINode fromNode, IEditorGUINode toNode
+        public bool Connect(
+            int connectionIndex, int fromTotConnections, NodeConnectionOptions fromOptions,
+            IEditorGUINode fromNode
         )
         {
             _Styles.Init();
-            NodeGUIData fromGUIData = process.nodeToGUIData[fromNode];
-            NodeGUIData toGUIData = process.nodeToGUIData[toNode];
-
-            // Prevent connection drawing if area between nodes is not visible
-            if (!fromGUIData.isVisible && !toGUIData.isVisible) {
-                // Verify if area between nodes is visible, otherwise don't draw anything
-                Rect area = fromGUIData.fullArea.Add(toGUIData.fullArea);
-                if (!process.AreaIsVisible(area)) return false;
+            if (_anchorsDataRefreshRequired) {
+                _anchorsDataRefreshRequired = false;
+                RefreshAnchorsData();
             }
-
-            bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual
-                                   && fromGUIData.connectorAreas != null
-                                   && (fromOptions.connectionMode != ConnectionMode.NormalPlus || connectionIndex < fromTotConnections - 1);
-            Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
-            AnchorsData anchorsData = GetAnchorsAllSides(
-                process, connectionIndex, fromNode, new RectCache(fromArea), toNode,
-                new RectCache(toGUIData.fullArea), fromOptions, useSubFromAreas
-            );
+            NodeGUIData fromGUIData = _process.nodeToGUIData[fromNode];
+//            NodeGUIData toGUIData = process.nodeToGUIData[toNode];
+//
+//            // Prevent connection drawing if area between nodes is not visible
+//            if (!fromGUIData.isVisible && !toGUIData.isVisible) {
+//                // Verify if area between nodes is visible, otherwise don't draw anything
+//                Rect area = fromGUIData.fullArea.Add(toGUIData.fullArea);
+//                if (!process.AreaIsVisible(area)) return false;
+//            }
+//
+//            bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual
+//                                   && fromGUIData.connectorAreas != null
+//                                   && (fromOptions.connectionMode != ConnectionMode.NormalPlus || connectionIndex < fromTotConnections - 1);
+//            Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[connectionIndex] : fromGUIData.fullArea;
+//            AnchorsData anchorsData = GetAnchorsAllSides(
+//                process, connectionIndex, fromNode, new RectCache(fromArea), toNode,
+//                new RectCache(toGUIData.fullArea), fromOptions, useSubFromAreas
+//            );
+//          Upper commented code became code below
+            if (!_nodeToAnchorsData.ContainsKey(fromNode)) return false;
+            AnchorsData anchorsData = _nodeToAnchorsData[fromNode][connectionIndex];
+            if (!anchorsData.isSet) return false;
+            //
             Color color = GetConnectionColor(connectionIndex, fromTotConnections, fromGUIData, fromOptions);
             // Line (shadow + line)
-            if (process.options.connectorsShadow) {
+            if (_process.options.connectorsShadow) {
                 Handles.DrawBezier(
-                    anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, _lineShadowColor, null, process.options.connectorsThickness + 2
+                    anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, _LineShadowColor, null, _process.options.connectorsThickness + 2
                 );
             }
-            Handles.DrawBezier(anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, color, null, process.options.connectorsThickness);
+            Handles.DrawBezier(anchorsData.fromLineP, anchorsData.toLineP, anchorsData.fromTangent, anchorsData.toTangent, color, null, _process.options.connectorsThickness);
             // Line start square
             Rect fromSquareR;
             switch (anchorsData.fromSide) {
             case ConnectionSide.Top:
-                fromSquareR = new Rect(anchorsData.fromMarkP.x - FromSquareHeight * 0.5f, anchorsData.fromMarkP.y - FromSquareWidth, FromSquareHeight, FromSquareWidth);
+                fromSquareR = new Rect(anchorsData.fromMarkP.x - _FromSquareHeight * 0.5f, anchorsData.fromMarkP.y - _FromSquareWidth, _FromSquareHeight, _FromSquareWidth);
                 break;
             case ConnectionSide.Bottom:
-                fromSquareR = new Rect(anchorsData.fromMarkP.x - FromSquareHeight * 0.5f, anchorsData.fromMarkP.y, FromSquareHeight, FromSquareWidth);
+                fromSquareR = new Rect(anchorsData.fromMarkP.x - _FromSquareHeight * 0.5f, anchorsData.fromMarkP.y, _FromSquareHeight, _FromSquareWidth);
                 break;
             case ConnectionSide.Left:
-                fromSquareR = new Rect(anchorsData.fromMarkP.x - FromSquareWidth, anchorsData.fromMarkP.y - FromSquareHeight * 0.5f, FromSquareWidth, FromSquareHeight);
+                fromSquareR = new Rect(anchorsData.fromMarkP.x - _FromSquareWidth, anchorsData.fromMarkP.y - _FromSquareHeight * 0.5f, _FromSquareWidth, _FromSquareHeight);
                 break;
             default: // Right
-                fromSquareR = new Rect(anchorsData.fromMarkP.x, anchorsData.fromMarkP.y - FromSquareHeight * 0.5f, FromSquareWidth, FromSquareHeight);
+                fromSquareR = new Rect(anchorsData.fromMarkP.x, anchorsData.fromMarkP.y - _FromSquareHeight * 0.5f, _FromSquareWidth, _FromSquareHeight);
                 break;
             }
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(fromSquareR, DeStylePalette.whiteSquare);
@@ -94,7 +131,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             );
             Matrix4x4 currGUIMatrix = GUI.matrix;
             if (anchorsData.arrowRequiresRotation) {
-                GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.toArrowP * process.guiScale + process.guiScalePositionDiff);
+                GUIUtility.RotateAroundPivot(anchorsData.arrowRotationAngle, anchorsData.toArrowP * _process.guiScale + _process.guiScalePositionDiff);
             }
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(arrowR, DeStylePalette.ico_nodeArrow);
             GUI.matrix = currGUIMatrix;
@@ -114,7 +151,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         }
 
         // Returns the connection color
-        public static Color Drag(
+        public Color Drag(
             InteractionManager interaction, Vector2 mousePosition,
             NodeGUIData nodeGuiData, NodeConnectionOptions connectionOptions, float lineThickness
         ){
@@ -151,6 +188,47 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             Handles.DrawBezier(attachP, mousePosition, attachP, mousePosition, color, null, lineThickness);
 
             return color;
+        }
+
+        #endregion
+
+        #region Methods
+
+        void RefreshAnchorsData()
+        {
+            Debug.Log("<color=#00ff00>REFRESH</color> " + Event.current.type);
+            _nodeToAnchorsData.Clear();
+            for (int i = 0; i < _process.nodes.Count; ++i) {
+                IEditorGUINode fromNode = _process.nodes[i];
+                NodeGUIData fromGUIData = _process.nodeToGUIData[fromNode];
+                NodeConnectionOptions fromOptions = _process.nodeToConnectionOptions[fromNode];
+                List<string> connections = fromNode.connectedNodesIds;
+                int totConnections = fromNode.connectedNodesIds.Count;
+                AnchorsData[] anchors = null;
+                for (int c = totConnections - 1; c > -1; --c) {
+                    string connId = connections[c];
+                    if (string.IsNullOrEmpty(connId)) continue; // No connection
+                    if (anchors == null) anchors = new AnchorsData[totConnections];
+                    IEditorGUINode toNode = _process.idToNode[connId];
+                    NodeGUIData toGUIData = _process.nodeToGUIData[toNode];
+                    // Verify if area between nodes is visible
+                    if (!fromGUIData.isVisible && !toGUIData.isVisible) {
+                        Rect area = fromGUIData.fullArea.Add(toGUIData.fullArea);
+                        if (!_process.AreaIsVisible(area)) continue; // No visible connection
+                    }
+                    bool useSubFromAreas = fromOptions.connectionMode != ConnectionMode.Dual
+                                           && fromGUIData.connectorAreas != null
+                                           && (fromOptions.connectionMode != ConnectionMode.NormalPlus || c < totConnections - 1);
+                    Rect fromArea = useSubFromAreas ? fromGUIData.connectorAreas[c] : fromGUIData.fullArea;
+                    AnchorsData anchorsData = GetAnchorsAllSides(
+                        _process, c, fromNode, new RectCache(fromArea), toNode,
+                        new RectCache(toGUIData.fullArea), fromOptions, useSubFromAreas
+                    );
+                    anchorsData.isSet = true;
+                    anchors[c] = anchorsData;
+                }
+                if (anchors != null) _nodeToAnchorsData.Add(fromNode, anchors);
+            }
         }
 
         #endregion
@@ -253,22 +331,22 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             switch (a.fromSide) {
             case ConnectionSide.Top:
                 a.fromLineP = a.fromMarkP = new Vector2(fromArea.center.x + fromDisplacement, fromArea.y);
-                a.fromLineP.y -= FromSquareWidth;
+                a.fromLineP.y -= _FromSquareWidth;
                 if (connectionOptions.connectionMode == ConnectionMode.Dual) a.fromLineP.x = a.fromMarkP.x += connectionIndex == 1 ? 4 : -4;
                 break;
             case ConnectionSide.Bottom:
                 a.fromLineP = a.fromMarkP = new Vector2(fromArea.center.x + fromDisplacement, fromArea.yMax);
-                a.fromLineP.y += FromSquareWidth;
+                a.fromLineP.y += _FromSquareWidth;
                 if (connectionOptions.connectionMode == ConnectionMode.Dual) a.fromLineP.x = a.fromMarkP.x += connectionIndex == 1 ? 4 : -4;
                 break;
             case ConnectionSide.Left:
                 a.fromLineP = a.fromMarkP = new Vector2(fromArea.x, fromArea.center.y + fromDisplacement);
-                a.fromLineP.x -= FromSquareWidth;
+                a.fromLineP.x -= _FromSquareWidth;
                 if (connectionOptions.connectionMode == ConnectionMode.Dual) a.fromLineP.y = a.fromMarkP.y += connectionIndex == 1 ? 4 : -4;
                 break;
             case ConnectionSide.Right:
                 a.fromLineP = a.fromMarkP = new Vector2(fromArea.xMax, fromArea.center.y + fromDisplacement);
-                a.fromLineP.x += FromSquareWidth;
+                a.fromLineP.x += _FromSquareWidth;
                 if (connectionOptions.connectionMode == ConnectionMode.Dual) a.fromLineP.y = a.fromMarkP.y += connectionIndex == 1 ? 4 : -4;
                 break;
             }
@@ -370,8 +448,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             }
             // Find correct fromLineP
             a.fromLineP = a.fromMarkP;
-            if (fromIsBottom) a.fromLineP.y += FromSquareWidth;
-            else a.fromLineP.x += FromSquareWidth;
+            if (fromIsBottom) a.fromLineP.y += _FromSquareWidth;
+            else a.fromLineP.x += _FromSquareWidth;
             //
             bool toIsTop = toArea.y > a.fromMarkP.y
                 && (fromArea.xMax > toArea.x || toArea.y - a.fromMarkP.y > toArea.center.x - a.fromMarkP.x)
@@ -530,6 +608,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
         struct AnchorsData
         {
+            public bool isSet;
             public Vector2 fromMarkP, fromLineP, toArrowP, toLineP;
             public Vector2 fromTangent, toTangent;
             public ConnectionSide fromSide, toSide;

@@ -64,10 +64,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         readonly NodeProcessDebug _debug = new NodeProcessDebug();
         internal readonly List<IEditorGUINode> nodes = new List<IEditorGUINode>(); // Used in conjunction with dictionaries to loop them in desired order
-        readonly Dictionary<string,IEditorGUINode> _idToNode = new Dictionary<string,IEditorGUINode>();
+        internal readonly Dictionary<string,IEditorGUINode> idToNode = new Dictionary<string,IEditorGUINode>();
+        internal readonly Dictionary<IEditorGUINode,NodeConnectionOptions> nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
         readonly Dictionary<Type,ABSDeGUINode> _typeToGUINode = new Dictionary<Type,ABSDeGUINode>();
-        readonly Dictionary<IEditorGUINode,NodeConnectionOptions> _nodeToConnectionOptions = new Dictionary<IEditorGUINode,NodeConnectionOptions>();
         readonly List<IEditorGUINode> _endGUINodes = new List<IEditorGUINode>(); // Used to draw invasive end node markers before drawing the nodes
+        readonly Connector _connector;
         readonly NodeDragManager _nodeDragManager;
         readonly NodesClipboard _clipboard;
         readonly ContextPanel _contextPanel;
@@ -106,6 +107,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             interaction = new InteractionManager(this);
             selection = new SelectionManager();
             guiScale = 1f;
+            _connector = new Connector(this);
             _nodeDragManager = new NodeDragManager(this);
             _clipboard = new NodesClipboard(this);
             _contextPanel = new ContextPanel(this);
@@ -125,6 +127,17 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             interaction.Reset();
             selection.Reset();
+            _connector.Reset();
+            if (_minimap != null) _minimap.RefreshMapTextureOnNextPass();
+        }
+
+        /// <summary>
+        /// Call this when the layout/size of one or more nodes changed because of external intervention
+        /// (if a whole new range of nodes has been loaded, just call <see cref="Reset"/> instead)
+        /// </summary>
+        public void MarkLayoutAsDirty()
+        {
+            _connector.Reset();
             if (_minimap != null) _minimap.RefreshMapTextureOnNextPass();
         }
 
@@ -188,12 +201,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
             switch (Event.current.type) {
             case EventType.Layout:
                 nodes.Add(node);
-                _idToNode.Add(node.id, node);
+                idToNode.Add(node.id, node);
                 nodeToGUIData.Add(node, nodeGuiData);
-                _nodeToConnectionOptions.Add(node, connectionOptions == null ? new NodeConnectionOptions(true) : (NodeConnectionOptions)connectionOptions);
+                nodeToConnectionOptions.Add(node, connectionOptions == null ? new NodeConnectionOptions(true) : (NodeConnectionOptions)connectionOptions);
                 if (evidenceEndNode) {
                     // Determine if mark as end node
-                    NodeConnectionOptions connOptions = _nodeToConnectionOptions[node];
+                    NodeConnectionOptions connOptions = nodeToConnectionOptions[node];
                     if (!connOptions.neverMarkAsEndNode) {
                         bool markAsEndNode = false;
                         switch (connOptions.connectionMode) {
@@ -216,6 +229,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 break;
             case EventType.Repaint:
+//                if (nodes.Count > 0 && node == nodes[0]) Debug.Log("Updated node layout (FIRST)" + Event.current.type);
+//                if (nodes.Count > 0 && node == nodes[nodes.Count - 1]) Debug.Log("Updated node layout (LAST)" + Event.current.type);
                 nodeToGUIData[node] = nodeGuiData;
                 if (nodeGuiData.isVisible) {
                     // Draw evidence
@@ -318,9 +333,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
             if (!interaction.mouseTargetIsLocked) EvaluateAndStoreMouseTarget();
             if (Event.current.type == EventType.Layout) {
                 nodes.Clear();
-                _idToNode.Clear();
+                idToNode.Clear();
                 nodeToGUIData.Clear();
-                _nodeToConnectionOptions.Clear();
+                nodeToConnectionOptions.Clear();
                 _endGUINodes.Clear();
             }
 
@@ -375,7 +390,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         // LMB pressed on a node
                         if (DeGUIKey.Exclusive.ctrl) {
                             // CTRL+Drag on node > drag connection (eventually)
-                            NodeConnectionOptions connectionOptions = _nodeToConnectionOptions[interaction.targetNode];
+                            NodeConnectionOptions connectionOptions = nodeToConnectionOptions[interaction.targetNode];
                             bool canDragConnector = connectionOptions.allowManualConnections
                                                     && (
                                                         connectionOptions.connectionMode == ConnectionMode.Flexible
@@ -671,7 +686,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     IEditorGUINode overNode = GetMouseOverNode();
                     if (overNode != null && overNode != interaction.targetNode) {
                         // Create new connection
-                        NodeConnectionOptions connectionOptions = _nodeToConnectionOptions[Connector.dragData.node];
+                        NodeConnectionOptions connectionOptions = nodeToConnectionOptions[Connector.dragData.node];
                         switch (connectionOptions.connectionMode) {
                         case ConnectionMode.Dual:
                             // Alt connection mode > add element to connectedNodeId 0 or 1 depending if SPACE is pressed or not
@@ -733,7 +748,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         _repaintOnEnd = true;
                     } else {
                         // Disconnect (unless connectionOptions are set to flexibleConnections)
-                        if (_nodeToConnectionOptions[Connector.dragData.node].connectionMode != ConnectionMode.Flexible) {
+                        if (nodeToConnectionOptions[Connector.dragData.node].connectionMode != ConnectionMode.Flexible) {
                             bool changed = !string.IsNullOrEmpty(Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex]);
                             Connector.dragData.node.connectedNodesIds[interaction.targetNodeConnectorAreaIndex] = null;
                             if (changed) {
@@ -771,16 +786,15 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     for (int c = totConnections - 1; c > -1; --c) {
                         string connId = connections[c];
                         if (string.IsNullOrEmpty(connId)) continue;
-                        if (!_idToNode.ContainsKey(connId)) {
+                        if (!idToNode.ContainsKey(connId)) {
                             // Node eliminated externally, remove from dictionary
-                            _idToNode.Remove(connId);
+                            idToNode.Remove(connId);
                         } else {
-                            IEditorGUINode toNode = _idToNode[connId];
-                            bool deletedConnection = Connector.Connect(this, c, totConnections, _nodeToConnectionOptions[fromNode], fromNode, toNode);
+                            bool deletedConnection = _connector.Connect(c, totConnections, nodeToConnectionOptions[fromNode], fromNode);
                             if (deletedConnection) {
                                 // Connection deleted, deal with flexibleConnections and non-flexibleConnections
                                 aConnectionWasDeleted = true;
-                                ConnectionMode connectionMode = _nodeToConnectionOptions[fromNode].connectionMode;
+                                ConnectionMode connectionMode = nodeToConnectionOptions[fromNode].connectionMode;
                                 switch (connectionMode) {
                                 case ConnectionMode.Flexible:
                                     totConnections--;
@@ -826,9 +840,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     // DRAW CONNECTOR DRAGGING
                     case InteractionManager.State.DraggingConnector:
                         // Draw drag connector
-                        Color connectionColor = Connector.Drag(
+                        Color connectionColor = _connector.Drag(
                             interaction, Event.current.mousePosition,
-                            nodeToGUIData[interaction.targetNode], _nodeToConnectionOptions[interaction.targetNode],
+                            nodeToGUIData[interaction.targetNode], nodeToConnectionOptions[interaction.targetNode],
                             options.connectorsThickness + 2
                         );
                         // Evidence origin
@@ -975,7 +989,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     _tmp_nodes.Add(node);
                     continue;
                 }
-                _clipboard.Add(node, clone, _nodeToConnectionOptions[node], _onCloneNodeCallback);
+                _clipboard.Add(node, clone, nodeToConnectionOptions[node], _onCloneNodeCallback);
             }
             if (_clipboard.currClones.Count == 0) return false;
             
@@ -1005,8 +1019,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 node.guiPosition += offset;
                 controlNodes.Add(node);
                 nodeToGUIData.Add(node, _clipboard.GetGuiDataByCloneId(node.id));
-                _nodeToConnectionOptions.Add(node, _clipboard.GetConnectionOptionsByCloneId(node.id));
-                _idToNode.Add(node.id, node);
+                nodeToConnectionOptions.Add(node, _clipboard.GetConnectionOptionsByCloneId(node.id));
+                idToNode.Add(node.id, node);
             }
             return true;
         }
@@ -1078,7 +1092,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         {
             foreach (string id in fromNode.connectedNodesIds) {
                 if (string.IsNullOrEmpty(id)) continue;
-                IEditorGUINode forwardConnectedNode = _idToNode[id];
+                IEditorGUINode forwardConnectedNode = idToNode[id];
                 if (_tmp_nodes.Contains(forwardConnectedNode)) continue;
                 _tmp_nodes.Add(forwardConnectedNode);
                 selection.Select(forwardConnectedNode, true);

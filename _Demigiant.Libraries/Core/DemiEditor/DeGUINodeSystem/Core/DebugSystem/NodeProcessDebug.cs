@@ -9,8 +9,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core.DebugSystem
 {
     internal class NodeProcessDebug
     {
-        readonly Data _panningData = new Data();
-        Data _currData;
+        public readonly DataStore panningData = new DataStore();
+        DataStore _currDataStore;
 
         #region Public Methods
 
@@ -21,26 +21,19 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core.DebugSystem
 
         public void OnNodeProcessStart(InteractionManager.State interactionState)
         {
-            if (Event.current.type != EventType.Layout) return;
             switch (interactionState) {
             case InteractionManager.State.Panning:
-                _currData = _panningData;
+                _currDataStore = panningData;
                 break;
             }
-            if (_currData != null) _currData.OnGUIStart();
+            if (_currDataStore != null) _currDataStore.OnGUIStart();
         }
 
         public void OnNodeProcessEnd()
         {
-            if (Event.current.type != EventType.Repaint) return;
-            if (_currData == null) return;
-            _currData.OnGUIEnd();
-            _currData = null;
-        }
-
-        public float GetPanningAvrgFps()
-        {
-            return _panningData.avrgFps;
+            if (_currDataStore == null) return;
+            _currDataStore.OnGUIEnd();
+            _currDataStore = null;
         }
 
         #endregion
@@ -49,23 +42,71 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core.DebugSystem
         // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
-        class Data
+        internal class DataStore
         {
-            public float avrgFps { get; private set; }
+            public float avrgFps_Layout { get { return _eventData[0].avrgFps; } }
+            public float avrgFps_Repaint { get { return _eventData[1].avrgFps; } }
+            public float avrgFps_LayoutAndRepaint { get { return _eventData[2].avrgFps; } }
+            public float avrgDrawTime_Layout { get { return _eventData[0].avrgMs; } }
+            public float avrgDrawTime_Repaint { get { return _eventData[1].avrgMs; } }
+            public float avrgDrawTime_LayoutAndRepaint { get { return _eventData[2].avrgMs; } }
 
-            const int _MaxToStore = 30;
-            readonly List<float> _elapsedTimes = new List<float>(_MaxToStore);
-            readonly List<float> _avrgOverTime = new List<float>(_MaxToStore);
-            float _guiStartTime;
+            /// <summary>Layout, Repaint, LayoutAndRepaint</summary>
+            readonly Data[] _eventData;
+
+            public DataStore()
+            {
+                _eventData = new[] {new Data(), new Data(), new Data()};
+            }
 
             public void OnGUIStart()
             {
-                _guiStartTime = Time.realtimeSinceStartup;
+                float time = Time.realtimeSinceStartup;
+                switch (Event.current.type) {
+                case EventType.Layout:
+                    _eventData[0].OnGUIStart(time);
+                    _eventData[2].OnGUIStart(time);
+                    break;
+                case EventType.Repaint:
+                    _eventData[1].OnGUIStart(time);
+                    break;
+                }
             }
 
             public void OnGUIEnd()
             {
-                float elapsed = Time.realtimeSinceStartup - _guiStartTime;
+                float time = Time.realtimeSinceStartup;
+                switch (Event.current.type) {
+                case EventType.Layout:
+                    _eventData[0].OnGUIEnd(time);
+                    break;
+                case EventType.Repaint:
+                    _eventData[1].OnGUIEnd(time);
+                    _eventData[2].OnGUIEnd(time);
+                    break;
+                }
+            }
+        }
+
+        class Data
+        {
+            public float avrgFps { get; private set; }
+            public float avrgMs { get; private set; }
+
+            const int _MaxToStore = 30;
+            readonly List<float> _elapsedTimes = new List<float>(_MaxToStore);
+            readonly List<float> _avrgFpsOverTime = new List<float>(_MaxToStore);
+            readonly List<float> _avrgMsOverTime = new List<float>(_MaxToStore);
+            float _guiStartTime;
+
+            public void OnGUIStart(float time)
+            {
+                _guiStartTime = time;
+            }
+
+            public void OnGUIEnd(float time)
+            {
+                float elapsed = time - _guiStartTime;
                 if (_elapsedTimes.Count > _MaxToStore) _elapsedTimes.RemoveAt(0);
                 _elapsedTimes.Add(elapsed);
                 StoreAverageFps();
@@ -75,7 +116,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core.DebugSystem
             {
                 int len = _elapsedTimes.Count;
                 if (len == 0) {
-                    avrgFps = 0;
+                    avrgFps = avrgMs = 0;
                     return;
                 }
                 float tot = 0;
@@ -83,8 +124,11 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core.DebugSystem
                     tot += _elapsedTimes[i];
                 }
                 avrgFps = 1 / (tot / len);
-                if (_avrgOverTime.Count > _MaxToStore) _avrgOverTime.RemoveAt(0);
-                _avrgOverTime.Add(avrgFps);
+                if (_avrgFpsOverTime.Count > _MaxToStore) _avrgFpsOverTime.RemoveAt(0);
+                _avrgFpsOverTime.Add(avrgFps);
+                avrgMs = (tot / len) * 1000;
+                if (_avrgMsOverTime.Count > _MaxToStore) _avrgMsOverTime.RemoveAt(0);
+                _avrgMsOverTime.Add(avrgMs);
             }
         }
     }

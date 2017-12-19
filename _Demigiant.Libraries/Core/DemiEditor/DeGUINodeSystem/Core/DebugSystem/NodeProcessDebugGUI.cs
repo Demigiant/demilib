@@ -8,8 +8,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core.DebugSystem
 {
     internal static class NodeProcessDebugGUI
     {
-        static readonly string[] _LabelsTxts = new string[2];
-        static readonly Rect[] _LabelsRects = new Rect[2];
+        static readonly string[] _LabelsTxts = new string[3];
+        static readonly Rect[] _LabelsRects = new Rect[3];
 
         #region GUI
 
@@ -21,7 +21,18 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core.DebugSystem
             const int dist = 2;
 
             _LabelsTxts[0] = "<b><color=#ff0000>NodeProcess DEBUG</color></b>";
-            _LabelsTxts[1] = "<b>Panning Avrg FPS:</b> " + debug.GetPanningAvrgFps().ToString("N2");
+            _LabelsTxts[1] = string.Format(
+                "<b>Panning Avrg <color=#4290f5>FPS</color> (Layout/Repaint/Layout+Repaint):</b> <color=#ffd845>{0:N2}</color> / <color=#ffd845>{1:N2}</color> / <color=#ffd845>{2:N2}</color>",
+                debug.panningData.avrgFps_Layout,
+                debug.panningData.avrgFps_Repaint,
+                debug.panningData.avrgFps_LayoutAndRepaint
+            );
+            _LabelsTxts[2] = string.Format(
+                "<b>Panning Avrg <color=#4290f5>MS</color> (Layout/Repaint/Layout+Repaint):</b> <color=#ffd845>{0:N2}</color> / <color=#ffd845>{1:N2}</color> / <color=#ffd845>{2:N2}</color>",
+                debug.panningData.avrgDrawTime_Layout,
+                debug.panningData.avrgDrawTime_Repaint,
+                debug.panningData.avrgDrawTime_LayoutAndRepaint
+            );
 
             Rect bgR = new Rect(processArea.x, processArea.y, 0, bgPadding * 2);
             for (int i = 0; i < _LabelsTxts.Length; ++i) {

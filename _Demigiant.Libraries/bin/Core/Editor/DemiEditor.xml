@@ -328,6 +328,9 @@
             Must always have at least one element in connectedNodesIds
             </summary>
         </member>
+        <member name="F:DG.DemiEditor.DeGUINodeSystem.Core.DebugSystem.NodeProcessDebug.DataStore._eventData">
+            <summary>Layout, Repaint, LayoutAndRepaint</summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.Core.NodesClipboard">
             <summary>
             Stores cloned nodes for pasting
@@ -350,7 +353,7 @@
             Always connects a node from BottomOrRight side to TopOrLeft side
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.Connector.Connect(DG.DemiEditor.DeGUINodeSystem.NodeProcess,System.Int32,System.Int32,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions,DG.DemiLib.IEditorGUINode,DG.DemiLib.IEditorGUINode)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.Connector.Connect(System.Int32,System.Int32,DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions,DG.DemiLib.IEditorGUINode)">
             <summary>
             Always connects from BottomOrRight side to TopOrLeft side.
             If ALT is pressed shows the delete connection button.
@@ -406,6 +409,11 @@
             </summary>
             <param name="newLine">If TRUE and there's other keys/targets, adds the new key on a new line preceded by a comma</param>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeGUIData.ShiftYBy(System.Single)">
+            <summary>
+            Recalculates all rects based on the given Y shift
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUINodeSystem.InteractionManager">
             <summary>
             One per <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/>.
@@ -454,6 +462,12 @@
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Reset">
             <summary>
             Needs to be called when loading a complete new series of nodes
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.MarkLayoutAsDirty">
+            <summary>
+            Call this when the layout/size of one or more nodes changed because of external intervention
+            (if a whole new range of nodes has been loaded, just call <see cref="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Reset"/> instead)
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ForceRefreshAreas(UnityEngine.Rect)">
