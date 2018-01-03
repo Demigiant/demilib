@@ -4,6 +4,16 @@
         <name>DemiEditor</name>
     </assembly>
     <members>
+        <member name="T:DG.DemiEditor.DeEditorCompatibilityUtils">
+            <summary>
+            Utils to use he correct method based on Unity's version
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.EncodeToPNG(UnityEngine.Texture2D)">
+            <summary>
+            Encodes to PNG using reflection to use correct method depending if editor is version 2017 or earlier
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeEditorFileUtils">
             <summary>
             File utils

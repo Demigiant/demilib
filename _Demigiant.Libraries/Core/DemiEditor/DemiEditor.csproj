@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeEditorCompatibilityUtils.cs" />
     <Compile Include="DeEditorFileUtils.cs" />
     <Compile Include="DeEditorGUIUtils.cs" />
     <Compile Include="DeEditorHierarchyUtils.cs" />
