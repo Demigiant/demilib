@@ -20,7 +20,7 @@ namespace DG.DeInspektorEditor
     [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)] [CanEditMultipleObjects]
     public class DeInspektor : Editor
     {
-        public const string Version = "0.5.270";
+        public const string Version = "0.5.275";
         public static DeInspektor I { get; private set; }
         static GUIStyle _arrayElementBtStyle;
         DeMethodButtonEditor _methodButtonEditor;
@@ -129,7 +129,7 @@ namespace DG.DeInspektorEditor
             GUI.backgroundColor = currColor;
             GUILayout.EndHorizontal();
 
-            if (!iterator.isExpanded) return;
+            if (!iterator.isExpanded || iterator.serializedObject == null) return;
 
             // List contents
             IList iList = null;
