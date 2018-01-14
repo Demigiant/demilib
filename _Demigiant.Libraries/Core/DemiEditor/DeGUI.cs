@@ -2,6 +2,7 @@
 // Created: 2015/04/24 18:27
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using DG.DemiLib;
 using DG.DemiLib.Core;
@@ -51,6 +52,28 @@ namespace DG.DemiEditor
             defaultGUIColor = GUI.color;
             defaultGUIBackgroundColor = GUI.backgroundColor;
             defaultGUIContentColor = GUI.contentColor;
+        }
+
+        /// <summary>
+        /// Better implementation of GUI.BeginScrollView.
+        /// Returns the modified scrollView struct.<para/>
+        /// Must be closed by a DeGUI.<see cref="EndScrollView"/>.
+        /// </summary>
+        /// <param name="scrollViewArea">Area used by the scrollView</param>
+        /// <param name="scrollView"><see cref="DeScrollView"/> target</param>
+        /// <param name="resetContentHeightToZero">If TRUE (default) resets <see cref="DeScrollView.fullContentArea"/>.height to 0
+        /// after beginning the ScrollView</param>
+        public static DeScrollView BeginScrollView(Rect scrollViewArea, DeScrollView scrollView, bool resetContentHeightToZero = true)
+        {
+            scrollView.Begin(scrollViewArea, resetContentHeightToZero);
+            return scrollView;
+        }
+        /// <summary>
+        /// Closes a DeGUI.<see cref="BeginScrollView"/> correctly
+        /// </summary>
+        public static void EndScrollView()
+        {
+            DeScrollView.Current().End();
         }
 
         /// <summary>

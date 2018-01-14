@@ -569,6 +569,47 @@
             Returns the given <see cref="T:UnityEngine.KeyCode"/> as an int, or -1 if it's not a number
             </summary>
         </member>
+        <member name="T:DG.DemiEditor.DeScrollView">
+            <summary>
+            Returns by <see cref="M:DG.DemiEditor.DeGUI.BeginScrollView(UnityEngine.Rect,DG.DemiEditor.DeScrollView,System.Boolean)"/>.
+            Contains properties and methods to manage non-layout scrollview better.<para/>
+            Remember to use <see cref="M:DG.DemiEditor.DeScrollView.IncreaseContentHeightBy(System.Single)"/> or <see cref="M:DG.DemiEditor.DeScrollView.SetContentHeight(System.Single)"/> to increase or set the full content height
+            </summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeScrollView.area">
+            <summary>Area used by ScrollView and its content</summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeScrollView.fullContentArea">
+            <summary>Full content area regardless if visible or not. Its height should be set manually based on the contents' height</summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeScrollView.visibleContentArea">
+            <summary>Content area currently visible (scroll bars excluded)</summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeScrollView.scrollPosition">
+            <summary>Current scrollPosition</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeScrollView.Current">
+            <summary>
+            Returns the current <see cref="T:DG.DemiEditor.DeScrollView"/> open, or an empty one if none is open.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeScrollView.SetContentHeight(System.Single)">
+            <summary>
+            Sets the <see cref="P:DG.DemiEditor.DeScrollView.fullContentArea"/> height
+            </summary>
+            <param name="height"></param>
+        </member>
+        <member name="M:DG.DemiEditor.DeScrollView.IncreaseContentHeightBy(System.Single)">
+            <summary>
+            Increase the <see cref="P:DG.DemiEditor.DeScrollView.fullContentArea"/> height by the given amount
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:DG.DemiEditor.DeScrollView.IsVisible(UnityEngine.Rect)">
+            <summary>
+            Returns TRUE if the given rect is at least partially visible in the displayed scroll area
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeSkinStyle">
             <summary>
             Contains both free and pro skins GUIStyle variations,
@@ -1000,6 +1041,22 @@
             </summary>
             <param name="guiColorPalette">Eventual <see cref="T:DG.DemiLib.DeColorPalette"/> to use</param>
             <param name="guiStylePalette">Eventual <see cref="T:DG.DemiEditor.DeStylePalette"/> to use</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.BeginScrollView(UnityEngine.Rect,DG.DemiEditor.DeScrollView,System.Boolean)">
+            <summary>
+            Better implementation of GUI.BeginScrollView.
+            Returns the modified scrollView struct.<para/>
+            Must be closed by a DeGUI.<see cref="M:DG.DemiEditor.DeGUI.EndScrollView"/>.
+            </summary>
+            <param name="scrollViewArea">Area used by the scrollView</param>
+            <param name="scrollView"><see cref="T:DG.DemiEditor.DeScrollView"/> target</param>
+            <param name="resetContentHeightToZero">If TRUE (default) resets <see cref="P:DG.DemiEditor.DeScrollView.fullContentArea"/>.height to 0
+            after beginning the ScrollView</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.EndScrollView">
+            <summary>
+            Closes a DeGUI.<see cref="M:DG.DemiEditor.DeGUI.BeginScrollView(UnityEngine.Rect,DG.DemiEditor.DeScrollView,System.Boolean)"/> correctly
+            </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ExitCurrentEvent">
             <summary>
