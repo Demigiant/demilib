@@ -605,6 +605,14 @@
             </summary>
             <param name="value"></param>
         </member>
+        <member name="M:DG.DemiEditor.DeScrollView.GetSingleLineRect(System.Single,System.Boolean)">
+            <summary>
+            Returns a Rect for a single line at the current scrollView yMax
+            </summary>
+            <param name="height">If less than 0 uses default line height, otherwise the value passed</param>
+            <param name="increaseScrollViewHeight">if TRUE (default) automatically increases the height of the <see cref="P:DG.DemiEditor.DeScrollView.fullContentArea"/> accordingly</param>
+            <returns></returns>
+        </member>
         <member name="M:DG.DemiEditor.DeScrollView.IsVisible(UnityEngine.Rect)">
             <summary>
             Returns TRUE if the given rect is at least partially visible in the displayed scroll area
@@ -1112,6 +1120,9 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ColoredButton(UnityEngine.Rect,UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
             <summary>Colored button</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.FoldoutButton(UnityEngine.Rect,System.Boolean,System.String,System.Boolean,System.Boolean)">
+            <summary>Toolbar foldout button which allows clicking even on its label</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.PressButton(UnityEngine.Rect,System.String,UnityEngine.GUIStyle)">
             <summary>

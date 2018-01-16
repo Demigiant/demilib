@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using DG.DemiEditor.Internal;
+using UnityEditor;
 using UnityEngine;
 
 namespace DG.DemiEditor
@@ -52,6 +53,19 @@ namespace DG.DemiEditor
         public void IncreaseContentHeightBy(float value)
         {
             fullContentArea = new Rect(fullContentArea.x, fullContentArea.y, fullContentArea.width, fullContentArea.height + value);
+        }
+
+        /// <summary>
+        /// Returns a Rect for a single line at the current scrollView yMax
+        /// </summary>
+        /// <param name="height">If less than 0 uses default line height, otherwise the value passed</param>
+        /// <param name="increaseScrollViewHeight">if TRUE (default) automatically increases the height of the <see cref="fullContentArea"/> accordingly</param>
+        /// <returns></returns>
+        public Rect GetSingleLineRect(float height = -1, bool increaseScrollViewHeight = true)
+        {
+            Rect r = new Rect(fullContentArea.x, fullContentArea.yMax, fullContentArea.width, height < 0 ? EditorGUIUtility.singleLineHeight : height);
+            if (increaseScrollViewHeight) IncreaseContentHeightBy(r.height);
+            return r;
         }
 
         /// <summary>
