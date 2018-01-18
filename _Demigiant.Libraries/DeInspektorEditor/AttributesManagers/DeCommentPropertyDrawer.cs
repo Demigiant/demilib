@@ -54,6 +54,11 @@ namespace DG.DeInspektorEditor.AttributesManagers
                 r.width += _ExtendedWidthIncrement;
             }
             r.height -= attr.marginBottom;
+            if (attr.style == DeCommentStyle.WrapNextLine) {
+                r.x -= 1;
+                r.width += 2;
+                r.height += attr.marginBottom + EditorGUIUtility.singleLineHeight + 2;
+            }
 
             bool wasGUIEnabled = GUI.enabled;
             GUI.enabled = isTrue && wasGUIEnabled;

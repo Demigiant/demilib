@@ -28,12 +28,12 @@ namespace DG.DeInspektor.Attributes
         public string textColor;
         /// <summary>Background color</summary>
         public string bgColor;
-        /// <summary>Margin bottom (default = 3)</summary>
-        public int marginBottom = 3;
+        /// <summary>Margin bottom (default = 1)</summary>
+        public int marginBottom = 1;
         /// <summary>Comment style (default = Box)</summary>
         public DeCommentStyle style = DeCommentStyle.Box;
-        /// <summary>Text anchor (default = MiddleLeft)</summary>
-        public TextAnchor textAnchor = TextAnchor.MiddleLeft;
+        /// <summary>Text anchor (default = UpperLeft)</summary>
+        public TextAnchor textAnchor = TextAnchor.UpperLeft;
 
         internal string text;
         internal DeCondition condition;

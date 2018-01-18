@@ -13,6 +13,8 @@ namespace DG.DeInspektor.Attributes
         /// <summary>Text only</summary>
         TextOnly,
         /// <summary>Text only, placed inside the value area and not encompassing the label area</summary>
-        TextInValueArea
+        TextInValueArea,
+        /// <summary>Box that wraps the next line</summary>
+        WrapNextLine
     }
 }

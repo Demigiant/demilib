@@ -257,13 +257,13 @@
             <summary>Background color</summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.marginBottom">
-            <summary>Margin bottom (default = 3)</summary>
+            <summary>Margin bottom (default = 1)</summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.style">
             <summary>Comment style (default = Box)</summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.textAnchor">
-            <summary>Text anchor (default = MiddleLeft)</summary>
+            <summary>Text anchor (default = UpperLeft)</summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.Int32)">
             <summary>
@@ -343,6 +343,9 @@
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.TextInValueArea">
             <summary>Text only, placed inside the value area and not encompassing the label area</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.WrapNextLine">
+            <summary>Box that wraps the next line</summary>
         </member>
         <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,System.Boolean)">
             <summary>
