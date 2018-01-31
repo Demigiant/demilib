@@ -55,7 +55,7 @@ namespace DG.DeExtensions
         {
             if (string.IsNullOrEmpty(s)) return "";
             _Strb.Length = 0;
-            _Strb.Append(s[0]);
+            _Strb.Append(s[0].ToString().ToUpper());
             for (int i = 1; i < s.Length; i++) {
                 char curr = s[i];
                 char prev = s[i - 1];
