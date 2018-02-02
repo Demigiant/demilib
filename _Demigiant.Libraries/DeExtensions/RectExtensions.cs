@@ -139,5 +139,33 @@ namespace DG.DeExtensions
             r.width = value;
             return r;
         }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its X,Y properties set so the rect center corresponds to the given values
+        /// </summary>
+        public static Rect SetCenter(this Rect r, float x, float y)
+        {
+            r.x = x - r.width * 0.5f;
+            r.y = y - r.height * 0.5f;
+            return r;
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its X property set so the rect X center corresponds to the given value
+        /// </summary>
+        public static Rect SetCenterX(this Rect r, float value)
+        {
+            r.x = value - r.width * 0.5f;
+            return r;
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its Y property set so the rect Y center corresponds to the given value
+        /// </summary>
+        public static Rect SetCenterY(this Rect r, float value)
+        {
+            r.y = value - r.height * 0.5f;
+            return r;
+        }
     }
 }

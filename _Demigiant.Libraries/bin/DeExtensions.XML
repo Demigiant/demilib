@@ -195,6 +195,21 @@
             Returns a copy of the Rect with its width property set to the given value
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetCenter(UnityEngine.Rect,System.Single,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X,Y properties set so the rect center corresponds to the given values
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetCenterX(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X property set so the rect X center corresponds to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetCenterY(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its Y property set so the rect Y center corresponds to the given value
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.StringExtensions.IsNullOrEmpty(System.String,System.Boolean)">
             <summary>
             Returns TRUE if the string is null or empty
@@ -224,6 +239,11 @@
             <summary>
             Compares a version string (in format #.#.###) with another of the same format,
             and return TRUE if this one is minor. Boths trings must have the same number of dot separators.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.TextureExtensions.GetRect(UnityEngine.Texture2D,System.Single,System.Single,System.Single)">
+            <summary>
+            Returns the full Rect of this texture, with options for position and scale
             </summary>
         </member>
         <member name="M:DG.DeExtensions.VectorExtensions.SetX(UnityEngine.Vector2,System.Single)">
