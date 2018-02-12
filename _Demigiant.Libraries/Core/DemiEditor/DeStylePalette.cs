@@ -336,7 +336,7 @@ namespace DG.DemiEditor
 
     public class ToolbarStyles
     {
-        public GUIStyle def,
+        public GUIStyle def, defNoPadding,
                         large, small,
                         stickyTop,
                         box,
@@ -345,6 +345,7 @@ namespace DG.DemiEditor
         internal void Init()
         {
             def = new GUIStyle(EditorStyles.toolbar).Height(18).StretchWidth();
+            defNoPadding = def.Clone().Padding(0);
             large = new GUIStyle(def).Height(23);
             small = new GUIStyle(def).Height(13);
             stickyTop = new GUIStyle(def).MarginTop(0);

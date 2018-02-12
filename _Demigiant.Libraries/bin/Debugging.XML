@@ -7,6 +7,9 @@
         <member name="T:DG.Debugging.Verbosity">
             <summary>Verbosity</summary>
         </member>
+        <member name="F:DG.Debugging.Verbosity.Verbose">
+            <summary>Log everything, verbose logs included</summary>
+        </member>
         <member name="F:DG.Debugging.Verbosity.Normal">
             <summary>Log everything except logs marked as verbose</summary>
         </member>
@@ -16,33 +19,58 @@
         <member name="F:DG.Debugging.Verbosity.ErrorsAndWarnings">
             <summary>Log only errors and warnings</summary>
         </member>
-        <member name="F:DG.Debugging.Verbosity.Verbose">
-            <summary>Log everything, verbose logs included</summary>
-        </member>
         <member name="T:DG.Debugging.Delogger">
             <summary>
             Logs messages using the given options
             </summary>
         </member>
         <member name="F:DG.Debugging.Delogger.verbosity">
-            <summary>Sets the verbosity value, which indicates the type of messages that will be logged</summary>
+            <summary>Sets the runtime verbosity value, which indicates the type of messages that will be logged</summary>
+        </member>
+        <member name="F:DG.Debugging.Delogger.editorVerbosity">
+            <summary>Sets the editor verbosity value, which indicates the type of messages that will be logged</summary>
         </member>
         <member name="F:DG.Debugging.Delogger.enabled">
-            <summary>If FALSE doesn't log anything</summary>
+            <summary>If FALSE doesn't log anything, neither in editor nor at runtime</summary>
         </member>
-        <member name="M:DG.Debugging.Delogger.Log(System.Object,System.Boolean,System.String)">
+        <member name="M:DG.Debugging.Delogger.Log(System.Object,System.Object,UnityEngine.Object,System.String)">
             <summary>
             Logs the given message with the given options
             </summary>
         </member>
-        <member name="M:DG.Debugging.Delogger.LogWarning(System.Object)">
+        <member name="M:DG.Debugging.Delogger.LogVerbose(System.Object,System.Object,UnityEngine.Object)">
             <summary>
             Logs the given message with the given options
             </summary>
         </member>
-        <member name="M:DG.Debugging.Delogger.LogError(System.Object)">
+        <member name="M:DG.Debugging.Delogger.LogWarning(System.Object,System.Object,UnityEngine.Object)">
             <summary>
             Logs the given message with the given options
+            </summary>
+        </member>
+        <member name="M:DG.Debugging.Delogger.LogError(System.Object,System.Object,UnityEngine.Object)">
+            <summary>
+            Logs the given message with the given options
+            </summary>
+        </member>
+        <member name="M:DG.Debugging.Delogger.EditorLog(System.Object,System.Object,UnityEngine.Object,System.String)">
+            <summary>
+            Logs the given editor-only message with the given options
+            </summary>
+        </member>
+        <member name="M:DG.Debugging.Delogger.EditorLogVerbose(System.Object,System.Object,UnityEngine.Object)">
+            <summary>
+            Logs the given editor-only message with the given options
+            </summary>
+        </member>
+        <member name="M:DG.Debugging.Delogger.EditorLogWarning(System.Object,System.Object,UnityEngine.Object)">
+            <summary>
+            Logs the given editor-only message with the given options
+            </summary>
+        </member>
+        <member name="M:DG.Debugging.Delogger.EditorLogError(System.Object,System.Object,UnityEngine.Object)">
+            <summary>
+            Logs the given editor-only message with the given options
             </summary>
         </member>
     </members>
