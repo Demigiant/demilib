@@ -53,55 +53,31 @@ namespace DG.Debugging
         /// Logs the given message with the given options
         /// </summary>
         public static void Log(object sender, object message, Object context = null, string hexColor = null)
-        { Log(false, LogType.Normal, sender, message, context, false, hexColor); }
+        { Log(-1, false, LogType.Normal, sender, message, context, false, hexColor); }
 
         /// <summary>
         /// Logs the given message with the given options
         /// </summary>
         public static void LogVerbose(object sender, object message, Object context = null)
-        { Log(false, LogType.Normal, sender, message, context, true, null); }
+        { Log(-1, false, LogType.Normal, sender, message, context, true, null); }
 
         /// <summary>
         /// Logs the given message with the given options
         /// </summary>
         public static void LogWarning(object sender, object message, Object context = null)
-        { Log(false, LogType.Warning, sender, message, context, false, null); }
+        { Log(-1, false, LogType.Warning, sender, message, context, false, null); }
 
         /// <summary>
         /// Logs the given message with the given options
         /// </summary>
         public static void LogError(object sender, object message, Object context = null)
-        { Log(false, LogType.Error, sender, message, context, false, null); }
-
-        /// <summary>
-        /// Logs the given editor-only message with the given options
-        /// </summary>
-        public static void EditorLog(object sender, object message, Object context = null, string hexColor = null)
-        { Log(true, LogType.Normal, sender, message, context, false, hexColor); }
-
-        /// <summary>
-        /// Logs the given editor-only message with the given options
-        /// </summary>
-        public static void EditorLogVerbose(object sender, object message, Object context = null)
-        { Log(true, LogType.Normal, sender, message, context, true, null); }
-
-        /// <summary>
-        /// Logs the given editor-only message with the given options
-        /// </summary>
-        public static void EditorLogWarning(object sender, object message, Object context = null)
-        { Log(true, LogType.Warning, sender, message, context, false, null); }
-
-        /// <summary>
-        /// Logs the given editor-only message with the given options
-        /// </summary>
-        public static void EditorLogError(object sender, object message, Object context = null)
-        { Log(true, LogType.Error, sender, message, context, false, null); }
+        { Log(-1, false, LogType.Error, sender, message, context, false, null); }
 
         #endregion
 
         #region Methods
 
-        static void Log(bool isEditorLog, LogType logType, object sender, object message, Object context, bool isVerbose, string hexColor)
+        static void Log(int importance, bool isEditorLog, LogType logType, object sender, object message, Object context, bool isVerbose, string hexColor)
         {
             if (!enabled) return;
 
@@ -118,7 +94,22 @@ namespace DG.Debugging
                 break;
             }
 
+            bool isImportant = importance > -1;
             bool colored = isVerbose || !string.IsNullOrEmpty(hexColor);
+            string importantLogEnd = "";
+            if (isImportant) {
+                _Strb.Append("<b><color=#f4c560><size=14>★ </size></color></b>");
+                switch (importance) {
+                case 1:
+                    _Strb.Append("<b>");
+                    importantLogEnd = "</b>";
+                    break;
+                default:
+                    _Strb.Append("<size=14><b>");
+                    importantLogEnd = "</b></size>";
+                    break;
+                }
+            }
             if (isVerbose) _Strb.Append(_VerboseColor);
             else if (colored) {
                 _Strb.Append("<color=");
@@ -131,6 +122,7 @@ namespace DG.Debugging
             }
             _Strb.Append(message);
             if (colored) _Strb.Append("</color>");
+            if (isImportant) _Strb.Append(importantLogEnd);
             switch (logType) {
             case LogType.Warning:
                 Debug.LogWarning(_Strb.ToString(), context);
@@ -147,5 +139,46 @@ namespace DG.Debugging
         }
 
         #endregion
+
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+        // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+        public static class Important
+        {
+            /// <summary>
+            /// Logs the given important message with the given options
+            /// </summary>
+            /// <param name="importance">0 to 1 (0 being more important than 1)</param>
+            public static void Log(int importance, object sender, object message, Object context = null, string hexColor = null)
+            { Delogger.Log(importance, false, LogType.Normal, sender, message, context, false, hexColor); }
+        }
+
+        public static class Editor
+        {
+            /// <summary>
+            /// Logs the given editor-only message with the given options
+            /// </summary>
+            public static void Log(object sender, object message, Object context = null, string hexColor = null)
+            { Delogger.Log(-1, true, LogType.Normal, sender, message, context, false, hexColor); }
+
+            /// <summary>
+            /// Logs the given editor-only message with the given options
+            /// </summary>
+            public static void LogVerbose(object sender, object message, Object context = null)
+            { Delogger.Log(-1, true, LogType.Normal, sender, message, context, true, null); }
+
+            /// <summary>
+            /// Logs the given editor-only message with the given options
+            /// </summary>
+            public static void LogWarning(object sender, object message, Object context = null)
+            { Delogger.Log(-1, true, LogType.Warning, sender, message, context, false, null); }
+
+            /// <summary>
+            /// Logs the given editor-only message with the given options
+            /// </summary>
+            public static void LogError(object sender, object message, Object context = null)
+            { Delogger.Log(-1, true, LogType.Error, sender, message, context, false, null); }
+        }
     }
 }

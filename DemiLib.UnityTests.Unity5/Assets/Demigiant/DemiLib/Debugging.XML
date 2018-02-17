@@ -53,22 +53,28 @@
             Logs the given message with the given options
             </summary>
         </member>
-        <member name="M:DG.Debugging.Delogger.EditorLog(System.Object,System.Object,UnityEngine.Object,System.String)">
+        <member name="M:DG.Debugging.Delogger.Important.Log(System.Int32,System.Object,System.Object,UnityEngine.Object,System.String)">
+            <summary>
+            Logs the given important message with the given options
+            </summary>
+            <param name="importance">0 to 1 (0 being more important than 1)</param>
+        </member>
+        <member name="M:DG.Debugging.Delogger.Editor.Log(System.Object,System.Object,UnityEngine.Object,System.String)">
             <summary>
             Logs the given editor-only message with the given options
             </summary>
         </member>
-        <member name="M:DG.Debugging.Delogger.EditorLogVerbose(System.Object,System.Object,UnityEngine.Object)">
+        <member name="M:DG.Debugging.Delogger.Editor.LogVerbose(System.Object,System.Object,UnityEngine.Object)">
             <summary>
             Logs the given editor-only message with the given options
             </summary>
         </member>
-        <member name="M:DG.Debugging.Delogger.EditorLogWarning(System.Object,System.Object,UnityEngine.Object)">
+        <member name="M:DG.Debugging.Delogger.Editor.LogWarning(System.Object,System.Object,UnityEngine.Object)">
             <summary>
             Logs the given editor-only message with the given options
             </summary>
         </member>
-        <member name="M:DG.Debugging.Delogger.EditorLogError(System.Object,System.Object,UnityEngine.Object)">
+        <member name="M:DG.Debugging.Delogger.Editor.LogError(System.Object,System.Object,UnityEngine.Object)">
             <summary>
             Logs the given editor-only message with the given options
             </summary>

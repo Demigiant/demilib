@@ -306,7 +306,7 @@ namespace DG.DemiEditor
             toolLFoldoutOpenWStretchedLabel = toolFoldoutOpenWStretchedLabel.Clone().OverflowTop(-4);
             // Custom using squareBorder
             bBlankBorder = new GUIStyle(GUI.skin.button).Add(TextAnchor.MiddleCenter, Color.white).Background(DeStylePalette.squareBorderCurved)
-                .Padding(5, 4, 1, 2).Border(new RectOffset(4, 4, 4, 4)).Overflow(-1, -1, 0, 0);
+                .Padding(5, 4, 1, 2).Border(new RectOffset(4, 4, 4, 4)).Overflow(-1, -1, 0, 0).ContentOffsetX(-1);
             bBlankBorderCompact = bBlankBorder.Clone().Padding(5, 4, 0, 0).ContentOffsetY(-1);
             flatWhite = DeGUI.styles.button.tool.Clone(TextAnchor.MiddleCenter).Background(DeStylePalette.whiteSquare).Margin(0).Padding(0)
                 .Border(0, 0, 0, 0).Overflow(0).Height(0).ContentOffset(0, 0);
