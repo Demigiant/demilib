@@ -46,6 +46,25 @@ namespace DG.De2D
 
         #region Public Methods
 
+        /// <summary>
+        /// Set the camera to center and fit on the given target.<para/>
+        /// Uses code from satchel82: https://answers.unity.com/questions/1231701/fitting-bounds-into-orthographic-2d-camera.html
+        /// </summary>
+        /// <param name="targetRenderer">Target renderer to use for fitting</param>
+        public void FitToTarget(Renderer targetRenderer)
+        {
+            Bounds bounds = targetRenderer.bounds;
+            float camRatio = _thisCam.aspect;
+            float targetRatio = bounds.size.x / bounds.size.y;
+
+            this.transform.position = new Vector3(bounds.center.x, bounds.center.y, _thisCam.transform.position.z);
+            if (camRatio >= targetRatio) _thisCam.orthographicSize = bounds.size.y * 0.5f;
+            else {
+                float diff = targetRatio / camRatio;
+                _thisCam.orthographicSize = bounds.size.y * 0.5f * diff;
+            }
+        }
+
         public void Adapt()
         {
             if (targetWidth <= 0 || targetHeight <= 0 || ppu <= 0) {
