@@ -28,7 +28,18 @@ namespace DG.De2D
 
         Camera _thisCam;
 
-        #region Unity Methods
+        #region Unity + INIT
+
+        void Init()
+        {
+            if (_thisCam == null) {
+                _thisCam = this.GetComponent<Camera>();
+                if (_thisCam == null) {
+                    Debug.LogWarning(string.Format("De2DCamera ::: No Camera found on \"{0}\"", this.name), this);
+                    return;
+                }
+            }
+        }
 
         void Start()
         {
@@ -53,6 +64,8 @@ namespace DG.De2D
         /// <param name="targetRenderer">Target renderer to use for fitting</param>
         public void FitToTarget(Renderer targetRenderer)
         {
+            Init();
+
             Bounds bounds = targetRenderer.bounds;
             float camRatio = _thisCam.aspect;
             float targetRatio = bounds.size.x / bounds.size.y;
@@ -72,14 +85,7 @@ namespace DG.De2D
                 return;
             }
 
-            // Store the cam
-            if (_thisCam == null) {
-                _thisCam = this.GetComponent<Camera>();
-                if (_thisCam == null) {
-                    Debug.LogWarning(string.Format("De2DCamera ::: No Camera found on \"{0}\"", this.name), this);
-                    return;
-                }
-            }
+            Init();
 
             // Assign ortho value
             if (!_thisCam.orthographic) {
@@ -93,6 +99,6 @@ namespace DG.De2D
             }
         }
 
-#endregion
+        #endregion
     }
 }
