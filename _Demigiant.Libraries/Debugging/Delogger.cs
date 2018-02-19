@@ -44,6 +44,7 @@ namespace DG.Debugging
         const string _EditorPrefix = "[Editor] ";
         const string _VerboseColor = "<color=#666666>";
         const string _SenderColor = "<color=#6b854a>";
+        const string _SenderColorImportant = "<color=#785814>";
         const string _VerboseSenderColor = "<color=#6b854a>";
         static readonly StringBuilder _Strb = new StringBuilder();
 
@@ -118,7 +119,8 @@ namespace DG.Debugging
             }
             if (isEditorLog) _Strb.Append(_EditorPrefix);
             if (sender != null) {
-                _Strb.Append(isVerbose ? _VerboseSenderColor : _SenderColor).Append(sender).Append("</color> ► ");
+                _Strb.Append(isVerbose ? _VerboseSenderColor : isImportant ? _SenderColorImportant : _SenderColor)
+                    .Append(sender).Append("</color> ► ");
             }
             _Strb.Append(message);
             if (colored) _Strb.Append("</color>");
