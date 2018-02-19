@@ -210,6 +210,11 @@
             Returns a copy of the Rect with its Y property set so the rect Y center corresponds to the given value
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.RectTransformExtensions.StretchToFill(UnityEngine.RectTransform)">
+            <summary>
+            Sets the given RectTransform to stretch to the exact borders of its parent
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.StringExtensions.IsNullOrEmpty(System.String,System.Boolean)">
             <summary>
             Returns TRUE if the string is null or empty
