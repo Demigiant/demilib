@@ -19,8 +19,14 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
             SortingLayer[] layers = SortingLayer.layers;
             if (_displayedOptions == null || layers.Length != _displayedOptions.Length) _displayedOptions = new string[layers.Length];
-            for (int i = 0; i < layers.Length; ++i) _displayedOptions[i] = layers[i].name;
-            property.intValue = EditorGUI.Popup(position, label.text, property.intValue, _displayedOptions);
+            int index = 0;
+            for (int i = 0; i < layers.Length; ++i) {
+                SortingLayer layer = layers[i];
+                _displayedOptions[i] = layer.name;
+                if (property.intValue == layer.id) index = i;
+            }
+            int result = EditorGUI.Popup(position, label.text, index, _displayedOptions);
+            property.intValue = layers[result].id;
         }
     }
 }
