@@ -189,6 +189,12 @@
             Shows a bigger preview image for the given sprite/texture.
             </summary>
         </member>
+        <member name="T:DG.DeInspektor.Attributes.DeLayerAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows a popup with available layers in the Inspector. Requires a valye of type <see cref="T:System.Int32"/>.
+            </summary>
+        </member>
         <member name="T:DG.DeInspektor.Attributes.DeRangeAttribute">
             <summary>
             <code>Property attribute</code><para/>
@@ -204,6 +210,12 @@
             <param name="min">Min value</param>
             <param name="max">Max value</param>
             <param name="label">Override field label</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeSortingLayer">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows a popup with available SortingLayers in the Inspector. Requires a valye of type <see cref="T:System.Int32"/>.
+            </summary>
         </member>
         <member name="T:DG.DeInspektor.Attributes.DeButtonMode">
             <summary>

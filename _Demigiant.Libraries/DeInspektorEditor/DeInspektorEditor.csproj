@@ -64,9 +64,11 @@
     <Compile Include="AttributesManagers\DeImagePreviewPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeImagePropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeLabelPropertyDrawer.cs" />
+    <Compile Include="AttributesManagers\DeLayerPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeMethodButtonEditor.cs" />
     <Compile Include="AttributesManagers\DeRangePropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
+    <Compile Include="AttributesManagers\DeSortingLayerPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeToggleButtonPropertyDrawer.cs" />
     <Compile Include="DeInspektor.cs" />
     <Compile Include="DeInspektorForScriptableObject.cs" />
