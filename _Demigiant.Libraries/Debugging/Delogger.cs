@@ -12,6 +12,8 @@ namespace DG.Debugging
     /// <summary>Verbosity</summary>
     public enum Verbosity
     {
+        /// <summary>No logs</summary>
+        None,
         /// <summary>Log everything, verbose logs included</summary>
         Verbose,
         /// <summary>Log everything except logs marked as verbose</summary>
@@ -81,6 +83,8 @@ namespace DG.Debugging
         static void Log(int importance, bool isEditorLog, LogType logType, object sender, object message, Object context, bool isVerbose, string hexColor)
         {
             if (!enabled) return;
+            if (isEditorLog && editorVerbosity == Verbosity.None) return;
+            if (!isEditorLog && verbosity == Verbosity.None) return;
 
             Verbosity targetVerbosity = isEditorLog ? editorVerbosity : verbosity;
             switch (targetVerbosity) {

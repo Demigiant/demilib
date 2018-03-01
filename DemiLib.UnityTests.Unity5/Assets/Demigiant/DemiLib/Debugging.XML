@@ -7,6 +7,9 @@
         <member name="T:DG.Debugging.Verbosity">
             <summary>Verbosity</summary>
         </member>
+        <member name="F:DG.Debugging.Verbosity.None">
+            <summary>No logs</summary>
+        </member>
         <member name="F:DG.Debugging.Verbosity.Verbose">
             <summary>Log everything, verbose logs included</summary>
         </member>
