@@ -16,6 +16,7 @@ public class DeSampler : MonoBehaviour
     
     public List<string> strList0 = new List<string>() {"A", "B", "C"};
     public List<string> strList1 = new List<string>() {"1", "2", "3"};
+    public List<string> strListAlt = new List<string>() {"a", "b", "c", "d", "e", "f"};
     public bool[] toggles = new bool[3];
     public bool foldoutOpen;
 

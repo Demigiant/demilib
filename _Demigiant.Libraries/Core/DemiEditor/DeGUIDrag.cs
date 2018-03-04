@@ -64,7 +64,7 @@ namespace DG.DemiEditor
         public static object optionalDragData { get { if (_dragData == null) return null; return _dragData.optionalData; } }
 
         // Default drag color
-        public static readonly Color DefaultDragColor = new Color(0.1720873f, 0.4236527f, 0.7686567f, 0.35f);
+        public static readonly Color DefaultDragColor = new Color(0.1720873f, 0.4236527f, 0.7686567f, 0.65f);
 
         const float _DragDelay = 0.15f;
         static GUIDragData _dragData;
@@ -154,13 +154,21 @@ namespace DG.DemiEditor
                 // Find and store eventual drag position
                 Rect lastRect = lastGUIRect == null ? GUILayoutUtility.GetLastRect() : (Rect)lastGUIRect;
                 float lastRectMiddleY = lastRect.yMin + lastRect.height * 0.5f;
-                float mouseY = Event.current.mousePosition.y;
-                if (currDraggableItemIndex <= listCount - 1 && mouseY <= lastRectMiddleY) {
-                    if (_dragDelayElapsed) DeGUI.FlatDivider(new Rect(lastRect.xMin, lastRect.yMin - 1, lastRect.width, 2), dragEvidenceColor);
+                Vector2 mouseP = Event.current.mousePosition;
+//                if (currDraggableItemIndex <= listCount - 1 && mouseY <= lastRectMiddleY) {
+                if (currDraggableItemIndex <= listCount - 1 && lastRect.Contains(mouseP) && mouseP.y <= lastRectMiddleY) {
+                    using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
+                    if (_dragDelayElapsed) DeGUI.FlatDivider(new Rect(lastRect.xMin, lastRect.yMin, lastRect.width, 5), dragEvidenceColor);
                     _dragData.currDragIndex = currDraggableItemIndex;
                     _dragData.currDragSet = true;
-                } else if (currDraggableItemIndex >= listCount - 1 && mouseY > lastRectMiddleY) {
-                    if (_dragDelayElapsed) DeGUI.FlatDivider(new Rect(lastRect.xMin, lastRect.yMax - 1, lastRect.width, 2), dragEvidenceColor);
+                } else if (currDraggableItemIndex <= listCount - 1 && lastRect.Contains(mouseP) && mouseP.y >= lastRectMiddleY) {
+                    using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
+                    if (_dragDelayElapsed) DeGUI.FlatDivider(new Rect(lastRect.xMin, lastRect.yMax - 5, lastRect.width, 5), dragEvidenceColor);
+                    _dragData.currDragIndex = currDraggableItemIndex + 1;
+                    _dragData.currDragSet = true;
+                } else if (currDraggableItemIndex >= listCount - 1 && mouseP.y > lastRectMiddleY) {
+                    using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
+                    if (_dragDelayElapsed) DeGUI.FlatDivider(new Rect(lastRect.xMin, lastRect.yMax - 5, lastRect.width, 5), dragEvidenceColor);
                     _dragData.currDragIndex = listCount;
                     _dragData.currDragSet = true;
                 }

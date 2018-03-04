@@ -3,6 +3,7 @@
 
 using DG.DeAudio;
 using DG.DeAudioEditor;
+using DG.DeExtensions;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
@@ -127,6 +128,21 @@ public class DeSamplerInspector : Editor
             }
             DeGUILayout.EndToolbar();
             if (DeGUIDrag.Drag(2, _src.strList1, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
+        }
+        GUILayout.Space(3); // Both vertical and horizontal
+        float h = (int)(_src.strListAlt.Count * 0.5f) * EditorGUIUtility.singleLineHeight;
+        Rect areaR = GUILayoutUtility.GetRect(0, float.MaxValue, h, h);
+        float elW = (int)(areaR.width * 0.5f);
+        Rect elR = areaR.SetWidth(elW).SetHeight(EditorGUIUtility.singleLineHeight);
+        for (int i = 0; i < _src.strListAlt.Count; ++i) {
+            if (i % 2 == 0) {
+                elR = elR.SetX(areaR.x);
+                if (i > 0) elR.y += elR.height;
+            } else elR = elR.SetX(areaR.x + elR.width);
+            if (DeGUI.PressButton(elR, "Drag me " + _src.strListAlt[i], DeGUI.styles.button.tool)) {
+                DeGUIDrag.StartDrag(3, this, _src.strListAlt, i);
+            }
+            if (DeGUIDrag.Drag(3, _src.strListAlt, i, elR).outcome == DeDragResultType.Accepted) GUI.changed = true;
         }
 
         // Container
