@@ -153,22 +153,53 @@ namespace DG.DemiEditor
             if (!_dragData.currDragSet) {
                 // Find and store eventual drag position
                 Rect lastRect = lastGUIRect == null ? GUILayoutUtility.GetLastRect() : (Rect)lastGUIRect;
-                float lastRectMiddleY = lastRect.yMin + lastRect.height * 0.5f;
+                if (!_dragData.hasHorizontalSet && Event.current.type == EventType.Repaint) {
+                    // Determine if drag is also horizontal
+                    if (currDraggableItemIndex == 0) _dragData.lastRect = lastRect;
+                    else if (_dragData.lastRect.width > 0) {
+                        _dragData.hasHorizontalSet = true;
+                        _dragData.hasHorizontalEls = !Mathf.Approximately(_dragData.lastRect.xMin, lastRect.xMin);
+                    }
+                }
+                Vector2 lastRectMiddleP = lastRect.center;
                 Vector2 mouseP = Event.current.mousePosition;
-//                if (currDraggableItemIndex <= listCount - 1 && mouseY <= lastRectMiddleY) {
-                if (currDraggableItemIndex <= listCount - 1 && lastRect.Contains(mouseP) && mouseP.y <= lastRectMiddleY) {
+                if (
+                    currDraggableItemIndex <= listCount - 1 && lastRect.Contains(mouseP)
+                    && (_dragData.hasHorizontalEls && mouseP.x <= lastRectMiddleP.x || !_dragData.hasHorizontalEls && mouseP.y <= lastRectMiddleP.y)
+                ) {
                     using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
-                    if (_dragDelayElapsed) DeGUI.FlatDivider(new Rect(lastRect.xMin, lastRect.yMin, lastRect.width, 5), dragEvidenceColor);
+                    if (_dragDelayElapsed) {
+                        Rect evidenceR = _dragData.hasHorizontalEls
+                            ? new Rect(lastRect.xMin, lastRect.yMin, 5, lastRect.height)
+                            : new Rect(lastRect.xMin, lastRect.yMin, lastRect.width, 5);
+                        DeGUI.FlatDivider(evidenceR, dragEvidenceColor);
+                    }
                     _dragData.currDragIndex = currDraggableItemIndex;
                     _dragData.currDragSet = true;
-                } else if (currDraggableItemIndex <= listCount - 1 && lastRect.Contains(mouseP) && mouseP.y >= lastRectMiddleY) {
+                } else if (
+                    currDraggableItemIndex <= listCount - 1 && lastRect.Contains(mouseP)
+                    && (_dragData.hasHorizontalEls && mouseP.x > lastRectMiddleP.x || !_dragData.hasHorizontalEls && mouseP.y > lastRectMiddleP.y)
+                ) {
                     using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
-                    if (_dragDelayElapsed) DeGUI.FlatDivider(new Rect(lastRect.xMin, lastRect.yMax - 5, lastRect.width, 5), dragEvidenceColor);
+                    if (_dragDelayElapsed) {
+                        Rect evidenceR = _dragData.hasHorizontalEls
+                            ? new Rect(lastRect.xMax - 5, lastRect.yMin, 5, lastRect.height)
+                            : new Rect(lastRect.xMin, lastRect.yMax - 5, lastRect.width, 5);
+                        DeGUI.FlatDivider(evidenceR, dragEvidenceColor);
+                    }
                     _dragData.currDragIndex = currDraggableItemIndex + 1;
                     _dragData.currDragSet = true;
-                } else if (currDraggableItemIndex >= listCount - 1 && mouseP.y > lastRectMiddleY) {
+                } else if (
+                    currDraggableItemIndex >= listCount - 1
+                    && (_dragData.hasHorizontalEls && mouseP.x > lastRectMiddleP.x || !_dragData.hasHorizontalEls && mouseP.y > lastRectMiddleP.y)
+                ) {
                     using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
-                    if (_dragDelayElapsed) DeGUI.FlatDivider(new Rect(lastRect.xMin, lastRect.yMax - 5, lastRect.width, 5), dragEvidenceColor);
+                    if (_dragDelayElapsed) {
+                        Rect evidenceR = _dragData.hasHorizontalEls
+                            ? new Rect(lastRect.xMax - 5, lastRect.yMin, 5, lastRect.height)
+                            : new Rect(lastRect.xMin, lastRect.yMax - 5, lastRect.width, 5);
+                        DeGUI.FlatDivider(evidenceR, dragEvidenceColor);
+                    }
                     _dragData.currDragIndex = listCount;
                     _dragData.currDragSet = true;
                 }
@@ -278,6 +309,11 @@ namespace DG.DemiEditor
         public IList draggableList; // Collection within which the drag is being executed
         public int currDragIndex = -1; // Index of current drag position
         public bool currDragSet;
+        // Used to auto-check if the drag can be horizontal too
+        public Rect lastRect;
+        public bool hasHorizontalSet;
+        public bool hasHorizontalEls;
+        //
         public object optionalData;
 
         // ***********************************************************************************
