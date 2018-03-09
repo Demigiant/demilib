@@ -4,6 +4,12 @@
         <name>DeAudio</name>
     </assembly>
     <members>
+        <member name="T:DG.DeAudio.Attributes.DeAudioClipDataModeAttribute">
+            <summary>
+            <code>Property attribute</code> for <see cref="T:DG.DeAudio.DeAudioClipData"/> elements<para/>
+            Sets how it should be drawn in the editor
+            </summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioClipData.Play">
             <summary>
             Plays this DeAudioClipData

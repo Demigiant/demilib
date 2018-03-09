@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributesManagers\DeAudioClipDataModePropertyDrawer.cs" />
     <Compile Include="DeAudioCollectionInspector.cs" />
     <Compile Include="DeAudioClipDataPropertyDrawer.cs" />
     <Compile Include="DeAudioEditorUtils.cs" />

@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DeAudioClipDataModeAttribute.cs" />
     <Compile Include="Core\OperationType.cs" />
     <Compile Include="DeAudioClipData.cs" />
     <Compile Include="DeAudioClipGUIMode.cs" />
