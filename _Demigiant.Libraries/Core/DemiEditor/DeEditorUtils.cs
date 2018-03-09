@@ -16,6 +16,8 @@ namespace DG.DemiEditor
         static MethodInfo _clearConsoleMI;
         static readonly List<GameObject> _rootGOs = new List<GameObject>(500);
 
+        #region Public Methods
+
         #region DelayedCall
 
         /// <summary>Calls the given action after the given delay</summary>
@@ -41,7 +43,7 @@ namespace DG.DemiEditor
         }
 
         #endregion
-        
+
         /// <summary>
         /// Return the size of the editor game view, eventual extra bars excluded (meaning the true size of the game area)
         /// </summary>
@@ -85,6 +87,8 @@ namespace DG.DemiEditor
             }
             return result;
         }
+
+        #endregion
     }
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████

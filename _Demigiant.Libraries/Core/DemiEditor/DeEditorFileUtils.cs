@@ -119,17 +119,6 @@ namespace DG.DemiEditor
             return _Strb.ToString();
         }
 
-//        /// <summary>
-//        /// Converts the given string to a valid filename and returns it.
-//        /// Beware: doesn't check for reserved words
-//        /// </summary>
-//        public static string ConvertToValidFilename(string text)
-//        {
-//            string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(Path.GetInvalidFileNameChars()) + ":");
-//            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-//            return Regex.Replace(text, invalidRegStr, "_");
-//        }
-
         /// <summary>
         /// Returns the asset path of the given GUID (relative to Unity project's folder),
         /// or an empty string if either the GUID is invalid or the related path doesn't exist.
@@ -141,6 +130,26 @@ namespace DG.DemiEditor
             if (string.IsNullOrEmpty(assetPath)) return "";
             if (AssetExists(assetPath)) return assetPath;
             return "";
+        }
+
+        public static void CreateScriptableObjectInCurrentFolder<T>() where T : ScriptableObject
+        {
+            if (Selection.activeObject == null) return;
+            string currADBFolder = AssetDatabase.GetAssetPath(Selection.activeObject);
+            if (currADBFolder == "") currADBFolder = "Assets";
+            else if (Path.GetExtension(currADBFolder) != "") {
+                currADBFolder = currADBFolder.Substring(0, currADBFolder.IndexOf('.'));
+            }
+            if (!Directory.Exists(DeEditorFileUtils.ADBPathToFullPath(currADBFolder))) {
+                Debug.LogWarning("DeEditorUtils.CreateScriptableObjectInCurrentFolder ► No valid project folder selected");
+                return;
+            }
+            string name = typeof(T).ToString();
+            int dotIndex = name.LastIndexOf('.');
+            if (dotIndex != -1) name = name.Substring(dotIndex + 1);
+            string adbPath = AssetDatabase.GenerateUniqueAssetPath(currADBFolder + string.Format("/New {0}.asset", name));
+            T instance = ScriptableObject.CreateInstance<T>();
+            AssetDatabase.CreateAsset(instance, adbPath);
         }
 
         /// <summary>
