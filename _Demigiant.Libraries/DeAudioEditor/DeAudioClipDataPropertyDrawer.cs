@@ -62,7 +62,10 @@ namespace DG.DeAudioEditor
             }
 
             // Clip
-            EditorGUI.PropertyField(clipRect, property.FindPropertyRelative("clip"), label);
+            SerializedProperty clip = property.FindPropertyRelative("clip");
+            using (new DeGUI.ColorScope(clip.objectReferenceValue == null ? Color.yellow : Color.white)) {
+                EditorGUI.PropertyField(clipRect, clip, label);
+            }
             if (options.mode != DeAudioClipGUIMode.ClipOnly) {
                 if (options.mode != DeAudioClipGUIMode.CompactPreviewOnly) {
                     // Group
