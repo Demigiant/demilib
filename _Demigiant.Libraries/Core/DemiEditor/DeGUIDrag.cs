@@ -167,7 +167,7 @@ namespace DG.DemiEditor
                     currDraggableItemIndex <= listCount - 1 && lastRect.Contains(mouseP)
                     && (_dragData.hasHorizontalEls && mouseP.x <= lastRectMiddleP.x || !_dragData.hasHorizontalEls && mouseP.y <= lastRectMiddleP.y)
                 ) {
-                    using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
+//                    using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
                     if (_dragDelayElapsed) {
                         Rect evidenceR = _dragData.hasHorizontalEls
                             ? new Rect(lastRect.xMin, lastRect.yMin, 5, lastRect.height)
@@ -180,7 +180,7 @@ namespace DG.DemiEditor
                     currDraggableItemIndex <= listCount - 1 && lastRect.Contains(mouseP)
                     && (_dragData.hasHorizontalEls && mouseP.x > lastRectMiddleP.x || !_dragData.hasHorizontalEls && mouseP.y > lastRectMiddleP.y)
                 ) {
-                    using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
+//                    using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
                     if (_dragDelayElapsed) {
                         Rect evidenceR = _dragData.hasHorizontalEls
                             ? new Rect(lastRect.xMax - 5, lastRect.yMin, 5, lastRect.height)
@@ -193,7 +193,7 @@ namespace DG.DemiEditor
                     currDraggableItemIndex >= listCount - 1
                     && (_dragData.hasHorizontalEls && mouseP.x > lastRectMiddleP.x || !_dragData.hasHorizontalEls && mouseP.y > lastRectMiddleP.y)
                 ) {
-                    using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
+//                    using (new DeGUI.ColorScope(null, null, dragEvidenceColor)) GUI.Box(lastRect, "", DeGUI.styles.box.outline01);
                     if (_dragDelayElapsed) {
                         Rect evidenceR = _dragData.hasHorizontalEls
                             ? new Rect(lastRect.xMax - 5, lastRect.yMin, 5, lastRect.height)
