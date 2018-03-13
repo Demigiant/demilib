@@ -644,8 +644,15 @@
             Assembly extensions
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.AssemblyExtensions.Directory(System.Reflection.Assembly)">
+            <summary>
+            Full path to the assembly directory, without final slash
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.AssemblyExtensions.ADBDir(System.Reflection.Assembly)">
-            <summary>AssetDatabase path to the assembly directory, without final slash</summary>
+            <summary>
+            AssetDatabase path to the assembly directory, without final slash
+            </summary>
         </member>
         <member name="T:DG.DemiEditor.GUIStyleExtensions">
             <summary>
@@ -1369,7 +1376,7 @@
             Texture extensions
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.TextureExtensions.SetGUIFormat(UnityEngine.Texture2D,UnityEngine.FilterMode,System.Int32,UnityEngine.TextureWrapMode)">
+        <member name="M:DG.DemiEditor.TextureExtensions.SetGUIFormat(UnityEngine.Texture2D,UnityEngine.FilterMode,System.Int32,UnityEngine.TextureWrapMode,System.Int32)">
             <summary>
             Checks that the texture uses the correct import settings, and applies them if they're incorrect.
             </summary>

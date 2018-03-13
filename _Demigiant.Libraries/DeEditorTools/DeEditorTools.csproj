@@ -51,6 +51,9 @@
     <Compile Include="Hierarchy\DeHierarchy.cs" />
     <Compile Include="Hierarchy\DeHierarchyComponentInspector.cs" />
     <Compile Include="Hierarchy\DeHierarchyContextMenu.cs" />
+    <Compile Include="Project\DeProject.cs" />
+    <Compile Include="Project\DeProjectContextMenu.cs" />
+    <Compile Include="Project\DeProjectData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScenesPanel\ScenesPanel.cs" />
     <Compile Include="Scene\DeSceneAlignSubpopup.cs" />

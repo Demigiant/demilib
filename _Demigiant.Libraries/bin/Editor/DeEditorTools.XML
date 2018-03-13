@@ -31,6 +31,36 @@
             Relies on <see cref="T:DG.DemiLib.External.DeHierarchyComponent"/> in Core library.
             </summary>
         </member>
+        <member name="T:DG.DeEditorTools.Project.DeProject">
+            <summary>
+            Customizes Project panel
+            </summary>
+        </member>
+        <member name="T:DG.DeEditorTools.Project.DeProjectData">
+            <summary>
+            Stored in main Assets folder
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.StoreItemColor(System.String,DG.DeEditorTools.Project.DeProjectData.HColor)">
+            <summary>
+            If the item exists sets it, otherwise first creates it and then sets it
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.StoreItemIcon(System.String,DG.DeEditorTools.Project.DeProjectData.IcoType)">
+            <summary>
+            If the item exists sets it, otherwise first creates it and then sets it
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.RemoveItemData(System.String)">
+            <summary>
+            Returns TRUE if the item existed and was removed.
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.GetItem(System.String)">
+            <summary>
+            Returns the customizedItem for the given gameObject, or NULL if none was found
+            </summary>
+        </member>
         <member name="T:DG.DeEditorTools.Scene.DeScene">
             <summary>
             Adds extra features to the Scene panel (like right-click).

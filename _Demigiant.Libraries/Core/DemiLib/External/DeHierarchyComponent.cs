@@ -68,10 +68,10 @@ namespace DG.DemiLib.External
         /// </summary>
         public void StoreItemColor(GameObject go, HColor hColor)
         {
-            foreach (CustomizedItem customizedItem in customizedItems) {
-                if (customizedItem.gameObject != go) continue;
+            for (int i = 0; i < customizedItems.Count; ++i) {
+                if (customizedItems[i].gameObject != go) continue;
                 // Item exists, replace it
-                customizedItem.hColor = hColor;
+                customizedItems[i].hColor = hColor;
                 return;
             }
             // Item doesn't exist, add it
@@ -83,10 +83,10 @@ namespace DG.DemiLib.External
         /// </summary>
         public void StoreItemIcon(GameObject go, IcoType icoType)
         {
-            foreach (CustomizedItem customizedItem in customizedItems) {
-                if (customizedItem.gameObject != go) continue;
+            for (int i = 0; i < customizedItems.Count; ++i) {
+                if (customizedItems[i].gameObject != go) continue;
                 // Item exists, replace it
-                customizedItem.icoType = icoType;
+                customizedItems[i].icoType = icoType;
                 return;
             }
             // Item doesn't exist, add it
@@ -117,8 +117,8 @@ namespace DG.DemiLib.External
         /// </summary>
         public CustomizedItem GetItem(GameObject go)
         {
-            foreach (CustomizedItem customizedItem in customizedItems) {
-                if (customizedItem.gameObject == go) return customizedItem;
+            for (int i = 0; i < customizedItems.Count; ++i) {
+                if (customizedItems[i].gameObject == go) return customizedItems[i];
             }
             return null;
         }

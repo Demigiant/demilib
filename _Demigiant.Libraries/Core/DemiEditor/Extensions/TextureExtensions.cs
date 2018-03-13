@@ -14,9 +14,9 @@ namespace DG.DemiEditor
         /// <summary>
         /// Checks that the texture uses the correct import settings, and applies them if they're incorrect.
         /// </summary>
-        public static void SetGUIFormat(this Texture2D texture, FilterMode filterMode = FilterMode.Point, int maxTextureSize = 32, TextureWrapMode wrapMode = TextureWrapMode.Clamp)
+        public static void SetGUIFormat(this Texture2D texture, FilterMode filterMode = FilterMode.Point, int maxTextureSize = 32, TextureWrapMode wrapMode = TextureWrapMode.Clamp, int quality = 0)
         {
-            if (texture.wrapMode == wrapMode && texture.filterMode == filterMode && texture.width <= maxTextureSize) return;
+//            if (texture.wrapMode == wrapMode && texture.filterMode == filterMode && texture.width <= maxTextureSize) return;
 
             string path = AssetDatabase.GetAssetPath(texture);
             TextureImporter tImporter = AssetImporter.GetAtPath(path) as TextureImporter;
@@ -25,7 +25,8 @@ namespace DG.DemiEditor
                 || tImporter.filterMode != filterMode
                 || tImporter.wrapMode != wrapMode
                 || tImporter.maxTextureSize != maxTextureSize
-                || tImporter.textureFormat != TextureImporterFormat.AutomaticTruecolor;
+                || tImporter.textureFormat != TextureImporterFormat.AutomaticTruecolor
+                || tImporter.compressionQuality != quality;
             if (!reimportRequired) return;
 
             tImporter.textureType = TextureImporterType.GUI;
@@ -34,6 +35,7 @@ namespace DG.DemiEditor
             tImporter.wrapMode = wrapMode;
             tImporter.maxTextureSize = maxTextureSize;
             tImporter.textureFormat = TextureImporterFormat.AutomaticTruecolor;
+            tImporter.compressionQuality = quality;
             AssetDatabase.ImportAsset(path);
         }
     }

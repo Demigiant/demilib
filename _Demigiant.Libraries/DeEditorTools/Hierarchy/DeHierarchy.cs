@@ -72,6 +72,7 @@ namespace DG.DeEditorTools.Hierarchy
             DeHierarchyComponent.CustomizedItem customizedItem = _dehComponent.GetItem(go);
             if (customizedItem == null) return;
 
+            // Color
             Color color = customizedItem.GetColor();
             if (DeEditorToolsPrefs.deHierarchy_fadeEvidenceWhenInactive && !go.activeInHierarchy) color.a = 0.4f;
             // Icon
