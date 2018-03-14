@@ -66,6 +66,11 @@
             Returns the customizedItem for the given gameObject, or NULL if none was found
             </summary>
         </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.Clean">
+            <summary>
+            Removes any leftover items that don't exist in the Project anymore
+            </summary>
+        </member>
         <member name="T:DG.DeEditorTools.Scene.DeScene">
             <summary>
             Adds extra features to the Scene panel (like right-click).

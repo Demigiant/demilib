@@ -4,7 +4,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using DG.DemiEditor;
+using UnityEditor;
 using UnityEngine;
 
 namespace DG.DeEditorTools.Project
@@ -125,6 +127,27 @@ namespace DG.DeEditorTools.Project
                 if (customizedItems[i].guid == guid) return customizedItems[i];
             }
             return null;
+        }
+
+        /// <summary>
+        /// Removes any leftover items that don't exist in the Project anymore
+        /// </summary>
+        public void Clean()
+        {
+            int totRemoved = 0;
+            for (int i = customizedItems.Count - 1; i > -1; --i) {
+                string guid = customizedItems[i].guid;
+                string adbPath = AssetDatabase.GUIDToAssetPath(guid);
+                if (!string.IsNullOrEmpty(adbPath) && Directory.Exists(DeEditorFileUtils.ADBPathToFullPath(adbPath))) continue;
+                totRemoved++;
+                customizedItems.RemoveAt(i);
+            }
+            if (totRemoved > 0) {
+                EditorUtility.SetDirty(this);
+                EditorUtility.DisplayDialog("DeProject Clean", totRemoved + " leftover items removed from the \"-DeProjectData.asset\"", "Ok");
+            } else {
+                EditorUtility.DisplayDialog("DeProject Clean", "No leftovers found", "Ok");
+            }
         }
 
         #endregion
