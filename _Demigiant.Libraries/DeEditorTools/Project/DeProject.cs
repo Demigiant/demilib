@@ -59,11 +59,10 @@ namespace DG.DeEditorTools.Project
             Texture2D icoTexture = customizedItem.GetIcon();
             if (icoTexture != null) {
                 bool isCustom = customizedItem.icoType == DeProjectData.IcoType.Custom;
-                int maxSize = isCustom ? customizedItem.customIconMaxSize : 16;
                 Rect icoR = new Rect(0, 0, icoTexture.width, icoTexture.height);
-                icoR = icoR.Fit(maxSize, maxSize);
-                icoR.x = folderR.xMax - icoR.width + (isCustom ? customizedItem.customIconOffsetX : 2);
-                icoR.y = folderR.yMax - icoR.height + (isCustom ? customizedItem.customIconOffsetY : 2);
+                if (isCustom) icoR = icoR.Fit(customizedItem.customIconMaxSize, customizedItem.customIconMaxSize);
+                icoR.x = (int)(folderR.xMax - icoR.width + (isCustom ? customizedItem.customIconOffsetX : 2));
+                icoR.y = (int)(folderR.yMax - icoR.height + (isCustom ? customizedItem.customIconOffsetY : 2));
                 using (new DeGUI.ColorScope(null, null, customizedItem.GetIconColor())) GUI.DrawTexture(icoR, icoTexture);
             }
         }

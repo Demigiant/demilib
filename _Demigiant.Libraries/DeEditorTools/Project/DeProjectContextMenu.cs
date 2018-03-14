@@ -23,14 +23,26 @@ namespace DG.DeEditorTools.Project
 
         #region Icon
 
-        [MenuItem("Assets/DeProject/Icon/Scripts", false, _Priority + 2)]
-        static void SetIconScripts() { DeProject.SetIconForSelections(DeProjectData.IcoType.Scripts); }
+        [MenuItem("Assets/DeProject/Icon/Audio", false, _Priority + 2)]
+        static void SetIconAudio() { DeProject.SetIconForSelections(DeProjectData.IcoType.Audio); }
+
+        [MenuItem("Assets/DeProject/Icon/Fonts", false, _Priority + 2)]
+        static void SetIconFonts() { DeProject.SetIconForSelections(DeProjectData.IcoType.Fonts); }
 
         [MenuItem("Assets/DeProject/Icon/Prefabs", false, _Priority + 2)]
         static void SetIconPrefabs() { DeProject.SetIconForSelections(DeProjectData.IcoType.Prefab); }
 
+        [MenuItem("Assets/DeProject/Icon/Scripts", false, _Priority + 2)]
+        static void SetIconScripts() { DeProject.SetIconForSelections(DeProjectData.IcoType.Scripts); }
+
+        [MenuItem("Assets/DeProject/Icon/Textures", false, _Priority + 2)]
+        static void SetIconTextures() { DeProject.SetIconForSelections(DeProjectData.IcoType.Textures); }
+
         [MenuItem("Assets/DeProject/Icon/Cog", false, _Priority + 2)]
         static void SetIconCog() { DeProject.SetIconForSelections(DeProjectData.IcoType.Cog); }
+
+        [MenuItem("Assets/DeProject/Icon/Demigiant", false, _Priority + 2)]
+        static void SetIconDemigiant() { DeProject.SetIconForSelections(DeProjectData.IcoType.Demigiant); }
 
         [MenuItem("Assets/DeProject/Icon/Play", false, _Priority + 2)]
         static void SetIconPlay() { DeProject.SetIconForSelections(DeProjectData.IcoType.Play); }

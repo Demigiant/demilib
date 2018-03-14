@@ -44,6 +44,11 @@ namespace DG.DeEditorTools.Project
             Star,
             Heart,
             Skull,
+
+            Audio,
+            Textures,
+            Fonts,
+            Demigiant
         }
 
         #region Serialized
@@ -188,8 +193,8 @@ namespace DG.DeEditorTools.Project
             {
                 switch (hColor) {
                 case HColor.Custom: return customColor;
-                case HColor.Blue: return new Color(0.2145329f, 0.4501492f, 0.9117647f, 1f);
-                case HColor.BrightBlue: return new Color(0.42f, 0.74f, 0.99f);
+                case HColor.Blue: return new Color(0.22f, 0.47f, 0.96f);
+                case HColor.BrightBlue: return new Color(0.27f, 0.68f, 1f);
                 case HColor.Green: return new Color(0.05060553f, 0.8602941f, 0.2237113f, 1f);
                 case HColor.Orange: return new Color(0.9558824f, 0.4471125f, 0.05622837f, 1f);
                 case HColor.Purple: return new Color(0.907186f, 0.05406574f, 0.9191176f, 1f);
@@ -214,6 +219,8 @@ namespace DG.DeEditorTools.Project
                     return DeStylePalette.proj_prefab;
                 case IcoType.Cog:
                     return DeStylePalette.proj_cog;
+                case IcoType.Demigiant:
+                    return DeStylePalette.proj_demigiant;
                 case IcoType.Play:
                     return DeStylePalette.proj_play;
                 case IcoType.Star:
@@ -222,6 +229,12 @@ namespace DG.DeEditorTools.Project
                     return DeStylePalette.proj_heart;
                 case IcoType.Skull:
                     return DeStylePalette.proj_skull;
+                case IcoType.Audio:
+                    return DeStylePalette.proj_audio;
+                case IcoType.Textures:
+                    return DeStylePalette.proj_textures;
+                case IcoType.Fonts:
+                    return DeStylePalette.proj_fonts;
                 }
                 return null;
             }
