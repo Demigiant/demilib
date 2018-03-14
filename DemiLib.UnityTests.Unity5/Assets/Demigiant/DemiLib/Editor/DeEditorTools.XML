@@ -41,6 +41,11 @@
             Stored in main Assets folder
             </summary>
         </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.StoreItem(System.String)">
+            <summary>
+            If the item exists returns it, otherwise first creates it and then returns it
+            </summary>
+        </member>
         <member name="M:DG.DeEditorTools.Project.DeProjectData.StoreItemColor(System.String,DG.DeEditorTools.Project.DeProjectData.HColor)">
             <summary>
             If the item exists sets it, otherwise first creates it and then sets it

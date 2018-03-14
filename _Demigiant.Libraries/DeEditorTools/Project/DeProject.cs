@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using DG.DemiEditor;
+using DG.DemiEditor.Internal;
 using UnityEditor;
 using UnityEngine;
 
@@ -24,6 +25,13 @@ namespace DG.DeEditorTools.Project
         {
             EditorApplication.projectWindowItemOnGUI -= ItemOnGUI;
             EditorApplication.projectWindowItemOnGUI += ItemOnGUI;
+            Undo.undoRedoPerformed -= OnUndoRedo;
+            Undo.undoRedoPerformed += OnUndoRedo;
+        }
+
+        static void OnUndoRedo()
+        {
+            EditorApplication.RepaintProjectWindow();
         }
 
         #region GUI
@@ -48,36 +56,14 @@ namespace DG.DeEditorTools.Project
             if (!isLeftSide) folderR.x = folderR.x + 3;
             using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(folderR, icoFolder);
             // Icon
-            Texture2D icoTexture = null;
-            switch (customizedItem.icoType) {
-            case DeProjectData.IcoType.Scripts:
-                icoTexture = DeStylePalette.proj_scripts;
-                break;
-            case DeProjectData.IcoType.Prefab:
-                icoTexture = DeStylePalette.proj_prefab;
-                break;
-            case DeProjectData.IcoType.Cog:
-                icoTexture = DeStylePalette.proj_cog;
-                break;
-            case DeProjectData.IcoType.Play:
-                icoTexture = DeStylePalette.proj_play;
-                break;
-            case DeProjectData.IcoType.Star:
-                icoTexture = DeStylePalette.proj_star;
-                break;
-            case DeProjectData.IcoType.Heart:
-                icoTexture = DeStylePalette.proj_heart;
-                break;
-            case DeProjectData.IcoType.Skull:
-                icoTexture = DeStylePalette.proj_skull;
-                break;
-                break;
-            }
+            Texture2D icoTexture = customizedItem.GetIcon();
             if (icoTexture != null) {
-//                Rect icoR = new Rect((int)(folderR.center.x - icoTexture.width * 0.5f), (int)(folderR.center.y - icoTexture.height * 0.5f), icoTexture.width, icoTexture.height);
-                Rect icoR = new Rect(folderR.xMax - 1 - icoTexture.width, folderR.yMax - 1 - icoTexture.height, icoTexture.width, icoTexture.height);
-                icoR.x += 3;
-                icoR.y += 3;
+                bool isCustom = customizedItem.icoType == DeProjectData.IcoType.Custom;
+                int maxSize = isCustom ? customizedItem.customIconMaxSize : 16;
+                Rect icoR = new Rect(0, 0, icoTexture.width, icoTexture.height);
+                icoR = icoR.Fit(maxSize, maxSize);
+                icoR.x = folderR.xMax - icoR.width + (isCustom ? customizedItem.customIconOffsetX : 2);
+                icoR.y = folderR.yMax - icoR.height + (isCustom ? customizedItem.customIconOffsetY : 2);
                 using (new DeGUI.ColorScope(null, null, customizedItem.GetIconColor())) GUI.DrawTexture(icoR, icoTexture);
             }
         }
@@ -85,6 +71,19 @@ namespace DG.DeEditorTools.Project
         #endregion
 
         #region Internal Methods
+
+        // Assumes at least one object is selected
+        internal static void CustomizeSelections()
+        {
+            _src = ConnectToData(true);
+            DeProjectCustomizeItemWindow.Items.Clear();
+            for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
+                string guid = Selection.assetGUIDs[i];
+                if (!IsProjectFolder(guid)) continue;
+                DeProjectCustomizeItemWindow.Items.Add(_src.StoreItem(guid));
+            }
+            if (DeProjectCustomizeItemWindow.Items.Count > 0) DeProjectCustomizeItemWindow.Open(_src);
+        }
 
         // Assumes at least one object is selected
         internal static void SetColorForSelections(DeProjectData.HColor hColor)
@@ -95,7 +94,6 @@ namespace DG.DeEditorTools.Project
             for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
                 string guid = Selection.assetGUIDs[i];
                 if (!IsProjectFolder(guid)) continue;
-                if (guid == null) continue;
                 if (hColor == DeProjectData.HColor.None) {
                     changed = _src.RemoveItemData(guid) || changed;
                 } else {
@@ -115,7 +113,6 @@ namespace DG.DeEditorTools.Project
             for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
                 string guid = Selection.assetGUIDs[i];
                 if (!IsProjectFolder(guid)) continue;
-                if (guid == null) continue;
                 changed = true;
                 _src.StoreItemIcon(guid, icoType);
             }

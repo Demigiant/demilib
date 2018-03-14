@@ -15,7 +15,10 @@ namespace DG.DeEditorTools.Project
 
         [MenuItem("Assets/DeProject/Reset", false, _Priority + 1)]
         static void SetColorReset() { DeProject.SetColorForSelections(DeProjectData.HColor.None); }
-        
+
+        [MenuItem("Assets/DeProject/Custom", false, _Priority + 1)]
+        static void SetColorCustom() { DeProject.CustomizeSelections(); }
+
         #endregion
 
         #region Icon

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using DG.DemiEditor;
 using UnityEngine;
 
 namespace DG.DeEditorTools.Project
@@ -16,6 +17,7 @@ namespace DG.DeEditorTools.Project
         public enum HColor
         {
             None,
+            Custom,
             Blue,
             Green,
             Orange,
@@ -26,12 +28,13 @@ namespace DG.DeEditorTools.Project
             DarkGrey,
             Black,
             White,
-            BrightBlue
+            BrightBlue,
         }
 
         public enum IcoType
         {
             None,
+            Custom,
             Scripts,
             Prefab,
             Cog,
@@ -48,6 +51,20 @@ namespace DG.DeEditorTools.Project
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// If the item exists returns it, otherwise first creates it and then returns it
+        /// </summary>
+        public CustomizedItem StoreItem(string guid)
+        {
+            for (int i = 0; i < customizedItems.Count; ++i) {
+                if (customizedItems[i].guid == guid) return customizedItems[i];
+            }
+            // Item doesn't exist, add it
+            CustomizedItem item = new CustomizedItem(guid);
+            customizedItems.Add(item);
+            return item;
+        }
 
         /// <summary>
         /// If the item exists sets it, otherwise first creates it and then sets it
@@ -73,6 +90,7 @@ namespace DG.DeEditorTools.Project
                 if (customizedItems[i].guid != guid) continue;
                 // Item exists, replace it
                 customizedItems[i].icoType = icoType;
+                customizedItems[i].customIcon = null;
                 return;
             }
             // Item doesn't exist, add it
@@ -121,6 +139,16 @@ namespace DG.DeEditorTools.Project
             public string guid;
             public HColor hColor = HColor.BrightGrey;
             public IcoType icoType = IcoType.None;
+            public Color customColor = Color.white;
+            public Texture2D customIcon = null;
+            public int customIconOffsetX = 2;
+            public int customIconOffsetY = 2;
+            public int customIconMaxSize = 16;
+
+            public CustomizedItem(string guid)
+            {
+                this.guid = guid;
+            }
 
             public CustomizedItem(string guid, HColor hColor)
             {
@@ -136,6 +164,7 @@ namespace DG.DeEditorTools.Project
             public Color GetColor()
             {
                 switch (hColor) {
+                case HColor.Custom: return customColor;
                 case HColor.Blue: return new Color(0.2145329f, 0.4501492f, 0.9117647f, 1f);
                 case HColor.BrightBlue: return new Color(0.42f, 0.74f, 0.99f);
                 case HColor.Green: return new Color(0.05060553f, 0.8602941f, 0.2237113f, 1f);
@@ -149,6 +178,29 @@ namespace DG.DeEditorTools.Project
                 case HColor.White: return Color.white;
                 default: return Color.white;
                 }
+            }
+
+            public Texture2D GetIcon()
+            {
+                switch (icoType) {
+                case IcoType.Custom:
+                    return customIcon;
+                case IcoType.Scripts:
+                    return DeStylePalette.proj_scripts;
+                case IcoType.Prefab:
+                    return DeStylePalette.proj_prefab;
+                case IcoType.Cog:
+                    return DeStylePalette.proj_cog;
+                case IcoType.Play:
+                    return DeStylePalette.proj_play;
+                case IcoType.Star:
+                    return DeStylePalette.proj_star;
+                case IcoType.Heart:
+                    return DeStylePalette.proj_heart;
+                case IcoType.Skull:
+                    return DeStylePalette.proj_skull;
+                }
+                return null;
             }
 
             public Color GetIconColor()
