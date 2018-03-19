@@ -23,6 +23,17 @@
             </summary>
             <param name="targetRenderer">Target renderer to use for fitting</param>
         </member>
+        <member name="T:DG.De2D.De2DManager">
+            <summary>
+            Global-permanent runtime component that fires callbacks in case screen changes
+            (used to avoid having Update calls on all 2D components)
+            </summary>
+        </member>
+        <member name="T:DG.De2D.De2DLayout">
+            <summary>
+            Works even if disabled (unless it's disabled in-editor)
+            </summary>
+        </member>
         <member name="T:DG.De2D.DeRendererSortOrder">
             <summary>
             Allows to set the sortingOrder of Renderers, not just SpriteRenderers

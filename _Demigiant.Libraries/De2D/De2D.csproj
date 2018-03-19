@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="De2DAutosorter.cs" />
     <Compile Include="De2DCamera.cs" />
+    <Compile Include="De2DManager.cs" />
+    <Compile Include="De2DLayout.cs" />
     <Compile Include="DeRendererSortOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\DeUIMesh.cs" />
