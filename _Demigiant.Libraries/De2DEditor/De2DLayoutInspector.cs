@@ -23,8 +23,7 @@ namespace DG.De2DEditor
 
         public override void OnInspectorGUI()
         {
-//            Undo.RecordObject(_src, "De2DLayout");
-
+            bool refreshRequired = false;
             SerializedProperty p_camera = serializedObject.FindProperty("cam");
             SerializedProperty p_alignment = serializedObject.FindProperty("_alignment");
             SerializedProperty p_offset = serializedObject.FindProperty("_offset");
@@ -38,10 +37,12 @@ namespace DG.De2DEditor
                 EditorGUILayout.PropertyField(p_alignment, new GUIContent("Alignment"));
                 EditorGUILayout.PropertyField(p_offset, new GUIContent("Offset"));
 
-                if (check.changed) _src.Refresh();
+                if (check.changed) refreshRequired = true;
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            if (refreshRequired) _src.Refresh();
         }
 
         #endregion
