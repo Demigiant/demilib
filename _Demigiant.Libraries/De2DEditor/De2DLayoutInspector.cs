@@ -24,7 +24,7 @@ namespace DG.De2DEditor
         public override void OnInspectorGUI()
         {
             bool refreshRequired = false;
-            SerializedProperty p_camera = serializedObject.FindProperty("cam");
+            SerializedProperty p_camera = serializedObject.FindProperty("_camera");
             SerializedProperty p_alignment = serializedObject.FindProperty("_alignment");
             SerializedProperty p_offset = serializedObject.FindProperty("_offset");
 

@@ -15,11 +15,13 @@ namespace DG.De2D
     {
         #region Serialized
 
-        public Camera cam;
+        [SerializeField] Camera _camera;
         [SerializeField] SpriteAlignment _alignment;
         [SerializeField] Vector2 _offset = Vector2.zero;
 
         #endregion
+
+        public Camera cam { get { return _camera; } set { _camera = value; if (_camera != null) Refresh(); } }
 
         SpriteRenderer _spriteR;
 
@@ -39,6 +41,7 @@ namespace DG.De2D
                 De2DManager.OnScreenSizeChanged += Refresh;
             }
 
+            // NOTE: Refresh won't work correctly in Awake but only in Start (because otherwise Sprite bounds come out wrong)
             Refresh();
         }
 
@@ -52,27 +55,28 @@ namespace DG.De2D
         {
             if (_currScreenWidth == Screen.width && _currScreenHeight == Screen.height) return;
 
-            _currScreenWidth = Screen.width;
-            _currScreenHeight = Screen.height;
             Refresh();
         }
 
         #endregion
 
-        #region Public Methods
+        #region Internal Methods
 
-        public void Refresh()
+        internal void Refresh()
         {
-            if (cam == null || !cam.orthographic) {
-                if (cam == null) {
-                    if (Application.isPlaying) Debug.LogError(string.Format("De2DLayout ► Camera not set for \"{0}\"", this.name), this);
-                } else if (!cam.orthographic) {
-                    Debug.LogWarning(string.Format("De2DLayout ► Camera \"{0}\" (used by \"{1}\") is not set to orthographic", cam.name, this.name), cam);
+            _currScreenWidth = Screen.width;
+            _currScreenHeight = Screen.height;
+            if (_camera == null || !_camera.orthographic) {
+                if (_camera == null) {
+                    if (Application.isPlaying) Debug.LogWarning(string.Format("De2DLayout ► Camera not set for \"{0}\"", this.name), this);
+                } else if (!_camera.orthographic) {
+                    Debug.LogWarning(string.Format("De2DLayout ► Camera \"{0}\" (used by \"{1}\") is not set to orthographic", _camera.name, this.name), _camera);
                 }
                 return;
             }
+
             if (_spriteR == null) _spriteR = this.GetComponent<SpriteRenderer>();
-            De2DManager.AlignToCamera(_spriteR, cam, _alignment, _offset);
+            De2DManager.AlignToCamera(_spriteR, _camera, _alignment, _offset);
         }
 
         #endregion
