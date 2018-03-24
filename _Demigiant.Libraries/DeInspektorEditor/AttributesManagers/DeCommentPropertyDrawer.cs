@@ -48,7 +48,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
             Rect r = position;
             r.x += shiftX;
-            r.y += 2;
+            r.y += 3;
             r.width = _positionW - 1;
             if (attr.style == DeCommentStyle.BoxExtended) {
                 r.x -= _ExtendedWidthIncrement - 4;
@@ -58,7 +58,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
             if (attr.style == DeCommentStyle.WrapNextLine) {
                 r.x -= 1;
                 r.width += 2;
-                r.height += attr.marginBottom + EditorGUIUtility.singleLineHeight + 1;
+                r.height += attr.marginBottom + EditorGUIUtility.singleLineHeight - 1;
             }
 
             bool wasGUIEnabled = GUI.enabled;
