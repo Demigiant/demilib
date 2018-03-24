@@ -48,16 +48,17 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
             Rect r = position;
             r.x += shiftX;
-            r.width = _positionW;
+            r.y += 2;
+            r.width = _positionW - 1;
             if (attr.style == DeCommentStyle.BoxExtended) {
                 r.x -= _ExtendedWidthIncrement - 4;
                 r.width += _ExtendedWidthIncrement;
             }
-            r.height -= attr.marginBottom;
+            r.height -= attr.marginBottom - 1;
             if (attr.style == DeCommentStyle.WrapNextLine) {
                 r.x -= 1;
                 r.width += 2;
-                r.height += attr.marginBottom + EditorGUIUtility.singleLineHeight + 2;
+                r.height += attr.marginBottom + EditorGUIUtility.singleLineHeight - 3;
             }
 
             bool wasGUIEnabled = GUI.enabled;
@@ -74,7 +75,8 @@ namespace DG.DeInspektorEditor.AttributesManagers
         {
             if (_attrStyle != null) return;
 
-            _attrStyle = new GUIStyle(GUI.skin.box).Add(attr.textAnchor, attr.fontSize, Format.RichText).Padding(4, 4, 3, 4);
+            _attrStyle = new GUIStyle(DeGUI.styles.box.sticky).Add(attr.textAnchor, attr.fontSize, Format.RichText).Padding(3, 3, 2, 1)
+                .Margin(0);
             if (attr.textColor != null) _attrStyle.Add(DeColorPalette.HexToColor(attr.textColor));
             else _attrStyle.Add(new DeSkinColor(0.35f, 0.58f));
             switch (attr.style) {

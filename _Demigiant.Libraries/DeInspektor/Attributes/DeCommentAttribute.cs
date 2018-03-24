@@ -28,8 +28,8 @@ namespace DG.DeInspektor.Attributes
         public string textColor;
         /// <summary>Background color</summary>
         public string bgColor;
-        /// <summary>Margin bottom (default = 1)</summary>
-        public int marginBottom = 1;
+        /// <summary>Margin bottom (default = 0)</summary>
+        public int marginBottom = 0;
         /// <summary>Comment style (default = Box)</summary>
         public DeCommentStyle style = DeCommentStyle.Box;
         /// <summary>Text anchor (default = UpperLeft)</summary>

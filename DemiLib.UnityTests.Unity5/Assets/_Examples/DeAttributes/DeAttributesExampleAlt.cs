@@ -13,8 +13,20 @@ namespace Assets._Examples.DeAttributes
     public class DeAttributesExampleAlt : MonoBehaviour
     {
         public float aFloat0 = 4.5f;
+        [DeComment("Test comment on single line")]
         [Range(1, 5)] public float aRange = 2;
+        [DeComment("Test comment on multiple line by jove this is gonna be long or maybe not who knows")]
         [DeRange(1, 5)] public float aDeRange0 = 2;
+        [DeComment("Another comment about life and everything and that's it", style = DeCommentStyle.BoxExtended)]
+        [DeRange(1, 5)] public float comment0 = 2;
+        [DeComment("Another comment about life and everything and that's it", style = DeCommentStyle.TextOnly)]
+        [DeRange(1, 5)] public float comment1 = 2;
+        [DeComment("Another comment about life and everything and that's it", style = DeCommentStyle.TextInValueArea)]
+        [DeRange(1, 5)] public float comment2 = 2;
+        [DeComment("Another comment about life and everything and that's it", style = DeCommentStyle.WrapNextLine)]
+        [DeRange(1, 5)] public float comment3 = 2;
+        [DeComment("Another comment about life and everything and that's it")]
+        [DeRange(1, 5)] public float comment4 = 2;
         [DeRange(1, 5, "Custom Label")] public float aDeRange1 = 2;
         public Range aDemiLibRange0 = new Range(2, 4);
         [DeRange(1, 5, "Range w DeRange")] public Range aDemiLibRange1 = new Range(2, 4);

@@ -269,7 +269,7 @@
             <summary>Background color</summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.marginBottom">
-            <summary>Margin bottom (default = 1)</summary>
+            <summary>Margin bottom (default = 0)</summary>
         </member>
         <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.style">
             <summary>Comment style (default = Box)</summary>
