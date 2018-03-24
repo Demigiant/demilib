@@ -14,10 +14,20 @@ namespace DG.DeEditorTools.Project
         #region Reset
 
         [MenuItem("Assets/DeProject/Reset", false, _Priority + 1)]
-        static void SetColorReset() { DeProject.SetColorForSelections(DeProjectData.HColor.None); }
+        static void Reset() { DeProject.SetColorForSelections(DeProjectData.HColor.None); }
 
         [MenuItem("Assets/DeProject/Custom", false, _Priority + 1)]
-        static void SetColorCustom() { DeProject.CustomizeSelections(); }
+        static void SetCustom() { DeProject.CustomizeSelections(); }
+
+        [MenuItem("Assets/DeProject/Copy", false, _Priority + 1)]
+        static void Copy() { DeProject.CopyDataFromSelection(); }
+        [MenuItem("Assets/DeProject/Copy", true)]
+        static bool Copy_Validate() { return DeProject.CanCopyDataFromSelection(); }
+
+        [MenuItem("Assets/DeProject/Paste", false, _Priority + 1)]
+        static void Paste() { DeProject.PastDataToSelections(); }
+        [MenuItem("Assets/DeProject/Paste", true)]
+        static bool Paste_Validate() { return DeProjectClipboard.hasStoreData; }
 
         #endregion
 

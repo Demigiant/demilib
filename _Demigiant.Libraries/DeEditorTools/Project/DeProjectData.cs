@@ -189,6 +189,29 @@ namespace DG.DeEditorTools.Project
                 this.icoType = icoType;
             }
 
+            public CustomizedItem Clone()
+            {
+                return new CustomizedItem(guid, hColor) {
+                    icoType = icoType,
+                    customColor = customColor,
+                    customIcon = customIcon,
+                    customIconOffsetX = customIconOffsetX,
+                    customIconOffsetY = customIconOffsetY,
+                    customIconMaxSize = customIconMaxSize
+                };
+            }
+
+            public void Paste(CustomizedItem item)
+            {
+                this.hColor = item.hColor;
+                this.icoType = item.icoType;
+                this.customColor = item.customColor;
+                this.customIcon = item.customIcon;
+                this.customIconOffsetX = item.customIconOffsetX;
+                this.customIconOffsetY = item.customIconOffsetY;
+                this.customIconMaxSize = item.customIconMaxSize;
+            }
+
             public Color GetColor()
             {
                 switch (hColor) {

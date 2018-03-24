@@ -53,6 +53,7 @@
     <Compile Include="Hierarchy\DeHierarchyComponentInspector.cs" />
     <Compile Include="Hierarchy\DeHierarchyContextMenu.cs" />
     <Compile Include="Project\DeProject.cs" />
+    <Compile Include="Project\DeProjectClipboard.cs" />
     <Compile Include="Project\DeProjectCustomizeItemWindow.cs" />
     <Compile Include="Project\DeProjectContextMenu.cs" />
     <Compile Include="Project\DeProjectData.cs" />

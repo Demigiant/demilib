@@ -71,6 +71,41 @@ namespace DG.DeEditorTools.Project
 
         #region Internal Methods
 
+        internal static bool CanCopyDataFromSelection()
+        {
+            if (Selection.assetGUIDs.Length == 0) return false;
+            string guid = Selection.assetGUIDs[0];
+            if (!IsProjectFolder(guid)) return false;
+            _src = ConnectToData(true);
+            return _src.GetItem(guid) != null;
+        }
+
+        internal static void CopyDataFromSelection()
+        {
+            if (Selection.assetGUIDs.Length == 0) return;
+            string guid = Selection.assetGUIDs[0];
+            if (!IsProjectFolder(guid)) return;
+            _src = ConnectToData(true);
+            DeProjectData.CustomizedItem item = _src.GetItem(guid);
+            if (item != null) DeProjectClipboard.storedItem = item.Clone();
+        }
+
+        internal static void PastDataToSelections()
+        {
+            if (!DeProjectClipboard.hasStoreData) return;
+            _src = ConnectToData(true);
+            Undo.RecordObject(_src, "DeProject");
+            bool changed = false;
+            for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
+                string guid = Selection.assetGUIDs[i];
+                if (!IsProjectFolder(guid)) continue;
+                changed = true;
+                DeProjectData.CustomizedItem item = _src.StoreItem(guid);
+                item.Paste(DeProjectClipboard.storedItem);
+            }
+            if (changed) EditorUtility.SetDirty(_src);
+        }
+
         // Assumes at least one object is selected
         internal static void CustomizeSelections()
         {
