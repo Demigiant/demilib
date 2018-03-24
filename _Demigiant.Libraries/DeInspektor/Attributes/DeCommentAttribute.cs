@@ -44,7 +44,7 @@ namespace DG.DeInspektor.Attributes
         /// </summary>
         /// <param name="text">Text</param>
         /// <param name="marginBottom">Bottom margin</param>
-        public DeCommentAttribute(string text, int marginBottom = 3)
+        public DeCommentAttribute(string text, int marginBottom = 0)
         {
             this.text = text;
             this.marginBottom = marginBottom;
@@ -57,7 +57,7 @@ namespace DG.DeInspektor.Attributes
         /// <param name="textColor">Text color</param>
         /// <param name="bgColor">Background color</param>
         /// <param name="marginBottom">Bottom margin</param>
-        public DeCommentAttribute(string text, string textColor, string bgColor, int marginBottom = 3)
+        public DeCommentAttribute(string text, string textColor, string bgColor, int marginBottom = 0)
         {
             this.text = text;
             this.textColor = textColor;

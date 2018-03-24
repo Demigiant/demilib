@@ -29,7 +29,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
                 ? EditorGUIUtility.currentViewWidth - (attr.style == DeCommentStyle.TextInValueArea ? EditorGUIUtility.labelWidth - 2 : 0)
                 : _positionW;
             if (attr.style == DeCommentStyle.BoxExtended) w += _ExtendedWidthIncrement;
-            float h = _attrStyle.CalcHeight(new GUIContent(attr.text), w) + attr.marginBottom;
+            float h = _attrStyle.CalcHeight(new GUIContent(attr.text), w) + attr.marginBottom + 4;
             return h;
         }
 
@@ -54,11 +54,11 @@ namespace DG.DeInspektorEditor.AttributesManagers
                 r.x -= _ExtendedWidthIncrement - 4;
                 r.width += _ExtendedWidthIncrement;
             }
-            r.height -= attr.marginBottom - 1;
+            r.height -= attr.marginBottom + 3;
             if (attr.style == DeCommentStyle.WrapNextLine) {
                 r.x -= 1;
                 r.width += 2;
-                r.height += attr.marginBottom + EditorGUIUtility.singleLineHeight - 3;
+                r.height += attr.marginBottom + EditorGUIUtility.singleLineHeight + 1;
             }
 
             bool wasGUIEnabled = GUI.enabled;
