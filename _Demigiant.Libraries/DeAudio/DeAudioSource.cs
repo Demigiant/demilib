@@ -202,7 +202,7 @@ namespace DG.DeAudio
         internal void FadeTo(float to, float duration, bool ignoreTimeScale, FadeBehaviour onCompleteBehaviour, TweenCallback onComplete)
         {
             _fadeTween.Kill();
-            _fadeTween = DOTween.To(() => volume, x => volume = x, to, duration)
+            _fadeTween = DOTween.To(() => unscaledVolume, x => volume = x, to, duration)
                 .SetTarget(this).SetUpdate(ignoreTimeScale).SetEase(DeAudioManager.I.fadeEase);
             switch (onCompleteBehaviour) {
             case FadeBehaviour.Stop:
