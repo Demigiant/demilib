@@ -102,7 +102,7 @@ namespace DG.Debugging
                 if (!force && logType != LogType.Error) return;
                 break;
             case Verbosity.ErrorsAndWarnings:
-                if (!force && (logType != LogType.Error || logType != LogType.Warning)) return;
+                if (!force && logType != LogType.Error && logType != LogType.Warning) return;
                 break;
             case Verbosity.Normal:
                 if (isVerbose) return;
