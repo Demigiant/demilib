@@ -41,6 +41,13 @@
             Logs the given message with the given options
             </summary>
         </member>
+        <member name="M:DG.Debugging.Delogger.ForceLog(System.Object,System.Object,UnityEngine.Object,System.String)">
+            <summary>
+            Logs the given message with the given options,
+            and forces it so it will log even if <see cref="F:DG.Debugging.Delogger.verbosity"/> is set to None
+            (but won't log it if the logger is not enabled)
+            </summary>
+        </member>
         <member name="M:DG.Debugging.Delogger.LogVerbose(System.Object,System.Object,UnityEngine.Object)">
             <summary>
             Logs the given message with the given options
@@ -73,6 +80,13 @@
         <member name="M:DG.Debugging.Delogger.Editor.Log(System.Object,System.Object,UnityEngine.Object,System.String)">
             <summary>
             Logs the given editor-only message with the given options
+            </summary>
+        </member>
+        <member name="M:DG.Debugging.Delogger.Editor.ForceLog(System.Object,System.Object,UnityEngine.Object,System.String)">
+            <summary>
+            Logs the given editor-only message with the given options,
+            and forces it so it will log even if <see cref="F:DG.Debugging.Delogger.verbosity"/> is set to None
+            (but won't log it if the logger is not enabled)
             </summary>
         </member>
         <member name="M:DG.Debugging.Delogger.Editor.LogVerbose(System.Object,System.Object,UnityEngine.Object)">

@@ -59,6 +59,14 @@ namespace DG.Debugging
         { Log(-1, false, LogType.Normal, sender, message, context, false, hexColor, false); }
 
         /// <summary>
+        /// Logs the given message with the given options,
+        /// and forces it so it will log even if <see cref="verbosity"/> is set to None
+        /// (but won't log it if the logger is not enabled)
+        /// </summary>
+        public static void ForceLog(object sender, object message, Object context = null, string hexColor = null)
+        { Log(-1, false, LogType.Normal, sender, message, context, false, hexColor, true); }
+
+        /// <summary>
         /// Logs the given message with the given options
         /// </summary>
         public static void LogVerbose(object sender, object message, Object context = null)
@@ -178,6 +186,14 @@ namespace DG.Debugging
             /// </summary>
             public static void Log(object sender, object message, Object context = null, string hexColor = null)
             { Delogger.Log(-1, true, LogType.Normal, sender, message, context, false, hexColor, false); }
+
+            /// <summary>
+            /// Logs the given editor-only message with the given options,
+            /// and forces it so it will log even if <see cref="verbosity"/> is set to None
+            /// (but won't log it if the logger is not enabled)
+            /// </summary>
+            public static void ForceLog(object sender, object message, Object context = null, string hexColor = null)
+            { Delogger.Log(-1, true, LogType.Normal, sender, message, context, false, hexColor, true); }
 
             /// <summary>
             /// Logs the given editor-only message with the given options
