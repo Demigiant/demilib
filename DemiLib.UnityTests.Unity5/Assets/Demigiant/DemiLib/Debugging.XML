@@ -62,6 +62,14 @@
             </summary>
             <param name="importance">0 to 1 (0 being more important than 1)</param>
         </member>
+        <member name="M:DG.Debugging.Delogger.Important.ForceLog(System.Int32,System.Object,System.Object,UnityEngine.Object,System.String)">
+            <summary>
+            Logs the given important message with the given options,
+            and forces it so it will log even if <see cref="F:DG.Debugging.Delogger.verbosity"/> is set to None
+            (but won't log it if the logger is not enabled)
+            </summary>
+            <param name="importance">0 to 1 (0 being more important than 1)</param>
+        </member>
         <member name="M:DG.Debugging.Delogger.Editor.Log(System.Object,System.Object,UnityEngine.Object,System.String)">
             <summary>
             Logs the given editor-only message with the given options

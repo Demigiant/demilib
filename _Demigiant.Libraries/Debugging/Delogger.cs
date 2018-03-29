@@ -56,43 +56,45 @@ namespace DG.Debugging
         /// Logs the given message with the given options
         /// </summary>
         public static void Log(object sender, object message, Object context = null, string hexColor = null)
-        { Log(-1, false, LogType.Normal, sender, message, context, false, hexColor); }
+        { Log(-1, false, LogType.Normal, sender, message, context, false, hexColor, false); }
 
         /// <summary>
         /// Logs the given message with the given options
         /// </summary>
         public static void LogVerbose(object sender, object message, Object context = null)
-        { Log(-1, false, LogType.Normal, sender, message, context, true, null); }
+        { Log(-1, false, LogType.Normal, sender, message, context, true, null, false); }
 
         /// <summary>
         /// Logs the given message with the given options
         /// </summary>
         public static void LogWarning(object sender, object message, Object context = null)
-        { Log(-1, false, LogType.Warning, sender, message, context, false, null); }
+        { Log(-1, false, LogType.Warning, sender, message, context, false, null, false); }
 
         /// <summary>
         /// Logs the given message with the given options
         /// </summary>
         public static void LogError(object sender, object message, Object context = null)
-        { Log(-1, false, LogType.Error, sender, message, context, false, null); }
+        { Log(-1, false, LogType.Error, sender, message, context, false, null, false); }
 
         #endregion
 
         #region Methods
 
-        static void Log(int importance, bool isEditorLog, LogType logType, object sender, object message, Object context, bool isVerbose, string hexColor)
-        {
+        static void Log(
+            int importance, bool isEditorLog, LogType logType, object sender, object message,
+            Object context, bool isVerbose, string hexColor, bool force
+        ){
             if (!enabled) return;
-            if (isEditorLog && editorVerbosity == Verbosity.None) return;
-            if (!isEditorLog && verbosity == Verbosity.None) return;
+            if (!force && isEditorLog && editorVerbosity == Verbosity.None) return;
+            if (!force && !isEditorLog && verbosity == Verbosity.None) return;
 
             Verbosity targetVerbosity = isEditorLog ? editorVerbosity : verbosity;
             switch (targetVerbosity) {
             case Verbosity.Errors:
-                if (logType != LogType.Error) return;
+                if (!force && logType != LogType.Error) return;
                 break;
             case Verbosity.ErrorsAndWarnings:
-                if (logType != LogType.Error || logType != LogType.Warning) return;
+                if (!force && (logType != LogType.Error || logType != LogType.Warning)) return;
                 break;
             case Verbosity.Normal:
                 if (isVerbose) return;
@@ -157,7 +159,16 @@ namespace DG.Debugging
             /// </summary>
             /// <param name="importance">0 to 1 (0 being more important than 1)</param>
             public static void Log(int importance, object sender, object message, Object context = null, string hexColor = null)
-            { Delogger.Log(importance, false, LogType.Normal, sender, message, context, false, hexColor); }
+            { Delogger.Log(importance, false, LogType.Normal, sender, message, context, false, hexColor, false); }
+
+            /// <summary>
+            /// Logs the given important message with the given options,
+            /// and forces it so it will log even if <see cref="verbosity"/> is set to None
+            /// (but won't log it if the logger is not enabled)
+            /// </summary>
+            /// <param name="importance">0 to 1 (0 being more important than 1)</param>
+            public static void ForceLog(int importance, object sender, object message, Object context = null, string hexColor = null)
+            { Delogger.Log(importance, false, LogType.Normal, sender, message, context, false, hexColor, true); }
         }
 
         public static class Editor
@@ -166,25 +177,25 @@ namespace DG.Debugging
             /// Logs the given editor-only message with the given options
             /// </summary>
             public static void Log(object sender, object message, Object context = null, string hexColor = null)
-            { Delogger.Log(-1, true, LogType.Normal, sender, message, context, false, hexColor); }
+            { Delogger.Log(-1, true, LogType.Normal, sender, message, context, false, hexColor, false); }
 
             /// <summary>
             /// Logs the given editor-only message with the given options
             /// </summary>
             public static void LogVerbose(object sender, object message, Object context = null)
-            { Delogger.Log(-1, true, LogType.Normal, sender, message, context, true, null); }
+            { Delogger.Log(-1, true, LogType.Normal, sender, message, context, true, null, false); }
 
             /// <summary>
             /// Logs the given editor-only message with the given options
             /// </summary>
             public static void LogWarning(object sender, object message, Object context = null)
-            { Delogger.Log(-1, true, LogType.Warning, sender, message, context, false, null); }
+            { Delogger.Log(-1, true, LogType.Warning, sender, message, context, false, null, false); }
 
             /// <summary>
             /// Logs the given editor-only message with the given options
             /// </summary>
             public static void LogError(object sender, object message, Object context = null)
-            { Delogger.Log(-1, true, LogType.Error, sender, message, context, false, null); }
+            { Delogger.Log(-1, true, LogType.Error, sender, message, context, false, null, false); }
         }
     }
 }
