@@ -210,11 +210,6 @@
             Returns a copy of the Rect with its Y property set so the rect Y center corresponds to the given value
             </summary>
         </member>
-        <member name="M:DG.DeExtensions.RectTransformExtensions.StretchToFill(UnityEngine.RectTransform)">
-            <summary>
-            Sets the given RectTransform to stretch to the exact borders of its parent
-            </summary>
-        </member>
         <member name="M:DG.DeExtensions.StringExtensions.IsNullOrEmpty(System.String,System.Boolean)">
             <summary>
             Returns TRUE if the string is null or empty
@@ -249,6 +244,11 @@
         <member name="M:DG.DeExtensions.TextureExtensions.GetRect(UnityEngine.Texture2D,System.Single,System.Single,System.Single)">
             <summary>
             Returns the full Rect of this texture, with options for position and scale
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.UIExtensions.StretchToFill(UnityEngine.RectTransform)">
+            <summary>
+            Sets the given RectTransform to stretch to the exact borders of its parent
             </summary>
         </member>
         <member name="M:DG.DeExtensions.VectorExtensions.SetX(UnityEngine.Vector2,System.Single)">
