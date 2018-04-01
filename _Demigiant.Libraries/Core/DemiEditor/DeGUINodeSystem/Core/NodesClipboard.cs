@@ -137,7 +137,17 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                     Type valueType = srcValue.GetType();
                     if (valueType.IsArray) {
                         // Clone Array
-                        Type arrayType = Type.GetType(valueType.FullName.Replace("[]", string.Empty));
+                        string typeStr = valueType.FullName.Replace("[]", string.Empty);
+                        Type arrayType = Type.GetType(typeStr);
+                        if (arrayType == null) {
+                            // Try finding type withing Unity's project qualified assemblies
+                            arrayType = Type.GetType(typeStr + ", Assembly-CSharp-firstpass");
+                            if (arrayType == null) Type.GetType(typeStr + ", Assembly-CSharp");
+                            // If type is not found yet, let it become an error.
+                            // The alternative would be to go through all assemblies with a
+                            // foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+                            // but it's expensive and let's ignore it for now
+                        }
                         Array srcArray = srcValue as Array;
                         Array clonedArray = Array.CreateInstance(arrayType, srcArray.Length);
                         for (int i = 0; i < srcArray.Length; ++i) clonedArray.SetValue(srcArray.GetValue(i), i);
