@@ -62,8 +62,20 @@ namespace DG.DeAudio
             DeAudioManager.Pause(this.clip);
         }
 
+        /// <summary>
+        /// If the clip is active in an AudioSource (even if not playing) returns it,
+        /// otherwise returns NULL
+        /// </summary>
+        public DeAudioSource GetAudioSource()
+        {
+            return DeAudioManager.GetAudioGroup(groupId).GetExistingAudioSourceFor(clip);
+        }
+
         #region Info Methods
 
+        /// <summary>
+        /// Returns TRUE if this clip is currently playing
+        /// </summary>
         public bool IsPlaying()
         {
             if (clip == null) return false;

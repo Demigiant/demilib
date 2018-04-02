@@ -176,9 +176,9 @@ namespace DG.DeAudio
         public bool IsPlaying(AudioClip clip)
         {
             if (clip == null) return false;
-            foreach (DeAudioSource src in sources) {
-                if (src.clip != clip) continue;
-                return src.isPlaying;
+            for (int i = 0; i < sources.Count; ++i) {
+                if (sources[i].clip != clip) continue;
+                return sources[i].isPlaying;
             }
             return false;
         }
@@ -266,6 +266,16 @@ namespace DG.DeAudio
                 sources.Clear();
             }
             _disposed = true;
+        }
+
+        // Returns the eventual existing source for the given clip, or NULL if there is none
+        internal DeAudioSource GetExistingAudioSourceFor(AudioClip clip)
+        {
+            if (clip == null) return null;
+            for (int i = 0; i < sources.Count; ++i) {
+                if (sources[i].clip == clip) return sources[i];
+            }
+            return null;
         }
 
         // Either:

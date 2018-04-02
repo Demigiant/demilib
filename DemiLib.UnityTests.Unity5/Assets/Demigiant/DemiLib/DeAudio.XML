@@ -25,6 +25,17 @@
             Pauses all sounds using this DeAudioClipData clip
             </summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioClipData.GetAudioSource">
+            <summary>
+            If the clip is active in an AudioSource (even if not playing) returns it,
+            otherwise returns NULL
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioClipData.IsPlaying">
+            <summary>
+            Returns TRUE if this clip is currently playing
+            </summary>
+        </member>
         <member name="T:DG.DeAudio.DeAudioClipGUIMode">
             <summary>
             Display mode used when drawing <see cref="T:DG.DeAudio.DeAudioClipData"/> objects in a custom editor.
