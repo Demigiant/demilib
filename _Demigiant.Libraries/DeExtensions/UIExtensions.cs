@@ -43,6 +43,23 @@ namespace DG.DeExtensions
 
         #endregion
 
+        #region Graphic
+
+        public static void SetAlpha(this Graphic t, float alpha)
+        {
+            Color c = t.color;
+            c.a = alpha;
+            t.color = c;
+        }
+
+        public static void SetColor(this Graphic t, Color color, float alpha)
+        {
+            color.a = alpha;
+            t.color = color;
+        }
+
+        #endregion
+
         #region RectTransform
 
         public static void SetAnchoredPosX(this RectTransform t, float value)
