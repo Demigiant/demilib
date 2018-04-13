@@ -120,6 +120,14 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Returns the given path with all slashes converted to the correct ones used by the system
+        /// </summary>
+        public static string ApplySystemDirectorySeparators(string path)
+        {
+            return path.Replace(PathSlashToReplace, PathSlash);
+        }
+
+        /// <summary>
         /// Returns the asset path of the given GUID (relative to Unity project's folder),
         /// or an empty string if either the GUID is invalid or the related path doesn't exist.
         /// </summary>

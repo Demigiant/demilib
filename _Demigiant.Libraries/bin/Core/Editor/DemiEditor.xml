@@ -74,6 +74,11 @@
             <param name="s">string to replace</param>
             <param name="replaceWith">Character to use as replacement for invalid ones</param>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.ApplySystemDirectorySeparators(System.String)">
+            <summary>
+            Returns the given path with all slashes converted to the correct ones used by the system
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorFileUtils.GUIDToExistingAssetPath(System.String)">
             <summary>
             Returns the asset path of the given GUID (relative to Unity project's folder),
