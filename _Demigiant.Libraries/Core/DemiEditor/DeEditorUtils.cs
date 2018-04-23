@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,7 +15,8 @@ namespace DG.DemiEditor
     {
         static readonly List<DelayedCall> _DelayedCalls = new List<DelayedCall>();
         static MethodInfo _clearConsoleMI;
-        static readonly List<GameObject> _rootGOs = new List<GameObject>(500);
+        static readonly List<GameObject> _RootGOs = new List<GameObject>(500);
+        static readonly StringBuilder _Strb = new StringBuilder();
 
         #region Public Methods
 
@@ -67,6 +69,86 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Adds the given global define (if it's not already present) to all the <see cref="BuildTargetGroup"/>
+        /// or only to the given <see cref="BuildTargetGroup"/>, depending on passed parameters,
+        /// and returns TRUE if it was added, FALSE otherwise.<para/>
+        /// NOTE: when adding to all of them some legacy warnings might appear, which you can ignore.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="buildTargetGroup"><see cref="BuildTargetGroup"/>to use. Leave NULL to add to all of them.</param>
+        public static bool AddGlobalDefine(string id, BuildTargetGroup? buildTargetGroup = null)
+        {
+            bool added = false;
+            BuildTargetGroup[] targetGroups = buildTargetGroup == null
+                ? (BuildTargetGroup[])Enum.GetValues(typeof(BuildTargetGroup))
+                : new[] {(BuildTargetGroup)buildTargetGroup};
+            foreach(BuildTargetGroup btg in targetGroups) {
+                if (btg == BuildTargetGroup.Unknown) continue;
+                string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
+                string[] singleDefs = defs.Split(';');
+                if (Array.IndexOf(singleDefs, id) != -1) continue; // Already present
+                added = true;
+                defs += defs.Length > 0 ? ";" + id : id;
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(btg, defs);
+            }
+            return added;
+        }
+
+        /// <summary>
+        /// Removes the given global define (if present) from all the <see cref="BuildTargetGroup"/>
+        /// or only from the given <see cref="BuildTargetGroup"/>, depending on passed parameters,
+        /// and returns TRUE if it was removed, FALSE otherwise.<para/>
+        /// NOTE: when removing from all of them some legacy warnings might appear, which you can ignore.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="buildTargetGroup"><see cref="BuildTargetGroup"/>to use. Leave NULL to remove from all of them.</param>
+        public static bool RemoveGlobalDefine(string id, BuildTargetGroup? buildTargetGroup = null)
+        {
+            bool removed = false;
+            BuildTargetGroup[] targetGroups = buildTargetGroup == null
+                ? (BuildTargetGroup[])Enum.GetValues(typeof(BuildTargetGroup))
+                : new[] {(BuildTargetGroup)buildTargetGroup};
+            foreach(BuildTargetGroup btg in targetGroups) {
+                if (btg == BuildTargetGroup.Unknown) continue;
+                string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
+                string[] singleDefs = defs.Split(';');
+                if (Array.IndexOf(singleDefs, id) == -1) continue; // Not present
+                removed = true;
+                _Strb.Length = 0;
+                for (int i = 0; i < singleDefs.Length; ++i) {
+                    if (singleDefs[i] == id) continue;
+                    if (_Strb.Length > 0) _Strb.Append(';');
+                    _Strb.Append(singleDefs[i]);
+                }
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(btg, _Strb.ToString());
+            }
+            _Strb.Length = 0;
+            return removed;
+        }
+
+        /// <summary>
+        /// Returns TRUE if the given global define is present in all the <see cref="BuildTargetGroup"/>
+        /// or only in the given <see cref="BuildTargetGroup"/>, depending on passed parameters.<para/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="buildTargetGroup"><see cref="BuildTargetGroup"/>to use. Leave NULL to check in all of them.</param>
+        public static bool HasGlobalDefine(string id, BuildTargetGroup? buildTargetGroup = null)
+        {
+            BuildTargetGroup[] targetGroups = buildTargetGroup == null
+                ? (BuildTargetGroup[])Enum.GetValues(typeof(BuildTargetGroup))
+                : new[] {(BuildTargetGroup)buildTargetGroup};
+            foreach(BuildTargetGroup btg in targetGroups) {
+                if (btg == BuildTargetGroup.Unknown) continue;
+                string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
+                string[] singleDefs = defs.Split(';');
+                if (Array.IndexOf(singleDefs, id) != -1) return true;
+            }
+            return false;
+        }
+
+        #region Legacy
+
+        /// <summary>
         /// Returns all components of type T in the currently open scene, or NULL if none could be found.<para/>
         /// If you're on Unity 5 or later, and have <code>DeEditorTools</code>, use <code>DeEditorToolsUtils.FindAllComponentsOfType</code>
         /// instead, which is more efficient.
@@ -87,6 +169,8 @@ namespace DG.DemiEditor
             }
             return result;
         }
+
+        #endregion
 
         #endregion
     }
