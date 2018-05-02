@@ -140,9 +140,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                         string typeStr = valueType.FullName.Replace("[]", string.Empty);
                         Type arrayType = Type.GetType(typeStr);
                         if (arrayType == null) {
-                            // Try finding type withing Unity's project qualified assemblies
+                            // Try finding type within Unity's project qualified assemblies
                             arrayType = Type.GetType(typeStr + ", Assembly-CSharp-firstpass");
-                            if (arrayType == null) Type.GetType(typeStr + ", Assembly-CSharp");
+                            if (arrayType == null) arrayType = Type.GetType(typeStr + ", Assembly-CSharp");
                             // If type is not found yet, let it become an error.
                             // The alternative would be to go through all assemblies with a
                             // foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
