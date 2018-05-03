@@ -156,6 +156,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public void ShiftAreaTo(Vector2 shift)
         {
             _forceApplyAreaShift = shift;
+            DispatchOnGUIChange(GUIChangeType.Pan);
             RepaintOnEnd();
         }
 
