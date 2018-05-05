@@ -48,7 +48,8 @@ namespace DG.DeEditorTools.Project
             Audio,
             Textures,
             Fonts,
-            Demigiant
+            Demigiant,
+            AssetBundle
         }
 
         #region Serialized
@@ -258,6 +259,8 @@ namespace DG.DeEditorTools.Project
                     return DeStylePalette.proj_textures;
                 case IcoType.Fonts:
                     return DeStylePalette.proj_fonts;
+                case IcoType.AssetBundle:
+                    return DeStylePalette.proj_bundle;
                 }
                 return null;
             }
@@ -265,6 +268,18 @@ namespace DG.DeEditorTools.Project
             public Color GetIconColor()
             {
                 return Color.white;
+            }
+
+            public Vector2 GetIconOffset()
+            {
+                switch (icoType) {
+                case IcoType.Custom:
+                    return new Vector2(customIconOffsetX, customIconOffsetY);
+                case IcoType.AssetBundle:
+                    return new Vector2(4, 4);
+                default:
+                    return new Vector2(2, 2);
+                }
             }
         }
     }

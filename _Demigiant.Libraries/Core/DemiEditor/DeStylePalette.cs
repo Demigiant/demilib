@@ -186,6 +186,7 @@ namespace DG.DemiEditor
 
         public static Texture2D proj_folder { get { return LoadTexture(ref _proj_folder, "project/ico_folder"); } }
         public static Texture2D proj_audio { get { return LoadTexture(ref _proj_audio, "project/ico_audio"); } }
+        public static Texture2D proj_bundle { get { return LoadTexture(ref _proj_bundle, "project/ico_bundle"); } }
         public static Texture2D proj_cog { get { return LoadTexture(ref _proj_cog, "project/ico_cog"); } }
         public static Texture2D proj_demigiant { get { return LoadTexture(ref _proj_demigiant, "project/ico_demigiant"); } }
         public static Texture2D proj_fonts { get { return LoadTexture(ref _proj_fonts, "project/ico_fonts"); } }
@@ -198,6 +199,7 @@ namespace DG.DemiEditor
         public static Texture2D proj_textures { get { return LoadTexture(ref _proj_textures, "project/ico_textures"); } }
         static Texture2D _proj_folder;
         static Texture2D _proj_audio;
+        static Texture2D _proj_bundle;
         static Texture2D _proj_cog;
         static Texture2D _proj_demigiant;
         static Texture2D _proj_fonts;

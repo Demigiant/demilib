@@ -61,8 +61,9 @@ namespace DG.DeEditorTools.Project
                 bool isCustom = customizedItem.icoType == DeProjectData.IcoType.Custom;
                 Rect icoR = new Rect(0, 0, icoTexture.width, icoTexture.height);
                 if (isCustom) icoR = icoR.Fit(customizedItem.customIconMaxSize, customizedItem.customIconMaxSize);
-                icoR.x = (int)(folderR.xMax - icoR.width + (isCustom ? customizedItem.customIconOffsetX : 2));
-                icoR.y = (int)(folderR.yMax - icoR.height + (isCustom ? customizedItem.customIconOffsetY : 2));
+                Vector2 offset = customizedItem.GetIconOffset();
+                icoR.x = (int)(folderR.xMax - icoR.width + offset.x);
+                icoR.y = (int)(folderR.yMax - icoR.height + offset.y);
                 using (new DeGUI.ColorScope(null, null, customizedItem.GetIconColor())) GUI.DrawTexture(icoR, icoTexture);
             }
         }

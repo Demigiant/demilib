@@ -13,6 +13,7 @@ namespace DG.DeEditorTools.Project
         const int _Priority_Custom = _Priority + 11;
         const int _Priority_CopyPaste = _Priority_Custom + 11;
         const int _Priority_Icon = _Priority_CopyPaste + 11;
+        const int _Priority_Icon_Sub = _Priority_Icon + 11;
         const int _Priority_Color = _Priority_Icon + 11;
 
         #region Reset
@@ -37,6 +38,9 @@ namespace DG.DeEditorTools.Project
 
         #region Icon
 
+        [MenuItem("Assets/DeProject/Icon/AssetBundle", false, _Priority_Icon)]
+        static void SetIconAssetBundle() { DeProject.SetIconForSelections(DeProjectData.IcoType.AssetBundle); }
+
         [MenuItem("Assets/DeProject/Icon/Audio", false, _Priority_Icon)]
         static void SetIconAudio() { DeProject.SetIconForSelections(DeProjectData.IcoType.Audio); }
 
@@ -52,22 +56,22 @@ namespace DG.DeEditorTools.Project
         [MenuItem("Assets/DeProject/Icon/Textures", false, _Priority_Icon)]
         static void SetIconTextures() { DeProject.SetIconForSelections(DeProjectData.IcoType.Textures); }
 
-        [MenuItem("Assets/DeProject/Icon/Cog", false, _Priority_Icon)]
+        [MenuItem("Assets/DeProject/Icon/Cog", false, _Priority_Icon_Sub)]
         static void SetIconCog() { DeProject.SetIconForSelections(DeProjectData.IcoType.Cog); }
 
-        [MenuItem("Assets/DeProject/Icon/Demigiant", false, _Priority_Icon)]
+        [MenuItem("Assets/DeProject/Icon/Demigiant", false, _Priority_Icon_Sub)]
         static void SetIconDemigiant() { DeProject.SetIconForSelections(DeProjectData.IcoType.Demigiant); }
 
-        [MenuItem("Assets/DeProject/Icon/Play", false, _Priority_Icon)]
-        static void SetIconPlay() { DeProject.SetIconForSelections(DeProjectData.IcoType.Play); }
-
-        [MenuItem("Assets/DeProject/Icon/Heart", false, _Priority_Icon)]
+        [MenuItem("Assets/DeProject/Icon/Heart", false, _Priority_Icon_Sub)]
         static void SetIconHeart() { DeProject.SetIconForSelections(DeProjectData.IcoType.Heart); }
 
-        [MenuItem("Assets/DeProject/Icon/Skull", false, _Priority_Icon)]
+        [MenuItem("Assets/DeProject/Icon/Play", false, _Priority_Icon_Sub)]
+        static void SetIconPlay() { DeProject.SetIconForSelections(DeProjectData.IcoType.Play); }
+
+        [MenuItem("Assets/DeProject/Icon/Skull", false, _Priority_Icon_Sub)]
         static void SetIconSkull() { DeProject.SetIconForSelections(DeProjectData.IcoType.Skull); }
 
-        [MenuItem("Assets/DeProject/Icon/Star", false, _Priority_Icon)]
+        [MenuItem("Assets/DeProject/Icon/Star", false, _Priority_Icon_Sub)]
         static void SetIconStar() { DeProject.SetIconForSelections(DeProjectData.IcoType.Star); }
 
         #endregion
