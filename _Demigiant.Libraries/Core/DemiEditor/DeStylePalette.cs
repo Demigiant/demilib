@@ -58,11 +58,14 @@ namespace DG.DemiEditor
         public static Texture2D squareBorderEmpty03 { get { return LoadTexture(ref _squareBorderEmpty03, "squareBorderEmpty03"); } }
         public static Texture2D squareBorderAlpha15 { get { return LoadTexture(ref _squareBorderAlpha15, "squareBorderAlpha15"); } }
         public static Texture2D squareBorderCurved { get { return LoadTexture(ref _squareBorderCurved, "squareBorderCurved"); } }
+        public static Texture2D squareBorderCurved02 { get { return LoadTexture(ref _squareBorderCurved02, "squareBorderCurved02"); } }
         public static Texture2D squareBorderCurvedEmpty { get { return LoadTexture(ref _squareBorderCurvedEmpty, "squareBorderCurvedEmpty"); } }
         public static Texture2D squareBorderCurvedEmptyThick { get { return LoadTexture(ref _squareBorderCurvedEmptyThick, "squareBorderCurvedEmptyThick"); } }
         public static Texture2D squareBorderCurvedEmpty02 { get { return LoadTexture(ref _squareBorderCurvedEmpty02, "squareBorderCurvedEmpty02"); } }
         public static Texture2D squareBorderCurvedAlpha { get { return LoadTexture(ref _squareBorderCurvedAlpha, "squareBorderCurvedAlpha"); } }
+        public static Texture2D squareBorderCurved_darkBorders { get { return LoadTexture(ref _squareBorderCurved_darkBorders, "squareBorderCurved_darkBorders"); } }
         public static Texture2D squareBorderCurved_darkBordersAlpha { get { return LoadTexture(ref _squareBorderCurved_darkBordersAlpha, "squareBorderCurved_darkBordersAlpha"); } }
+        public static Texture2D squareBorderCurved02_darkBorders { get { return LoadTexture(ref _squareBorderCurved02_darkBorders, "squareBorderCurved02_darkBorders"); } }
         public static Texture2D squareCornersEmpty02 { get { return LoadTexture(ref _squareCornersEmpty02, "squareCornersEmpty02"); } }
         public static Texture2D whiteDot { get { return LoadTexture(ref _whiteDot, "whiteDot"); } }
         public static Texture2D whiteDot_darkBorder { get { return LoadTexture(ref _whiteDot_darkBorder, "whiteDot_darkBorder"); } }
@@ -93,11 +96,14 @@ namespace DG.DemiEditor
         static Texture2D _squareBorderEmpty03;
         static Texture2D _squareBorderAlpha15;
         static Texture2D _squareBorderCurved;
+        static Texture2D _squareBorderCurved02;
         static Texture2D _squareBorderCurvedEmpty;
         static Texture2D _squareBorderCurvedEmptyThick;
         static Texture2D _squareBorderCurvedEmpty02; // More curved
         static Texture2D _squareBorderCurvedAlpha;
+        static Texture2D _squareBorderCurved_darkBorders;
         static Texture2D _squareBorderCurved_darkBordersAlpha;
+        static Texture2D _squareBorderCurved02_darkBorders;
         static Texture2D _squareCornersEmpty02;
         static Texture2D _whiteDot;
         static Texture2D _whiteDot_darkBorder;
