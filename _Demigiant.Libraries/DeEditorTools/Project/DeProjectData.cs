@@ -31,6 +31,7 @@ namespace DG.DeEditorTools.Project
             Black,
             White,
             BrightBlue,
+            Violet
         }
 
         public enum IcoType
@@ -222,6 +223,7 @@ namespace DG.DeEditorTools.Project
                 case HColor.Green: return new Color(0.05060553f, 0.8602941f, 0.2237113f, 1f);
                 case HColor.Orange: return new Color(0.9558824f, 0.4471125f, 0.05622837f, 1f);
                 case HColor.Purple: return new Color(0.907186f, 0.05406574f, 0.9191176f, 1f);
+                case HColor.Violet: return new Color(0.5797163f, 0.1764706f, 1f, 1f);
                 case HColor.Red: return new Color(0.9191176f, 0.1617312f, 0.07434041f, 1f);
                 case HColor.Yellow: return new Color(1f, 0.853854f, 0.03676468f, 1f);
                 case HColor.BrightGrey: return new Color(0.6470588f, 0.6470588f, 0.6470588f, 1f);
