@@ -167,13 +167,15 @@ namespace DG.DeEditorTools.Project
         public class CustomizedItem
         {
             public string guid;
-            public HColor hColor = HColor.BrightGrey;
+            public HColor hColor = HColor.None;
             public IcoType icoType = IcoType.None;
             public Color customColor = Color.white;
             public Texture2D customIcon = null;
             public int customIconOffsetX = 2;
             public int customIconOffsetY = 2;
             public int customIconMaxSize = 16;
+            public bool hasColor { get { return hColor != HColor.None; } }
+            public bool hasIcon { get { return icoType != IcoType.None; } }
 
             public CustomizedItem(string guid)
             {

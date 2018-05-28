@@ -49,12 +49,14 @@ namespace DG.DeEditorTools.Project
             DeGUI.BeginGUI();
             bool isLeftSide = selectionRect.x >= 16;
 
-            // Color
-            Color color = customizedItem.GetColor();
             Texture2D icoFolder = DeStylePalette.proj_folder;
             Rect folderR = new Rect(selectionRect.x, selectionRect.y + 2, icoFolder.width, icoFolder.height);
-            if (!isLeftSide) folderR.x = folderR.x + 3;
-            using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(folderR, icoFolder);
+            // Color
+            if (customizedItem.hasColor) {
+                Color color = customizedItem.GetColor();
+                if (!isLeftSide) folderR.x = folderR.x + 3;
+                using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(folderR, icoFolder);
+            }
             // Icon
             Texture2D icoTexture = customizedItem.GetIcon();
             if (icoTexture != null) {
@@ -71,6 +73,17 @@ namespace DG.DeEditorTools.Project
         #endregion
 
         #region Internal Methods
+
+        internal static void ResetSelections()
+        {
+            _src = ConnectToData(true);
+            Undo.RecordObject(_src, "DeProject");
+            bool changed = false;
+            for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
+                changed = _src.RemoveItemData(Selection.assetGUIDs[i]) || changed;
+            }
+            if (changed) EditorUtility.SetDirty(_src);
+        }
 
         internal static bool CanCopyDataFromSelection()
         {
@@ -91,7 +104,7 @@ namespace DG.DeEditorTools.Project
             if (item != null) DeProjectClipboard.storedItem = item.Clone();
         }
 
-        internal static void PastDataToSelections()
+        internal static void PasteDataToSelections()
         {
             if (!DeProjectClipboard.hasStoreData) return;
             _src = ConnectToData(true);
@@ -130,7 +143,14 @@ namespace DG.DeEditorTools.Project
                 string guid = Selection.assetGUIDs[i];
                 if (!IsProjectFolder(guid)) continue;
                 if (hColor == DeProjectData.HColor.None) {
-                    changed = _src.RemoveItemData(guid) || changed;
+                    DeProjectData.CustomizedItem item = _src.GetItem(guid);
+                    if (item != null) {
+                        if (!item.hasIcon) changed = _src.RemoveItemData(guid) || changed; // Remove reference since it has no customization
+                        else {
+                            changed = true;
+                            _src.StoreItemColor(guid, hColor);
+                        }
+                    }
                 } else {
                     changed = true;
                     _src.StoreItemColor(guid, hColor);
@@ -148,8 +168,19 @@ namespace DG.DeEditorTools.Project
             for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
                 string guid = Selection.assetGUIDs[i];
                 if (!IsProjectFolder(guid)) continue;
-                changed = true;
-                _src.StoreItemIcon(guid, icoType);
+                if (icoType == DeProjectData.IcoType.None) {
+                    DeProjectData.CustomizedItem item = _src.GetItem(guid);
+                    if (item != null) {
+                        if (!item.hasColor) changed = _src.RemoveItemData(guid) || changed; // Remove reference since it has no customization
+                        else {
+                            changed = true;
+                            _src.StoreItemIcon(guid, icoType);
+                        }
+                    }
+                } else {
+                    changed = true;
+                    _src.StoreItemIcon(guid, icoType);
+                }
             }
             if (changed) EditorUtility.SetDirty(_src);
         }
