@@ -2,10 +2,11 @@
 // Created: 2018/03/13 17:05
 // License Copyright (c) Daniele Giardini
 
-using System;
+using System.Collections.Generic;
 using System.IO;
 using DG.DemiEditor;
 using DG.DemiEditor.Internal;
+using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
 
@@ -40,33 +41,57 @@ namespace DG.DeEditorTools.Project
         {
             if (Event.current.type != EventType.Repaint) return;
 
+//            Debug.Log(selectionRect + " > " + AssetDatabase.GUIDToAssetPath(guid));
             if (_src == null) _src = ConnectToData(false);
             if (_src == null) return;
 
-            DeProjectData.CustomizedItem customizedItem = _src.GetItem(guid);
-            if (customizedItem == null) return;
-
             DeGUI.BeginGUI();
-            bool isLeftSide = selectionRect.x >= 16;
+            bool isLeftSide = selectionRect.x >= 15;
+            bool isFirstItemOrAssets = selectionRect.x < 20;
 
-            Texture2D icoFolder = DeStylePalette.proj_folder;
-            Rect folderR = new Rect(selectionRect.x, selectionRect.y + 2, icoFolder.width, icoFolder.height);
-            // Color
-            if (customizedItem.hasColor) {
-                Color color = customizedItem.GetColor();
-                if (!isLeftSide) folderR.x = folderR.x + 3;
-                using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(folderR, icoFolder);
+            DeProjectData.CustomizedItem customizedItem = _src.GetItem(guid);
+            if (customizedItem != null) {
+
+                Texture2D icoFolder = DeStylePalette.proj_folder;
+                Rect folderR = new Rect(selectionRect.x, selectionRect.y + 2, icoFolder.width, icoFolder.height);
+                // Color
+                if (customizedItem.hasColor) {
+                    Color color = customizedItem.GetColor();
+                    if (!isLeftSide) folderR.x = folderR.x + 3;
+                    using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(folderR, icoFolder);
+                }
+                // Icon
+                Texture2D icoTexture = customizedItem.GetIcon();
+                if (icoTexture != null) {
+                    bool isCustom = customizedItem.icoType == DeProjectData.IcoType.Custom;
+                    Rect icoR = new Rect(0, 0, icoTexture.width, icoTexture.height);
+                    if (isCustom) icoR = icoR.Fit(customizedItem.customIconMaxSize, customizedItem.customIconMaxSize);
+                    Vector2 offset = customizedItem.GetIconOffset();
+                    icoR.x = (int)(folderR.xMax - icoR.width + offset.x);
+                    icoR.y = (int)(folderR.yMax - icoR.height + offset.y);
+                    using (new DeGUI.ColorScope(null, null, customizedItem.GetIconColor())) GUI.DrawTexture(icoR, icoTexture);
+                }
             }
-            // Icon
-            Texture2D icoTexture = customizedItem.GetIcon();
-            if (icoTexture != null) {
-                bool isCustom = customizedItem.icoType == DeProjectData.IcoType.Custom;
-                Rect icoR = new Rect(0, 0, icoTexture.width, icoTexture.height);
-                if (isCustom) icoR = icoR.Fit(customizedItem.customIconMaxSize, customizedItem.customIconMaxSize);
-                Vector2 offset = customizedItem.GetIconOffset();
-                icoR.x = (int)(folderR.xMax - icoR.width + offset.x);
-                icoR.y = (int)(folderR.yMax - icoR.height + offset.y);
-                using (new DeGUI.ColorScope(null, null, customizedItem.GetIconColor())) GUI.DrawTexture(icoR, icoTexture);
+
+            // Evidence
+            if (isLeftSide && _src.evidenceType != DeProjectData.EvidenceType.None && !isFirstItemOrAssets) {
+                const float columnStep = 14;
+                const float minColumnX = 30;
+                Rect r = new Rect(selectionRect.x - 14, selectionRect.y, 1, selectionRect.height);
+                Color color = new Color(0.4078432f, 0.4078432f, 0.4078432f, 1f);
+                bool firstElementDone = false;
+                while (r.x > 20) {
+                    float colorDepth = columnStep / (r.x - minColumnX + columnStep);
+                    if (colorDepth < 0.1f) colorDepth = 0.1f;
+                    color = color.SetAlpha(colorDepth);
+                    Rect drawR = new Rect(r.x - 8, r.y - 7, r.width, r.height);
+                    DeGUI.DrawColoredSquare(drawR, color); // vertical
+                    drawR = new Rect(drawR.x + drawR.width, drawR.y + drawR.height - 1, 14 - drawR.width, 1);
+                    if (firstElementDone) drawR.width = 2;
+                    DeGUI.DrawColoredSquare(drawR, color);
+                    firstElementDone = true;
+                    r.x -= columnStep;
+                }
             }
         }
 
@@ -185,6 +210,16 @@ namespace DG.DeEditorTools.Project
             if (changed) EditorUtility.SetDirty(_src);
         }
 
+        // Assumes at least one object is selected
+        internal static void SetEvidence(DeProjectData.EvidenceType evidenceType)
+        {
+            _src = ConnectToData(true);
+            if (_src.evidenceType == evidenceType) return;
+            Undo.RecordObject(_src, "DeProject");
+            _src.evidenceType = evidenceType;
+            EditorUtility.SetDirty(_src);
+        }
+
         #endregion
 
         #region Methods
@@ -202,6 +237,5 @@ namespace DG.DeEditorTools.Project
         }
 
         #endregion
-
     }
 }

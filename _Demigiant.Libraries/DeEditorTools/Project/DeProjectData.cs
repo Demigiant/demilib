@@ -53,8 +53,15 @@ namespace DG.DeEditorTools.Project
             AssetBundle
         }
 
+        public enum EvidenceType
+        {
+            None,
+            Default
+        }
+
         #region Serialized
 
+        public EvidenceType evidenceType = EvidenceType.None;
         public List<CustomizedItem> customizedItems = new List<CustomizedItem>();
 
         #endregion

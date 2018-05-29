@@ -10,7 +10,9 @@ namespace DG.DeEditorTools.Project
     public class DeProjectContextMenu : MonoBehaviour
     {
         const int _Priority = 8; // Was 18 + 1
-        const int _Priority_Custom = _Priority + 1;
+        const int _Priority_Evidence = _Priority + 1;
+        const int _Priority_Evidence_Sub0 = _Priority_Evidence + 11;
+        const int _Priority_Custom = _Priority_Evidence + 11;
         const int _Priority_CopyPaste = _Priority_Custom + 11;
         const int _Priority_Color = _Priority_CopyPaste + 11;
         const int _Priority_Color_Sub0 = _Priority_Color + 11;
@@ -20,7 +22,13 @@ namespace DG.DeEditorTools.Project
         const int _Priority_Icon_Sub1 = _Priority_Icon_Sub0 + 11;
         const int _Priority_Preset = _Priority_Color + 0;
 
-        #region Reset
+        #region Tree Evidence + Reset + Custom + Copy/Paste
+
+        [MenuItem("Assets/DeProject/Global Tree Evidence/None", false, _Priority_Evidence)]
+        static void SetEvidenceNone() { DeProject.SetEvidence(DeProjectData.EvidenceType.None); }
+
+        [MenuItem("Assets/DeProject/Global Tree Evidence/Default", false, _Priority_Evidence_Sub0)]
+        static void SetEvidenceWChildren() { DeProject.SetEvidence(DeProjectData.EvidenceType.Default); }
 
         [MenuItem("Assets/DeProject/Reset", false, _Priority_Custom)]
         static void Reset() { DeProject.ResetSelections(); }
