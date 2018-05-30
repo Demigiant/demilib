@@ -36,6 +36,30 @@
             Customizes Project panel
             </summary>
         </member>
+        <member name="M:DG.DeEditorTools.Project.DeProject.SetFolderColor(DG.DeEditorTools.Project.DeProjectData.HColor,System.String,System.Boolean)">
+            <summary>
+            Sets the color of a project folder with options to apply it to subfolders also
+            </summary>
+            <param name="color">Color to apply</param>
+            <param name="absOrAdbFolderPath">Absolute or AssetDatabase path</param>
+            <param name="alsoApplyToSubdirectories">If TRUE also applies the color to all subdirectories</param>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProject.SetFolderColor(UnityEngine.Color,System.String,System.Boolean)">
+            <summary>
+            Sets the color of a project folder with options to apply it to subfolders also
+            </summary>
+            <param name="color">Color to apply</param>
+            <param name="absOrAdbFolderPath">Absolute or AssetDatabase path</param>
+            <param name="alsoApplyToSubdirectories">If TRUE also applies the color to all subdirectories</param>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProject.SetFolderIcon(DG.DeEditorTools.Project.DeProjectData.IcoType,System.String,System.Boolean)">
+            <summary>
+            Sets the icon of a project folder with options to apply it to subfolders also
+            </summary>
+            <param name="icoType">Icon to apply</param>
+            <param name="absOrAdbFolderPath">Absolute or AssetDatabase path</param>
+            <param name="alsoApplyToSubdirectories">If TRUE also applies the color to all subdirectories</param>
+        </member>
         <member name="T:DG.DeEditorTools.Project.DeProjectData">
             <summary>
             Stored in main Assets folder
@@ -46,7 +70,7 @@
             If the item exists returns it, otherwise first creates it and then returns it
             </summary>
         </member>
-        <member name="M:DG.DeEditorTools.Project.DeProjectData.StoreItemColor(System.String,DG.DeEditorTools.Project.DeProjectData.HColor)">
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.StoreItemColor(System.String,DG.DeEditorTools.Project.DeProjectData.HColor,System.Nullable{UnityEngine.Color})">
             <summary>
             If the item exists sets it, otherwise first creates it and then sets it
             </summary>

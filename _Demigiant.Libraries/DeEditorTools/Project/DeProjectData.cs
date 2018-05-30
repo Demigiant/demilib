@@ -85,16 +85,17 @@ namespace DG.DeEditorTools.Project
         /// <summary>
         /// If the item exists sets it, otherwise first creates it and then sets it
         /// </summary>
-        public void StoreItemColor(string guid, HColor hColor)
+        public void StoreItemColor(string guid, HColor hColor, Color? customColor = null)
         {
             for (int i = 0; i < customizedItems.Count; ++i) {
                 if (customizedItems[i].guid != guid) continue;
                 // Item exists, replace it
                 customizedItems[i].hColor = hColor;
+                if (customColor != null) customizedItems[i].customColor = (Color)customColor;
                 return;
             }
             // Item doesn't exist, add it
-            customizedItems.Add(new CustomizedItem(guid, hColor));
+            customizedItems.Add(new CustomizedItem(guid, hColor, customColor));
         }
 
         /// <summary>
@@ -189,10 +190,11 @@ namespace DG.DeEditorTools.Project
                 this.guid = guid;
             }
 
-            public CustomizedItem(string guid, HColor hColor)
+            public CustomizedItem(string guid, HColor hColor, Color? customColor = null)
             {
                 this.guid = guid;
                 this.hColor = hColor;
+                if (customColor != null) this.customColor = (Color)customColor;
             }
             public CustomizedItem(string guid, IcoType icoType)
             {
@@ -225,22 +227,7 @@ namespace DG.DeEditorTools.Project
 
             public Color GetColor()
             {
-                switch (hColor) {
-                case HColor.Custom: return customColor;
-                case HColor.Blue: return new Color(0.22f, 0.47f, 0.96f);
-                case HColor.BrightBlue: return new Color(0.27f, 0.68f, 1f);
-                case HColor.Green: return new Color(0.05060553f, 0.8602941f, 0.2237113f, 1f);
-                case HColor.Orange: return new Color(0.9558824f, 0.4471125f, 0.05622837f, 1f);
-                case HColor.Purple: return new Color(0.907186f, 0.05406574f, 0.9191176f, 1f);
-                case HColor.Violet: return new Color(0.5797163f, 0.1764706f, 1f, 1f);
-                case HColor.Red: return new Color(0.9191176f, 0.1617312f, 0.07434041f, 1f);
-                case HColor.Yellow: return new Color(1f, 0.853854f, 0.03676468f, 1f);
-                case HColor.BrightGrey: return new Color(0.6470588f, 0.6470588f, 0.6470588f, 1f);
-                case HColor.DarkGrey: return new Color(0.3308824f, 0.3308824f, 0.3308824f, 1f);
-                case HColor.Black: return Color.black;
-                case HColor.White: return Color.white;
-                default: return Color.white;
-                }
+                return DeProjectUtils.HColorToColor(hColor, customColor);
             }
 
             public Texture2D GetIcon()

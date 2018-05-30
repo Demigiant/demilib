@@ -31,18 +31,18 @@ namespace DG.DeEditorTools.Project
         static void SetEvidenceWChildren() { DeProject.SetEvidence(DeProjectData.EvidenceType.Default); }
 
         [MenuItem("Assets/DeProject/Reset", false, _Priority_Custom)]
-        static void Reset() { DeProject.ResetSelections(); }
+        static void Reset() { DeProject.ResetSelections(Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Custom", false, _Priority_Custom)]
-        static void SetCustom() { DeProject.CustomizeSelections(); }
+        static void SetCustom() { DeProject.CustomizeSelections(Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Copy Customization", false, _Priority_CopyPaste)]
-        static void Copy() { DeProject.CopyDataFromSelection(); }
+        static void Copy() { DeProject.CopyDataFromSelection(Selection.assetGUIDs); }
         [MenuItem("Assets/DeProject/Copy Customization", true)]
-        static bool Copy_Validate() { return DeProject.CanCopyDataFromSelection(); }
+        static bool Copy_Validate() { return DeProject.CanCopyDataFromSelection(Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Paste Customization", false, _Priority_CopyPaste)]
-        static void Paste() { DeProject.PasteDataToSelections(); }
+        static void Paste() { DeProject.PasteDataToSelections(Selection.assetGUIDs); }
         [MenuItem("Assets/DeProject/Paste Customization", true)]
         static bool Paste_Validate() { return DeProjectClipboard.hasStoreData; }
 
@@ -51,86 +51,86 @@ namespace DG.DeEditorTools.Project
         #region Colors
 
         [MenuItem("Assets/DeProject/Color/None", false, _Priority_Color)]
-        static void SetColorNone() { DeProject.SetColorForSelections(DeProjectData.HColor.None); }
+        static void SetColorNone() { DeProject.SetColorForSelections(DeProjectData.HColor.None, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Blue", false, _Priority_Icon_Sub0)]
-        static void SetColorBlue() { DeProject.SetColorForSelections(DeProjectData.HColor.Blue); }
+        static void SetColorBlue() { DeProject.SetColorForSelections(DeProjectData.HColor.Blue, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Blue (Bright)", false, _Priority_Icon_Sub0)]
-        static void SetColorBrightBlue() { DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue); }
+        static void SetColorBrightBlue() { DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Green", false, _Priority_Icon_Sub0)]
-        static void SetColorGreen() { DeProject.SetColorForSelections(DeProjectData.HColor.Green); }
+        static void SetColorGreen() { DeProject.SetColorForSelections(DeProjectData.HColor.Green, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Orange", false, _Priority_Icon_Sub0)]
-        static void SetColorOrange() { DeProject.SetColorForSelections(DeProjectData.HColor.Orange); }
+        static void SetColorOrange() { DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Purple", false, _Priority_Icon_Sub0)]
-        static void SetColorPurple() { DeProject.SetColorForSelections(DeProjectData.HColor.Purple); }
+        static void SetColorPurple() { DeProject.SetColorForSelections(DeProjectData.HColor.Purple, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Red", false, _Priority_Icon_Sub0)]
-        static void SetColorRed() { DeProject.SetColorForSelections(DeProjectData.HColor.Red); }
+        static void SetColorRed() { DeProject.SetColorForSelections(DeProjectData.HColor.Red, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Violet", false, _Priority_Icon_Sub0)]
-        static void SetColorViolet() { DeProject.SetColorForSelections(DeProjectData.HColor.Violet); }
+        static void SetColorViolet() { DeProject.SetColorForSelections(DeProjectData.HColor.Violet, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Yellow", false, _Priority_Icon_Sub0)]
-        static void SetColorYellow() { DeProject.SetColorForSelections(DeProjectData.HColor.Yellow); }
+        static void SetColorYellow() { DeProject.SetColorForSelections(DeProjectData.HColor.Yellow, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Black", false, _Priority_Color_Sub1)]
-        static void SetColorBlack() { DeProject.SetColorForSelections(DeProjectData.HColor.Black); }
+        static void SetColorBlack() { DeProject.SetColorForSelections(DeProjectData.HColor.Black, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/White", false, _Priority_Color_Sub1)]
-        static void SetColorWhite() { DeProject.SetColorForSelections(DeProjectData.HColor.White); }
+        static void SetColorWhite() { DeProject.SetColorForSelections(DeProjectData.HColor.White, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Grey (Bright)", false, _Priority_Color_Sub1)]
-        static void SetColorBrightGrey() { DeProject.SetColorForSelections(DeProjectData.HColor.BrightGrey); }
+        static void SetColorBrightGrey() { DeProject.SetColorForSelections(DeProjectData.HColor.BrightGrey, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Color/Grey (Dark)", false, _Priority_Color_Sub1)]
-        static void SetColorDarkGrey() { DeProject.SetColorForSelections(DeProjectData.HColor.DarkGrey); }
+        static void SetColorDarkGrey() { DeProject.SetColorForSelections(DeProjectData.HColor.DarkGrey, Selection.assetGUIDs); }
 
         #endregion
 
         #region Icon
 
         [MenuItem("Assets/DeProject/Icon/None", false, _Priority_Icon)]
-        static void SetIconNone() { DeProject.SetIconForSelections(DeProjectData.IcoType.None); }
+        static void SetIconNone() { DeProject.SetIconForSelections(DeProjectData.IcoType.None, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/AssetBundle", false, _Priority_Icon_Sub0)]
-        static void SetIconAssetBundle() { DeProject.SetIconForSelections(DeProjectData.IcoType.AssetBundle); }
+        static void SetIconAssetBundle() { DeProject.SetIconForSelections(DeProjectData.IcoType.AssetBundle, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Audio", false, _Priority_Icon_Sub0)]
-        static void SetIconAudio() { DeProject.SetIconForSelections(DeProjectData.IcoType.Audio); }
+        static void SetIconAudio() { DeProject.SetIconForSelections(DeProjectData.IcoType.Audio, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Fonts", false, _Priority_Icon_Sub0)]
-        static void SetIconFonts() { DeProject.SetIconForSelections(DeProjectData.IcoType.Fonts); }
+        static void SetIconFonts() { DeProject.SetIconForSelections(DeProjectData.IcoType.Fonts, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Prefabs", false, _Priority_Icon_Sub0)]
-        static void SetIconPrefabs() { DeProject.SetIconForSelections(DeProjectData.IcoType.Prefab); }
+        static void SetIconPrefabs() { DeProject.SetIconForSelections(DeProjectData.IcoType.Prefab, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Scripts", false, _Priority_Icon_Sub0)]
-        static void SetIconScripts() { DeProject.SetIconForSelections(DeProjectData.IcoType.Scripts); }
+        static void SetIconScripts() { DeProject.SetIconForSelections(DeProjectData.IcoType.Scripts, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Textures", false, _Priority_Icon_Sub0)]
-        static void SetIconTextures() { DeProject.SetIconForSelections(DeProjectData.IcoType.Textures); }
+        static void SetIconTextures() { DeProject.SetIconForSelections(DeProjectData.IcoType.Textures, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Cog", false, _Priority_Icon_Sub1)]
-        static void SetIconCog() { DeProject.SetIconForSelections(DeProjectData.IcoType.Cog); }
+        static void SetIconCog() { DeProject.SetIconForSelections(DeProjectData.IcoType.Cog, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Demigiant", false, _Priority_Icon_Sub1)]
-        static void SetIconDemigiant() { DeProject.SetIconForSelections(DeProjectData.IcoType.Demigiant); }
+        static void SetIconDemigiant() { DeProject.SetIconForSelections(DeProjectData.IcoType.Demigiant, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Heart", false, _Priority_Icon_Sub1)]
-        static void SetIconHeart() { DeProject.SetIconForSelections(DeProjectData.IcoType.Heart); }
+        static void SetIconHeart() { DeProject.SetIconForSelections(DeProjectData.IcoType.Heart, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Play", false, _Priority_Icon_Sub1)]
-        static void SetIconPlay() { DeProject.SetIconForSelections(DeProjectData.IcoType.Play); }
+        static void SetIconPlay() { DeProject.SetIconForSelections(DeProjectData.IcoType.Play, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Skull", false, _Priority_Icon_Sub1)]
-        static void SetIconSkull() { DeProject.SetIconForSelections(DeProjectData.IcoType.Skull); }
+        static void SetIconSkull() { DeProject.SetIconForSelections(DeProjectData.IcoType.Skull, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Star", false, _Priority_Icon_Sub1)]
-        static void SetIconStar() { DeProject.SetIconForSelections(DeProjectData.IcoType.Star); }
+        static void SetIconStar() { DeProject.SetIconForSelections(DeProjectData.IcoType.Star, Selection.assetGUIDs); }
 
         #endregion
 
@@ -139,71 +139,71 @@ namespace DG.DeEditorTools.Project
         [MenuItem("Assets/DeProject/Preset/AssetBundle", false, _Priority_Preset)]
         static void SetPresetAssetBundle()
         {
-            DeProject.SetIconForSelections(DeProjectData.IcoType.AssetBundle);
-            DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue);
+            DeProject.SetIconForSelections(DeProjectData.IcoType.AssetBundle, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/Audio", false, _Priority_Preset)]
         static void SetPresetAudio()
         {
-            DeProject.SetIconForSelections(DeProjectData.IcoType.Audio);
-            DeProject.SetColorForSelections(DeProjectData.HColor.Orange);
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Audio, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/Fonts", false, _Priority_Preset)]
         static void SetPresetFonts()
         {
-            DeProject.SetIconForSelections(DeProjectData.IcoType.Fonts);
-            DeProject.SetColorForSelections(DeProjectData.HColor.Orange);
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Fonts, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/Plugins + Standard Assets", false, _Priority_Preset)]
         static void SetPresetPlugins()
         {
-            DeProject.SetIconForSelections(DeProjectData.IcoType.Cog);
-            DeProject.SetColorForSelections(DeProjectData.HColor.None);
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Cog, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.None, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/Prefabs", false, _Priority_Preset)]
         static void SetPresetPrefabs()
         {
-            DeProject.SetIconForSelections(DeProjectData.IcoType.Prefab);
-            DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue);
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Prefab, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/Resources", false, _Priority_Preset)]
         static void SetPresetResources()
         {
-            DeProject.SetIconForSelections(DeProjectData.IcoType.Play);
-            DeProject.SetColorForSelections(DeProjectData.HColor.Green);
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Play, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Green, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/Scenes", false, _Priority_Preset)]
         static void SetPresetScenes()
         {
-            DeProject.SetIconForSelections(DeProjectData.IcoType.Play);
-            DeProject.SetColorForSelections(DeProjectData.HColor.Green);
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Play, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Green, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/Scripts", false, _Priority_Preset)]
         static void SetPresetScripts()
         {
-            DeProject.SetIconForSelections(DeProjectData.IcoType.Scripts);
-            DeProject.SetColorForSelections(DeProjectData.HColor.Purple);
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Scripts, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Purple, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/StreamingAssets", false, _Priority_Preset)]
         static void SetPresetStreamingAssets()
         {
-            DeProject.SetIconForSelections(DeProjectData.IcoType.Play);
-            DeProject.SetColorForSelections(DeProjectData.HColor.Green);
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Play, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Green, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/Textures + Sprites", false, _Priority_Preset)]
         static void SetPresetTextures()
         {
-            DeProject.SetIconForSelections(DeProjectData.IcoType.Textures);
-            DeProject.SetColorForSelections(DeProjectData.HColor.Orange);
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Textures, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs);
         }
 
         #endregion

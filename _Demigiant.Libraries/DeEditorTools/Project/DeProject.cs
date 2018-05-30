@@ -21,6 +21,7 @@ namespace DG.DeEditorTools.Project
         public const string ADBDataPath = "Assets/-DeProjectData.asset";
 
         static DeProjectData _src;
+        static readonly List<string> _tmpGUIDs = new List<string>();
 
         static DeProject()
         {
@@ -97,46 +98,91 @@ namespace DG.DeEditorTools.Project
 
         #endregion
 
+        #region Public Methods
+
+        /// <summary>
+        /// Sets the color of a project folder with options to apply it to subfolders also
+        /// </summary>
+        /// <param name="color">Color to apply</param>
+        /// <param name="absOrAdbFolderPath">Absolute or AssetDatabase path</param>
+        /// <param name="alsoApplyToSubdirectories">If TRUE also applies the color to all subdirectories</param>
+        public static void SetFolderColor(DeProjectData.HColor color, string absOrAdbFolderPath, bool alsoApplyToSubdirectories = false)
+        {
+            if (ValidateAndFillDirsList(absOrAdbFolderPath, alsoApplyToSubdirectories)) {
+                SetColorForSelections(color, _tmpGUIDs);
+            }
+            _tmpGUIDs.Clear();
+        }
+        /// <summary>
+        /// Sets the color of a project folder with options to apply it to subfolders also
+        /// </summary>
+        /// <param name="color">Color to apply</param>
+        /// <param name="absOrAdbFolderPath">Absolute or AssetDatabase path</param>
+        /// <param name="alsoApplyToSubdirectories">If TRUE also applies the color to all subdirectories</param>
+        public static void SetFolderColor(Color color, string absOrAdbFolderPath, bool alsoApplyToSubdirectories = false)
+        {
+            if (ValidateAndFillDirsList(absOrAdbFolderPath, alsoApplyToSubdirectories)) {
+                SetColorForSelections(DeProjectData.HColor.Custom, _tmpGUIDs, color);
+            }
+            _tmpGUIDs.Clear();
+        }
+
+        /// <summary>
+        /// Sets the icon of a project folder with options to apply it to subfolders also
+        /// </summary>
+        /// <param name="icoType">Icon to apply</param>
+        /// <param name="absOrAdbFolderPath">Absolute or AssetDatabase path</param>
+        /// <param name="alsoApplyToSubdirectories">If TRUE also applies the color to all subdirectories</param>
+        public static void SetFolderIcon(DeProjectData.IcoType icoType, string absOrAdbFolderPath, bool alsoApplyToSubdirectories = false)
+        {
+            if (ValidateAndFillDirsList(absOrAdbFolderPath, alsoApplyToSubdirectories)) {
+                SetIconForSelections(icoType, _tmpGUIDs);
+            }
+            _tmpGUIDs.Clear();
+        }
+
+        #endregion
+
         #region Internal Methods
 
-        internal static void ResetSelections()
+        internal static void ResetSelections(IList<string> assetGUIDs)
         {
             _src = ConnectToData(true);
             Undo.RecordObject(_src, "DeProject");
             bool changed = false;
-            for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
-                changed = _src.RemoveItemData(Selection.assetGUIDs[i]) || changed;
+            for (int i = 0; i < assetGUIDs.Count; ++i) {
+                changed = _src.RemoveItemData(assetGUIDs[i]) || changed;
             }
             if (changed) EditorUtility.SetDirty(_src);
         }
 
-        internal static bool CanCopyDataFromSelection()
+        internal static bool CanCopyDataFromSelection(IList<string> assetGUIDs)
         {
-            if (Selection.assetGUIDs.Length == 0) return false;
-            string guid = Selection.assetGUIDs[0];
+            if (assetGUIDs.Count == 0) return false;
+            string guid = assetGUIDs[0];
             if (!IsProjectFolder(guid)) return false;
             _src = ConnectToData(true);
             return _src.GetItem(guid) != null;
         }
 
-        internal static void CopyDataFromSelection()
+        internal static void CopyDataFromSelection(IList<string> assetGUIDs)
         {
-            if (Selection.assetGUIDs.Length == 0) return;
-            string guid = Selection.assetGUIDs[0];
+            if (assetGUIDs.Count == 0) return;
+            string guid = assetGUIDs[0];
             if (!IsProjectFolder(guid)) return;
             _src = ConnectToData(true);
             DeProjectData.CustomizedItem item = _src.GetItem(guid);
             if (item != null) DeProjectClipboard.storedItem = item.Clone();
         }
 
-        internal static void PasteDataToSelections()
+        internal static void PasteDataToSelections(IList<string> assetGUIDs)
         {
             if (!DeProjectClipboard.hasStoreData) return;
             _src = ConnectToData(true);
             Undo.RecordObject(_src, "DeProject");
             bool changed = false;
-            for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
-                string guid = Selection.assetGUIDs[i];
+            for (int i = 0; i < assetGUIDs.Count; ++i) {
+                string guid = assetGUIDs[i];
                 if (!IsProjectFolder(guid)) continue;
                 changed = true;
                 DeProjectData.CustomizedItem item = _src.StoreItem(guid);
@@ -146,12 +192,12 @@ namespace DG.DeEditorTools.Project
         }
 
         // Assumes at least one object is selected
-        internal static void CustomizeSelections()
+        internal static void CustomizeSelections(IList<string> assetGUIDs)
         {
             _src = ConnectToData(true);
             DeProjectCustomizeItemWindow.Items.Clear();
-            for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
-                string guid = Selection.assetGUIDs[i];
+            for (int i = 0; i < assetGUIDs.Count; ++i) {
+                string guid = assetGUIDs[i];
                 if (!IsProjectFolder(guid)) continue;
                 DeProjectCustomizeItemWindow.Items.Add(_src.StoreItem(guid));
             }
@@ -159,13 +205,13 @@ namespace DG.DeEditorTools.Project
         }
 
         // Assumes at least one object is selected
-        internal static void SetColorForSelections(DeProjectData.HColor hColor)
+        internal static void SetColorForSelections(DeProjectData.HColor hColor, IList<string> assetGUIDs, Color? customColor = null)
         {
             _src = ConnectToData(true);
             Undo.RecordObject(_src, "DeProject");
             bool changed = false;
-            for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
-                string guid = Selection.assetGUIDs[i];
+            for (int i = 0; i < assetGUIDs.Count; ++i) {
+                string guid = assetGUIDs[i];
                 if (!IsProjectFolder(guid)) continue;
                 if (hColor == DeProjectData.HColor.None) {
                     DeProjectData.CustomizedItem item = _src.GetItem(guid);
@@ -173,25 +219,25 @@ namespace DG.DeEditorTools.Project
                         if (!item.hasIcon) changed = _src.RemoveItemData(guid) || changed; // Remove reference since it has no customization
                         else {
                             changed = true;
-                            _src.StoreItemColor(guid, hColor);
+                            _src.StoreItemColor(guid, hColor, customColor);
                         }
                     }
                 } else {
                     changed = true;
-                    _src.StoreItemColor(guid, hColor);
+                    _src.StoreItemColor(guid, hColor, customColor);
                 }
             }
             if (changed) EditorUtility.SetDirty(_src);
         }
 
         // Assumes at least one object is selected
-        internal static void SetIconForSelections(DeProjectData.IcoType icoType)
+        internal static void SetIconForSelections(DeProjectData.IcoType icoType, IList<string> assetGUIDs)
         {
             _src = ConnectToData(true);
             Undo.RecordObject(_src, "DeProject");
             bool changed = false;
-            for (int i = 0; i < Selection.assetGUIDs.Length; ++i) {
-                string guid = Selection.assetGUIDs[i];
+            for (int i = 0; i < assetGUIDs.Count; ++i) {
+                string guid = assetGUIDs[i];
                 if (!IsProjectFolder(guid)) continue;
                 if (icoType == DeProjectData.IcoType.None) {
                     DeProjectData.CustomizedItem item = _src.GetItem(guid);
@@ -234,6 +280,38 @@ namespace DG.DeEditorTools.Project
         static DeProjectData ConnectToData(bool createIfMissing)
         {
             return DeEditorPanelUtils.ConnectToSourceAsset<DeProjectData>(ADBDataPath, createIfMissing, false);
+        }
+
+        #endregion
+
+        #region Helpers
+
+        // Fills _tmpGUIDs with the GUIDs of the selected folders.
+        // Returns FALSE if the given dir is invalid
+        static bool ValidateAndFillDirsList(string absOrAdbFolderPath, bool includeSubdirectories)
+        {
+            string fullPath = absOrAdbFolderPath;
+            if (!DeEditorFileUtils.IsFullPath(fullPath)) {
+                if (DeEditorFileUtils.IsADBPath(absOrAdbFolderPath)) fullPath = DeEditorFileUtils.ADBPathToFullPath(absOrAdbFolderPath);
+                else {
+                    Debug.LogError(string.Format("Submitted path (\"{0}\") is neither a full nor ar and ADB valid path", absOrAdbFolderPath));
+                    return false;
+                }
+            }
+            if (!Directory.Exists(fullPath) || !fullPath.Contains(DeEditorFileUtils.projectPath)) {
+                Debug.LogError(string.Format("Submitted path (\"{0}\") is not a valid path", absOrAdbFolderPath));
+                return false;
+            }
+            _tmpGUIDs.Clear();
+            _tmpGUIDs.Add(AssetDatabase.AssetPathToGUID(DeEditorFileUtils.FullPathToADBPath(fullPath)));
+            if (includeSubdirectories) {
+                string[] subdirs = Directory.GetDirectories(fullPath, "*", SearchOption.AllDirectories);
+                foreach (string subdir in subdirs) {
+                    string adbSubdir = AssetDatabase.AssetPathToGUID(DeEditorFileUtils.FullPathToADBPath(subdir));
+                    _tmpGUIDs.Add(adbSubdir);
+                }
+            }
+            return true;
         }
 
         #endregion

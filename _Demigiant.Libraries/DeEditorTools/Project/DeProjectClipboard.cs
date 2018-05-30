@@ -4,7 +4,7 @@
 
 namespace DG.DeEditorTools.Project
 {
-    public static class DeProjectClipboard
+    internal static class DeProjectClipboard
     {
         public static bool hasStoreData { get { return storedItem != null; } }
         public static DeProjectData.CustomizedItem storedItem;

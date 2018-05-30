@@ -60,6 +60,16 @@ namespace DG.DemiEditor
 
         #region Public Methods
 
+        public static bool IsFullPath(string path)
+        {
+            return path[1] == ':';
+        }
+
+        public static bool IsADBPath(string path)
+        {
+            return path.Substring(0, 6) == "Assets";
+        }
+
         /// <summary>
         /// Converts the given project-relative path to a full path
         /// </summary>
