@@ -99,6 +99,9 @@ namespace DG.DeEditorTools.Project
         [MenuItem("Assets/DeProject/Icon/AssetBundle", false, _Priority_Icon_Sub0)]
         static void SetIconAssetBundle() { DeProject.SetIconForSelections(DeProjectData.IcoType.AssetBundle, Selection.assetGUIDs); }
 
+        [MenuItem("Assets/DeProject/Icon/Atlas", false, _Priority_Icon_Sub0)]
+        static void SetIconAtlas() { DeProject.SetIconForSelections(DeProjectData.IcoType.Atlas, Selection.assetGUIDs); }
+
         [MenuItem("Assets/DeProject/Icon/Audio", false, _Priority_Icon_Sub0)]
         static void SetIconAudio() { DeProject.SetIconForSelections(DeProjectData.IcoType.Audio, Selection.assetGUIDs); }
 
@@ -116,6 +119,9 @@ namespace DG.DeEditorTools.Project
 
         [MenuItem("Assets/DeProject/Icon/Cog", false, _Priority_Icon_Sub1)]
         static void SetIconCog() { DeProject.SetIconForSelections(DeProjectData.IcoType.Cog, Selection.assetGUIDs); }
+
+        [MenuItem("Assets/DeProject/Icon/Cross", false, _Priority_Icon_Sub1)]
+        static void SetIconCross() { DeProject.SetIconForSelections(DeProjectData.IcoType.Cross, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Demigiant", false, _Priority_Icon_Sub1)]
         static void SetIconDemigiant() { DeProject.SetIconForSelections(DeProjectData.IcoType.Demigiant, Selection.assetGUIDs); }
@@ -141,6 +147,13 @@ namespace DG.DeEditorTools.Project
         {
             DeProject.SetIconForSelections(DeProjectData.IcoType.AssetBundle, Selection.assetGUIDs);
             DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue, Selection.assetGUIDs);
+        }
+
+        [MenuItem("Assets/DeProject/Preset/Atlas", false, _Priority_Preset)]
+        static void SetPresetAtlas()
+        {
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Atlas, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/Audio", false, _Priority_Preset)]

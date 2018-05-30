@@ -50,7 +50,9 @@ namespace DG.DeEditorTools.Project
             Textures,
             Fonts,
             Demigiant,
-            AssetBundle
+            AssetBundle,
+            Cross,
+            Atlas
         }
 
         public enum EvidenceType
@@ -259,6 +261,10 @@ namespace DG.DeEditorTools.Project
                     return DeStylePalette.proj_fonts;
                 case IcoType.AssetBundle:
                     return DeStylePalette.proj_bundle;
+                case IcoType.Cross:
+                    return DeStylePalette.proj_cross;
+                case IcoType.Atlas:
+                    return DeStylePalette.proj_atlas;
                 }
                 return null;
             }

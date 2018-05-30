@@ -191,9 +191,11 @@ namespace DG.DemiEditor
         static Texture2D _tileBars_slanted_alpha;
 
         public static Texture2D proj_folder { get { return LoadTexture(ref _proj_folder, "project/ico_folder"); } }
+        public static Texture2D proj_atlas { get { return LoadTexture(ref _proj_atlas, "project/ico_atlas"); } }
         public static Texture2D proj_audio { get { return LoadTexture(ref _proj_audio, "project/ico_audio"); } }
         public static Texture2D proj_bundle { get { return LoadTexture(ref _proj_bundle, "project/ico_bundle"); } }
         public static Texture2D proj_cog { get { return LoadTexture(ref _proj_cog, "project/ico_cog"); } }
+        public static Texture2D proj_cross { get { return LoadTexture(ref _proj_cross, "project/ico_cross"); } }
         public static Texture2D proj_demigiant { get { return LoadTexture(ref _proj_demigiant, "project/ico_demigiant"); } }
         public static Texture2D proj_fonts { get { return LoadTexture(ref _proj_fonts, "project/ico_fonts"); } }
         public static Texture2D proj_heart { get { return LoadTexture(ref _proj_heart, "project/ico_heart"); } }
@@ -204,9 +206,11 @@ namespace DG.DemiEditor
         public static Texture2D proj_star { get { return LoadTexture(ref _proj_star, "project/ico_star"); } }
         public static Texture2D proj_textures { get { return LoadTexture(ref _proj_textures, "project/ico_textures"); } }
         static Texture2D _proj_folder;
+        static Texture2D _proj_atlas;
         static Texture2D _proj_audio;
         static Texture2D _proj_bundle;
         static Texture2D _proj_cog;
+        static Texture2D _proj_cross;
         static Texture2D _proj_demigiant;
         static Texture2D _proj_fonts;
         static Texture2D _proj_heart;
