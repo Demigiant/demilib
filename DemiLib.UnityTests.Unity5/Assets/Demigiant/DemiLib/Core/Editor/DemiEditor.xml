@@ -41,6 +41,21 @@
             Full path to project's Assets directory, without final slash.
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.IsFullPath(System.String)">
+            <summary>
+            Returns TRUE if the given path is an absolute path
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.IsADBPath(System.String)">
+            <summary>
+            Returns TRUE if the given path is an AssetDatabase path
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.IsProjectFolder(System.String)">
+            <summary>
+            Returns TRUE if the given GUID refers to a valid and existing project folder
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorFileUtils.ADBPathToFullPath(System.String)">
             <summary>
             Converts the given project-relative path to a full path

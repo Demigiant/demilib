@@ -60,14 +60,30 @@ namespace DG.DemiEditor
 
         #region Public Methods
 
+        /// <summary>
+        /// Returns TRUE if the given path is an absolute path
+        /// </summary>
         public static bool IsFullPath(string path)
         {
             return path[1] == ':';
         }
 
+        /// <summary>
+        /// Returns TRUE if the given path is an AssetDatabase path
+        /// </summary>
         public static bool IsADBPath(string path)
         {
             return path.Substring(0, 6) == "Assets";
+        }
+
+        /// <summary>
+        /// Returns TRUE if the given GUID refers to a valid and existing project folder
+        /// </summary>
+        public static bool IsProjectFolder(string assetGuid)
+        {
+            if (string.IsNullOrEmpty(assetGuid)) return false;
+            string adbPath = AssetDatabase.GUIDToAssetPath(assetGuid);
+            return !string.IsNullOrEmpty(adbPath) && Directory.Exists(DeEditorFileUtils.ADBPathToFullPath(adbPath));
         }
 
         /// <summary>

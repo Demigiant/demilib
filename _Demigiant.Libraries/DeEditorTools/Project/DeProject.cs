@@ -160,7 +160,7 @@ namespace DG.DeEditorTools.Project
         {
             if (assetGUIDs.Count == 0) return false;
             string guid = assetGUIDs[0];
-            if (!IsProjectFolder(guid)) return false;
+            if (!DeEditorFileUtils.IsProjectFolder(guid)) return false;
             _src = ConnectToData(true);
             return _src.GetItem(guid) != null;
         }
@@ -169,7 +169,7 @@ namespace DG.DeEditorTools.Project
         {
             if (assetGUIDs.Count == 0) return;
             string guid = assetGUIDs[0];
-            if (!IsProjectFolder(guid)) return;
+            if (!DeEditorFileUtils.IsProjectFolder(guid)) return;
             _src = ConnectToData(true);
             DeProjectData.CustomizedItem item = _src.GetItem(guid);
             if (item != null) DeProjectClipboard.storedItem = item.Clone();
@@ -183,7 +183,7 @@ namespace DG.DeEditorTools.Project
             bool changed = false;
             for (int i = 0; i < assetGUIDs.Count; ++i) {
                 string guid = assetGUIDs[i];
-                if (!IsProjectFolder(guid)) continue;
+                if (!DeEditorFileUtils.IsProjectFolder(guid)) continue;
                 changed = true;
                 DeProjectData.CustomizedItem item = _src.StoreItem(guid);
                 item.Paste(DeProjectClipboard.storedItem);
@@ -198,7 +198,7 @@ namespace DG.DeEditorTools.Project
             DeProjectCustomizeItemWindow.Items.Clear();
             for (int i = 0; i < assetGUIDs.Count; ++i) {
                 string guid = assetGUIDs[i];
-                if (!IsProjectFolder(guid)) continue;
+                if (!DeEditorFileUtils.IsProjectFolder(guid)) continue;
                 DeProjectCustomizeItemWindow.Items.Add(_src.StoreItem(guid));
             }
             if (DeProjectCustomizeItemWindow.Items.Count > 0) DeProjectCustomizeItemWindow.Open(_src);
@@ -212,7 +212,7 @@ namespace DG.DeEditorTools.Project
             bool changed = false;
             for (int i = 0; i < assetGUIDs.Count; ++i) {
                 string guid = assetGUIDs[i];
-                if (!IsProjectFolder(guid)) continue;
+                if (!DeEditorFileUtils.IsProjectFolder(guid)) continue;
                 if (hColor == DeProjectData.HColor.None) {
                     DeProjectData.CustomizedItem item = _src.GetItem(guid);
                     if (item != null) {
@@ -238,7 +238,7 @@ namespace DG.DeEditorTools.Project
             bool changed = false;
             for (int i = 0; i < assetGUIDs.Count; ++i) {
                 string guid = assetGUIDs[i];
-                if (!IsProjectFolder(guid)) continue;
+                if (!DeEditorFileUtils.IsProjectFolder(guid)) continue;
                 if (icoType == DeProjectData.IcoType.None) {
                     DeProjectData.CustomizedItem item = _src.GetItem(guid);
                     if (item != null) {
@@ -269,13 +269,6 @@ namespace DG.DeEditorTools.Project
         #endregion
 
         #region Methods
-
-        static bool IsProjectFolder(string assetGuid)
-        {
-            if (assetGuid == null) return false;
-            string adbPath = AssetDatabase.GUIDToAssetPath(assetGuid);
-            return !string.IsNullOrEmpty(adbPath) && Directory.Exists(DeEditorFileUtils.ADBPathToFullPath(adbPath));
-        }
 
         static DeProjectData ConnectToData(bool createIfMissing)
         {
