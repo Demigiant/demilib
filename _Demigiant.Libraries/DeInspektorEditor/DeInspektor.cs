@@ -20,12 +20,13 @@ namespace DG.DeInspektorEditor
     [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)] [CanEditMultipleObjects]
     public class DeInspektor : Editor
     {
-        public const string Version = "0.5.292";
+        public const string Version = "0.5.300";
         public static DeInspektor I { get; private set; }
         static GUIStyle _arrayElementBtStyle;
         DeMethodButtonEditor _methodButtonEditor;
         DeComponentDescriptionEditor _componentDescriptionEditor;
         int _listId;
+        int _objectId; // Added to list ID (so IDs are different in case there's multiple Components with lists on the same GameObject)
 
         #region GUI
 
@@ -46,6 +47,7 @@ namespace DG.DeInspektorEditor
             case DeInspektorPrefs.Mode.Full:
                 // Inspector with special features like custom lists
                 _listId = -1;
+                _objectId = this.serializedObject.targetObject.GetInstanceID();
                 Draw(this.serializedObject);
                 break;
             default:
@@ -100,6 +102,7 @@ namespace DG.DeInspektorEditor
         static void DrawList(SerializedProperty iterator)
         {
             I._listId++;
+            int currListId = I._objectId + I._listId;
 
             // Header
             EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("[{0}] {1}", iterator.arraySize, iterator.displayName)), false, new GUILayoutOption[0]);
@@ -160,7 +163,7 @@ namespace DG.DeInspektorEditor
                 bool wasEnabled = GUI.enabled;
                 if (I.targets.Length > 1) GUI.enabled = false;
                 if (DeGUILayout.PressButton(i.ToString(), _arrayElementBtStyle, GUILayout.Width(18))) {
-                    DeGUIDrag.StartDrag(I._listId, I, iList, i);
+                    DeGUIDrag.StartDrag(currListId, I, iList, i);
                 }
                 GUI.enabled = wasEnabled;
                 DrawProperty(property, true, i); // Property
@@ -180,7 +183,7 @@ namespace DG.DeInspektorEditor
                 }
                 EditorGUIUtility.labelWidth = currLabelW;
                 EditorGUILayout.EndHorizontal();
-                if (DeGUIDrag.Drag(I._listId, iList, i).outcome == DeDragResultType.Accepted) {
+                if (DeGUIDrag.Drag(currListId, iList, i).outcome == DeDragResultType.Accepted) {
                     GUI.changed = true;
                 }
             }
