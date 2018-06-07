@@ -37,6 +37,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         NodeProcess _process;
         readonly List<ContentGroup> _ContentGroups = new List<ContentGroup>();
         bool _layoutReady; // Used to prevent a repaint until a layout has happened
+        string _editableTextAreaId; // Used by editableTextArea
         Vector2 _scroll;
 
         static readonly StringBuilder _Strb = new StringBuilder();
@@ -46,6 +47,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public HelpPanel(NodeProcess nodeProcess)
         {
             _process = nodeProcess;
+            _editableTextAreaId = "HelpPanel_" + UnityEngine.Random.Range(1, int.MaxValue);
 
             // Write down help content
             // GENERAL
@@ -118,10 +120,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 if (notes.allowEditableNote) {
                     EditorGUI.BeginChangeCheck();
-                    Rect r = GUILayoutUtility.GetRect(new GUIContent(notes.editableNote), _Styles.editableProjectNotesAsLabel);
+                    bool isEditing = GUI.GetNameOfFocusedControl() == _editableTextAreaId;
+                    Rect r = GUILayoutUtility.GetRect(new GUIContent(notes.editableNote), isEditing ? _Styles.editableProjectNotes : _Styles.editableProjectNotesAsLabel);
                     using (new DeGUI.CursorColorScope(Color.white)) {
                         notes.editableNote = DeGUI.DoubleClickTextArea(
-                            r, _process.editor, "HelpPanelEditable5678", notes.editableNote,
+                            r, _process.editor, _editableTextAreaId, notes.editableNote,
                             _Styles.editableProjectNotesAsLabel, _Styles.editableProjectNotes
                         );
                     }
@@ -302,9 +305,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     .Padding(0, _InnerPadding, 4, 4).Margin(0);
                 projectNotes = DeGUI.styles.label.wordwrap.Clone(Color.white).Margin(0).Padding(_InnerPadding, _InnerPadding, 4, 4)
                     .Background(DeStylePalette.blackSquare).StretchWidth();
-                editableProjectNotes = EditorStyles.textArea.Clone(new Color(0.9f, 0.87f, 0.43f), Format.WordWrap).Margin(0).Padding(_InnerPadding, _InnerPadding, 4, 4)
-                    .Background(DeStylePalette.blackSquare);
-                editableProjectNotesAsLabel = editableProjectNotes.Clone(Format.RichText);
+                editableProjectNotes = EditorStyles.textArea.Clone(new Color(0.9f, 0.87f, 0.43f), Format.WordWrap).Margin(0)
+                    .Padding(_InnerPadding, _InnerPadding, 8, 8).Background(DeStylePalette.blackSquare);
+                editableProjectNotesAsLabel = editableProjectNotes.Clone(Format.RichText, new DeSkinColor(0.95f));
             }
         }
     }
