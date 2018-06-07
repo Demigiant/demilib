@@ -66,7 +66,14 @@ namespace DG.De2DEditor
 
         static void Reorder()
         {
-            foreach (De2DAutosorter de2DAutosorter in _Subscribed) {
+            for (int i = _Subscribed.Count - 1; i > -1; --i) {
+                De2DAutosorter de2DAutosorter = _Subscribed[i];
+                if (de2DAutosorter == null) {
+                    // Happens when undoing a De2DAutoSorter AddComponent
+                    _Subscribed.RemoveAt(i);
+                    if (i == 0 && _Subscribed.Count == 0) EditorApplication.hierarchyWindowChanged -= Reorder;
+                    continue;
+                }
                 Renderer[] rs = de2DAutosorter.GetComponentsInChildren<Renderer>(true);
                 int sortIncrement = 0;
                 switch (de2DAutosorter.sortMode) {
