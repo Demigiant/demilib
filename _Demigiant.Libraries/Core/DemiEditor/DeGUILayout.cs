@@ -319,7 +319,7 @@ namespace DG.DemiEditor
         static string DoDoubleClickTextField(Editor editor, EditorWindow editorWindow, string id, string text, int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle, GUIStyle editingStyle = null)
         {
             Rect r = GUILayoutUtility.GetRect(new GUIContent(""), defaultStyle, GUILayout.ExpandWidth(true));
-            return DeGUI.DoDoubleClickTextField(r, editor, editorWindow, id, text, dragId, draggableList, draggedItemIndex, defaultStyle, editingStyle);
+            return DeGUI.DoDoubleClickTextField(r, false, editor, editorWindow, id, text, dragId, draggableList, draggedItemIndex, defaultStyle, editingStyle);
         }
 
         /// <summary>

@@ -106,7 +106,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             using (new DeGUI.ColorScope(null, null, new Color(0.14f, 0.14f, 0.14f, 0.6f))) GUI.DrawTexture(area, DeStylePalette.whiteSquare);
 
             // Content
-            GUILayout.BeginArea(area);
+            // Removing Begin/EndArea works the same and apparently prevents error when pressing ALT while other layouts are present (see Outspoken)
+//            GUILayout.BeginArea(area);
             _scroll = GUILayout.BeginScrollView(_scroll);
             GUILayout.Label("Help Panel", _Styles.titleLabel);
             DeGUILayout.HorizontalDivider(_EvidenceColor, 1, 0, 0);
@@ -117,9 +118,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
                 if (notes.allowEditableNote) {
                     EditorGUI.BeginChangeCheck();
-                    Rect r = GUILayoutUtility.GetRect(new GUIContent(notes.editableNote), _Styles.editableProjectNotes);
+                    Rect r = GUILayoutUtility.GetRect(new GUIContent(notes.editableNote), _Styles.editableProjectNotesAsLabel);
                     using (new DeGUI.CursorColorScope(Color.white)) {
-                        notes.editableNote = EditorGUI.TextArea(r, notes.editableNote, _Styles.editableProjectNotes);
+                        notes.editableNote = DeGUI.DoubleClickTextArea(
+                            r, _process.editor, "HelpPanelEditable5678", notes.editableNote,
+                            _Styles.editableProjectNotesAsLabel, _Styles.editableProjectNotes
+                        );
                     }
                     if (EditorGUI.EndChangeCheck()) Dispatch_OnEditableNoteChanged(notes.editableNote);
                 }
@@ -144,7 +148,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
             }
             GUILayout.EndScrollView();
-            GUILayout.EndArea();
+//            GUILayout.EndArea();
 
             GUI.matrix = prevGuiMatrix;
             return true;
@@ -277,7 +281,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         class Styles
         {
             public GUIStyle rowBox, titleLabel, groupTitleLabel, descriptionLabel, definitionLabel, keysLabel,
-                            projectNotes, editableProjectNotes;
+                            projectNotes, editableProjectNotes, editableProjectNotesAsLabel;
             bool _initialized;
 
             public void Init()
@@ -300,6 +304,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     .Background(DeStylePalette.blackSquare).StretchWidth();
                 editableProjectNotes = EditorStyles.textArea.Clone(new Color(0.9f, 0.87f, 0.43f), Format.WordWrap).Margin(0).Padding(_InnerPadding, _InnerPadding, 4, 4)
                     .Background(DeStylePalette.blackSquare);
+                editableProjectNotesAsLabel = editableProjectNotes.Clone(Format.RichText);
             }
         }
     }
