@@ -1,28 +1,48 @@
 fileFormatVersion: 2
 guid: d23cccb6a77c74b40b53ed7823e215f3
-timeCreated: 1467539700
+timeCreated: 1528401472
 licenseType: Pro
 PluginImporter:
-  serializedVersion: 1
+  serializedVersion: 2
   iconMap:
     DG.De2D.De2DAutosorter: {fileID: 2800000, guid: 60a0e4e93e9892b43bb27e0de53ef2fc,
       type: 3}
     DG.De2D.De2DCamera: {fileID: 2800000, guid: 60a0e4e93e9892b43bb27e0de53ef2fc,
       type: 3}
+    DG.De2D.De2DLayout: {fileID: 2800000, guid: 60a0e4e93e9892b43bb27e0de53ef2fc,
+      type: 3}
+    DG.De2D.De2DManager: {fileID: 2800000, guid: 60a0e4e93e9892b43bb27e0de53ef2fc,
+      type: 3}
+    DG.De2D.DeRendererSortOrder: {fileID: 2800000, guid: 60a0e4e93e9892b43bb27e0de53ef2fc,
+      type: 3}
+    DG.De2D.DeSpriteButton: {fileID: 2800000, guid: 60a0e4e93e9892b43bb27e0de53ef2fc,
+      type: 3}
+    DG.De2D.UI.DeUIMesh: {fileID: 2800000, guid: 60a0e4e93e9892b43bb27e0de53ef2fc,
+      type: 3}
   executionOrder: {}
   isPreloaded: 0
+  isOverridable: 0
   platformData:
-    Any:
-      enabled: 1
-      settings: {}
-    Editor:
-      enabled: 0
-      settings:
-        DefaultValueInitialized: true
-    WindowsStoreApps:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
+    data:
+      first:
+        Any: 
+      second:
+        enabled: 1
+        settings: {}
+    data:
+      first:
+        Editor: Editor
+      second:
+        enabled: 0
+        settings:
+          DefaultValueInitialized: true
+    data:
+      first:
+        Windows Store Apps: WindowsStoreApps
+      second:
+        enabled: 0
+        settings:
+          CPU: AnyCPU
   userData: 
   assetBundleName: 
   assetBundleVariant: 

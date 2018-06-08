@@ -39,6 +39,11 @@
             Allows to set the sortingOrder of Renderers, not just SpriteRenderers
             </summary>
         </member>
+        <member name="M:DG.De2D.DeSpriteButton.Refresh">
+            <summary>
+            Force-refreshes the graphics of this button
+            </summary>
+        </member>
         <member name="T:DG.De2D.UI.DeUIMesh">
             <summary>
             Used to draw a custom mesh inside Unity's UI
