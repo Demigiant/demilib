@@ -31,7 +31,7 @@ namespace DG.De2D
 
         [SerializeField] bool _interactable = true;
         public ColorBlock colors = ColorBlock.defaultColorBlock;
-        public UnityEvent onClick;
+        public UnityEvent onClick, onPress, onRelease;
 
         #endregion
 
@@ -77,6 +77,7 @@ namespace DG.De2D
             _state = State.Press;
             _isDown = true;
             Refresh();
+            if (onPress != null) onPress.Invoke();
         }
 
         void OnMouseUpAsButton()
@@ -92,6 +93,7 @@ namespace DG.De2D
             _state = _isOver ? State.Rollover : State.Normal;
             _isDown = false;
             Refresh();
+            if (onRelease != null) onRelease.Invoke();
         }
 
         void OnMouseExit()

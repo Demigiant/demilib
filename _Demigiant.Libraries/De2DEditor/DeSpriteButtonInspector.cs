@@ -24,7 +24,9 @@ namespace DG.De2DEditor
 
         SerializedProperty _p_interactable,
                            _p_colors,
-                           _p_onClick;
+                           _p_onClick,
+                           _p_onPress,
+                           _p_onRelease;
 
         #region Unity and GUI Methods
 
@@ -35,6 +37,8 @@ namespace DG.De2DEditor
             _p_interactable = serializedObject.FindProperty("_interactable");
             _p_colors = serializedObject.FindProperty("colors");
             _p_onClick = serializedObject.FindProperty("onClick");
+            _p_onPress = serializedObject.FindProperty("onPress");
+            _p_onRelease = serializedObject.FindProperty("onRelease");
 
             _src.OnEditorRefreshRequired += RefreshSprite;
         }
@@ -82,6 +86,8 @@ namespace DG.De2DEditor
             }
             GUILayout.Space(4);
             EditorGUILayout.PropertyField(_p_onClick);
+            EditorGUILayout.PropertyField(_p_onPress);
+            EditorGUILayout.PropertyField(_p_onRelease);
 
             serializedObject.ApplyModifiedProperties();
 
@@ -111,18 +117,19 @@ namespace DG.De2DEditor
                 if (coll != null) continue;
                 switch (type) {
                 case ColliderType.Box:
-                    Undo.AddComponent<BoxCollider2D>(bt.gameObject);
+                    coll = Undo.AddComponent<BoxCollider2D>(bt.gameObject);
                     break;
                 case ColliderType.Circle:
-                    Undo.AddComponent<CircleCollider2D>(bt.gameObject);
+                    coll = Undo.AddComponent<CircleCollider2D>(bt.gameObject);
                     break;
                 case ColliderType.Capsule:
-                    Undo.AddComponent<CapsuleCollider2D>(bt.gameObject);
+                    coll = Undo.AddComponent<CapsuleCollider2D>(bt.gameObject);
                     break;
                 case ColliderType.Polygon:
-                    Undo.AddComponent<PolygonCollider2D>(bt.gameObject);
+                    coll = Undo.AddComponent<PolygonCollider2D>(bt.gameObject);
                     break;
                 }
+                if (coll != null) coll.isTrigger = true;
             }
         }
 
