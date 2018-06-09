@@ -57,6 +57,11 @@ namespace DG.De2D
             _spriteR = this.GetComponent<SpriteRenderer>();
         }
 
+        void OnEnable()
+        {
+            Refresh(true);
+        }
+
         void Awake()
         {
             Init();
@@ -122,22 +127,22 @@ namespace DG.De2D
         /// <summary>
         /// Force-refreshes the graphics of this button
         /// </summary>
-        public void Refresh()
+        public void Refresh(bool immediate = false)
         {
             Init();
 
             if (!_interactable) {
-                TweenColorTo(colors.disabledColor, colors.fadeDuration);
+                TweenColorTo(colors.disabledColor, immediate ? -1 : 0.1f);
             } else {
                 switch (_state) {
                 case State.Rollover:
-                    TweenColorTo(colors.highlightedColor, colors.fadeDuration);
+                    TweenColorTo(colors.highlightedColor, immediate ? -1 : colors.fadeDuration);
                     break;
                 case State.Press:
                     TweenColorTo(colors.pressedColor, -1);
                     break;
                 default:
-                    TweenColorTo(colors.normalColor, colors.fadeDuration);
+                    TweenColorTo(colors.normalColor, immediate ? -1 : colors.fadeDuration);
                     break;
                 }
             }
@@ -147,12 +152,12 @@ namespace DG.De2D
 
         #region Methods
 
-        void SetInteractable(bool value)
+        void SetInteractable(bool value, bool immediate = false)
         {
             if (_interactable == value) return;
 
             _interactable = value;
-            Refresh();
+            Refresh(immediate);
         }
 
         #region Tweens
