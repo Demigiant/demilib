@@ -71,6 +71,8 @@ namespace DG.De2D
         {
             _state = _isDown ? State.Press : State.Rollover;
             _isOver = true;
+            if (!_interactable) return;
+
             Refresh();
         }
 
@@ -78,6 +80,8 @@ namespace DG.De2D
         {
             _state = State.Press;
             _isDown = true;
+            if (!_interactable) return;
+
             Refresh();
             if (onPress != null) onPress.Invoke();
         }
@@ -86,6 +90,8 @@ namespace DG.De2D
         {
             _state = State.Rollover;
             _isDown = false;
+            if (!_interactable) return;
+
             Refresh();
             if (onClick != null) onClick.Invoke();
         }
@@ -94,6 +100,8 @@ namespace DG.De2D
         {
             _state = _isOver ? State.Rollover : State.Normal;
             _isDown = false;
+            if (!_interactable) return;
+
             Refresh();
             if (onRelease != null) onRelease.Invoke();
         }
@@ -102,6 +110,8 @@ namespace DG.De2D
         {
             _state = _isDown ? State.Press : State.Normal;
             _isOver = false;
+            if (!_interactable) return;
+
             Refresh();
         }
 
