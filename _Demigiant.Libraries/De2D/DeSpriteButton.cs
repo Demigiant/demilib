@@ -33,10 +33,18 @@ namespace DG.De2D
         public ColorBlock colors = ColorBlock.defaultColorBlock;
         [SerializeField] bool _showOnClick = true; // Editor-only
         [SerializeField] bool _showOnPress, _showOnRelease; // Editor-only
-        public UnityEvent onClick, onPress, onRelease;
+        public UnityEvent onClick = new UnityEvent();
+        public UnityEvent onPress = new UnityEvent();
+        public UnityEvent onRelease = new UnityEvent();
 
         #endregion
 
+        // Extra non-serialized events
+        public UnityEvent onEnter { get { if (_onEnter == null) _onEnter = new UnityEvent(); return _onEnter; } }
+        public UnityEvent onExit { get { if (_onExit == null) _onExit = new UnityEvent(); return _onExit; } }
+        UnityEvent _onEnter;
+        UnityEvent _onExit;
+        //
         public bool interactable { get { return _interactable; } set { SetInteractable(value); } }
 
         bool _initialized;
@@ -79,6 +87,7 @@ namespace DG.De2D
             if (!_interactable) return;
 
             Refresh();
+            if (onEnter != null) onEnter.Invoke();
         }
 
         void OnMouseDown()
@@ -118,6 +127,7 @@ namespace DG.De2D
             if (!_interactable) return;
 
             Refresh();
+            if (onExit != null) onExit.Invoke();
         }
 
         #endregion
@@ -158,6 +168,8 @@ namespace DG.De2D
 
             _interactable = value;
             Refresh(immediate);
+            if (_isOver && onExit != null) onExit.Invoke();
+            if (_isDown && onRelease != null) onRelease.Invoke();
         }
 
         #region Tweens
