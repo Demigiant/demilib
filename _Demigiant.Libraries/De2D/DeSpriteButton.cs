@@ -31,6 +31,8 @@ namespace DG.De2D
 
         [SerializeField] bool _interactable = true;
         public ColorBlock colors = ColorBlock.defaultColorBlock;
+        [SerializeField] bool _showOnClick = true; // Editor-only
+        [SerializeField] bool _showOnPress, _showOnRelease; // Editor-only
         public UnityEvent onClick, onPress, onRelease;
 
         #endregion

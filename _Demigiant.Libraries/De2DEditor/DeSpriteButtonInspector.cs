@@ -6,6 +6,7 @@ using DG.De2D;
 using DG.DemiEditor;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DG.De2DEditor
 {
@@ -24,9 +25,8 @@ namespace DG.De2DEditor
 
         SerializedProperty _p_interactable,
                            _p_colors,
-                           _p_onClick,
-                           _p_onPress,
-                           _p_onRelease;
+                           _p_showOnClick, _p_showOnPress, _p_showOnRelease,
+                           _p_onClick, _p_onPress, _p_onRelease;
 
         #region Unity and GUI Methods
 
@@ -36,6 +36,9 @@ namespace DG.De2DEditor
 
             _p_interactable = serializedObject.FindProperty("_interactable");
             _p_colors = serializedObject.FindProperty("colors");
+            _p_showOnClick = serializedObject.FindProperty("_showOnClick");
+            _p_showOnPress = serializedObject.FindProperty("_showOnPress");
+            _p_showOnRelease = serializedObject.FindProperty("_showOnRelease");
             _p_onClick = serializedObject.FindProperty("onClick");
             _p_onPress = serializedObject.FindProperty("onPress");
             _p_onRelease = serializedObject.FindProperty("onRelease");
@@ -85,13 +88,31 @@ namespace DG.De2DEditor
                 if (check.changed) refreshSprite = true;
             }
             GUILayout.Space(4);
-            EditorGUILayout.PropertyField(_p_onClick);
-            EditorGUILayout.PropertyField(_p_onPress);
-            EditorGUILayout.PropertyField(_p_onRelease);
+            using (new GUILayout.HorizontalScope()) {
+                CallbackToggle("On Click", _p_showOnClick, _p_onClick);
+                CallbackToggle("On Press", _p_showOnPress, _p_onPress);
+                CallbackToggle("On Release", _p_showOnRelease, _p_onRelease);
+            }
+            if (_p_showOnClick.boolValue) EditorGUILayout.PropertyField(_p_onClick);
+            if (_p_showOnPress.boolValue) EditorGUILayout.PropertyField(_p_onPress);
+            if (_p_showOnRelease.boolValue) EditorGUILayout.PropertyField(_p_onRelease);
 
             serializedObject.ApplyModifiedProperties();
 
             if (refreshSprite) RefreshSprite();
+        }
+
+        void CallbackToggle(string label, SerializedProperty property, SerializedProperty evProperty)
+        {
+            using (var check = new EditorGUI.ChangeCheckScope()) {
+                property.boolValue = DeGUILayout.ToggleButton(property.boolValue, label);
+                if (check.changed && !property.boolValue) {
+                    // Clear all events if unset
+                    SerializedProperty evs = evProperty.FindPropertyRelative("m_PersistentCalls.m_Calls");
+                    evs.ClearArray();
+                    serializedObject.ApplyModifiedProperties();
+                }
+            }
         }
 
         #endregion
