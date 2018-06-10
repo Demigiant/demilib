@@ -39,6 +39,9 @@
             Allows to set the sortingOrder of Renderers, not just SpriteRenderers
             </summary>
         </member>
+        <member name="F:DG.De2D.DeSpriteButton.colors">
+            <summary>Only used in case of <see cref="F:DG.De2D.DeSpriteButton.TransitionType.ColorTint"/> transitions</summary>
+        </member>
         <member name="M:DG.De2D.DeSpriteButton.Refresh(System.Boolean)">
             <summary>
             Force-refreshes the graphics of this button

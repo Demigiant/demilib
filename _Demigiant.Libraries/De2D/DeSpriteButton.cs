@@ -13,6 +13,12 @@ namespace DG.De2D
     [RequireComponent(typeof(SpriteRenderer))]
     public class DeSpriteButton : MonoBehaviour
     {
+        public enum TransitionType
+        {
+            ColorTint,
+            BounceScale
+        }
+
         enum State
         {
             Normal,
@@ -30,7 +36,16 @@ namespace DG.De2D
         #region Serialized
 
         [SerializeField] bool _interactable = true;
+        [SerializeField] TransitionType _transition;
+        // Transition ► Scale
+        [SerializeField] float _highlightedScaleFactor = 1.1f;
+        [SerializeField] float _pressedScaleFactor = 1.2f;
+        [SerializeField] float _disabledScaleFactor = 1f;
+        [SerializeField] float _duration = 0.4f; // Ignored in case of ColorTint transition (who has it internally to ColorBlock)
+        // Transition ► Color
+        /// <summary>Only used in case of <see cref="TransitionType.ColorTint"/> transitions</summary>
         public ColorBlock colors = ColorBlock.defaultColorBlock;
+        //
         [SerializeField] bool _showOnClick = true; // Editor-only
         [SerializeField] bool _showOnPress, _showOnRelease; // Editor-only
         public UnityEvent onClick = new UnityEvent();
@@ -50,9 +65,10 @@ namespace DG.De2D
         bool _initialized;
         State _state = State.Normal;
         SpriteRenderer _spriteR;
+        Vector3 _defLocalScale;
         bool _isOver;
         bool _isDown;
-        Coroutine _coColorTween;
+        Coroutine _coTransitionTween;
 
         #region Unity + INIT
 
@@ -63,6 +79,7 @@ namespace DG.De2D
             _initialized = true;
 
             _spriteR = this.GetComponent<SpriteRenderer>();
+            _defLocalScale = this.transform.localScale;
         }
 
         void OnEnable()
@@ -142,17 +159,45 @@ namespace DG.De2D
             Init();
 
             if (!_interactable) {
-                TweenColorTo(colors.disabledColor, immediate ? -1 : 0.1f);
+                switch (_transition) {
+                case TransitionType.BounceScale:
+                    TweenScaleTo(_defLocalScale * _disabledScaleFactor, immediate ? -1 : 0.1f);
+                    break;
+                case TransitionType.ColorTint:
+                    TweenColorTo(colors.disabledColor, immediate ? -1 : 0.1f);
+                    break;
+                }
             } else {
                 switch (_state) {
                 case State.Rollover:
-                    TweenColorTo(colors.highlightedColor, immediate ? -1 : colors.fadeDuration);
+                    switch (_transition) {
+                    case TransitionType.BounceScale:
+                        TweenScaleTo(_defLocalScale * _highlightedScaleFactor, immediate ? -1 : _duration, true);
+                        break;
+                    case TransitionType.ColorTint:
+                        TweenColorTo(colors.highlightedColor, immediate ? -1 : colors.fadeDuration);
+                        break;
+                    }
                     break;
                 case State.Press:
-                    TweenColorTo(colors.pressedColor, -1);
+                    switch (_transition) {
+                    case TransitionType.BounceScale:
+                        TweenScaleTo(_defLocalScale * _pressedScaleFactor, -1);
+                        break;
+                    case TransitionType.ColorTint:
+                        TweenColorTo(colors.pressedColor, -1);
+                        break;
+                    }
                     break;
                 default:
-                    TweenColorTo(colors.normalColor, immediate ? -1 : colors.fadeDuration);
+                    switch (_transition) {
+                    case TransitionType.BounceScale:
+                        TweenScaleTo(_defLocalScale, immediate ? -1 : _duration);
+                        break;
+                    case TransitionType.ColorTint:
+                        TweenColorTo(colors.normalColor, immediate ? -1 : colors.fadeDuration);
+                        break;
+                    }
                     break;
                 }
             }
@@ -174,11 +219,48 @@ namespace DG.De2D
 
         #region Tweens
 
+        void TweenScaleTo(Vector3 scale, float duration, bool loop = false)
+        {
+            if (_coTransitionTween != null) {
+                this.StopCoroutine(_coTransitionTween);
+                _coTransitionTween = null;
+            }
+            if (duration <= 0) {
+                this.transform.localScale = scale;
+                return;
+            }
+            if (this.transform.localScale == scale) return;
+
+            _coTransitionTween = this.StartCoroutine(CO_ScaleTo(scale, duration, loop));
+        }
+
+        IEnumerator CO_ScaleTo(Vector3 scale, float duration, bool loop = false)
+        {
+            Vector3 startScale = this.transform.localScale;
+            float startTime = Time.realtimeSinceStartup;
+            bool complete = false;
+            while (!complete) {
+                float elapsed = Time.realtimeSinceStartup - startTime;
+                float elapsedPerc = elapsed / duration;
+                if (elapsedPerc > 1) {
+                    if (loop) {
+                        int loopCount = (int)elapsedPerc;
+                        elapsedPerc %= 1;
+                        if (loopCount % 2 != 0) elapsedPerc = 1 - elapsedPerc; // Yoyo loop
+                    } else elapsedPerc = 1;
+                }
+                this.transform.localScale = Vector3.Slerp(startScale, scale, elapsedPerc);
+                if (!loop && elapsed > duration) complete = true;
+                else yield return null;
+            }
+            _coTransitionTween = null;
+        }
+
         void TweenColorTo(Color color, float duration)
         {
-            if (_coColorTween != null) {
-                this.StopCoroutine(_coColorTween);
-                _coColorTween = null;
+            if (_coTransitionTween != null) {
+                this.StopCoroutine(_coTransitionTween);
+                _coTransitionTween = null;
             }
             if (duration <= 0) {
                 _spriteR.color = color;
@@ -186,26 +268,23 @@ namespace DG.De2D
             }
             if (_spriteR.color.Equals(color)) return;
 
-            _coColorTween = this.StartCoroutine(CO_ColorTo(color, duration));
+            _coTransitionTween = this.StartCoroutine(CO_ColorTo(color, duration));
         }
 
         IEnumerator CO_ColorTo(Color color, float duration)
         {
-            if (duration <= 0) {
-                _spriteR.color = color;
-                yield break;
-            }
             Color startColor = _spriteR.color;
             float startTime = Time.realtimeSinceStartup;
             bool complete = false;
             while (!complete) {
                 float elapsed = Time.realtimeSinceStartup - startTime;
-                float elapsedPerc = Mathf.Min(1, elapsed / duration);
+                float elapsedPerc = elapsed / duration;
+                if (elapsedPerc > 1) elapsedPerc = 1;
                 _spriteR.color = Color.Lerp(startColor, color, elapsedPerc);
                 if (elapsed > duration) complete = true;
                 else yield return null;
             }
-            _coColorTween = null;
+            _coTransitionTween = null;
         }
 
         #endregion

@@ -24,6 +24,8 @@ namespace DG.De2DEditor
         DeSpriteButton _src;
 
         SerializedProperty _p_interactable,
+                           _p_transition,
+                           _p_highlightedScaleFactor, _p_pressedScaleFactor, _p_disabledScaleFactor, _p_duration,
                            _p_colors,
                            _p_showOnClick, _p_showOnPress, _p_showOnRelease,
                            _p_onClick, _p_onPress, _p_onRelease;
@@ -35,6 +37,11 @@ namespace DG.De2DEditor
             _src = this.target as DeSpriteButton;
 
             _p_interactable = serializedObject.FindProperty("_interactable");
+            _p_transition = serializedObject.FindProperty("_transition");
+            _p_highlightedScaleFactor = serializedObject.FindProperty("_highlightedScaleFactor");
+            _p_pressedScaleFactor = serializedObject.FindProperty("_pressedScaleFactor");
+            _p_disabledScaleFactor = serializedObject.FindProperty("_disabledScaleFactor");
+            _p_duration = serializedObject.FindProperty("_duration");
             _p_colors = serializedObject.FindProperty("colors");
             _p_showOnClick = serializedObject.FindProperty("_showOnClick");
             _p_showOnPress = serializedObject.FindProperty("_showOnPress");
@@ -82,9 +89,23 @@ namespace DG.De2DEditor
 
             using (var check = new EditorGUI.ChangeCheckScope()) {
                 EditorGUILayout.PropertyField(_p_interactable);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(_p_colors);
-                EditorGUI.indentLevel--;
+                EditorGUILayout.PropertyField(_p_transition);
+                if (!_p_transition.hasMultipleDifferentValues) {
+                    // Transition
+                    EditorGUI.indentLevel++;
+                    switch ((DeSpriteButton.TransitionType)_p_transition.enumValueIndex) {
+                    case DeSpriteButton.TransitionType.BounceScale:
+                        EditorGUILayout.PropertyField(_p_highlightedScaleFactor, new GUIContent("Highlighted Factor"));
+                        EditorGUILayout.PropertyField(_p_pressedScaleFactor, new GUIContent("Pressed Factor"));
+                        EditorGUILayout.PropertyField(_p_disabledScaleFactor, new GUIContent("Disabled Factor"));
+                        EditorGUILayout.PropertyField(_p_duration, new GUIContent("Bounce Duration"));
+                        break;
+                    case DeSpriteButton.TransitionType.ColorTint:
+                        EditorGUILayout.PropertyField(_p_colors);
+                        break;
+                    }
+                    EditorGUI.indentLevel--;
+                }
                 if (check.changed) refreshSprite = true;
             }
             GUILayout.Space(4);
