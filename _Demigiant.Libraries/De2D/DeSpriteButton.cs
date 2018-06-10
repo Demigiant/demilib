@@ -64,10 +64,12 @@ namespace DG.De2D
 
         bool _initialized;
         State _state = State.Normal;
+        State _prevState = State.Normal;
         SpriteRenderer _spriteR;
         Vector3 _defLocalScale;
         bool _isOver;
         bool _isDown;
+        Coroutine _coRefresh;
         Coroutine _coTransitionTween;
 
         #region Unity + INIT
@@ -99,7 +101,7 @@ namespace DG.De2D
 
         void OnMouseEnter()
         {
-            _state = _isDown ? State.Press : State.Rollover;
+            ChangeState(_isDown ? State.Press : State.Rollover);
             _isOver = true;
             if (!_interactable) return;
 
@@ -109,7 +111,7 @@ namespace DG.De2D
 
         void OnMouseDown()
         {
-            _state = State.Press;
+            ChangeState(State.Press);
             _isDown = true;
             if (!_interactable) return;
 
@@ -119,7 +121,7 @@ namespace DG.De2D
 
         void OnMouseUpAsButton()
         {
-            _state = State.Rollover;
+            ChangeState(State.Rollover);
             _isDown = false;
             if (!_interactable) return;
 
@@ -129,7 +131,7 @@ namespace DG.De2D
 
         void OnMouseUp()
         {
-            _state = _isOver ? State.Rollover : State.Normal;
+            ChangeState(_isOver ? State.Rollover : State.Normal);
             _isDown = false;
             if (!_interactable) return;
 
@@ -139,7 +141,7 @@ namespace DG.De2D
 
         void OnMouseExit()
         {
-            _state = _isDown ? State.Press : State.Normal;
+            ChangeState(_isDown ? State.Press : State.Normal);
             _isOver = false;
             if (!_interactable) return;
 
@@ -158,6 +160,15 @@ namespace DG.De2D
         {
             Init();
 
+            if (_coRefresh != null) {
+                this.StopCoroutine(_coRefresh);
+                _coRefresh = null;
+            }
+            _coRefresh = this.StartCoroutine(CO_Refresh(immediate));
+        }
+
+        IEnumerator CO_Refresh(bool immediate = false)
+        {
             if (!_interactable) {
                 switch (_transition) {
                 case TransitionType.BounceScale:
@@ -172,6 +183,11 @@ namespace DG.De2D
                 case State.Rollover:
                     switch (_transition) {
                     case TransitionType.BounceScale:
+                        if (!immediate && _prevState == State.Press) {
+                            // Reset scale to default so loop works correctly
+                            TweenScaleTo(_defLocalScale, 0.1f, false);
+                            yield return new WaitForSecondsRealtime(0.1f);
+                        }
                         TweenScaleTo(_defLocalScale * _highlightedScaleFactor, immediate ? -1 : _duration, true);
                         break;
                     case TransitionType.ColorTint:
@@ -192,7 +208,7 @@ namespace DG.De2D
                 default:
                     switch (_transition) {
                     case TransitionType.BounceScale:
-                        TweenScaleTo(_defLocalScale, immediate ? -1 : _duration);
+                        TweenScaleTo(_defLocalScale, immediate ? -1 : 0.1f);
                         break;
                     case TransitionType.ColorTint:
                         TweenColorTo(colors.normalColor, immediate ? -1 : colors.fadeDuration);
@@ -206,6 +222,13 @@ namespace DG.De2D
         #endregion
 
         #region Methods
+
+        void ChangeState(State newState)
+        {
+            if (_state == newState) return;
+            _prevState = _state;
+            _state = newState;
+        }
 
         void SetInteractable(bool value, bool immediate = false)
         {
