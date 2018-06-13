@@ -63,6 +63,7 @@ namespace DG.De2D
         public bool interactable { get { return _interactable; } set { SetInteractable(value); } }
 
         bool _initialized;
+        bool _isActive;
         State _state = State.Normal;
         State _prevState = State.Normal;
         SpriteRenderer _spriteR;
@@ -86,7 +87,16 @@ namespace DG.De2D
 
         void OnEnable()
         {
+            _isActive = true;
             Refresh(true);
+        }
+
+        void OnDisable()
+        {
+            _isActive = _isOver = _isDown = false;
+            this.StopAllCoroutines();
+            _coRefresh = _coTransitionTween = null;
+            ChangeState(State.Normal);
         }
 
         void Awake()
@@ -158,6 +168,8 @@ namespace DG.De2D
         /// </summary>
         public void Refresh(bool immediate = false)
         {
+            if (!_isActive) return;
+
             Init();
 
             if (_coRefresh != null) {
@@ -183,12 +195,17 @@ namespace DG.De2D
                 case State.Rollover:
                     switch (_transition) {
                     case TransitionType.BounceScale:
-                        if (!immediate && _prevState == State.Press) {
-                            // Reset scale to default so loop works correctly
-                            TweenScaleTo(_defLocalScale, 0.1f, false);
+//                        if (!immediate && _prevState == State.Press) {
+//                            // Reset scale to default so loop works correctly
+//                            TweenScaleTo(_defLocalScale, 0.1f, false);
+//                            yield return new WaitForSecondsRealtime(0.1f);
+//                        }
+                        if (!immediate) {
+                            // Jump fast to highlighted scale and then start loop
+                            TweenScaleTo(_defLocalScale * _highlightedScaleFactor, 0.1f, false);
                             yield return new WaitForSecondsRealtime(0.1f);
                         }
-                        TweenScaleTo(_defLocalScale * _highlightedScaleFactor, immediate ? -1 : _duration, true);
+                        TweenScaleTo(_defLocalScale, immediate ? -1 : _duration, true);
                         break;
                     case TransitionType.ColorTint:
                         TweenColorTo(colors.highlightedColor, immediate ? -1 : colors.fadeDuration);
