@@ -12,7 +12,7 @@ namespace DG.DeEditorTools
 {
     public class DeEditorToolsPrefs
     {
-        const string _Version = "0.7.000";
+        const string _Version = "0.7.050";
 
         public static bool deScene_enableContextMenu;
         public static bool deHierarchy_hideObject;

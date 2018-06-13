@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using DG.DemiEditor;
+using DG.DemiEditor.Internal;
 using DG.DemiLib.External;
 using UnityEditor;
 using UnityEngine;
@@ -22,6 +23,13 @@ namespace DG.DeEditorTools.Hierarchy
 
         static DeHierarchy()
         {
+            // Delay initialization so GUI is linked and drawn after other assets that modify the Hierarchy (like DeHierarchy)
+            EditorApplication.delayCall += Init;
+        }
+
+        static void Init()
+        {
+            EditorApplication.delayCall -= Init;
             EditorApplication.hierarchyWindowChanged -= Refresh;
             EditorApplication.hierarchyWindowItemOnGUI -= ItemOnGUI;
             Undo.undoRedoPerformed -= UndoRedoPerformed;
@@ -77,16 +85,19 @@ namespace DG.DeEditorTools.Hierarchy
             if (DeEditorToolsPrefs.deHierarchy_fadeEvidenceWhenInactive && !go.activeInHierarchy) color.a = 0.4f;
             // Icon
             if (DeEditorToolsPrefs.deHierarchy_showIco) {
+                const int icoOffset = -30; // was -28
+                const int icoSize = 28; // was 28
+                const int icoSizeHalf = 14; // was 14
                 Rect fullR = selectionRect;
-                fullR.x -= 28;
-                fullR.width += 28;
+                fullR.x += icoOffset;
+                fullR.width += icoSize;
                 if (!DeEditorToolsPrefs.deHierarchy_indentIco) {
                     // Full rect not indented
                     Transform t = go.transform;
                     while (t.parent != null) {
                         t = t.parent;
-                        fullR.x -= 14;
-                        fullR.width += 14;
+                        fullR.x -= icoSizeHalf;
+                        fullR.width += icoSizeHalf;
                     }
                 }
                 Texture2D icoTexture;
@@ -125,7 +136,7 @@ namespace DG.DeEditorTools.Hierarchy
             // Border
             if (DeEditorToolsPrefs.deHierarchy_showBorder) {
                 using (new DeGUI.ColorScope(color)) {
-                    GUI.Label(selectionRect, "", _evidenceStyle);
+                    GUI.Label(selectionRect.Shift(-3, 1, 4, -1), "", _evidenceStyle);
                 }
             }
         }
