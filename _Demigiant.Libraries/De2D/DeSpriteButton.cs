@@ -253,8 +253,13 @@ namespace DG.De2D
 
             _interactable = value;
             Refresh(immediate);
-            if (_isOver && onExit != null) onExit.Invoke();
-            if (_isDown && onRelease != null) onRelease.Invoke();
+            if (!_interactable) {
+                if (_isOver && onExit != null) onExit.Invoke();
+                if (_isDown && onRelease != null) onRelease.Invoke();
+            } else {
+                if (_isOver && onEnter != null) onEnter.Invoke();
+                if (_isDown && onPress != null) onPress.Invoke();
+            }
         }
 
         #region Tweens
