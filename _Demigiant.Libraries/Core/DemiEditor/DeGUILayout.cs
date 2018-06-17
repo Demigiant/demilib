@@ -95,7 +95,7 @@ namespace DG.DemiEditor
         }
 
         /// <summary>Toolbar foldout button</summary>
-        public static bool ToolbarFoldoutButton(bool toggled, string text = null, bool isLarge = false, bool stretchedLabel = false)
+        public static bool ToolbarFoldoutButton(bool toggled, string text = null, bool isLarge = false, bool stretchedLabel = false, Color? forceLabelColor = null)
         {
             GUIStyle style;
             if (isLarge) {
@@ -111,6 +111,7 @@ namespace DG.DemiEditor
                         ? stretchedLabel ? DeGUI.styles.button.toolFoldoutOpenWStretchedLabel : DeGUI.styles.button.toolFoldoutOpenWLabel
                         : stretchedLabel ? DeGUI.styles.button.toolFoldoutClosedWStretchedLabel : DeGUI.styles.button.toolFoldoutClosedWLabel;
             }
+            if (forceLabelColor != null) style = style.Clone((Color)forceLabelColor);
             bool clicked = GUILayout.Button(text, style);
             if (clicked) {
                 toggled = !toggled;
