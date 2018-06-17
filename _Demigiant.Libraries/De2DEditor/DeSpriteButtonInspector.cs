@@ -10,7 +10,7 @@ using UnityEngine.Events;
 
 namespace DG.De2DEditor
 {
-    [CustomEditor(typeof(DeSpriteButton)), CanEditMultipleObjects]
+    [CustomEditor(typeof(DeSpriteButton), true), CanEditMultipleObjects]
     public class DeSpriteButtonInspector : Editor
     {
         enum ColliderType
