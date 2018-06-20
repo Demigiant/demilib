@@ -1189,6 +1189,9 @@
             Draws a button that returns TRUE the first time it's pressed, instead than when its released.
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.ToolbarFoldoutButton(UnityEngine.Rect,System.Boolean,System.String,System.Boolean,System.Boolean,System.Nullable{UnityEngine.Color})">
+            <summary>Toolbar foldout button</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,System.String)">
             <summary>Button that can be toggled on and off</summary>
         </member>

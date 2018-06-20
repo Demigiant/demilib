@@ -305,6 +305,32 @@ namespace DG.DemiEditor
             return false;
         }
 
+        /// <summary>Toolbar foldout button</summary>
+        public static bool ToolbarFoldoutButton(Rect rect, bool toggled, string text = null, bool isLarge = false, bool stretchedLabel = false, Color? forceLabelColor = null)
+        {
+            GUIStyle style;
+            if (isLarge) {
+                style = string.IsNullOrEmpty(text)
+                    ? toggled ? DeGUI.styles.button.toolLFoldoutOpen : DeGUI.styles.button.toolLFoldoutClosed
+                    : toggled
+                        ? stretchedLabel ? DeGUI.styles.button.toolLFoldoutOpenWStretchedLabel : DeGUI.styles.button.toolLFoldoutOpenWLabel
+                        : stretchedLabel ? DeGUI.styles.button.toolLFoldoutClosedWStretchedLabel : DeGUI.styles.button.toolLFoldoutClosedWLabel;
+            } else {
+                style = string.IsNullOrEmpty(text)
+                    ? toggled ? DeGUI.styles.button.toolFoldoutOpen : DeGUI.styles.button.toolFoldoutClosed
+                    : toggled
+                        ? stretchedLabel ? DeGUI.styles.button.toolFoldoutOpenWStretchedLabel : DeGUI.styles.button.toolFoldoutOpenWLabel
+                        : stretchedLabel ? DeGUI.styles.button.toolFoldoutClosedWStretchedLabel : DeGUI.styles.button.toolFoldoutClosedWLabel;
+            }
+            if (forceLabelColor != null) style = style.Clone((Color)forceLabelColor);
+            bool clicked = GUI.Button(rect, text, style);
+            if (clicked) {
+                toggled = !toggled;
+                GUI.changed = true;
+            }
+            return toggled;
+        }
+
         /// <summary>Button that can be toggled on and off</summary>
         public static bool ToggleButton(Rect rect, bool toggled, string text)
         { return ToggleButton(rect, toggled, new GUIContent(text, ""), null, null); }
