@@ -4,7 +4,9 @@
 
 using System;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DG.DemiEditor
 {
@@ -13,8 +15,8 @@ namespace DG.DemiEditor
     /// </summary>
     public static class DeEditorCompatibilityUtils
     {
-        static bool _is2017_orLater;
         static MethodInfo _miEncodeToPng;
+        static MethodInfo _miGetPrefabParent;
 
         #region Public Methods
 
@@ -26,15 +28,33 @@ namespace DG.DemiEditor
             if (_miEncodeToPng == null) {
                 _miEncodeToPng = typeof(Texture2D).GetMethod("EncodeToPNG", BindingFlags.Instance | BindingFlags.Public);
                 if (_miEncodeToPng == null) {
-                    _is2017_orLater = true;
                     _miEncodeToPng = Type.GetType("UnityEngine.ImageConversion, UnityEngine")
                         .GetMethod("EncodeToPNG", BindingFlags.Static | BindingFlags.Public);
                 }
             }
-            if (_is2017_orLater) {
-                object[] parms = new[] {texture};
+            if (DeUnityEditorVersion.MajorVersion >= 2017) {
+                object[] parms = new[] { texture };
                 return _miEncodeToPng.Invoke(null, parms) as byte[];
-            } else return _miEncodeToPng.Invoke(texture, null) as byte[];
+            } else {
+                return _miEncodeToPng.Invoke(texture, null) as byte[];
+            }
+        }
+
+        /// <summary>
+        /// Returns the prefab parent by using different code on Unity 2018 or later
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static Object GetPrefabParent(GameObject instance)
+        {
+            if (_miGetPrefabParent == null) {
+                if (DeUnityEditorVersion.Version < 2017.2f) {
+                    _miGetPrefabParent = typeof(PrefabUtility).GetMethod("GetPrefabParent", BindingFlags.Public | BindingFlags.Static);
+                } else {
+                    _miGetPrefabParent = typeof(PrefabUtility).GetMethod("GetCorrespondingObjectFromSource", BindingFlags.Public | BindingFlags.Static);
+                }
+            }
+            return (Object)_miGetPrefabParent.Invoke(null, new[] {instance});
         }
 
         #endregion

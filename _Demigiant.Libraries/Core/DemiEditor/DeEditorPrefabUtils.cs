@@ -19,7 +19,7 @@ namespace DG.DemiEditor
         /// <param name="instance"></param>
         public static void ApplyPrefabInstanceModifications(GameObject instance)
         {
-            PrefabUtility.ReplacePrefab(instance, PrefabUtility.GetPrefabParent(instance), ReplacePrefabOptions.ConnectToPrefab);
+            PrefabUtility.ReplacePrefab(instance, DeEditorCompatibilityUtils.GetPrefabParent(instance), ReplacePrefabOptions.ConnectToPrefab);
         }
 
         /// <summary>
@@ -39,20 +39,28 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
-        /// Completely removes any prefab connection from the given prefab instances.
+        /// Completely removes any prefab connection from the given prefab instances, by desotroing the original object and recreating it.<para/>
+        /// Returns a list with all the new elements created.
         /// <para>
         /// Based on RodGreen's method (http://forum.unity3d.com/threads/82883-Breaking-connection-from-gameObject-to-prefab-for-good.?p=726602&amp;viewfull=1#post726602)
         /// </para>
         /// </summary>
-        public static void BreakPrefabInstances(List<GameObject> prefabInstances)
-        { foreach (GameObject instance in prefabInstances) BreakPrefabInstance(instance); }
+        public static List<GameObject> BreakPrefabInstances(List<GameObject> prefabInstances, bool keepOriginals = false)
+        {
+            List<GameObject> result = new List<GameObject>();
+            for (int i = 0; i < prefabInstances.Count; ++i) {
+                GameObject newInstance = BreakPrefabInstance(prefabInstances[i], keepOriginals);
+                result.Add(newInstance);
+            }
+            return result;
+        }
         /// <summary>
-        /// Completely removes any prefab connection from the given prefab instance.
+        /// Completely removes any prefab connection from the given prefab instance, by desotroing the original object and recreating it.
         /// <para>
         /// Based on RodGreen's method (http://forum.unity3d.com/threads/82883-Breaking-connection-from-gameObject-to-prefab-for-good.?p=726602&amp;viewfull=1#post726602)
         /// </para>
         /// </summary>
-        public static void BreakPrefabInstance(GameObject prefabInstance)
+        public static GameObject BreakPrefabInstance(GameObject prefabInstance, bool keepOriginal = false)
         {
             string name = prefabInstance.name;
             Transform transform = prefabInstance.transform;
@@ -67,7 +75,9 @@ namespace DG.DemiEditor
             newInstance.transform.SetParent(parent);
             newInstance.transform.SetSiblingIndex(index);
             // Remove old.
-            Object.DestroyImmediate(prefabInstance, false);
+            if (!keepOriginal) Object.DestroyImmediate(prefabInstance, false);
+
+            return newInstance;
         }
     }
 }

@@ -14,6 +14,13 @@
             Encodes to PNG using reflection to use correct method depending if editor is version 2017 or earlier
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.GetPrefabParent(UnityEngine.GameObject)">
+            <summary>
+            Returns the prefab parent by using different code on Unity 2018 or later
+            </summary>
+            <param name="instance"></param>
+            <returns></returns>
+        </member>
         <member name="T:DG.DemiEditor.DeEditorFileUtils">
             <summary>
             File utils
@@ -192,17 +199,18 @@
             NOTE: this a somehow costly operation (since it generates GC)
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeEditorPrefabUtils.BreakPrefabInstances(System.Collections.Generic.List{UnityEngine.GameObject})">
+        <member name="M:DG.DemiEditor.DeEditorPrefabUtils.BreakPrefabInstances(System.Collections.Generic.List{UnityEngine.GameObject},System.Boolean)">
             <summary>
-            Completely removes any prefab connection from the given prefab instances.
+            Completely removes any prefab connection from the given prefab instances, by desotroing the original object and recreating it.<para/>
+            Returns a list with all the new elements created.
             <para>
             Based on RodGreen's method (http://forum.unity3d.com/threads/82883-Breaking-connection-from-gameObject-to-prefab-for-good.?p=726602&amp;viewfull=1#post726602)
             </para>
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeEditorPrefabUtils.BreakPrefabInstance(UnityEngine.GameObject)">
+        <member name="M:DG.DemiEditor.DeEditorPrefabUtils.BreakPrefabInstance(UnityEngine.GameObject,System.Boolean)">
             <summary>
-            Completely removes any prefab connection from the given prefab instance.
+            Completely removes any prefab connection from the given prefab instance, by desotroing the original object and recreating it.
             <para>
             Based on RodGreen's method (http://forum.unity3d.com/threads/82883-Breaking-connection-from-gameObject-to-prefab-for-good.?p=726602&amp;viewfull=1#post726602)
             </para>
@@ -686,6 +694,20 @@
             <summary>
             Stops all clips playing.
             </summary>
+        </member>
+        <member name="T:DG.DemiEditor.DeUnityEditorVersion">
+            <summary>
+            Util to determine Unity editor version and store them as comparable numbers
+            </summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeUnityEditorVersion.Version">
+            <summary>Full major version + first minor version (ex: 2018.1f)</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeUnityEditorVersion.MajorVersion">
+            <summary>Major version</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeUnityEditorVersion.MinorVersion">
+            <summary>First minor version (ex: in 2018.1 it would be 1)</summary>
         </member>
         <member name="T:DG.DemiEditor.AssemblyExtensions">
             <summary>
