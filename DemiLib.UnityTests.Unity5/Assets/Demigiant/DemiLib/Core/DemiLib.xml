@@ -32,6 +32,9 @@
             Background colors
             </summary>
         </member>
+        <member name="F:DG.DemiLib.DeColorBG.editor">
+            <summary>Editor background color</summary>
+        </member>
         <member name="T:DG.DemiLib.DeColorContent">
             <summary>
             Content colors

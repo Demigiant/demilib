@@ -78,6 +78,8 @@ namespace DG.DemiLib
     [System.Serializable]
     public class DeColorBG
     {
+        /// <summary>Editor background color</summary>
+        public DeSkinColor editor = new DeSkinColor((Color)new Color32(194, 194, 194, 255), (Color)new Color32(56, 56, 56, 255));
         public DeSkinColor def = Color.white;
         public DeSkinColor critical = new DeSkinColor(new Color(0.9411765f, 0.2388736f, 0.006920422f, 1f), new Color(1f, 0.2482758f, 0f, 1f));
         public DeSkinColor divider = new DeSkinColor(0.6f, 0.3f);
