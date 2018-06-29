@@ -50,6 +50,7 @@
     <Compile Include="Attributes\DeComponentDescriptionAttribute.cs" />
     <Compile Include="Attributes\DeImagePreviewAttribute.cs" />
     <Compile Include="Attributes\DeLayerAttribute.cs" />
+    <Compile Include="Attributes\DeObjectGuidAttribute.cs" />
     <Compile Include="Attributes\DeRangeAttribute.cs" />
     <Compile Include="Attributes\DeSortingLayer.cs" />
     <Compile Include="Attributes\Properties %28no namespace%29\DeButtonMode.cs" />

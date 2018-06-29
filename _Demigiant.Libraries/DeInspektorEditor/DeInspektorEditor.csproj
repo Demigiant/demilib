@@ -67,6 +67,7 @@
     <Compile Include="AttributesManagers\DeLabelPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeLayerPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeMethodButtonEditor.cs" />
+    <Compile Include="AttributesManagers\DeObjectGuidAttributePropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeRangePropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
     <Compile Include="AttributesManagers\DeSortingLayerPropertyDrawer.cs" />

@@ -195,6 +195,12 @@
             Shows a popup with available layers in the Inspector. Requires a valye of type <see cref="T:System.Int32"/>.
             </summary>
         </member>
+        <member name="T:DG.DeInspektor.Attributes.DeObjectGuidAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows the GUID with as a clickable button that pings the target object (if it exist), only works with string fields
+            </summary>
+        </member>
         <member name="T:DG.DeInspektor.Attributes.DeRangeAttribute">
             <summary>
             <code>Property attribute</code><para/>
