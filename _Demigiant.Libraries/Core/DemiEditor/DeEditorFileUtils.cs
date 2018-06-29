@@ -73,7 +73,7 @@ namespace DG.DemiEditor
         /// </summary>
         public static bool IsADBPath(string path)
         {
-            return path.Substring(0, 6) == "Assets";
+            return path.StartsWith("Assets");
         }
 
         /// <summary>
