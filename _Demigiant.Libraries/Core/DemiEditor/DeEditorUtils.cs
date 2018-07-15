@@ -17,6 +17,8 @@ namespace DG.DemiEditor
         static MethodInfo _clearConsoleMI;
         static readonly List<GameObject> _RootGOs = new List<GameObject>(500);
         static readonly StringBuilder _Strb = new StringBuilder();
+        static MethodInfo _miGetTargetStringFromBuildTargetGroup;
+        static MethodInfo _miGetPlatformNameFromBuildTargetGroup;
 
         #region Public Methods
 
@@ -83,7 +85,7 @@ namespace DG.DemiEditor
                 ? (BuildTargetGroup[])Enum.GetValues(typeof(BuildTargetGroup))
                 : new[] {(BuildTargetGroup)buildTargetGroup};
             foreach(BuildTargetGroup btg in targetGroups) {
-                if (btg == BuildTargetGroup.Unknown) continue;
+                if (!IsValidBuildTargetGroup(btg)) continue;
                 string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
                 string[] singleDefs = defs.Split(';');
                 if (Array.IndexOf(singleDefs, id) != -1) continue; // Already present
@@ -109,7 +111,7 @@ namespace DG.DemiEditor
                 ? (BuildTargetGroup[])Enum.GetValues(typeof(BuildTargetGroup))
                 : new[] {(BuildTargetGroup)buildTargetGroup};
             foreach(BuildTargetGroup btg in targetGroups) {
-                if (btg == BuildTargetGroup.Unknown) continue;
+                if (!IsValidBuildTargetGroup(btg)) continue;
                 string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
                 string[] singleDefs = defs.Split(';');
                 if (Array.IndexOf(singleDefs, id) == -1) continue; // Not present
@@ -138,7 +140,7 @@ namespace DG.DemiEditor
                 ? (BuildTargetGroup[])Enum.GetValues(typeof(BuildTargetGroup))
                 : new[] {(BuildTargetGroup)buildTargetGroup};
             foreach(BuildTargetGroup btg in targetGroups) {
-                if (btg == BuildTargetGroup.Unknown) continue;
+                if (!IsValidBuildTargetGroup(btg)) continue;
                 string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
                 string[] singleDefs = defs.Split(';');
                 if (Array.IndexOf(singleDefs, id) != -1) return true;
@@ -171,6 +173,34 @@ namespace DG.DemiEditor
         }
 
         #endregion
+
+        #endregion
+
+        #region Methods
+
+        static bool IsValidBuildTargetGroup(BuildTargetGroup group)
+        {
+            if (group == BuildTargetGroup.Unknown) return false;
+
+            if (_miGetTargetStringFromBuildTargetGroup == null) {
+                Type moduleManager = Type.GetType("UnityEditor.Modules.ModuleManager, UnityEditor.dll");
+//            MethodInfo miIsPlatformSupportLoaded = moduleManager.GetMethod("IsPlatformSupportLoaded", BindingFlags.Static | BindingFlags.NonPublic);
+                _miGetTargetStringFromBuildTargetGroup = moduleManager.GetMethod(
+                    "GetTargetStringFromBuildTargetGroup", BindingFlags.Static | BindingFlags.NonPublic
+                );
+                _miGetPlatformNameFromBuildTargetGroup = typeof(PlayerSettings).GetMethod(
+                    "GetPlatformName", BindingFlags.Static | BindingFlags.NonPublic
+                );
+            }
+
+            string targetString = (string)_miGetTargetStringFromBuildTargetGroup.Invoke(null, new object[] {group});
+            string platformName = (string)_miGetPlatformNameFromBuildTargetGroup.Invoke(null, new object[] {group});
+
+            // Group is valid if at least one betweeen targetString and platformName is not empty.
+            // This seems to me the safest and more reliant way to check,
+            // since ModuleManager.IsPlatformSupportLoaded dosn't work well with BuildTargetGroup (only BuildTarget)
+            return !string.IsNullOrEmpty(targetString) || !string.IsNullOrEmpty(platformName);
+        }
 
         #endregion
     }
