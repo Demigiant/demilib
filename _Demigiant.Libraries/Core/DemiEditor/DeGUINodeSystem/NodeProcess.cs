@@ -938,7 +938,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     // (ignore in case tot areas are different from tot connections (happens in case of flexibleConnections option)
                     interaction.SetMouseTargetType(InteractionManager.TargetType.Node, InteractionManager.NodeTargetType.NonDraggableArea);
                     int totConns = targetNode.connectedNodesIds.Count;
-                    if (totConns > 1 && nodeGuiData.connectorAreas != null && totConns == nodeGuiData.connectorAreas.Count) {
+//                    if (totConns > 1 && nodeGuiData.connectorAreas != null && totConns == nodeGuiData.connectorAreas.Count) {
+//                        for (int i = 0; i < totConns; ++i) {
+                    if (totConns > 1 && nodeGuiData.connectorAreas != null) {
                         for (int i = 0; i < totConns; ++i) {
                             Rect connectorArea = nodeGuiData.connectorAreas[i];
                             if (!connectorArea.Contains(Event.current.mousePosition)) continue;
