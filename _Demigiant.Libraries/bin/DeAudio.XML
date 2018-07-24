@@ -400,6 +400,10 @@
         <member name="P:DG.DeAudio.DeAudioSource.isPaused">
             <summary>TRUE if the clip was playing and has been paused - FALSE if it was/is stopped</summary>
         </member>
+        <member name="P:DG.DeAudio.DeAudioSource.isFadingOut">
+            <summary>TRUE while the source is fading out towards 0.
+            Sources that are fading out are ignored when calling a DeAudioGroup Fade tween</summary>
+        </member>
         <member name="F:DG.DeAudio.DeAudioSource.targetVolume">
             <summary>Target volume to use when fading in (taken by DeAudioClipData, but can also be set manually)</summary>
         </member>

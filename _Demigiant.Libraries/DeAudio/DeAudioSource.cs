@@ -24,6 +24,9 @@ namespace DG.DeAudio
         public bool isPlaying { get { return audioSource.isPlaying; } }
         /// <summary>TRUE if the clip was playing and has been paused - FALSE if it was/is stopped</summary>
         public bool isPaused { get; private set; }
+        /// <summary>TRUE while the source is fading out towards 0.
+        /// Sources that are fading out are ignored when calling a DeAudioGroup Fade tween</summary>
+        public bool isFadingOut { get; private set; }
         public AudioClip clip { get { return audioSource.clip; } }
         public float duration { get { if (clip == null) return 0; return clip.length; } }
         public float pitch { get { return audioSource.pitch; } set { audioSource.pitch = value; } }
@@ -204,15 +207,33 @@ namespace DG.DeAudio
             _fadeTween.Kill();
             _fadeTween = DOTween.To(() => unscaledVolume, x => volume = x, to, duration)
                 .SetTarget(this).SetUpdate(ignoreTimeScale).SetEase(DeAudioManager.I.fadeEase);
+            if (to <= 0) isFadingOut = true;
             switch (onCompleteBehaviour) {
             case FadeBehaviour.Stop:
-                _fadeTween.OnStepComplete(Stop);
+                _fadeTween.OnStepComplete(OnFadeToInternalComplete_Stop);
                 break;
             case FadeBehaviour.Pause:
-                _fadeTween.OnStepComplete(PauseDirect);
+                _fadeTween.OnStepComplete(OnFadeToInternalComplete_Pause);
+                break;
+            default:
+                _fadeTween.OnStepComplete(OnFadeToInternalComplete_Default);
                 break;
             }
             if (onComplete != null) _fadeTween.OnComplete(onComplete);
+        }
+        void OnFadeToInternalComplete_Default()
+        {
+            isFadingOut = false;
+        }
+        void OnFadeToInternalComplete_Stop()
+        {
+            isFadingOut = false;
+            Stop();
+        }
+        void OnFadeToInternalComplete_Pause()
+        {
+            isFadingOut = false;
+            PauseDirect();
         }
 
         #endregion

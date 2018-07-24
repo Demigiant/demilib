@@ -224,7 +224,10 @@ namespace DG.DeAudio
         internal void FadeSourcesTo(float to, float duration, bool ignoreTimeScale, FadeBehaviour onCompleteBehaviour, TweenCallback onComplete)
         {
             int len = sources.Count;
-            for (int i = 0; i < len; ++i) sources[i].FadeTo(to, duration, ignoreTimeScale, onCompleteBehaviour, onComplete);
+            for (int i = 0; i < len; ++i) {
+                if (sources[i].isFadingOut) continue; // Ignore sources that are fading to 0
+                sources[i].FadeTo(to, duration, ignoreTimeScale, onCompleteBehaviour, onComplete);
+            }
         }
 
         /// <summary>
