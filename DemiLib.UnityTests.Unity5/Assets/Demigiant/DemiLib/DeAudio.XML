@@ -60,6 +60,9 @@
         <member name="F:DG.DeAudio.DeAudioClipGUIMode.VolumeAndLoopsWithPreview">
             <summary>2 rows > AudioClip, GroupId, Volume, play/stop/loops buttons</summary>
         </member>
+        <member name="F:DG.DeAudio.DeAudioClipGUIMode.FullNoGroup">
+            <summary>3 rows > All options except GroupId</summary>
+        </member>
         <member name="F:DG.DeAudio.DeAudioClipGUIMode.Full">
             <summary>3 rows > All options</summary>
         </member>

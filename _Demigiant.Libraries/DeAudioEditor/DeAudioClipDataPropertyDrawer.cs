@@ -43,6 +43,7 @@ namespace DG.DeAudioEditor
 
             switch (options.mode) {
             case DeAudioClipGUIMode.ClipOnly:
+            case DeAudioClipGUIMode.FullNoGroup:
                 clipRect.width = position.width;
                 break;
             case DeAudioClipGUIMode.CompactPreviewOnly:
@@ -67,7 +68,7 @@ namespace DG.DeAudioEditor
                 EditorGUI.PropertyField(clipRect, clip, label);
             }
             if (options.mode != DeAudioClipGUIMode.ClipOnly) {
-                if (options.mode != DeAudioClipGUIMode.CompactPreviewOnly) {
+                if (options.mode != DeAudioClipGUIMode.CompactPreviewOnly && options.mode != DeAudioClipGUIMode.FullNoGroup) {
                     // Group
                     using (new EditorGUI.DisabledScope(!options.allowGroupChange)) {
                         EditorGUI.PropertyField(groupIdRect, property.FindPropertyRelative("groupId"), new GUIContent(""));

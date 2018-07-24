@@ -15,6 +15,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:DG.DeAudioEditor.DeAudioGUI">
+            <summary>
+            GUI methods for drawing DeAudio data objects
+            </summary>
+        </member>
         <member name="T:DG.DeAudioEditor.DeAudioGUILayout">
             <summary>
             GUILayout methods for drawing DeAudio data objects

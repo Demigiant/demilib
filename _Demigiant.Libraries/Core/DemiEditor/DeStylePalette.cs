@@ -293,7 +293,7 @@ namespace DG.DemiEditor
     public class ButtonStyles
     {
         public GUIStyle def,
-                        tool, toolL, toolS, toolIco,
+                        tool, toolNoFixedH, toolL, toolS, toolIco,
                         toolFoldoutClosed, toolFoldoutClosedWLabel, toolFoldoutClosedWStretchedLabel,
                         toolFoldoutOpen, toolFoldoutOpenWLabel, toolFoldoutOpenWStretchedLabel,
                         toolLFoldoutClosed, toolLFoldoutClosedWLabel, toolLFoldoutClosedWStretchedLabel,
@@ -305,6 +305,7 @@ namespace DG.DemiEditor
         {
             def = new GUIStyle(GUI.skin.button);
             tool = new GUIStyle(EditorStyles.toolbarButton).ContentOffsetY(-1);
+            toolNoFixedH = new GUIStyle(EditorStyles.toolbarButton).ContentOffsetY(-1).Height(0);
             toolL = new GUIStyle(EditorStyles.toolbarButton).Height(23).ContentOffsetY(0);
             toolS = new GUIStyle(EditorStyles.toolbarButton).Height(13).ContentOffsetY(0).Padding(0);
             toolIco = new GUIStyle(tool).StretchWidth(false).Width(22).ContentOffsetX(-1);

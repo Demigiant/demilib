@@ -21,6 +21,8 @@ namespace DG.DeAudio
         VolumeWithPreview,
         /// <summary>2 rows > AudioClip, GroupId, Volume, play/stop/loops buttons</summary>
         VolumeAndLoopsWithPreview,
+        /// <summary>3 rows > All options except GroupId</summary>
+        FullNoGroup,
         /// <summary>3 rows > All options</summary>
         Full
     }
