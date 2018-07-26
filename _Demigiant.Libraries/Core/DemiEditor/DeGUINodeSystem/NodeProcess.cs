@@ -935,13 +935,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     interaction.SetMouseTargetType(InteractionManager.TargetType.Node, InteractionManager.NodeTargetType.DraggableArea);
                 } else {
                     // Mouse on non-draggable area: check if a sub connectorArea should be stored
-                    // (ignore in case tot areas are different from tot connections (happens in case of flexibleConnections option)
                     interaction.SetMouseTargetType(InteractionManager.TargetType.Node, InteractionManager.NodeTargetType.NonDraggableArea);
                     int totConns = targetNode.connectedNodesIds.Count;
+//                    // (ignore in case tot areas are different from tot connections (happens in case of flexibleConnections option)
 //                    if (totConns > 1 && nodeGuiData.connectorAreas != null && totConns == nodeGuiData.connectorAreas.Count) {
 //                        for (int i = 0; i < totConns; ++i) {
                     if (totConns > 1 && nodeGuiData.connectorAreas != null) {
-                        for (int i = 0; i < totConns; ++i) {
+                        for (int i = 0; i < nodeGuiData.connectorAreas.Count; ++i) {
                             Rect connectorArea = nodeGuiData.connectorAreas[i];
                             if (!connectorArea.Contains(Event.current.mousePosition)) continue;
                             interaction.targetNodeConnectorAreaIndex = i;
