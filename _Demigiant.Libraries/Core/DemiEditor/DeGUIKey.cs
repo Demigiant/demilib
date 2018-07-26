@@ -64,6 +64,11 @@ namespace DG.DemiEditor
                 result.pressed.shift = shift && !downKeysAtLastPass.shift;
                 result.pressed.ctrl = ctrl && !downKeysAtLastPass.ctrl;
                 result.pressed.alt = alt && !downKeysAtLastPass.alt;
+                switch (Event.current.keyCode) {
+                case KeyCode.Tab:
+                    Toggled.tab = !Toggled.tab;
+                    break;
+                }
             } else if (Event.current.rawType == EventType.KeyUp) {
                 switch (Event.current.keyCode) {
                 case KeyCode.LeftShift:
@@ -164,6 +169,11 @@ namespace DG.DemiEditor
             public static bool softCtrlShift { get { return DeGUIKey.softCtrl && DeGUIKey.softShift && !DeGUIKey.alt; }}
             public static bool softCtrlAlt { get { return DeGUIKey.softCtrl && DeGUIKey.softAlt && !DeGUIKey.shift; }}
             public static bool softShiftAlt { get { return DeGUIKey.softShift && DeGUIKey.softAlt && !DeGUIKey.ctrl; }}
+        }
+
+        public static class Toggled
+        {
+            public static bool tab { get; internal set; }
         }
 
         public struct Keys
