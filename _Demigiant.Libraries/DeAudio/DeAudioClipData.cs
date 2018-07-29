@@ -66,9 +66,11 @@ namespace DG.DeAudio
         /// If the clip is active in an AudioSource (even if not playing) returns it,
         /// otherwise returns NULL
         /// </summary>
-        public DeAudioSource GetAudioSource()
+        /// <param name="ignorePaused">If TRUE ignores sources that are not playing</param>
+        /// <param name="ignoreFadingOut">If TRUE ignores sources that are fading out</param>
+        public DeAudioSource GetAudioSource(bool ignorePaused = false, bool ignoreFadingOut = true)
         {
-            return DeAudioManager.GetAudioGroup(groupId).GetExistingAudioSourceFor(clip);
+            return DeAudioManager.GetAudioGroup(groupId).GetExistingAudioSourceFor(clip, ignorePaused, ignoreFadingOut);
         }
 
         #region Info Methods

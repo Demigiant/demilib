@@ -25,11 +25,13 @@
             Pauses all sounds using this DeAudioClipData clip
             </summary>
         </member>
-        <member name="M:DG.DeAudio.DeAudioClipData.GetAudioSource">
+        <member name="M:DG.DeAudio.DeAudioClipData.GetAudioSource(System.Boolean,System.Boolean)">
             <summary>
             If the clip is active in an AudioSource (even if not playing) returns it,
             otherwise returns NULL
             </summary>
+            <param name="ignorePaused">If TRUE ignores sources that are not playing</param>
+            <param name="ignoreFadingOut">If TRUE ignores sources that are fading out</param>
         </member>
         <member name="M:DG.DeAudio.DeAudioClipData.IsPlaying">
             <summary>

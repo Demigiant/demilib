@@ -281,11 +281,14 @@ namespace DG.DeAudio
         }
 
         // Returns the eventual existing source for the given clip, or NULL if there is none
-        internal DeAudioSource GetExistingAudioSourceFor(AudioClip clip)
+        internal DeAudioSource GetExistingAudioSourceFor(AudioClip clip, bool ignorePaused = false, bool ignoreFadingOut = true)
         {
             if (clip == null) return null;
             for (int i = 0; i < sources.Count; ++i) {
-                if (sources[i].clip == clip) return sources[i];
+                DeAudioSource src = sources[i];
+                if (src.clip != clip) continue;
+                if (ignorePaused && !src.isPlaying || ignoreFadingOut && src.isFadingOut) continue;
+                return src;
             }
             return null;
         }
