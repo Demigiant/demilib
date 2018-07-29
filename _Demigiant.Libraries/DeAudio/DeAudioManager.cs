@@ -31,7 +31,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "1.0.050";
+        public const string Version = "1.1.000";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
@@ -166,7 +166,6 @@ namespace DG.DeAudio
                 pitch == null ? clipData.pitch : (float)pitch,
                 loop == null ? clipData.loop : (bool)loop
             );
-            src.targetVolume = clipData.volume;
             return src;
         }
         /// <summary>

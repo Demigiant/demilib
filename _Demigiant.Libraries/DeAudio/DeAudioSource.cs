@@ -33,10 +33,11 @@ namespace DG.DeAudio
         public bool loop { get { return audioSource.loop; } set { audioSource.loop = value; } }
         public float time { get { return audioSource.time; } set { audioSource.time = value; } }
         /// <summary>Target volume to use when fading in (taken by DeAudioClipData, but can also be set manually)</summary>
-        public float targetVolume = 1;
+        public float targetVolume { get; private set; }
         /// <summary>Unscaled volume (doesn't include modifiers caused by global, group and target volumes)</summary>
         public float unscaledVolume { get; private set; }
-        /// <summary>Current volume (including modifiers caused by global, group and target volumes)</summary>
+        /// <summary>Getter returns current audioSource.volume (which is influenced by global, group and target volumes).<para/>
+        /// Setter automatically applies scale factors (target, audioGroup and global volumes)</summary>
         public float volume {
             get { return audioSource.volume; }
             set {
@@ -56,6 +57,7 @@ namespace DG.DeAudio
         internal DeAudioSource(DeAudioGroup audioGroup, GameObject container)
         {
             this.audioGroup = audioGroup;
+            targetVolume = 1;
             audioSource = container.AddComponent<AudioSource>();
             audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
             audioSource.playOnAwake = false;
@@ -98,7 +100,8 @@ namespace DG.DeAudio
             isPaused = false;
             DestroyFadeTween();
             playTime = Time.realtimeSinceStartup;
-            this.volume = volume;
+            targetVolume = volume;
+            this.volume = 1;
             if (audioGroup.mixerGroup != null) audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
             audioSource.clip = clip;
             audioSource.time = fromTime;
@@ -204,6 +207,11 @@ namespace DG.DeAudio
         }
         internal void FadeTo(float to, float duration, bool ignoreTimeScale, FadeBehaviour onCompleteBehaviour, TweenCallback onComplete)
         {
+            if (to <= 0) to = 0;
+            else {
+                float maxScaledVolume = 1 / targetVolume / audioGroup.fooVolume / DeAudioManager.globalVolume;
+                if (to > maxScaledVolume) to = maxScaledVolume;
+            }
             _fadeTween.Kill();
             _fadeTween = DOTween.To(() => unscaledVolume, x => volume = x, to, duration)
                 .SetTarget(this).SetUpdate(ignoreTimeScale).SetEase(DeAudioManager.I.fadeEase);
@@ -241,6 +249,11 @@ namespace DG.DeAudio
         #endregion
 
         #region Methods
+
+        internal void Reset()
+        {
+            targetVolume = 1;
+        }
 
         public void Dispose()
         {

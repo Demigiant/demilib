@@ -80,7 +80,6 @@ namespace DG.DeAudio
                 pitch == null ? clipData.pitch : (float)pitch,
                 loop == null ? clipData.loop : (bool)loop
             );
-            src.targetVolume = clipData.volume;
             return src;
         }
         /// <summary>
@@ -100,7 +99,6 @@ namespace DG.DeAudio
                 pitch == null ? clipData.pitch : (float)pitch,
                 loop == null ? clipData.loop : (bool)loop
             );
-            src.targetVolume = clipData.volume;
             return src;
         }
         /// <summary>
@@ -109,13 +107,13 @@ namespace DG.DeAudio
         /// </summary>
         public DeAudioSource PlayFrom(AudioClip clip, float fromTime, float volume = 1, float pitch = 1, bool loop = false)
         {
-            DeAudioSource source = GetAvailableSource();
-            if (source == null) {
+            DeAudioSource src = GetAvailableSource();
+            if (src == null) {
                 if (DeAudioManager.I.logInfo) Debug.Log(DeAudioManager.LogPrefix + "Clip can't be played because all sources are busy");
                 return null;
             }
-            source.PlayFrom(clip, fromTime, volume, pitch, loop);
-            return source;
+            src.PlayFrom(clip, fromTime, volume, pitch, loop);
+            return src;
         }
 
         /// <summary>Stops all sounds for this group</summary>
@@ -225,7 +223,8 @@ namespace DG.DeAudio
         {
             int len = sources.Count;
             for (int i = 0; i < len; ++i) {
-                if (sources[i].isFadingOut) continue; // Ignore sources that are fading to 0
+                DeAudioSource src = sources[i];
+                if (!src.isPlaying || src.isFadingOut) continue; // Ignore sources that are fading to 0 or that are not playing at all
                 sources[i].FadeTo(to, duration, ignoreTimeScale, onCompleteBehaviour, onComplete);
             }
         }
@@ -290,23 +289,23 @@ namespace DG.DeAudio
         {
             int len = sources.Count;
             for (int i = 0; i < len; ++i) {
-                DeAudioSource s = sources[i];
-                if (s.isFree) {
-                    s.targetVolume = 1;
-                    return s;
+                DeAudioSource src = sources[i];
+                if (src.isFree) {
+                    src.Reset();
+                    return src;
                 }
             }
             // No free sources...
             if (maxSources < 0 || len < maxSources) {
                 // Create new source
-                DeAudioSource s = new DeAudioSource(this, _sourcesContainer);
-                s.targetVolume = 1;
-                sources.Add(s);
-                return s;
+                DeAudioSource src = new DeAudioSource(this, _sourcesContainer);
+                src.Reset();
+                sources.Add(src);
+                return src;
             } else if (recycle) {
                 // Recycle oldest source
                 DeAudioSource src = GetOldestSource();
-                src.targetVolume = 1;
+                src.Reset();
                 return src;
             } else {
                 // All sources busy and can't be recycled
