@@ -130,6 +130,13 @@
         <member name="M:DG.DeAudio.DeAudioGroup.ChangePitch(System.Single)">
             <summary>Changes the pitch for all existing sources of this group</summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.ChangeRealPitch(System.Single,System.Boolean)">
+            <summary>
+            Sets the real pitch of all sources for this group (ignoring targetPitch modifiers).
+            </summary>
+            <param name="value">Pitch to set</param>
+            <param name="assignAsTargetPitch">If TRUE also sets this pitch as the new targetPitch for each source</param>
+        </member>
         <member name="M:DG.DeAudio.DeAudioGroup.SetVolume(System.Single)">
             <summary>Sets the volume for this group (same as setting <see cref="P:DG.DeAudio.DeAudioGroup.volume"/> directly)</summary>
         </member>
@@ -405,7 +412,8 @@
             Sources that are fading out are ignored when calling a DeAudioGroup Fade tween</summary>
         </member>
         <member name="P:DG.DeAudio.DeAudioSource.targetVolume">
-            <summary>Target volume to use when fading in (taken by DeAudioClipData, but can also be set manually)</summary>
+            <summary>Target volume set when a clip starts playing.<para/>
+            Setting volume to 1 will actually set it to this value (plus group and global modifiers).</summary>
         </member>
         <member name="P:DG.DeAudio.DeAudioSource.unscaledVolume">
             <summary>Unscaled volume (doesn't include modifiers caused by global, group and target volumes)</summary>
@@ -413,6 +421,24 @@
         <member name="P:DG.DeAudio.DeAudioSource.volume">
             <summary>Getter returns current audioSource.volume (which is influenced by global, group and target volumes).<para/>
             Setter automatically applies scale factors (target, audioGroup and global volumes)</summary>
+        </member>
+        <member name="P:DG.DeAudio.DeAudioSource.targetPitch">
+            <summary>Target pitch set when a clip starts playing.<para/>
+            Setting pitch to 1 will actually set it to this value (plus group and global modifiers).</summary>
+        </member>
+        <member name="P:DG.DeAudio.DeAudioSource.unscaledPitch">
+            <summary>Unscaled pitch (doesn't include modifiers caused by targetPitch)</summary>
+        </member>
+        <member name="P:DG.DeAudio.DeAudioSource.pitch">
+            <summary>Getter returns current audioSource.pitch (which is influenced by targetPitch).<para/>
+            Setter automatically applies scale factors (targetPitch)</summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioSource.SetRealPitch(System.Single,System.Boolean)">
+            <summary>
+            Sets the real pitch of the AudioSource (ignoring targetPitch modifiers).
+            </summary>
+            <param name="value">Pitch to set</param>
+            <param name="assignAsTargetPitch">If TRUE also sets this pitch as the new targetPitch</param>
         </member>
         <member name="M:DG.DeAudio.DeAudioSource.Play(DG.DeAudio.DeAudioClipData)">
             <summary>

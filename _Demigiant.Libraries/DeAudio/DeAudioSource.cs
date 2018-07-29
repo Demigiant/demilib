@@ -29,10 +29,11 @@ namespace DG.DeAudio
         public bool isFadingOut { get; private set; }
         public AudioClip clip { get { return audioSource.clip; } }
         public float duration { get { if (clip == null) return 0; return clip.length; } }
-        public float pitch { get { return audioSource.pitch; } set { audioSource.pitch = value; } }
+//        public float pitch { get { return audioSource.pitch; } set { audioSource.pitch = value; } }
         public bool loop { get { return audioSource.loop; } set { audioSource.loop = value; } }
         public float time { get { return audioSource.time; } set { audioSource.time = value; } }
-        /// <summary>Target volume to use when fading in (taken by DeAudioClipData, but can also be set manually)</summary>
+        /// <summary>Target volume set when a clip starts playing.<para/>
+        /// Setting volume to 1 will actually set it to this value (plus group and global modifiers).</summary>
         public float targetVolume { get; private set; }
         /// <summary>Unscaled volume (doesn't include modifiers caused by global, group and target volumes)</summary>
         public float unscaledVolume { get; private set; }
@@ -42,7 +43,27 @@ namespace DG.DeAudio
             get { return audioSource.volume; }
             set {
                 unscaledVolume = value;
-                audioSource.volume = value * targetVolume * audioGroup.fooVolume * DeAudioManager.globalVolume;
+                float to = value * targetVolume * audioGroup.fooVolume * DeAudioManager.globalVolume;
+                if (to < 0) to = 0;
+                else if (to > 1) to = 1;
+                audioSource.volume = to;
+            }
+        }
+        /// <summary>Target pitch set when a clip starts playing.<para/>
+        /// Setting pitch to 1 will actually set it to this value (plus group and global modifiers).</summary>
+        public float targetPitch { get; private set; }
+        /// <summary>Unscaled pitch (doesn't include modifiers caused by targetPitch)</summary>
+        public float unscaledPitch { get; private set; }
+        /// <summary>Getter returns current audioSource.pitch (which is influenced by targetPitch).<para/>
+        /// Setter automatically applies scale factors (targetPitch)</summary>
+        public float pitch {
+            get { return audioSource.pitch; }
+            set {
+                unscaledPitch = value;
+                float to = value * targetPitch;
+                if (to < 0) to = 0;
+                else if (to > 3) to = 3;
+                audioSource.pitch = to;
             }
         }
 
@@ -57,7 +78,7 @@ namespace DG.DeAudio
         internal DeAudioSource(DeAudioGroup audioGroup, GameObject container)
         {
             this.audioGroup = audioGroup;
-            targetVolume = 1;
+            targetVolume = targetPitch = 1;
             audioSource = container.AddComponent<AudioSource>();
             audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
             audioSource.playOnAwake = false;
@@ -67,6 +88,19 @@ namespace DG.DeAudio
         }
 
         #region Public Methods
+
+        /// <summary>
+        /// Sets the real pitch of the AudioSource (ignoring targetPitch modifiers).
+        /// </summary>
+        /// <param name="value">Pitch to set</param>
+        /// <param name="assignAsTargetPitch">If TRUE also sets this pitch as the new targetPitch</param>
+        public void SetRealPitch(float value, bool assignAsTargetPitch = false)
+        {
+            if (value < 0) value = 0;
+            if (value > 3) value = 3;
+            audioSource.pitch = value;
+            if (assignAsTargetPitch) targetPitch = value;
+        }
 
         /// <summary>
         /// Play the given clip with the stored volume, pitch and loop settings.
@@ -101,11 +135,13 @@ namespace DG.DeAudio
             DestroyFadeTween();
             playTime = Time.realtimeSinceStartup;
             targetVolume = volume;
+            targetPitch = pitch;
             this.volume = 1;
+            this.pitch = 1;
             if (audioGroup.mixerGroup != null) audioSource.outputAudioMixerGroup = audioGroup.mixerGroup;
             audioSource.clip = clip;
             audioSource.time = fromTime;
-            audioSource.pitch = pitch;
+//            audioSource.pitch = pitch;
             audioSource.loop = loop;
             audioSource.Play();
         }
@@ -252,7 +288,7 @@ namespace DG.DeAudio
 
         internal void Reset()
         {
-            targetVolume = 1;
+            targetVolume = targetPitch = 1;
         }
 
         public void Dispose()

@@ -149,7 +149,17 @@ namespace DG.DeAudio
         /// <summary>Changes the pitch for all existing sources of this group</summary>
         public void ChangePitch(float pitch)
         {
-            for (int i = 0; i < sources.Count; i++) sources[i].audioSource.pitch = pitch;
+            for (int i = 0; i < sources.Count; i++) sources[i].pitch = pitch;
+        }
+
+        /// <summary>
+        /// Sets the real pitch of all sources for this group (ignoring targetPitch modifiers).
+        /// </summary>
+        /// <param name="value">Pitch to set</param>
+        /// <param name="assignAsTargetPitch">If TRUE also sets this pitch as the new targetPitch for each source</param>
+        public void ChangeRealPitch(float value, bool assignAsTargetPitch = false)
+        {
+            for (int i = 0; i < sources.Count; i++) sources[i].SetRealPitch(value, assignAsTargetPitch);
         }
 
         /// <summary>Sets the volume for this group (same as setting <see cref="volume"/> directly)</summary>

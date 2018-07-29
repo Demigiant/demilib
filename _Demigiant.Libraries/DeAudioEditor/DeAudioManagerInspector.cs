@@ -143,8 +143,10 @@ namespace DG.DeAudioEditor
         void DrawRuntimeSourcesFor(DeAudioGroup group)
         {
             Color trueVolumeColor = new Color(0.18f, 0.91f, 0f);
-            Color volumeColor = new Color(1f, 0.76f, 0f);
-            Color timeColor = new Color(0f, 0.9172413f, 1f, 1f);
+            Color volumeColor = new Color(0.62f, 0.83f, 0f);
+            Color truePitchColor = new Color(0.96f, 0.15f, 0.97f);
+            Color pitchColor = new Color(0.67f, 0.32f, 0.99f);
+            Color timeColor = new Color(0f, 0.61f, 1f);
             int len = group.sources.Count;
             for (int i = 0; i < len; ++i) {
                 // Sources volume and play time
@@ -155,23 +157,28 @@ namespace DG.DeAudioEditor
                 if (s.locked) _runtimeStrb.Append(" [LOCKED]");
                 if (s.loop) _runtimeStrb.Append(" [loop]");
                 GUILayout.Label(_runtimeStrb.ToString());
-                DrawRuntimeSourceBar(volumeColor, s.unscaledVolume, s.audioSource.volume, trueVolumeColor);
+                // Volume
+                DrawRuntimeSourceBar(volumeColor, s.unscaledVolume, null, s.volume, trueVolumeColor);
+                // Pitch
+                const float markerP = 1f / 3f;
+                DrawRuntimeSourceBar(pitchColor, s.unscaledPitch / 3, markerP, s.pitch / 3, truePitchColor);
+                // Elapsed time
                 float elapsed = s.audioSource.time / s.clip.length;
                 if (elapsed > 1) elapsed = 1;
                 DrawRuntimeSourceBar(timeColor, elapsed);
             }
         }
 
-        void DrawRuntimeSourceBar(Color color, float percentage, float? truePercentage = null, Color? trueColor = null)
+        void DrawRuntimeSourceBar(Color color, float percentage, float? markerPercentage = null, float? truePercentage = null, Color? trueColor = null)
         {
             int totLines = Mathf.Max(1, Mathf.CeilToInt(percentage)); // Volume can go beyond 1, so add more lines
-            Rect timeRect = GUILayoutUtility.GetRect(0, 2 * totLines + totLines - 1, GUILayout.ExpandWidth(true));
-            timeRect.x += 15;
-            timeRect.y -= 1;
-            timeRect.width -= 15;
+            Rect lineRect = GUILayoutUtility.GetRect(0, 2 * totLines + totLines - 1, GUILayout.ExpandWidth(true));
+            lineRect.x += 15;
+            lineRect.y -= 1;
+            lineRect.width -= 15;
             Color guiOrColor = GUI.color;
             for (int i = 0; i < totLines; ++i) {
-                Rect r = new Rect(timeRect.x, timeRect.y + (2 * i + i), timeRect.width, 2);
+                Rect r = new Rect(lineRect.x, lineRect.y + (2 * i + i), lineRect.width, 2);
                 float p = percentage <= 1 ? percentage
                     : i < totLines - 1 ? 1 : percentage % 1;
                 GUI.color = Color.black;
@@ -181,15 +188,23 @@ namespace DG.DeAudioEditor
                 GUI.color = color;
                 GUI.Box(r, "", DeGUI.styles.box.flat);
                 if (i == 0 && truePercentage != null) {
+                    // True bar
                     float truePerc = (float)truePercentage;
-                    p = timeRect.width * truePerc;
-                    r = new Rect(timeRect.x, timeRect.y, p, 2);
+                    p = lineRect.width * truePerc;
+                    r = new Rect(lineRect.x, lineRect.y, p, 2);
                     GUI.color = trueColor == null ? Color.green : (Color)trueColor;
                     GUI.Box(r, "", DeGUI.styles.box.flat);
-                    if (Mathf.Approximately(truePerc, percentage) || truePerc <= 0 || truePerc >= 1) continue;
-                    // Black divider
-                    r = new Rect(timeRect.x + (p < 2 ? 0 : p - 2), r.y, 2, r.height);
-                    DeGUI.DrawColoredSquare(r, Color.black);
+                    if (!Mathf.Approximately(truePerc, percentage) && truePerc > 0 && truePerc < 1) {
+                        // Black divider
+                        r = new Rect(lineRect.x + (p < 2 ? 0 : p - 2), r.y, 2, r.height);
+                        DeGUI.DrawColoredSquare(r, Color.black);
+                    }
+                    if (markerPercentage != null) {
+                        // Marker
+                        p = lineRect.width * (float)markerPercentage;
+                        r = new Rect(lineRect.x + (p < 2 ? 0 : p - 2), r.y, 2, r.height);
+                        DeGUI.DrawColoredSquare(r, Color.white);
+                    }
                 }
             }
             GUI.color = guiOrColor;
