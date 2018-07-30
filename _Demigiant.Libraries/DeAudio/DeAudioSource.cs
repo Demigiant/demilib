@@ -90,6 +90,21 @@ namespace DG.DeAudio
         #region Public Methods
 
         /// <summary>
+        /// Changes the <see cref="targetVolume"/> with options to keep the current real volume the same
+        /// </summary>
+        /// <param name="value">Target volume to set</param>
+        /// <param name="adaptRealVolume">If TRUE adapts the current volume so that the actual volume output
+        /// will be the same it was before calling this method</param>
+        public void SetTargetVolume(float value, bool adaptRealVolume = true)
+        {
+            if (adaptRealVolume) {
+                unscaledVolume = audioSource.volume / (value * audioGroup.fooVolume * DeAudioManager.globalVolume);
+            }
+            targetVolume = value;
+            volume = unscaledVolume;
+        }
+
+        /// <summary>
         /// Sets the real pitch of the AudioSource (ignoring targetPitch modifiers).
         /// </summary>
         /// <param name="value">Pitch to set</param>

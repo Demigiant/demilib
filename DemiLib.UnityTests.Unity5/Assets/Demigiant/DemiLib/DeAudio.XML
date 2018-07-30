@@ -435,6 +435,14 @@
             <summary>Getter returns current audioSource.pitch (which is influenced by targetPitch).<para/>
             Setter automatically applies scale factors (targetPitch)</summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioSource.SetTargetVolume(System.Single,System.Boolean)">
+            <summary>
+            Changes the <see cref="P:DG.DeAudio.DeAudioSource.targetVolume"/> with options to keep the current real volume the same
+            </summary>
+            <param name="value">Target volume to set</param>
+            <param name="adaptRealVolume">If TRUE adapts the current volume so that the actual volume output
+            will be the same it was before calling this method</param>
+        </member>
         <member name="M:DG.DeAudio.DeAudioSource.SetRealPitch(System.Single,System.Boolean)">
             <summary>
             Sets the real pitch of the AudioSource (ignoring targetPitch modifiers).
