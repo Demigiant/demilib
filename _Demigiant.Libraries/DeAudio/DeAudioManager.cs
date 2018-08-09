@@ -31,7 +31,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "1.1.020";
+        public const string Version = "1.1.025";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
@@ -383,13 +383,13 @@ namespace DG.DeAudio
         { FadeTo(clip, 0, duration, ignoreTimeScale, onCompleteBehaviour, onComplete); }
         /// <summary>Starts playing the given clip with a fade-in volume effect</summary>
         public static void FadeIn(DeAudioGroupId groupId, AudioClip clip, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { Play(groupId, clip, 0).FadeTo(1, duration, ignoreTimeScale, onComplete); }
+        { Play(groupId, clip).FadeFrom(0, duration, ignoreTimeScale, onComplete); }
         /// <summary>Starts playing the given clip external to any group, with a fade-in volume effect</summary>
         public static void FadeIn(AudioClip clip, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { Play(clip, 0).FadeTo(1, duration, ignoreTimeScale, onComplete); }
+        { Play(clip).FadeFrom(0, duration, ignoreTimeScale, onComplete); }
         /// <summary>Starts playing the given <see cref="DeAudioClipData"/> with a fade-in volume effect</summary>
         public static void FadeIn(DeAudioClipData clipData, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
-        { Play(clipData.groupId, clipData.clip, 0, clipData.pitch, clipData.loop).FadeTo(clipData.volume, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
+        { Play(clipData.groupId, clipData.clip, clipData.volume, clipData.pitch, clipData.loop).FadeFrom(0, duration, ignoreTimeScale, onComplete); }
         /// <summary>Fades the given clip's volume to the given value</summary>
         public static void FadeTo(AudioClip clip, float to, float duration = 1.5f, bool ignoreTimeScale = true, TweenCallback onComplete = null)
         { FadeTo(clip, to, duration, ignoreTimeScale, FadeBehaviour.None, onComplete); }
