@@ -233,6 +233,13 @@ namespace DG.DeEditorTools.Project
             DeProject.SetColorForSelections(DeProjectData.HColor.Green, Selection.assetGUIDs);
         }
 
+        [MenuItem("Assets/DeProject/Preset/Terrains", false, _Priority_Preset)]
+        static void SetPresetTerrains()
+        {
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Terrains, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue, Selection.assetGUIDs);
+        }
+
         [MenuItem("Assets/DeProject/Preset/Textures + Sprites", false, _Priority_Preset)]
         static void SetPresetTextures()
         {

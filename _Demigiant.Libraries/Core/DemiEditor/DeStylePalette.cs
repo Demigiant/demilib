@@ -209,6 +209,7 @@ namespace DG.DemiEditor
         public static Texture2D proj_scripts { get { return LoadTexture(ref _proj_scripts, "project/ico_scripts"); } }
         public static Texture2D proj_skull { get { return LoadTexture(ref _proj_skull, "project/ico_skull"); } }
         public static Texture2D proj_star { get { return LoadTexture(ref _proj_star, "project/ico_star"); } }
+        public static Texture2D proj_terrains { get { return LoadTexture(ref _proj_terrains, "project/ico_terrains"); } }
         public static Texture2D proj_textures { get { return LoadTexture(ref _proj_textures, "project/ico_textures"); } }
         static Texture2D _proj_folder;
         static Texture2D _proj_atlas;
@@ -227,6 +228,7 @@ namespace DG.DemiEditor
         static Texture2D _proj_scripts;
         static Texture2D _proj_skull;
         static Texture2D _proj_star;
+        static Texture2D _proj_terrains;
         static Texture2D _proj_textures;
 
         #endregion

@@ -55,7 +55,8 @@ namespace DG.DeEditorTools.Project
             Atlas,
             Shaders,
             Models,
-            Materials
+            Materials,
+            Terrains
         }
 
         public enum EvidenceType
@@ -274,6 +275,8 @@ namespace DG.DeEditorTools.Project
                     return DeStylePalette.proj_models;
                 case IcoType.Materials:
                     return DeStylePalette.proj_materials;
+                case IcoType.Terrains:
+                    return DeStylePalette.proj_terrains;
                 }
                 return null;
             }
