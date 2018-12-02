@@ -54,7 +54,8 @@ namespace DG.DeEditorTools.Project
             Cross,
             Atlas,
             Shaders,
-            Models
+            Models,
+            Materials
         }
 
         public enum EvidenceType
@@ -271,6 +272,8 @@ namespace DG.DeEditorTools.Project
                     return DeStylePalette.proj_shaders;
                 case IcoType.Models:
                     return DeStylePalette.proj_models;
+                case IcoType.Materials:
+                    return DeStylePalette.proj_materials;
                 }
                 return null;
             }

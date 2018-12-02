@@ -177,6 +177,13 @@ namespace DG.DeEditorTools.Project
             DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs);
         }
 
+        [MenuItem("Assets/DeProject/Preset/Materials", false, _Priority_Preset)]
+        static void SetPresetMaterials()
+        {
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Materials, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs);
+        }
+
         [MenuItem("Assets/DeProject/Preset/Plugins + Standard Assets", false, _Priority_Preset)]
         static void SetPresetPlugins()
         {
