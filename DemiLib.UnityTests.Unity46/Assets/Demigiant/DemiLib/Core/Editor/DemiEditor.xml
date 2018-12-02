@@ -167,6 +167,15 @@
             <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
             <param name="createFoldersIfMissing">If TRUE also creates the path folders if they don't exist</param>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorPanelUtils.SourceAssetExists``1(System.String,System.Boolean)">
+            <summary>
+            Check if the <see cref="T:UnityEngine.ScriptableObject"/> at the given path exists and eventually if it's available
+            </summary>
+            <param name="adbFilePath">File path (relative to Unity's project folder)</param>
+            <param name="checkIfAvailable">If TRUE also check if the file is available
+            (file can be unavailable if it was deleted outside Unity, or if Unity is just starting)</param>
+            <returns></returns>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorPanelUtils.IsDockableWindow(UnityEditor.EditorWindow)">
             <summary>
             Returns TRUE if the given <see cref="T:UnityEditor.EditorWindow"/> is dockable, FALSE if instead it's a utility window

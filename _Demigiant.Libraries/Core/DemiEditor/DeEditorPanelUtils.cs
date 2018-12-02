@@ -29,7 +29,9 @@ namespace DG.DemiEditor
         /// <param name="adbFilePath">File path (relative to Unity's project folder)</param>
         /// <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
         /// <param name="createFoldersIfMissing">If TRUE also creates the path folders if they don't exist</param>
-        public static T ConnectToSourceAsset<T>(string adbFilePath, bool createIfMissing = false, bool createFoldersIfMissing = false) where T : ScriptableObject
+        public static T ConnectToSourceAsset<T>(
+            string adbFilePath, bool createIfMissing = false, bool createFoldersIfMissing = false
+        ) where T : ScriptableObject
         {
             if (!DeEditorFileUtils.AssetExists(adbFilePath)) {
                 if (createIfMissing) CreateScriptableAsset<T>(adbFilePath, createFoldersIfMissing);
@@ -42,6 +44,21 @@ namespace DG.DemiEditor
                 source = (T)AssetDatabase.LoadAssetAtPath(adbFilePath, typeof(T));
             }
             return source;
+        }
+
+        /// <summary>
+        /// Check if the <see cref="ScriptableObject"/> at the given path exists and eventually if it's available
+        /// </summary>
+        /// <param name="adbFilePath">File path (relative to Unity's project folder)</param>
+        /// <param name="checkIfAvailable">If TRUE also check if the file is available
+        /// (file can be unavailable if it was deleted outside Unity, or if Unity is just starting)</param>
+        /// <returns></returns>
+        public static bool SourceAssetExists<T>(string adbFilePath, bool checkIfAvailable = true) where T : ScriptableObject
+        {
+            if (!DeEditorFileUtils.AssetExists(adbFilePath)) return false;
+            if (!checkIfAvailable) return true;
+            T source = (T)AssetDatabase.LoadAssetAtPath(adbFilePath, typeof(T));
+            return source != null;
         }
 
         /// <summary>
