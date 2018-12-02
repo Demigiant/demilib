@@ -201,8 +201,10 @@ namespace DG.DemiEditor
         public static Texture2D proj_demigiant { get { return LoadTexture(ref _proj_demigiant, "project/ico_demigiant"); } }
         public static Texture2D proj_fonts { get { return LoadTexture(ref _proj_fonts, "project/ico_fonts"); } }
         public static Texture2D proj_heart { get { return LoadTexture(ref _proj_heart, "project/ico_heart"); } }
+        public static Texture2D proj_models { get { return LoadTexture(ref _proj_models, "project/ico_models"); } }
         public static Texture2D proj_play { get { return LoadTexture(ref _proj_play, "project/ico_play"); } }
         public static Texture2D proj_prefab { get { return LoadTexture(ref _proj_prefab, "project/ico_prefab"); } }
+        public static Texture2D proj_shaders { get { return LoadTexture(ref _proj_shaders, "project/ico_shaders"); } }
         public static Texture2D proj_scripts { get { return LoadTexture(ref _proj_scripts, "project/ico_scripts"); } }
         public static Texture2D proj_skull { get { return LoadTexture(ref _proj_skull, "project/ico_skull"); } }
         public static Texture2D proj_star { get { return LoadTexture(ref _proj_star, "project/ico_star"); } }
@@ -216,8 +218,10 @@ namespace DG.DemiEditor
         static Texture2D _proj_demigiant;
         static Texture2D _proj_fonts;
         static Texture2D _proj_heart;
+        static Texture2D _proj_models;
         static Texture2D _proj_play;
         static Texture2D _proj_prefab;
+        static Texture2D _proj_shaders;
         static Texture2D _proj_scripts;
         static Texture2D _proj_skull;
         static Texture2D _proj_star;

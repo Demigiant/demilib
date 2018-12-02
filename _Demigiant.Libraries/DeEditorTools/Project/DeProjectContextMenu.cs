@@ -142,6 +142,13 @@ namespace DG.DeEditorTools.Project
 
         #region Presets
 
+        [MenuItem("Assets/DeProject/Preset/3D Models", false, _Priority_Preset)]
+        static void SetPresetModels()
+        {
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Models, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue, Selection.assetGUIDs);
+        }
+
         [MenuItem("Assets/DeProject/Preset/AssetBundle", false, _Priority_Preset)]
         static void SetPresetAssetBundle()
         {
@@ -203,6 +210,13 @@ namespace DG.DeEditorTools.Project
         {
             DeProject.SetIconForSelections(DeProjectData.IcoType.Scripts, Selection.assetGUIDs);
             DeProject.SetColorForSelections(DeProjectData.HColor.Purple, Selection.assetGUIDs);
+        }
+
+        [MenuItem("Assets/DeProject/Preset/Shaders", false, _Priority_Preset)]
+        static void SetPresetShaders()
+        {
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Shaders, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs);
         }
 
         [MenuItem("Assets/DeProject/Preset/StreamingAssets", false, _Priority_Preset)]

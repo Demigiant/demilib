@@ -52,7 +52,9 @@ namespace DG.DeEditorTools.Project
             Demigiant,
             AssetBundle,
             Cross,
-            Atlas
+            Atlas,
+            Shaders,
+            Models
         }
 
         public enum EvidenceType
@@ -265,6 +267,10 @@ namespace DG.DeEditorTools.Project
                     return DeStylePalette.proj_cross;
                 case IcoType.Atlas:
                     return DeStylePalette.proj_atlas;
+                case IcoType.Shaders:
+                    return DeStylePalette.proj_shaders;
+                case IcoType.Models:
+                    return DeStylePalette.proj_models;
                 }
                 return null;
             }
