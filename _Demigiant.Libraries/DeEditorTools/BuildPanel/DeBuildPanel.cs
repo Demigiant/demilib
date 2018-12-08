@@ -238,6 +238,7 @@ namespace DG.DeEditorTools.BuildPanel
 
             if (totEnabled == 0) {
                 EditorUtility.DisplayDialog("Build All", "0 platforms enabled, nothing to build", "Ok");
+                EditorUtility.ClearProgressBar();
                 return;
             }
 
@@ -246,7 +247,10 @@ namespace DG.DeEditorTools.BuildPanel
                 string.Format("Build for {0} platform{1}?", totEnabled, totEnabled > 1 ? "s" : ""),
                 "Yes", "Cancel"
             );
-            if (!proceed) return;
+            if (!proceed) {
+                EditorUtility.ClearProgressBar();
+                return;
+            }
 
             foreach (DeBuildPanelData.Build build in _src.builds) DoBuild(build);
         }
@@ -265,10 +269,12 @@ namespace DG.DeEditorTools.BuildPanel
 
             if (string.IsNullOrEmpty(build.buildFolder)) {
                 EditorUtility.DisplayDialog(dialogTitle, "Build folder can't be empty!", "Ok");
+                EditorUtility.ClearProgressBar();
                 return;
             }
             if (string.IsNullOrEmpty(build.bundleIdentifier)) {
                 EditorUtility.DisplayDialog(dialogTitle, "Bundle Identifier can't be empty!", "Ok");
+                EditorUtility.ClearProgressBar();
                 return;
             }
 
@@ -276,6 +282,7 @@ namespace DG.DeEditorTools.BuildPanel
 
             if (!Directory.Exists(buildFolder)) {
                 EditorUtility.DisplayDialog(dialogTitle, string.Format("Build folder doesn't exist!\n\n\"{0}\"", buildFolder), "Ok");
+                EditorUtility.ClearProgressBar();
                 return;
             }
 

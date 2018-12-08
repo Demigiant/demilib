@@ -19,7 +19,7 @@ namespace DG.DeEditorTools.BuildPanel
 
         #endregion
 
-        public const string Version = "1.0.000";
+        public const string Version = "1.0.005";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
             BuildTarget.StandaloneWindows64,
             BuildTarget.StandaloneOSX,
