@@ -36,6 +36,9 @@
         <member name="F:DG.Debugging.Delogger.enabled">
             <summary>If FALSE doesn't log anything, neither in editor nor at runtime</summary>
         </member>
+        <member name="F:DG.Debugging.Delogger.stripHtmlTags">
+            <summary>If TRUE strips all HTML tags from the logs (useful in standalone builds for cleaner logs)</summary>
+        </member>
         <member name="M:DG.Debugging.Delogger.Log(System.Object,System.Object,UnityEngine.Object,System.String)">
             <summary>
             Logs the given message with the given options

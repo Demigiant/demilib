@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace DG.Debugging
@@ -42,12 +43,15 @@ namespace DG.Debugging
         public static Verbosity editorVerbosity = Verbosity.Normal;
         /// <summary>If FALSE doesn't log anything, neither in editor nor at runtime</summary>
         public static bool enabled = true;
+        /// <summary>If TRUE strips all HTML tags from the logs (useful in standalone builds for cleaner logs)</summary>
+        public static bool stripHtmlTags = false;
 
         const string _EditorPrefix = "[Editor] ";
         const string _VerboseColor = "<color=#666666>";
         const string _SenderColor = "<color=#6b854a>";
         const string _SenderColorImportant = "<color=#785814>";
         const string _VerboseSenderColor = "<color=#6b854a>";
+        static readonly Regex _TagsRegex = new Regex(@"<[^>]*>", RegexOptions.Multiline); // Used to remove HTML tags
         static readonly StringBuilder _Strb = new StringBuilder();
 
         #region Public Methods
@@ -139,19 +143,19 @@ namespace DG.Debugging
             _Strb.Append(message);
             if (colored) _Strb.Append("</color>");
             if (isImportant) _Strb.Append(importantLogEnd);
+            string finalLog = stripHtmlTags ? _TagsRegex.Replace(_Strb.ToString(), "") : _Strb.ToString();
+            _Strb.Length = 0;
             switch (logType) {
             case LogType.Warning:
-                Debug.LogWarning(_Strb.ToString(), context);
+                Debug.LogWarning(finalLog, context);
                 break;
             case LogType.Error:
-                Debug.LogError(_Strb.ToString(), context);
+                Debug.LogError(finalLog, context);
                 break;
             default:
-                Debug.Log(_Strb.ToString(), context);
+                Debug.Log(finalLog, context);
                 break;
             }
-
-            _Strb.Length = 0;
         }
 
         #endregion
