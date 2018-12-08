@@ -19,7 +19,7 @@ namespace DG.DeEditorTools.BuildPanel
 
         #endregion
 
-        public const string Version = "0.9.000";
+        public const string Version = "1.0.000";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
             BuildTarget.StandaloneWindows64,
             BuildTarget.StandaloneOSX,
@@ -38,6 +38,7 @@ namespace DG.DeEditorTools.BuildPanel
             public bool foldout = true;
             public bool enabled = true;
             public string buildFolder; // Relative to project directory
+            public string buildName; // Folder within buildFolder where the build will be created (this one is created if it doesn't exist)
             public bool clearBuildFolder = true;
             public string bundleIdentifier;
             // Android/iOS only
