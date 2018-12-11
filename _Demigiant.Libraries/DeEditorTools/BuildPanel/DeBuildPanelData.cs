@@ -14,12 +14,14 @@ namespace DG.DeEditorTools.BuildPanel
     {
         #region Serialized
 
-        public string suffix = "";
+//        public string suffix = "";
+        public List<Affix> prefixes = new List<Affix>();
+        public List<Affix> suffixes = new List<Affix>();
         public List<Build> builds = new List<Build>();
 
         #endregion
 
-        public const string Version = "1.0.005";
+        public const string Version = "1.0.010";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
             BuildTarget.StandaloneWindows64,
             BuildTarget.StandaloneOSX,
@@ -31,6 +33,13 @@ namespace DG.DeEditorTools.BuildPanel
         // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
+        [Serializable]
+        public class Affix
+        {
+            public bool enabled = true;
+            public string text;
+        }
+        
         [Serializable]
         public class Build
         {

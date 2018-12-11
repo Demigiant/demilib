@@ -2,6 +2,7 @@
 // Created: 2018/12/07 13:24
 // License Copyright (c) Daniele Giardini
 
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using DG.DemiEditor;
@@ -20,9 +21,12 @@ namespace DG.DeEditorTools.BuildPanel
         const string _Title = "Simple Build Panel";
         const string _SrcADBFilePath = "Assets/-DeBuildPanelData.asset";
         static readonly StringBuilder _Strb = new StringBuilder();
+        static readonly StringBuilder _StrbAlt = new StringBuilder();
         DeBuildPanelData _src;
         Vector2 _scrollPos;
-        const int _DragId = 235;
+        const int _DragId_Prefixes = 200;
+        const int _DragId_Suffixes = 300;
+        const int _DragId_Builds = 400;
         const int _LabelWidth = 116;
         string _buildFolderComment;
         string[] _buildPathsLabels;
@@ -76,16 +80,40 @@ namespace DG.DeEditorTools.BuildPanel
                 }
             }
 
-            // Global options
+            // Affixes
             GUILayout.Space(3);
-            using (new DeGUI.LabelFieldWidthScope(_LabelWidth + 4)) {
-                using (var check = new EditorGUI.ChangeCheckScope()) {
-                    _src.suffix = EditorGUILayout.TextField(
-                        new GUIContent("Build Suffix", "Suffix (if any) is applied to all Build paths"),
-                        _src.suffix
-                    );
-                    if (check.changed) RefreshBuildPathsLabels();
+            using (new DeGUI.LabelFieldWidthScope(_LabelWidth + 4))
+            using (new GUILayout.VerticalScope(DeGUI.styles.box.def))
+            using (var check = new EditorGUI.ChangeCheckScope()) {
+                // Prefixes
+                using (new DeGUILayout.ToolbarScope()) {
+                    GUILayout.Label("Prefixes", DeGUI.styles.label.toolbar);
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("+ Add Prefix", DeGUI.styles.button.tool)) {
+                        _src.prefixes.Add(new DeBuildPanelData.Affix());
+                        GUI.changed = true;
+                    }
                 }
+                if (_src.prefixes.Count > 0) {
+                    using (new GUILayout.VerticalScope(DeGUI.styles.box.sticky)) {
+                        DrawAffix(_src.prefixes, _DragId_Prefixes);
+                    }
+                }
+                // Suffixes
+                using (new DeGUILayout.ToolbarScope()) {
+                    GUILayout.Label("Suffixes", DeGUI.styles.label.toolbar);
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("+ Add Suffix", DeGUI.styles.button.tool)) {
+                        _src.suffixes.Add(new DeBuildPanelData.Affix());
+                        GUI.changed = true;
+                    }
+                }
+                if (_src.suffixes.Count > 0) {
+                    using (new GUILayout.VerticalScope(DeGUI.styles.box.sticky)) {
+                        DrawAffix(_src.suffixes, _DragId_Suffixes);
+                    }
+                }
+                if (check.changed) RefreshBuildPathsLabels();
             }
             GUILayout.Space(4);
 
@@ -98,13 +126,37 @@ namespace DG.DeEditorTools.BuildPanel
                         GUI.changed = true;
                     }
                 }
-                if (DeGUIDrag.Drag(_DragId, _src.builds, i).outcome == DeDragResultType.Accepted) {
+                if (DeGUIDrag.Drag(_DragId_Builds, _src.builds, i).outcome == DeDragResultType.Accepted) {
                     EditorUtility.SetDirty(_src);
                 }
             }
 
             GUILayout.EndScrollView();
             if (GUI.changed) EditorUtility.SetDirty(_src);
+        }
+
+        void DrawAffix(List<DeBuildPanelData.Affix> affixes, int dragId)
+        {
+            for (int i = 0; i < affixes.Count; ++i) {
+                DeBuildPanelData.Affix affix = affixes[i];
+                using (new GUILayout.HorizontalScope()) {
+                    if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) {
+                        DeGUIDrag.StartDrag(dragId, this, affixes, i);
+                    }
+                    using (new DeGUI.ColorScope(affix.enabled ? Color.white : (Color)new DeSkinColor(0.7f, 0.7f), affix.enabled ? Color.white : (Color)new DeSkinColor(0.7f, 0.5f))) {
+                        affix.text = EditorGUILayout.TextField(affix.text);
+                    }
+                    affix.enabled = DeGUILayout.ToggleButton(affix.enabled, "Enabled", Styles.btInlineToggle, GUILayout.Width(60));
+                    if (GUILayout.Button("×", Styles.btDeleteBuild)) {
+                        affixes.RemoveAt(i);
+                        --i;
+                        GUI.changed = true;
+                    }
+                }
+                if (DeGUIDrag.Drag(dragId, affixes, i).outcome == DeDragResultType.Accepted) {
+                    GUI.changed = true;
+                }
+            }
         }
 
         // Returns FALSE if the given build was deleted
@@ -115,7 +167,7 @@ namespace DG.DeEditorTools.BuildPanel
             // Toolbar
             using (new DeGUILayout.ToolbarScope()) {
                 if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) {
-                    DeGUIDrag.StartDrag(_DragId, this, _src.builds, index);
+                    DeGUIDrag.StartDrag(_DragId_Builds, this, _src.builds, index);
                 }
                 build.foldout = DeGUILayout.ToolbarFoldoutButton(build.foldout, build.buildTarget.ToString(), false, true);
                 build.enabled = DeGUILayout.ToggleButton(build.enabled, "Enabled", Styles.btToolbarToggle, GUILayout.Width(60));
@@ -124,13 +176,14 @@ namespace DG.DeEditorTools.BuildPanel
                         Build(build);
                     }
                 }
-                if (GUILayout.Button("×", Styles.btDeleteBuild)) {
+                if (GUILayout.Button("×", Styles.btDeleteBuildToolbar)) {
                     _src.builds.RemoveAt(index);
                     return false;
                 }
             }
             // Data
             if (build.foldout) {
+                using (new EditorGUI.DisabledScope(!build.enabled))
                 using (new GUILayout.VerticalScope(DeGUI.styles.box.stickyTop)) {
                     using (new GUILayout.VerticalScope(Styles.buildPathContainer)) {
                         GUILayout.Label(_buildPathsLabels[index], Styles.labelBuildPath);
@@ -215,6 +268,7 @@ namespace DG.DeEditorTools.BuildPanel
             BuildTarget buildTarget = (BuildTarget)buildTargetObj;
             _src.builds.Add(new DeBuildPanelData.Build(buildTarget));
             EditorUtility.SetDirty(_src);
+            RefreshBuildPathsLabels();
         }
 
         #endregion
@@ -287,21 +341,10 @@ namespace DG.DeEditorTools.BuildPanel
             }
 
             bool buildIsSingleFile = BuildsAsSingleFile(build.buildTarget);
-            string completeBuildFolder = buildIsSingleFile
+            string completeBuildFolder = buildIsSingleFile || build.buildTarget == BuildTarget.StandaloneOSX || build.buildTarget == BuildTarget.iOS
                 ? buildFolder
-                : Path.GetFullPath(buildFolder + DeEditorFileUtils.PathSlash + build.buildName + _src.suffix);
-            string buildFilePath = completeBuildFolder;
-            switch (build.buildTarget) {
-            case BuildTarget.StandaloneWindows64:
-                buildFilePath += DeEditorFileUtils.PathSlash + build.buildName + _src.suffix + ".exe";
-                break;
-            case BuildTarget.StandaloneOSX:
-                buildFilePath += DeEditorFileUtils.PathSlash + build.buildName + _src.suffix + ".app";
-                break;
-            case BuildTarget.Android:
-                buildFilePath += DeEditorFileUtils.PathSlash + build.buildName + _src.suffix + ".apk";
-                break;
-            }
+                : Path.GetFullPath(buildFolder + DeEditorFileUtils.PathSlash + GetFullBuildName(build, false));
+            string buildFilePath = completeBuildFolder + DeEditorFileUtils.PathSlash + GetFullBuildName(build, true);
 
             // Clear build folder
             if (!buildIsSingleFile && build.clearBuildFolder && Directory.Exists(completeBuildFolder)) {
@@ -378,16 +421,36 @@ namespace DG.DeEditorTools.BuildPanel
             _Strb.Append(DeEditorFileUtils.PathSlash).Append(build.buildFolder);
             string fullPath = Path.GetFullPath(_Strb.ToString());
             _Strb.Length = 0;
-            _Strb.Append("<b>").Append(fullPath).Append("</b>");
-            _Strb.Append(DeEditorFileUtils.PathSlash).Append(build.buildName)
-                .Append(_src.suffix);
-            switch (build.buildTarget) {
-            case BuildTarget.Android:
-                _Strb.Append(".apk");
-                break;
-            }
+            _Strb.Append("<b>").Append(fullPath).Append("</b>").Append(DeEditorFileUtils.PathSlash);
+            _Strb.Append(GetFullBuildName(build, build.buildTarget == BuildTarget.StandaloneOSX || build.buildTarget == BuildTarget.Android));
             _Strb.Replace('\\', '/');
             return _Strb.ToString();
+        }
+
+        string GetFullBuildName(DeBuildPanelData.Build build, bool withExtension)
+        {
+            _StrbAlt.Length = 0;
+            foreach (DeBuildPanelData.Affix affix in _src.prefixes) {
+                if (affix.enabled) _StrbAlt.Append(affix.text);
+            }
+            _StrbAlt.Append(build.buildName);
+            foreach (DeBuildPanelData.Affix affix in _src.suffixes) {
+                if (affix.enabled) _StrbAlt.Append(affix.text);
+            }
+            if (withExtension) {
+                switch (build.buildTarget) {
+                case BuildTarget.StandaloneWindows64:
+                    _StrbAlt.Append(".exe");
+                    break;
+                case BuildTarget.StandaloneOSX:
+                    _StrbAlt.Append(".app");
+                    break;
+                case BuildTarget.Android:
+                    _StrbAlt.Append(".apk");
+                    break;
+                }
+            }
+            return _StrbAlt.ToString();
         }
 
         #endregion
@@ -401,7 +464,7 @@ namespace DG.DeEditorTools.BuildPanel
             static bool _initialized;
 
             public static GUIStyle buildContainer, buildPathContainer,
-                                   btToolbarToggle, btDeleteBuild,
+                                   btToolbarToggle, btInlineToggle, btDeleteBuildToolbar, btDeleteBuild,
                                    labelBuildPath;
 
             public static void Init()
@@ -412,9 +475,13 @@ namespace DG.DeEditorTools.BuildPanel
 
                 buildContainer = new GUIStyle().Margin(0).Padding(0).ContentOffset(0, 0);
                 buildPathContainer = DeGUI.styles.box.stickyTop.Clone().Padding(1);
+
                 btToolbarToggle = DeGUI.styles.button.bBlankBorderCompact.Margin(2, 2, 2, 0);
-                btDeleteBuild = DeGUI.styles.button.tool.Clone(Color.white, FontStyle.Bold).Background(DeStylePalette.redSquare)
+                btInlineToggle = DeGUI.styles.button.bBlankBorder.Clone().MarginTop(2);
+                btDeleteBuildToolbar = DeGUI.styles.button.tool.Clone(Color.white, FontStyle.Bold).Background(DeStylePalette.redSquare)
                     .Width(16).Height(14).Margin(0, 0, 2, 0);
+                btDeleteBuild = btDeleteBuildToolbar.Clone().Height(16);
+
                 labelBuildPath = new GUIStyle(GUI.skin.label).Add(9, Format.WordWrap, Format.RichText);
             }
         }
