@@ -26,6 +26,17 @@ namespace DG.DemiEditor
         Click
     }
 
+    public enum DeDragDirection
+    {
+        /// <summary>Automatically determines if dragged elements are horizontal, vertical, or both</summary>
+        Auto,
+        /// <summary>Forces vertical drag</summary>
+        Vertical,
+        /// <summary>Forces horizontal drag (useful to avoid initial wrong drag indicators
+        /// if the users starts dragging an horizontal system vertically)</summary>
+        Horizontal
+    }
+
     public struct DeDragResult
     {
         public DeDragResultType outcome;
@@ -126,8 +137,10 @@ namespace DG.DemiEditor
         /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
         /// <param name="lastGUIRect">If NULL will calculate this automatically using <see cref="GUILayoutUtility.GetLastRect"/>.
         /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
-        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null)
-        { return Drag(dragId, draggableList, currDraggableItemIndex, DefaultDragColor, lastGUIRect); }
+        /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
+        /// unless you want to skip eventual layout calculations</param>
+        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto)
+        { return Drag(dragId, draggableList, currDraggableItemIndex, DefaultDragColor, lastGUIRect, direction); }
 
         /// <summary>
         /// Call this after each draggable GUI block, to calculate and draw the current drag state
@@ -139,7 +152,9 @@ namespace DG.DemiEditor
         /// <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
         /// <param name="lastGUIRect">If NULL will calculate this automatically using <see cref="GUILayoutUtility.GetLastRect"/>.
         /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
-        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor, Rect? lastGUIRect = null)
+        /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
+        /// unless you want to skip eventual layout calculations</param>
+        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor, Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto)
         {
             if (_dragData == null || _dragId != dragId) return new DeDragResult(DeDragResultType.NoDrag);
             if (_waitingToApplyDrag) {
@@ -155,11 +170,24 @@ namespace DG.DemiEditor
                 // Find and store eventual drag position
                 Rect lastRect = lastGUIRect == null ? GUILayoutUtility.GetLastRect() : (Rect)lastGUIRect;
                 if (!_dragData.hasHorizontalSet && Event.current.type == EventType.Repaint) {
-                    // Determine if drag is also horizontal
-                    if (currDraggableItemIndex == 0) _dragData.lastRect = lastRect;
-                    else if (_dragData.lastRect.width > 0) {
+                    // Set drag direction
+                    switch (direction) {
+                    case DeDragDirection.Auto:
+                        // Auto-determine if drag is also horizontal
+                        if (currDraggableItemIndex == 0) _dragData.lastRect = lastRect;
+                        else if (_dragData.lastRect.width > 0) {
+                            _dragData.hasHorizontalSet = true;
+                            _dragData.hasHorizontalEls = !Mathf.Approximately(_dragData.lastRect.xMin, lastRect.xMin);
+                        }
+                        break;
+                    case DeDragDirection.Vertical:
                         _dragData.hasHorizontalSet = true;
-                        _dragData.hasHorizontalEls = !Mathf.Approximately(_dragData.lastRect.xMin, lastRect.xMin);
+                        _dragData.hasHorizontalEls = false;
+                        break;
+                    case DeDragDirection.Horizontal:
+                        _dragData.hasHorizontalSet = true;
+                        _dragData.hasHorizontalEls = true;
+                        break;
                     }
                 }
                 Vector2 lastRectMiddleP = lastRect.center;
