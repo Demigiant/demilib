@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -19,6 +20,9 @@ namespace DG.DemiEditor
         static readonly StringBuilder _Strb = new StringBuilder();
         static MethodInfo _miGetTargetStringFromBuildTargetGroup;
         static MethodInfo _miGetPlatformNameFromBuildTargetGroup;
+        static MethodInfo _miGetAnnotations;
+        static MethodInfo _miSetGizmoEnabled;
+        static MethodInfo _miSetIconEnabled;
 
         #region Public Methods
 
@@ -148,6 +152,67 @@ namespace DG.DemiEditor
             return false;
         }
 
+        // Uses code from Zwer99 on UnityAnswers (thank you): https://answers.unity.com/questions/851470/how-to-hide-gizmos-by-script.html
+        /// <summary>
+        /// Sets the gizmos icon visibility in the Scene and Game view for the given class names
+        /// </summary>
+        /// <param name="visible">Visibility</param>
+        /// <param name="classNames">Class names (no namespace), as many as you want separated by a comma</param>
+        public static void SetGizmosIconVisibility(bool visible, params string[] classNames)
+        {
+            if (!StoreAnnotationsReflectionMethods()) return;
+
+            int setValue = visible ? 1 : 0;
+            var annotations = _miGetAnnotations.Invoke(null, null);
+            foreach (object annotation in (IEnumerable)annotations) {
+                Type annotationType = annotation.GetType();
+                FieldInfo fiClassId = annotationType.GetField("classID", BindingFlags.Public | BindingFlags.Instance);
+                FieldInfo fiScriptClass = annotationType.GetField("scriptClass", BindingFlags.Public | BindingFlags.Instance);
+                if (fiClassId == null || fiScriptClass == null) continue;
+
+                string scriptClass = (string)fiScriptClass.GetValue(annotation);
+                bool found = false;
+                for (int i = 0; i < classNames.Length; ++i) {
+                    if (classNames[i] != scriptClass) continue;
+                    found = true;
+                    break;
+                }
+                if (!found) continue;
+
+                int classId = (int)fiClassId.GetValue(annotation);
+                _miSetGizmoEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
+                _miSetIconEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
+            }
+        }
+
+        // Uses code from Zwer99 on UnityAnswers (thank you): https://answers.unity.com/questions/851470/how-to-hide-gizmos-by-script.html
+        /// <summary>
+        /// Sets the gizmos icon visibility in the Scene and Game view for all custom icons
+        /// (for example icons created with HOTools)
+        /// </summary>
+        /// <param name="visible">Visibility</param>
+        public static void SetGizmosIconVisibilityForAllCustomIcons(bool visible)
+        {
+            // Note: works by checking class ID being 114 (otherwise I could check if scriptClass is not nullOrEmpty
+            if (!StoreAnnotationsReflectionMethods()) return;
+
+            int setValue = visible ? 1 : 0;
+            var annotations = _miGetAnnotations.Invoke(null, null);
+            foreach (object annotation in (IEnumerable)annotations) {
+                Type annotationType = annotation.GetType();
+                FieldInfo fiClassId = annotationType.GetField("classID", BindingFlags.Public | BindingFlags.Instance);
+                FieldInfo fiScriptClass = annotationType.GetField("scriptClass", BindingFlags.Public | BindingFlags.Instance);
+                if (fiClassId == null || fiScriptClass == null) continue;
+
+                int classId = (int)fiClassId.GetValue(annotation);
+                if (classId != 114) continue;
+
+                string scriptClass = (string)fiScriptClass.GetValue(annotation);
+                _miSetGizmoEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
+                _miSetIconEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
+            }
+        }
+
         #region Legacy
 
         /// <summary>
@@ -200,6 +265,20 @@ namespace DG.DemiEditor
             // This seems to me the safest and more reliant way to check,
             // since ModuleManager.IsPlatformSupportLoaded dosn't work well with BuildTargetGroup (only BuildTarget)
             return !string.IsNullOrEmpty(targetString) || !string.IsNullOrEmpty(platformName);
+        }
+
+        // Returns FALSE if the annotations API weren't found
+        static bool StoreAnnotationsReflectionMethods()
+        {
+            if (_miGetAnnotations != null) return true;
+
+            Type type = Assembly.GetAssembly(typeof(Editor)).GetType("UnityEditor.AnnotationUtility");
+            if (type == null) return false;
+
+            _miGetAnnotations = type.GetMethod("GetAnnotations", BindingFlags.Static | BindingFlags.NonPublic);
+            _miSetGizmoEnabled = type.GetMethod("SetGizmoEnabled", BindingFlags.Static | BindingFlags.NonPublic);
+            _miSetIconEnabled = type.GetMethod("SetIconEnabled", BindingFlags.Static | BindingFlags.NonPublic);
+            return true;
         }
 
         #endregion
