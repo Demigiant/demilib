@@ -243,6 +243,12 @@ namespace DG.DemiEditor
 
             initialized = true;
 
+            // Unity 2018 (bug with non-centered content) ► change default styles then reapply them after init
+            Vector2 def_toolbarBtContentOffset = GUI.skin.button.contentOffset;
+            if (DeUnityEditorVersion.MajorVersion >= 2018) {
+                EditorStyles.toolbarButton.contentOffset = new Vector2(1, 0);
+            }
+
             // Default inits (made manually so they happen before subpalettes, which might be using them)
             box.Init();
             button.Init();
@@ -254,6 +260,11 @@ namespace DG.DemiEditor
             FieldInfo[] fieldInfos = this.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
             foreach (FieldInfo fi in fieldInfos) {
                 if (fi.FieldType.IsSubclassOf(typeof(DeStyleSubPalette))) ((DeStyleSubPalette)fi.GetValue(this)).Init();
+            }
+
+            if (DeUnityEditorVersion.MajorVersion >= 2018) {
+                // Unity 2018 ► Reassign default styles
+                EditorStyles.toolbarButton.contentOffset = def_toolbarBtContentOffset;
             }
         }
 
@@ -317,14 +328,6 @@ namespace DG.DemiEditor
             toolL = new GUIStyle(EditorStyles.toolbarButton).Height(23).ContentOffsetY(0);
             toolS = new GUIStyle(EditorStyles.toolbarButton).Height(13).ContentOffsetY(0).Padding(0);
             toolIco = new GUIStyle(tool).StretchWidth(false).Width(22).ContentOffsetX(-1);
-//            toolFoldoutClosed = new GUIStyle(GUI.skin.button) {
-//                alignment = TextAnchor.UpperLeft,
-//                active = { background = null },
-//                fixedWidth = 14,
-//                normal = { background = EditorStyles.foldout.normal.background },
-//                border = EditorStyles.foldout.border,
-//                padding = new RectOffset(14, 0, 0, 0)
-//            }.MarginTop(2);
             toolFoldoutClosed = new GUIStyle(GUI.skin.button) {
                 alignment = TextAnchor.MiddleLeft,
                 active = { background = null },
