@@ -171,7 +171,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         /// <summary>
         /// Draws the given node using the given T editor GUINode type.
-        /// Retuns the full area of the node
+        /// Returns the full area of the node
         /// </summary>
         public Rect Draw<T>(IEditorGUINode node, NodeConnectionOptions? connectionOptions = null) where T : ABSDeGUINode, new()
         {

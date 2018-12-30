@@ -592,7 +592,7 @@
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Draw``1(DG.DemiLib.IEditorGUINode,System.Nullable{DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions})">
             <summary>
             Draws the given node using the given T editor GUINode type.
-            Retuns the full area of the node
+            Returns the full area of the node
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.OpenHelpPanel">

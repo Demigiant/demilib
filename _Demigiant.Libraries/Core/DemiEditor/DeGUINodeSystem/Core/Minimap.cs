@@ -161,7 +161,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             // Draw the elements
             foreach (IEditorGUINode node in _process.nodes) {
                 bool evidenceAsEndNode = false;
-                if (_process.options.minimapEvidenceEndNodes) {
+                if (_process.options.minimapEvidenceEndNodes && !_process.nodeToConnectionOptions[node].neverMarkAsEndNode) {
                     foreach (string connId in node.connectedNodesIds) {
                         if (!string.IsNullOrEmpty(connId)) continue;
                         evidenceAsEndNode = true;
@@ -174,9 +174,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 int xMax = (int)((nodeRect.xMax + shift.x) * w / fullZeroBasedArea.width);
                 int yMin = (int)((nodeRect.y + shift.y) * w / fullZeroBasedArea.height);
                 int yMax = (int)((nodeRect.yMax + shift.y) * w / fullZeroBasedArea.height);
+                Color color = evidenceAsEndNode ? Color.red : nodeGuiData.mainColor;
                 for (int x = xMin; x < xMax; ++x) {
                     for (int y = yMin; y < yMax; ++y) {
-                        _texture.SetPixel(x, w - y, evidenceAsEndNode ? Color.red : nodeGuiData.mainColor);
+                        _texture.SetPixel(x, w - y, color);
                     }
                 }
             }
