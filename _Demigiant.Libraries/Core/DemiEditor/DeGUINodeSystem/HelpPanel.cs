@@ -73,7 +73,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             cGroup.AppendDefinition("Move selected nodes by 1 pixel").AddKey("ARROWS");
             cGroup.AppendDefinition("Move selected nodes by 10 pixel").AddKey("SHIFT+ARROWS");
             cGroup.AppendDefinition("Disable snapping while dragging nodes").AddKey("ALT");
-            cGroup.AppendDefinition("Drag new connection from node (if allowed)").AddKey("CTRL+LMB → Drag");
+            cGroup.AppendDefinition("Drag connection from node (if allowed)").AddKey("CTRL+LMB → Drag");
+            cGroup.AppendDefinition("Drag alternative connection from node (if allowed)").AddKey("CTRL+SPACE+LMB → Drag");
             cGroup.AppendDefinition("Clone selected nodes and drag them").AddKey("SHIFT+CTRL+LMB → Drag");
             cGroup.AppendDefinition("Node context menu").AddKey("RMB");
         }
@@ -90,7 +91,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 return false;
             }
 
-            // Block and event until the first layout has happened
+            // Block any event until the first layout has happened
             if (!_layoutReady) {
                 if (Event.current.type == EventType.Layout) _layoutReady = true;
                 else return true;
@@ -122,7 +123,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     EditorGUI.BeginChangeCheck();
                     bool isEditing = GUI.GetNameOfFocusedControl() == _editableTextAreaId;
                     Rect r = GUILayoutUtility.GetRect(new GUIContent(notes.editableNote), isEditing ? _Styles.editableProjectNotes : _Styles.editableProjectNotesAsLabel);
-                    using (new DeGUI.CursorColorScope(Color.white)) {
+                    using (new DeGUI.ColorScope(isEditing ? new Color(0.89f, 0.89f, 0.89f) : Color.white))
+                    using (new DeGUI.CursorColorScope(isEditing ? Color.black : Color.white)) {
                         notes.editableNote = DeGUI.DoubleClickTextArea(
                             r, _process.editor, _editableTextAreaId, notes.editableNote,
                             _Styles.editableProjectNotesAsLabel, _Styles.editableProjectNotes
@@ -305,9 +307,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     .Padding(0, _InnerPadding, 4, 4).Margin(0);
                 projectNotes = DeGUI.styles.label.wordwrap.Clone(Color.white).Margin(0).Padding(_InnerPadding, _InnerPadding, 4, 4)
                     .Background(DeStylePalette.blackSquare).StretchWidth();
-                editableProjectNotes = EditorStyles.textArea.Clone(new Color(0.9f, 0.87f, 0.43f), Format.WordWrap).Margin(0)
-                    .Padding(_InnerPadding, _InnerPadding, 8, 8).Background(DeStylePalette.blackSquare);
-                editableProjectNotesAsLabel = editableProjectNotes.Clone(Format.RichText, new DeSkinColor(0.95f));
+                editableProjectNotes = EditorStyles.textArea.Clone(new Color(0.18f, 0.18f, 0.18f), Format.WordWrap).Margin(0)
+                    .Padding(_InnerPadding, _InnerPadding, 8, 8).Background(DeStylePalette.whiteSquare);
+                editableProjectNotesAsLabel = editableProjectNotes.Clone(Format.RichText, new DeSkinColor(0.95f))
+                    .Background(DeStylePalette.blackSquare);
             }
         }
     }
