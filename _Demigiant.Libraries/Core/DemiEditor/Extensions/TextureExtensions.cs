@@ -25,7 +25,7 @@ namespace DG.DemiEditor
                 || tImporter.filterMode != filterMode
                 || tImporter.wrapMode != wrapMode
                 || tImporter.maxTextureSize != maxTextureSize
-                || tImporter.textureFormat != TextureImporterFormat.AutomaticTruecolor
+                || tImporter.textureFormat != 0 && tImporter.textureFormat != TextureImporterFormat.AutomaticTruecolor
                 || tImporter.compressionQuality != quality;
             if (!reimportRequired) return;
 
