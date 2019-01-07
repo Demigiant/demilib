@@ -40,6 +40,17 @@
             Content colors
             </summary>
         </member>
+        <member name="T:DG.DemiLib.DeInputUtils">
+            <summary>
+            Various Input utils
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.DeInputUtils.IsNumKeyDown">
+            <summary>
+            Returns a number key int if a number key was pressed in this frame, or -1 otherwise
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:DG.DemiLib.DeScope">
              <summary>
              Extend this to replicate Unity's Scope system with any Unity version.
