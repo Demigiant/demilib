@@ -120,19 +120,77 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         }
 
         /// <summary>
-        /// Returns a clone of the given node (clones also lists, but leaves other references as references).
+        /// Returns a deep clone of the given node.
         /// A new ID will be automatically generated.
         /// </summary>
         public T CloneNode<T>(IEditorGUINode node) where T : IEditorGUINode, new()
         {
-            T clone = new T();
+            T clone = (T)CloneObject(node);
+            clone.id = Guid.NewGuid().ToString();
+            return clone;
+
+//            T clone = new T();
+//            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+//            FieldInfo[] srcFields = node.GetType().GetFields(flags);
+//            FieldInfo[] destFields = clone.GetType().GetFields(flags);
+//            foreach (FieldInfo srcField in srcFields) {
+//                FieldInfo destField = destFields.FirstOrDefault(field => field.Name == srcField.Name);
+//                if (destField == null || destField.IsLiteral || srcField.FieldType != destField.FieldType) continue;
+//                object srcValue = srcField.GetValue(node);
+//                if (srcValue != null) {
+//                    Type valueType = srcValue.GetType();
+//                    if (valueType.IsArray) {
+//                        // Clone Array
+//                        string typeStr = valueType.FullName.Replace("[]", string.Empty);
+//                        Type arrayType = Type.GetType(typeStr);
+//                        if (arrayType == null) {
+//                            // Try finding type within Unity's project qualified assemblies
+//                            arrayType = Type.GetType(typeStr + ", Assembly-CSharp-firstpass");
+//                            if (arrayType == null) arrayType = Type.GetType(typeStr + ", Assembly-CSharp");
+//                            // If type is not found yet, let it become an error.
+//                            // The alternative would be to go through all assemblies with a
+//                            // foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+//                            // but it's expensive and let's ignore it for now
+//                        }
+//                        Array srcArray = srcValue as Array;
+//                        Array clonedArray = Array.CreateInstance(arrayType, srcArray.Length);
+//                        for (int i = 0; i < srcArray.Length; ++i) clonedArray.SetValue(srcArray.GetValue(i), i);
+//                        destField.SetValue(clone, clonedArray);
+//                    } else if (valueType.IsGenericType) {
+//                        // Clone List
+//                        Type listType = Type.GetType(valueType.FullName.Replace("[]", string.Empty));
+//                        if (listType == null) {
+//                            Debug.LogWarning(string.Format("Couldn't clone correctly the {0} field, a shallow copy will be used", srcField.Name));
+//                            destField.SetValue(clone, srcField.GetValue(node));
+//                        } else {
+//                            IList srcList = srcValue as IList;
+//                            IList clonedList = Activator.CreateInstance(listType) as IList;
+//                            for (int i = 0; i < srcList.Count; ++i) clonedList.Add(srcList[i]);
+//                            destField.SetValue(clone, clonedList);
+//                        }
+//                    } else {
+//                        destField.SetValue(clone, srcField.GetValue(node));
+//                    }
+//                }
+//            }
+//            clone.id = Guid.NewGuid().ToString();
+//            return clone;
+        }
+
+        object CloneObject(object original)
+        {
+            if (original == null) return null;
+            Type t = original.GetType();
+            if (t.IsValueType || t == typeof(string)) return original; // struct
+
+            object clone = Activator.CreateInstance(t);
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-            FieldInfo[] srcFields = node.GetType().GetFields(flags);
+            FieldInfo[] srcFields = t.GetFields(flags);
             FieldInfo[] destFields = clone.GetType().GetFields(flags);
             foreach (FieldInfo srcField in srcFields) {
                 FieldInfo destField = destFields.FirstOrDefault(field => field.Name == srcField.Name);
                 if (destField == null || destField.IsLiteral || srcField.FieldType != destField.FieldType) continue;
-                object srcValue = srcField.GetValue(node);
+                object srcValue = srcField.GetValue(original);
                 if (srcValue != null) {
                     Type valueType = srcValue.GetType();
                     if (valueType.IsArray) {
@@ -150,24 +208,27 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                         }
                         Array srcArray = srcValue as Array;
                         Array clonedArray = Array.CreateInstance(arrayType, srcArray.Length);
-                        for (int i = 0; i < srcArray.Length; ++i) clonedArray.SetValue(srcArray.GetValue(i), i);
+                        for (int i = 0; i < srcArray.Length; ++i) {
+                            clonedArray.SetValue(CloneObject(srcArray.GetValue(i)), i);
+                        }
                         destField.SetValue(clone, clonedArray);
                     } else if (valueType.IsGenericType) {
                         // Clone List
                         Type listType = Type.GetType(valueType.FullName.Replace("[]", string.Empty));
                         if (listType == null) {
                             Debug.LogWarning(string.Format("Couldn't clone correctly the {0} field, a shallow copy will be used", srcField.Name));
-                            destField.SetValue(clone, srcField.GetValue(node));
+                            destField.SetValue(clone, CloneObject(srcField.GetValue(original)));
                         } else {
                             IList srcList = srcValue as IList;
                             IList clonedList = Activator.CreateInstance(listType) as IList;
-                            for (int i = 0; i < srcList.Count; ++i) clonedList.Add(srcList[i]);
+                            for (int i = 0; i < srcList.Count; ++i) clonedList.Add(CloneObject(srcList[i]));
                             destField.SetValue(clone, clonedList);
                         }
-                    } else destField.SetValue(clone, srcField.GetValue(node));
+                    } else {
+                        destField.SetValue(clone, CloneObject(srcField.GetValue(original)));
+                    }
                 }
             }
-            clone.id = Guid.NewGuid().ToString();
             return clone;
         }
 

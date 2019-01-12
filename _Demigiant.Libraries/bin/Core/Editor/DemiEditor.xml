@@ -447,7 +447,7 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.Core.NodesClipboard.CloneNode``1(DG.DemiLib.IEditorGUINode)">
             <summary>
-            Returns a clone of the given node (clones also lists, but leaves other references as references).
+            Returns a deep clone of the given node.
             A new ID will be automatically generated.
             </summary>
         </member>
