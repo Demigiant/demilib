@@ -120,7 +120,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         }
 
         /// <summary>
-        /// Returns a deep clone of the given node.
+        /// Returns a deep clone of the given node but doesn't clone UnityEngine references.
         /// A new ID will be automatically generated.
         /// </summary>
         public T CloneNode<T>(IEditorGUINode node) where T : IEditorGUINode, new()
@@ -181,7 +181,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         {
             if (original == null) return null;
             Type t = original.GetType();
-            if (t.IsValueType || t == typeof(string)) return original; // struct
+            if (t.IsValueType || t == typeof(string) || t.Namespace != null && t.Namespace.StartsWith("UnityEngine")) return original; // struct
 
             object clone = Activator.CreateInstance(t);
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
