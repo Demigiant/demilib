@@ -80,7 +80,7 @@ namespace DG.DemiEditor
 
         const float _DragDelay = 0.15f;
         static GUIDragData _dragData;
-        static int _dragId;
+        static int _dragId; // Unused since now it just checks that the dragged list is correct
         static bool _waitingToApplyDrag;
         static DelayedCall _dragDelayedCall; // Used to set _dragDelayElapsed to TRUE
         static bool _dragDelayElapsed;
@@ -92,22 +92,32 @@ namespace DG.DemiEditor
         /// <summary>
         /// Starts a drag operation on a GUI element.
         /// </summary>
+        /// <param name="editor">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
+        /// <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
+        /// <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
+        /// <param name="optionalData">Optional data that can be retrieved via the <see cref="optionalDragData"/> static property</param>
+        public static void StartDrag(Editor editor, IList draggableList, int draggedItemIndex, object optionalData = null)
+        { DoStartDrag(-1, editor, null, draggableList, draggedItemIndex, optionalData); }
+        /// <summary>
+        /// Starts a drag operation on a GUI element.
+        /// </summary>
         /// <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
         /// <param name="editor">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
         /// <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
         /// <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
         /// <param name="optionalData">Optional data that can be retrieved via the <see cref="optionalDragData"/> static property</param>
+        [Obsolete("Use overload that doesn't require dragId instead")]
         public static void StartDrag(int dragId, Editor editor, IList draggableList, int draggedItemIndex, object optionalData = null)
-        {
-            if (_dragData != null) return;
-            Reset();
-            _editorWindow = null;
-            _editor = editor;
-            _dragId = dragId;
-            _dragData = new GUIDragData(draggableList, draggableList[draggedItemIndex], draggedItemIndex, optionalData);
-            ClearDragDelayedCall();
-            _dragDelayedCall = DeEditorUtils.DelayedCall(_DragDelay, () => _dragDelayElapsed = true);
-        }
+        { DoStartDrag(dragId, editor, null, draggableList, draggedItemIndex, optionalData); }
+        /// <summary>
+        /// Starts a drag operation on a GUI element.
+        /// </summary>
+        /// <param name="editorWindow">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
+        /// <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
+        /// <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
+        /// <param name="optionalData">Optional data that can be retrieved via the <see cref="optionalDragData"/> static property</param>
+        public static void StartDrag(EditorWindow editorWindow, IList draggableList, int draggedItemIndex, object optionalData = null)
+        { DoStartDrag(-1, null, editorWindow, draggableList, draggedItemIndex, optionalData); }
         /// <summary>
         /// Starts a drag operation on a GUI element.
         /// </summary>
@@ -116,11 +126,15 @@ namespace DG.DemiEditor
         /// <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
         /// <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
         /// <param name="optionalData">Optional data that can be retrieved via the <see cref="optionalDragData"/> static property</param>
+        [Obsolete("Use overload that doesn't require dragId instead")]
         public static void StartDrag(int dragId, EditorWindow editorWindow, IList draggableList, int draggedItemIndex, object optionalData = null)
+        { DoStartDrag(dragId, null, editorWindow, draggableList, draggedItemIndex, optionalData); }
+
+        static void DoStartDrag(int dragId, Editor editor, EditorWindow editorWindow, IList draggableList, int draggedItemIndex, object optionalData)
         {
             if (_dragData != null) return;
             Reset();
-            _editor = null;
+            _editor = editor;
             _editorWindow = editorWindow;
             _dragId = dragId;
             _dragData = new GUIDragData(draggableList, draggableList[draggedItemIndex], draggedItemIndex, optionalData);
@@ -139,9 +153,25 @@ namespace DG.DemiEditor
         /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
         /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
         /// unless you want to skip eventual layout calculations</param>
-        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto)
-        { return Drag(dragId, draggableList, currDraggableItemIndex, DefaultDragColor, lastGUIRect, direction); }
-
+        [Obsolete("Use overload that doesn't require dragId instead")]
+        public static DeDragResult Drag(
+            int dragId, IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto
+        )
+        { return Drag(draggableList, currDraggableItemIndex, DefaultDragColor, lastGUIRect, direction); }
+        /// <summary>
+        /// Call this after each draggable GUI block, to calculate and draw the current drag state
+        /// (or complete it if the mouse was released).
+        /// </summary>
+        /// <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
+        /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
+        /// <param name="lastGUIRect">If NULL will calculate this automatically using <see cref="GUILayoutUtility.GetLastRect"/>.
+        /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
+        /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
+        /// unless you want to skip eventual layout calculations</param>
+        public static DeDragResult Drag(
+            IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto
+        )
+        { return Drag(draggableList, currDraggableItemIndex, DefaultDragColor, lastGUIRect, direction); }
         /// <summary>
         /// Call this after each draggable GUI block, to calculate and draw the current drag state
         /// (or complete it if the mouse was released).
@@ -154,9 +184,30 @@ namespace DG.DemiEditor
         /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
         /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
         /// unless you want to skip eventual layout calculations</param>
-        public static DeDragResult Drag(int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor, Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto)
-        {
-            if (_dragData == null || _dragId != dragId) return new DeDragResult(DeDragResultType.NoDrag);
+        [Obsolete("Use overload that doesn't require dragId instead")]
+        public static DeDragResult Drag(
+            int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor,
+            Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto
+        )
+        { return Drag(draggableList, currDraggableItemIndex, dragEvidenceColor, lastGUIRect, direction); }
+        /// <summary>
+        /// Call this after each draggable GUI block, to calculate and draw the current drag state
+        /// (or complete it if the mouse was released).
+        /// </summary>
+        /// <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
+        /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
+        /// <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
+        /// <param name="lastGUIRect">If NULL will calculate this automatically using <see cref="GUILayoutUtility.GetLastRect"/>.
+        /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
+        /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
+        /// unless you want to skip eventual layout calculations</param>
+        public static DeDragResult Drag(
+            IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor,
+            Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto
+        ){
+            // Drag ID is ignored and is here only for legacy reasons
+            if (_dragData == null || _dragData.draggableList == null || _dragData.draggableList != draggableList) return new DeDragResult(DeDragResultType.NoDrag);
+//            if (_dragData == null || _dragId == -1 || _dragId != dragId) return new DeDragResult(DeDragResultType.NoDrag);
             if (_waitingToApplyDrag) {
                 if (Event.current.type == EventType.Repaint) Event.current.type = EventType.Used;
                 if (Event.current.type == EventType.Used) ApplyDrag();

@@ -346,12 +346,30 @@
             Retrieves the eventual optional data stored via the StartDrag method
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUIDrag.StartDrag(UnityEditor.Editor,System.Collections.IList,System.Int32,System.Object)">
+            <summary>
+            Starts a drag operation on a GUI element.
+            </summary>
+            <param name="editor">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
+            <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
+            <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
+            <param name="optionalData">Optional data that can be retrieved via the <see cref="P:DG.DemiEditor.DeGUIDrag.optionalDragData"/> static property</param>
+        </member>
         <member name="M:DG.DemiEditor.DeGUIDrag.StartDrag(System.Int32,UnityEditor.Editor,System.Collections.IList,System.Int32,System.Object)">
             <summary>
             Starts a drag operation on a GUI element.
             </summary>
             <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
             <param name="editor">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
+            <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
+            <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
+            <param name="optionalData">Optional data that can be retrieved via the <see cref="P:DG.DemiEditor.DeGUIDrag.optionalDragData"/> static property</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUIDrag.StartDrag(UnityEditor.EditorWindow,System.Collections.IList,System.Int32,System.Object)">
+            <summary>
+            Starts a drag operation on a GUI element.
+            </summary>
+            <param name="editorWindow">Reference to the current editor drawing the GUI (used when a Repaint is needed)</param>
             <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
             <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
             <param name="optionalData">Optional data that can be retrieved via the <see cref="P:DG.DemiEditor.DeGUIDrag.optionalDragData"/> static property</param>
@@ -379,12 +397,37 @@
             <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
             unless you want to skip eventual layout calculations</param>
         </member>
+        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Collections.IList,System.Int32,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection)">
+            <summary>
+            Call this after each draggable GUI block, to calculate and draw the current drag state
+            (or complete it if the mouse was released).
+            </summary>
+            <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
+            <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
+            <param name="lastGUIRect">If NULL will calculate this automatically using <see cref="M:UnityEngine.GUILayoutUtility.GetLastRect"/>.
+            Pass this if you're creating a drag between elements that don't use GUILayout</param>
+            <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
+            unless you want to skip eventual layout calculations</param>
+        </member>
         <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Int32,System.Collections.IList,System.Int32,UnityEngine.Color,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection)">
             <summary>
             Call this after each draggable GUI block, to calculate and draw the current drag state
             (or complete it if the mouse was released).
             </summary>
             <param name="dragId">ID for this drag operation (must be the same for both StartDrag and Drag</param>
+            <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
+            <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
+            <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
+            <param name="lastGUIRect">If NULL will calculate this automatically using <see cref="M:UnityEngine.GUILayoutUtility.GetLastRect"/>.
+            Pass this if you're creating a drag between elements that don't use GUILayout</param>
+            <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
+            unless you want to skip eventual layout calculations</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Collections.IList,System.Int32,UnityEngine.Color,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection)">
+            <summary>
+            Call this after each draggable GUI block, to calculate and draw the current drag state
+            (or complete it if the mouse was released).
+            </summary>
             <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
             <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
             <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
