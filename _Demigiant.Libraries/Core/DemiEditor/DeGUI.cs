@@ -481,7 +481,7 @@ namespace DG.DemiEditor
         /// <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
         /// <param name="editingStyle">Style for editing mode</param>
         public static string DoubleClickTextField(Rect rect, EditorWindow editorWindow, string id, string text, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
-        { return DoDoubleClickTextField(rect, false, null, editorWindow, id, text, -1, null, -1, defaultStyle, editingStyle); }
+        { return DoDoubleClickTextField(rect, false, null, editorWindow, id, text, null, -1, defaultStyle, editingStyle); }
         /// <summary>
         /// A text field that becomes editable only on double-click
         /// </summary>
@@ -492,7 +492,7 @@ namespace DG.DemiEditor
         /// <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
         /// <param name="editingStyle">Style for editing mode</param>
         public static string DoubleClickTextField(Rect rect, Editor editor, string id, string text, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
-        { return DoDoubleClickTextField(rect, false, editor, null, id, text, -1, null, -1, defaultStyle, editingStyle); }
+        { return DoDoubleClickTextField(rect, false, editor, null, id, text, null, -1, defaultStyle, editingStyle); }
         /// <summary>
         /// A text field that becomes editable only on double-click and can also be dragged
         /// </summary>
@@ -500,13 +500,12 @@ namespace DG.DemiEditor
         /// <param name="editorWindow">EditorWindow reference</param>
         /// <param name="id">A unique ID to use in order to determine if the text is selected or not</param>
         /// <param name="text">Text</param>
-        /// <param name="dragId">ID for this drag operation (must be the same for both this and Drag</param>
         /// <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
         /// <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
         /// <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
         /// <param name="editingStyle">Style for editing mode</param>
-        public static string DoubleClickDraggableTextField(Rect rect, EditorWindow editorWindow, string id, string text, int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
-        { return DoDoubleClickTextField(rect, false, null, editorWindow, id, text, dragId, draggableList, draggedItemIndex, defaultStyle, editingStyle); }
+        public static string DoubleClickDraggableTextField(Rect rect, EditorWindow editorWindow, string id, string text, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
+        { return DoDoubleClickTextField(rect, false, null, editorWindow, id, text, draggableList, draggedItemIndex, defaultStyle, editingStyle); }
         /// <summary>
         /// A text field that becomes editable only on double-click and can also be dragged
         /// </summary>
@@ -514,13 +513,12 @@ namespace DG.DemiEditor
         /// <param name="editor">Editor reference</param>
         /// <param name="id">A unique ID to use in order to determine if the text is selected or not</param>
         /// <param name="text">Text</param>
-        /// <param name="dragId">ID for this drag operation (must be the same for both this and Drag</param>
         /// <param name="draggableList">List containing the dragged item and all other relative draggable items</param>
         /// <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
         /// <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
         /// <param name="editingStyle">Style for editing mode</param>
-        public static string DoubleClickDraggableTextField(Rect rect, Editor editor, string id, string text, int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
-        { return DoDoubleClickTextField(rect, false, editor, null, id, text, dragId, draggableList, draggedItemIndex, defaultStyle, editingStyle); }
+        public static string DoubleClickDraggableTextField(Rect rect, Editor editor, string id, string text, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
+        { return DoDoubleClickTextField(rect, false, editor, null, id, text, draggableList, draggedItemIndex, defaultStyle, editingStyle); }
 
         /// <summary>
         /// A textArea that becomes editable only on double-click
@@ -532,7 +530,7 @@ namespace DG.DemiEditor
         /// <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
         /// <param name="editingStyle">Style for editing mode</param>
         public static string DoubleClickTextArea(Rect rect, EditorWindow editorWindow, string id, string text, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
-        { return DoDoubleClickTextField(rect, true, null, editorWindow, id, text, -1, null, -1, defaultStyle, editingStyle); }
+        { return DoDoubleClickTextField(rect, true, null, editorWindow, id, text, null, -1, defaultStyle, editingStyle); }
         /// <summary>
         /// A textArea that becomes editable only on double-click
         /// </summary>
@@ -543,11 +541,11 @@ namespace DG.DemiEditor
         /// <param name="defaultStyle">Style for default (non-editing mode) appearance</param>
         /// <param name="editingStyle">Style for editing mode</param>
         public static string DoubleClickTextArea(Rect rect, Editor editor, string id, string text, GUIStyle defaultStyle = null, GUIStyle editingStyle = null)
-        { return DoDoubleClickTextField(rect, true, editor, null, id, text, -1, null, -1, defaultStyle, editingStyle); }
+        { return DoDoubleClickTextField(rect, true, editor, null, id, text, null, -1, defaultStyle, editingStyle); }
 
         internal static string DoDoubleClickTextField(
             Rect rect, bool isTextArea, Editor editor, EditorWindow editorWindow, string id, string text,
-            int dragId, IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null
+            IList draggableList, int draggedItemIndex, GUIStyle defaultStyle = null, GUIStyle editingStyle = null
         ){
             if (defaultStyle == null) defaultStyle = EditorStyles.label;
             if (editingStyle == null) editingStyle = EditorStyles.textField;
@@ -566,8 +564,8 @@ namespace DG.DemiEditor
                     else editorWindow.Repaint();
                 } else if (draggableList != null) {
                     // Start drag
-                    if (editor != null) DeGUIDrag.StartDrag(dragId, editor, draggableList, draggedItemIndex);
-                    else DeGUIDrag.StartDrag(dragId, editorWindow, draggableList, draggedItemIndex);
+                    if (editor != null) DeGUIDrag.StartDrag(editor, draggableList, draggedItemIndex);
+                    else DeGUIDrag.StartDrag(editorWindow, draggableList, draggedItemIndex);
                 }
             }
 //            bool selected = _doubleClickTextFieldId == id && GUI.GetNameOfFocusedControl() == id;

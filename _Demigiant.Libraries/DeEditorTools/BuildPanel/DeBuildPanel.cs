@@ -24,9 +24,6 @@ namespace DG.DeEditorTools.BuildPanel
         static readonly StringBuilder _StrbAlt = new StringBuilder();
         DeBuildPanelData _src;
         Vector2 _scrollPos;
-        const int _DragId_Prefixes = 200;
-        const int _DragId_Suffixes = 300;
-        const int _DragId_Builds = 400;
         const int _LabelWidth = 116;
         string _buildFolderComment;
         string[] _buildPathsLabels;
@@ -96,7 +93,7 @@ namespace DG.DeEditorTools.BuildPanel
                 }
                 if (_src.prefixes.Count > 0) {
                     using (new GUILayout.VerticalScope(DeGUI.styles.box.sticky)) {
-                        DrawAffix(_src.prefixes, _DragId_Prefixes);
+                        DrawAffix(_src.prefixes);
                     }
                 }
                 // Suffixes
@@ -110,7 +107,7 @@ namespace DG.DeEditorTools.BuildPanel
                 }
                 if (_src.suffixes.Count > 0) {
                     using (new GUILayout.VerticalScope(DeGUI.styles.box.sticky)) {
-                        DrawAffix(_src.suffixes, _DragId_Suffixes);
+                        DrawAffix(_src.suffixes);
                     }
                 }
                 if (check.changed) RefreshBuildPathsLabels();
@@ -126,7 +123,7 @@ namespace DG.DeEditorTools.BuildPanel
                         GUI.changed = true;
                     }
                 }
-                if (DeGUIDrag.Drag(_DragId_Builds, _src.builds, i).outcome == DeDragResultType.Accepted) {
+                if (DeGUIDrag.Drag(_src.builds, i).outcome == DeDragResultType.Accepted) {
                     EditorUtility.SetDirty(_src);
                 }
             }
@@ -135,13 +132,13 @@ namespace DG.DeEditorTools.BuildPanel
             if (GUI.changed) EditorUtility.SetDirty(_src);
         }
 
-        void DrawAffix(List<DeBuildPanelData.Affix> affixes, int dragId)
+        void DrawAffix(List<DeBuildPanelData.Affix> affixes)
         {
             for (int i = 0; i < affixes.Count; ++i) {
                 DeBuildPanelData.Affix affix = affixes[i];
                 using (new GUILayout.HorizontalScope()) {
                     if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) {
-                        DeGUIDrag.StartDrag(dragId, this, affixes, i);
+                        DeGUIDrag.StartDrag(this, affixes, i);
                     }
                     using (new DeGUI.ColorScope(affix.enabled ? Color.white : (Color)new DeSkinColor(0.7f, 0.7f), affix.enabled ? Color.white : (Color)new DeSkinColor(0.7f, 0.5f))) {
                         affix.text = EditorGUILayout.TextField(affix.text);
@@ -153,7 +150,7 @@ namespace DG.DeEditorTools.BuildPanel
                         GUI.changed = true;
                     }
                 }
-                if (DeGUIDrag.Drag(dragId, affixes, i).outcome == DeDragResultType.Accepted) {
+                if (DeGUIDrag.Drag(affixes, i).outcome == DeDragResultType.Accepted) {
                     GUI.changed = true;
                 }
             }
@@ -167,7 +164,7 @@ namespace DG.DeEditorTools.BuildPanel
             // Toolbar
             using (new DeGUILayout.ToolbarScope()) {
                 if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) {
-                    DeGUIDrag.StartDrag(_DragId_Builds, this, _src.builds, index);
+                    DeGUIDrag.StartDrag(this, _src.builds, index);
                 }
                 build.foldout = DeGUILayout.ToolbarFoldoutButton(build.foldout, build.buildTarget.ToString(), false, true);
                 build.enabled = DeGUILayout.ToggleButton(build.enabled, "Enabled", Styles.btToolbarToggle, GUILayout.Width(60));

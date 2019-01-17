@@ -121,11 +121,11 @@ namespace DG.DeEditorTools.ScenesPanel
                     }
                 }
                 EditorGUI.BeginDisabledGroup(Application.isPlaying);
-                if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) DeGUIDrag.StartDrag(0, this, scenes, i);
+                if (DeGUILayout.PressButton("≡", DeGUI.styles.button.tool, GUILayout.Width(16))) DeGUIDrag.StartDrag(this, scenes, i);
                 EditorGUI.EndDisabledGroup();
                 DeGUILayout.EndToolbar();
 
-                if (DeGUIDrag.Drag(0, scenes, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
+                if (DeGUIDrag.Drag(scenes, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
             }
             if (GUI.changed) EditorBuildSettings.scenes = scenesMod == null ? scenes : scenesMod;
 
