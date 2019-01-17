@@ -66,7 +66,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         /// Called during Repaint or MouseDown/Up.
         /// Returns TRUE if the connection was deleted using the delete connection button.
         /// </summary>
-        public bool Connect(
+        public ConnectResult Connect(
             int connectionIndex, int fromTotConnections, NodeConnectionOptions fromOptions,
             IEditorGUINode fromNode
         )
@@ -77,9 +77,13 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 RefreshAnchorsData();
             }
             NodeGUIData fromGUIData = _process.nodeToGUIData[fromNode];
-            if (!_nodeToAnchorsData.ContainsKey(fromNode)) return false;
+            if (!_nodeToAnchorsData.ContainsKey(fromNode)) return new ConnectResult();
+            if (connectionIndex >= _nodeToAnchorsData[fromNode].Length) {
+                // A connection was added and a Refresh is required
+                return new ConnectResult(true, false, true);
+            }
             AnchorsData anchorsData = _nodeToAnchorsData[fromNode][connectionIndex];
-            if (!anchorsData.isSet) return false;
+            if (!anchorsData.isSet) return new ConnectResult();
             //
             Color color = GetConnectionColor(connectionIndex, fromTotConnections, fromGUIData, fromOptions);
             // Line (shadow + line)
@@ -125,11 +129,11 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 Rect btR = new Rect(midP.x - 5, midP.y - 5, 10, 10);
                 using (new DeGUI.ColorScope(null, null, color)) GUI.DrawTexture(btR.Expand(2), DeStylePalette.circle);
                 using (new DeGUI.ColorScope(null, null, DeGUI.colors.global.red)) {
-                    if (GUI.Button(btR, "", _Styles.btDelete)) return true;
+                    if (GUI.Button(btR, "", _Styles.btDelete)) return new ConnectResult(true, true);
                 }
                 GUI.DrawTexture(btR.Contract(2), DeStylePalette.ico_delete);
             }
-            return false;
+            return new ConnectResult();
         }
 
         // Returns the connection color
@@ -587,6 +591,24 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             }
         }
 
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+        internal struct ConnectResult
+        {
+            public bool changed;
+            public bool aConnectionWasDeleted;
+            public bool aConnectionWasAdded;
+
+            public ConnectResult(bool changed = false, bool aConnectionWasDeleted = false, bool aConnectionWasAdded = false)
+            {
+                this.changed = changed;
+                this.aConnectionWasDeleted = aConnectionWasDeleted;
+                this.aConnectionWasAdded = aConnectionWasAdded;
+            }
+        }
+
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
         struct AnchorsData
         {
             public bool isSet;
@@ -598,6 +620,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             public bool arrowRequiresRotation;
             public float arrowRotationAngle;
         }
+
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
         // A rect that stores its center and max values without recalculating them every time
         struct RectCache
@@ -614,6 +638,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             }
         }
 
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
         struct ConnectionData
         {
             public int index, totConnections;
@@ -623,6 +649,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 this.totConnections = totConnections;
             }
         }
+
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
         class Styles
         {

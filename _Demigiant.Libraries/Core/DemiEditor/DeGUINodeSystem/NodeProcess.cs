@@ -779,7 +779,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             case EventType.Repaint:
             case EventType.MouseDown:
             case EventType.MouseUp:
-                bool aConnectionWasDeleted = false;
+                bool aConnectionWasAddedOrDeleted = false;
                 for (int i = 0; i < nodes.Count; ++i) {
                     IEditorGUINode fromNode = nodes[i];
                     List<string> connections = fromNode.connectedNodesIds;
@@ -791,25 +791,28 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             // Node eliminated externally, remove from dictionary
                             idToNode.Remove(connId);
                         } else {
-                            bool deletedConnection = _connector.Connect(c, totConnections, nodeToConnectionOptions[fromNode], fromNode);
-                            if (deletedConnection) {
-                                // Connection deleted, deal with flexibleConnections and non-flexibleConnections
-                                aConnectionWasDeleted = true;
+                            Connector.ConnectResult connectResult = _connector.Connect(c, totConnections, nodeToConnectionOptions[fromNode], fromNode);
+                            if (connectResult.changed) {
+                                // Connection added or deleted, deal with flexibleConnections and non-flexibleConnections
+                                aConnectionWasAddedOrDeleted = true;
                                 ConnectionMode connectionMode = nodeToConnectionOptions[fromNode].connectionMode;
                                 switch (connectionMode) {
                                 case ConnectionMode.Flexible:
-                                    totConnections--;
-                                    fromNode.connectedNodesIds.RemoveAt(c);
+                                    if (connectResult.aConnectionWasAdded) totConnections++;
+                                    else {
+                                        totConnections--;
+                                        fromNode.connectedNodesIds.RemoveAt(c);
+                                    }
                                     break;
                                 default:
-                                    fromNode.connectedNodesIds[c] = null;
+                                    if (connectResult.aConnectionWasDeleted) fromNode.connectedNodesIds[c] = null;
                                     break;
                                 }
                             }
                         }
                     }
                 }
-                if (aConnectionWasDeleted) {
+                if (aConnectionWasAddedOrDeleted) {
                     guiChangeType = GUIChangeType.NodeConnection;
                     GUI.changed = _repaintOnEnd = true;
                     DispatchOnGUIChange(GUIChangeType.NodeConnection);
@@ -856,6 +859,22 @@ namespace DG.DemiEditor.DeGUINodeSystem
                         if (overNode != null && overNode != interaction.targetNode) {
                             using (new DeGUI.ColorScope(connectionColor)) {
                                 GUI.Box(nodeToGUIData[overNode].fullArea.Expand(4), "", _Styles.nodeSelectionOutlineThick);
+                            }
+                        }
+                        // If node has alternative CTRL+SPACE connection show a tooltip
+                        if (!DeGUIKey.Extra.space) {
+                            NodeConnectionOptions connectionOptions = nodeToConnectionOptions[interaction.targetNode];
+                            switch (connectionOptions.connectionMode) {
+                            case ConnectionMode.Dual:
+                            case ConnectionMode.NormalPlus:
+                                const float tooltipW = 176;
+                                const float tooltipH = 32;
+                                Vector2 mouseP = Event.current.mousePosition;
+                                Rect tooltipR = new Rect(mouseP.x, mouseP.y - tooltipH - 6, tooltipW, tooltipH);
+                                using (new DeGUI.ColorScope(new Color(0f, 0f, 0f, 0.8f))) {
+                                    GUI.Label(tooltipR, "<b><color=#ffffcd>CTRL+SPACE</color></b>\nto drag alternate connection", _Styles.draggingTooltip);
+                                }
+                                break;
                             }
                         }
                         break;
@@ -1146,7 +1165,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         class Styles
         {
-            public GUIStyle selectionRect, nodeSelectionOutline, nodeSelectionOutlineThick, endNodeOutline;
+            public GUIStyle selectionRect, nodeSelectionOutline, nodeSelectionOutlineThick, endNodeOutline, draggingTooltip;
             bool _initialized;
 
             public void Init()
@@ -1160,6 +1179,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 nodeSelectionOutlineThick = nodeSelectionOutline.Clone().Background(DeStylePalette.squareBorderCurvedEmptyThick);
                 endNodeOutline = nodeSelectionOutlineThick.Clone().Background(DeStylePalette.squareCornersEmpty02)
                     .Border(new RectOffset(7, 7, 7, 7));
+                draggingTooltip = new GUIStyle(GUI.skin.label).Add(new DeSkinColor(0.85f), TextAnchor.MiddleLeft, Format.RichText)
+                    .Padding(5, 0, 0, 0).Background(DeStylePalette.blackSquare);
             }
         }
     }
