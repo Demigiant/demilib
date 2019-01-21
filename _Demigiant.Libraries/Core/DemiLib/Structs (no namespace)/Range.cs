@@ -33,5 +33,11 @@ namespace DG.DemiLib
         {
             return UnityEngine.Random.Range(min, max);
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return "(" + min + "/" + max + ")";
+        }
     }
 }

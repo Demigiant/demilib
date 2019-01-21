@@ -142,6 +142,9 @@
             Returns a random value within this range (min/max included)
             </summary>
         </member>
+        <member name="M:DG.DemiLib.IntRange.ToString">
+            <inheritdoc />
+        </member>
         <member name="T:DG.DemiLib.Range">
             <summary>
             A serializable struct including a min and a max float value
@@ -162,6 +165,9 @@
             <summary>
             Returns a random value within this range (min/max included)
             </summary>
+        </member>
+        <member name="M:DG.DemiLib.Range.ToString">
+            <inheritdoc />
         </member>
     </members>
 </doc>
