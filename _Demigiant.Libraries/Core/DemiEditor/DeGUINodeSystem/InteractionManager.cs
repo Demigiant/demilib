@@ -51,6 +51,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         public State state { get; private set; }
         public ReadyFor readyForState { get; private set; }
+        /// <summary>TRUE when read-to or dragging nodes</summary>
+        public bool isDraggingNodes { get { return _isReadyToDragNodes || _isDraggingNodes; } }
         public TargetType mouseTargetType { get; private set; } // Always updated, even on rollover
         public NodeTargetType nodeTargetType { get; private set; }
         public IEditorGUINode targetNode { get; internal set; }
@@ -72,6 +74,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         const float _DoubleClickTime = 0.4f;
         internal static readonly float MinDragStartupDistance = 10; // Min drag pixels required to actually start some drag operations
         readonly NodeProcess _process;
+        bool _isReadyToDragNodes, _isDraggingNodes; // Stored as bool values for faster access from isDraggingNodes
         MouseCursor _currMouseCursor;
         MouseSnapshot _lastLMBUpSnapshot;
 
@@ -112,6 +115,16 @@ namespace DG.DemiEditor.DeGUINodeSystem
             State prevState = state;
             state = toState;
             readyForState = ReadyFor.Unset;
+            _isReadyToDragNodes = false;
+
+            switch (state) {
+            case State.DraggingNodes:
+                _isDraggingNodes = true;
+                break;
+            default:
+                _isDraggingNodes = false;
+                break;
+            }
 
             // Repaint editor if necessary
             if (allowRepaint) {
@@ -127,6 +140,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
         internal void SetReadyFor(ReadyFor value)
         {
             readyForState = value;
+            switch (readyForState) {
+            case ReadyFor.DraggingNodes:
+                _isReadyToDragNodes = true;
+                break;
+            default:
+                _isReadyToDragNodes = false;
+                break;
+            }
         }
 
         internal void SetMouseTargetType(TargetType targetType, NodeTargetType nodeTargetType = NodeTargetType.None)

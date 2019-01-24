@@ -566,6 +566,9 @@
             Partially independent, mainly controlled by process.
             </summary>
         </member>
+        <member name="P:DG.DemiEditor.DeGUINodeSystem.InteractionManager.isDraggingNodes">
+            <summary>TRUE when read-to or dragging nodes</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.IsDragging(DG.DemiLib.IEditorGUINode)">
             <summary>Returns TRUE if the given node is currently being dragged</summary>
         </member>
