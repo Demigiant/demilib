@@ -50,7 +50,7 @@ namespace DG.DeAudio
             }
 
             I = this;
-            DontDestroyOnLoad(this.gameObject);
+            if (this.transform.parent == null) DontDestroyOnLoad(this.gameObject);
 
             if (!_isInitializing) InitializeAudioGroups();
         }
