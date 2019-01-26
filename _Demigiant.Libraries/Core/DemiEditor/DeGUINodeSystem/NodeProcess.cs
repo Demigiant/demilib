@@ -330,6 +330,17 @@ namespace DG.DemiEditor.DeGUINodeSystem
             guiScalePositionDiff = new Vector2(nodeArea.x - nodeArea.x / guiScale, nodeArea.y - nodeArea.y / guiScale);
             GUILayout.BeginArea(new Rect(nodeArea.x / guiScale, nodeArea.y / guiScale, relativeArea.width, relativeArea.height));
 
+            // Reset readyForState before checking if interaction is locked
+            // (otherwise mouse target isn't evaluated because readyForState locks it to previous one)
+            if (Event.current.type == EventType.MouseDown) {
+                switch (interaction.readyForState) {
+                case InteractionManager.ReadyFor.Unset: break;
+                default:
+                    interaction.SetReadyFor(InteractionManager.ReadyFor.Unset);
+                    break;
+                }
+            }
+
             // Determine mouse target type before clearing nodeGUIData dictionary
             if (!interaction.mouseTargetIsLocked) EvaluateAndStoreMouseTarget();
             if (Event.current.type == EventType.Layout) {
