@@ -115,19 +115,19 @@ public class DeSamplerInspector : Editor
         for (int i = 0; i < _src.strList0.Count; ++i) {
             DeGUILayout.BeginToolbar();
             if (DeGUILayout.PressButton("Drag me " + _src.strList0[i], DeGUI.styles.button.tool)) {
-                DeGUIDrag.StartDrag(1, this, _src.strList0, i);
+                DeGUIDrag.StartDrag(this, _src.strList0, i);
             }
             DeGUILayout.EndToolbar();
-            if (DeGUIDrag.Drag(1, _src.strList0, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
+            if (DeGUIDrag.Drag(_src.strList0, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
         }
         GUILayout.Space(3);
         for (int i = 0; i < _src.strList1.Count; ++i) {
             DeGUILayout.BeginToolbar();
             if (DeGUILayout.PressButton("Drag me " + _src.strList1[i], DeGUI.styles.button.tool)) {
-                DeGUIDrag.StartDrag(2, this, _src.strList1, i);
+                DeGUIDrag.StartDrag(this, _src.strList1, i);
             }
             DeGUILayout.EndToolbar();
-            if (DeGUIDrag.Drag(2, _src.strList1, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
+            if (DeGUIDrag.Drag(_src.strList1, i).outcome == DeDragResultType.Accepted) GUI.changed = true;
         }
         GUILayout.Space(3); // Both vertical and horizontal
         float h = (int)(_src.strListAlt.Count * 0.5f) * EditorGUIUtility.singleLineHeight;
@@ -140,9 +140,9 @@ public class DeSamplerInspector : Editor
                 if (i > 0) elR.y += elR.height;
             } else elR = elR.SetX(areaR.x + elR.width);
             if (DeGUI.PressButton(elR, "Drag me " + _src.strListAlt[i], DeGUI.styles.button.tool)) {
-                DeGUIDrag.StartDrag(3, this, _src.strListAlt, i);
+                DeGUIDrag.StartDrag(this, _src.strListAlt, i);
             }
-            if (DeGUIDrag.Drag(3, _src.strListAlt, i, elR).outcome == DeDragResultType.Accepted) GUI.changed = true;
+            if (DeGUIDrag.Drag(_src.strListAlt, i, elR).outcome == DeDragResultType.Accepted) GUI.changed = true;
         }
 
         // Container
@@ -225,8 +225,8 @@ public class DeSamplerInspector : Editor
             EditorGUILayout.HelpBox("Double click a label to edit it, drag it to change its position (works with both arrays and lists)", MessageType.Info);
             for (int i = 0; i < _src.draggableLabels.Length; ++i) {
                 string l = _src.draggableLabels[i];
-                _src.draggableLabels[i] = DeGUILayout.DoubleClickDraggableTextField(this, i.ToString(), l, _DragID0, _src.draggableLabels, i, DeGUI.styles.label.toolbar);
-                if (DeGUIDrag.Drag(_DragID0, _src.draggableLabels, i).outcome == DeDragResultType.Accepted) EditorUtility.SetDirty(_src);
+                _src.draggableLabels[i] = DeGUILayout.DoubleClickDraggableTextField(this, i.ToString(), l, _src.draggableLabels, i, DeGUI.styles.label.toolbar);
+                if (DeGUIDrag.Drag(_src.draggableLabels, i).outcome == DeDragResultType.Accepted) EditorUtility.SetDirty(_src);
             }
         }
 

@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System.Collections.Generic;
+using DG.DemiEditor.Internal;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         readonly NodeProcess _process;
         readonly SnappingManager _snapper = new SnappingManager();
         IEditorGUINode _mainNode;
+        Rect _nodeArea;
         // References to existing lists/dictionaries
         List<IEditorGUINode> _allNodesRef;
         Dictionary<IEditorGUINode, NodeGUIData> _nodeToGuiDataRef;
@@ -50,11 +52,11 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         public void ApplyDrag(Vector2 delta)
         {
             Vector2 mainFullP = nodeToFullDragPosition[_mainNode];
-            Rect mainArea = _nodeToGuiDataRef[_mainNode].fullArea;
-            mainArea.x = mainFullP.x + _process.areaShift.x;
-            mainArea.y = mainFullP.y + _process.areaShift.y;
+            _nodeArea = _nodeToGuiDataRef[_mainNode].fullArea;
+            _nodeArea.x = mainFullP.x + _process.areaShift.x;
+            _nodeArea.y = mainFullP.y + _process.areaShift.y;
             Vector2 snappedDelta = delta;
-            _snapper.EvaluateSnapping(_mainNode, mainArea,  _allNodesRef, _draggedNodesRef, _nodeToGuiDataRef, _process.relativeArea);
+            _snapper.EvaluateSnapping(_mainNode, _nodeArea,  _allNodesRef, _draggedNodesRef, _nodeToGuiDataRef, _process.relativeArea);
             if (_snapper.hasSnapX) {
                 _lastDragWasSnappedOnX = true;
                 snappedDelta.x = _snapper.snapX - (_mainNode.guiPosition.x + _process.areaShift.x);
@@ -84,14 +86,15 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         {
             float guideSize = 2 / _process.guiScale;
             if (_snapper.showHorizontalGuide) {
-                Vector2 fromP = new Vector2(0, _snapper.snapY);
-                Vector2 toP = new Vector2(_process.relativeArea.width, _snapper.snapY);
+                float y = _snapper.snapYPosition == 0 ? _snapper.snapY : _snapper.snapY + _nodeArea.height;
+                Vector2 fromP = new Vector2(0, y);
+                Vector2 toP = new Vector2(_process.relativeArea.width, y);
                 Handles.DrawBezier(fromP, toP, fromP, toP, Color.cyan, null, guideSize);
             }
             if (_snapper.showVerticalGuide) {
-                Vector2 fromP = new Vector2(_snapper.snapX, 0);
-                Vector2 toP = new Vector2(_snapper.snapX, _process.relativeArea.height);
-                Handles.DrawDottedLine(fromP, toP, 4f);
+                float x = _snapper.snapXPosition == 0 ? _snapper.snapX : _snapper.snapX + _nodeArea.width;
+                Vector2 fromP = new Vector2(x, 0);
+                Vector2 toP = new Vector2(x, _process.relativeArea.height);
                 Handles.DrawBezier(fromP, toP, fromP, toP, Color.cyan, null, guideSize);
             }
         }

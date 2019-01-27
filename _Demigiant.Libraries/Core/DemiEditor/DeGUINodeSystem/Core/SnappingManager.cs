@@ -13,6 +13,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
     {
         public bool hasSnapX { get; private set; }
         public bool hasSnapY { get; private set; }
+        public int snapXPosition { get; private set; } // 0 is left, 1 is right
+        public int snapYPosition { get; private set; } // 0 is top, 1 is bottom
         public bool showVerticalGuide { get; private set; }
         public bool showHorizontalGuide { get; private set; }
         public float snapX { get; private set; }
@@ -31,6 +33,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             Dictionary<IEditorGUINode, NodeGUIData> nodeToGuiData, Rect processRelativeArea
         ){
             hasSnapX = hasSnapY = showHorizontalGuide = showVerticalGuide = false;
+            snapXPosition = snapYPosition = 0;
             _topSnappingPs.Clear();
             _bottomSnappingPs.Clear();
             _leftSnappingPs.Clear();
@@ -97,6 +100,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                         } else if (ValuesAreWithinBorderSnappingRange(forArea.x, toArea.xMax)) {
                             _rightSnappingPs.Add(toArea.xMax);
                             hasSnapX = showVerticalGuide = hasBorderSnapping = hasRightSnappingPs = true;
+                        } else if (ValuesAreWithinBorderSnappingRange(forArea.xMax, toArea.xMax)) {
+                            _rightSnappingPs.Add(toArea.xMax);
+                            hasSnapX = showVerticalGuide = hasBorderSnapping = hasRightSnappingPs = true;
+                            snapXPosition = 1;
                         }
                     }
                     if (!hasNearSnappingY) {
@@ -106,15 +113,27 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                         } else if (ValuesAreWithinBorderSnappingRange(forArea.y, toArea.yMax)) {
                             _bottomSnappingPs.Add(toArea.yMax);
                             hasSnapY = showHorizontalGuide = hasBorderSnapping = hasBottomSnappingPs = true;
+                        } else if (ValuesAreWithinBorderSnappingRange(forArea.yMax, toArea.yMax)) {
+                            _bottomSnappingPs.Add(toArea.yMax);
+                            hasSnapY = showHorizontalGuide = hasBorderSnapping = hasBottomSnappingPs = true;
+                            snapYPosition = 1;
                         }
                     }
                 }
-                // Find closes snapping point
+                // Find closest snapping point
                 if (hasBorderSnapping) {
                     if (hasLeftSnappingPs) snapX = FindNearestValueTo(forArea.x, _leftSnappingPs);
-                    else if (hasRightSnappingPs) snapX = FindNearestValueTo(forArea.x, _rightSnappingPs);
+                    else if (hasRightSnappingPs) {
+                        snapX = snapXPosition == 0
+                            ? FindNearestValueTo(forArea.x, _rightSnappingPs)
+                            : FindNearestValueTo(forArea.xMax, _rightSnappingPs) - forArea.width;
+                    }
                     if (hasTopSnappingPs) snapY = FindNearestValueTo(forArea.y, _topSnappingPs);
-                    else if (hasBottomSnappingPs) snapY = FindNearestValueTo(forArea.y, _bottomSnappingPs);
+                    else if (hasBottomSnappingPs) {
+                        snapY = snapYPosition == 0
+                            ? FindNearestValueTo(forArea.y, _bottomSnappingPs)
+                            : FindNearestValueTo(forArea.yMax, _bottomSnappingPs) - forArea.height;
+                    }
                 }
             }
         }
