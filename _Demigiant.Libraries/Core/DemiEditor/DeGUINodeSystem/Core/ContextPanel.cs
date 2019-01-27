@@ -176,6 +176,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 }
                 break;
             }
+            _process.MarkLayoutAsDirty();
         }
 
         #endregion
