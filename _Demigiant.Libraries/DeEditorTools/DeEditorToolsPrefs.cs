@@ -12,7 +12,7 @@ namespace DG.DeEditorTools
 {
     public class DeEditorToolsPrefs
     {
-        const string _Version = "0.7.050";
+        const string _Version = "0.7.100";
 
         public static bool deScene_enableContextMenu;
         public static bool deHierarchy_hideObject;
@@ -21,6 +21,7 @@ namespace DG.DeEditorTools
         public static bool deHierarchy_indentIco;
         public static bool deHierarchy_showBorder;
         public static bool deHierarchy_fadeEvidenceWhenInactive;
+        public static bool deHierarchy_thickSeparators;
 
         const string _SavePrefix = "DeEditorTools_";
         const string _ID_DeScene_EnableContextMenu = _SavePrefix + "deScene_enableContextMenu";
@@ -30,6 +31,7 @@ namespace DG.DeEditorTools
         const string _ID_DeHierarchy_IndentIco = _SavePrefix + "deHierarchy_indentIco";
         const string _ID_DeHierarchy_ShowBorder = _SavePrefix + "deHierarchy_showBorder";
         const string _ID_DeHierarchy_FadeEvidenceWhenInactive = _SavePrefix + "deHierarchy_fadeEvidenceWhenInactive";
+        const string _ID_DeHierarchy_ThickSeparators = _SavePrefix + "deHierarchy_thickSeparators";
 
         // Elements to remove from EditorPrefs (possible leftovers from previous versions)
         static readonly string[] _PrefsToDelete = new [] {
@@ -55,6 +57,7 @@ namespace DG.DeEditorTools
             deHierarchy_indentIco = EditorPrefs.GetBool(_ID_DeHierarchy_IndentIco, false);
             deHierarchy_showBorder = EditorPrefs.GetBool(_ID_DeHierarchy_ShowBorder, true);
             deHierarchy_fadeEvidenceWhenInactive = EditorPrefs.GetBool(_ID_DeHierarchy_FadeEvidenceWhenInactive, true);
+            deHierarchy_thickSeparators = EditorPrefs.GetBool(_ID_DeHierarchy_ThickSeparators, true);
         }
 
         [PreferenceItem("DeEditorTools")]
@@ -91,6 +94,7 @@ namespace DG.DeEditorTools
                 }
                 deHierarchy_showBorder = EditorGUILayout.Toggle("Show colored border", deHierarchy_showBorder);
                 deHierarchy_fadeEvidenceWhenInactive = EditorGUILayout.Toggle("Fade evidence if object is inactive", deHierarchy_fadeEvidenceWhenInactive);
+                deHierarchy_thickSeparators = EditorGUILayout.Toggle("Thick separators", deHierarchy_thickSeparators);
                 hierarchyChanged = EditorGUI.EndChangeCheck();
             }
 
@@ -108,6 +112,7 @@ namespace DG.DeEditorTools
             EditorPrefs.SetBool(_ID_DeHierarchy_IndentIco, deHierarchy_indentIco);
             EditorPrefs.SetBool(_ID_DeHierarchy_ShowBorder, deHierarchy_showBorder);
             EditorPrefs.SetBool(_ID_DeHierarchy_FadeEvidenceWhenInactive, deHierarchy_fadeEvidenceWhenInactive);
+            EditorPrefs.SetBool(_ID_DeHierarchy_ThickSeparators, deHierarchy_thickSeparators);
         }
     }
 }

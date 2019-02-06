@@ -139,6 +139,24 @@ namespace DG.DeEditorTools.Hierarchy
                     GUI.Label(selectionRect.Shift(-3, 1, 4, -1), "", _evidenceStyle);
                 }
             }
+            // Separator
+            if (customizedItem.separatorType != DeHierarchyComponent.SeparatorType.None) {
+                color = customizedItem.GetSeparatorColor();
+                bool thick = DeEditorToolsPrefs.deHierarchy_thickSeparators;
+                const int offsetToLBorder = -30; // Offset to reach left border
+                const int extraSize = 60;
+                Rect separatorR;
+                switch (customizedItem.separatorType) {
+                case DeHierarchyComponent.SeparatorType.Top:
+                    separatorR = new Rect(selectionRect.x, selectionRect.y - (thick ? 1 : 0), selectionRect.width, (thick ? 3 : 1));
+                    break;
+                default:
+                    separatorR = new Rect(selectionRect.x, selectionRect.y + selectionRect.height - 1, selectionRect.width, (thick ? 3 : 1));
+                    break;
+                }
+                separatorR = separatorR.Shift(offsetToLBorder, 0, extraSize, 0);
+                DeGUI.DrawColoredSquare(separatorR, color);
+            }
         }
 
         static void SetStyles()
@@ -182,23 +200,48 @@ namespace DG.DeEditorTools.Hierarchy
         #region Internal Methods
 
         // Assumes at least one object is selected
-        internal static void SetColorForSelections(DeHierarchyComponent.HColor hColor)
+        internal static void ResetSelections()
         {
-            ConnectToDeHierarchyComponent(true);
+            ConnectToDeHierarchyComponent(false);
+            if (_dehComponent == null) return;
+
             Undo.RecordObject(_dehComponent, "DeHierarchy");
             bool changed = false;
             foreach (GameObject go in Selection.gameObjects) {
-                if (hColor == DeHierarchyComponent.HColor.None) {
-                    changed = _dehComponent.RemoveItemData(go) || changed;
-                } else {
-                    changed = true;
-                    _dehComponent.StoreItemColor(go, hColor);
-                }
+                changed = _dehComponent.RemoveItemData(go) || changed;
             }
             if (_dehComponent.customizedItems.Count == 0) {
                 Undo.DestroyObjectImmediate(_dehComponent.gameObject);
                 _dehComponent = null;
             } else if (changed) EditorUtility.SetDirty(_dehComponent);
+        }
+
+        // Assumes at least one object is selected
+        internal static void ResetSeparatorsForSelections()
+        {
+            ConnectToDeHierarchyComponent(false);
+            if (_dehComponent == null) return;
+
+            Undo.RecordObject(_dehComponent, "DeHierarchy");
+            bool changed = false;
+            foreach (GameObject go in Selection.gameObjects) {
+                changed = _dehComponent.ResetSeparator(go) || changed;
+            }
+            if (_dehComponent.customizedItems.Count == 0) {
+                Undo.DestroyObjectImmediate(_dehComponent.gameObject);
+                _dehComponent = null;
+            } else if (changed) EditorUtility.SetDirty(_dehComponent);
+        }
+
+        // Assumes at least one object is selected
+        // Assumes it's never called with HColor.None
+        internal static void SetColorForSelections(DeHierarchyComponent.HColor hColor)
+        {
+            ConnectToDeHierarchyComponent(true);
+            Undo.RecordObject(_dehComponent, "DeHierarchy");
+            foreach (GameObject go in Selection.gameObjects) {
+                _dehComponent.StoreItemColor(go, hColor);
+            }
         }
 
         // Assumes at least one object is selected
@@ -208,6 +251,18 @@ namespace DG.DeEditorTools.Hierarchy
             Undo.RecordObject(_dehComponent, "DeHierarchy");
             foreach (GameObject go in Selection.gameObjects) {
                 _dehComponent.StoreItemIcon(go, icoType);
+            }
+        }
+
+        // Assumes at least one object is selected
+        // Assumes it's never called with HColor.None
+        internal static void SetSeparatorForSelections(
+            DeHierarchyComponent.SeparatorType separatorType, DeHierarchyComponent.HColor separatorHColor = DeHierarchyComponent.HColor.None
+        ){
+            ConnectToDeHierarchyComponent(true);
+            Undo.RecordObject(_dehComponent, "DeHierarchy");
+            foreach (GameObject go in Selection.gameObjects) {
+                _dehComponent.StoreItemSeparator(go, separatorType, separatorHColor);
             }
         }
 

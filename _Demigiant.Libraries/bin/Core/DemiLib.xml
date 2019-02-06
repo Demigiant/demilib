@@ -101,9 +101,19 @@
             If the item exists sets it, otherwise first creates it and then sets it
             </summary>
         </member>
+        <member name="M:DG.DemiLib.External.DeHierarchyComponent.StoreItemSeparator(UnityEngine.GameObject,DG.DemiLib.External.DeHierarchyComponent.SeparatorType,DG.DemiLib.External.DeHierarchyComponent.HColor)">
+            <summary>
+            If the item exists sets it, otherwise first creates it and then sets it
+            </summary>
+        </member>
         <member name="M:DG.DemiLib.External.DeHierarchyComponent.RemoveItemData(UnityEngine.GameObject)">
             <summary>
             Returns TRUE if the item existed and was removed.
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.External.DeHierarchyComponent.ResetSeparator(UnityEngine.GameObject)">
+            <summary>
+            Returns TRUE if the item existed and was changed.
             </summary>
         </member>
         <member name="M:DG.DemiLib.External.DeHierarchyComponent.GetItem(UnityEngine.GameObject)">

@@ -42,6 +42,13 @@ namespace DG.DemiLib.External
             Camera,
         }
 
+        public enum SeparatorType
+        {
+            None,
+            Top,
+            Bottom
+        }
+
         #region Serialized
 
         public List<CustomizedItem> customizedItems = new List<CustomizedItem>();
@@ -94,6 +101,22 @@ namespace DG.DemiLib.External
         }
 
         /// <summary>
+        /// If the item exists sets it, otherwise first creates it and then sets it
+        /// </summary>
+        public void StoreItemSeparator(GameObject go, SeparatorType separatorType, HColor separatorHColor = HColor.None)
+        {
+            for (int i = 0; i < customizedItems.Count; ++i) {
+                if (customizedItems[i].gameObject != go) continue;
+                // Item exists, replace it
+                customizedItems[i].separatorType = separatorType;
+                customizedItems[i].separatorHColor = separatorHColor;
+                return;
+            }
+            // Item doesn't exist, add it
+            customizedItems.Add(new CustomizedItem(go, separatorType, separatorHColor));
+        }
+
+        /// <summary>
         /// Returns TRUE if the item existed and was removed.
         /// </summary>
         public bool RemoveItemData(GameObject go)
@@ -113,6 +136,22 @@ namespace DG.DemiLib.External
         }
 
         /// <summary>
+        /// Returns TRUE if the item existed and was changed.
+        /// </summary>
+        public bool ResetSeparator(GameObject go)
+        {
+            for (int i = 0; i < customizedItems.Count; ++i) {
+                if (customizedItems[i].gameObject != go) continue;
+                // Item exists, replace it
+                customizedItems[i].separatorType = SeparatorType.None;
+                customizedItems[i].separatorHColor = HColor.None;
+                if (customizedItems[i].hColor == HColor.None) customizedItems.RemoveAt(i);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Returns the customizedItem for the given gameObject, or NULL if none was found
         /// </summary>
         public CustomizedItem GetItem(GameObject go)
@@ -122,6 +161,21 @@ namespace DG.DemiLib.External
             }
             return null;
         }
+
+//        /// <summary>
+//        /// Returns TRUE if there's no more customized items and this gameObject should be destroyed
+//        /// </summary>
+//        /// <returns></returns>
+//        public bool ClearUnsetCustomizedItems()
+//        {
+//            for (int i = customizedItems.Count - 1; i > -1; --i) {
+//                bool clear = customizedItems[i].gameObject == null
+//                             || customizedItems[i].separatorType == SeparatorType.None
+//                             || customizedItems[i].hColor == HColor.None;
+//                if (clear) customizedItems.RemoveAt(i);
+//            }
+//            return customizedItems.Count == 0;
+//        }
 
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
         // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
@@ -133,6 +187,8 @@ namespace DG.DemiLib.External
             public GameObject gameObject;
             public HColor hColor = HColor.BrightGrey;
             public IcoType icoType = IcoType.Dot;
+            public SeparatorType separatorType = SeparatorType.None;
+            public HColor separatorHColor = HColor.Black;
 
             public CustomizedItem(GameObject gameObject, HColor hColor)
             {
@@ -144,10 +200,22 @@ namespace DG.DemiLib.External
                 this.gameObject = gameObject;
                 this.icoType = icoType;
             }
+            public CustomizedItem(GameObject gameObject, SeparatorType separatorType, HColor separatorHColor)
+            {
+                this.gameObject = gameObject;
+                this.separatorType = separatorType;
+                this.separatorHColor = separatorHColor;
+            }
 
             public Color GetColor()
+            { return GetColor(hColor); }
+
+            public Color GetSeparatorColor()
+            { return GetColor(separatorHColor); }
+
+            Color GetColor(HColor color)
             {
-                switch (hColor) {
+                switch (color) {
                 case HColor.Blue: return new Color(0.2145329f, 0.4501492f, 0.9117647f, 1f);
                 case HColor.Green: return new Color(0.05060553f, 0.8602941f, 0.2237113f, 1f);
                 case HColor.Orange: return new Color(0.9558824f, 0.4471125f, 0.05622837f, 1f);

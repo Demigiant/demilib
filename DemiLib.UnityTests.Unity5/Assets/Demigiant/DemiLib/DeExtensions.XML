@@ -6,7 +6,7 @@
     <members>
         <member name="M:DG.DeExtensions.ColorExtensions.ChangeBrightness(UnityEngine.Color,System.Single,System.Nullable{System.Single})">
             <summary>
-            Returns a new color equal to the given on with changed brightness
+            Returns a new color equal to the given one with changed brightness
             </summary>
             <param name="color">Color to evaluate</param>
             <param name="brightnessFactor">Brightness factor (multiplied by current brightness)</param>
