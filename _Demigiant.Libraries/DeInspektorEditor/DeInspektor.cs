@@ -25,7 +25,6 @@ namespace DG.DeInspektorEditor
         static GUIStyle _arrayElementBtStyle;
         DeMethodButtonEditor _methodButtonEditor;
         DeComponentDescriptionEditor _componentDescriptionEditor;
-        int _objectId; // Added to list ID (so IDs are different in case there's multiple Components with lists on the same GameObject)
 
         #region GUI
 
@@ -45,7 +44,6 @@ namespace DG.DeInspektorEditor
             switch (DeInspektorPrefs.mode) {
             case DeInspektorPrefs.Mode.Full:
                 // Inspector with special features like custom lists
-                _objectId = this.serializedObject.targetObject.GetInstanceID();
                 Draw(this.serializedObject);
                 break;
             default:
