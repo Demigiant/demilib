@@ -27,13 +27,14 @@ namespace DG.DeInspektorEditor.AttributesManagers
 
             SetStyles(_attr);
 
-            GUILayout.Space(-1);
-            using (new GUILayout.HorizontalScope()) {
-                GUILayout.Space(-13);
-                Rect r = GUILayoutUtility.GetRect(new GUIContent(_attr.text), _attrStyle);
-                r.width += 4;
-                using (new DeGUI.ColorScope(new DeSkinColor(0.65f, 0.16f))) GUI.Box(r, _attr.text, _attrStyle);
-            }
+//            GUILayout.Space(-1);
+//            using (new GUILayout.HorizontalScope()) {
+//                GUILayout.Space(-13);
+//                Rect r = GUILayoutUtility.GetRect(new GUIContent(_attr.text), _attrStyle);
+//                r.width += 4;
+//                using (new DeGUI.ColorScope(new DeSkinColor(0.65f, 0.16f))) GUI.Box(r, _attr.text, _attrStyle);
+//            }
+            using (new DeGUI.ColorScope(new DeSkinColor(0.65f, 0.16f))) GUILayout.Box(_attr.text, _attrStyle);
         }
 
         void SetStyles(DeComponentDescriptionAttribute attr)
