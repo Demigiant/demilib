@@ -575,21 +575,37 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 case KeyCode.DownArrow:
                 case KeyCode.LeftArrow:
                 case KeyCode.RightArrow:
-                    // Move selected nodes (on key down so it can repeat when keeping they key pressed)
-                    if (selection.selectedNodes.Count == 0 || !DeGUIKey.none && !DeGUIKey.Exclusive.shift) break;
-                    Vector2 shift = Vector2.zero;
-                    switch (Event.current.keyCode) {
-                    case KeyCode.UpArrow: shift.y = -1;
-                        break;
-                    case KeyCode.DownArrow: shift.y = 1;
-                        break;
-                    case KeyCode.LeftArrow: shift.x = -1;
-                        break;
-                    case KeyCode.RightArrow: shift.x = 1;
-                        break;
+                    if (DeGUIKey.Exclusive.softCtrlShift) {
+                        // Align and arrange nodes vertically or horizontally
+                        switch (Event.current.keyCode) {
+                        case KeyCode.LeftArrow:
+                            _contextPanel.AlignAndArrangeNodes(false, selection.selectedNodes);
+                            break;
+                        case KeyCode.UpArrow:
+                            _contextPanel.AlignAndArrangeNodes(true, selection.selectedNodes);
+                            break;
+                        }
+                    } else {
+                        // Move selected nodes (on key down so it can repeat when keeping they key pressed)
+                        if (selection.selectedNodes.Count == 0 || !DeGUIKey.none && !DeGUIKey.Exclusive.shift) break;
+                        Vector2 shift = Vector2.zero;
+                        switch (Event.current.keyCode) {
+                        case KeyCode.UpArrow:
+                            shift.y = -1;
+                            break;
+                        case KeyCode.DownArrow:
+                            shift.y = 1;
+                            break;
+                        case KeyCode.LeftArrow:
+                            shift.x = -1;
+                            break;
+                        case KeyCode.RightArrow:
+                            shift.x = 1;
+                            break;
+                        }
+                        if (DeGUIKey.Exclusive.shift) shift *= 10;
+                        foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += shift;
                     }
-                    if (DeGUIKey.Exclusive.shift) shift *= 10;
-                    foreach (IEditorGUINode node in selection.selectedNodes) node.guiPosition += shift;
                     guiChangeType = GUIChangeType.DragNodes;
                     GUI.changed = _repaintOnEnd = true;
                     DispatchOnGUIChange(GUIChangeType.DragNodes);

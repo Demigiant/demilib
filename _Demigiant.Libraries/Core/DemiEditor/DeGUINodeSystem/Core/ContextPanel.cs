@@ -48,29 +48,36 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             if (!_isVisible) return;
 
             const int totIcons = 8;
+            const int totAlignIcons = 6;
+            const int dividerW = 2; // Divider between align and distribute buttons
 
             _Styles.Init();
-            _area = _process.relativeArea.SetWidth(_IcoSize * totIcons + _IcosDistance * (totIcons - 1) + _HPadding * 2)
+            _area = _process.relativeArea.SetWidth(_IcoSize * totIcons + _IcosDistance * totIcons - 1 + _HPadding * 2 + dividerW)
                 .SetHeight(_HeaderHeight + _IcoSize + _VPadding * 2);
             _area = _area.SetX(_process.relativeArea.xMax - _area.width - _Margin).Shift(0, _Margin, 0, 0);
             _area.x = (int)_area.x;
             _area.y = (int)_area.y;
+            Rect dividerR = new Rect(_area.x + _IcoSize * totAlignIcons + _IcosDistance * totAlignIcons + _HPadding, _area.y, dividerW, _area.height);
 
             // Background
             DeGUI.DrawColoredSquare(_area, Color.black);
             using (new DeGUI.ColorScope(DeGUI.colors.global.blue)) GUI.Box(_area.Expand(1), "", DeGUI.styles.box.outline01);
+            // Distribute buttons divider
+            DeGUI.DrawColoredSquare(new Rect(dividerR), DeGUI.colors.global.blue);
 
             // Header
             Rect headerR = _area.SetHeight(_HeaderHeight);
             GUI.Label(headerR, string.Format("{0} nodes selected", _process.selection.selectedNodes.Count), _Styles.headerLabel);
 
             // Align buttons
+            Rect icoR = new Rect(_area.x + _HPadding, _area.y + _VPadding + _HeaderHeight, _IcoSize, _IcoSize);
             for (int i = 0; i < totIcons; ++i) {
-                Rect icoR = new Rect(_area.x + _HPadding + (_IcoSize + _IcosDistance) * i, _area.y + _VPadding + _HeaderHeight, _IcoSize, _IcoSize);
+                if (i == totAlignIcons) icoR.x += dividerW + _IcosDistance;
                 if (GUI.Button(icoR, IndexToIcon(i), _Styles.btIco) && Event.current.button == 0) {
-                    if (i > 5) ArrangeSelectedNodes(i == 6);
-                    AlignSelectedNodes(IndexToGroupAlignment(i));
+                    if (i > totAlignIcons - 1) ArrangeSelectedNodes(i > totAlignIcons, _process.selection.selectedNodes);
+                    AlignSelectedNodes(IndexToGroupAlignment(i), _process.selection.selectedNodes);
                 }
+                icoR.x += _IcoSize + _IcosDistance;
             }
         }
 
@@ -84,13 +91,19 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             return _area.Contains(Event.current.mousePosition);;
         }
 
+        public void AlignAndArrangeNodes(bool horizontally, List<IEditorGUINode> nodes)
+        {
+            ArrangeSelectedNodes(horizontally, nodes);
+            AlignSelectedNodes(horizontally ? GroupAlignment.Top : GroupAlignment.Left, nodes);
+        }
+
         #endregion
 
         #region Methods
 
-        void AlignSelectedNodes(GroupAlignment alignment)
+        void AlignSelectedNodes(GroupAlignment alignment, List<IEditorGUINode> nodes)
         {
-            int len = _process.selection.selectedNodes.Count;
+            int len = nodes.Count;
             if (len <= 1) return;
 
             GUI.changed = true;
@@ -100,81 +113,81 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             switch (alignment) {
             case GroupAlignment.Left:
                 for (int i = 0; i < len; ++i) {
-                    Rect r = _process.nodeToGUIData[_process.selection.selectedNodes[i]].fullArea;
+                    Rect r = _process.nodeToGUIData[nodes[i]].fullArea;
                     if (i == 0) alignVector = new Vector2(r.x, 0);
                     else if (r.x < alignVector.x) alignVector.x = r.x;
                 }
                 for (int i = 0; i < len; ++i) {
-                    IEditorGUINode node = _process.selection.selectedNodes[i];
+                    IEditorGUINode node = nodes[i];
                     node.guiPosition = new Vector2(alignVector.x - shift.x, node.guiPosition.y);
                 }
                 break;
             case GroupAlignment.Right:
                 for (int i = 0; i < len; ++i) {
-                    Rect r = _process.nodeToGUIData[_process.selection.selectedNodes[i]].fullArea;
+                    Rect r = _process.nodeToGUIData[nodes[i]].fullArea;
                     if (i == 0) alignVector = new Vector2(r.xMax, 0);
                     else if (r.xMax > alignVector.x) alignVector.x = r.xMax;
                 }
                 for (int i = 0; i < len; ++i) {
-                    IEditorGUINode node = _process.selection.selectedNodes[i];
+                    IEditorGUINode node = nodes[i];
                     node.guiPosition = new Vector2(
-                        alignVector.x - _process.nodeToGUIData[_process.selection.selectedNodes[i]].fullArea.width - shift.x,
+                        alignVector.x - _process.nodeToGUIData[nodes[i]].fullArea.width - shift.x,
                         node.guiPosition.y
                     );
                 }
                 break;
             case GroupAlignment.VCenter:
                 for (int i = 0; i < len; ++i) {
-                    Rect r = _process.nodeToGUIData[_process.selection.selectedNodes[i]].fullArea;
+                    Rect r = _process.nodeToGUIData[nodes[i]].fullArea;
                     if (i == 0) alignVector = new Vector2(r.center.x, 0);
                     else if (r.center.x > alignVector.x) alignVector.x += (r.center.x - alignVector.x) * 0.5f;
                     else if (r.center.x < alignVector.x) alignVector.x -= (alignVector.x - r.center.x) * 0.5f;
                 }
                 for (int i = 0; i < len; ++i) {
-                    IEditorGUINode node = _process.selection.selectedNodes[i];
+                    IEditorGUINode node = nodes[i];
                     node.guiPosition = new Vector2(
-                        alignVector.x - _process.nodeToGUIData[_process.selection.selectedNodes[i]].fullArea.width * 0.5f - shift.x,
+                        alignVector.x - _process.nodeToGUIData[nodes[i]].fullArea.width * 0.5f - shift.x,
                         node.guiPosition.y
                     );
                 }
                 break;
             case GroupAlignment.Top:
                 for (int i = 0; i < len; ++i) {
-                    Rect r = _process.nodeToGUIData[_process.selection.selectedNodes[i]].fullArea;
+                    Rect r = _process.nodeToGUIData[nodes[i]].fullArea;
                     if (i == 0) alignVector = new Vector2(0, r.y);
                     else if (r.y < alignVector.y) alignVector.y = r.y;
                 }
                 for (int i = 0; i < len; ++i) {
-                    IEditorGUINode node = _process.selection.selectedNodes[i];
+                    IEditorGUINode node = nodes[i];
                     node.guiPosition = new Vector2(node.guiPosition.x, alignVector.y - shift.y);
                 }
                 break;
             case GroupAlignment.Bottom:
                 for (int i = 0; i < len; ++i) {
-                    Rect r = _process.nodeToGUIData[_process.selection.selectedNodes[i]].fullArea;
+                    Rect r = _process.nodeToGUIData[nodes[i]].fullArea;
                     if (i == 0) alignVector = new Vector2(0, r.yMax);
                     else if (r.yMax > alignVector.y) alignVector.y = r.yMax;
                 }
                 for (int i = 0; i < len; ++i) {
-                    IEditorGUINode node = _process.selection.selectedNodes[i];
+                    IEditorGUINode node = nodes[i];
                     node.guiPosition = new Vector2(
                         node.guiPosition.x,
-                        alignVector.y - _process.nodeToGUIData[_process.selection.selectedNodes[i]].fullArea.height - shift.y
+                        alignVector.y - _process.nodeToGUIData[nodes[i]].fullArea.height - shift.y
                     );
                 }
                 break;
             case GroupAlignment.HCenter:
                 for (int i = 0; i < len; ++i) {
-                    Rect r = _process.nodeToGUIData[_process.selection.selectedNodes[i]].fullArea;
+                    Rect r = _process.nodeToGUIData[nodes[i]].fullArea;
                     if (i == 0) alignVector = new Vector2(0, r.center.y);
                     else if (r.center.y > alignVector.y) alignVector.y += (r.center.y - alignVector.y) * 0.5f;
                     else if (r.center.y < alignVector.y) alignVector.y -= (alignVector.y - r.center.y) * 0.5f;
                 }
                 for (int i = 0; i < len; ++i) {
-                    IEditorGUINode node = _process.selection.selectedNodes[i];
+                    IEditorGUINode node = nodes[i];
                     node.guiPosition = new Vector2(
                         node.guiPosition.x,
-                        alignVector.y - _process.nodeToGUIData[_process.selection.selectedNodes[i]].fullArea.height * 0.5f - shift.y
+                        alignVector.y - _process.nodeToGUIData[nodes[i]].fullArea.height * 0.5f - shift.y
                     );
                 }
                 break;
@@ -182,9 +195,9 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             _process.MarkLayoutAsDirty();
         }
 
-        void ArrangeSelectedNodes(bool horizontally)
+        void ArrangeSelectedNodes(bool horizontally, List<IEditorGUINode> nodes)
         {
-            _process.selection.selectedNodes.Sort((a, b) => {
+            nodes.Sort((a, b) => {
                 if (horizontally) {
                     if (a.guiPosition.x < b.guiPosition.x) return -1;
                     if (a.guiPosition.x > b.guiPosition.x) return 1;
@@ -198,12 +211,12 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 }
                 return 0;
             });
-            for (int i = 1; i < _process.selection.selectedNodes.Count; ++i) {
-                IEditorGUINode prevINode = _process.selection.selectedNodes[i-1];
+            for (int i = 1; i < nodes.Count; ++i) {
+                IEditorGUINode prevINode = nodes[i-1];
                 NodeGUIData prevNodeGUIData = _process.nodeToGUIData[prevINode];
                 prevNodeGUIData.fullArea.x = prevINode.guiPosition.x;
                 prevNodeGUIData.fullArea.y = prevINode.guiPosition.y;
-                IEditorGUINode iNode = _process.selection.selectedNodes[i];
+                IEditorGUINode iNode = nodes[i];
                 iNode.guiPosition = horizontally
                     ? new Vector2(prevNodeGUIData.fullArea.xMax + NodeProcess.SnapOffset, prevINode.guiPosition.y)
                     : new Vector2(prevINode.guiPosition.x, prevNodeGUIData.fullArea.yMax + NodeProcess.SnapOffset);
@@ -222,8 +235,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             case 3: return DeStylePalette.ico_alignT;
             case 4: return DeStylePalette.ico_alignHC;
             case 5: return DeStylePalette.ico_alignB;
-            case 6: return DeStylePalette.ico_distributeHAlignT; // Align and distribute
-            case 7: return DeStylePalette.ico_distributeVAlignL; // Align and distribute
+            case 6: return DeStylePalette.ico_distributeVAlignL; // Align and distribute
+            case 7: return DeStylePalette.ico_distributeHAlignT; // Align and distribute
             default: return DeStylePalette.ico_alignL;
             }
         }
@@ -236,8 +249,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             case 3: return GroupAlignment.Top;
             case 4: return GroupAlignment.HCenter;
             case 5: return GroupAlignment.Bottom;
-            case 6: return GroupAlignment.Top; // Align and distribute
-            case 7: return GroupAlignment.Left; // Align and distribute
+            case 6: return GroupAlignment.Left; // Align and distribute
+            case 7: return GroupAlignment.Top; // Align and distribute
             default: return GroupAlignment.Left;
             }
         }

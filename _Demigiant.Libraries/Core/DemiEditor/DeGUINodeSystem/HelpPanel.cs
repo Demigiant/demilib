@@ -72,6 +72,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             cGroup.AppendDefinition("Paste nodes").AddKey("CTRL+V");
             cGroup.AppendDefinition("Move selected nodes by 1 pixel").AddKey("ARROWS");
             cGroup.AppendDefinition("Move selected nodes by 10 pixel").AddKey("SHIFT+ARROWS");
+            cGroup.AppendDefinition("Align and arrange selected nodes vertically").AddKey("CTRL+SHIFT+LEFT");
+            cGroup.AppendDefinition("Align and arrange selected nodes horizontally").AddKey("CTRL+SHIFT+UP");
             cGroup.AppendDefinition("Disable snapping while dragging nodes").AddKey("ALT");
             cGroup.AppendDefinition("Drag connection from node (if allowed)").AddKey("CTRL+LMB → Drag");
             cGroup.AppendDefinition("Drag alternative connection from node (if allowed)").AddKey("CTRL+SPACE+LMB → Drag");
