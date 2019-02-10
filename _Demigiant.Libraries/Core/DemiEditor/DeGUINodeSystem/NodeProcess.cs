@@ -45,7 +45,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             NodeConnection // Node connection changed, added or removed
         }
 
-        public const string Version = "1.0.010";
+        public const string Version = "1.0.020";
         /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
         public const int SnapOffset = 12;
         public EditorWindow editor; // Get/set so it can be refreshed if necessary

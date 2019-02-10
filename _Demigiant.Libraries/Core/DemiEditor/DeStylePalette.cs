@@ -129,6 +129,8 @@ namespace DG.DemiEditor
         public static Texture2D ico_alignT { get { return LoadTexture(ref _ico_alignT, "ico_alignT"); } }
         public static Texture2D ico_alignVC { get { return LoadTexture(ref _ico_alignVC, "ico_alignVC"); } }
         public static Texture2D ico_alignB { get { return LoadTexture(ref _ico_alignB, "ico_alignB"); } }
+        public static Texture2D ico_distributeHAlignT { get { return LoadTexture(ref _ico_distributeHAlignT, "ico_distributeHAlignT"); } }
+        public static Texture2D ico_distributeVAlignL { get { return LoadTexture(ref _ico_distributeVAlignL, "ico_distributeVAlignL"); } }
         public static Texture2D ico_star { get { return LoadTexture(ref _ico_star, "ico_star"); } }
         public static Texture2D ico_star_border { get { return LoadTexture(ref _ico_star_border, "ico_star_border"); } }
         public static Texture2D ico_play { get { return LoadTexture(ref _ico_play, "ico_play"); } }
@@ -170,6 +172,8 @@ namespace DG.DemiEditor
         static Texture2D _ico_alignT;
         static Texture2D _ico_alignVC;
         static Texture2D _ico_alignB;
+        static Texture2D _ico_distributeHAlignT;
+        static Texture2D _ico_distributeVAlignL;
         static Texture2D _ico_star;
         static Texture2D _ico_star_border;
         static Texture2D _ico_cog;

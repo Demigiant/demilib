@@ -47,8 +47,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         {
             if (!_isVisible) return;
 
+            const int totIcons = 8;
+
             _Styles.Init();
-            _area = _process.relativeArea.SetWidth(_IcoSize * 6 + _IcosDistance * 5 + _HPadding * 2)
+            _area = _process.relativeArea.SetWidth(_IcoSize * totIcons + _IcosDistance * (totIcons - 1) + _HPadding * 2)
                 .SetHeight(_HeaderHeight + _IcoSize + _VPadding * 2);
             _area = _area.SetX(_process.relativeArea.xMax - _area.width - _Margin).Shift(0, _Margin, 0, 0);
             _area.x = (int)_area.x;
@@ -63,9 +65,10 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             GUI.Label(headerR, string.Format("{0} nodes selected", _process.selection.selectedNodes.Count), _Styles.headerLabel);
 
             // Align buttons
-            for (int i = 0; i < 6; ++i) {
+            for (int i = 0; i < totIcons; ++i) {
                 Rect icoR = new Rect(_area.x + _HPadding + (_IcoSize + _IcosDistance) * i, _area.y + _VPadding + _HeaderHeight, _IcoSize, _IcoSize);
                 if (GUI.Button(icoR, IndexToIcon(i), _Styles.btIco) && Event.current.button == 0) {
+                    if (i > 5) ArrangeSelectedNodes(i == 6);
                     AlignSelectedNodes(IndexToGroupAlignment(i));
                 }
             }
@@ -179,6 +182,34 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             _process.MarkLayoutAsDirty();
         }
 
+        void ArrangeSelectedNodes(bool horizontally)
+        {
+            _process.selection.selectedNodes.Sort((a, b) => {
+                if (horizontally) {
+                    if (a.guiPosition.x < b.guiPosition.x) return -1;
+                    if (a.guiPosition.x > b.guiPosition.x) return 1;
+                    if (a.guiPosition.y > b.guiPosition.y) return 1;
+                    if (a.guiPosition.y < b.guiPosition.y) return -1;
+                } else {
+                    if (a.guiPosition.y < b.guiPosition.y) return -1;
+                    if (a.guiPosition.y > b.guiPosition.y) return 1;
+                    if (a.guiPosition.x > b.guiPosition.x) return 1;
+                    if (a.guiPosition.x < b.guiPosition.x) return -1;
+                }
+                return 0;
+            });
+            for (int i = 1; i < _process.selection.selectedNodes.Count; ++i) {
+                IEditorGUINode prevINode = _process.selection.selectedNodes[i-1];
+                NodeGUIData prevNodeGUIData = _process.nodeToGUIData[prevINode];
+                prevNodeGUIData.fullArea.x = prevINode.guiPosition.x;
+                prevNodeGUIData.fullArea.y = prevINode.guiPosition.y;
+                IEditorGUINode iNode = _process.selection.selectedNodes[i];
+                iNode.guiPosition = horizontally
+                    ? new Vector2(prevNodeGUIData.fullArea.xMax + NodeProcess.SnapOffset, prevINode.guiPosition.y)
+                    : new Vector2(prevINode.guiPosition.x, prevNodeGUIData.fullArea.yMax + NodeProcess.SnapOffset);
+            }
+        }
+
         #endregion
 
         #region Helpers
@@ -191,6 +222,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             case 3: return DeStylePalette.ico_alignT;
             case 4: return DeStylePalette.ico_alignHC;
             case 5: return DeStylePalette.ico_alignB;
+            case 6: return DeStylePalette.ico_distributeHAlignT; // Align and distribute
+            case 7: return DeStylePalette.ico_distributeVAlignL; // Align and distribute
             default: return DeStylePalette.ico_alignL;
             }
         }
@@ -203,6 +236,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             case 3: return GroupAlignment.Top;
             case 4: return GroupAlignment.HCenter;
             case 5: return GroupAlignment.Bottom;
+            case 6: return GroupAlignment.Top; // Align and distribute
+            case 7: return GroupAlignment.Left; // Align and distribute
             default: return GroupAlignment.Left;
             }
         }
