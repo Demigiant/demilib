@@ -2,6 +2,7 @@
 // Created: 2018/06/23 21:05
 // License Copyright (c) Daniele Giardini
 
+using System.Globalization;
 using UnityEngine;
 
 namespace DG.DemiEditor
@@ -34,7 +35,12 @@ namespace DG.DemiEditor
                 dotIndex = sMinor.IndexOf('.');
                 if (dotIndex != -1) sMinor = sMinor.Substring(0, dotIndex);
                 MinorVersion = int.Parse(sMinor);
-                Version = float.Parse(sMajor + '.' + sMinor);
+                if (!float.TryParse(sMajor + '.' + sMinor, NumberStyles.Float, CultureInfo.InvariantCulture, out Version)) {
+                    // There was a bug with Unity 2018.3.6 where culture didn't allow parse and the above row should solve it,
+                    // but Imma leave this try-catch just for safety
+                    Debug.LogWarning(string.Format("DeUnityEditorVersion ► Error when detecting Unity Version from \"{0}.{1}\"", sMajor, sMinor));
+                    Version = 2018.3f;
+                }
             }
         }
     }
