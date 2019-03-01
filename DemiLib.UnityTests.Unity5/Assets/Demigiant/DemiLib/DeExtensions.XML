@@ -280,6 +280,16 @@
             Returns a copy of the vector with its values rounded to integers, using a fast int cast.
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.RotateAroundPivot(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>
+            Rotates the given vector around the given pivot by the given angles
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.RotateAroundPivot(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Quaternion)">
+            <summary>
+            Rotates the given vector around the given pivot by the given angles
+            </summary>
+        </member>
         <member name="M:DG.DeExtensions.VectorExtensions.SetX(UnityEngine.Vector3,System.Single)">
             <summary>
             Returns a copy of the vector with its X set to the given value.

@@ -49,6 +49,21 @@ namespace DG.DeExtensions
         #region Vector3
 
         /// <summary>
+        /// Rotates the given vector around the given pivot by the given angles
+        /// </summary>
+        public static Vector3 RotateAroundPivot(this Vector3 v, Vector3 pivot, Vector3 rotation)
+        {
+            return v.RotateAroundPivot(pivot, Quaternion.Euler(rotation));
+        }
+        /// <summary>
+        /// Rotates the given vector around the given pivot by the given angles
+        /// </summary>
+        public static Vector3 RotateAroundPivot(this Vector3 v, Vector3 pivot, Quaternion rotation)
+        {
+            return rotation * (v - pivot) + pivot;
+        }
+
+        /// <summary>
         /// Returns a copy of the vector with its X set to the given value.
         /// </summary>
         public static Vector3 SetX(this Vector3 v, float value)
