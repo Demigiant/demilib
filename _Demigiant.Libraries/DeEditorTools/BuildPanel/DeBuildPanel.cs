@@ -14,8 +14,19 @@ using Format = DG.DemiEditor.Format;
 
 namespace DG.DeEditorTools.BuildPanel
 {
-    class DeBuildPanel : EditorWindow
+    public class DeBuildPanel : EditorWindow
     {
+        #region HOOKS
+
+        public static event Func<BuildTarget,string,string> OnBuildNameRequest;
+
+        static string Dispatch_OnBuildNameRequest(BuildTarget buildTarget, string buildName)
+        {
+            return OnBuildNameRequest == null ? buildName : OnBuildNameRequest(buildTarget, buildName);
+        }
+
+        #endregion
+        
         [MenuItem("Tools/Demigiant/" + _Title)]
         static void ShowWindow() { GetWindow(typeof(DeBuildPanel), false, _Title); }
 		
@@ -449,21 +460,27 @@ namespace DG.DeEditorTools.BuildPanel
             foreach (DeBuildPanelData.Affix affix in _src.suffixes) {
                 if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.text);
             }
+            string result = _StrbAlt.ToString();
+            if (!isInnerExecutable) {
+                string prevResult = result;
+                result = Dispatch_OnBuildNameRequest(build.buildTarget, result);
+                if (string.IsNullOrEmpty(result)) result = prevResult;
+            }
             if (withExtension) {
                 switch (build.buildTarget) {
                 case BuildTarget.StandaloneWindows64:
                 case BuildTarget.StandaloneWindows:
-                    _StrbAlt.Append(".exe");
+                    result += ".exe";
                     break;
                 case BuildTarget.StandaloneOSX:
-                    _StrbAlt.Append(".app");
+                    result += ".app";
                     break;
                 case BuildTarget.Android:
-                    _StrbAlt.Append(".apk");
+                    result += ".apk";
                     break;
                 }
             }
-            return _StrbAlt.ToString();
+            return result;
         }
 
         #endregion
