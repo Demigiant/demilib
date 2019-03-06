@@ -2,6 +2,7 @@
 // Created: 2018/12/07 13:24
 // License Copyright (c) Daniele Giardini
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -144,6 +145,13 @@ namespace DG.DeEditorTools.BuildPanel
                         affix.text = EditorGUILayout.TextField(affix.text);
                     }
                     affix.enabled = DeGUILayout.ToggleButton(affix.enabled, "Enabled", Styles.btInlineToggle, GUILayout.Width(60));
+                    using (new EditorGUI.DisabledScope(!affix.enabled)) {
+                        affix.enabledForInnerExecutable = DeGUILayout.ToggleButton(
+                            affix.enabledForInnerExecutable,
+                            new GUIContent("Win/Linux Filename", "If toggled applies this also to the filename on WIN/Linux builds only"),
+                            Styles.btInlineToggle, GUILayout.Width(121)
+                        );
+                    }
                     if (GUILayout.Button("×", Styles.btDeleteBuild)) {
                         affixes.RemoveAt(i);
                         --i;
@@ -186,7 +194,7 @@ namespace DG.DeEditorTools.BuildPanel
                         GUILayout.Label(_buildPathsLabels[index], Styles.labelBuildPath);
                     }
                     using (new GUILayout.HorizontalScope()) {
-                        if (!BuildsAsSingleFile(build.buildTarget)) {
+                        if (!build.BuildsDirectlyToFile() || build.buildTarget == BuildTarget.StandaloneOSX) {
                             build.clearBuildFolder = DeGUILayout.ToggleButton(
                                 build.clearBuildFolder,
                                 new GUIContent(
@@ -337,24 +345,35 @@ namespace DG.DeEditorTools.BuildPanel
                 return;
             }
 
-            bool buildIsSingleFile = BuildsAsSingleFile(build.buildTarget);
-            string completeBuildFolder = buildIsSingleFile || build.buildTarget == BuildTarget.StandaloneOSX || build.buildTarget == BuildTarget.iOS
+            bool buildIsSingleFile = build.BuildsDirectlyToFile();
+            string completeBuildFolder = buildIsSingleFile
                 ? buildFolder
                 : Path.GetFullPath(buildFolder + DeEditorFileUtils.PathSlash + GetFullBuildName(build, false));
-            string buildFilePath = completeBuildFolder + DeEditorFileUtils.PathSlash + GetFullBuildName(build, true);
+            string buildFilePath = build.buildTarget == BuildTarget.iOS
+                ? completeBuildFolder
+                : completeBuildFolder + DeEditorFileUtils.PathSlash + GetFullBuildName(build, true);
 
-            // Clear build folder
-            if (!buildIsSingleFile && build.clearBuildFolder && Directory.Exists(completeBuildFolder)) {
-                string[] files = Directory.GetFiles(completeBuildFolder);
-                for (int i = 0; i < files.Length; ++i) File.Delete(files[i]);
-                string[] subdirs = Directory.GetDirectories(completeBuildFolder);
-                for (int i = 0; i < subdirs.Length; ++i) Directory.Delete(subdirs[i], true);
+            if (!buildIsSingleFile) {
+                if (build.clearBuildFolder && Directory.Exists(completeBuildFolder)) {
+                    // Clear build folder
+                    string[] files = Directory.GetFiles(completeBuildFolder);
+                    for (int i = 0; i < files.Length; ++i) File.Delete(files[i]);
+                    string[] subdirs = Directory.GetDirectories(completeBuildFolder);
+                    for (int i = 0; i < subdirs.Length; ++i) Directory.Delete(subdirs[i], true);
+                }
+            } else if (build.clearBuildFolder) {
+                // Clear build file if it's a directory (OSX)
+                if (build.buildTarget == BuildTarget.StandaloneOSX && Directory.Exists(buildFilePath)) Directory.Delete(buildFilePath, true);
             }
 
             // Build
             switch (build.buildTarget) {
+            case BuildTarget.StandaloneWindows:
             case BuildTarget.StandaloneWindows64:
             case BuildTarget.StandaloneOSX:
+            case BuildTarget.StandaloneLinuxUniversal:
+            case BuildTarget.StandaloneLinux:
+            case BuildTarget.StandaloneLinux64:
                 PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Standalone, build.bundleIdentifier);
                 break;
             case BuildTarget.Android:
@@ -396,14 +415,6 @@ namespace DG.DeEditorTools.BuildPanel
                    && !string.IsNullOrEmpty(build.bundleIdentifier);
         }
 
-        bool BuildsAsSingleFile(BuildTarget buildTarget)
-        {
-            switch (buildTarget) {
-            case BuildTarget.Android: return true;
-            default: return false;
-            }
-        }
-
         string GetFullBuildPathLabel(DeBuildPanelData.Build build)
         {
             _Strb.Length = 0;
@@ -418,25 +429,30 @@ namespace DG.DeEditorTools.BuildPanel
             _Strb.Append(DeEditorFileUtils.PathSlash).Append(build.buildFolder);
             string fullPath = Path.GetFullPath(_Strb.ToString());
             _Strb.Length = 0;
-            _Strb.Append("<b>").Append(fullPath).Append("</b>").Append(DeEditorFileUtils.PathSlash);
-            _Strb.Append(GetFullBuildName(build, build.buildTarget == BuildTarget.StandaloneOSX || build.buildTarget == BuildTarget.Android));
+            _Strb.Append(fullPath).Append(DeEditorFileUtils.PathSlash);
+            _Strb.Append("<b><color=#00ff00>").Append(GetFullBuildName(build, build.BuildsDirectlyToFile())).Append("</color></b>");
+            if (build.HasInnerExecutable()) {
+                _Strb.Append('/').Append(GetFullBuildName(build, true));
+            }
             _Strb.Replace('\\', '/');
             return _Strb.ToString();
         }
 
         string GetFullBuildName(DeBuildPanelData.Build build, bool withExtension)
         {
+            bool isInnerExecutable = withExtension && build.HasInnerExecutable();
             _StrbAlt.Length = 0;
             foreach (DeBuildPanelData.Affix affix in _src.prefixes) {
-                if (affix.enabled) _StrbAlt.Append(affix.text);
+                if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.text);
             }
             _StrbAlt.Append(build.buildName);
             foreach (DeBuildPanelData.Affix affix in _src.suffixes) {
-                if (affix.enabled) _StrbAlt.Append(affix.text);
+                if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.text);
             }
             if (withExtension) {
                 switch (build.buildTarget) {
                 case BuildTarget.StandaloneWindows64:
+                case BuildTarget.StandaloneWindows:
                     _StrbAlt.Append(".exe");
                     break;
                 case BuildTarget.StandaloneOSX:
@@ -473,8 +489,8 @@ namespace DG.DeEditorTools.BuildPanel
                 buildContainer = new GUIStyle().Margin(0).Padding(0).ContentOffset(0, 0);
                 buildPathContainer = DeGUI.styles.box.stickyTop.Clone().Padding(1);
 
-                btToolbarToggle = DeGUI.styles.button.bBlankBorderCompact.Margin(2, 2, 2, 0);
-                btInlineToggle = DeGUI.styles.button.bBlankBorder.Clone().MarginTop(2);
+                btToolbarToggle = DeGUI.styles.button.bBlankBorderCompact.Margin(2, 2, 2, 0).Padding(0, 0, 1, 0).ContentOffsetX(1);
+                btInlineToggle = DeGUI.styles.button.bBlankBorder.Clone().Margin(1, 1, 2, 0).PaddingBottom(2);
                 btDeleteBuildToolbar = DeGUI.styles.button.tool.Clone(Color.white, FontStyle.Bold).Background(DeStylePalette.redSquare)
                     .Width(16).Height(14).Margin(0, 0, 2, 0);
                 btDeleteBuild = btDeleteBuildToolbar.Clone().Height(16);

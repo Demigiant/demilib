@@ -8,6 +8,8 @@ set BinDirUnity46Tests=DemiLib.UnityTests.Unity46\Assets\Demigiant\DemiLib\Core\
 set DestinationDirUnity46Tests=%1..\%BinDirUnity46Tests%
 set BinDirUnityTests=DemiLib.UnityTests.Unity5\Assets\Demigiant\DemiLib\Core\Editor
 set DestinationDirUnityTests=%1..\%BinDirUnityTests%
+set BinDirUnityTests2018=DemiLib.UnityTests.Unity2018\Assets\Demigiant\DemiLib\Core\Editor
+set DestinationDirUnityTests2018=%1..\%BinDirUnityTests2018%
 
 echo %DestinationDir%
 echo %2
@@ -32,3 +34,9 @@ echo f | xcopy "%1\bin\Core\Editor" %DestinationDirUnity46Tests% /Y /I /E
 
 echo Exporting Assembly to %DestinationDirUnityTests%
 echo f | xcopy "%1\bin\Core\Editor" %DestinationDirUnityTests% /Y /I /E
+
+echo Exporting Assembly to %DestinationDirUnityTests2018%
+echo f | xcopy "%1\bin\Core\Editor" %DestinationDirUnityTests2018% /Y /I /E
+
+echo Exporting Assembly to %DestinationDirUnityTests2018%
+echo f | xcopy "%1\bin\Core\Editor" %DestinationDirUnityTests2018% /Y /I /E

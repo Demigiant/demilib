@@ -21,10 +21,11 @@ namespace DG.DeEditorTools.BuildPanel
 
         #endregion
 
-        public const string Version = "1.0.010";
+        public const string Version = "1.0.020";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
             BuildTarget.StandaloneWindows64,
             BuildTarget.StandaloneOSX,
+            BuildTarget.StandaloneLinuxUniversal,
             BuildTarget.Android,
             BuildTarget.iOS,
         };
@@ -37,6 +38,7 @@ namespace DG.DeEditorTools.BuildPanel
         public class Affix
         {
             public bool enabled = true;
+            public bool enabledForInnerExecutable = false; // If TRUE also uses this affix when determining the fileName on standalone platforms
             public string text;
         }
         
@@ -57,6 +59,31 @@ namespace DG.DeEditorTools.BuildPanel
             public Build(BuildTarget buildTarget)
             {
                 this.buildTarget = buildTarget;
+            }
+
+            public bool HasInnerExecutable()
+            {
+                switch (buildTarget) {
+                case BuildTarget.StandaloneWindows:
+                case BuildTarget.StandaloneWindows64:
+                case BuildTarget.StandaloneLinux:
+                case BuildTarget.StandaloneLinux64:
+                case BuildTarget.StandaloneLinuxUniversal:
+                    return true;
+                default:
+                    return false;
+                }
+            }
+
+            public bool BuildsDirectlyToFile()
+            {
+                switch (buildTarget) {
+                case BuildTarget.StandaloneOSX:
+                case BuildTarget.Android:
+                    return true;
+                default:
+                    return false;
+                }
             }
         }
     }

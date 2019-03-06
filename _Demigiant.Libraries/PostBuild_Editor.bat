@@ -6,6 +6,8 @@ set BinDirNoMeta=bin.Global_no_meta\DemiLib\Editor
 set DestinationDirNoMeta=%1..\..\%BinDirNoMeta%
 set BinDirUnityTests=DemiLib.UnityTests.Unity5\Assets\Demigiant\DemiLib\Editor
 set DestinationDirUnityTests=%1..\%BinDirUnityTests%
+set BinDirUnityTests2018=DemiLib.UnityTests.Unity2018\Assets\Demigiant\DemiLib\Editor
+set DestinationDirUnityTests2018=%1..\%BinDirUnityTests2018%
 
 echo %DestinationDir%
 echo %2
@@ -27,3 +29,6 @@ echo f | xcopy "%1\bin\Editor" %DestinationDirNoMeta% /Y /I /E
 
 echo Exporting Assembly to %DestinationDirUnityTests%
 echo f | xcopy "%1\bin\Editor" %DestinationDirUnityTests% /Y /I /E
+
+echo Exporting Assembly to %DestinationDirUnityTests2018%
+echo f | xcopy "%1\bin\Editor" %DestinationDirUnityTests2018% /Y /I /E
