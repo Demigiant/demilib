@@ -193,6 +193,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 break;
             }
             _process.MarkLayoutAsDirty();
+            _process.DispatchOnGUIChange(NodeProcess.GUIChangeType.DragNodes);
         }
 
         void ArrangeSelectedNodes(bool horizontally, List<IEditorGUINode> nodes)
@@ -221,6 +222,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                     ? new Vector2(prevNodeGUIData.fullArea.xMax + NodeProcess.SnapOffset, prevINode.guiPosition.y)
                     : new Vector2(prevINode.guiPosition.x, prevNodeGUIData.fullArea.yMax + NodeProcess.SnapOffset);
             }
+            _process.DispatchOnGUIChange(NodeProcess.GUIChangeType.DragNodes);
         }
 
         #endregion
