@@ -283,7 +283,7 @@ namespace DG.DemiEditor
         {
             // NOTE: tried using RepeatButton, but doesn't work if used for dragging
             if (GUI.enabled && Event.current.type == EventType.MouseUp && _activePressButtonId != -1) {
-                 _activePressButtonId = -1;
+                _activePressButtonId = -1;
 //                GUIUtility.hotControl = -1; // This breaks the undo system
                 GUIUtility.hotControl = 0;
                 Event.current.Use();

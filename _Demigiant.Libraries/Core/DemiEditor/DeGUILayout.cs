@@ -70,28 +70,27 @@ namespace DG.DemiEditor
         /// </summary>
         public static bool PressButton(GUIContent content, GUIStyle guiStyle, params GUILayoutOption[] options)
         {
-            // NOTE: tried using RepeatButton, but doesn't work if used for dragging
-            if (GUI.enabled && Event.current.type == EventType.MouseUp && _activePressButtonId != -1) {
-                _activePressButtonId = -1;
-//                GUIUtility.hotControl = -1; // This breaks the undo system
-                GUIUtility.hotControl = 0;
-                Event.current.Use();
-            }
-            GUILayout.Button(content, guiStyle, options);
-//            int controlId = GUIUtility.GetControlID(FocusType.Native);
-            int controlId = DeEditorGUIUtils.GetLastControlId(); // Changed from prev while working on DeInspektor
-            int hotControl = GUIUtility.hotControl;
-            bool pressed = GUI.enabled && hotControl > 1 && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition);
-            if (pressed) {
-//                if (_activePressButtonId != controlId) {
-                if (_activePressButtonId == -1 && _activePressButtonId != controlId) { // Modified while working on DeInspektor
-                    GUIUtility.hotControl = controlId; // Remove control from other elements (added while working on DeInspektor)
-                    _activePressButtonId = controlId;
-                    return true;
-                }
-            }
-            if (!pressed && hotControl < 1) _activePressButtonId = -1;
-            return false;
+            return DeGUI.PressButton(GUILayoutUtility.GetRect(content, guiStyle, options), content, guiStyle);
+
+//            // NOTE: tried using RepeatButton, but doesn't work if used for dragging
+//            if (GUI.enabled && Event.current.type == EventType.MouseUp && _activePressButtonId != -1) {
+//                _activePressButtonId = -1;
+//                GUIUtility.hotControl = 0;
+//                Event.current.Use();
+//            }
+//            GUILayout.Button(content, guiStyle, options);
+//            int controlId = DeEditorGUIUtils.GetLastControlId(); // Changed from prev while working on DeInspektor
+//            int hotControl = GUIUtility.hotControl;
+//            bool pressed = GUI.enabled && hotControl > 1 && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition);
+//            if (pressed) {
+//                if (_activePressButtonId == -1 && _activePressButtonId != controlId) { // Modified while working on DeInspektor
+//                    GUIUtility.hotControl = controlId; // Remove control from other elements (added while working on DeInspektor)
+//                    _activePressButtonId = controlId;
+//                    return true;
+//                }
+//            }
+//            if (!pressed && hotControl < 1) _activePressButtonId = -1;
+//            return false;
         }
 
         /// <summary>Toolbar foldout button</summary>
