@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System;
+using System.Globalization;
 using System.Text;
 using UnityEngine;
 
@@ -83,6 +84,20 @@ namespace DG.DeExtensions
             if (Enum.IsDefined(tType, s)) return (T)Enum.Parse(tType, s);
             if (defaultValue == null) throw new ArgumentException("Value not found and defaultValue not set");
             return (T)defaultValue;
+        }
+
+        /// <summary>
+        /// Converts the given string to a float and returns it.
+        /// Returns <code>defaultValue</code> if the conversion fails or the string is empty
+        /// </summary>
+        /// <param name="defaultValue">Default value to return if conversion fails</param>
+        public static float ToFloat(this string s, float defaultValue = 0)
+        {
+            if (string.IsNullOrEmpty(s)) return defaultValue;
+
+            float result;
+            float.TryParse(s, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out result);
+            return result;
         }
 
         /// <summary>

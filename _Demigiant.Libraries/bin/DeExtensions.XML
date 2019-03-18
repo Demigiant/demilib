@@ -244,6 +244,13 @@
             NOTE: doesn't use try/catch (TryParse) since on some platforms that won't work.
             </summary>
         </member>
+        <member name="M:DG.DeExtensions.StringExtensions.ToFloat(System.String,System.Single)">
+            <summary>
+            Converts the given string to a float and returns it.
+            Returns <code>defaultValue</code> if the conversion fails or the string is empty
+            </summary>
+            <param name="defaultValue">Default value to return if conversion fails</param>
+        </member>
         <member name="M:DG.DeExtensions.StringExtensions.VersionIsMinorThan(System.String,System.String)">
             <summary>
             Compares a version string (in format #.#.###) with another of the same format,
