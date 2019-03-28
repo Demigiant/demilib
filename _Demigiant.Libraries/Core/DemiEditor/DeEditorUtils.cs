@@ -55,7 +55,6 @@ namespace DG.DemiEditor
         /// <summary>
         /// Return the size of the editor game view, eventual extra bars excluded (meaning the true size of the game area)
         /// </summary>
-        /// <returns></returns>
         public static Vector2 GetGameViewSize()
         {
             return Handles.GetMainGameViewSize();

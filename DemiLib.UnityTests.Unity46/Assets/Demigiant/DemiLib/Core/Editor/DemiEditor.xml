@@ -232,7 +232,6 @@
             <summary>
             Return the size of the editor game view, eventual extra bars excluded (meaning the true size of the game area)
             </summary>
-            <returns></returns>
         </member>
         <member name="M:DG.DemiEditor.DeEditorUtils.ClearConsole">
             <summary>

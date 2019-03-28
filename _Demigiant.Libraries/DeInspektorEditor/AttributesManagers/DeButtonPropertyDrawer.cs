@@ -53,12 +53,23 @@ namespace DG.DeInspektorEditor.AttributesManagers
                         else {
                             if (attr.targetType.IsSubclassOf(typeof(ScriptableObject))) {
                                 // ScriptableObject > call the method directly from it
-                                mInfo.Invoke(Selection.activeObject, attr.parameters);
-                                EditorUtility.SetDirty(Selection.activeObject);
+                                if (Selection.activeObject == null) {
+                                    Debug.LogWarning("DeButton ► When calling a non-static Component or ScriptableObject method" +
+                                                     " the instance must be selected in Unity's project/hierarchy");
+                                } else {
+                                    mInfo.Invoke(Selection.activeObject, attr.parameters);
+                                    EditorUtility.SetDirty(Selection.activeObject);
+                                }
                             } else if (attr.targetType.IsSubclassOf(typeof(Component))) {
                                 // Monobehaviour > find it and call the method directly
-                                Component c = Selection.activeTransform.GetComponent(attr.targetType);
-                                mInfo.Invoke(c, attr.parameters);
+                                Transform t = Selection.activeTransform;
+                                Component c = t == null ? null : t.GetComponent(attr.targetType);
+                                if (c == null) {
+                                    Debug.LogWarning("DeButton ► When calling a non-static Component or ScriptableObject method" +
+                                                     " the instance must be selected in Unity's project/hierarchy");
+                                } else {
+                                    mInfo.Invoke(c, attr.parameters);
+                                }
                             } else {
                                 // Normal class > create instance and call method from it
                                 mInfo.Invoke(Activator.CreateInstance(attr.targetType), attr.parameters);
