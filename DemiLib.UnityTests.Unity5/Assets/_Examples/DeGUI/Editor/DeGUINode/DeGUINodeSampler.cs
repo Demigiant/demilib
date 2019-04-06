@@ -56,7 +56,7 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             DG.DemiEditor.DeGUI.BeginGUI();
 
             // Node GUI Process
-			Rect nodeArea = this.position.ResetXY().SetY(100).Shift(0, 0, 0, -100);
+            Rect nodeArea = this.position.ResetXY().SetY(100).Shift(0, 0, 0, -100);
             using (new NodeProcessScope<GenericNode>(_nodeProcess, nodeArea, ref src.nodeSystem.areaShift, src.nodeSystem.genericNodes)) {
                 // Draw nodes
                 // Generic and multi nodes
@@ -74,7 +74,9 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 NodeConnectionOptions multiNodeConnOptions = new NodeConnectionOptions(true, ConnectorMode.Smart, multiGradient);
                 NodeConnectionOptions flexibleNodeConnOptions = new NodeConnectionOptions(true, ConnectionMode.Flexible, ConnectorMode.Smart);
                 NodeConnectionOptions dualNodeConnOptions = new NodeConnectionOptions(true, ConnectionMode.Dual, ConnectorMode.Smart, dualGradient);
-                foreach (GenericNode node in src.nodeSystem.genericNodes) {
+//                foreach (GenericNode node in src.nodeSystem.genericNodes) {
+                foreach (IEditorGUINode editorGUINode in _nodeProcess.orderedNodes) {
+                    GenericNode node = (GenericNode)editorGUINode;
                     switch (node.type) {
                     case NodeType.Multi:
                         _nodeProcess.Draw<MultiNodeGUI>(node, node.normalPlusConnectionMode ? normalPlusNodeConnOptions : multiNodeConnOptions);

@@ -583,7 +583,8 @@
             Create it, then enclose your GUI node calls inside a <see cref="!:NodeProcessScope"/>.<para/>
             CODING ORDER:<para/>
             - Create a <see cref="T:DG.DemiEditor.DeGUINodeSystem.NodeProcess"/> to use for your node system (create it once, obviously)<para/>
-            - Inside OnGUI, write all your nodes GUI code inside a <see cref="!:NodeProcessScope"/>
+            - Inside OnGUI, write all your nodes GUI code inside a <see cref="!:NodeProcessScope"/><para/>
+            - To draw the nodes, loop through the <see cref="F:DG.DemiEditor.DeGUINodeSystem.NodeProcess.orderedNodes"/> list and call <see cref="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.Draw``1(DG.DemiLib.IEditorGUINode,System.Nullable{DG.DemiEditor.DeGUINodeSystem.NodeConnectionOptions})"/> for each node
             </summary>
         </member>
         <member name="F:DG.DemiEditor.DeGUINodeSystem.NodeProcess.SnapOffset">
@@ -594,6 +595,10 @@
         </member>
         <member name="P:DG.DemiEditor.DeGUINodeSystem.NodeProcess.relativeArea">
             <summary>Position with zeroed coordinates (used by all node GUI since it's inside a GUILayout(area))</summary>
+        </member>
+        <member name="F:DG.DemiEditor.DeGUINodeSystem.NodeProcess.orderedNodes">
+            <summary>Contains the nodes passed to NodeProcessScope ordered by depth.
+            You should loop through this list when drawing nodes</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.#ctor(UnityEditor.EditorWindow,System.Func{System.Collections.Generic.List{DG.DemiLib.IEditorGUINode},System.Boolean},System.Func{DG.DemiLib.IEditorGUINode,DG.DemiLib.IEditorGUINode,System.Boolean})">
             <summary>

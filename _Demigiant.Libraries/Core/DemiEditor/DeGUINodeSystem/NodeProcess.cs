@@ -5,8 +5,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using DG.DeExtensions;
 using DG.DemiEditor.DeGUINodeSystem.Core;
 using DG.DemiEditor.DeGUINodeSystem.Core.DebugSystem;
@@ -22,7 +20,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
     /// Create it, then enclose your GUI node calls inside a <see cref="NodeProcessScope"/>.<para/>
     /// CODING ORDER:<para/>
     /// - Create a <see cref="NodeProcess"/> to use for your node system (create it once, obviously)<para/>
-    /// - Inside OnGUI, write all your nodes GUI code inside a <see cref="NodeProcessScope"/>
+    /// - Inside OnGUI, write all your nodes GUI code inside a <see cref="NodeProcessScope"/><para/>
+    /// - To draw the nodes, loop through the <see cref="orderedNodes"/> list and call <see cref="Draw{T}"/> for each node
     /// </summary>
     public class NodeProcess
     {
@@ -45,7 +44,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             NodeConnection // Node connection changed, added or removed
         }
 
-        public const string Version = "1.0.030";
+        public const string Version = "1.0.035";
         /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
         public const int SnapOffset = 12;
         public EditorWindow editor; // Get/set so it can be refreshed if necessary
@@ -61,6 +60,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public Vector2 areaShift { get; private set; }
         public float guiScale { get; private set; }
         public readonly Dictionary<IEditorGUINode,NodeGUIData> nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
+        /// <summary>Contains the nodes passed to NodeProcessScope ordered by depth.
+        /// You should loop through this list when drawing nodes</summary>
+        public readonly List<IEditorGUINode> orderedNodes = new List<IEditorGUINode>();
         internal Vector2 guiScalePositionDiff { get; private set; } // Used by GUI calls that need to rotate the matrix
 
         readonly NodeProcessDebug _debug = new NodeProcessDebug();
@@ -129,6 +131,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             interaction.Reset();
             selection.Reset();
             _connector.Reset();
+            orderedNodes.Clear();
             if (_minimap != null) _minimap.RefreshMapTextureOnNextPass();
         }
 
@@ -309,6 +312,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 nodeArea.y += 22;
             }
 
+            // Validate nodes order
+            if (orderedNodes.Count == 0) {
+                for (int i = 0; i < controlNodes.Count; ++i) orderedNodes.Add(controlNodes[i]);
+            }
+
             _Styles.Init();
             position = nodeArea;
             refAreaShift += _forceApplyAreaShift;
@@ -447,7 +455,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                             }
                         }
                         // Update eventual sorting
-                        if (options.bringSelectedNodesForward && controlNodes != null) UpdateSorting(controlNodes);
+                        if (controlNodes != null) UpdateOrderedNodesSorting();
                         break;
                     }
                     break;
@@ -1066,12 +1074,14 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 offset = Event.current.mousePosition - (topLeftP + areaShift);
             }
             // Add nodes and also nodeGuiData etc based on original nodes
+            // Also add them to ordered nodes
             foreach (T node in clones) {
                 node.guiPosition += offset;
                 controlNodes.Add(node);
                 nodeToGUIData.Add(node, _clipboard.GetGuiDataByCloneId(node.id));
                 nodeToConnectionOptions.Add(node, _clipboard.GetConnectionOptionsByCloneId(node.id));
                 idToNode.Add(node.id, node);
+                orderedNodes.Add(node);
             }
             return true;
         }
@@ -1087,6 +1097,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 if (index == -1) continue;
                 _tmp_string.Add(selectedNode.id);
                 removeFrom.RemoveAt(index);
+                // Remove from ordered nodes
+                index = orderedNodes.IndexOf(selectedNode);
+                if (index != -1) orderedNodes.RemoveAt(index);
             }
             // Remove references to deleted nodes from connections
             foreach (IEditorGUINode node in nodes) {
@@ -1097,34 +1110,34 @@ namespace DG.DemiEditor.DeGUINodeSystem
         }
 
         // Called only if controlNodes is not NULL and the event is MouseDown
-        void UpdateSorting<T>(IList<T> sortableNodes) where T : IEditorGUINode
+        void UpdateOrderedNodesSorting()
         {
             int totSelected = selection.selectedNodes.Count;
-            int totSortables = sortableNodes.Count;
+            int totSortables = orderedNodes.Count;
             if (totSelected == 0 || totSortables == 0 || totSelected >= totSortables) return;
             bool sortingRequired = false;
             if (totSelected == 1) {
                 // Single selection
                 IEditorGUINode selectedNode = selection.selectedNodes[0];
-                sortingRequired = selectedNode.id != sortableNodes[totSortables - 1].id;
+                sortingRequired = selectedNode.id != orderedNodes[totSortables - 1].id;
                 if (!sortingRequired) return;
                 for (int i = 0; i < totSortables; ++i) {
-                    if (sortableNodes[i].id != interaction.targetNode.id) continue;
-                    sortableNodes.Shift(i, totSortables - 1);
+                    if (orderedNodes[i].id != interaction.targetNode.id) continue;
+                    orderedNodes.Shift(i, totSortables - 1);
                     break;
                 }
             } else {
                 // Multiple selections
                 for (int i = totSortables - 1; i > totSortables - totSelected - 1; --i) {
-                    if (selection.selectedNodes.Contains(sortableNodes[i])) continue;
+                    if (selection.selectedNodes.Contains(orderedNodes[i])) continue;
                     sortingRequired = true;
                     break;
                 }
                 if (!sortingRequired) return;
                 int shiftOffset = 0;
                 for (int i = totSortables - 1; i > -1; --i) {
-                    if (!selection.selectedNodes.Contains(sortableNodes[i])) continue;
-                    sortableNodes.Shift(i, totSortables - 1 - shiftOffset);
+                    if (!selection.selectedNodes.Contains(orderedNodes[i])) continue;
+                    orderedNodes.Shift(i, totSortables - 1 - shiftOffset);
                     shiftOffset++;
                 }
             }
