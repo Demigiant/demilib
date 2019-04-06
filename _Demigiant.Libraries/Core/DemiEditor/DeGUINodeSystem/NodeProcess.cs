@@ -44,7 +44,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             NodeConnection // Node connection changed, added or removed
         }
 
-        public const string Version = "1.0.035";
+        public const string Version = "1.0.036";
         /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
         public const int SnapOffset = 12;
         public EditorWindow editor; // Get/set so it can be refreshed if necessary
@@ -313,7 +313,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             }
 
             // Validate nodes order
-            if (orderedNodes.Count == 0) {
+            if (orderedNodes.Count == 0 && controlNodes != null) {
                 for (int i = 0; i < controlNodes.Count; ++i) orderedNodes.Add(controlNodes[i]);
             }
 
