@@ -29,7 +29,7 @@ namespace DG.DeEditorTools.BuildPanel
         
         [MenuItem("Tools/Demigiant/" + _Title)]
         static void ShowWindow() { GetWindow(typeof(DeBuildPanel), false, _Title); }
-		
+        
         const string _Title = "Simple Build Panel";
         const string _SrcADBFilePath = "Assets/-DeBuildPanelData.asset";
         static readonly StringBuilder _Strb = new StringBuilder();
@@ -64,7 +64,7 @@ namespace DG.DeEditorTools.BuildPanel
             Undo.RecordObject(_src, _Title);
             DeGUI.BeginGUI();
             Styles.Init();
-			
+            
             // Main toolbar
             using (new DeGUILayout.ToolbarScope(DeGUI.styles.toolbar.large)) {
                 GUILayout.Label("v" + DeBuildPanelData.Version, DeGUI.styles.label.toolbar);
@@ -403,7 +403,9 @@ namespace DG.DeEditorTools.BuildPanel
             buildOptions.scenes = scenes;
             buildOptions.locationPathName = buildFilePath;
             buildOptions.target = build.buildTarget;
-            buildOptions.options = BuildOptions.None;
+//            buildOptions.options = BuildOptions.None;
+            if (EditorUserBuildSettings.development) buildOptions.options = buildOptions.options | BuildOptions.Development;
+            if (EditorUserBuildSettings.allowDebugging) buildOptions.options = buildOptions.options | BuildOptions.AllowDebugging;
             BuildPipeline.BuildPlayer(buildOptions);
         }
 
