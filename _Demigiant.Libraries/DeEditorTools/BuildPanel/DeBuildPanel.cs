@@ -360,7 +360,7 @@ namespace DG.DeEditorTools.BuildPanel
             string completeBuildFolder = buildIsSingleFile
                 ? buildFolder
                 : Path.GetFullPath(buildFolder + DeEditorFileUtils.PathSlash + GetFullBuildName(build, false));
-            string buildFilePath = build.buildTarget == BuildTarget.iOS
+            string buildFilePath = build.buildTarget == BuildTarget.iOS || build.buildTarget == BuildTarget.WebGL
                 ? completeBuildFolder
                 : completeBuildFolder + DeEditorFileUtils.PathSlash + GetFullBuildName(build, true);
 
@@ -395,6 +395,9 @@ namespace DG.DeEditorTools.BuildPanel
             case BuildTarget.iOS:
                 PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.iOS, build.bundleIdentifier);
                 PlayerSettings.iOS.buildNumber = PlayerSettings.iOS.buildNumber + (build.increaseInternalBuildNumber ? 1 : 0);
+                break;
+            case BuildTarget.WebGL:
+                PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.WebGL, build.bundleIdentifier);
                 break;
             }
             BuildPlayerOptions buildOptions = new BuildPlayerOptions();
