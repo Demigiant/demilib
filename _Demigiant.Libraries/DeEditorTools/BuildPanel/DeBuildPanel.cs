@@ -9,6 +9,7 @@ using System.Text;
 using DG.DemiEditor;
 using DG.DemiLib;
 using UnityEditor;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 using Format = DG.DemiEditor.Format;
 
@@ -16,13 +17,45 @@ namespace DG.DeEditorTools.BuildPanel
 {
     public class DeBuildPanel : EditorWindow
     {
+        public enum OnWillBuildResult
+        {
+            /// <summary>Continue</summary>
+            Continue,
+            /// <summary>Cancel this build</summary>
+            Cancel,
+            /// <summary>Cancel all builds in queue</summary>
+            CancelAll
+        }
+
+        enum DeBuildResult
+        {
+            Success,
+            Failed,
+            Canceled,
+            CancelAll
+        }
+
         #region HOOKS
 
-        public static event Func<BuildTarget,string,string> OnBuildNameRequest;
-
+        /// <summary>
+        /// Called when assigning the build's name. Hook to this to modify it and return the one you want.<para/>
+        /// Must return a string with the name to use</summary>
+        public static event OnBuildNameRequestHandler OnBuildNameRequest;
+        public delegate string OnBuildNameRequestHandler(BuildTarget buildTarget, string buildName);
         static string Dispatch_OnBuildNameRequest(BuildTarget buildTarget, string buildName)
         {
             return OnBuildNameRequest == null ? buildName : OnBuildNameRequest(buildTarget, buildName);
+        }
+
+        /// <summary>
+        /// Called before a build starts.<para/>
+        /// Must return an <code>OnWillBuildResult</code> indicating if you wish to continue
+        /// </summary>
+        public static event OnWillBuildHandler OnWillBuild;
+        public delegate OnWillBuildResult OnWillBuildHandler(BuildTarget buildTarget, bool isFirstBuildOfQueue);
+        static OnWillBuildResult Dispatch_OnWillBuild(BuildTarget buildTarget, bool isFirstBuildOfQueue)
+        {
+            return OnWillBuild == null ? OnWillBuildResult.Continue : OnWillBuild(buildTarget, isFirstBuildOfQueue);
         }
 
         #endregion
@@ -57,6 +90,12 @@ namespace DG.DeEditorTools.BuildPanel
         void OnDisable()
         { Undo.undoRedoPerformed -= Repaint; }
 
+        void OnFocus()
+        {
+            if (_src == null) _src = DeEditorPanelUtils.ConnectToSourceAsset<DeBuildPanelData>(_SrcADBFilePath, true);
+            RefreshBuildPathsLabels();
+        }
+
         void OnGUI()
         {
             if (_src == null) _src = DeEditorPanelUtils.ConnectToSourceAsset<DeBuildPanelData>(_SrcADBFilePath, true);
@@ -67,7 +106,7 @@ namespace DG.DeEditorTools.BuildPanel
             
             // Main toolbar
             using (new DeGUILayout.ToolbarScope(DeGUI.styles.toolbar.large)) {
-                GUILayout.Label("v" + DeBuildPanelData.Version, DeGUI.styles.label.toolbar);
+                GUILayout.Label("v" + DeBuildPanelData.Version, DeGUI.styles.label.toolbarL);
                 GUILayout.FlexibleSpace();
                 using (new DeGUI.ColorScope(new DeSkinColor(0.9f, 0.65f))) {
                     if (GUILayout.Button("BUILD ALL ENABLED", DeGUI.styles.button.toolL)) {
@@ -322,38 +361,58 @@ namespace DG.DeEditorTools.BuildPanel
                 return;
             }
 
-            foreach (DeBuildPanelData.Build build in _src.builds) DoBuild(build);
+            for (int i = 0; i < _src.builds.Count; i++) {
+                DeBuildPanelData.Build build = _src.builds[i];
+                // Hook ► Verify if build should continue
+                OnWillBuildResult onWillBuildResult = Dispatch_OnWillBuild(build.buildTarget, i == 0);
+                switch (onWillBuildResult) {
+                case OnWillBuildResult.Cancel:
+                    EditorUtility.ClearProgressBar();
+                    continue;
+                case OnWillBuildResult.CancelAll:
+                    EditorUtility.ClearProgressBar();
+                    return;
+                }
+                //
+                DeBuildResult result = DoBuild(build);
+                if (result == DeBuildResult.CancelAll) return;
+            }
         }
 
         void Build(DeBuildPanelData.Build build)
         {
+            // Hook ► Verify if build should continue
+            OnWillBuildResult onWillBuildResult = Dispatch_OnWillBuild(build.buildTarget, true);
+            if (onWillBuildResult != OnWillBuildResult.Continue) return;
+
             EditorUtility.DisplayProgressBar(string.Format("Build ({0})", build.buildTarget), "Preparing...", 0.2f);
             // Use delayed call to prevent Unity GUILayout bug
             DeEditorUtils.ClearAllDelayedCalls();
             DeEditorUtils.DelayedCall(0.1f, ()=> DoBuild(build));
         }
 
-        void DoBuild(DeBuildPanelData.Build build)
+        // Returns TRUE if all builds in queue should be canceled
+        DeBuildResult DoBuild(DeBuildPanelData.Build build)
         {
             string dialogTitle = string.Format("Build ({0})", build.buildTarget);
 
             if (string.IsNullOrEmpty(build.buildFolder)) {
-                EditorUtility.DisplayDialog(dialogTitle, "Build folder can't be empty!", "Ok");
+                bool cancelAll = !EditorUtility.DisplayDialog(dialogTitle, "Build folder can't be empty!", "Ok", "Cancel All");
                 EditorUtility.ClearProgressBar();
-                return;
+                return cancelAll ? DeBuildResult.CancelAll : DeBuildResult.Canceled;
             }
             if (string.IsNullOrEmpty(build.bundleIdentifier)) {
-                EditorUtility.DisplayDialog(dialogTitle, "Bundle Identifier can't be empty!", "Ok");
+                bool cancelAll = !EditorUtility.DisplayDialog(dialogTitle, "Bundle Identifier can't be empty!", "Ok", "Cancel All");
                 EditorUtility.ClearProgressBar();
-                return;
+                return cancelAll ? DeBuildResult.CancelAll : DeBuildResult.Canceled;
             }
 
             string buildFolder = Path.GetFullPath(DeEditorFileUtils.projectPath + "/" + build.buildFolder);
 
             if (!Directory.Exists(buildFolder)) {
-                EditorUtility.DisplayDialog(dialogTitle, string.Format("Build folder doesn't exist!\n\n\"{0}\"", buildFolder), "Ok");
+                bool cancelAll = !EditorUtility.DisplayDialog(dialogTitle, string.Format("Build folder doesn't exist!\n\n\"{0}\"", buildFolder), "Ok", "Cancel All");
                 EditorUtility.ClearProgressBar();
-                return;
+                return cancelAll ? DeBuildResult.CancelAll : DeBuildResult.Canceled;
             }
 
             bool buildIsSingleFile = build.BuildsDirectlyToFile();
@@ -406,10 +465,11 @@ namespace DG.DeEditorTools.BuildPanel
             buildOptions.scenes = scenes;
             buildOptions.locationPathName = buildFilePath;
             buildOptions.target = build.buildTarget;
-//            buildOptions.options = BuildOptions.None;
             if (EditorUserBuildSettings.development) buildOptions.options = buildOptions.options | BuildOptions.Development;
             if (EditorUserBuildSettings.allowDebugging) buildOptions.options = buildOptions.options | BuildOptions.AllowDebugging;
-            BuildPipeline.BuildPlayer(buildOptions);
+            BuildReport report = BuildPipeline.BuildPlayer(buildOptions);
+
+            return report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded ? DeBuildResult.Success : DeBuildResult.Failed;
         }
 
         #endregion

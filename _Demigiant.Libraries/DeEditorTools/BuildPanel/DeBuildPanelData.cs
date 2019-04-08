@@ -14,14 +14,13 @@ namespace DG.DeEditorTools.BuildPanel
     {
         #region Serialized
 
-//        public string suffix = "";
         public List<Affix> prefixes = new List<Affix>();
         public List<Affix> suffixes = new List<Affix>();
         public List<Build> builds = new List<Build>();
 
         #endregion
 
-        public const string Version = "1.0.030";
+        public const string Version = "1.0.040";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
             BuildTarget.StandaloneWindows64,
             BuildTarget.StandaloneOSX,
