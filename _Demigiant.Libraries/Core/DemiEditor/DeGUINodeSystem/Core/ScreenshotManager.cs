@@ -13,7 +13,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
     {
         #region Public Methods
 
-        public static void CaptureScreenshot(NodeProcess process, NodeProcess.ScreenshotMode screenshotMode, Action<Texture2D> onComplete, bool useProgressBar)
+        public static void CaptureScreenshot(NodeProcess process, NodeProcess.ScreenshotMode screenshotMode, Action<Texture2D> onComplete, float allNodesScaleFactor, bool useProgressBar)
         {
             process.editor.Focus();
             switch (screenshotMode) {
@@ -21,7 +21,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                 DeEditorCoroutines.StartCoroutine(CaptureScreenshot_VisibleArea(process, onComplete, useProgressBar));
                 break;
             case NodeProcess.ScreenshotMode.AllNodes:
-                DeEditorCoroutines.StartCoroutine(CaptureScreenshot_AllNodes(process, onComplete, useProgressBar));
+                DeEditorCoroutines.StartCoroutine(CaptureScreenshot_AllNodes(process, onComplete, allNodesScaleFactor, useProgressBar));
                 break;
             }
         }
@@ -46,12 +46,15 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             onComplete(tx);
         }
 
-        static IEnumerator CaptureScreenshot_AllNodes(NodeProcess process, Action<Texture2D> onComplete, bool useProgressBar)
+        static IEnumerator CaptureScreenshot_AllNodes(NodeProcess process, Action<Texture2D> onComplete, float scaleFactor, bool useProgressBar)
         {
-            float scaleFactor = process.guiScale;
-            const int padding = 20;
-            if (useProgressBar) EditorUtility.DisplayProgressBar("Screenshot", "Capturing...", 0.3f);
             bool hasMinimap = process.options.showMinimap;
+            float orGuiScale = process.guiScale;
+            Vector2 orShift = process.areaShift;
+            process.guiScale = scaleFactor;
+            const int padding = 20;
+            const int cropVal = 1; // Applied on both sides to avoid capturing window border
+            if (useProgressBar) EditorUtility.DisplayProgressBar("Screenshot", "Capturing...", 0.3f);
             process.options.showMinimap = false;
             Rect fullNodesArea = process.EvaluateFullNodesArea();
             fullNodesArea = fullNodesArea.Shift(-padding, -padding, padding * 2, padding * 2);
@@ -64,7 +67,12 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             int rows = Mathf.CeilToInt(fullNodesArea.height / captureR.height);
             int blockW = (int)captureR.width;
             int blockH = (int)captureR.height;
-            Texture2D tx = new Texture2D((int)fullNodesArea.width, (int)fullNodesArea.height, TextureFormat.RGB24, false);
+            float cropValOffset = cropVal * 2 / scaleFactor;
+            Texture2D tx = new Texture2D(
+                (int)fullNodesArea.width - cropVal * 2 * cols,
+                (int)fullNodesArea.height - cropVal * 2 * rows,
+                TextureFormat.RGB24, false
+            );
             int y = tx.height;
             for (int r = 0; r < rows; ++r) {
                 bool shiftTxY = true;
@@ -75,9 +83,12 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                     if (r == rows - 1) h = blockH - (blockH * (r + 1) - (int)fullNodesArea.height);
                     if (shiftTxY) {
                         shiftTxY = false;
-                        y -= h;
+                        y -= h - cropVal * 2;
                     }
-                    Vector2 areaShift = new Vector2(-fullNodesArea.x - blockW / scaleFactor * c, -fullNodesArea.y - blockH / scaleFactor * r);
+                    Vector2 areaShift = new Vector2(
+                        -fullNodesArea.x - blockW / scaleFactor * c - cropValOffset,
+                        -fullNodesArea.y - blockH / scaleFactor * r - cropValOffset
+                    );
                     process.SetAreaShift(areaShift);
                     Texture2D subTx = new Texture2D(w, h, TextureFormat.RGB24, false);
                     yield return DeEditorCoroutines.WaitForSeconds(0.001f);
@@ -89,12 +100,14 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 //                    continue;
                     subTx.ReadPixels(new Rect(0, blockH - h, w, h), 0, 0, false);
                     subTx.Apply();
-                    Color[] pixels = subTx.GetPixels(0);
-                    tx.SetPixels(blockW * c, y, w, h, pixels);
+                    Color[] pixels = subTx.GetPixels(cropVal, cropVal, w - cropVal * 2, h - cropVal * 2);
+                    tx.SetPixels((blockW - cropVal * 2) * c, y, w - cropVal * 2, h - cropVal * 2, pixels);
                 }
             }
             tx.Apply(false);
             if (hasMinimap) process.options.showMinimap = hasMinimap;
+            process.guiScale = orGuiScale;
+            process.SetAreaShift(orShift);
             if (useProgressBar) EditorUtility.ClearProgressBar();
             onComplete(tx);
         }

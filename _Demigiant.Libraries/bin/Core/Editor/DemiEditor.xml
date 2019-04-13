@@ -676,7 +676,7 @@
             Returns TRUE if the given area is visible (even if partially) inside the current nodeProcess area
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.CaptureScreenshot(DG.DemiEditor.DeGUINodeSystem.NodeProcess.ScreenshotMode,System.Action{UnityEngine.Texture2D},System.Boolean)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.CaptureScreenshot(DG.DemiEditor.DeGUINodeSystem.NodeProcess.ScreenshotMode,System.Action{UnityEngine.Texture2D},System.Single,System.Boolean)">
             <summary>
             Captures a screenshot of the node editor area and returns it when calling the onComplete method.<para/>
             Sadly this requires a callback because if called immediately the capture will fail
@@ -684,6 +684,7 @@
             </summary>
             <param name="screenshotMode">Screenshot mode</param>
             <param name="onComplete">A callback that accepts the generated Texture2D object</param>
+            <param name="allNodesScaleFactor">Screenshot scale factor (only used if screenshotMode is set to <see cref="F:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ScreenshotMode.AllNodes"/>)</param>
             <param name="useProgressBar">If TRUE (default) displays a progress bar during the operation.
             You'll want to set this to FALSE when you're already using a custom progressBar
             and the screenshot is only part of a larger queue of operations</param>

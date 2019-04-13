@@ -64,7 +64,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// <summary>Position with zeroed coordinates (used by all node GUI since it's inside a GUILayout(area))</summary>
         public Rect relativeArea { get; private set; }
         public Vector2 areaShift { get; private set; }
-        public float guiScale { get; private set; }
+        public float guiScale { get; internal set; }
         public readonly Dictionary<IEditorGUINode,NodeGUIData> nodeToGUIData = new Dictionary<IEditorGUINode,NodeGUIData>(); // Refilled on Layout event
         /// <summary>Contains the nodes passed to NodeProcessScope ordered by depth.
         /// You should loop through this list when drawing nodes</summary>
@@ -318,12 +318,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// </summary>
         /// <param name="screenshotMode">Screenshot mode</param>
         /// <param name="onComplete">A callback that accepts the generated Texture2D object</param>
+        /// <param name="allNodesScaleFactor">Screenshot scale factor (only used if screenshotMode is set to <see cref="ScreenshotMode.AllNodes"/>)</param>
         /// <param name="useProgressBar">If TRUE (default) displays a progress bar during the operation.
         /// You'll want to set this to FALSE when you're already using a custom progressBar
         /// and the screenshot is only part of a larger queue of operations</param>
-        public void CaptureScreenshot(ScreenshotMode screenshotMode, Action<Texture2D> onComplete, bool useProgressBar = true)
+        public void CaptureScreenshot(ScreenshotMode screenshotMode, Action<Texture2D> onComplete, float allNodesScaleFactor = 1, bool useProgressBar = true)
         {
-            ScreenshotManager.CaptureScreenshot(this, screenshotMode, onComplete, useProgressBar);
+            ScreenshotManager.CaptureScreenshot(this, screenshotMode, onComplete, allNodesScaleFactor, useProgressBar);
         }
 
         #endregion
