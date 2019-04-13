@@ -51,11 +51,15 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             bool hasMinimap = process.options.showMinimap;
             float orGuiScale = process.guiScale;
             Vector2 orShift = process.areaShift;
+            Rect orEditorPosition = process.editor.position;
             process.guiScale = scaleFactor;
             const int padding = 20;
             const int cropVal = 1; // Applied on both sides to avoid capturing window border
             if (useProgressBar) EditorUtility.DisplayProgressBar("Screenshot", "Capturing...", 0.3f);
             process.options.showMinimap = false;
+            process.editor.position = new Rect(0, 0, 4096, 4096);
+            process.editor.Repaint();
+            yield return DeEditorCoroutines.WaitForSeconds(0.001f);
             Rect fullNodesArea = process.EvaluateFullNodesArea();
             fullNodesArea = fullNodesArea.Shift(-padding, -padding, padding * 2, padding * 2);
             fullNodesArea.x -= process.areaShift.x;
@@ -107,6 +111,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             tx.Apply(false);
             if (hasMinimap) process.options.showMinimap = hasMinimap;
             process.guiScale = orGuiScale;
+            process.editor.position = orEditorPosition;
             process.SetAreaShift(orShift);
             if (useProgressBar) EditorUtility.ClearProgressBar();
             onComplete(tx);
