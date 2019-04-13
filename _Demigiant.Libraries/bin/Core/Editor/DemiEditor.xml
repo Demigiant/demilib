@@ -21,6 +21,12 @@
             <param name="instance"></param>
             <returns></returns>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorCoroutines.StartCoroutine(System.Collections.IEnumerator)">
+            <summary>
+            Starts an editor coroutine. You can't use normal <code>yield new WaitFor</code> methods because
+            those are Unity runtime, but you can instead use 
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeEditorFileUtils">
             <summary>
             File utils
@@ -628,7 +634,12 @@
             Forces the refresh of the area calculations. Useful if you need them before the first GUI call has run
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ShiftAreaTo(UnityEngine.Vector2)">
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ShiftAreaBy(UnityEngine.Vector2)">
+            <summary>
+            Shifts the visible are to the given coordinates and repaints on end
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.SetAreaShift(UnityEngine.Vector2)">
             <summary>
             Shifts the visible are to the given coordinates and repaints on end
             </summary>
@@ -664,6 +675,18 @@
             <summary>
             Returns TRUE if the given area is visible (even if partially) inside the current nodeProcess area
             </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.CaptureScreenshot(DG.DemiEditor.DeGUINodeSystem.NodeProcess.ScreenshotMode,System.Action{UnityEngine.Texture2D},System.Boolean)">
+            <summary>
+            Captures a screenshot of the node editor area and returns it when calling the onComplete method.<para/>
+            Sadly this requires a callback because if called immediately the capture will fail
+            with a "[d3d11] attempting to ReadPixels outside of RenderTexture bounds!" error in most cases
+            </summary>
+            <param name="screenshotMode">Screenshot mode</param>
+            <param name="onComplete">A callback that accepts the generated Texture2D object</param>
+            <param name="useProgressBar">If TRUE (default) displays a progress bar during the operation.
+            You'll want to set this to FALSE when you're already using a custom progressBar
+            and the screenshot is only part of a larger queue of operations</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.NodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">
             <summary>
@@ -1249,6 +1272,11 @@
             Sets the GUI colors to the given ones
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.ShowTexturePreview(UnityEngine.Texture2D)">
+            <summary>
+            Opens a panel that previews the given texture (if not NULL)
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUI.CursorColorScope">
             <summary>
             Sets the GUI cursor color to the given ones
@@ -1362,6 +1390,8 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.DrawTiledTexture(UnityEngine.Rect,UnityEngine.Texture2D,System.Single,System.Nullable{UnityEngine.Color})">
             <summary>Draws the given texture tiled within the given rect</summary>
+            <param name="rect">Rect</param>
+            <param name="texture">Texture</param>
             <param name="scale">Eventual scale to apply</param>
             <param name="color">If not NULL, colorizes the texture with this color</param>
         </member>

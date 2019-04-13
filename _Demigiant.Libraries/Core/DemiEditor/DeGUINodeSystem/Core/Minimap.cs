@@ -96,7 +96,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
 
             _visibleArea = new Rect(_process.relativeArea);
             _relativeArea = _visibleArea.ResetXY();
-            _fullNodesArea = EvaluateFullNodesArea(); // x/y = TL node corner, width/height = exact size of area occupied by nodes without extra space
+            _fullNodesArea = _process.EvaluateFullNodesArea(); // x/y = TL node corner, width/height = exact size of area occupied by nodes without extra space
             if (_fullNodesArea.width < 1 || _visibleArea.Includes(_fullNodesArea)) {
                 _draw = false;
                 return; // Don't draw map if nodes don't exit the visible area
@@ -192,18 +192,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             float perc = _fullZeroBasedArea.width / _area.width;
             Vector2 p = _shiftFromOriginalNodesAreaPos - relativeMouseP * perc; // TL corner
             p += new Vector2(_visibleArea.width * 0.5f, _visibleArea.height * 0.5f);
-            _process.ShiftAreaTo(p);
-        }
-
-        #endregion
-
-        #region Helpers
-
-        Rect EvaluateFullNodesArea()
-        {
-            Rect area = _process.nodeToGUIData[_process.nodes[0]].fullArea;
-            foreach (IEditorGUINode node in _process.nodes) area = area.Add(_process.nodeToGUIData[node].fullArea);
-            return area;
+            _process.ShiftAreaBy(p);
         }
 
         #endregion

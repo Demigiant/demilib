@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using DG.DemiEditor.Panels;
 using DG.DemiLib;
 using DG.DemiLib.Core;
 using UnityEditor;
@@ -125,6 +126,14 @@ namespace DG.DemiEditor
             if (background != null) GUI.backgroundColor = (Color)background;
             if (content != null) GUI.contentColor = (Color)content;
             if (main != null) GUI.color = (Color)main;
+        }
+
+        /// <summary>
+        /// Opens a panel that previews the given texture (if not NULL)
+        /// </summary>
+        public static void ShowTexturePreview(Texture2D texture)
+        {
+            TexturePreviewWindow.Open(texture);
         }
 
         public class LabelFieldWidthScope : DeScope
@@ -456,6 +465,8 @@ namespace DG.DemiEditor
         }
 
         /// <summary>Draws the given texture tiled within the given rect</summary>
+        /// <param name="rect">Rect</param>
+        /// <param name="texture">Texture</param>
         /// <param name="scale">Eventual scale to apply</param>
         /// <param name="color">If not NULL, colorizes the texture with this color</param>
         public static void DrawTiledTexture(Rect rect, Texture2D texture, float scale = 1, Color? color = null)

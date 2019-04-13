@@ -130,6 +130,10 @@ namespace _Examples.DeGUI.Editor.DeGUINode
                 EditorUtility.SetDirty(src);
                 this.Repaint();
             });
+            menu.AddItem(new GUIContent("Capture screenshot"), false, () => {
+                Texture2D screenshot = _nodeProcess.CaptureScreenshot(NodeProcess.ScreenshotMode.VisibleArea);
+                DG.DemiEditor.DeGUI.ShowTexturePreview(screenshot);
+            });
             menu.DropDown(new Rect(Event.current.mousePosition.x, Event.current.mousePosition.y, 0, 0));
         }
 

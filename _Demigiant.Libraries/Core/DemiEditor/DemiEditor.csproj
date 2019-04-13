@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeEditorCompatibilityUtils.cs" />
+    <Compile Include="DeEditorCoroutines.cs" />
     <Compile Include="DeEditorFileUtils.cs" />
     <Compile Include="DeEditorGUIUtils.cs" />
     <Compile Include="DeEditorHierarchyUtils.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="DeGUINodeSystem\Core\NodesClipboard.cs" />
     <Compile Include="DeGUINodeSystem\Core\Connector.cs" />
     <Compile Include="DeGUINodeSystem\Core\NodeDragManager.cs" />
+    <Compile Include="DeGUINodeSystem\Core\ScreenshotManager.cs" />
     <Compile Include="DeGUINodeSystem\HelpPanel.cs" />
     <Compile Include="DeGUINodeSystem\Core\Minimap.cs" />
     <Compile Include="DeGUINodeSystem\Core\SnappingManager.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Extensions\SerializedPropertyExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TextureExtensions.cs" />
+    <Compile Include="Panels\TexturePreviewWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Format.cs" />
     <Compile Include="PropertyDrawers\LayerIndexPropertyDrawer.cs" />

@@ -44,6 +44,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
             NodeConnection // Node connection changed, added or removed
         }
 
+        public enum ScreenshotMode
+        {
+            VisibleArea,
+            AllNodes
+        }
+
         public const string Version = "1.0.037";
         /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
         public const int SnapOffset = 12;
@@ -85,7 +91,9 @@ namespace DG.DemiEditor.DeGUINodeSystem
         bool _isDockableEditor; // Used in conjunction with hack to allow correct GUI scaling on dockable windows
         bool _repaintOnEnd; // If TRUE, repaints the editor during EndGUI. Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
-        Vector2 _forceApplyAreaShift; // Used by ShiftAreaTo to apply a shift the next time the process begins
+        Vector2 _forceApplyAreaShiftBy; // Used by ShiftAreaBy to apply a shift the next time the process begins
+        Vector2 _forceApplyAreaShift; // Used by SetShiftArea to apply a shift the next time the process begins
+        bool _doForceApplyAreaShift; // Used by SetShiftArea to apply a shift the next time the process begins
 
         #region CONSTRUCTOR
 
@@ -157,8 +165,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
         /// <summary>
         /// Shifts the visible are to the given coordinates and repaints on end
         /// </summary>
-        public void ShiftAreaTo(Vector2 shift)
+        public void ShiftAreaBy(Vector2 shift)
         {
+            _forceApplyAreaShiftBy = shift;
+            DispatchOnGUIChange(GUIChangeType.Pan);
+            RepaintOnEnd();
+        }
+
+        /// <summary>
+        /// Shifts the visible are to the given coordinates and repaints on end
+        /// </summary>
+        public void SetAreaShift(Vector2 shift)
+        {
+            _doForceApplyAreaShift = true;
             _forceApplyAreaShift = shift;
             DispatchOnGUIChange(GUIChangeType.Pan);
             RepaintOnEnd();
@@ -292,9 +311,31 @@ namespace DG.DemiEditor.DeGUINodeSystem
             return area.xMax > relativeArea.xMin && area.xMin < relativeArea.xMax && area.yMax > relativeArea.yMin && area.yMin < relativeArea.yMax;
         }
 
+        /// <summary>
+        /// Captures a screenshot of the node editor area and returns it when calling the onComplete method.<para/>
+        /// Sadly this requires a callback because if called immediately the capture will fail
+        /// with a "[d3d11] attempting to ReadPixels outside of RenderTexture bounds!" error in most cases
+        /// </summary>
+        /// <param name="screenshotMode">Screenshot mode</param>
+        /// <param name="onComplete">A callback that accepts the generated Texture2D object</param>
+        /// <param name="useProgressBar">If TRUE (default) displays a progress bar during the operation.
+        /// You'll want to set this to FALSE when you're already using a custom progressBar
+        /// and the screenshot is only part of a larger queue of operations</param>
+        public void CaptureScreenshot(ScreenshotMode screenshotMode, Action<Texture2D> onComplete, bool useProgressBar = true)
+        {
+            ScreenshotManager.CaptureScreenshot(this, screenshotMode, onComplete, useProgressBar);
+        }
+
         #endregion
 
         #region Internal Methods
+
+        internal Rect EvaluateFullNodesArea()
+        {
+            Rect area = nodeToGUIData[nodes[0]].fullArea;
+            foreach (IEditorGUINode node in nodes) area = area.Add(nodeToGUIData[node].fullArea);
+            return area;
+        }
 
         // Updates the main node process.
         // Sets <code>GUI.changed</code> to TRUE if the area is panned, a node is dragged, or controlNodes are reordered or deleted.
@@ -324,8 +365,13 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
             _Styles.Init();
             position = nodeArea;
-            refAreaShift += _forceApplyAreaShift;
-            _forceApplyAreaShift = Vector2.zero;
+            if (_doForceApplyAreaShift) {
+                refAreaShift = _forceApplyAreaShift;
+                _doForceApplyAreaShift = false;
+            } else if (_forceApplyAreaShiftBy != Vector2.zero) {
+                refAreaShift += _forceApplyAreaShiftBy;
+                _forceApplyAreaShiftBy = Vector2.zero;
+            }
             areaShift = new Vector2((int)refAreaShift.x, (int)refAreaShift.y);
             if (options.showMinimap) {
                 if (_minimap == null) _minimap = new Minimap(this);
