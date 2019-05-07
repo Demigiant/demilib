@@ -114,6 +114,7 @@ namespace DG.DemiEditor
         public static Texture2D ico_delete { get { return LoadTexture(ref _ico_delete, "ico_delete", FilterMode.Bilinear, 16); } }
         public static Texture2D ico_end { get { return LoadTexture(ref _ico_end, "ico_end", FilterMode.Bilinear); } }
         public static Texture2D ico_alert { get { return LoadTexture(ref _ico_alert, "ico_alert", FilterMode.Bilinear); } }
+        public static Texture2D ico_ok { get { return LoadTexture(ref _ico_ok, "ico_ok", FilterMode.Bilinear); } }
         public static Texture2D ico_alignTL { get { return LoadTexture(ref _ico_alignTL, "ico_alignTL"); } }
         public static Texture2D ico_alignTC { get { return LoadTexture(ref _ico_alignTC, "ico_alignTC"); } }
         public static Texture2D ico_alignTR { get { return LoadTexture(ref _ico_alignTR, "ico_alignTR"); } }
@@ -157,6 +158,7 @@ namespace DG.DemiEditor
         static Texture2D _ico_delete;
         static Texture2D _ico_end;
         static Texture2D _ico_alert;
+        static Texture2D _ico_ok;
         static Texture2D _ico_alignTL; // Icons with square with corners and center
         static Texture2D _ico_alignTC;
         static Texture2D _ico_alignTR;
@@ -207,6 +209,7 @@ namespace DG.DemiEditor
         public static Texture2D proj_heart { get { return LoadTexture(ref _proj_heart, "project/ico_heart"); } }
         public static Texture2D proj_materials { get { return LoadTexture(ref _proj_materials, "project/ico_materials"); } }
         public static Texture2D proj_models { get { return LoadTexture(ref _proj_models, "project/ico_models"); } }
+        public static Texture2D proj_particles { get { return LoadTexture(ref _proj_particles, "project/ico_particles"); } }
         public static Texture2D proj_play { get { return LoadTexture(ref _proj_play, "project/ico_play"); } }
         public static Texture2D proj_prefab { get { return LoadTexture(ref _proj_prefab, "project/ico_prefab"); } }
         public static Texture2D proj_shaders { get { return LoadTexture(ref _proj_shaders, "project/ico_shaders"); } }
@@ -226,6 +229,7 @@ namespace DG.DemiEditor
         static Texture2D _proj_heart;
         static Texture2D _proj_materials;
         static Texture2D _proj_models;
+        static Texture2D _proj_particles;
         static Texture2D _proj_play;
         static Texture2D _proj_prefab;
         static Texture2D _proj_shaders;

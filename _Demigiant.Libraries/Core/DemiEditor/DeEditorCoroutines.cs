@@ -40,8 +40,8 @@ namespace DG.DemiEditor
         static void UpdateCoroutines()
         {
             for (int i = 0; i < _Coroutines.Count; ++i) {
-                if (_Coroutines[i].Current is IEnumerator current) {
-                    if (MoveNext(current)) continue;
+                if (_Coroutines[i].Current is IEnumerator) {
+                    if (MoveNext((IEnumerator)_Coroutines[i].Current)) continue;
                 }
                 if (!_Coroutines[i].MoveNext()) _Coroutines.RemoveAt(i--);
             }

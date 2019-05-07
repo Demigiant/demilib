@@ -56,7 +56,8 @@ namespace DG.DeEditorTools.Project
             Shaders,
             Models,
             Materials,
-            Terrains
+            Terrains,
+            Particles
         }
 
         public enum EvidenceType
@@ -277,6 +278,8 @@ namespace DG.DeEditorTools.Project
                     return DeStylePalette.proj_materials;
                 case IcoType.Terrains:
                     return DeStylePalette.proj_terrains;
+                case IcoType.Particles:
+                    return DeStylePalette.proj_particles;
                 }
                 return null;
             }

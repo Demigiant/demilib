@@ -108,11 +108,23 @@ namespace DG.DeEditorTools.Project
         [MenuItem("Assets/DeProject/Icon/Fonts", false, _Priority_Icon_Sub0)]
         static void SetIconFonts() { DeProject.SetIconForSelections(DeProjectData.IcoType.Fonts, Selection.assetGUIDs); }
 
+        [MenuItem("Assets/DeProject/Icon/Materials", false, _Priority_Icon_Sub0)]
+        static void SetIconMaterials() { DeProject.SetIconForSelections(DeProjectData.IcoType.Materials, Selection.assetGUIDs); }
+
+        [MenuItem("Assets/DeProject/Icon/Particles", false, _Priority_Icon_Sub0)]
+        static void SetIconParticles() { DeProject.SetIconForSelections(DeProjectData.IcoType.Particles, Selection.assetGUIDs); }
+
         [MenuItem("Assets/DeProject/Icon/Prefabs", false, _Priority_Icon_Sub0)]
         static void SetIconPrefabs() { DeProject.SetIconForSelections(DeProjectData.IcoType.Prefab, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Scripts", false, _Priority_Icon_Sub0)]
         static void SetIconScripts() { DeProject.SetIconForSelections(DeProjectData.IcoType.Scripts, Selection.assetGUIDs); }
+
+        [MenuItem("Assets/DeProject/Icon/Shaders", false, _Priority_Icon_Sub0)]
+        static void SetIconShaders() { DeProject.SetIconForSelections(DeProjectData.IcoType.Shaders, Selection.assetGUIDs); }
+
+        [MenuItem("Assets/DeProject/Icon/Terrains", false, _Priority_Icon_Sub0)]
+        static void SetIconTerrains() { DeProject.SetIconForSelections(DeProjectData.IcoType.Terrains, Selection.assetGUIDs); }
 
         [MenuItem("Assets/DeProject/Icon/Textures", false, _Priority_Icon_Sub0)]
         static void SetIconTextures() { DeProject.SetIconForSelections(DeProjectData.IcoType.Textures, Selection.assetGUIDs); }
@@ -181,6 +193,13 @@ namespace DG.DeEditorTools.Project
         static void SetPresetMaterials()
         {
             DeProject.SetIconForSelections(DeProjectData.IcoType.Materials, Selection.assetGUIDs);
+            DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs);
+        }
+
+        [MenuItem("Assets/DeProject/Preset/Particles", false, _Priority_Preset)]
+        static void SetPresetParticles()
+        {
+            DeProject.SetIconForSelections(DeProjectData.IcoType.Particles, Selection.assetGUIDs);
             DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs);
         }
 
