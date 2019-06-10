@@ -34,12 +34,14 @@ namespace DG.DemiEditor
         static string _doubleClickTextFieldId; // ID of selected double click textField
         static int _activePressButtonId = -1;
         static int _pressFrame = -1;
+        static bool _hasEditorPressUpdateActive = false;
         static MethodInfo _defaultPropertyFieldMInfo;
 
         static DeGUI()
         {
             GUIUtils.isProSkin = IsProSkin = EditorGUIUtility.isProSkin;
             EditorApplication.update -= OnEditorPressUpdate;
+            _hasEditorPressUpdateActive = false;
         }
 
         static void OnEditorPressUpdate()
@@ -47,6 +49,7 @@ namespace DG.DemiEditor
             if (GUIUtility.hotControl < 2) {
                 _pressFrame = -1;
                 EditorApplication.update -= OnEditorPressUpdate;
+                _hasEditorPressUpdateActive = false;
                 return;
             }
             _pressFrame++;
@@ -319,8 +322,11 @@ namespace DG.DemiEditor
             bool mousePressed = GUI.enabled && _activePressButtonId == -1 && hotControl > 1;
             if (mousePressed && _pressFrame == -1) {
                 _pressFrame++;
-                EditorApplication.update -= OnEditorPressUpdate;
-                EditorApplication.update += OnEditorPressUpdate;
+                if (!_hasEditorPressUpdateActive) {
+                    _hasEditorPressUpdateActive = true;
+                    EditorApplication.update -= OnEditorPressUpdate;
+                    EditorApplication.update += OnEditorPressUpdate;
+                }
             }
             bool pressedOverButton = mousePressed && _pressFrame < 2 && rect.Contains(Event.current.mousePosition);
             if (pressedOverButton) {
