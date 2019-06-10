@@ -33,11 +33,23 @@ namespace DG.DemiEditor
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
         static string _doubleClickTextFieldId; // ID of selected double click textField
         static int _activePressButtonId = -1;
+        static int _pressFrame = -1;
         static MethodInfo _defaultPropertyFieldMInfo;
 
         static DeGUI()
         {
             GUIUtils.isProSkin = IsProSkin = EditorGUIUtility.isProSkin;
+            EditorApplication.update -= OnEditorPressUpdate;
+        }
+
+        static void OnEditorPressUpdate()
+        {
+            if (GUIUtility.hotControl < 2) {
+                _pressFrame = -1;
+                EditorApplication.update -= OnEditorPressUpdate;
+                return;
+            }
+            _pressFrame++;
         }
 
         #region Public GUI Methods
@@ -292,17 +304,26 @@ namespace DG.DemiEditor
         {
             // NOTE: tried using RepeatButton, but doesn't work if used for dragging
             if (GUI.enabled && Event.current.type == EventType.MouseUp && _activePressButtonId != -1) {
-                _activePressButtonId = -1;
 //                GUIUtility.hotControl = -1; // This breaks the undo system
                 GUIUtility.hotControl = 0;
                 Event.current.Use();
+                _pressFrame = -1;
+                _activePressButtonId = -1;
             }
             GUI.Button(rect, content, guiStyle);
 //            int controlId = GUIUtility.GetControlID(FocusType.Native);
             int controlId = DeEditorGUIUtils.GetLastControlId(); // Changed from prev while working on DeInspektor
             int hotControl = GUIUtility.hotControl;
-            bool pressed = GUI.enabled && _activePressButtonId == -1 && hotControl > 1 && rect.Contains(Event.current.mousePosition);
-            if (pressed) {
+//            bool pressed = GUI.enabled && _activePressButtonId == -1 && hotControl > 1 && rect.Contains(Event.current.mousePosition);
+            // Avoid detecting a press if mouse is already pressed and moves over button later
+            bool mousePressed = GUI.enabled && _activePressButtonId == -1 && hotControl > 1;
+            if (mousePressed && _pressFrame == -1) {
+                _pressFrame++;
+                EditorApplication.update -= OnEditorPressUpdate;
+                EditorApplication.update += OnEditorPressUpdate;
+            }
+            bool pressedOverButton = mousePressed && _pressFrame < 2 && rect.Contains(Event.current.mousePosition);
+            if (pressedOverButton) {
                 if (_activePressButtonId == -1 && _activePressButtonId != controlId) {
                     // Modified while working on DeInspektor
                     GUIUtility.hotControl = controlId; // Remove control from other elements (added while working on DeInspektor)
@@ -310,7 +331,7 @@ namespace DG.DemiEditor
                     return true;
                 }
             }
-            if (!pressed && hotControl < 1) _activePressButtonId = -1;
+            if (!pressedOverButton && hotControl < 1) _activePressButtonId = -1;
             return false;
         }
 
