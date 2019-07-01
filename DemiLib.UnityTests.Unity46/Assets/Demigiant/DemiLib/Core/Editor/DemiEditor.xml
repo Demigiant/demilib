@@ -689,6 +689,11 @@
             You'll want to set this to FALSE when you're already using a custom progressBar
             and the screenshot is only part of a larger queue of operations</param>
         </member>
+        <member name="F:DG.DemiEditor.DeGUINodeSystem.ProcessOptions.guiScaleValues">
+            <summary>
+            Ordered from max to min, 1f included. IMPORTANT: if you want "scale around the mouse" to work, every value must be half of the previous one
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.NodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">
             <summary>
             Use this to encapsulate node GUI operations.<para/>

@@ -41,7 +41,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             SortedNodes,
             DeletedNodes,
             AddedNodes,
-            NodeConnection // Node connection changed, added or removed
+            NodeConnection, // Node connection changed, added or removed
+            GUIScale
         }
 
         public enum ScreenshotMode
@@ -50,7 +51,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             AllNodes
         }
 
-        public const string Version = "1.0.037";
+        public const string Version = "1.0.040";
         /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
         public const int SnapOffset = 12;
         public EditorWindow editor; // Get/set so it can be refreshed if necessary
@@ -382,7 +383,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
             EditorGUI.BeginDisabledGroup(helpPanel.isOpen);
 
             // Set scale
-            if (!Mathf.Approximately(guiScale, 1)) {
+            bool isScaled = !Mathf.Approximately(guiScale, 1);
+            if (isScaled) {
                 GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one * guiScale);
             }
 
@@ -615,7 +617,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     for (int i = 0; i < options.guiScaleValues.Length; ++i) {
                         if (!Mathf.Approximately(options.guiScaleValues[i], guiScale)) continue;
                         guiScale = isScaleUp ? options.guiScaleValues[i - 1] : options.guiScaleValues[i + 1];
+                        // Center on mouse (only works if new guiScale is exactly half or double the previous one)
+                        refAreaShift += isScaleUp ? -Event.current.mousePosition * 0.5f : Event.current.mousePosition;
                         _repaintOnEnd = true;
+                        DispatchOnGUIChange(GUIChangeType.GUIScale);
                         break;
                     }
                 }

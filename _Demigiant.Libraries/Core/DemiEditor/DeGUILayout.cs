@@ -177,7 +177,7 @@ namespace DG.DemiEditor
             { BeginToolbar(backgroundShade, style, options); }
 
             protected override void CloseScope()
-	        { EndToolbar(); }
+            { EndToolbar(); }
         }
 
         /// <summary>Begins an horizontal toolbar layout</summary>
@@ -236,7 +236,7 @@ namespace DG.DemiEditor
             { BeginVBox(style); }
 
             protected override void CloseScope()
-	        { EndVBox(); }
+            { EndVBox(); }
         }
 
         /// <summary>Vertical box layout with style and color options</summary>
