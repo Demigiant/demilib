@@ -51,7 +51,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             AllNodes
         }
 
-        public const string Version = "1.0.040";
+        public const string Version = "1.0.045";
         /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
         public const int SnapOffset = 12;
         public EditorWindow editor; // Get/set so it can be refreshed if necessary
@@ -616,9 +616,17 @@ namespace DG.DemiEditor.DeGUINodeSystem
                     if (!isScaleUp && Mathf.Approximately(options.guiScaleValues[options.guiScaleValues.Length - 1], guiScale)) break;
                     for (int i = 0; i < options.guiScaleValues.Length; ++i) {
                         if (!Mathf.Approximately(options.guiScaleValues[i], guiScale)) continue;
+                        float prevGuiScale = guiScale;
                         guiScale = isScaleUp ? options.guiScaleValues[i - 1] : options.guiScaleValues[i + 1];
                         // Center on mouse (only works if new guiScale is exactly half or double the previous one)
-                        refAreaShift += isScaleUp ? -Event.current.mousePosition * 0.5f : Event.current.mousePosition;
+                        Vector2 mouseP = Event.current.mousePosition;
+                        Vector2 offset = isScaleUp ? -mouseP : mouseP;
+                        float scaleFactor = guiScale / prevGuiScale;
+                        scaleFactor = guiScale < prevGuiScale
+                            ? (1 - scaleFactor) / scaleFactor
+                            : (guiScale - prevGuiScale) / guiScale;
+                        offset *= scaleFactor;
+                        refAreaShift += offset;
                         _repaintOnEnd = true;
                         DispatchOnGUIChange(GUIChangeType.GUIScale);
                         break;
