@@ -22,6 +22,7 @@ namespace DG.DemiEditor
         static MethodInfo _miGetPlatformNameFromBuildTargetGroup;
         static MethodInfo _miGetAnnotations;
         static MethodInfo _miSetGizmoEnabled;
+        static int _miSetGizmoEnabledTotParms;
         static MethodInfo _miSetIconEnabled;
 
         #region Public Methods
@@ -179,7 +180,13 @@ namespace DG.DemiEditor
                 if (!found) continue;
 
                 int classId = (int)fiClassId.GetValue(annotation);
-                _miSetGizmoEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
+                if (_miSetGizmoEnabledTotParms == 4) {
+                    // Unity 2019 or newer
+                    _miSetGizmoEnabled.Invoke(null, new object[] { classId, scriptClass, setValue, true });
+                } else {
+                    // Unity 2018 or older
+                    _miSetGizmoEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
+                }
                 _miSetIconEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
             }
         }
@@ -207,7 +214,13 @@ namespace DG.DemiEditor
                 if (classId != 114) continue;
 
                 string scriptClass = (string)fiScriptClass.GetValue(annotation);
-                _miSetGizmoEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
+                if (_miSetGizmoEnabledTotParms == 4) {
+                    // Unity 2019 or newer
+                    _miSetGizmoEnabled.Invoke(null, new object[] { classId, scriptClass, setValue, true });
+                } else {
+                    // Unity 2018 or older
+                    _miSetGizmoEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
+                }
                 _miSetIconEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
             }
         }
@@ -276,6 +289,7 @@ namespace DG.DemiEditor
 
             _miGetAnnotations = type.GetMethod("GetAnnotations", BindingFlags.Static | BindingFlags.NonPublic);
             _miSetGizmoEnabled = type.GetMethod("SetGizmoEnabled", BindingFlags.Static | BindingFlags.NonPublic);
+            if (_miSetGizmoEnabled != null) _miSetGizmoEnabledTotParms = _miSetGizmoEnabled.GetParameters().Length;
             _miSetIconEnabled = type.GetMethod("SetIconEnabled", BindingFlags.Static | BindingFlags.NonPublic);
             return true;
         }
