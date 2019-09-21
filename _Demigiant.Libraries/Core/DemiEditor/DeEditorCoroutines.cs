@@ -51,7 +51,12 @@ namespace DG.DemiEditor
 
         static bool MoveNext(IEnumerator coroutine)
         {
-            if (coroutine.Current is IEnumerator current) {
+//            if (coroutine.Current is IEnumerator current) {
+//                if (MoveNext(current)) return true;
+//            }
+
+            IEnumerator current = coroutine.Current as IEnumerator;
+            if (current != null) {
                 if (MoveNext(current)) return true;
             }
             return coroutine.MoveNext();
