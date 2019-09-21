@@ -100,6 +100,7 @@ namespace DG.DemiEditor
         /// </summary>
         public static GUIStyle Background(this GUIStyle style, Texture2D background, Texture2D pressBackground = null)
         {
+            if (background == null) background = DeStylePalette.transparent;
             if (pressBackground == null) pressBackground = background;
             style.normal.background = style.onNormal.background
                 = style.focused.background = style.onFocused.background

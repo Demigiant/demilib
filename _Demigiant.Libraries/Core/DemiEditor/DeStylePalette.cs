@@ -33,6 +33,7 @@ namespace DG.DemiEditor
 
         #region Texture2D
 
+        public static Texture2D transparent { get { return LoadTexture(ref _transparent, "transparentSquare"); } }
         public static Texture2D whiteSquare { get { return LoadTexture(ref _whiteSquare, "whiteSquare"); } }
         public static Texture2D whiteSquareAlpha10 { get { return LoadTexture(ref _whiteSquareAlpha10, "whiteSquareAlpha10"); } }
         public static Texture2D whiteSquareAlpha15 { get { return LoadTexture(ref _whiteSquareAlpha15, "whiteSquareAlpha15"); } }
@@ -71,6 +72,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteDot_darkBorder { get { return LoadTexture(ref _whiteDot_darkBorder, "whiteDot_darkBorder"); } }
         public static Texture2D whiteDot_whiteBorderAlpha { get { return LoadTexture(ref _whiteDot_whiteBorderAlpha, "whiteDot_whiteBorderAlpha"); } }
         public static Texture2D circle { get { return LoadTexture(ref _circle, "circle", FilterMode.Bilinear); } }
+        static Texture2D _transparent;
         static Texture2D _whiteSquare;
         static Texture2D _whiteSquareAlpha10;
         static Texture2D _whiteSquareAlpha15;
