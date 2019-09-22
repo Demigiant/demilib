@@ -114,6 +114,8 @@ namespace DG.DemiEditor
         public static Texture2D ico_demigiant { get { return LoadTexture(ref _ico_demigiant, "ico_demigiant", FilterMode.Bilinear, 16); } }
         public static Texture2D ico_visibility { get { return LoadTexture(ref _ico_visibility_on, "ico_visibility"); } }
         public static Texture2D ico_visibility_off { get { return LoadTexture(ref _ico_visibility_off, "ico_visibility_off"); } }
+        public static Texture2D ico_foldout_open { get { return LoadTexture(ref _ico_foldout_open, "ico_foldout_open"); } }
+        public static Texture2D ico_foldout_closed { get { return LoadTexture(ref _ico_foldout_closed, "ico_foldout_closed"); } }
         public static Texture2D ico_nodeArrow { get { return LoadTexture(ref _ico_nodeArrow, "ico_nodeArrow", FilterMode.Bilinear, 16); } }
         public static Texture2D ico_delete { get { return LoadTexture(ref _ico_delete, "ico_delete", FilterMode.Bilinear, 16); } }
         public static Texture2D ico_end { get { return LoadTexture(ref _ico_end, "ico_end", FilterMode.Bilinear); } }
@@ -160,6 +162,8 @@ namespace DG.DemiEditor
         static Texture2D _ico_demigiant;
         static Texture2D _ico_visibility_on;
         static Texture2D _ico_visibility_off;
+        static Texture2D _ico_foldout_open;
+        static Texture2D _ico_foldout_closed;
         static Texture2D _ico_nodeArrow;
         static Texture2D _ico_delete;
         static Texture2D _ico_end;
@@ -346,7 +350,8 @@ namespace DG.DemiEditor
                 alignment = TextAnchor.MiddleLeft,
                 active = { background = null },
                 fixedWidth = 14,
-                normal = { background = EditorStyles.foldout.normal.background },
+//                normal = { background = EditorStyles.foldout.normal.background },
+                normal = { background = DeStylePalette.ico_foldout_closed },
                 border = EditorStyles.foldout.border,
                 padding = new RectOffset(14, 0, 0, 0),
                 margin = new RectOffset(0, 3, 0, 0),
@@ -358,10 +363,12 @@ namespace DG.DemiEditor
             toolFoldoutClosedWLabel = toolFoldoutClosed.Clone(9).Width(0).StretchWidth(false);
             toolFoldoutClosedWStretchedLabel = toolFoldoutClosedWLabel.Clone().StretchWidth();
             toolFoldoutOpen = new GUIStyle(toolFoldoutClosed) {
-                normal = { background = EditorStyles.foldout.onNormal.background }
+//                normal = { background = EditorStyles.foldout.onNormal.background }
+                normal = { background = DeStylePalette.ico_foldout_open }
             };
             toolFoldoutOpenWLabel = new GUIStyle(toolFoldoutClosedWLabel) {
-                normal = { background = EditorStyles.foldout.onNormal.background }
+//                normal = { background = EditorStyles.foldout.onNormal.background }
+                normal = { background = DeStylePalette.ico_foldout_open }
             };
             toolFoldoutOpenWStretchedLabel = toolFoldoutOpenWLabel.Clone().StretchWidth();
             // Large
