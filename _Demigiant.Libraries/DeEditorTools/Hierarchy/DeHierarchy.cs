@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using DG.DemiEditor;
 using DG.DemiEditor.Internal;
+using DG.DemiLib;
 using DG.DemiLib.External;
 using UnityEditor;
 using UnityEngine;
@@ -19,7 +20,8 @@ namespace DG.DeEditorTools.Hierarchy
     {
         static DeHierarchyComponent _dehComponent;
 
-        static GUIStyle _evidenceStyle, _evidencePrefixStyle;
+        static Color _icoVisibilityOnColor, _icoVisibilityOffColor;
+        static GUIStyle _evidenceStyle, _btVisibility, _btVisibilityOff;
 
         static DeHierarchy()
         {
@@ -68,14 +70,34 @@ namespace DG.DeEditorTools.Hierarchy
 
         static void ItemOnGUI(int instanceID, Rect selectionRect)
         {
-            if (Event.current.type != EventType.Repaint) return;
-            if (_dehComponent == null) return;
+            bool hasDehComponent = _dehComponent != null;
+            bool showVisibilityButton = DeEditorToolsPrefs.deHierarchy_showVisibilityButton;
+            if (showVisibilityButton) {
+                if (Event.current.type == EventType.Layout) return;
+            } else if (!hasDehComponent || Event.current.type != EventType.Repaint) return;
 
             DeGUI.BeginGUI();
             SetStyles();
 
             GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
             if (go == null) return;
+
+            // Visibility button
+            if (showVisibilityButton) {
+                bool isActive = go.activeSelf;
+                bool isActiveInHierarchy = go.activeInHierarchy;
+                Texture2D ico = DeStylePalette.ico_visibility;
+                Rect visibilityR = new Rect(selectionRect.xMax - ico.width - 2, (int)(selectionRect.center.y - (ico.height * 0.5f)), ico.width, ico.height);
+                using (new DeGUI.ColorScope(null, null, isActiveInHierarchy ? _icoVisibilityOnColor : _icoVisibilityOffColor)) {
+                    if (GUI.Button(visibilityR, "", isActive ? _btVisibility : _btVisibilityOff)) {
+                        Undo.RecordObject(go, go.name + " Visibility");
+                        go.SetActive(!isActive);
+                        EditorUtility.SetDirty(go);
+                    }
+                }
+            }
+
+            if (!hasDehComponent) return;
 
             DeHierarchyComponent.CustomizedItem customizedItem = _dehComponent.GetItem(go);
             if (customizedItem == null) return;
@@ -163,8 +185,14 @@ namespace DG.DeEditorTools.Hierarchy
         {
             if (_evidenceStyle != null) return;
 
+            _icoVisibilityOnColor = new DeSkinColor(DeGUI.IsProSkin ? 0.65f : 0.5f);
+            _icoVisibilityOffColor = new DeSkinColor(DeGUI.IsProSkin ? 0.4f : 0.6f);
+
             _evidenceStyle = DeGUI.styles.button.bBlankBorder.Clone(TextAnchor.MiddleLeft).Background(DeStylePalette.squareBorderCurvedEmpty)
                 .PaddingLeft(3).PaddingTop(2);
+            _btVisibility = DeGUI.styles.button.flatWhite.Clone().Margin(0).Padding(0).Background(DeStylePalette.ico_visibility)
+                .Width(DeStylePalette.ico_visibility.width).Height(DeStylePalette.ico_visibility.height);
+            _btVisibilityOff = _btVisibility.Clone().Background(DeStylePalette.ico_visibility_off);
         }
 
         #endregion

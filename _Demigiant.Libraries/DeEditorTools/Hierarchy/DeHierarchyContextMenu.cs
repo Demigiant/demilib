@@ -14,7 +14,7 @@ namespace DG.DeEditorTools.Hierarchy
 
         [MenuItem("GameObject/DeHierarchy/Reset", false, 21)]
         static void SetColorReset() { DeHierarchy.ResetSelections(); }
-        
+
         #endregion
 
         #region Icon
