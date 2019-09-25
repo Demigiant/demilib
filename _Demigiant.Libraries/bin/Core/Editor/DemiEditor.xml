@@ -24,7 +24,8 @@
         <member name="M:DG.DemiEditor.DeEditorCoroutines.StartCoroutine(System.Collections.IEnumerator)">
             <summary>
             Starts an editor coroutine. You can't use normal <code>yield new WaitFor</code> methods because
-            those are Unity runtime, but you can instead use 
+            those are Unity runtime, but you can instead use <see cref="M:DG.DemiEditor.DeEditorCoroutines.WaitForSeconds(System.Single)"/>.
+            Other than that, you can use normal <code>yield null/etc</code>.
             </summary>
         </member>
         <member name="T:DG.DemiEditor.DeEditorFileUtils">

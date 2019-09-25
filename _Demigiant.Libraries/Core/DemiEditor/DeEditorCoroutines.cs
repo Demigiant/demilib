@@ -19,7 +19,8 @@ namespace DG.DemiEditor
 
         /// <summary>
         /// Starts an editor coroutine. You can't use normal <code>yield new WaitFor</code> methods because
-        /// those are Unity runtime, but you can instead use 
+        /// those are Unity runtime, but you can instead use <see cref="DeEditorCoroutines.WaitForSeconds"/>.
+        /// Other than that, you can use normal <code>yield null/etc</code>.
         /// </summary>
         public static void StartCoroutine(IEnumerator coroutine)
         {
