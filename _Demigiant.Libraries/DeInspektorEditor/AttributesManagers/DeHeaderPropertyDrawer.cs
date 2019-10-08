@@ -60,7 +60,7 @@ namespace DG.DeInspektorEditor.AttributesManagers
             Color defBgColor = GUI.backgroundColor;
             GUI.backgroundColor = attr.bgColor != null
                 ? DeColorPalette.HexToColor(attr.bgColor)
-                : (Color)new DeSkinColor(0.45f, 0.5f);
+                : (Color)new DeSkinColor(0.45f, 0.05f);
             if (hasTopDivider) GUI.Label(topDividerR, "", _dividerStyle);
             GUI.Label(headerR, attr.text, _attributeStyle);
             if (hasBottomDivider) GUI.Label(bottomDividerR, "", _dividerStyle);
