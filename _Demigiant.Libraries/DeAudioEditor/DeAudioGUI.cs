@@ -90,7 +90,9 @@ namespace DG.DeAudioEditor
                 }
             }
             Rect clipR = lineR;
-            value.clip = EditorGUI.ObjectField(clipR, label, value.clip, typeof(AudioClip), false) as AudioClip;
+            value.clip = label.text == ""
+                ? EditorGUI.ObjectField(clipR, value.clip, typeof(AudioClip), false) as AudioClip
+                : EditorGUI.ObjectField(clipR, label, value.clip, typeof(AudioClip), false) as AudioClip;
             // Second line
             lineR.y = lineR.yMax + VSpace;
             lineR.width = rect.width;
