@@ -11,7 +11,14 @@
             <param name="color">Color to evaluate</param>
             <param name="brightnessFactor">Brightness factor (multiplied by current brightness)</param>
             <param name="alpha">If set applies this alpha value</param>
-            <returns></returns>
+        </member>
+        <member name="M:DG.DeExtensions.ColorExtensions.ChangeSaturation(UnityEngine.Color,System.Single,System.Nullable{System.Single})">
+            <summary>
+            Returns a new color equal to the given one with changed saturation
+            </summary>
+            <param name="color">Color to evaluate</param>
+            <param name="saturationFactor">Saturation factor (multiplied by current brightness)</param>
+            <param name="alpha">If set applies this alpha value</param>
         </member>
         <member name="M:DG.DeExtensions.ColorExtensions.SetAlpha(UnityEngine.Color,System.Single)">
             <summary>

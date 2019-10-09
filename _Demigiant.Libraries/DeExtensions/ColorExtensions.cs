@@ -14,7 +14,6 @@ namespace DG.DeExtensions
         /// <param name="color">Color to evaluate</param>
         /// <param name="brightnessFactor">Brightness factor (multiplied by current brightness)</param>
         /// <param name="alpha">If set applies this alpha value</param>
-        /// <returns></returns>
         public static Color ChangeBrightness(this Color color, float brightnessFactor, float? alpha = null)
         {
             float h, s, v;
@@ -22,6 +21,24 @@ namespace DG.DeExtensions
             v *= brightnessFactor;
             if (v < 0) v = 0;
             else if (v > 1) v = 1;
+            Color result = Color.HSVToRGB(h, s, v);
+            if (alpha != null) result.a = (float)alpha;
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a new color equal to the given one with changed saturation
+        /// </summary>
+        /// <param name="color">Color to evaluate</param>
+        /// <param name="saturationFactor">Saturation factor (multiplied by current brightness)</param>
+        /// <param name="alpha">If set applies this alpha value</param>
+        public static Color ChangeSaturation(this Color color, float saturationFactor, float? alpha = null)
+        {
+            float h, s, v;
+            Color.RGBToHSV(color, out h, out s, out v);
+            s *= saturationFactor;
+            if (s < 0) s = 0;
+            else if (s > 1) s = 1;
             Color result = Color.HSVToRGB(h, s, v);
             if (alpha != null) result.a = (float)alpha;
             return result;
