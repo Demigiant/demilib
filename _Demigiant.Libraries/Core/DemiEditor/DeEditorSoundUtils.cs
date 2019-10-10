@@ -11,6 +11,8 @@ namespace DG.DemiEditor
 {
     public static class DeEditorSoundUtils
     {
+        static MethodInfo _miPlay, _miStop, _miStopAll;
+
         #region Public Methods
 
         /// <summary>
@@ -20,10 +22,28 @@ namespace DG.DemiEditor
         {
             if (audioClip == null) return;
 
-            Assembly editorAssembly = Assembly.GetAssembly(typeof(EditorWindow));
-            MethodInfo mInfo = editorAssembly.CreateInstance("UnityEditor.AudioUtil").GetType()
-                .GetMethod("PlayClip", BindingFlags.Static | BindingFlags.Public | BindingFlags.InvokeMethod, Type.DefaultBinder, new[] { typeof(AudioClip) }, null);
-            mInfo.Invoke(null, new object[] { audioClip });
+            if (_miPlay == null) {
+                Assembly editorAssembly = Assembly.GetAssembly(typeof(EditorWindow));
+                Type t = editorAssembly.CreateInstance("UnityEditor.AudioUtil").GetType();
+                if (DeUnityEditorVersion.MajorVersion < 2019) {
+                    _miPlay = t.GetMethod(
+                        "PlayClip",
+                        BindingFlags.Static | BindingFlags.Public | BindingFlags.InvokeMethod, Type.DefaultBinder,
+                        new[] {typeof(AudioClip)}, null
+                    );
+                } else {
+                    _miPlay = t.GetMethod(
+                        "PlayClip",
+                        BindingFlags.Static | BindingFlags.Public | BindingFlags.InvokeMethod, Type.DefaultBinder,
+                        new[] { typeof(AudioClip), typeof(int), typeof(bool) }, null
+                    );
+                }
+            }
+            if (DeUnityEditorVersion.MajorVersion < 2019) {
+                _miPlay.Invoke(null, new object[] {audioClip});
+            } else {
+                _miPlay.Invoke(null, new object[] {audioClip, 0, false});
+            }
         }
 
         /// <summary>
@@ -34,9 +54,11 @@ namespace DG.DemiEditor
             if (audioClip == null) return;
 
             Assembly editorAssembly = Assembly.GetAssembly(typeof(EditorWindow));
-            MethodInfo mInfo = editorAssembly.CreateInstance("UnityEditor.AudioUtil").GetType()
-                .GetMethod("StopClip", BindingFlags.Static | BindingFlags.Public | BindingFlags.InvokeMethod, Type.DefaultBinder, new[] { typeof(AudioClip) }, null);
-            mInfo.Invoke(null, new object[] { audioClip });
+            if (_miStop == null) {
+                Type t = editorAssembly.CreateInstance("UnityEditor.AudioUtil").GetType();
+                _miStop = t.GetMethod("StopClip", BindingFlags.Static | BindingFlags.Public | BindingFlags.InvokeMethod, Type.DefaultBinder, new[] {typeof(AudioClip)}, null);
+            }
+            _miStop.Invoke(null, new object[] { audioClip });
         }
 
         /// <summary>
@@ -45,8 +67,11 @@ namespace DG.DemiEditor
         public static void StopAll()
         {
             Assembly editorAssembly = Assembly.GetAssembly(typeof(EditorWindow));
-            MethodInfo mInfo = editorAssembly.CreateInstance("UnityEditor.AudioUtil").GetType().GetMethod("StopAllClips", BindingFlags.Static | BindingFlags.Public);
-            mInfo.Invoke(null, null);
+            if (_miStopAll == null) {
+                Type t = editorAssembly.CreateInstance("UnityEditor.AudioUtil").GetType();
+                _miStopAll = t.GetMethod("StopAllClips", BindingFlags.Static | BindingFlags.Public);
+            }
+            _miStopAll.Invoke(null, null);
         }
 
         #endregion
