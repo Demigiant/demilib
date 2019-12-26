@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DeScriptExecutionOrderAttribute.cs" />
     <Compile Include="Core\GUIUtils.cs" />
     <Compile Include="DeColorPalette.cs" />
     <Compile Include="DeInputUtils.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Structs %28no namespace%29\IntRange.cs" />
     <Compile Include="Structs %28no namespace%29\Range.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>call $(SolutionDir)PostBuild_Core.bat $(SolutionDir) $(TargetDir) $(TargetFileName) $(TargetName)</PostBuildEvent>

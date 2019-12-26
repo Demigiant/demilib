@@ -1,4 +1,4 @@
-:: Called by DeEditorTools (last in compilation order) post build
+:: Called by DeInspektorEditor (last in compilation order) post build
 
 :: %StartupDir = $(SolutionDir)
 set PATH=%PATH%;C:\Program Files\7-Zip\
