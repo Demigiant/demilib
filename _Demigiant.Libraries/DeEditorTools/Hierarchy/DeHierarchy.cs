@@ -19,9 +19,10 @@ namespace DG.DeEditorTools.Hierarchy
     public class DeHierarchy
     {
         static DeHierarchyComponent _dehComponent;
+        static readonly Dictionary<GameObject,Renderer> _GoToRenderer = new Dictionary<GameObject, Renderer>();
 
         static Color _icoVisibilityOnColor, _icoVisibilityOffColor;
-        static GUIStyle _evidenceStyle, _btVisibility, _btVisibilityOff;
+        static GUIStyle _evidenceStyle, _btVisibility, _btVisibilityOff, _layerBox, _layerOrderBox;
 
         static DeHierarchy()
         {
@@ -45,6 +46,8 @@ namespace DG.DeEditorTools.Hierarchy
 
         static void Refresh()
         {
+            _GoToRenderer.Clear();
+
             ConnectToDeHierarchyComponent(false, true);
             if (_dehComponent == null) return;
 
@@ -82,18 +85,63 @@ namespace DG.DeEditorTools.Hierarchy
             GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
             if (go == null) return;
 
+            Rect extraR = new Rect(selectionRect.xMax, selectionRect.y, 0, selectionRect.height);
             // Visibility button
             if (showVisibilityButton) {
                 bool isActive = go.activeSelf;
                 bool isActiveInHierarchy = go.activeInHierarchy;
                 Texture2D ico = DeStylePalette.ico_visibility;
-                Rect visibilityR = new Rect(selectionRect.xMax - ico.width - 2, (int)(selectionRect.center.y - (ico.height * 0.5f)), ico.width, ico.height);
+                extraR = new Rect(selectionRect.xMax - ico.width - 2, (int)(selectionRect.center.y - (ico.height * 0.5f)), ico.width, ico.height);
                 using (new DeGUI.ColorScope(null, null, isActiveInHierarchy ? _icoVisibilityOnColor : _icoVisibilityOffColor)) {
-                    if (GUI.Button(visibilityR, "", isActive ? _btVisibility : _btVisibilityOff)) {
+                    if (GUI.Button(extraR, "", isActive ? _btVisibility : _btVisibilityOff)) {
                         Undo.RecordObject(go, go.name + " Visibility");
                         go.SetActive(!isActive);
                         EditorUtility.SetDirty(go);
                     }
+                }
+            }
+            // Sorting layer/order
+            bool showSortingLayer = DeEditorToolsPrefs.deHierarchy_showSortingLayer;
+            bool showSortingOrder = DeEditorToolsPrefs.deHierarchy_showOrderInLayer;
+            if (showSortingLayer || showSortingOrder) {
+                if (!_GoToRenderer.ContainsKey(go)) _GoToRenderer.Add(go, go.GetComponent<Renderer>());
+                Renderer rend = _GoToRenderer[go];
+                if (rend != null) {
+                    if (showSortingLayer) {
+                        GUIContent label = new GUIContent(rend.sortingLayerName);
+                        Vector2 size = _layerOrderBox.CalcSize(label);
+                        extraR = extraR.Shift(-size.x - 2, 0, 0, 0).SetY((int)(selectionRect.center.y - (size.y * 0.5f)))
+                            .SetHeight(size.y).SetWidth(size.x);
+                        GUI.Label(extraR, label, _layerBox);
+                    }
+                    if (showSortingOrder) {
+                        GUIContent label = new GUIContent(rend.sortingOrder.ToString());
+                        Vector2 size = _layerOrderBox.CalcSize(label);
+                        extraR = extraR.Shift(-size.x - 2, 0, 0, 0).SetY((int)(selectionRect.center.y - (size.y * 0.5f)))
+                            .SetHeight(size.y).SetWidth(size.x);
+                        GUI.Label(extraR, label, _layerOrderBox);
+                    }
+                }
+            }
+
+            // Tree structure lines
+            if (DeEditorToolsPrefs.deHierarchy_showTreeLines && go.transform.parent != null) {
+                const float columnStep = 14;
+                float minColumnX = DeUnityEditorVersion.Version < 2019.3f ? 30 : 64;
+                Rect r = new Rect(selectionRect.x - 14, selectionRect.y, 1, selectionRect.height);
+                Color linesCol = new Color(0.4078432f, 0.4078432f, 0.4078432f, 1f);
+                bool firstElementDone = false;
+                while (r.x > 20) {
+                    float colorDepth = columnStep / (r.x - minColumnX + columnStep);
+                    if (colorDepth < 0.1f) colorDepth = 0.1f;
+                    linesCol = linesCol.SetAlpha(colorDepth);
+                    Rect drawR = new Rect(r.x - 8, r.y - 7, r.width, r.height);
+                    DeGUI.DrawColoredSquare(drawR, linesCol); // vertical
+                    drawR = new Rect(drawR.x + drawR.width, drawR.y + drawR.height - 1, 14 - drawR.width, 1);
+                    if (firstElementDone) drawR.width = 2;
+                    DeGUI.DrawColoredSquare(drawR, linesCol);
+                    firstElementDone = true;
+                    r.x -= columnStep;
                 }
             }
 
@@ -148,6 +196,9 @@ namespace DG.DeEditorTools.Hierarchy
                 case DeHierarchyComponent.IcoType.Camera:
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_camera_border : DeStylePalette.ico_camera;
                     break;
+                case DeHierarchyComponent.IcoType.Light:
+                    icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_light_border : DeStylePalette.ico_light;
+                    break;
                 default: // Dot
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.whiteDot_darkBorder : DeStylePalette.whiteDot;
                     break;
@@ -193,6 +244,9 @@ namespace DG.DeEditorTools.Hierarchy
             _btVisibility = DeGUI.styles.button.flatWhite.Clone().Margin(0).Padding(0).Background(DeStylePalette.ico_visibility)
                 .Width(DeStylePalette.ico_visibility.width).Height(DeStylePalette.ico_visibility.height);
             _btVisibilityOff = _btVisibility.Clone().Background(DeStylePalette.ico_visibility_off);
+            _layerBox = new GUIStyle(GUI.skin.label).Add(TextAnchor.MiddleCenter, 10, new DeSkinColor(0.2f, 0.8f)).Padding(2, 2, 1, 1).Margin(0)
+                .Background(DeGUI.IsProSkin ? DeStylePalette.blackSquare : DeStylePalette.whiteSquare);
+            _layerOrderBox = _layerBox.Clone();
         }
 
         #endregion
