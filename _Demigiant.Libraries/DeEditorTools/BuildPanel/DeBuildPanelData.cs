@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using DG.DemiEditor;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace DG.DeEditorTools.BuildPanel
 
         #endregion
 
-        public const string Version = "1.0.040";
+        public const string Version = "1.0.050";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
             BuildTarget.StandaloneWindows64,
             BuildTarget.StandaloneOSX,
@@ -40,6 +41,13 @@ namespace DG.DeEditorTools.BuildPanel
             public bool enabled = true;
             public bool enabledForInnerExecutable = false; // If TRUE also uses this affix when determining the fileName on standalone platforms
             public string text;
+
+            // Returns the right text value, evaluating it as a static string property in case it starts with a @
+            public string GetText(bool logErrors = false)
+            {
+                if (!text.StartsWith("@")) return text;
+                return text.Substring(1).EvalAsProperty<string>(null, logErrors);
+            }
         }
         
         [Serializable]

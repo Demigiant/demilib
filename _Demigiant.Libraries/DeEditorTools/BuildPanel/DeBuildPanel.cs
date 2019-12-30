@@ -144,7 +144,7 @@ namespace DG.DeEditorTools.BuildPanel
                 }
                 if (_src.prefixes.Count > 0) {
                     using (new GUILayout.VerticalScope(DeGUI.styles.box.sticky)) {
-                        DrawAffix(_src.prefixes);
+                        DrawAffixes(_src.prefixes);
                     }
                 }
                 // Suffixes
@@ -158,7 +158,7 @@ namespace DG.DeEditorTools.BuildPanel
                 }
                 if (_src.suffixes.Count > 0) {
                     using (new GUILayout.VerticalScope(DeGUI.styles.box.sticky)) {
-                        DrawAffix(_src.suffixes);
+                        DrawAffixes(_src.suffixes);
                     }
                 }
                 if (check.changed) RefreshBuildPathsLabels();
@@ -183,8 +183,12 @@ namespace DG.DeEditorTools.BuildPanel
             if (GUI.changed) EditorUtility.SetDirty(_src);
         }
 
-        void DrawAffix(List<DeBuildPanelData.Affix> affixes)
+        void DrawAffixes(List<DeBuildPanelData.Affix> affixes)
         {
+            GUILayout.Label(
+                "If you start an affix with \"@\" it will be evaluated as a static string property/field via Reflection",
+                Styles.labelAffixComment
+            );
             for (int i = 0; i < affixes.Count; ++i) {
                 DeBuildPanelData.Affix affix = affixes[i];
                 using (new GUILayout.HorizontalScope()) {
@@ -193,6 +197,13 @@ namespace DG.DeEditorTools.BuildPanel
                     }
                     using (new DeGUI.ColorScope(affix.enabled ? Color.white : (Color)new DeSkinColor(0.7f, 0.7f), affix.enabled ? Color.white : (Color)new DeSkinColor(0.7f, 0.5f))) {
                         affix.text = EditorGUILayout.TextField(affix.text);
+                    }
+                    if (affix.text.StartsWith("@")) {
+                        using (new DeGUI.ColorScope(new DeSkinColor(0.9f, 0.2f), new DeSkinColor(0.3f, 0.8f))) {
+                            if (GUILayout.Button("Test", Styles.btInline, GUILayout.ExpandWidth(false))) {
+                                Debug.Log(affix.GetText(true));
+                            }
+                        }
                     }
                     affix.enabled = DeGUILayout.ToggleButton(affix.enabled, "Enabled", Styles.btInlineToggle, GUILayout.Width(60));
                     using (new EditorGUI.DisabledScope(!affix.enabled)) {
@@ -519,11 +530,11 @@ namespace DG.DeEditorTools.BuildPanel
             bool isInnerExecutable = withExtension && build.HasInnerExecutable();
             _StrbAlt.Length = 0;
             foreach (DeBuildPanelData.Affix affix in _src.prefixes) {
-                if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.text);
+                if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.GetText());
             }
             _StrbAlt.Append(build.buildName);
             foreach (DeBuildPanelData.Affix affix in _src.suffixes) {
-                if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.text);
+                if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.GetText());
             }
             string result = _StrbAlt.ToString();
             if (!isInnerExecutable) {
@@ -559,8 +570,8 @@ namespace DG.DeEditorTools.BuildPanel
             static bool _initialized;
 
             public static GUIStyle buildContainer, buildPathContainer,
-                                   btToolbarToggle, btInlineToggle, btDeleteBuildToolbar, btDeleteBuild,
-                                   labelBuildPath;
+                                   btToolbarToggle, btInline, btInlineToggle, btDeleteBuildToolbar, btDeleteBuild,
+                                   labelBuildPath, labelAffixComment;
 
             public static void Init()
             {
@@ -572,12 +583,15 @@ namespace DG.DeEditorTools.BuildPanel
                 buildPathContainer = DeGUI.styles.box.stickyTop.Clone().Padding(1);
 
                 btToolbarToggle = DeGUI.styles.button.bBlankBorderCompact.Margin(2, 2, 2, 0).Padding(0, 0, 1, 0).ContentOffsetX(1);
-                btInlineToggle = DeGUI.styles.button.bBlankBorder.Clone().Margin(1, 1, 2, 0).PaddingBottom(2);
+                btInline = DeGUI.styles.button.bBlankBorder.Clone().Margin(1, 1, 2, 0).PaddingBottom(2);
+                btInlineToggle = btInline.Clone();
                 btDeleteBuildToolbar = DeGUI.styles.button.tool.Clone(Color.white, FontStyle.Bold).Background(DeStylePalette.redSquare)
                     .Width(16).Height(14).Margin(0, 0, 2, 0);
                 btDeleteBuild = btDeleteBuildToolbar.Clone().Height(16);
 
                 labelBuildPath = new GUIStyle(GUI.skin.label).Add(9, Format.WordWrap, Format.RichText);
+                labelAffixComment = DeGUI.styles.label.wordwrapRichtText.Clone(new DeSkinColor(0.4f, 0.6f), 10)
+                    .Margin(0, 0, 0, 2).Padding(0);
             }
         }
     }

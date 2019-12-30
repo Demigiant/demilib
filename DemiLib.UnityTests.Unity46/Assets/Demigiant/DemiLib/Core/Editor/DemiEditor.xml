@@ -1593,6 +1593,12 @@
             Works better than Path.GetDirectoryName, which kind of sucks imho
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.StringExtensions.EvalAsProperty``1(System.String,System.Object,System.Boolean)">
+            <summary>
+            Evaluates the string as a property or field and returns its value.
+            </summary>
+            <param name="obj">If NULL considers the string as a static property, otherwise uses obj as the starting instance</param>
+        </member>
         <member name="T:DG.DemiEditor.TextureExtensions">
             <summary>
             Texture extensions

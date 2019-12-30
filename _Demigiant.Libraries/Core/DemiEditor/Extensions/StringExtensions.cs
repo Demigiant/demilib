@@ -1,6 +1,13 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/11/18 21:18
 // License Copyright (c) Daniele Giardini
+
+using System;
+using System.Globalization;
+using System.Reflection;
+using UnityEngine;
+using Object = UnityEngine.Object;
+
 namespace DG.DemiEditor
 {
     /// <summary>
@@ -46,6 +53,50 @@ namespace DG.DemiEditor
                 if (slashIndex == -1) return path;
             }
             return path.Substring(slashIndex + 1);
+        }
+
+        /// <summary>
+        /// Evaluates the string as a property or field and returns its value.
+        /// </summary>
+        /// <param name="obj">If NULL considers the string as a static property, otherwise uses obj as the starting instance</param>
+        public static T EvalAsProperty<T>(this string s, object obj = null, bool logErrors = false)
+        {
+            try {
+                Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                string[] split = s.Split('.');
+                if (obj == null) {
+                    // Static
+                    string typeS = split[0];
+                    for (int i = 1; i < split.Length - 1; ++i) typeS += '.' + split[i];
+                    Type t = null;
+                    for (int i = 0; i < assemblies.Length; ++i) {
+                        t = assemblies[i].GetType(typeS);
+                        if (t != null) break;
+                    }
+                    if (t == null) throw new NullReferenceException("Type " + typeS + " could not be found in any of the domain assemblies");
+                    PropertyInfo pInfo = t.GetProperty(split[split.Length - 1]);
+                    if (pInfo != null) {
+                        return (T)pInfo.GetValue(
+                            null, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
+                            null, null, CultureInfo.InvariantCulture
+                        );
+                    } else {
+                        return (T)t.GetField(split[split.Length - 1]).GetValue(null);
+                    }
+                } else {
+                    // TODO: needs testing for instance property/fields
+                    foreach (string part in split) {
+                        Type t = obj.GetType();
+                        PropertyInfo pInfo = t.GetProperty(part);
+                        if (pInfo != null) obj = pInfo.GetValue(obj, null);
+                        else obj = t.GetField(part).GetValue(obj);
+                    }
+                    return (T)obj;
+                }
+            } catch (Exception e) {
+                if (logErrors) Debug.LogError("EvalAsProperty error (" + e.Message + ")\n" + e.StackTrace);
+                return default(T);
+            }
         }
 
         #region Helpers
