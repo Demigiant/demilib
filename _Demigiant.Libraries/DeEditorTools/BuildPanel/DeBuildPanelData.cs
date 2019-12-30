@@ -45,7 +45,7 @@ namespace DG.DeEditorTools.BuildPanel
             // Returns the right text value, evaluating it as a static string property in case it starts with a @
             public string GetText(bool logErrors = false)
             {
-                if (!text.StartsWith("@")) return text;
+                if (string.IsNullOrEmpty(text) || !text.StartsWith("@")) return text;
                 return text.Substring(1).EvalAsProperty<string>(null, logErrors);
             }
         }

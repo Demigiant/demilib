@@ -198,7 +198,7 @@ namespace DG.DeEditorTools.BuildPanel
                     using (new DeGUI.ColorScope(affix.enabled ? Color.white : (Color)new DeSkinColor(0.7f, 0.7f), affix.enabled ? Color.white : (Color)new DeSkinColor(0.7f, 0.5f))) {
                         affix.text = EditorGUILayout.TextField(affix.text);
                     }
-                    if (affix.text.StartsWith("@")) {
+                    if (!string.IsNullOrEmpty(affix.text) && affix.text.StartsWith("@")) {
                         using (new DeGUI.ColorScope(new DeSkinColor(0.9f, 0.2f), new DeSkinColor(0.3f, 0.8f))) {
                             if (GUILayout.Button("Test", Styles.btInline, GUILayout.ExpandWidth(false))) {
                                 Debug.Log(affix.GetText(true));
