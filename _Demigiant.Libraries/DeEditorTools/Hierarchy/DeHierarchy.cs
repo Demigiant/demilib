@@ -18,7 +18,7 @@ namespace DG.DeEditorTools.Hierarchy
     [InitializeOnLoad]
     public class DeHierarchy
     {
-        static DeHierarchyComponent _dehComponent;
+        static public DeHierarchyComponent dehComponent { get; private set; }
         static readonly Dictionary<GameObject,Renderer> _GoToRenderer = new Dictionary<GameObject, Renderer>();
 
         static Color _icoVisibilityOnColor, _icoVisibilityOffColor;
@@ -49,18 +49,18 @@ namespace DG.DeEditorTools.Hierarchy
             _GoToRenderer.Clear();
 
             ConnectToDeHierarchyComponent(false, true);
-            if (_dehComponent == null) return;
+            if (dehComponent == null) return;
 
             if (EditorApplication.isPlayingOrWillChangePlaymode) return;
 
             // Delete customizedItems that refer to objects not in the scene anymore
             // Doesn't call Undo.RecordObject before the operation, because at this point it would mark the scene dirty even if no change is made
-            List<int> missingIndexes = _dehComponent.MissingItemsIndexes();
+            List<int> missingIndexes = dehComponent.MissingItemsIndexes();
             if (missingIndexes != null) {
-                Undo.RecordObject(_dehComponent, "DeHierarchy");
+                Undo.RecordObject(dehComponent, "DeHierarchy");
                 foreach (int missingIndex in missingIndexes) {
-                    _dehComponent.customizedItems.RemoveAt(missingIndex);
-                    EditorUtility.SetDirty(_dehComponent);
+                    dehComponent.customizedItems.RemoveAt(missingIndex);
+                    EditorUtility.SetDirty(dehComponent);
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace DG.DeEditorTools.Hierarchy
 
         static void ItemOnGUI(int instanceID, Rect selectionRect)
         {
-            bool hasDehComponent = _dehComponent != null;
+            bool hasDehComponent = dehComponent != null;
             bool showVisibilityButton = DeEditorToolsPrefs.deHierarchy_showVisibilityButton;
             if (showVisibilityButton) {
                 if (Event.current.type == EventType.Layout) return;
@@ -147,7 +147,7 @@ namespace DG.DeEditorTools.Hierarchy
 
             if (!hasDehComponent) return;
 
-            DeHierarchyComponent.CustomizedItem customizedItem = _dehComponent.GetItem(go);
+            DeHierarchyComponent.CustomizedItem customizedItem = dehComponent.GetItem(go);
             if (customizedItem == null) return;
 
             // Color
@@ -256,7 +256,7 @@ namespace DG.DeEditorTools.Hierarchy
         public static void OnPreferencesRefresh(bool flagsChanged)
         {
             if (flagsChanged) {
-                if (_dehComponent != null) SetDeHierarchyGOFlags(_dehComponent.gameObject);
+                if (dehComponent != null) SetDeHierarchyGOFlags(dehComponent.gameObject);
                 EditorApplication.DirtyHierarchyWindowSorting();
             } else EditorApplication.RepaintHierarchyWindow();
         }
@@ -285,34 +285,34 @@ namespace DG.DeEditorTools.Hierarchy
         internal static void ResetSelections()
         {
             ConnectToDeHierarchyComponent(false);
-            if (_dehComponent == null) return;
+            if (dehComponent == null) return;
 
-            Undo.RecordObject(_dehComponent, "DeHierarchy");
+            Undo.RecordObject(dehComponent, "DeHierarchy");
             bool changed = false;
             foreach (GameObject go in Selection.gameObjects) {
-                changed = _dehComponent.RemoveItemData(go) || changed;
+                changed = dehComponent.RemoveItemData(go) || changed;
             }
-            if (_dehComponent.customizedItems.Count == 0) {
-                Undo.DestroyObjectImmediate(_dehComponent.gameObject);
-                _dehComponent = null;
-            } else if (changed) EditorUtility.SetDirty(_dehComponent);
+            if (dehComponent.customizedItems.Count == 0) {
+                Undo.DestroyObjectImmediate(dehComponent.gameObject);
+                dehComponent = null;
+            } else if (changed) EditorUtility.SetDirty(dehComponent);
         }
 
         // Assumes at least one object is selected
         internal static void ResetSeparatorsForSelections()
         {
             ConnectToDeHierarchyComponent(false);
-            if (_dehComponent == null) return;
+            if (dehComponent == null) return;
 
-            Undo.RecordObject(_dehComponent, "DeHierarchy");
+            Undo.RecordObject(dehComponent, "DeHierarchy");
             bool changed = false;
             foreach (GameObject go in Selection.gameObjects) {
-                changed = _dehComponent.ResetSeparator(go) || changed;
+                changed = dehComponent.ResetSeparator(go) || changed;
             }
-            if (_dehComponent.customizedItems.Count == 0) {
-                Undo.DestroyObjectImmediate(_dehComponent.gameObject);
-                _dehComponent = null;
-            } else if (changed) EditorUtility.SetDirty(_dehComponent);
+            if (dehComponent.customizedItems.Count == 0) {
+                Undo.DestroyObjectImmediate(dehComponent.gameObject);
+                dehComponent = null;
+            } else if (changed) EditorUtility.SetDirty(dehComponent);
         }
 
         // Assumes at least one object is selected
@@ -320,32 +320,35 @@ namespace DG.DeEditorTools.Hierarchy
         internal static void SetColorForSelections(DeHierarchyComponent.HColor hColor)
         {
             ConnectToDeHierarchyComponent(true);
-            Undo.RecordObject(_dehComponent, "DeHierarchy");
+            Undo.RecordObject(dehComponent, "DeHierarchy");
             foreach (GameObject go in Selection.gameObjects) {
-                _dehComponent.StoreItemColor(go, hColor);
+                dehComponent.StoreItemColor(go, hColor);
             }
+            EditorApplication.RepaintHierarchyWindow();
         }
 
         // Assumes at least one object is selected
         internal static void SetIconForSelections(DeHierarchyComponent.IcoType icoType)
         {
             ConnectToDeHierarchyComponent(true);
-            Undo.RecordObject(_dehComponent, "DeHierarchy");
+            Undo.RecordObject(dehComponent, "DeHierarchy");
             foreach (GameObject go in Selection.gameObjects) {
-                _dehComponent.StoreItemIcon(go, icoType);
+                dehComponent.StoreItemIcon(go, icoType);
             }
+            EditorApplication.RepaintHierarchyWindow();
         }
 
         // Assumes at least one object is selected
         // Assumes it's never called with HColor.None
         internal static void SetSeparatorForSelections(
-            DeHierarchyComponent.SeparatorType separatorType, DeHierarchyComponent.HColor separatorHColor = DeHierarchyComponent.HColor.None
+            DeHierarchyComponent.SeparatorType? separatorType = null, DeHierarchyComponent.HColor? separatorHColor = null
         ){
             ConnectToDeHierarchyComponent(true);
-            Undo.RecordObject(_dehComponent, "DeHierarchy");
+            Undo.RecordObject(dehComponent, "DeHierarchy");
             foreach (GameObject go in Selection.gameObjects) {
-                _dehComponent.StoreItemSeparator(go, separatorType, separatorHColor);
+                dehComponent.StoreItemSeparator(go, separatorType, separatorHColor);
             }
+            EditorApplication.RepaintHierarchyWindow();
         }
 
         #endregion
@@ -354,17 +357,17 @@ namespace DG.DeEditorTools.Hierarchy
 
         static void ConnectToDeHierarchyComponent(bool createIfMissing, bool forceRefresh = false)
         {
-            if (_dehComponent != null && !forceRefresh) return;
+            if (dehComponent != null && !forceRefresh) return;
 
-            _dehComponent = DeEditorToolsUtils.FindFirstComponentOfType<DeHierarchyComponent>();
-            if (_dehComponent != null || !createIfMissing) {
-                if (_dehComponent != null) SetDeHierarchyGOFlags(_dehComponent.gameObject);
+            dehComponent = DeEditorToolsUtils.FindFirstComponentOfType<DeHierarchyComponent>();
+            if (dehComponent != null || !createIfMissing) {
+                if (dehComponent != null) SetDeHierarchyGOFlags(dehComponent.gameObject);
                 return;
             }
 
             GameObject go = new GameObject(":: DeHierarchy ::");
             SetDeHierarchyGOFlags(go);
-            _dehComponent = go.AddComponent<DeHierarchyComponent>();
+            dehComponent = go.AddComponent<DeHierarchyComponent>();
         }
 
         static void SetDeHierarchyGOFlags(GameObject deHierarchyGO)

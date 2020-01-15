@@ -113,7 +113,7 @@
             If the item exists sets it, otherwise first creates it and then sets it
             </summary>
         </member>
-        <member name="M:DG.DemiLib.External.DeHierarchyComponent.StoreItemSeparator(UnityEngine.GameObject,DG.DemiLib.External.DeHierarchyComponent.SeparatorType,DG.DemiLib.External.DeHierarchyComponent.HColor)">
+        <member name="M:DG.DemiLib.External.DeHierarchyComponent.StoreItemSeparator(UnityEngine.GameObject,System.Nullable{DG.DemiLib.External.DeHierarchyComponent.SeparatorType},System.Nullable{DG.DemiLib.External.DeHierarchyComponent.HColor})">
             <summary>
             If the item exists sets it, otherwise first creates it and then sets it
             </summary>
@@ -131,6 +131,11 @@
         <member name="M:DG.DemiLib.External.DeHierarchyComponent.GetItem(UnityEngine.GameObject)">
             <summary>
             Returns the customizedItem for the given gameObject, or NULL if none was found
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.External.DeHierarchyComponent.GetColor(DG.DemiLib.External.DeHierarchyComponent.HColor)">
+            <summary>
+            Returns the color corresponding to the given <see cref="T:DG.DemiLib.External.DeHierarchyComponent.HColor"/>
             </summary>
         </member>
         <member name="P:DG.DemiLib.IEditorGUINode.id">

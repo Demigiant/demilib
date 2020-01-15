@@ -104,17 +104,21 @@ namespace DG.DemiLib.External
         /// <summary>
         /// If the item exists sets it, otherwise first creates it and then sets it
         /// </summary>
-        public void StoreItemSeparator(GameObject go, SeparatorType separatorType, HColor separatorHColor = HColor.None)
+        public void StoreItemSeparator(GameObject go, SeparatorType? separatorType, HColor? separatorHColor)
         {
             for (int i = 0; i < customizedItems.Count; ++i) {
                 if (customizedItems[i].gameObject != go) continue;
                 // Item exists, replace it
-                customizedItems[i].separatorType = separatorType;
-                customizedItems[i].separatorHColor = separatorHColor;
+                if (separatorType != null) customizedItems[i].separatorType = (SeparatorType)separatorType;
+                if (separatorHColor != null) customizedItems[i].separatorHColor = (HColor)separatorHColor;
                 return;
             }
             // Item doesn't exist, add it
-            customizedItems.Add(new CustomizedItem(go, separatorType, separatorHColor));
+            customizedItems.Add(new CustomizedItem(
+                go,
+                separatorType == null ? SeparatorType.None : (SeparatorType)separatorType,
+                separatorHColor == null ? HColor.None : (HColor)separatorHColor
+            ));
         }
 
         /// <summary>
@@ -163,20 +167,25 @@ namespace DG.DemiLib.External
             return null;
         }
 
-//        /// <summary>
-//        /// Returns TRUE if there's no more customized items and this gameObject should be destroyed
-//        /// </summary>
-//        /// <returns></returns>
-//        public bool ClearUnsetCustomizedItems()
-//        {
-//            for (int i = customizedItems.Count - 1; i > -1; --i) {
-//                bool clear = customizedItems[i].gameObject == null
-//                             || customizedItems[i].separatorType == SeparatorType.None
-//                             || customizedItems[i].hColor == HColor.None;
-//                if (clear) customizedItems.RemoveAt(i);
-//            }
-//            return customizedItems.Count == 0;
-//        }
+        /// <summary>
+        /// Returns the color corresponding to the given <see cref="HColor"/>
+        /// </summary>
+        public static Color GetColor(HColor color)
+        {
+            switch (color) {
+            case HColor.Blue: return new Color(0.2145329f, 0.4501492f, 0.9117647f, 1f);
+            case HColor.Green: return new Color(0.05060553f, 0.8602941f, 0.2237113f, 1f);
+            case HColor.Orange: return new Color(0.9558824f, 0.4471125f, 0.05622837f, 1f);
+            case HColor.Purple: return new Color(0.907186f, 0.05406574f, 0.9191176f, 1f);
+            case HColor.Red: return new Color(0.9191176f, 0.1617312f, 0.07434041f, 1f);
+            case HColor.Yellow: return new Color(1f, 0.853854f, 0.03676468f, 1f);
+            case HColor.BrightGrey: return new Color(0.6470588f, 0.6470588f, 0.6470588f, 1f);
+            case HColor.DarkGrey: return new Color(0.3308824f, 0.3308824f, 0.3308824f, 1f);
+            case HColor.Black: return Color.black;
+            case HColor.White: return Color.white;
+            default: return Color.white;
+            }
+        }
 
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
         // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
@@ -209,27 +218,27 @@ namespace DG.DemiLib.External
             }
 
             public Color GetColor()
-            { return GetColor(hColor); }
+            { return DeHierarchyComponent.GetColor(hColor); }
 
             public Color GetSeparatorColor()
-            { return GetColor(separatorHColor); }
+            { return DeHierarchyComponent.GetColor(separatorHColor); }
 
-            Color GetColor(HColor color)
-            {
-                switch (color) {
-                case HColor.Blue: return new Color(0.2145329f, 0.4501492f, 0.9117647f, 1f);
-                case HColor.Green: return new Color(0.05060553f, 0.8602941f, 0.2237113f, 1f);
-                case HColor.Orange: return new Color(0.9558824f, 0.4471125f, 0.05622837f, 1f);
-                case HColor.Purple: return new Color(0.907186f, 0.05406574f, 0.9191176f, 1f);
-                case HColor.Red: return new Color(0.9191176f, 0.1617312f, 0.07434041f, 1f);
-                case HColor.Yellow: return new Color(1f, 0.853854f, 0.03676468f, 1f);
-                case HColor.BrightGrey: return new Color(0.6470588f, 0.6470588f, 0.6470588f, 1f);
-                case HColor.DarkGrey: return new Color(0.3308824f, 0.3308824f, 0.3308824f, 1f);
-                case HColor.Black: return Color.black;
-                case HColor.White: return Color.white;
-                default: return Color.white;
-                }
-            }
+//            Color GetColor(HColor color)
+//            {
+//                switch (color) {
+//                case HColor.Blue: return new Color(0.2145329f, 0.4501492f, 0.9117647f, 1f);
+//                case HColor.Green: return new Color(0.05060553f, 0.8602941f, 0.2237113f, 1f);
+//                case HColor.Orange: return new Color(0.9558824f, 0.4471125f, 0.05622837f, 1f);
+//                case HColor.Purple: return new Color(0.907186f, 0.05406574f, 0.9191176f, 1f);
+//                case HColor.Red: return new Color(0.9191176f, 0.1617312f, 0.07434041f, 1f);
+//                case HColor.Yellow: return new Color(1f, 0.853854f, 0.03676468f, 1f);
+//                case HColor.BrightGrey: return new Color(0.6470588f, 0.6470588f, 0.6470588f, 1f);
+//                case HColor.DarkGrey: return new Color(0.3308824f, 0.3308824f, 0.3308824f, 1f);
+//                case HColor.Black: return Color.black;
+//                case HColor.White: return Color.white;
+//                default: return Color.white;
+//                }
+//            }
         }
     }
 }

@@ -12,6 +12,9 @@ namespace DG.DeEditorTools.Hierarchy
     {
         #region Reset
 
+        [MenuItem("GameObject/DeHierarchy/Customize Panel", false, 21)]
+        static void OpenCustomizePanel() { DeHierarchyCustomizePanel.ShowWindow(); }
+
         [MenuItem("GameObject/DeHierarchy/Reset", false, 21)]
         static void SetColorReset() { DeHierarchy.ResetSelections(); }
 
