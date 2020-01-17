@@ -4,6 +4,16 @@
         <name>DemiEditor</name>
     </assembly>
     <members>
+        <member name="M:DG.DemiEditor.DeEditorArrayUtils.ExpandAndAdd``1(``0[]@,``0)">
+            <summary>
+            Expands the given array and adds the given element as the last one
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorArrayUtils.RemoveAtIndexAndContract``1(``0[]@,System.Int32)">
+            <summary>
+            Removes the element at index from the given array, shifts everything after by -1 position and resizes the array
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeEditorCompatibilityUtils">
             <summary>
             Utils to use he correct method based on Unity's version
