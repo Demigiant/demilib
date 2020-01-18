@@ -112,6 +112,8 @@ namespace DG.DemiEditor
         static Texture2D _whiteDot_whiteBorderAlpha;
         static Texture2D _circle;
         public static Texture2D ico_demigiant { get { return LoadTexture(ref _ico_demigiant, "ico_demigiant", FilterMode.Bilinear, 16); } }
+        public static Texture2D ico_lock { get { return LoadTexture(ref _ico_lock, "ico_lock"); } }
+        public static Texture2D ico_lock_open { get { return LoadTexture(ref _ico_lock_open, "ico_lock_open"); } }
         public static Texture2D ico_visibility { get { return LoadTexture(ref _ico_visibility_on, "ico_visibility"); } }
         public static Texture2D ico_visibility_off { get { return LoadTexture(ref _ico_visibility_off, "ico_visibility_off"); } }
         public static Texture2D ico_foldout_open { get { return LoadTexture(ref _ico_foldout_open, "ico_foldout_open"); } }
@@ -162,6 +164,8 @@ namespace DG.DemiEditor
         public static Texture2D tileBars_slanted { get { return LoadTexture(ref _tileBars_slanted, "tileBars_slanted", FilterMode.Point, 32, TextureWrapMode.Repeat); } }
         public static Texture2D tileBars_slanted_alpha { get { return LoadTexture(ref _tileBars_slanted_alpha, "tileBars_slanted_alpha", FilterMode.Point, 32, TextureWrapMode.Repeat); } }
         static Texture2D _ico_demigiant;
+        static Texture2D _ico_lock;
+        static Texture2D _ico_lock_open;
         static Texture2D _ico_visibility_on;
         static Texture2D _ico_visibility_off;
         static Texture2D _ico_foldout_open;
