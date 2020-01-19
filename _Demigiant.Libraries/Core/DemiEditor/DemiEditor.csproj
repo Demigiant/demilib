@@ -51,7 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeEditorArrayUtils.cs" />
     <Compile Include="DeEditorCompatibilityUtils.cs" />
     <Compile Include="DeEditorCoroutines.cs" />
     <Compile Include="DeEditorFileUtils.cs" />

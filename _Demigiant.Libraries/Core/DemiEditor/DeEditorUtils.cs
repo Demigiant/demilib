@@ -92,7 +92,7 @@ namespace DG.DemiEditor
                 if (!IsValidBuildTargetGroup(btg)) continue;
                 string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
                 string[] singleDefs = defs.Split(';');
-                if (Array.IndexOf(singleDefs, id) != -1) continue; // Already present
+                if (System.Array.IndexOf(singleDefs, id) != -1) continue; // Already present
                 added = true;
                 defs += defs.Length > 0 ? ";" + id : id;
                 PlayerSettings.SetScriptingDefineSymbolsForGroup(btg, defs);
@@ -118,7 +118,7 @@ namespace DG.DemiEditor
                 if (!IsValidBuildTargetGroup(btg)) continue;
                 string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
                 string[] singleDefs = defs.Split(';');
-                if (Array.IndexOf(singleDefs, id) == -1) continue; // Not present
+                if (System.Array.IndexOf(singleDefs, id) == -1) continue; // Not present
                 removed = true;
                 _Strb.Length = 0;
                 for (int i = 0; i < singleDefs.Length; ++i) {
@@ -147,7 +147,7 @@ namespace DG.DemiEditor
                 if (!IsValidBuildTargetGroup(btg)) continue;
                 string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
                 string[] singleDefs = defs.Split(';');
-                if (Array.IndexOf(singleDefs, id) != -1) return true;
+                if (System.Array.IndexOf(singleDefs, id) != -1) return true;
             }
             return false;
         }
@@ -295,10 +295,62 @@ namespace DG.DemiEditor
         }
 
         #endregion
+
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+        // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+        public static class List
+        {
+            /// <summary>
+            /// Shifts an item from an index to another, without modifying the list except than by moving elements around
+            /// </summary>
+            public static void Shift<T>(IList<T> list, int fromIndex, int toIndex)
+            {
+                if (toIndex == fromIndex) return;
+                int index = fromIndex;
+                T shifted = list[fromIndex];
+                while (index > toIndex) {
+                    index--;
+                    list[index + 1] = list[index];
+                    list[index] = shifted;
+                }
+                while (index < toIndex) {
+                    index++;
+                    list[index - 1] = list[index];
+                    list[index] = shifted;
+                }
+            }
+        }
+
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+        public static class Array
+        {
+            /// <summary>
+            /// Expands the given array and adds the given element as the last one
+            /// </summary>
+            public static void ExpandAndAdd<T>(ref T[] array, T element)
+            {
+                int len = array.Length;
+                System.Array.Resize(ref array, len + 1);
+                array[len] = element;
+            }
+
+            /// <summary>
+            /// Removes the element at index from the given array, shifts everything after by -1 position and resizes the array
+            /// </summary>
+            public static void RemoveAtIndexAndContract<T>(ref T[] array, int index)
+            {
+                int len = array.Length;
+                for (int i = index + 1; i < len; ++i) array[i - 1] = array[i];
+                System.Array.Resize(ref array, len - 1);
+            }
+        }
     }
 
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
-    // ███ CLASSES ███████████████████████████████████████████████████████████████████████████████████████████████████████████
+    // ███ CLASSES █████████████████████████████████████████████████████████████████████████████████████████████████████████
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
     public class DelayedCall

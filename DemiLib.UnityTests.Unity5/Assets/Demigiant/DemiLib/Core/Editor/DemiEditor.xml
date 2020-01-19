@@ -4,16 +4,6 @@
         <name>DemiEditor</name>
     </assembly>
     <members>
-        <member name="M:DG.DemiEditor.DeEditorArrayUtils.ExpandAndAdd``1(``0[]@,``0)">
-            <summary>
-            Expands the given array and adds the given element as the last one
-            </summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeEditorArrayUtils.RemoveAtIndexAndContract``1(``0[]@,System.Int32)">
-            <summary>
-            Removes the element at index from the given array, shifts everything after by -1 position and resizes the array
-            </summary>
-        </member>
         <member name="T:DG.DemiEditor.DeEditorCompatibilityUtils">
             <summary>
             Utils to use he correct method based on Unity's version
@@ -316,6 +306,21 @@
             Returns all components of type T in the currently open scene, or NULL if none could be found.<para/>
             If you're on Unity 5 or later, and have <code>DeEditorTools</code>, use <code>DeEditorToolsUtils.FindAllComponentsOfType</code>
             instead, which is more efficient.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorUtils.List.Shift``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32)">
+            <summary>
+            Shifts an item from an index to another, without modifying the list except than by moving elements around
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorUtils.Array.ExpandAndAdd``1(``0[]@,``0)">
+            <summary>
+            Expands the given array and adds the given element as the last one
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorUtils.Array.RemoveAtIndexAndContract``1(``0[]@,System.Int32)">
+            <summary>
+            Removes the element at index from the given array, shifts everything after by -1 position and resizes the array
             </summary>
         </member>
         <member name="F:DG.DemiEditor.DeDragResultType.NoDrag">
