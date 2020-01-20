@@ -370,7 +370,7 @@ namespace DG.DemiEditor
                 contentOffset = new Vector2(2, -1),
                 richText = true
             };
-            toolFoldoutClosedWLabel = toolFoldoutClosed.Clone(9).Width(0).StretchWidth(false);
+            toolFoldoutClosedWLabel = toolFoldoutClosed.Clone(DeGUI.usesInterFont ? 11 : 9).Width(0).StretchWidth(false);
             toolFoldoutClosedWStretchedLabel = toolFoldoutClosedWLabel.Clone().StretchWidth();
             toolFoldoutOpen = new GUIStyle(toolFoldoutClosed) {
 //                normal = { background = EditorStyles.foldout.onNormal.background }
@@ -410,10 +410,11 @@ namespace DG.DemiEditor
             rightAligned = new GUIStyle(GUI.skin.label).Add(TextAnchor.MiddleRight);
             wordwrap = new GUIStyle(GUI.skin.label).Add(Format.WordWrap);
             wordwrapRichtText = wordwrap.Clone(Format.RichText);
-            toolbar = new GUIStyle(GUI.skin.label).Add(9).ContentOffset(new Vector2(-2, 1));
+            toolbar = new GUIStyle(GUI.skin.label).Add(DeGUI.usesInterFont ? 11 : 9)
+                .ContentOffset(new Vector2(-2, DeGUI.usesInterFont ? -1 : 1));
             toolbarRightAligned = toolbar.Clone(TextAnchor.MiddleRight);
             toolbarL = new GUIStyle(toolbar).ContentOffsetY(3);
-            toolbarS = new GUIStyle(toolbar).Add(8, FontStyle.Bold).ContentOffsetY(-2);
+            toolbarS = new GUIStyle(toolbar).Add(DeGUI.usesInterFont ? 10 : 8, FontStyle.Bold).ContentOffsetY(-2);
             toolbarBox = new GUIStyle(toolbar).ContentOffsetY(0);
         }
     }

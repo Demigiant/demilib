@@ -29,6 +29,9 @@ namespace DG.DemiEditor
         /// <summary>TRUE if we're using the PRO skin</summary>
         public static readonly bool IsProSkin;
         public static Color defaultGUIColor, defaultGUIBackgroundColor, defaultGUIContentColor; // Set on Begin GUI
+        public static int defaultFontSize { get; private set; } // Set on Begin GUI
+        public static bool usesInterFont { get; private set; } // Set on Begin GUI: new default font added in Unity 2019.3
+
         static DeColorPalette _defaultColorPalette; // Default color palette if none selected
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
         static string _doubleClickTextFieldId; // ID of selected double click textField
@@ -68,6 +71,8 @@ namespace DG.DemiEditor
             defaultGUIColor = GUI.color;
             defaultGUIBackgroundColor = GUI.backgroundColor;
             defaultGUIContentColor = GUI.contentColor;
+            defaultFontSize = GUI.skin.label.fontSize;
+            usesInterFont = DeUnityEditorVersion.Version >= 2019.3f && (GUI.skin.label.font == null);
         }
 
         /// <summary>
