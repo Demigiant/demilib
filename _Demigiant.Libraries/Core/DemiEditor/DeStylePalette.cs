@@ -116,6 +116,7 @@ namespace DG.DemiEditor
         public static Texture2D ico_lock_open { get { return LoadTexture(ref _ico_lock_open, "ico_lock_open"); } }
         public static Texture2D ico_visibility { get { return LoadTexture(ref _ico_visibility_on, "ico_visibility"); } }
         public static Texture2D ico_visibility_off { get { return LoadTexture(ref _ico_visibility_off, "ico_visibility_off"); } }
+        public static Texture2D ico_flipV { get { return LoadTexture(ref _ico_flipV, "ico_flipV"); } }
         public static Texture2D ico_optionsDropdown { get { return LoadTexture(ref _ico_optionsDropdown, "ico_optionsDropdown"); } }
         public static Texture2D ico_foldout_open { get { return LoadTexture(ref _ico_foldout_open, "ico_foldout_open"); } }
         public static Texture2D ico_foldout_closed { get { return LoadTexture(ref _ico_foldout_closed, "ico_foldout_closed"); } }
@@ -169,6 +170,7 @@ namespace DG.DemiEditor
         static Texture2D _ico_lock_open;
         static Texture2D _ico_visibility_on;
         static Texture2D _ico_visibility_off;
+        static Texture2D _ico_flipV;
         static Texture2D _ico_optionsDropdown;
         static Texture2D _ico_foldout_open;
         static Texture2D _ico_foldout_closed;
@@ -352,6 +354,7 @@ namespace DG.DemiEditor
         {
             def = new GUIStyle(GUI.skin.button);
             tool = new GUIStyle(EditorStyles.toolbarButton).ContentOffsetY(-1);
+            if (DeGUI.usesInterFont) tool.Height((int)(tool.fixedHeight - 3));
             toolNoFixedH = new GUIStyle(EditorStyles.toolbarButton).ContentOffsetY(-1).Height(0);
             toolL = new GUIStyle(EditorStyles.toolbarButton).Height(23).ContentOffsetY(0);
             toolS = new GUIStyle(EditorStyles.toolbarButton).Height(13).ContentOffsetY(0).Padding(0);
