@@ -156,6 +156,20 @@ namespace DG.DemiEditor
             TexturePreviewWindow.Open(texture);
         }
 
+        public class MixedValueScope : DeScope
+        {
+            readonly bool _prevMixedValue;
+            public MixedValueScope(bool showMixedValue)
+            {
+                _prevMixedValue = EditorGUI.showMixedValue;
+                EditorGUI.showMixedValue = showMixedValue;
+            }
+            protected override void CloseScope()
+            {
+                EditorGUI.showMixedValue = _prevMixedValue;
+            }
+        }
+
         public class LabelFieldWidthScope : DeScope
         {
             readonly float _prevLabelWidth;
