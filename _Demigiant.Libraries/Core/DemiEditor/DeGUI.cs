@@ -159,7 +159,7 @@ namespace DG.DemiEditor
         public class MixedValueScope : DeScope
         {
             readonly bool _prevMixedValue;
-            public MixedValueScope(bool showMixedValue)
+            public MixedValueScope(bool showMixedValue = true)
             {
                 _prevMixedValue = EditorGUI.showMixedValue;
                 EditorGUI.showMixedValue = showMixedValue;
