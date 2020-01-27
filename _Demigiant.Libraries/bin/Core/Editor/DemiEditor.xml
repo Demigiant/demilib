@@ -1175,6 +1175,69 @@
         <member name="M:DG.DemiEditor.DeGUILayout.Toolbar(System.String,UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
             <summary>A toolbar with a label</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiColorField(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiColorFieldAdvanced(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiCurveField(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiEnumPopup``1(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiFloatField(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{System.Single},System.Nullable{System.Single},UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiIntField(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{System.Int32},System.Nullable{System.Int32},UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiIntSlider(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Int32,System.Int32,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiObjectField(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiRectField(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiSlider(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Single,System.Single,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiTextArea(System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiTextField(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiToggleButton(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiToggleButton(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiToggleButton(System.Nullable{System.Boolean},UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiVector2Field(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiVector3Field(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiVector4Field(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiVector2FieldAdvanced(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean,System.Boolean,System.Boolean,System.Boolean,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiVector3FieldAdvanced(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiVector4FieldAdvanced(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUILayout.BeginVBox(UnityEngine.GUIStyle)">
             <summary>Vertical box layout with style and color options</summary>
         </member>
@@ -1510,6 +1573,78 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.FlatDivider(UnityEngine.Rect,System.Nullable{UnityEngine.Color})">
             <summary>Divider</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.Vector2FieldAdvanced(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Vector2,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Draws a Vector3Field that can have single axes disabled</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.Vector3FieldAdvanced(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Vector3,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Draws a Vector3Field that can have single axes disabled</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.Vector4FieldAdvanced(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Vector4,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Draws a Vector3Field that can have single axes disabled</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiColorField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiColorFieldAdvanced(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiCurveField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiEnumPopup``1(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
+            <summary>Returns TRUE if there's mixed values. Supports using an int as an enum</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiFloatField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{System.Single},System.Nullable{System.Single})">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiIntField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiIntSlider(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Int32,System.Int32)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiObjectField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiRectField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiSlider(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Single,System.Single)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiTextArea(UnityEngine.Rect,System.String,System.Collections.IList)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiTextField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiToggleButton(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUIStyle)">
+            <summary>Returns TRUE if there's mixed values. Supports passing int values as bool (1 = true, 0 = false)</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiToggleButton(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle)">
+            <summary>Returns TRUE if there's mixed values. Supports passing int values as bool (1 = true, 0 = false)</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiToggleButton(UnityEngine.Rect,System.Nullable{System.Boolean},UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle)">
+            <summary>Returns TRUE if there's mixed values. Supports passing int values as bool (1 = true, 0 = false)</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiVector2Field(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiVector3Field(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiVector4Field(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiVector2FieldAdvanced(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiVector3FieldAdvanced(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiVector4FieldAdvanced(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Returns TRUE if there's mixed values</summary>
         </member>
         <member name="M:DG.DemiEditor.Internal.ColorExtensions.SetAlpha(UnityEngine.Color,System.Single)">
             <summary>

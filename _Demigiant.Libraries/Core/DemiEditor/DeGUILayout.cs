@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using DG.DemiEditor.Internal;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;
@@ -18,6 +19,18 @@ namespace DG.DemiEditor
     {
         static int _activePressButtonId = -1;
         static MethodInfo _miGradientField;
+        static MethodInfo _miGetSliderRect {
+            get {
+                if (_fooMiGetSliderRect == null) {
+                    _fooMiGetSliderRect = typeof(EditorGUILayout).GetMethod(
+                        "GetSliderRect", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
+                        null, new Type[] { typeof(bool), typeof(GUILayoutOption[]) }, null
+                    );
+                }
+                return _fooMiGetSliderRect;
+            }
+        }
+        static MethodInfo _fooMiGetSliderRect;
 
         #region Buttons
 
@@ -230,38 +243,199 @@ namespace DG.DemiEditor
 
         #region MixedValue GUI
 
-        public static void MultiFloatField(
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiColorField(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
+        {
+            return DeGUI.MultiColorField(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.colorField, options),
+                label, fieldName, sources
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiColorFieldAdvanced(GUIContent label, string fieldName, IList sources, bool alphaOnly, params GUILayoutOption[] options)
+        {
+            return DeGUI.MultiColorFieldAdvanced(
+                alphaOnly
+                    ? (Rect)_miGetSliderRect.Invoke(null, new object[]{ label.HasText(), (object)options })
+                    : EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.colorField, options),
+                label, fieldName, sources, alphaOnly
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiCurveField(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
+        {
+            return DeGUI.MultiCurveField(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.colorField, options),
+                label, fieldName, sources
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiEnumPopup<T>(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options) where T : Enum
+        {
+            return DeGUI.MultiEnumPopup<T>(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.popup, options),
+                label, fieldName, sources
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiFloatField(
             GUIContent label, string fieldName, IList sources, float? min = null, float? max = null, params GUILayoutOption[] options
         ){
-            DeGUI.MultiFloatField(GUILayoutUtility.GetRect(label, EditorStyles.textField, options), label, fieldName, sources, min, max);
+            return DeGUI.MultiFloatField(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.numberField, options),
+                label, fieldName, sources, min, max
+            );
         }
 
-        public static void MultiIntField(
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiIntField(
             GUIContent label, string fieldName, IList sources, int? min = null, int? max = null, params GUILayoutOption[] options
         ){
-            DeGUI.MultiIntField(GUILayoutUtility.GetRect(label, EditorStyles.textField, options), label, fieldName, sources, min, max);
+            return DeGUI.MultiIntField(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.numberField, options),
+                label, fieldName, sources, min, max
+            );
         }
 
-        public static void MultiEnumPopup(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiIntSlider(GUIContent label, string fieldName, IList sources, int min, int max, params GUILayoutOption[] options)
         {
-            DeGUI.MultiEnumPopup(GUILayoutUtility.GetRect(label, EditorStyles.popup, options), label, fieldName, sources);
+            return DeGUI.MultiIntSlider(
+                (Rect)_miGetSliderRect.Invoke(null, new object[]{ label.HasText(), (object)options }),
+                label, fieldName, sources, min, max
+            );
         }
 
-        public static void MultiObjectField(GUIContent label, string fieldName, IList sources, bool allowSceneObjects, params GUILayoutOption[] options)
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiObjectField(GUIContent label, string fieldName, IList sources, bool allowSceneObjects, params GUILayoutOption[] options)
         {
-            DeGUI.MultiObjectField(GUILayoutUtility.GetRect(label, EditorStyles.objectField, options), label, fieldName, sources, allowSceneObjects);
+            return DeGUI.MultiObjectField(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, options),
+                label, fieldName, sources, allowSceneObjects
+            );
         }
 
-        public static void MultiCurveField(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiRectField(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
         {
-            DeGUI.MultiCurveField(GUILayoutUtility.GetRect(label, EditorStyles.label, options), label, fieldName, sources);
+            return DeGUI.MultiRectField(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.numberField, options),
+                label, fieldName, sources
+            );
         }
 
-        public static void MultiToggleButton(GUIContent label, string fieldName, IList sources, GUIStyle guiStyle = null, params GUILayoutOption[] options)
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiSlider(GUIContent label, string fieldName, IList sources, float min, float max, params GUILayoutOption[] options)
         {
-            DeGUI.MultiToggleButton(
+            return DeGUI.MultiSlider(
+                (Rect)_miGetSliderRect.Invoke(null, new object[]{ label.HasText(), (object)options }),
+                label, fieldName, sources, min, max
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiTextArea(string fieldName, IList sources, params GUILayoutOption[] options)
+        {
+            string content = (string)sources[0].GetType()
+                .GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).GetValue(sources[0]);
+            return DeGUI.MultiTextArea(
+                GUILayoutUtility.GetRect(new GUIContent(content), EditorStyles.textField, options),
+                fieldName, sources
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiTextField(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
+        {
+            return DeGUI.MultiTextField(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.textField, options),
+                label, fieldName, sources
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiToggleButton(GUIContent label, string fieldName, IList sources, GUIStyle guiStyle = null, params GUILayoutOption[] options)
+        { return DeGUILayout.MultiToggleButton(null, label, fieldName, sources, null, null, null, null, guiStyle, options); }
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiToggleButton(
+            GUIContent label, string fieldName, IList sources,
+            Color? bgOffColor, Color? bgOnColor = null, Color? contentOffColor = null, Color? contenOnColor = null,
+            GUIStyle guiStyle = null, params GUILayoutOption[] options
+        ){ return DeGUILayout.MultiToggleButton(null, label, fieldName, sources, bgOffColor, bgOnColor, contentOffColor, contenOnColor, guiStyle, options); }
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiToggleButton(
+            bool? forceSetToggle,
+            GUIContent label, string fieldName, IList sources,
+            Color? bgOffColor, Color? bgOnColor = null, Color? contentOffColor = null, Color? contenOnColor = null,
+            GUIStyle guiStyle = null, params GUILayoutOption[] options
+        ){
+            return DeGUI.MultiToggleButton(
                 GUILayoutUtility.GetRect(label, guiStyle == null ? DeGUI.styles.button.bBlankBorder : guiStyle, options),
-                label, fieldName, sources, guiStyle
+                forceSetToggle, label, fieldName, sources, bgOffColor, bgOnColor, contentOffColor, contenOnColor, guiStyle
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector2Field(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
+        {
+            return DeGUI.MultiVector2Field(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.numberField, options),
+                label, fieldName, sources
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector3Field(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
+        {
+            return DeGUI.MultiVector3Field(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.numberField, options),
+                label, fieldName, sources
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector4Field(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
+        {
+            return DeGUI.MultiVector4Field(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.numberField, options),
+                label, fieldName, sources
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector2FieldAdvanced(
+            GUIContent label, string fieldName, IList sources, bool xEnabled, bool yEnabled,
+            bool lockAllToX, bool lockAllToY, params GUILayoutOption[] options
+        ){
+            return DeGUI.MultiVector2FieldAdvanced(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.numberField, options),
+                label, fieldName, sources, xEnabled, yEnabled, lockAllToX, lockAllToY
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector3FieldAdvanced(
+            GUIContent label, string fieldName, IList sources, bool xEnabled, bool yEnabled, bool zEnabled,
+            bool lockAllToX, bool lockAllToY, bool lockAllToZ, params GUILayoutOption[] options
+        ){
+            return DeGUI.MultiVector3FieldAdvanced(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.numberField, options),
+                label, fieldName, sources, xEnabled, yEnabled, zEnabled, lockAllToX, lockAllToY, lockAllToZ
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector4FieldAdvanced(
+            GUIContent label, string fieldName, IList sources, bool xEnabled, bool yEnabled, bool zEnabled, bool wEnabled,
+            bool lockAllToX, bool lockAllToY, bool lockAllToZ, bool lockAllToW, params GUILayoutOption[] options
+        ){
+            return DeGUI.MultiVector4FieldAdvanced(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.numberField, options),
+                label, fieldName, sources, xEnabled, yEnabled, zEnabled, wEnabled, lockAllToX, lockAllToY, lockAllToZ, lockAllToW
             );
         }
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using DG.DemiEditor.Internal;
 using DG.DemiEditor.Panels;
 using DG.DemiLib;
 using DG.DemiLib.Core;
@@ -257,6 +258,7 @@ namespace DG.DemiEditor
         public class MultiPropertyScope : DeScope
         {
             public readonly FieldInfo fieldInfo;
+            public readonly bool hasMixedValue;
             public object value;
             readonly IList _sources;
             readonly bool _prevShowMixedValue;
@@ -270,14 +272,18 @@ namespace DG.DemiEditor
                 fieldInfo = GetFieldInfo(fieldName, sources);
                 _prevShowMixedValue = EditorGUI.showMixedValue;
                 EditorGUI.BeginChangeCheck();
-                EditorGUI.showMixedValue = HasMixedValue(fieldInfo, _sources);
+                EditorGUI.showMixedValue = hasMixedValue = HasMixedValue(fieldInfo, _sources);
             }
 
             protected override void CloseScope()
             {
                 EditorGUI.showMixedValue = _prevShowMixedValue;
                 if (EditorGUI.EndChangeCheck()) {
-                    for (int i = 0; i < _sources.Count; ++i) fieldInfo.SetValue(_sources[i], value);
+                    try {
+                        for (int i = 0; i < _sources.Count; ++i) fieldInfo.SetValue(_sources[i], value);
+                    } catch {
+                        // Means the value was only shown not set (like in case of toggle buttons that are set later by custom code)
+                    }
                 }
             }
 
@@ -716,61 +722,344 @@ namespace DG.DemiEditor
             GUI.backgroundColor = prevBgColor;
         }
 
+        /// <summary>Draws a Vector3Field that can have single axes disabled</summary>
+        public static Vector2 Vector2FieldAdvanced(
+            Rect rect, GUIContent label, Vector2 value, bool xEnabled, bool yEnabled, bool lockAllToX, bool lockAllToY
+        ){
+            if (label.HasText()) rect = EditorGUI.PrefixLabel(rect, label);
+            Rect axisR = rect.SetWidth((rect.width - 2) / 2);
+            using (new LabelFieldWidthScope(10)) {
+                for (int i = 0; i < 2; ++i) {
+                    bool wasGuiEnabled = GUI.enabled;
+                    switch (i) {
+                    case 0:
+                        GUI.enabled = xEnabled;
+                        EditorGUI.BeginChangeCheck();
+                        value.x = EditorGUI.FloatField(axisR, "X", value.x);
+                        if (EditorGUI.EndChangeCheck() && lockAllToX) value.y = value.x;
+                        break;
+                    case 1:
+                        GUI.enabled = yEnabled;
+                        EditorGUI.BeginChangeCheck();
+                        value.y = EditorGUI.FloatField(axisR, "Y", value.y);
+                        if (EditorGUI.EndChangeCheck() && lockAllToY) value.x = value.y;
+                        break;
+                    }
+                    GUI.enabled = wasGuiEnabled;
+                    axisR = axisR.Shift(axisR.width + 2, 0, 0, 0);
+                }
+            }
+            return value;
+        }
+
+        /// <summary>Draws a Vector3Field that can have single axes disabled</summary>
+        public static Vector3 Vector3FieldAdvanced(
+            Rect rect, GUIContent label, Vector3 value, bool xEnabled, bool yEnabled, bool zEnabled, bool lockAllToX, bool lockAllToY, bool lockAllToZ
+        )
+        {
+            if (label.HasText()) rect = EditorGUI.PrefixLabel(rect, label);
+            Rect axisR = rect.SetWidth((rect.width - 4) / 3);
+            using (new LabelFieldWidthScope(10)) {
+                for (int i = 0; i < 3; ++i) {
+                    bool wasGuiEnabled = GUI.enabled;
+                    switch (i) {
+                    case 0:
+                        GUI.enabled = xEnabled;
+                        EditorGUI.BeginChangeCheck();
+                        value.x = EditorGUI.FloatField(axisR, "X", value.x);
+                        if (EditorGUI.EndChangeCheck() && lockAllToX) value.y = value.z = value.x;
+                        break;
+                    case 1:
+                        GUI.enabled = yEnabled;
+                        EditorGUI.BeginChangeCheck();
+                        value.y = EditorGUI.FloatField(axisR, "Y", value.y);
+                        if (EditorGUI.EndChangeCheck() && lockAllToY) value.x = value.z = value.y;
+                        break;
+                    case 2:
+                        GUI.enabled = zEnabled;
+                        EditorGUI.BeginChangeCheck();
+                        value.z = EditorGUI.FloatField(axisR, "Z", value.z);
+                        if (EditorGUI.EndChangeCheck() && lockAllToZ) value.x = value.y = value.z;
+                        break;
+                    }
+                    GUI.enabled = wasGuiEnabled;
+                    axisR = axisR.Shift(axisR.width + 2, 0, 0, 0);
+                }
+            }
+            return value;
+        }
+
+        /// <summary>Draws a Vector3Field that can have single axes disabled</summary>
+        public static Vector4 Vector4FieldAdvanced(
+            Rect rect, GUIContent label, Vector4 value, bool xEnabled, bool yEnabled, bool zEnabled, bool wEnabled,
+            bool lockAllToX, bool lockAllToY, bool lockAllToZ, bool lockAllToW
+        ){
+            if (label.HasText()) rect = EditorGUI.PrefixLabel(rect, label);
+            Rect axisR = rect.SetWidth((rect.width - 6) / 4);
+            using (new LabelFieldWidthScope(10)) {
+                for (int i = 0; i < 4; ++i) {
+                    bool wasGuiEnabled = GUI.enabled;
+                    switch (i) {
+                    case 0:
+                        GUI.enabled = xEnabled;
+                        EditorGUI.BeginChangeCheck();
+                        value.x = EditorGUI.FloatField(axisR, "X", value.x);
+                        if (EditorGUI.EndChangeCheck() && lockAllToX) value.y = value.z = value.w = value.x;
+                        break;
+                    case 1:
+                        GUI.enabled = yEnabled;
+                        EditorGUI.BeginChangeCheck();
+                        value.y = EditorGUI.FloatField(axisR, "Y", value.y);
+                        if (EditorGUI.EndChangeCheck() && lockAllToY) value.x = value.z = value.w = value.y;
+                        break;
+                    case 2:
+                        GUI.enabled = zEnabled;
+                        EditorGUI.BeginChangeCheck();
+                        value.z = EditorGUI.FloatField(axisR, "Z", value.z);
+                        if (EditorGUI.EndChangeCheck() && lockAllToZ) value.x = value.y = value.w = value.z;
+                        break;
+                    case 3:
+                        GUI.enabled = wEnabled;
+                        EditorGUI.BeginChangeCheck();
+                        value.w = EditorGUI.FloatField(axisR, "W", value.w);
+                        if (EditorGUI.EndChangeCheck() && lockAllToW) value.x = value.y = value.z = value.w;
+                        break;
+                    }
+                    GUI.enabled = wasGuiEnabled;
+                    axisR = axisR.Shift(axisR.width + 2, 0, 0, 0);
+                }
+            }
+            return value;
+        }
+
         #endregion
 
         #region MixedValue GUI
 
-        public static void MultiFloatField(Rect position, GUIContent label, string fieldName, IList sources, float? min = null, float? max = null)
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiColorField(Rect rect, GUIContent label, string fieldName, IList sources)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.ColorField(rect, label, (Color)mScope.fieldInfo.GetValue(sources[0]));
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiColorFieldAdvanced(Rect rect, GUIContent label, string fieldName, IList sources, bool alphaOnly)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                if (alphaOnly) {
+                    Color color = (Color)mScope.fieldInfo.GetValue(sources[0]);
+                    color.a = EditorGUI.Slider(rect, label, ((Color)mScope.fieldInfo.GetValue(sources[0])).a, 0, 1);
+                    mScope.value = color;
+                } else {
+                    mScope.value = EditorGUI.ColorField(rect, label, (Color)mScope.fieldInfo.GetValue(sources[0]));
+                }
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiCurveField(Rect rect, GUIContent label, string fieldName, IList sources)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.CurveField(rect, label, (AnimationCurve)mScope.fieldInfo.GetValue(sources[0]));
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values. Supports using an int as an enum</summary>
+        public static bool MultiEnumPopup<T>(Rect rect, GUIContent label, string fieldName, IList sources) where T : Enum
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                bool isIntMode = mScope.fieldInfo.FieldType == typeof(int);
+                mScope.value = EditorGUI.EnumPopup(rect, label, (T)mScope.fieldInfo.GetValue(sources[0]));
+                if (isIntMode) mScope.value = (int)mScope.value;
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiFloatField(Rect rect, GUIContent label, string fieldName, IList sources, float? min = null, float? max = null)
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
                 EditorGUI.BeginChangeCheck();
-                mScope.value = EditorGUI.FloatField(position, label, (float)mScope.fieldInfo.GetValue(sources[0]));
+                mScope.value = EditorGUI.FloatField(rect, label, (float)mScope.fieldInfo.GetValue(sources[0]));
                 if (EditorGUI.EndChangeCheck()) {
                     if (min != null && (float)mScope.value < (float)min) mScope.value = min;
                     else if (max != null && (float)mScope.value < (float)max) mScope.value = max;
                 }
+                return mScope.hasMixedValue;
             }
         }
 
-        public static void MultiIntField(Rect position, GUIContent label, string fieldName, IList sources, int? min = null, int? max = null)
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiIntField(Rect rect, GUIContent label, string fieldName, IList sources, int? min = null, int? max = null)
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
                 EditorGUI.BeginChangeCheck();
-                mScope.value = EditorGUI.IntField(position, label, (int)mScope.fieldInfo.GetValue(sources[0]));
+                mScope.value = EditorGUI.IntField(rect, label, (int)mScope.fieldInfo.GetValue(sources[0]));
                 if (EditorGUI.EndChangeCheck()) {
                     if (min != null && (int)mScope.value < (int)min) mScope.value = min;
                     else if (max != null && (int)mScope.value < (int)max) mScope.value = max;
                 }
+                return mScope.hasMixedValue;
             }
         }
 
-        public static void MultiEnumPopup(Rect position, GUIContent label, string fieldName, IList sources)
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiIntSlider(Rect rect, GUIContent label, string fieldName, IList sources, int min, int max)
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
-                mScope.value = EditorGUI.EnumPopup(position, label, (Enum)mScope.fieldInfo.GetValue(sources[0]));
+                mScope.value = EditorGUI.IntSlider(rect, label, (int)mScope.fieldInfo.GetValue(sources[0]), min, max);
+                return mScope.hasMixedValue;
             }
         }
 
-        public static void MultiObjectField(Rect position, GUIContent label, string fieldName, IList sources, bool allowSceneObjects)
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiObjectField(Rect rect, GUIContent label, string fieldName, IList sources, bool allowSceneObjects)
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
                 mScope.value = EditorGUI.ObjectField(
-                    position, label, (Object)mScope.fieldInfo.GetValue(sources[0]), mScope.fieldInfo.FieldType, allowSceneObjects
+                    rect, label, (Object)mScope.fieldInfo.GetValue(sources[0]), mScope.fieldInfo.FieldType, allowSceneObjects
                 );
+                return mScope.hasMixedValue;
             }
         }
 
-        public static void MultiCurveField(Rect position, GUIContent label, string fieldName, IList sources)
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiRectField(Rect rect, GUIContent label, string fieldName, IList sources)
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
-                mScope.value = EditorGUI.CurveField(position, label, (AnimationCurve)mScope.fieldInfo.GetValue(sources[0]));
+                mScope.value = EditorGUI.RectField(rect, label, (Rect)mScope.fieldInfo.GetValue(sources[0]));
+                return mScope.hasMixedValue;
             }
         }
 
-        public static void MultiToggleButton(Rect position, GUIContent label, string fieldName, IList sources, GUIStyle guiStyle = null)
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiSlider(Rect rect, GUIContent label, string fieldName, IList sources, float min, float max)
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
-                mScope.value = ToggleButton(position, (bool)mScope.fieldInfo.GetValue(sources[0]), label, guiStyle);
+                mScope.value = EditorGUI.Slider(rect, label, (float)mScope.fieldInfo.GetValue(sources[0]), min, max);
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiTextArea(Rect rect, string fieldName, IList sources)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.TextArea(rect, (string)mScope.fieldInfo.GetValue(sources[0]));
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiTextField(Rect rect, GUIContent label, string fieldName, IList sources)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.TextField(rect, label, (string)mScope.fieldInfo.GetValue(sources[0]));
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values. Supports passing int values as bool (1 = true, 0 = false)</summary>
+        public static bool MultiToggleButton(Rect rect, GUIContent label, string fieldName, IList sources, GUIStyle guiStyle = null)
+        { return MultiToggleButton(rect, null, label, fieldName, sources, null, null, null, null, guiStyle); }
+        /// <summary>Returns TRUE if there's mixed values. Supports passing int values as bool (1 = true, 0 = false)</summary>
+        public static bool MultiToggleButton(
+            Rect rect, GUIContent label, string fieldName, IList sources,
+            Color? bgOffColor, Color? bgOnColor = null, Color? contentOffColor = null, Color? contenOnColor = null,  GUIStyle guiStyle = null
+        ){ return MultiToggleButton(rect, null, label, fieldName, sources, bgOffColor, bgOnColor, contentOffColor, contenOnColor, guiStyle); }
+        /// <summary>Returns TRUE if there's mixed values. Supports passing int values as bool (1 = true, 0 = false)</summary>
+        public static bool MultiToggleButton(
+            Rect rect, bool? forceSetToggle, GUIContent label, string fieldName, IList sources,
+            Color? bgOffColor, Color? bgOnColor = null, Color? contentOffColor = null, Color? contenOnColor = null,  GUIStyle guiStyle = null
+        ){
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                bool intMode = mScope.fieldInfo.FieldType == typeof(int);
+                mScope.value = ToggleButton(rect,
+                    forceSetToggle == null
+                        ? intMode
+                            ? (int)mScope.fieldInfo.GetValue(sources[0]) == 1
+                            : (bool)mScope.fieldInfo.GetValue(sources[0])
+                        : (bool)forceSetToggle,
+                    label,
+                    bgOffColor == null ? (Color)colors.bg.toggleOff : (Color)bgOffColor,
+                    bgOnColor == null ? (Color)colors.bg.toggleOn : (Color)bgOnColor,
+                    contentOffColor == null ? (Color)colors.content.toggleOff : (Color)contentOffColor,
+                    contenOnColor == null ? (Color)colors.content.toggleOn : (Color)contenOnColor,
+                    guiStyle
+                );
+                if (intMode) mScope.value = (bool)mScope.value ? 1 : 0;
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector2Field(Rect rect, GUIContent label, string fieldName, IList sources)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.Vector2Field(rect, label, (Vector2)mScope.fieldInfo.GetValue(sources[0]));
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector3Field(Rect rect, GUIContent label, string fieldName, IList sources)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.Vector3Field(rect, label, (Vector3)mScope.fieldInfo.GetValue(sources[0]));
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector4Field(Rect rect, GUIContent label, string fieldName, IList sources)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.Vector4Field(rect, label.text, (Vector4)mScope.fieldInfo.GetValue(sources[0]));
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector2FieldAdvanced(
+            Rect rect, GUIContent label, string fieldName, IList sources, bool xEnabled, bool yEnabled, bool lockAllToX, bool lockAllToY
+        ){
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = Vector2FieldAdvanced(
+                    rect, label, (Vector2)mScope.fieldInfo.GetValue(sources[0]), xEnabled, yEnabled, lockAllToX, lockAllToY
+                );
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector3FieldAdvanced(
+            Rect rect, GUIContent label, string fieldName, IList sources, bool xEnabled, bool yEnabled, bool zEnabled,
+            bool lockAllToX, bool lockAllToY, bool lockAllToZ
+        ){
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = Vector3FieldAdvanced(
+                    rect, label, (Vector3)mScope.fieldInfo.GetValue(sources[0]), xEnabled, yEnabled, zEnabled, lockAllToX, lockAllToY, lockAllToZ
+                );
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiVector4FieldAdvanced(
+            Rect rect, GUIContent label, string fieldName, IList sources, bool xEnabled, bool yEnabled, bool zEnabled, bool wEnabled,
+            bool lockAllToX, bool lockAllToY, bool lockAllToZ, bool lockAllToW
+        ){
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = Vector4FieldAdvanced(
+                    rect, label, (Vector4)mScope.fieldInfo.GetValue(sources[0]), xEnabled, yEnabled, zEnabled, wEnabled,
+                    lockAllToX, lockAllToY, lockAllToZ, lockAllToW
+                );
+                return mScope.hasMixedValue;
             }
         }
 
