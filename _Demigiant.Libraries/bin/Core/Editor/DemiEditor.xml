@@ -1599,7 +1599,7 @@
             <summary>Returns TRUE if there's mixed values</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.MultiIntField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{System.Int32},System.Nullable{System.Int32})">
-            <summary>Returns TRUE if there's mixed values</summary>
+            <summary>Returns TRUE if there's mixed values. Supports also uint fields</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.MultiIntSlider(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Int32,System.Int32)">
             <summary>Returns TRUE if there's mixed values</summary>

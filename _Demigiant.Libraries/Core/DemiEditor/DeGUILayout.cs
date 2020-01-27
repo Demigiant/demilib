@@ -323,7 +323,7 @@ namespace DG.DemiEditor
         public static bool MultiRectField(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
         {
             return DeGUI.MultiRectField(
-                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.numberField, options),
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 36f, EditorStyles.numberField, options),
                 label, fieldName, sources
             );
         }

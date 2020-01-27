@@ -34,6 +34,7 @@ namespace DG.DemiEditor
         public static int defaultFontSize { get; private set; } // Set on Begin GUI
         public static bool usesInterFont { get; private set; } // Set on Begin GUI: new default font added in Unity 2019.3
 
+        public static readonly GUIContent MixedValueLabel = new GUIContent("–");
         static DeColorPalette _defaultColorPalette; // Default color palette if none selected
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
         static string _doubleClickTextFieldId; // ID of selected double click textField
@@ -894,15 +895,22 @@ namespace DG.DemiEditor
             }
         }
 
-        /// <summary>Returns TRUE if there's mixed values</summary>
+        /// <summary>Returns TRUE if there's mixed values. Supports also uint fields</summary>
         public static bool MultiIntField(Rect rect, GUIContent label, string fieldName, IList sources, int? min = null, int? max = null)
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                bool isUintMode = mScope.fieldInfo.FieldType == typeof(uint);
                 EditorGUI.BeginChangeCheck();
-                mScope.value = EditorGUI.IntField(rect, label, (int)mScope.fieldInfo.GetValue(sources[0]));
+                mScope.value = EditorGUI.IntField(rect, label,
+                    isUintMode ? (int)(uint)mScope.fieldInfo.GetValue(sources[0]) : (int)mScope.fieldInfo.GetValue(sources[0])
+                );
                 if (EditorGUI.EndChangeCheck()) {
                     if (min != null && (int)mScope.value < (int)min) mScope.value = min;
                     else if (max != null && (int)mScope.value < (int)max) mScope.value = max;
+                    if (isUintMode) {
+                        if ((int)mScope.value < 0) mScope.value = (uint)0;
+                        else mScope.value = (uint)(int)mScope.value;
+                    }
                 }
                 return mScope.hasMixedValue;
             }
@@ -985,7 +993,7 @@ namespace DG.DemiEditor
                             ? (int)mScope.fieldInfo.GetValue(sources[0]) == 1
                             : (bool)mScope.fieldInfo.GetValue(sources[0])
                         : (bool)forceSetToggle,
-                    label,
+                    mScope.hasMixedValue ? MixedValueLabel : label,
                     bgOffColor == null ? (Color)colors.bg.toggleOff : (Color)bgOffColor,
                     bgOnColor == null ? (Color)colors.bg.toggleOn : (Color)bgOnColor,
                     contentOffColor == null ? (Color)colors.content.toggleOff : (Color)contentOffColor,
