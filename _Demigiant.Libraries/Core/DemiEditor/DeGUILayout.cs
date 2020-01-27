@@ -228,6 +228,45 @@ namespace DG.DemiEditor
 
         #endregion
 
+        #region MixedValue GUI
+
+        public static void MultiFloatField(
+            GUIContent label, string fieldName, IList sources, float? min = null, float? max = null, params GUILayoutOption[] options
+        ){
+            DeGUI.MultiFloatField(GUILayoutUtility.GetRect(label, EditorStyles.textField, options), label, fieldName, sources, min, max);
+        }
+
+        public static void MultiIntField(
+            GUIContent label, string fieldName, IList sources, int? min = null, int? max = null, params GUILayoutOption[] options
+        ){
+            DeGUI.MultiIntField(GUILayoutUtility.GetRect(label, EditorStyles.textField, options), label, fieldName, sources, min, max);
+        }
+
+        public static void MultiEnumPopup(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
+        {
+            DeGUI.MultiEnumPopup(GUILayoutUtility.GetRect(label, EditorStyles.popup, options), label, fieldName, sources);
+        }
+
+        public static void MultiObjectField(GUIContent label, string fieldName, IList sources, bool allowSceneObjects, params GUILayoutOption[] options)
+        {
+            DeGUI.MultiObjectField(GUILayoutUtility.GetRect(label, EditorStyles.objectField, options), label, fieldName, sources, allowSceneObjects);
+        }
+
+        public static void MultiCurveField(GUIContent label, string fieldName, IList sources, params GUILayoutOption[] options)
+        {
+            DeGUI.MultiCurveField(GUILayoutUtility.GetRect(label, EditorStyles.label, options), label, fieldName, sources);
+        }
+
+        public static void MultiToggleButton(GUIContent label, string fieldName, IList sources, GUIStyle guiStyle = null, params GUILayoutOption[] options)
+        {
+            DeGUI.MultiToggleButton(
+                GUILayoutUtility.GetRect(label, guiStyle == null ? DeGUI.styles.button.bBlankBorder : guiStyle, options),
+                label, fieldName, sources, guiStyle
+            );
+        }
+
+        #endregion
+
         #region Miscellaneous
 
         public class VBoxScope : DeScope

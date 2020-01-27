@@ -1318,6 +1318,18 @@
             Sets the GUI matrix to the given ones
             </summary>
         </member>
+        <member name="T:DG.DemiEditor.DeGUI.MultiPropertyScope">
+            <summary>
+            Wrapper to set serialized fields with multiple sources selected: automatically sets GUI to show mixed values when necessary
+            and contains a fieldInfo <see cref="T:System.Reflection.FieldInfo"/> which is set within the wrapper.<para/>
+            Note that you must set the <see cref="F:DG.DemiEditor.DeGUI.MultiPropertyScope.value"/> property within the wrapper so that it's assigned correctly when closing the scope.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiPropertyScope.#ctor(System.String,System.Collections.IList)">
+            <summary>Multi property scope</summary>
+            <param name="fieldName">Name of the field so it can be found and set/get via Reflection</param>
+            <param name="sources">List of the sources containing the given field</param>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.ShadedButton(UnityEngine.Rect,UnityEngine.Color,System.String)">
             <summary>Shaded button</summary>
         </member>

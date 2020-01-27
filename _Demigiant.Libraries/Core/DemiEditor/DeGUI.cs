@@ -1,6 +1,7 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/04/24 18:27
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -156,6 +157,10 @@ namespace DG.DemiEditor
             TexturePreviewWindow.Open(texture);
         }
 
+        #endregion
+
+        #region Scopes
+
         public class MixedValueScope : DeScope
         {
             readonly bool _prevMixedValue;
@@ -241,6 +246,54 @@ namespace DG.DemiEditor
             protected override void CloseScope()
             {
                 GUI.matrix = _prevMatrix;
+            }
+        }
+
+        /// <summary>
+        /// Wrapper to set serialized fields with multiple sources selected: automatically sets GUI to show mixed values when necessary
+        /// and contains a fieldInfo <see cref="FieldInfo"/> which is set within the wrapper.<para/>
+        /// Note that you must set the <see cref="value"/> property within the wrapper so that it's assigned correctly when closing the scope.
+        /// </summary>
+        public class MultiPropertyScope : DeScope
+        {
+            public readonly FieldInfo fieldInfo;
+            public object value;
+            readonly IList _sources;
+            readonly bool _prevShowMixedValue;
+
+            /// <summary>Multi property scope</summary>
+            /// <param name="fieldName">Name of the field so it can be found and set/get via Reflection</param>
+            /// <param name="sources">List of the sources containing the given field</param>
+            public MultiPropertyScope(string fieldName, IList sources)
+            {
+                _sources = sources;
+                fieldInfo = GetFieldInfo(fieldName, sources);
+                _prevShowMixedValue = EditorGUI.showMixedValue;
+                EditorGUI.BeginChangeCheck();
+                EditorGUI.showMixedValue = HasMixedValue(fieldInfo, _sources);
+            }
+
+            protected override void CloseScope()
+            {
+                EditorGUI.showMixedValue = _prevShowMixedValue;
+                if (EditorGUI.EndChangeCheck()) {
+                    for (int i = 0; i < _sources.Count; ++i) fieldInfo.SetValue(_sources[i], value);
+                }
+            }
+
+            static FieldInfo GetFieldInfo(string fieldName, IList targets)
+            {
+                return targets[0].GetType().GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            }
+
+            static bool HasMixedValue(FieldInfo fInfo, IList targets)
+            {
+                object defValue = null;
+                for (int i = 0; i < targets.Count; ++i) {
+                    if (i == 0) defValue = fInfo.GetValue(targets[i]);
+                    else if (!fInfo.GetValue(targets[i]).Equals(defValue)) return true;
+                }
+                return false;
             }
         }
 
@@ -661,6 +714,64 @@ namespace DG.DemiEditor
             if (color != null) GUI.backgroundColor = (Color)color;
             GUI.Box(rect, "", DeGUI.styles.box.flat);
             GUI.backgroundColor = prevBgColor;
+        }
+
+        #endregion
+
+        #region MixedValue GUI
+
+        public static void MultiFloatField(Rect position, GUIContent label, string fieldName, IList sources, float? min = null, float? max = null)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                EditorGUI.BeginChangeCheck();
+                mScope.value = EditorGUI.FloatField(position, label, (float)mScope.fieldInfo.GetValue(sources[0]));
+                if (EditorGUI.EndChangeCheck()) {
+                    if (min != null && (float)mScope.value < (float)min) mScope.value = min;
+                    else if (max != null && (float)mScope.value < (float)max) mScope.value = max;
+                }
+            }
+        }
+
+        public static void MultiIntField(Rect position, GUIContent label, string fieldName, IList sources, int? min = null, int? max = null)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                EditorGUI.BeginChangeCheck();
+                mScope.value = EditorGUI.IntField(position, label, (int)mScope.fieldInfo.GetValue(sources[0]));
+                if (EditorGUI.EndChangeCheck()) {
+                    if (min != null && (int)mScope.value < (int)min) mScope.value = min;
+                    else if (max != null && (int)mScope.value < (int)max) mScope.value = max;
+                }
+            }
+        }
+
+        public static void MultiEnumPopup(Rect position, GUIContent label, string fieldName, IList sources)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.EnumPopup(position, label, (Enum)mScope.fieldInfo.GetValue(sources[0]));
+            }
+        }
+
+        public static void MultiObjectField(Rect position, GUIContent label, string fieldName, IList sources, bool allowSceneObjects)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.ObjectField(
+                    position, label, (Object)mScope.fieldInfo.GetValue(sources[0]), mScope.fieldInfo.FieldType, allowSceneObjects
+                );
+            }
+        }
+
+        public static void MultiCurveField(Rect position, GUIContent label, string fieldName, IList sources)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.CurveField(position, label, (AnimationCurve)mScope.fieldInfo.GetValue(sources[0]));
+            }
+        }
+
+        public static void MultiToggleButton(Rect position, GUIContent label, string fieldName, IList sources, GUIStyle guiStyle = null)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = ToggleButton(position, (bool)mScope.fieldInfo.GetValue(sources[0]), label, guiStyle);
+            }
         }
 
         #endregion
