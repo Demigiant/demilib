@@ -34,7 +34,7 @@ namespace DG.DemiEditor
         public static int defaultFontSize { get; private set; } // Set on Begin GUI
         public static bool usesInterFont { get; private set; } // Set on Begin GUI: new default font added in Unity 2019.3
 
-        public static readonly GUIContent MixedValueLabel = new GUIContent("–");
+        public static readonly GUIContent MixedValueLabel = new GUIContent("—");
         static DeColorPalette _defaultColorPalette; // Default color palette if none selected
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
         static string _doubleClickTextFieldId; // ID of selected double click textField
@@ -866,6 +866,10 @@ namespace DG.DemiEditor
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
                 mScope.value = EditorGUI.CurveField(rect, label, (AnimationCurve)mScope.fieldInfo.GetValue(sources[0]));
+                if (mScope.hasMixedValue) {
+                    // Draw over curve field because Unity has no default way to show mixed values on them
+                    DrawTiledTexture(rect.Contract(2), DeStylePalette.tileBars_empty, 0.25f, new Color(0.97f, 0.81f, 0.02f, 0.5f));
+                }
                 return mScope.hasMixedValue;
             }
         }
