@@ -80,7 +80,7 @@ namespace DG.DemiEditor
                 property.serializedObject, property.FindPropertyRelative("m_PersistentCalls.m_Calls"),
                 draggable: false, displayHeader: true, displayAddButton: true, displayRemoveButton: true
             );
-            return li.GetHeight() + li.count * 26;
+            return li.GetHeight() + Mathf.Max(1, li.count) * 26;
         }
 
         #region Get/Set
