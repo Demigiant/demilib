@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using DG.DemiEditor.Internal;
 using DG.DemiLib;
@@ -376,6 +377,18 @@ namespace DG.DemiEditor
             return DeGUI.MultiToggleButton(
                 GUILayoutUtility.GetRect(label, guiStyle == null ? DeGUI.styles.button.bBlankBorder : guiStyle, options),
                 forceSetToggle, label, fieldName, sources, bgOffColor, bgOnColor, contentOffColor, contenOnColor, guiStyle
+            );
+        }
+
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiUnityEvent(
+            GUIContent label, string fieldName, IList sources, List<SerializedProperty> fieldsAsSerializedProperties, params GUILayoutOption[] options
+        ){
+            return DeGUI.MultiUnityEvent(
+                EditorGUILayout.GetControlRect(
+                    hasLabel: label.HasText(), fieldsAsSerializedProperties[0].GetUnityEventHeight(), EditorStyles.label, options
+                ),
+                label, fieldName, sources, fieldsAsSerializedProperties
             );
         }
 

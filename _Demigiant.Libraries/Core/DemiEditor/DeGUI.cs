@@ -41,7 +41,15 @@ namespace DG.DemiEditor
         static int _activePressButtonId = -1;
         static int _pressFrame = -1;
         static bool _hasEditorPressUpdateActive = false;
-        static MethodInfo _defaultPropertyFieldMInfo;
+        static MethodInfo _miDefaultPropertyField {
+            get {
+                if (_foo_miDefaultPropertyField == null) {
+                    _foo_miDefaultPropertyField = typeof(EditorGUI).GetMethod("DefaultPropertyField", BindingFlags.Static | BindingFlags.NonPublic);
+                }
+                return _foo_miDefaultPropertyField;
+            }
+        }
+        static MethodInfo _foo_miDefaultPropertyField;
 
         static DeGUI()
         {
@@ -260,26 +268,48 @@ namespace DG.DemiEditor
         {
             public readonly FieldInfo fieldInfo;
             public readonly bool hasMixedValue;
+            public readonly bool isGenericSerializedProperty; // Not supported (usually UnityEvents)
             public object value;
             readonly IList _sources;
             readonly bool _prevShowMixedValue;
+            readonly bool _isSerializedPropertyMode;
+            readonly List<SerializedProperty> _fieldsAsSerializedProperties;
 
             /// <summary>Multi property scope</summary>
             /// <param name="fieldName">Name of the field so it can be found and set/get via Reflection</param>
             /// <param name="sources">List of the sources containing the given field</param>
-            public MultiPropertyScope(string fieldName, IList sources)
+            public MultiPropertyScope(string fieldName, IList sources, List<SerializedProperty> fieldsAsSerializedProperties = null)
             {
                 _sources = sources;
                 fieldInfo = GetFieldInfo(fieldName, sources);
                 _prevShowMixedValue = EditorGUI.showMixedValue;
                 EditorGUI.BeginChangeCheck();
                 EditorGUI.showMixedValue = hasMixedValue = HasMixedValue(fieldInfo, _sources);
+                if (fieldsAsSerializedProperties != null) {
+                    _isSerializedPropertyMode = true;
+                    _fieldsAsSerializedProperties = fieldsAsSerializedProperties;
+                    isGenericSerializedProperty = _fieldsAsSerializedProperties[0].propertyType == SerializedPropertyType.Generic;
+                    for (int i = 0; i < _fieldsAsSerializedProperties.Count; ++i) _fieldsAsSerializedProperties[i].serializedObject.Update();
+                }
             }
 
             protected override void CloseScope()
             {
                 EditorGUI.showMixedValue = _prevShowMixedValue;
-                if (EditorGUI.EndChangeCheck()) {
+                if (!EditorGUI.EndChangeCheck()) return;
+                if (_isSerializedPropertyMode) {
+                    if (isGenericSerializedProperty) {
+                        // Update only first one that might have changed, ignore others
+                        _fieldsAsSerializedProperties[0].serializedObject.ApplyModifiedProperties();
+                    } else {
+                        object value = null;
+                        for (int i = 0; i < _fieldsAsSerializedProperties.Count; ++i) {
+                            if (i == 0) value = _fieldsAsSerializedProperties[i].GetValue();
+                            else _fieldsAsSerializedProperties[i].SetValue(value);
+                            _fieldsAsSerializedProperties[i].serializedObject.ApplyModifiedProperties();
+                        }
+                    }
+                } else {
                     try {
                         for (int i = 0; i < _sources.Count; ++i) fieldInfo.SetValue(_sources[i], value);
                     } catch {
@@ -557,8 +587,7 @@ namespace DG.DemiEditor
         /// </summary>
         public static void DefaultPropertyField(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (_defaultPropertyFieldMInfo == null) _defaultPropertyFieldMInfo = typeof(EditorGUI).GetMethod("DefaultPropertyField", BindingFlags.Static | BindingFlags.NonPublic);
-            _defaultPropertyFieldMInfo.Invoke(null, new object[] { position, property, label });
+            _miDefaultPropertyField.Invoke(null, new object[] { position, property, label });
         }
 
         /// <summary>Draws a colored square</summary>
@@ -1005,6 +1034,19 @@ namespace DG.DemiEditor
                     guiStyle
                 );
                 if (intMode) mScope.value = (bool)mScope.value ? 1 : 0;
+                return mScope.hasMixedValue;
+            }
+        }
+
+        /// <summary>Returns TRUE if there's mixed values. Requires a SerializedProperty representation of each UnityEven field</summary>
+        public static bool MultiUnityEvent(
+            Rect rect, GUIContent label, string fieldName, IList sources, List<SerializedProperty> fieldsAsSerializedProperties
+        ){
+            using (var mScope = new MultiPropertyScope(fieldName, sources, fieldsAsSerializedProperties)) {
+                EditorGUI.BeginDisabledGroup(mScope.hasMixedValue); // Unity events can't be set when multiple
+                if (label.HasText()) EditorGUI.PropertyField(rect, fieldsAsSerializedProperties[0], label);
+                else EditorGUI.PropertyField(rect, fieldsAsSerializedProperties[0]);
+                EditorGUI.EndDisabledGroup();
                 return mScope.hasMixedValue;
             }
         }

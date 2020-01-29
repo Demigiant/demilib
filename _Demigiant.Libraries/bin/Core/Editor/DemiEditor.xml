@@ -1220,6 +1220,9 @@
         <member name="M:DG.DemiEditor.DeGUILayout.MultiToggleButton(System.Nullable{System.Boolean},UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
             <summary>Returns TRUE if there's mixed values</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiUnityEvent(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Collections.Generic.List{UnityEditor.SerializedProperty},UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUILayout.MultiVector2Field(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
             <summary>Returns TRUE if there's mixed values</summary>
         </member>
@@ -1388,7 +1391,7 @@
             Note that you must set the <see cref="F:DG.DemiEditor.DeGUI.MultiPropertyScope.value"/> property within the wrapper so that it's assigned correctly when closing the scope.
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUI.MultiPropertyScope.#ctor(System.String,System.Collections.IList)">
+        <member name="M:DG.DemiEditor.DeGUI.MultiPropertyScope.#ctor(System.String,System.Collections.IList,System.Collections.Generic.List{UnityEditor.SerializedProperty})">
             <summary>Multi property scope</summary>
             <param name="fieldName">Name of the field so it can be found and set/get via Reflection</param>
             <param name="sources">List of the sources containing the given field</param>
@@ -1628,6 +1631,9 @@
         <member name="M:DG.DemiEditor.DeGUI.MultiToggleButton(UnityEngine.Rect,System.Nullable{System.Boolean},UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle)">
             <summary>Returns TRUE if there's mixed values. Supports passing int values as bool (1 = true, 0 = false)</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiUnityEvent(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Collections.Generic.List{UnityEditor.SerializedProperty})">
+            <summary>Returns TRUE if there's mixed values. Requires a SerializedProperty representation of each UnityEven field</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.MultiVector2Field(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
             <summary>Returns TRUE if there's mixed values</summary>
         </member>
@@ -1735,6 +1741,21 @@
         <member name="M:DG.DemiEditor.SerializedPropertyExtensions.GetIndexInArray(UnityEditor.SerializedProperty)">
             <summary>
             Returns -1 if the property is not inside an array, otherwise returns its index inside the array
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.SerializedPropertyExtensions.GetUnityEventHeight(UnityEditor.SerializedProperty)">
+            <summary>
+            Returns the height of a UnityEvent serializedProperty
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.SerializedPropertyExtensions.GetValue(UnityEditor.SerializedProperty)">
+            <summary>
+            Uses code from FlaShG's GitMerge: https://github.com/FlaShG/GitMerge-for-Unity/blob/master/Editor/SerializedPropertyExtensions.cs
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.SerializedPropertyExtensions.SetValue(UnityEditor.SerializedProperty,System.Object)">
+            <summary>
+            Uses code from FlaShG's GitMerge: https://github.com/FlaShG/GitMerge-for-Unity/blob/master/Editor/SerializedPropertyExtensions.cs
             </summary>
         </member>
         <member name="T:DG.DemiEditor.StringExtensions">
