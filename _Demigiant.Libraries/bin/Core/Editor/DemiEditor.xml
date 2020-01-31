@@ -836,6 +836,36 @@
             Stops all clips playing.
             </summary>
         </member>
+        <member name="T:DG.DemiEditor.DeStopwatch">
+            <summary>
+            A stopwatch whose time can be changed manually via <see cref="M:DG.DemiEditor.DeStopwatch.Goto(System.Single,System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeStopwatch.Start">
+            <summary>
+            Start or resume playing
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeStopwatch.Reset">
+            <summary>
+            Stop the watch and reset the time
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeStopwatch.Restart">
+            <summary>
+            Restart measuring from zero
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeStopwatch.Stop">
+            <summary>
+            Pause the watch
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeStopwatch.Goto(System.Single,System.Boolean)">
+            <summary>
+            Send the watch to the given time
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeUnityEditorVersion">
             <summary>
             Util to determine Unity editor version and store them as comparable numbers

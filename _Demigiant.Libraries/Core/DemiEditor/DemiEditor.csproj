@@ -87,6 +87,7 @@
     <Compile Include="DeScrollView.cs" />
     <Compile Include="DeSkinStyle.cs" />
     <Compile Include="DeEditorSoundUtils.cs" />
+    <Compile Include="DeStopwatch.cs" />
     <Compile Include="DeUnityEditorVersion.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\GUIStyleExtensions.cs" />
