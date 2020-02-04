@@ -1217,6 +1217,9 @@
         <member name="M:DG.DemiEditor.DeGUILayout.MultiEnumPopup``1(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
             <summary>Returns TRUE if there's mixed values</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiEnumPopup(UnityEngine.GUIContent,System.Type,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUILayout.MultiFloatField(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{System.Single},System.Nullable{System.Single},UnityEngine.GUILayoutOption[])">
             <summary>Returns TRUE if there's mixed values</summary>
         </member>
@@ -1227,7 +1230,10 @@
             <summary>Returns TRUE if there's mixed values</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUILayout.MultiObjectField(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean,UnityEngine.GUILayoutOption[])">
-            <summary>Returns TRUE if there's mixed values</summary>
+            <summary>Returns TRUE if there's mixed values. Auto-determines object type from the field's type</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.MultiObjectField(UnityEngine.GUIContent,System.String,System.Collections.IList,System.Type,System.Boolean,UnityEngine.GUILayoutOption[])">
+            <summary>Returns TRUE if there's mixed values. Forces field to accept only objects of the given type</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUILayout.MultiRectField(UnityEngine.GUIContent,System.String,System.Collections.IList,UnityEngine.GUILayoutOption[])">
             <summary>Returns TRUE if there's mixed values</summary>
@@ -1628,6 +1634,9 @@
         <member name="M:DG.DemiEditor.DeGUI.MultiEnumPopup``1(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
             <summary>Returns TRUE if there's mixed values. Supports using an int as an enum</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiEnumPopup(UnityEngine.Rect,UnityEngine.GUIContent,System.Type,System.String,System.Collections.IList)">
+            <summary>Returns TRUE if there's mixed values. Supports using an int as an enum</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.MultiFloatField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Nullable{System.Single},System.Nullable{System.Single})">
             <summary>Returns TRUE if there's mixed values</summary>
         </member>
@@ -1638,7 +1647,10 @@
             <summary>Returns TRUE if there's mixed values</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.MultiObjectField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean)">
-            <summary>Returns TRUE if there's mixed values</summary>
+            <summary>Returns TRUE if there's mixed values. Auto-determines object type from the field's type</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.MultiObjectField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Type,System.Boolean)">
+            <summary>Returns TRUE if there's mixed values. Forces field to accept only objects of the given type</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.MultiRectField(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList)">
             <summary>Returns TRUE if there's mixed values</summary>

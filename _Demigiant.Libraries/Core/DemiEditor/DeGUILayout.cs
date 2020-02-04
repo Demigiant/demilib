@@ -281,6 +281,14 @@ namespace DG.DemiEditor
                 label, fieldName, sources
             );
         }
+        /// <summary>Returns TRUE if there's mixed values</summary>
+        public static bool MultiEnumPopup(GUIContent label, Type enumType, string fieldName, IList sources, params GUILayoutOption[] options)
+        {
+            return DeGUI.MultiEnumPopup(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, EditorStyles.popup, options),
+                label, enumType, fieldName, sources
+            );
+        }
 
         /// <summary>Returns TRUE if there's mixed values</summary>
         public static bool MultiFloatField(
@@ -311,12 +319,20 @@ namespace DG.DemiEditor
             );
         }
 
-        /// <summary>Returns TRUE if there's mixed values</summary>
+        /// <summary>Returns TRUE if there's mixed values. Auto-determines object type from the field's type</summary>
         public static bool MultiObjectField(GUIContent label, string fieldName, IList sources, bool allowSceneObjects, params GUILayoutOption[] options)
         {
             return DeGUI.MultiObjectField(
                 EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, options),
                 label, fieldName, sources, allowSceneObjects
+            );
+        }
+        /// <summary>Returns TRUE if there's mixed values. Forces field to accept only objects of the given type</summary>
+        public static bool MultiObjectField(GUIContent label, string fieldName, IList sources, Type objType, bool allowSceneObjects, params GUILayoutOption[] options)
+        {
+            return DeGUI.MultiObjectField(
+                EditorGUILayout.GetControlRect(hasLabel: label.HasText(), 18f, options),
+                label, fieldName, sources, objType, allowSceneObjects
             );
         }
 

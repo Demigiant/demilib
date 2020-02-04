@@ -913,6 +913,17 @@ namespace DG.DemiEditor
                 return mScope.hasMixedValue;
             }
         }
+        /// <summary>Returns TRUE if there's mixed values. Supports using an int as an enum</summary>
+        public static bool MultiEnumPopup(Rect rect, GUIContent label, Type enumType, string fieldName, IList sources)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                bool isIntMode = mScope.fieldInfo.FieldType == typeof(int);
+                object parsed = Enum.Parse(enumType, mScope.fieldInfo.GetValue(sources[0]).ToString());
+                mScope.value = EditorGUI.EnumPopup(rect, label, parsed as Enum);
+                if (isIntMode) mScope.value = (int)mScope.value;
+                return mScope.hasMixedValue;
+            }
+        }
 
         /// <summary>Returns TRUE if there's mixed values</summary>
         public static bool MultiFloatField(Rect rect, GUIContent label, string fieldName, IList sources, float? min = null, float? max = null)
@@ -958,12 +969,22 @@ namespace DG.DemiEditor
             }
         }
 
-        /// <summary>Returns TRUE if there's mixed values</summary>
+        /// <summary>Returns TRUE if there's mixed values. Auto-determines object type from the field's type</summary>
         public static bool MultiObjectField(Rect rect, GUIContent label, string fieldName, IList sources, bool allowSceneObjects)
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
                 mScope.value = EditorGUI.ObjectField(
                     rect, label, (Object)mScope.fieldInfo.GetValue(sources[0]), mScope.fieldInfo.FieldType, allowSceneObjects
+                );
+                return mScope.hasMixedValue;
+            }
+        }
+        /// <summary>Returns TRUE if there's mixed values. Forces field to accept only objects of the given type</summary>
+        public static bool MultiObjectField(Rect rect, GUIContent label, string fieldName, IList sources, Type objType, bool allowSceneObjects)
+        {
+            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+                mScope.value = EditorGUI.ObjectField(
+                    rect, label, (Object)mScope.fieldInfo.GetValue(sources[0]), objType, allowSceneObjects
                 );
                 return mScope.hasMixedValue;
             }
