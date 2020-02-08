@@ -347,6 +347,7 @@ namespace DG.DemiEditor
                         toolFoldoutOpen, toolFoldoutOpenWLabel, toolFoldoutOpenWStretchedLabel,
                         toolLFoldoutClosed, toolLFoldoutClosedWLabel, toolLFoldoutClosedWStretchedLabel,
                         toolLFoldoutOpen, toolLFoldoutOpenWLabel, toolLFoldoutOpenWStretchedLabel,
+                        foldoutClosedWLabel, foldoutOpenWLabel,
                         bBlankBorder, bBlankBorderCompact,
                         flatWhite, transparent;
 
@@ -391,6 +392,9 @@ namespace DG.DemiEditor
             toolLFoldoutOpen = toolFoldoutOpen.Clone().OverflowTop(-4);
             toolLFoldoutOpenWLabel = toolFoldoutOpenWLabel.Clone().OverflowTop(-4);
             toolLFoldoutOpenWStretchedLabel = toolFoldoutOpenWStretchedLabel.Clone().OverflowTop(-4);
+            //
+            foldoutOpenWLabel = toolFoldoutOpenWStretchedLabel.Clone(12);
+            foldoutClosedWLabel = toolFoldoutClosedWStretchedLabel.Clone(12);
             // Custom using squareBorder
             bBlankBorder = new GUIStyle(GUI.skin.button).Add(TextAnchor.MiddleCenter, Color.white).Background(DeStylePalette.squareBorderCurved)
                 .Padding(5, 4, 1, 2).Border(new RectOffset(4, 4, 4, 4)).Overflow(-1, -1, 0, 0).ContentOffsetX(-1);

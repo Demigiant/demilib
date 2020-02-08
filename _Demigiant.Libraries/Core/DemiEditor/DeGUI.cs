@@ -403,6 +403,22 @@ namespace DG.DemiEditor
             }
             return toggled;
         }
+        /// <summary>Foldout button + label (not intended to be used in toolbar) which allows click-to-foldout/foldin</summary>
+        public static bool FoldoutLabel(Rect rect, bool toggled, GUIContent label = null)
+        {
+            bool hasLabel = label != null && !string.IsNullOrEmpty(label.text);
+            GUIStyle style = !hasLabel
+                ? toggled ? styles.button.toolFoldoutOpen : styles.button.toolFoldoutClosed
+                : toggled
+                    ? styles.button.foldoutOpenWLabel
+                    : styles.button.foldoutClosedWLabel;
+            bool clicked = GUI.Button(rect, hasLabel ? label : GUIContent.none, style);
+            if (clicked) {
+                toggled = !toggled;
+                GUI.changed = true;
+            }
+            return toggled;
+        }
 
         /// <summary>
         /// Draws a button that returns TRUE the first time it's pressed, instead than when its released.

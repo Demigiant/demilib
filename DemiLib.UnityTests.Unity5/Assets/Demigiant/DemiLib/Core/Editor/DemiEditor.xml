@@ -939,6 +939,11 @@
             Sets the background of the style
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.Background(UnityEngine.GUIStyle,UnityEngine.Texture2D,UnityEngine.Texture2D,UnityEngine.Texture2D)">
+            <summary>
+            Sets the background of the style
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.GUIStyleExtensions.ContentOffset(UnityEngine.GUIStyle,UnityEngine.Vector2)">
             <summary>
             Sets the contentOffset of the style
@@ -1458,6 +1463,9 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.FoldoutButton(UnityEngine.Rect,System.Boolean,System.String,System.Boolean,System.Boolean)">
             <summary>Toolbar foldout button which allows clicking even on its label</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.FoldoutLabel(UnityEngine.Rect,System.Boolean,UnityEngine.GUIContent)">
+            <summary>Foldout button + label (not intended to be used in toolbar) which allows click-to-foldout/foldin</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.PressButton(UnityEngine.Rect,System.String,UnityEngine.GUIStyle)">
             <summary>
