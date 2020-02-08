@@ -766,6 +766,26 @@
             Returns the given <see cref="T:UnityEngine.KeyCode"/> as an int, or -1 if it's not a number
             </summary>
         </member>
+        <member name="T:DG.DemiEditor.DeReflectionUtils">
+            <summary>
+            Used code from Celtc on StackOverflow: https://stackoverflow.com/a/54044197/10151925
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeReflectionUtils.GetAllFields(System.Type,System.Reflection.BindingFlags)">
+            <summary>
+            Gets all fields from an object and its hierarchy inheritance
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeReflectionUtils.DeepCopy``1(``0)">
+            <summary>
+            Perform a deep copy of the class
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeReflectionUtils.DoCopy(System.Object)">
+            <summary>
+            Does the copy
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeScrollView">
             <summary>
             Returns by <see cref="M:DG.DemiEditor.DeGUI.BeginScrollView(UnityEngine.Rect,DG.DemiEditor.DeScrollView,System.Boolean)"/>.
@@ -1840,6 +1860,11 @@
         <member name="M:DG.DemiEditor.TextureExtensions.SetGUIFormat(UnityEngine.Texture2D,UnityEngine.FilterMode,System.Int32,UnityEngine.TextureWrapMode,System.Int32)">
             <summary>
             Checks that the texture uses the correct import settings, and applies them if they're incorrect.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.UnityEventExtensions.Clone(UnityEngine.Events.UnityEvent)">
+            <summary>
+            Returns a clone of the event
             </summary>
         </member>
         <member name="T:DG.DeExtensions.ListExtensions">
