@@ -37,14 +37,16 @@ namespace DG.DemiEditor
 
         /// <summary>
         /// A button that triggers an immediate repaint when hovered/pressed/unhovered
-        /// (which otherwise doesn't happen if you set a background to the button's GUIStyle)
+        /// (which otherwise doesn't happen if you set a background to the button's GUIStyle).<para/>
+        /// Requires <see cref="EditorWindow.wantsMouseMove"/> to be activated.
         /// </summary>
         public static bool ActiveButton(GUIContent content, GUIStyle guiStyle = null, params GUILayoutOption[] options)
         { return DeGUI.ActiveButton(GUILayoutUtility.GetRect(content, guiStyle, options), content, guiStyle); }
         /// <summary>
         /// A button that triggers an immediate repaint when hovered/pressed/unhovered
         /// (which otherwise doesn't happen if you set a background to the button's GUIStyle)
-        /// and also assigns a different GUI color based on the button's state
+        /// and also assigns a different GUI color based on the button's state.<para/>
+        /// Requires <see cref="EditorWindow.wantsMouseMove"/> to be activated.
         /// </summary>
         public static bool ActiveButton(
             GUIContent content, Color onNormal, Color onHover, Color onPressed, GUIStyle guiStyle = null, params GUILayoutOption[] options
