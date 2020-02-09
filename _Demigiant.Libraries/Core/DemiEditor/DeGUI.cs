@@ -38,8 +38,9 @@ namespace DG.DemiEditor
         public static Color defaultGUIColor, defaultGUIBackgroundColor, defaultGUIContentColor; // Set on Begin GUI
         public static int defaultFontSize { get; private set; } // Set on Begin GUI
         public static bool usesInterFont { get; private set; } // Set on Begin GUI: new default font added in Unity 2019.3
-
         public static readonly GUIContent MixedValueLabel = new GUIContent("—");
+        public static bool isMouseDown { get; private set; }
+
         static DeColorPalette _defaultColorPalette; // Default color palette if none selected
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
         static string _doubleClickTextFieldId; // ID of selected double click textField
@@ -90,6 +91,15 @@ namespace DG.DemiEditor
             defaultGUIContentColor = GUI.contentColor;
             defaultFontSize = GUI.skin.label.fontSize;
             usesInterFont = DeUnityEditorVersion.Version >= 2019.3f && (GUI.skin.label.font == null);
+
+            switch (Event.current.rawType) {
+            case EventType.MouseDown:
+                isMouseDown = true;
+                break;
+            case EventType.MouseUp:
+                isMouseDown = false;
+                break;
+            }
         }
 
         /// <summary>
@@ -363,19 +373,46 @@ namespace DG.DemiEditor
         #region Buttons
 
         /// <summary>
-        /// A button that triggers a repaint when hovered/pressed
+        /// A button that triggers an immediate repaint when hovered/pressed/unhovered
         /// (which otherwise doesn't happen if you set a background to the button's GUIStyle)
         /// </summary>
-        public static bool ActiveButton(Rect rect, GUIContent content, GUIStyle style)
+        public static bool ActiveButton(Rect rect, GUIContent content, GUIStyle guiStyle = null)
         {
-            bool result = GUI.Button(rect, content, style);
             ButtonState lastState = GetButtonState(rect);
             ButtonState currState = !rect.Contains(Event.current.mousePosition)
-                ? ButtonState.Normal
-                : Event.current.button > 1
-                    ? ButtonState.Pressed
-                    : ButtonState.Hover;
-            if (lastState != currState) DeEditorPanelUtils.RepaintCurrentEditor();
+                ? ButtonState.Normal : isMouseDown ? ButtonState.Pressed : ButtonState.Hover;
+            bool result = GUI.Button(rect, content, guiStyle);
+            if (lastState != currState) {
+                SetButtonState(rect, currState);
+                DeEditorPanelUtils.RepaintCurrentEditor();
+            }
+            return result;
+        }
+        /// <summary>
+        /// A button that triggers an immediate repaint when hovered/pressed/unhovered
+        /// (which otherwise doesn't happen if you set a background to the button's GUIStyle)
+        /// and also assigns a different GUI color based on the button's state
+        /// </summary>
+        public static bool ActiveButton(Rect rect, GUIContent content, Color onNormal, Color onHover, Color onPressed, GUIStyle guiStyle = null)
+        {
+            bool result;
+            Color color = onNormal;
+            ButtonState lastState = GetButtonState(rect);
+            ButtonState currState = !rect.Contains(Event.current.mousePosition)
+                ? ButtonState.Normal : isMouseDown ? ButtonState.Pressed : ButtonState.Hover;
+            switch (currState) {
+            case ButtonState.Hover:
+                color = onHover;
+                break;
+            case ButtonState.Pressed:
+                color = onPressed;
+                break;
+            }
+            using (new ColorScope(color)) result = GUI.Button(rect, content, guiStyle);
+            if (lastState != currState) {
+                SetButtonState(rect, currState);
+                DeEditorPanelUtils.RepaintCurrentEditor();
+            }
             return result;
         }
 
