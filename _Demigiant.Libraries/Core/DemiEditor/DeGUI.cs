@@ -20,6 +20,11 @@ namespace DG.DemiEditor
     /// </summary>
     public static class DeGUI
     {
+        enum ButtonState
+        {
+            Normal, Hover, Pressed
+        }
+
         /// <summary>
         /// Default color palette
         /// </summary>
@@ -41,6 +46,7 @@ namespace DG.DemiEditor
         static int _activePressButtonId = -1;
         static int _pressFrame = -1;
         static bool _hasEditorPressUpdateActive = false;
+        static readonly Dictionary<Rect, ButtonState> _ButtonRectToState = new Dictionary<Rect, ButtonState>();
         static MethodInfo _miDefaultPropertyField {
             get {
                 if (_foo_miDefaultPropertyField == null) {
@@ -165,6 +171,22 @@ namespace DG.DemiEditor
         public static void ShowTexturePreview(Texture2D texture)
         {
             TexturePreviewWindow.Open(texture);
+        }
+
+        #endregion
+
+        #region Methods
+
+        static ButtonState GetButtonState(Rect r)
+        {
+            if (!_ButtonRectToState.ContainsKey(r)) _ButtonRectToState.Add(r, ButtonState.Normal);
+            return _ButtonRectToState[r];
+        }
+
+        static void SetButtonState(Rect r, ButtonState state)
+        {
+            if (_ButtonRectToState.ContainsKey(r)) _ButtonRectToState[r] = state;
+            else _ButtonRectToState.Add(r, state);
         }
 
         #endregion
@@ -339,6 +361,23 @@ namespace DG.DemiEditor
         #region Public GUI Draw Methods
 
         #region Buttons
+
+        /// <summary>
+        /// A button that triggers a repaint when hovered/pressed
+        /// (which otherwise doesn't happen if you set a background to the button's GUIStyle)
+        /// </summary>
+        public static bool ActiveButton(Rect rect, GUIContent content, GUIStyle style)
+        {
+            bool result = GUI.Button(rect, content, style);
+            ButtonState lastState = GetButtonState(rect);
+            ButtonState currState = !rect.Contains(Event.current.mousePosition)
+                ? ButtonState.Normal
+                : Event.current.button > 1
+                    ? ButtonState.Pressed
+                    : ButtonState.Hover;
+            if (lastState != currState) DeEditorPanelUtils.RepaintCurrentEditor();
+            return result;
+        }
 
         /// <summary>Shaded button</summary>
         public static bool ShadedButton(Rect rect, Color shade, string text)

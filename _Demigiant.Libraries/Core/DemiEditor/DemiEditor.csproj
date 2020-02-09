@@ -84,7 +84,7 @@
     <Compile Include="DeGUINodeSystem\SelectionManager.cs" />
     <Compile Include="DeGUINodeSystem\zzLegacy\Legacy_Connector.cs" />
     <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
-    <Compile Include="DeReflectionUtils.cs" />
+    <Compile Include="DeEditorReflectionUtils.cs" />
     <Compile Include="DeScrollView.cs" />
     <Compile Include="DeSkinStyle.cs" />
     <Compile Include="DeEditorSoundUtils.cs" />

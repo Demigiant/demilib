@@ -212,6 +212,11 @@
             <param name="icon">Icon to apply</param>
             <param name="title">Title. If NULL doesn't change it</param>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorPanelUtils.RepaintCurrentEditor">
+            <summary>
+            Repaints the currently focues editor
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeEditorPrefabUtils">
             <summary>
             Prefab utilities
@@ -766,22 +771,22 @@
             Returns the given <see cref="T:UnityEngine.KeyCode"/> as an int, or -1 if it's not a number
             </summary>
         </member>
-        <member name="T:DG.DemiEditor.DeReflectionUtils">
+        <member name="T:DG.DemiEditor.DeEditorReflectionUtils">
             <summary>
             Used code from Celtc on StackOverflow: https://stackoverflow.com/a/54044197/10151925
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeReflectionUtils.GetAllFields(System.Type,System.Reflection.BindingFlags)">
+        <member name="M:DG.DemiEditor.DeEditorReflectionUtils.GetAllFields(System.Type,System.Reflection.BindingFlags)">
             <summary>
             Gets all fields from an object and its hierarchy inheritance
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeReflectionUtils.DeepCopy``1(``0)">
+        <member name="M:DG.DemiEditor.DeEditorReflectionUtils.DeepCopy``1(``0)">
             <summary>
             Perform a deep copy of the class
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeReflectionUtils.DoCopy(System.Object)">
+        <member name="M:DG.DemiEditor.DeEditorReflectionUtils.DoCopy(System.Object)">
             <summary>
             Does the copy
             </summary>
@@ -1456,6 +1461,12 @@
             <summary>Multi property scope</summary>
             <param name="fieldName">Name of the field so it can be found and set/get via Reflection</param>
             <param name="sources">List of the sources containing the given field</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ActiveButton(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
+            <summary>
+            A button that triggers a repaint when hovered/pressed
+            (which otherwise doesn't happen if you set a background to the button's GUIStyle)
+            </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ShadedButton(UnityEngine.Rect,UnityEngine.Color,System.String)">
             <summary>Shaded button</summary>

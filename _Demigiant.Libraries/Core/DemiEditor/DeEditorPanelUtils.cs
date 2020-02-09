@@ -17,6 +17,7 @@ namespace DG.DemiEditor
     {
         static Dictionary<EditorWindow, GUIContent> _winTitleContentByEditor;
         static FieldInfo _fi_editorWindowParent;
+        static MethodInfo _miRepaintCurrentEditor;
 
         #region Public Methods
 
@@ -104,6 +105,17 @@ namespace DG.DemiEditor
                 if (title != null && titleContent.text != title) titleContent.text = title;
                 _winTitleContentByEditor.Add(editor, titleContent);
             }
+        }
+
+        /// <summary>
+        /// Repaints the currently focues editor
+        /// </summary>
+        public static void RepaintCurrentEditor()
+        {
+            if (_miRepaintCurrentEditor == null) {
+                _miRepaintCurrentEditor = typeof(EditorGUIUtility).GetMethod("RepaintCurrentWindow", BindingFlags.Static | BindingFlags.NonPublic);
+            }
+            _miRepaintCurrentEditor.Invoke(null, null);
         }
 
         #endregion

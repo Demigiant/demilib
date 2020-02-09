@@ -15,7 +15,7 @@ namespace DG.DemiEditor
         /// </summary>
         public static UnityEvent Clone(this UnityEvent unityEvent)
         {
-            return DeReflectionUtils.DeepCopy(unityEvent);
+            return DeEditorReflectionUtils.DeepCopy(unityEvent);
         }
 
         #endregion

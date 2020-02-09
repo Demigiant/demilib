@@ -10,7 +10,7 @@ namespace DG.DemiEditor
     /// <summary>
     /// Used code from Celtc on StackOverflow: https://stackoverflow.com/a/54044197/10151925
     /// </summary>
-    public static class DeReflectionUtils
+    public static class DeEditorReflectionUtils
     {
         /// <summary>
         /// Gets all fields from an object and its hierarchy inheritance
