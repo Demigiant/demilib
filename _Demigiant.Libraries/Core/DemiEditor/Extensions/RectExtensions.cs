@@ -4,13 +4,15 @@
 
 using UnityEngine;
 
-namespace DG.DemiEditor.Internal
+namespace DG.DemiEditor
 {
     /// <summary>
     /// Replicates DeExtensions.RectExtensions for internal usage
     /// </summary>
-    internal static class RectExtensions
+    public static class RectExtensions
     {
+        #region Public Methods
+
         /// <summary>
         /// Adds one rect into another, and returns the resulting a
         /// </summary>
@@ -32,6 +34,15 @@ namespace DG.DemiEditor.Internal
             float exSize = amount * 2;
             return r.Shift(-amount, -amount, exSize, exSize);
         }
+        /// <summary>
+        /// Returns a copy or the Rect expanded around its center by the given amount
+        /// </summary>
+        /// <param name="amountX">Indicates how much to expand the rect on each horizontal side</param>
+        /// <param name="amountY">Indicates how much to expand the rect on each vertical side</param>
+        public static Rect Expand(this Rect r, float amountX, float amountY)
+        {
+            return r.Shift(-amountX, -amountY, amountX * 2, amountY * 2);
+        }
 
         /// <summary>
         /// Returns a copy or the Rect contracted around its center by the given amount
@@ -41,6 +52,15 @@ namespace DG.DemiEditor.Internal
         {
             float exSize = amount * 2;
             return r.Shift(amount, amount, -exSize, -exSize);
+        }
+        /// <summary>
+        /// Returns a copy or the Rect contracted around its center by the given amount
+        /// </summary>
+        /// <param name="amountX">Indicates how much to contract the rect on each horizontal side</param>
+        /// <param name="amountY">Indicates how much to contract the rect on each vertical side</param>
+        public static Rect Contract(this Rect r, float amountX, float amountY)
+        {
+            return r.Shift(amountX, amountY, -amountX * 2, -amountY * 2);
         }
 
         /// <summary>
@@ -90,6 +110,40 @@ namespace DG.DemiEditor.Internal
         }
 
         /// <summary>
+        /// Returns a copy of the Rect with its X value shifted by the given value
+        /// </summary>
+        public static Rect ShiftX(this Rect r, float x)
+        {
+            return new Rect(r.x + x, r.y, r.width, r.height);
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its Y value shifted by the given value
+        /// </summary>
+        public static Rect ShiftY(this Rect r, float y)
+        {
+            return new Rect(r.x, r.y + y, r.width, r.height);
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its x shifted by the given value and its width shrinked/expanded accordingly
+        /// (so that the xMax value will stay the same as before)
+        /// </summary>
+        public static Rect ShiftXAndResize(this Rect r, float x)
+        {
+            return new Rect(r.x + x, r.y, r.width - x, r.height);
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its y shifted by the given value and its height shrinked/expanded accordingly
+        /// (so that the yMax value will stay the same as before)
+        /// </summary>
+        public static Rect ShiftYAndResize(this Rect r, float y)
+        {
+            return new Rect(r.x, r.y + y, r.width, r.height - y);
+        }
+
+        /// <summary>
         /// Returns a copy of the Rect with its X property set to the given value
         /// </summary>
         public static Rect SetX(this Rect r, float value)
@@ -124,5 +178,35 @@ namespace DG.DemiEditor.Internal
             r.width = value;
             return r;
         }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its X,Y properties set so the rect center corresponds to the given values
+        /// </summary>
+        public static Rect SetCenter(this Rect r, float x, float y)
+        {
+            r.x = x - r.width * 0.5f;
+            r.y = y - r.height * 0.5f;
+            return r;
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its X property set so the rect X center corresponds to the given value
+        /// </summary>
+        public static Rect SetCenterX(this Rect r, float value)
+        {
+            r.x = value - r.width * 0.5f;
+            return r;
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its Y property set so the rect Y center corresponds to the given value
+        /// </summary>
+        public static Rect SetCenterY(this Rect r, float value)
+        {
+            r.y = value - r.height * 0.5f;
+            return r;
+        }
+
+        #endregion
     }
 }

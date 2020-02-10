@@ -147,11 +147,25 @@
             </summary>
             <param name="amount">Indicates how much to expand the rect on each size</param>
         </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Expand(UnityEngine.Rect,System.Single,System.Single)">
+            <summary>
+            Returns a copy or the Rect expanded around its center by the given amount
+            </summary>
+            <param name="amountX">Indicates how much to expand the rect on each horizontal side</param>
+            <param name="amountY">Indicates how much to expand the rect on each vertical side</param>
+        </member>
         <member name="M:DG.DeExtensions.RectExtensions.Contract(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy or the Rect contracted around its center by the given amount
             </summary>
             <param name="amount">Indicates how much to contract the rect on each size</param>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Contract(UnityEngine.Rect,System.Single,System.Single)">
+            <summary>
+            Returns a copy or the Rect contracted around its center by the given amount
+            </summary>
+            <param name="amountX">Indicates how much to contract the rect on each horizontal side</param>
+            <param name="amountY">Indicates how much to contract the rect on each vertical side</param>
         </member>
         <member name="M:DG.DeExtensions.RectExtensions.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
             <summary>
@@ -177,6 +191,16 @@
         <member name="M:DG.DeExtensions.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Returns a copy of the Rect with its values shifted according the the given parameters
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.ShiftX(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X value shifted by the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.ShiftY(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its Y value shifted by the given value
             </summary>
         </member>
         <member name="M:DG.DeExtensions.RectExtensions.ShiftXAndResize(UnityEngine.Rect,System.Single)">

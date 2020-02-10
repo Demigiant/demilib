@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.IO;
 using DG.DemiEditor;
-using DG.DemiEditor.Internal;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;

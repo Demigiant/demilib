@@ -29,6 +29,15 @@ namespace DG.DeExtensions
             float exSize = amount * 2;
             return r.Shift(-amount, -amount, exSize, exSize);
         }
+        /// <summary>
+        /// Returns a copy or the Rect expanded around its center by the given amount
+        /// </summary>
+        /// <param name="amountX">Indicates how much to expand the rect on each horizontal side</param>
+        /// <param name="amountY">Indicates how much to expand the rect on each vertical side</param>
+        public static Rect Expand(this Rect r, float amountX, float amountY)
+        {
+            return r.Shift(-amountX, -amountY, amountX * 2, amountY * 2);
+        }
 
         /// <summary>
         /// Returns a copy or the Rect contracted around its center by the given amount
@@ -38,6 +47,15 @@ namespace DG.DeExtensions
         {
             float exSize = amount * 2;
             return r.Shift(amount, amount, -exSize, -exSize);
+        }
+        /// <summary>
+        /// Returns a copy or the Rect contracted around its center by the given amount
+        /// </summary>
+        /// <param name="amountX">Indicates how much to contract the rect on each horizontal side</param>
+        /// <param name="amountY">Indicates how much to contract the rect on each vertical side</param>
+        public static Rect Contract(this Rect r, float amountX, float amountY)
+        {
+            return r.Shift(amountX, amountY, -amountX * 2, -amountY * 2);
         }
 
         /// <summary>
@@ -84,6 +102,22 @@ namespace DG.DeExtensions
         public static Rect Shift(this Rect r, float x, float y, float width, float height)
         {
             return new Rect(r.x + x, r.y + y, r.width + width, r.height + height);
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its X value shifted by the given value
+        /// </summary>
+        public static Rect ShiftX(this Rect r, float x)
+        {
+            return new Rect(r.x + x, r.y, r.width, r.height);
+        }
+
+        /// <summary>
+        /// Returns a copy of the Rect with its Y value shifted by the given value
+        /// </summary>
+        public static Rect ShiftY(this Rect r, float y)
+        {
+            return new Rect(r.x, r.y + y, r.width, r.height);
         }
 
         /// <summary>

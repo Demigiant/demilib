@@ -3,7 +3,6 @@
 // License Copyright (c) Daniele Giardini
 
 using System.Collections.Generic;
-using DG.DemiEditor.Internal;
 using UnityEditor;
 using UnityEngine;
 

@@ -1757,34 +1757,98 @@
         <member name="M:DG.DemiEditor.DeGUI.MultiVector4FieldAdvanced(UnityEngine.Rect,UnityEngine.GUIContent,System.String,System.Collections.IList,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
             <summary>Returns TRUE if there's mixed values</summary>
         </member>
-        <member name="M:DG.DemiEditor.Internal.ColorExtensions.SetAlpha(UnityEngine.Color,System.Single)">
+        <member name="M:DG.DemiEditor.ColorExtensions.CloneAndChangeBrightness(UnityEngine.Color,System.Single,System.Nullable{System.Single})">
+            <summary>
+            Returns a new color equal to the given one with changed brightness
+            </summary>
+            <param name="color">Color to evaluate</param>
+            <param name="brightnessFactor">Brightness factor (multiplied by current brightness)</param>
+            <param name="alpha">If set applies this alpha value</param>
+        </member>
+        <member name="M:DG.DemiEditor.ColorExtensions.CloneAndChangeSaturation(UnityEngine.Color,System.Single,System.Nullable{System.Single})">
+            <summary>
+            Returns a new color equal to the given one with changed saturation
+            </summary>
+            <param name="color">Color to evaluate</param>
+            <param name="saturationFactor">Saturation factor (multiplied by current brightness)</param>
+            <param name="alpha">If set applies this alpha value</param>
+        </member>
+        <member name="M:DG.DemiEditor.ColorExtensions.SetAlpha(UnityEngine.Color,System.Single)">
             <summary>
             Changes the alpha of this color and returns it
             </summary>
         </member>
-        <member name="T:DG.DemiEditor.Internal.RectExtensions">
+        <member name="M:DG.DemiEditor.ColorExtensions.CloneAndSetAlpha(UnityEngine.Color,System.Single)">
+            <summary>
+            Returns a new color equal to the given one with changed alpha
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.ColorExtensions.ToHex(UnityEngine.Color32,System.Boolean)">
+            <summary>
+            Returns a HEX version of the given Unity Color, without the initial #
+            </summary>
+            <param name="includeAlpha">If TRUE, also converts the alpha value and returns a hex of 8 characters,
+            otherwise doesn't and returns a hex of 6 characters</param>
+        </member>
+        <member name="M:DG.DemiEditor.ColorExtensions.ToHex(UnityEngine.Color,System.Boolean)">
+            <summary>
+            Returns a HEX version of the given Unity Color, without the initial #
+            </summary>
+            <param name="includeAlpha">If TRUE, also converts the alpha value and returns a hex of 8 characters,
+            otherwise doesn't and returns a hex of 6 characters</param>
+        </member>
+        <member name="T:DG.DemiEditor.ListExtensions">
+            <summary>
+            Replicates parts of DeExtensions.ListExtensions for internal usage
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.ListExtensions.Shift``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32)">
+            <summary>
+            Shifts an item from an index to another, without modifying the list except than by moving elements around
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.ListExtensions.Shuffle``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            Shuffles the list
+            </summary>
+        </member>
+        <member name="T:DG.DemiEditor.RectExtensions">
             <summary>
             Replicates DeExtensions.RectExtensions for internal usage
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.Add(UnityEngine.Rect,UnityEngine.Rect)">
+        <member name="M:DG.DemiEditor.RectExtensions.Add(UnityEngine.Rect,UnityEngine.Rect)">
             <summary>
             Adds one rect into another, and returns the resulting a
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.Expand(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.RectExtensions.Expand(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy or the Rect expanded around its center by the given amount
             </summary>
             <param name="amount">Indicates how much to expand the rect on each size</param>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.Contract(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.RectExtensions.Expand(UnityEngine.Rect,System.Single,System.Single)">
+            <summary>
+            Returns a copy or the Rect expanded around its center by the given amount
+            </summary>
+            <param name="amountX">Indicates how much to expand the rect on each horizontal side</param>
+            <param name="amountY">Indicates how much to expand the rect on each vertical side</param>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.Contract(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy or the Rect contracted around its center by the given amount
             </summary>
             <param name="amount">Indicates how much to contract the rect on each size</param>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
+        <member name="M:DG.DemiEditor.RectExtensions.Contract(UnityEngine.Rect,System.Single,System.Single)">
+            <summary>
+            Returns a copy or the Rect contracted around its center by the given amount
+            </summary>
+            <param name="amountX">Indicates how much to contract the rect on each horizontal side</param>
+            <param name="amountY">Indicates how much to contract the rect on each vertical side</param>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
             <summary>
             Returns a copy of the Rect resized so it fits proportionally within the given size limits
             </summary>
@@ -1793,41 +1857,78 @@
             <param name="shrinkOnly">If TRUE (default) only shrinks the rect if needed, if FALSE also enlarges it to fit</param>
             <returns></returns>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.Includes(UnityEngine.Rect,UnityEngine.Rect,System.Boolean)">
+        <member name="M:DG.DemiEditor.RectExtensions.Includes(UnityEngine.Rect,UnityEngine.Rect,System.Boolean)">
             <summary>
             Returns TRUE if the first rect includes the second one
             </summary>
             <param name="full">If TRUE, returns TRUE only if the second rect is fully included,
             otherwise just if some part of it is included</param>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.ResetXY(UnityEngine.Rect)">
+        <member name="M:DG.DemiEditor.RectExtensions.ResetXY(UnityEngine.Rect)">
             <summary>
             Returns a copy of the Rect with its X/Y coordinates set to 0
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:DG.DemiEditor.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Returns a copy of the Rect with its values shifted according the the given parameters
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.SetX(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.RectExtensions.ShiftX(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X value shifted by the given value
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.ShiftY(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its Y value shifted by the given value
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.ShiftXAndResize(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its x shifted by the given value and its width shrinked/expanded accordingly
+            (so that the xMax value will stay the same as before)
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.ShiftYAndResize(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its y shifted by the given value and its height shrinked/expanded accordingly
+            (so that the yMax value will stay the same as before)
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.SetX(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy of the Rect with its X property set to the given value
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.SetY(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.RectExtensions.SetY(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy of the Rect with its Y property set to the given value
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.SetHeight(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.RectExtensions.SetHeight(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy of the Rect with its height property set to the given value
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.Internal.RectExtensions.SetWidth(UnityEngine.Rect,System.Single)">
+        <member name="M:DG.DemiEditor.RectExtensions.SetWidth(UnityEngine.Rect,System.Single)">
             <summary>
             Returns a copy of the Rect with its width property set to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.SetCenter(UnityEngine.Rect,System.Single,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X,Y properties set so the rect center corresponds to the given values
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.SetCenterX(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X property set so the rect X center corresponds to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.SetCenterY(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its Y property set so the rect Y center corresponds to the given value
             </summary>
         </member>
         <member name="M:DG.DemiEditor.SerializedPropertyExtensions.CastTo``1(UnityEditor.SerializedProperty)">
@@ -1892,6 +1993,11 @@
             Texture extensions
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.TextureExtensions.GetRect(UnityEngine.Texture2D,System.Single,System.Single,System.Single)">
+            <summary>
+            Returns the full Rect of this texture, with options for position and scale
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.TextureExtensions.SetGUIFormat(UnityEngine.Texture2D,UnityEngine.FilterMode,System.Int32,UnityEngine.TextureWrapMode,System.Int32)">
             <summary>
             Checks that the texture uses the correct import settings, and applies them if they're incorrect.
@@ -1900,16 +2006,6 @@
         <member name="M:DG.DemiEditor.UnityEventExtensions.Clone(UnityEngine.Events.UnityEvent)">
             <summary>
             Returns a clone of the event
-            </summary>
-        </member>
-        <member name="T:DG.DeExtensions.ListExtensions">
-            <summary>
-            Replicates parts of DeExtensions.ListExtensions for internal usage
-            </summary>
-        </member>
-        <member name="M:DG.DeExtensions.ListExtensions.Shift``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32)">
-            <summary>
-            Shifts an item from an index to another, without modifying the list except than by moving elements around
             </summary>
         </member>
     </members>

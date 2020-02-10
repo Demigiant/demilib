@@ -4,7 +4,6 @@
 // Legacy saved on 2017/06/08
 
 using System.Collections.Generic;
-using DG.DemiEditor.Internal;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;

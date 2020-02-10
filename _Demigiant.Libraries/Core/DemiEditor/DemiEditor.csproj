@@ -95,10 +95,10 @@
     <Compile Include="DeStylePalette.cs" />
     <Compile Include="DeGUILayout.cs" />
     <Compile Include="DeGUI.cs" />
-    <Compile Include="Extensions\Internal\ColorExtensions.cs" />
-    <Compile Include="Extensions\Internal\GUIContentExtensions.cs" />
-    <Compile Include="Extensions\Internal\ListExtensions.cs" />
-    <Compile Include="Extensions\Internal\RectExtensions.cs" />
+    <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\GUIContentExtensions.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\RectExtensions.cs" />
     <Compile Include="Extensions\SerializedPropertyExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TextureExtensions.cs" />

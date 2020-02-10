@@ -2,15 +2,20 @@
 // Created: 2015/12/16 20:26
 // License Copyright (c) Daniele Giardini
 
+using System;
 using System.Collections.Generic;
 
-namespace DG.DeExtensions
+namespace DG.DemiEditor
 {
     /// <summary>
     /// Replicates parts of DeExtensions.ListExtensions for internal usage
     /// </summary>
-    internal static class ListExtensions
+    public static class ListExtensions
     {
+        static Random _rng;
+
+        #region Public Methods
+
         /// <summary>
         /// Shifts an item from an index to another, without modifying the list except than by moving elements around
         /// </summary>
@@ -30,5 +35,23 @@ namespace DG.DeExtensions
                 list[index] = shifted;
             }
         }
+
+        /// <summary>
+        /// Shuffles the list
+        /// </summary>
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            if (_rng == null) _rng = new Random();
+            int len = list.Count;
+            while (len > 1) {
+                len--;
+                int k = _rng.Next(len + 1);
+                T value = list[k];
+                list[k] = list[len];
+                list[len] = value;
+            }
+        }
+
+        #endregion
     }
 }

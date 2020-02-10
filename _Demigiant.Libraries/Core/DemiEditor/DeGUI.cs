@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using DG.DemiEditor.Internal;
 using DG.DemiEditor.Panels;
 using DG.DemiLib;
 using DG.DemiLib.Core;
