@@ -1145,13 +1145,31 @@
             Requires <see cref="P:UnityEditor.EditorWindow.wantsMouseMove"/> to be activated.
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUILayout.ActiveButton(UnityEngine.GUIContent,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+        <member name="M:DG.DemiEditor.DeGUILayout.ActiveButton(UnityEngine.GUIContent,UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
             <summary>
             A button that triggers an immediate repaint when hovered/pressed/unhovered
             (which otherwise doesn't happen if you set a background to the button's GUIStyle)
-            and also assigns a different GUI color based on the button's state.<para/>
+            and also assigns different GUI colors based on the button's state and the given one.<para/>
             Requires <see cref="P:UnityEditor.EditorWindow.wantsMouseMove"/> to be activated.
             </summary>
+            <param name="content">Content</param>
+            <param name="onNormal">Default color</param>
+            <param name="guiStyle">Style</param>
+            <param name="options">GUILayout options</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ActiveButton(UnityEngine.GUIContent,UnityEngine.Color,System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>
+            A button that triggers an immediate repaint when hovered/pressed/unhovered
+            (which otherwise doesn't happen if you set a background to the button's GUIStyle)
+            and also assigns different GUI colors based on the button's state with options to eventually auto-generate them.<para/>
+            Requires <see cref="P:UnityEditor.EditorWindow.wantsMouseMove"/> to be activated.
+            </summary>
+            <param name="content">Content</param>
+            <param name="onNormal">Default color</param>
+            <param name="onHover">Hover color (if NULL auto-generates it from the given one by making it brighter</param>
+            <param name="onPressed">Pressed color (if NULL auto-generates it from the given one by making it even brighter</param>
+            <param name="guiStyle">Style</param>
+            <param name="options">GUILayout options</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUILayout.ShadedButton(UnityEngine.Color,System.String,UnityEngine.GUILayoutOption[])">
             <summary>Shaded button</summary>
@@ -1480,17 +1498,35 @@
         <member name="M:DG.DemiEditor.DeGUI.ActiveButton(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
             <summary>
             A button that triggers an immediate repaint when hovered/pressed/unhovered
-            (which otherwise doesn't happen if you set a background to the button's GUIStyle).<para/>
+            (which otherwise doesn't happen if you apply a background to the button's GUIStyle).<para/>
             Requires <see cref="P:UnityEditor.EditorWindow.wantsMouseMove"/> to be activated.
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUI.ActiveButton(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIStyle)">
+        <member name="M:DG.DemiEditor.DeGUI.ActiveButton(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Color,UnityEngine.GUIStyle)">
             <summary>
             A button that triggers an immediate repaint when hovered/pressed/unhovered
-            (which otherwise doesn't happen if you set a background to the button's GUIStyle)
-            and also assigns a different GUI color based on the button's state.<para/>
+            (which otherwise doesn't happen if you apply a background to the button's GUIStyle)
+            and also assigns different GUI colors based on the button's state and the given one.<para/>
             Requires <see cref="P:UnityEditor.EditorWindow.wantsMouseMove"/> to be activated.
             </summary>
+            <param name="rect">Rect</param>
+            <param name="content">Content</param>
+            <param name="onNormal">Default color</param>
+            <param name="guiStyle">Style</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ActiveButton(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Color,System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},UnityEngine.GUIStyle)">
+            <summary>
+            A button that triggers an immediate repaint when hovered/pressed/unhovered
+            (which otherwise doesn't happen if you apply a background to the button's GUIStyle)
+            and also assigns different GUI colors based on the button's state with options to eventually auto-generate them.<para/>
+            Requires <see cref="P:UnityEditor.EditorWindow.wantsMouseMove"/> to be activated.
+            </summary>
+            <param name="rect">Rect</param>
+            <param name="content">Content</param>
+            <param name="onNormal">Default color</param>
+            <param name="onHover">Hover color (if NULL auto-generates it from the given one by making it brighter</param>
+            <param name="onPressed">Pressed color (if NULL auto-generates it from the given one by making it even brighter</param>
+            <param name="guiStyle">Style</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ShadedButton(UnityEngine.Rect,UnityEngine.Color,System.String)">
             <summary>Shaded button</summary>

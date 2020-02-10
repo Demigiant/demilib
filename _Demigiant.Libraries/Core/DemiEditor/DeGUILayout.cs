@@ -44,11 +44,29 @@ namespace DG.DemiEditor
         /// <summary>
         /// A button that triggers an immediate repaint when hovered/pressed/unhovered
         /// (which otherwise doesn't happen if you set a background to the button's GUIStyle)
-        /// and also assigns a different GUI color based on the button's state.<para/>
+        /// and also assigns different GUI colors based on the button's state and the given one.<para/>
         /// Requires <see cref="EditorWindow.wantsMouseMove"/> to be activated.
         /// </summary>
+        /// <param name="content">Content</param>
+        /// <param name="onNormal">Default color</param>
+        /// <param name="guiStyle">Style</param>
+        /// <param name="options">GUILayout options</param>
+        public static bool ActiveButton(GUIContent content, Color onNormal, GUIStyle guiStyle, params GUILayoutOption[] options)
+        { return DeGUI.ActiveButton(GUILayoutUtility.GetRect(content, guiStyle, options), content, onNormal, null, null, guiStyle); }
+        /// <summary>
+        /// A button that triggers an immediate repaint when hovered/pressed/unhovered
+        /// (which otherwise doesn't happen if you set a background to the button's GUIStyle)
+        /// and also assigns different GUI colors based on the button's state with options to eventually auto-generate them.<para/>
+        /// Requires <see cref="EditorWindow.wantsMouseMove"/> to be activated.
+        /// </summary>
+        /// <param name="content">Content</param>
+        /// <param name="onNormal">Default color</param>
+        /// <param name="onHover">Hover color (if NULL auto-generates it from the given one by making it brighter</param>
+        /// <param name="onPressed">Pressed color (if NULL auto-generates it from the given one by making it even brighter</param>
+        /// <param name="guiStyle">Style</param>
+        /// <param name="options">GUILayout options</param>
         public static bool ActiveButton(
-            GUIContent content, Color onNormal, Color onHover, Color onPressed, GUIStyle guiStyle = null, params GUILayoutOption[] options
+            GUIContent content, Color onNormal, Color? onHover = null, Color? onPressed = null, GUIStyle guiStyle = null, params GUILayoutOption[] options
         )
         { return DeGUI.ActiveButton(GUILayoutUtility.GetRect(content, guiStyle, options), content, onNormal, onHover, onPressed, guiStyle); }
 

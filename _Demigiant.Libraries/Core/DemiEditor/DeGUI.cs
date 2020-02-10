@@ -373,7 +373,7 @@ namespace DG.DemiEditor
 
         /// <summary>
         /// A button that triggers an immediate repaint when hovered/pressed/unhovered
-        /// (which otherwise doesn't happen if you set a background to the button's GUIStyle).<para/>
+        /// (which otherwise doesn't happen if you apply a background to the button's GUIStyle).<para/>
         /// Requires <see cref="EditorWindow.wantsMouseMove"/> to be activated.
         /// </summary>
         public static bool ActiveButton(Rect rect, GUIContent content, GUIStyle guiStyle = null)
@@ -390,12 +390,31 @@ namespace DG.DemiEditor
         }
         /// <summary>
         /// A button that triggers an immediate repaint when hovered/pressed/unhovered
-        /// (which otherwise doesn't happen if you set a background to the button's GUIStyle)
-        /// and also assigns a different GUI color based on the button's state.<para/>
+        /// (which otherwise doesn't happen if you apply a background to the button's GUIStyle)
+        /// and also assigns different GUI colors based on the button's state and the given one.<para/>
         /// Requires <see cref="EditorWindow.wantsMouseMove"/> to be activated.
         /// </summary>
-        public static bool ActiveButton(Rect rect, GUIContent content, Color onNormal, Color onHover, Color onPressed, GUIStyle guiStyle = null)
-        {
+        /// <param name="rect">Rect</param>
+        /// <param name="content">Content</param>
+        /// <param name="onNormal">Default color</param>
+        /// <param name="guiStyle">Style</param>
+        public static bool ActiveButton(Rect rect, GUIContent content, Color onNormal, GUIStyle guiStyle)
+        { return ActiveButton(rect, content, onNormal, null, null, guiStyle); }
+        /// <summary>
+        /// A button that triggers an immediate repaint when hovered/pressed/unhovered
+        /// (which otherwise doesn't happen if you apply a background to the button's GUIStyle)
+        /// and also assigns different GUI colors based on the button's state with options to eventually auto-generate them.<para/>
+        /// Requires <see cref="EditorWindow.wantsMouseMove"/> to be activated.
+        /// </summary>
+        /// <param name="rect">Rect</param>
+        /// <param name="content">Content</param>
+        /// <param name="onNormal">Default color</param>
+        /// <param name="onHover">Hover color (if NULL auto-generates it from the given one by making it brighter</param>
+        /// <param name="onPressed">Pressed color (if NULL auto-generates it from the given one by making it even brighter</param>
+        /// <param name="guiStyle">Style</param>
+        public static bool ActiveButton(
+            Rect rect, GUIContent content, Color onNormal, Color? onHover = null, Color? onPressed = null, GUIStyle guiStyle = null
+        ){
             bool result;
             Color color = onNormal;
             ButtonState lastState = GetButtonState(rect);
@@ -403,10 +422,10 @@ namespace DG.DemiEditor
                 ? ButtonState.Normal : isMouseDown ? ButtonState.Pressed : ButtonState.Hover;
             switch (currState) {
             case ButtonState.Hover:
-                color = onHover;
+                color = onHover != null ? (Color)onHover : onNormal.CloneAndChangeBrightness(1.15f);
                 break;
             case ButtonState.Pressed:
-                color = onPressed;
+                color = onPressed != null ? (Color)onPressed : onNormal.CloneAndChangeBrightness(1.3f);
                 break;
             }
             using (new ColorScope(color)) result = GUI.Button(rect, content, guiStyle);
