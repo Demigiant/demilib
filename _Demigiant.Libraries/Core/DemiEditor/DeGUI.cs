@@ -1045,7 +1045,7 @@ namespace DG.DemiEditor
                 mScope.value = EditorGUI.FloatField(rect, label, (float)mScope.fieldInfo.GetValue(sources[0]));
                 if (EditorGUI.EndChangeCheck()) {
                     if (min != null && (float)mScope.value < (float)min) mScope.value = min;
-                    else if (max != null && (float)mScope.value < (float)max) mScope.value = max;
+                    else if (max != null && (float)mScope.value > (float)max) mScope.value = max;
                 }
                 return mScope.hasMixedValue;
             }
@@ -1056,17 +1056,22 @@ namespace DG.DemiEditor
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
                 bool isUintMode = mScope.fieldInfo.FieldType == typeof(uint);
+                bool isFloatMode = !isUintMode && mScope.fieldInfo.FieldType == typeof(float);
                 EditorGUI.BeginChangeCheck();
                 mScope.value = EditorGUI.IntField(rect, label,
-                    isUintMode ? (int)(uint)mScope.fieldInfo.GetValue(sources[0]) : (int)mScope.fieldInfo.GetValue(sources[0])
+                    isUintMode
+                        ? (int)(uint)mScope.fieldInfo.GetValue(sources[0])
+                        : isFloatMode
+                            ? (int)(float)mScope.fieldInfo.GetValue(sources[0])
+                            : (int)mScope.fieldInfo.GetValue(sources[0])
                 );
                 if (EditorGUI.EndChangeCheck()) {
                     if (min != null && (int)mScope.value < (int)min) mScope.value = min;
-                    else if (max != null && (int)mScope.value < (int)max) mScope.value = max;
+                    else if (max != null && (int)mScope.value > (int)max) mScope.value = max;
                     if (isUintMode) {
                         if ((int)mScope.value < 0) mScope.value = (uint)0;
                         else mScope.value = (uint)(int)mScope.value;
-                    }
+                    } else if (isFloatMode) mScope.value = (float)(int)mScope.value;
                 }
                 return mScope.hasMixedValue;
             }
