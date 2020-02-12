@@ -875,13 +875,13 @@ namespace DG.DemiEditor
                     bool wasGuiEnabled = GUI.enabled;
                     switch (i) {
                     case 0:
-                        GUI.enabled = xEnabled;
+                        GUI.enabled = wasGuiEnabled && xEnabled;
                         EditorGUI.BeginChangeCheck();
                         value.x = EditorGUI.FloatField(axisR, "X", value.x);
                         if (EditorGUI.EndChangeCheck() && lockAllToX) value.y = value.x;
                         break;
                     case 1:
-                        GUI.enabled = yEnabled;
+                        GUI.enabled = wasGuiEnabled && yEnabled;
                         EditorGUI.BeginChangeCheck();
                         value.y = EditorGUI.FloatField(axisR, "Y", value.y);
                         if (EditorGUI.EndChangeCheck() && lockAllToY) value.x = value.y;
@@ -906,19 +906,19 @@ namespace DG.DemiEditor
                     bool wasGuiEnabled = GUI.enabled;
                     switch (i) {
                     case 0:
-                        GUI.enabled = xEnabled;
+                        GUI.enabled = wasGuiEnabled && xEnabled;
                         EditorGUI.BeginChangeCheck();
                         value.x = EditorGUI.FloatField(axisR, "X", value.x);
                         if (EditorGUI.EndChangeCheck() && lockAllToX) value.y = value.z = value.x;
                         break;
                     case 1:
-                        GUI.enabled = yEnabled;
+                        GUI.enabled = wasGuiEnabled && yEnabled;
                         EditorGUI.BeginChangeCheck();
                         value.y = EditorGUI.FloatField(axisR, "Y", value.y);
                         if (EditorGUI.EndChangeCheck() && lockAllToY) value.x = value.z = value.y;
                         break;
                     case 2:
-                        GUI.enabled = zEnabled;
+                        GUI.enabled = wasGuiEnabled && zEnabled;
                         EditorGUI.BeginChangeCheck();
                         value.z = EditorGUI.FloatField(axisR, "Z", value.z);
                         if (EditorGUI.EndChangeCheck() && lockAllToZ) value.x = value.y = value.z;
@@ -943,25 +943,25 @@ namespace DG.DemiEditor
                     bool wasGuiEnabled = GUI.enabled;
                     switch (i) {
                     case 0:
-                        GUI.enabled = xEnabled;
+                        GUI.enabled = wasGuiEnabled && xEnabled;
                         EditorGUI.BeginChangeCheck();
                         value.x = EditorGUI.FloatField(axisR, "X", value.x);
                         if (EditorGUI.EndChangeCheck() && lockAllToX) value.y = value.z = value.w = value.x;
                         break;
                     case 1:
-                        GUI.enabled = yEnabled;
+                        GUI.enabled = wasGuiEnabled && yEnabled;
                         EditorGUI.BeginChangeCheck();
                         value.y = EditorGUI.FloatField(axisR, "Y", value.y);
                         if (EditorGUI.EndChangeCheck() && lockAllToY) value.x = value.z = value.w = value.y;
                         break;
                     case 2:
-                        GUI.enabled = zEnabled;
+                        GUI.enabled = wasGuiEnabled && zEnabled;
                         EditorGUI.BeginChangeCheck();
                         value.z = EditorGUI.FloatField(axisR, "Z", value.z);
                         if (EditorGUI.EndChangeCheck() && lockAllToZ) value.x = value.y = value.w = value.z;
                         break;
                     case 3:
-                        GUI.enabled = wEnabled;
+                        GUI.enabled = wasGuiEnabled && wEnabled;
                         EditorGUI.BeginChangeCheck();
                         value.w = EditorGUI.FloatField(axisR, "W", value.w);
                         if (EditorGUI.EndChangeCheck() && lockAllToW) value.x = value.y = value.z = value.w;
