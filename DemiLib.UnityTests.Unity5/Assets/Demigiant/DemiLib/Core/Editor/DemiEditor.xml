@@ -1490,10 +1490,12 @@
             Note that you must set the <see cref="F:DG.DemiEditor.DeGUI.MultiPropertyScope.value"/> property within the wrapper so that it's assigned correctly when closing the scope.
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeGUI.MultiPropertyScope.#ctor(System.String,System.Collections.IList,System.Collections.Generic.List{UnityEditor.SerializedProperty})">
+        <member name="M:DG.DemiEditor.DeGUI.MultiPropertyScope.#ctor(System.String,System.Collections.IList,System.Collections.Generic.List{UnityEditor.SerializedProperty},System.Boolean)">
             <summary>Multi property scope</summary>
             <param name="fieldName">Name of the field so it can be found and set/get via Reflection</param>
             <param name="sources">List of the sources containing the given field</param>
+            <param name="requiresSpecialEndChangeCheck">If TRUE validates EditorGUI.EndChangeCheck before calling it
+            (fixes an issue which happens with advanced Undo usage in DOTween Timeline and ColorFields)</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ActiveButton(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
             <summary>

@@ -56,6 +56,15 @@ namespace DG.DemiEditor
             }
         }
         static MethodInfo _foo_miDefaultPropertyField;
+        static FieldInfo _fiChangedStack {
+            get {
+                if (_foo_fiChangedStack == null) {
+                    _foo_fiChangedStack = typeof(EditorGUI).GetField("s_ChangedStack", BindingFlags.Static | BindingFlags.NonPublic);
+                }
+                return _foo_fiChangedStack;
+            }
+        }
+        static FieldInfo _foo_fiChangedStack;
 
         static DeGUI()
         {
@@ -304,16 +313,22 @@ namespace DG.DemiEditor
             readonly IList _sources;
             readonly bool _prevShowMixedValue;
             readonly bool _isSerializedPropertyMode;
+            readonly bool _requiresSpecialEndChangeCheck;
             readonly List<SerializedProperty> _fieldsAsSerializedProperties;
 
             /// <summary>Multi property scope</summary>
             /// <param name="fieldName">Name of the field so it can be found and set/get via Reflection</param>
             /// <param name="sources">List of the sources containing the given field</param>
-            public MultiPropertyScope(string fieldName, IList sources, List<SerializedProperty> fieldsAsSerializedProperties = null)
-            {
+            /// <param name="requiresSpecialEndChangeCheck">If TRUE validates EditorGUI.EndChangeCheck before calling it
+            /// (fixes an issue which happens with advanced Undo usage in DOTween Timeline and ColorFields)</param>
+            public MultiPropertyScope(
+                string fieldName, IList sources, List<SerializedProperty> fieldsAsSerializedProperties = null,
+                bool requiresSpecialEndChangeCheck = false
+            ){
                 _sources = sources;
                 fieldInfo = GetFieldInfo(fieldName, sources);
                 _prevShowMixedValue = EditorGUI.showMixedValue;
+                _requiresSpecialEndChangeCheck = requiresSpecialEndChangeCheck;
                 EditorGUI.BeginChangeCheck();
                 EditorGUI.showMixedValue = hasMixedValue = HasMixedValue(fieldInfo, _sources);
                 if (fieldsAsSerializedProperties != null) {
@@ -327,7 +342,10 @@ namespace DG.DemiEditor
             protected override void CloseScope()
             {
                 EditorGUI.showMixedValue = _prevShowMixedValue;
-                if (!EditorGUI.EndChangeCheck()) return;
+                if (_requiresSpecialEndChangeCheck) {
+                    Stack<bool> changeStack = (Stack<bool>)_fiChangedStack.GetValue(null);
+                    if (changeStack.Count > 0 && !EditorGUI.EndChangeCheck()) return;
+                } else if (!EditorGUI.EndChangeCheck()) return;
                 if (_isSerializedPropertyMode) {
                     if (isGenericSerializedProperty) {
                         // Update only first one that might have changed, ignore others
@@ -981,7 +999,7 @@ namespace DG.DemiEditor
         /// <summary>Returns TRUE if there's mixed values</summary>
         public static bool MultiColorField(Rect rect, GUIContent label, string fieldName, IList sources)
         {
-            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+            using (var mScope = new MultiPropertyScope(fieldName, sources, null, true)) {
                 mScope.value = EditorGUI.ColorField(rect, label, (Color)mScope.fieldInfo.GetValue(sources[0]));
                 return mScope.hasMixedValue;
             }
@@ -990,7 +1008,7 @@ namespace DG.DemiEditor
         /// <summary>Returns TRUE if there's mixed values</summary>
         public static bool MultiColorFieldAdvanced(Rect rect, GUIContent label, string fieldName, IList sources, bool alphaOnly)
         {
-            using (var mScope = new MultiPropertyScope(fieldName, sources)) {
+            using (var mScope = new MultiPropertyScope(fieldName, sources, null, true)) {
                 if (alphaOnly) {
                     Color color = (Color)mScope.fieldInfo.GetValue(sources[0]);
                     color.a = EditorGUI.Slider(rect, label, ((Color)mScope.fieldInfo.GetValue(sources[0])).a, 0, 1);
