@@ -2007,6 +2007,29 @@
             String extensions
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.StringExtensions.IsNullOrEmpty(System.String,System.Boolean)">
+            <summary>
+            Returns TRUE if the string is null or empty
+            </summary>
+            <param name="trimSpaces">If TRUE (default) and the string contains only spaces, considers it empty</param>
+        </member>
+        <member name="M:DG.DemiEditor.StringExtensions.VersionIsMinorThan(System.String,System.String)">
+            <summary>
+            Compares a version string (in format #.#.###) with another of the same format,
+            and return TRUE if this one is minor. Boths trings must have the same number of dot separators.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.StringExtensions.HexToColor(System.String)">
+            <summary>
+            Converts a HEX color to a Unity Color and returns it
+            </summary>
+            <param name="hex">The HEX color, either with or without the initial # (accepts both regular and short format)</param>
+        </member>
+        <member name="M:DG.DemiEditor.StringExtensions.Nicify(System.String)">
+            <summary>
+            Nicifies a string, replacing underscores with spaces, and adding a space before Uppercase letters (except the first character)
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.StringExtensions.Parent(System.String)">
             <summary>
             If the given string is a directory path, returns its parent
