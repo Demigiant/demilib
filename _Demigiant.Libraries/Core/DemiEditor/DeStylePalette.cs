@@ -362,10 +362,10 @@ namespace DG.DemiEditor
             toolIco = new GUIStyle(tool).StretchWidth(false).Width(22).ContentOffsetX(-1);
             toolFoldoutClosed = new GUIStyle(GUI.skin.button) {
                 alignment = TextAnchor.MiddleLeft,
-                active = { background = null },
+                active = { background = DeStylePalette.transparent, scaledBackgrounds = new Texture2D[0] },
                 fixedWidth = 14,
 //                normal = { background = EditorStyles.foldout.normal.background },
-                normal = { background = DeStylePalette.ico_foldout_closed },
+                normal = { background = DeStylePalette.ico_foldout_closed, scaledBackgrounds = new Texture2D[0] },
                 border = EditorStyles.foldout.border,
                 padding = new RectOffset(14, 0, 0, 0),
                 margin = new RectOffset(0, 3, 0, 0),
@@ -378,11 +378,11 @@ namespace DG.DemiEditor
             toolFoldoutClosedWStretchedLabel = toolFoldoutClosedWLabel.Clone().StretchWidth();
             toolFoldoutOpen = new GUIStyle(toolFoldoutClosed) {
 //                normal = { background = EditorStyles.foldout.onNormal.background }
-                normal = { background = DeStylePalette.ico_foldout_open }
+                normal = { background = DeStylePalette.ico_foldout_open, scaledBackgrounds = new Texture2D[0] }
             };
             toolFoldoutOpenWLabel = new GUIStyle(toolFoldoutClosedWLabel) {
 //                normal = { background = EditorStyles.foldout.onNormal.background }
-                normal = { background = DeStylePalette.ico_foldout_open }
+                normal = { background = DeStylePalette.ico_foldout_open, scaledBackgrounds = new Texture2D[0] }
             };
             toolFoldoutOpenWStretchedLabel = toolFoldoutOpenWLabel.Clone().StretchWidth();
             // Large

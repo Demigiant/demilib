@@ -109,13 +109,13 @@ namespace DG.DemiEditor
             if (pressBackground == null) pressBackground = background;
             if (overBackground == null) overBackground = background;
             style.normal.background = style.onNormal.background = background;
-            style.normal.scaledBackgrounds = style.onNormal.scaledBackgrounds = new Texture2D[] { background };
+            style.normal.scaledBackgrounds = style.onNormal.scaledBackgrounds = new Texture2D[0];
             style.focused.background = style.onFocused.background
                 = style.hover.background = style.onHover.background = overBackground;
             style.focused.scaledBackgrounds = style.onFocused.scaledBackgrounds
-                = style.hover.scaledBackgrounds = style.onHover.scaledBackgrounds = new Texture2D[] { overBackground };
+                = style.hover.scaledBackgrounds = style.onHover.scaledBackgrounds = new Texture2D[0];
             style.active.background = style.onActive.background = pressBackground;
-            style.active.scaledBackgrounds = style.onActive.scaledBackgrounds = new Texture2D[] { pressBackground };
+            style.active.scaledBackgrounds = style.onActive.scaledBackgrounds = new Texture2D[0];
             return style;
         }
 
