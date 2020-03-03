@@ -213,15 +213,18 @@ namespace DG.DemiEditor
 
         static T GetFieldOrPropertyValue<T>(string fieldName, object obj)
         {
-            const BindingFlags bindings = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+            const BindingFlags bindings = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
             Type t = obj.GetType();
 
-            FieldInfo field = t.GetField(fieldName, bindings);
-            if (field != null) return (T)field.GetValue(obj);
- 
-            PropertyInfo property = t.GetProperty(fieldName, bindings);
-            if (property != null) return (T)property.GetValue(obj, null);
- 
+            // Look also up hierarchy
+            while (t != null) {
+                FieldInfo field = t.GetField(fieldName, bindings);
+                if (field != null) return (T)field.GetValue(obj);
+                PropertyInfo property = t.GetProperty(fieldName, bindings);
+                if (property != null) return (T)property.GetValue(obj, null);
+                t = t.BaseType;
+            }
+
             return default(T);
         }
 
