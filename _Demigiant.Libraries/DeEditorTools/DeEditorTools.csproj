@@ -59,6 +59,7 @@
     <Compile Include="Project\DeProjectClipboard.cs" />
     <Compile Include="Project\DeProjectCustomizeItemWindow.cs" />
     <Compile Include="Project\DeProjectContextMenu.cs" />
+    <Compile Include="Project\DeProjectCustomizePanel.cs" />
     <Compile Include="Project\DeProjectData.cs" />
     <Compile Include="Project\DeProjectDataInspector.cs" />
     <Compile Include="Project\DeProjectUtils.cs" />

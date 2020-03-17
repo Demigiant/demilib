@@ -27,6 +27,9 @@ namespace DG.DeEditorTools.Project
         [MenuItem("Assets/DeProject/Global Tree Evidence/None", false, _Priority_Evidence)]
         static void SetEvidenceNone() { DeProject.SetEvidence(DeProjectData.EvidenceType.None); }
 
+        [MenuItem("Assets/DeProject/Customize Panel", false, _Priority_Evidence)]
+        static void OpenCustomizePanel() { DeProjectCustomizePanel.ShowWindow(); }
+
         [MenuItem("Assets/DeProject/Global Tree Evidence/Default", false, _Priority_Evidence_Sub0)]
         static void SetEvidenceWChildren() { DeProject.SetEvidence(DeProjectData.EvidenceType.Default); }
 

@@ -295,6 +295,8 @@ namespace DG.DeEditorTools.Hierarchy
                 Undo.DestroyObjectImmediate(dehComponent.gameObject);
                 dehComponent = null;
             } else if (changed) EditorUtility.SetDirty(dehComponent);
+
+            EditorApplication.RepaintHierarchyWindow();
         }
 
         // Assumes at least one object is selected

@@ -77,8 +77,14 @@ namespace DG.DeEditorTools.Hierarchy
             // Icons
             Rect icoR = icosR.SetWidth(icosR.height);
             using (new DeGUI.ColorScope(new DeSkinColor(0.5f, 0.4f))) {
-                for (int i = 0; i < _icoTextures.Length; ++i) {
-                    if (GUI.Button(icoR, _icoTextures[i], Styles.bt)) DeHierarchy.SetIconForSelections(_icoTypes[i]);
+                for (int i = -1; i < _icoTextures.Length; ++i) {
+                    if (i == -1) {
+                        if (GUI.Button(icoR, DeStylePalette.ico_delete, Styles.bt)) {
+                            DeHierarchy.ResetSelections();
+                        }
+                    } else {
+                        if (GUI.Button(icoR, _icoTextures[i], Styles.bt)) DeHierarchy.SetIconForSelections(_icoTypes[i]);
+                    }
                     icoR = icoR.Shift(icoR.width + 1, 0, 0, 0);
                 }
             }

@@ -226,7 +226,10 @@ namespace DG.DeEditorTools.Project
                     _src.StoreItemColor(guid, hColor, customColor);
                 }
             }
-            if (changed) EditorUtility.SetDirty(_src);
+            if (changed) {
+                EditorUtility.SetDirty(_src);
+                EditorApplication.RepaintProjectWindow();
+            }
         }
 
         // Assumes at least one object is selected
@@ -252,7 +255,10 @@ namespace DG.DeEditorTools.Project
                     _src.StoreItemIcon(guid, icoType);
                 }
             }
-            if (changed) EditorUtility.SetDirty(_src);
+            if (changed) {
+                EditorUtility.SetDirty(_src);
+                EditorApplication.RepaintProjectWindow();
+            }
         }
 
         // Assumes at least one object is selected

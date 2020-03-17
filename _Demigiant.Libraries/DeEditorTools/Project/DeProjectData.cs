@@ -172,6 +172,58 @@ namespace DG.DeEditorTools.Project
             }
         }
 
+        public static Texture2D GetIcon(IcoType forType, Texture2D customIcon = null)
+        {
+            switch (forType) {
+            case IcoType.Custom:
+                return customIcon;
+            case IcoType.Scripts:
+                return DeStylePalette.proj_scripts;
+            case IcoType.Prefab:
+                return DeStylePalette.proj_prefab;
+            case IcoType.Cog:
+                return DeStylePalette.proj_cog;
+            case IcoType.Demigiant:
+                return DeStylePalette.proj_demigiant;
+            case IcoType.Play:
+                return DeStylePalette.proj_play;
+            case IcoType.Star:
+                return DeStylePalette.proj_star;
+            case IcoType.Heart:
+                return DeStylePalette.proj_heart;
+            case IcoType.Skull:
+                return DeStylePalette.proj_skull;
+            case IcoType.Audio:
+                return DeStylePalette.proj_audio;
+            case IcoType.Textures:
+                return DeStylePalette.proj_textures;
+            case IcoType.Fonts:
+                return DeStylePalette.proj_fonts;
+            case IcoType.AssetBundle:
+                return DeStylePalette.proj_bundle;
+            case IcoType.Cross:
+                return DeStylePalette.proj_cross;
+            case IcoType.Atlas:
+                return DeStylePalette.proj_atlas;
+            case IcoType.Shaders:
+                return DeStylePalette.proj_shaders;
+            case IcoType.Models:
+                return DeStylePalette.proj_models;
+            case IcoType.Materials:
+                return DeStylePalette.proj_materials;
+            case IcoType.Terrains:
+                return DeStylePalette.proj_terrains;
+            case IcoType.Particles:
+                return DeStylePalette.proj_particles;
+            }
+            return null;
+        }
+
+        public static Color GetColor(HColor hColor, Color? customColor = null)
+        {
+            return DeProjectUtils.HColorToColor(hColor, customColor);
+        }
+
         #endregion
 
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
@@ -234,54 +286,12 @@ namespace DG.DeEditorTools.Project
 
             public Color GetColor()
             {
-                return DeProjectUtils.HColorToColor(hColor, customColor);
+                return DeProjectData.GetColor(hColor, customColor);
             }
 
             public Texture2D GetIcon()
             {
-                switch (icoType) {
-                case IcoType.Custom:
-                    return customIcon;
-                case IcoType.Scripts:
-                    return DeStylePalette.proj_scripts;
-                case IcoType.Prefab:
-                    return DeStylePalette.proj_prefab;
-                case IcoType.Cog:
-                    return DeStylePalette.proj_cog;
-                case IcoType.Demigiant:
-                    return DeStylePalette.proj_demigiant;
-                case IcoType.Play:
-                    return DeStylePalette.proj_play;
-                case IcoType.Star:
-                    return DeStylePalette.proj_star;
-                case IcoType.Heart:
-                    return DeStylePalette.proj_heart;
-                case IcoType.Skull:
-                    return DeStylePalette.proj_skull;
-                case IcoType.Audio:
-                    return DeStylePalette.proj_audio;
-                case IcoType.Textures:
-                    return DeStylePalette.proj_textures;
-                case IcoType.Fonts:
-                    return DeStylePalette.proj_fonts;
-                case IcoType.AssetBundle:
-                    return DeStylePalette.proj_bundle;
-                case IcoType.Cross:
-                    return DeStylePalette.proj_cross;
-                case IcoType.Atlas:
-                    return DeStylePalette.proj_atlas;
-                case IcoType.Shaders:
-                    return DeStylePalette.proj_shaders;
-                case IcoType.Models:
-                    return DeStylePalette.proj_models;
-                case IcoType.Materials:
-                    return DeStylePalette.proj_materials;
-                case IcoType.Terrains:
-                    return DeStylePalette.proj_terrains;
-                case IcoType.Particles:
-                    return DeStylePalette.proj_particles;
-                }
-                return null;
+                return DeProjectData.GetIcon(icoType, customIcon);
             }
 
             public Color GetIconColor()
