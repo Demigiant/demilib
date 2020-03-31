@@ -24,6 +24,7 @@ namespace DG.DemiEditor
         public readonly MiscStyles misc = new MiscStyles();
 
         protected bool initialized;
+        protected bool initializedAsInterfont;
 
         // ADB path to Imgs directory, final slash included
         static string _adbImgsDir {
@@ -269,9 +270,10 @@ namespace DG.DemiEditor
         /// </summary>
         internal void Init()
         {
-            if (initialized) return;
+            if (initialized && initializedAsInterfont == DeGUI.usesInterFont) return;
 
             initialized = true;
+            initializedAsInterfont = DeGUI.usesInterFont;
 
             // Unity 2018 (bug with non-centered content) ► change default styles then reapply them after init
             Vector2 def_toolbarBtContentOffset = GUI.skin.button.contentOffset;
