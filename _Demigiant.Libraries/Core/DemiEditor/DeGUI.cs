@@ -87,13 +87,14 @@ namespace DG.DemiEditor
         #region Public GUI Methods
 
         /// <summary>
-        /// Call this at the beginning of GUI methods
+        /// Call this at the beginning of GUI methods.
+        /// Returns TRUE if the styles were initialized or re-initialized
         /// </summary>
         /// <param name="guiColorPalette">Eventual <see cref="DeColorPalette"/> to use</param>
         /// <param name="guiStylePalette">Eventual <see cref="DeStylePalette"/> to use</param>
-        public static void BeginGUI(DeColorPalette guiColorPalette = null, DeStylePalette guiStylePalette = null)
+        public static bool BeginGUI(DeColorPalette guiColorPalette = null, DeStylePalette guiStylePalette = null)
         {
-            ChangePalette(guiColorPalette, guiStylePalette);
+            bool stylesReinitialized = ChangePalette(guiColorPalette, guiStylePalette);
             defaultGUIColor = GUI.color;
             defaultGUIBackgroundColor = GUI.backgroundColor;
             defaultGUIContentColor = GUI.contentColor;
@@ -108,6 +109,8 @@ namespace DG.DemiEditor
                 isMouseDown = false;
                 break;
             }
+
+            return stylesReinitialized;
         }
 
         /// <summary>
@@ -144,9 +147,10 @@ namespace DG.DemiEditor
 
         /// <summary>
         /// Changes the active palettes to the given ones
-        /// (or resets them to the default ones if NULL)
+        /// (or resets them to the default ones if NULL).
+        /// Returns TRUE if the styles were initialized or re-initialized
         /// </summary>
-        public static void ChangePalette(DeColorPalette newColorPalette, DeStylePalette newStylePalette)
+        public static bool ChangePalette(DeColorPalette newColorPalette, DeStylePalette newStylePalette)
         {
             if (newColorPalette != null) colors = newColorPalette;
             else {
@@ -160,7 +164,7 @@ namespace DG.DemiEditor
                 styles = _defaultStylePalette;
             }
 
-            styles.Init();
+            return styles.Init();
         }
 
         /// <summary>

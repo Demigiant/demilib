@@ -267,10 +267,11 @@ namespace DG.DemiEditor
         /// <summary>
         /// Called automatically by <code>DeGUI.BeginGUI</code>.
         /// Override when adding new style subclasses.
+        /// Returns TRUE if the styles were initialized or re-initialized
         /// </summary>
-        internal void Init()
+        internal bool Init()
         {
-            if (initialized && initializedAsInterfont == DeGUI.usesInterFont) return;
+            if (initialized && initializedAsInterfont == DeGUI.usesInterFont) return false;
 
             initialized = true;
             initializedAsInterfont = DeGUI.usesInterFont;
@@ -298,6 +299,8 @@ namespace DG.DemiEditor
                 // Unity 2018 ► Reassign default styles
                 EditorStyles.toolbarButton.contentOffset = def_toolbarBtContentOffset;
             }
+
+            return true;
         }
 
         static Texture2D LoadTexture(ref Texture2D property, string name, FilterMode filterMode = FilterMode.Point, int maxTextureSize = 32, TextureWrapMode wrapMode = TextureWrapMode.Clamp)

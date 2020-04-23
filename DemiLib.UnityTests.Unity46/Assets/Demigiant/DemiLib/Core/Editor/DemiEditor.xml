@@ -1126,6 +1126,7 @@
             <summary>
             Called automatically by <code>DeGUI.BeginGUI</code>.
             Override when adding new style subclasses.
+            Returns TRUE if the styles were initialized or re-initialized
             </summary>
         </member>
         <member name="T:DG.DemiEditor.DeStyleSubPalette">
@@ -1426,7 +1427,8 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.BeginGUI(DG.DemiLib.DeColorPalette,DG.DemiEditor.DeStylePalette)">
             <summary>
-            Call this at the beginning of GUI methods
+            Call this at the beginning of GUI methods.
+            Returns TRUE if the styles were initialized or re-initialized
             </summary>
             <param name="guiColorPalette">Eventual <see cref="T:DG.DemiLib.DeColorPalette"/> to use</param>
             <param name="guiStylePalette">Eventual <see cref="T:DG.DemiEditor.DeStylePalette"/> to use</param>
@@ -1455,7 +1457,8 @@
         <member name="M:DG.DemiEditor.DeGUI.ChangePalette(DG.DemiLib.DeColorPalette,DG.DemiEditor.DeStylePalette)">
             <summary>
             Changes the active palettes to the given ones
-            (or resets them to the default ones if NULL)
+            (or resets them to the default ones if NULL).
+            Returns TRUE if the styles were initialized or re-initialized
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ResetGUIColors(System.Boolean,System.Boolean,System.Boolean)">
