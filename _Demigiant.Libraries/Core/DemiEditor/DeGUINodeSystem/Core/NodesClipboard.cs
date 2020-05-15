@@ -184,7 +184,7 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
             if (t.IsValueType || t == typeof(string) || t.Namespace != null && t.Namespace.StartsWith("UnityEngine")) return original; // struct
 
             object clone = Activator.CreateInstance(t);
-            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
             FieldInfo[] srcFields = t.GetFields(flags);
             FieldInfo[] destFields = clone.GetType().GetFields(flags);
             foreach (FieldInfo srcField in srcFields) {
