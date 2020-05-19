@@ -563,7 +563,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
                     return connectionOptions.startColor == Color.clear ? nodeGuiData.mainColor : connectionOptions.startColor;
                 } else {
                     // Regular
-                    return connectionOptions.gradientColor.Evaluate(connectionIndex / (float)(totConnections - 2));
+                    float time = totConnections <= 2 ? 0 : connectionIndex / (float)(totConnections - 2);
+                    return connectionOptions.gradientColor.Evaluate(time);
                 }
             }
             return totConnections < 2 || connectionOptions.gradientColor == null
