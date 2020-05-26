@@ -18,6 +18,7 @@ namespace DG.DemiEditor
         static MethodInfo _clearConsoleMI;
         static readonly List<GameObject> _RootGOs = new List<GameObject>(500);
         static readonly StringBuilder _Strb = new StringBuilder();
+        static float _editorUiScaling = -1;
         static MethodInfo _miGetTargetStringFromBuildTargetGroup;
         static MethodInfo _miGetPlatformNameFromBuildTargetGroup;
         static MethodInfo _miGetAnnotations;
@@ -59,6 +60,23 @@ namespace DG.DemiEditor
         public static Vector2 GetGameViewSize()
         {
             return Handles.GetMainGameViewSize();
+        }
+
+        /// <summary>
+        /// Returns a value from 1 to N (2 for 200% scaling) indicating the UI Scaling of Unity's editor.
+        /// The first time this is called it will store the scaling and keep it without refreshing,
+        /// since you need to restart Unity in order to apply a scaling change
+        /// </summary>
+        public static float GetEditorUIScaling()
+        {
+            if (_editorUiScaling < 0) {
+                // EditorPrefs method: I prefer Reflection method because I'm not sure on OSX, where you can't set UI scaling manually, this is used
+//                _editorUiScaling = EditorPrefs.GetInt("CustomEditorUIScale") * 0.01f;
+                PropertyInfo p = typeof(GUIUtility).GetProperty("pixelsPerPoint", BindingFlags.Static | BindingFlags.NonPublic);
+                if (p != null) _editorUiScaling = (float)p.GetValue(null, null);
+                else _editorUiScaling = 1;
+            }
+            return _editorUiScaling;
         }
 
         /// <summary>

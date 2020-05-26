@@ -259,6 +259,13 @@
             Return the size of the editor game view, eventual extra bars excluded (meaning the true size of the game area)
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorUtils.GetEditorUIScaling">
+            <summary>
+            Returns a value from 1 to N (2 for 200% scaling) indicating the UI Scaling of Unity's editor.
+            The first time this is called it will store the scaling and keep it without refreshing,
+            since you need to restart Unity in order to apply a scaling change
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorUtils.ClearConsole">
             <summary>
             Clears all logs from Unity's console
