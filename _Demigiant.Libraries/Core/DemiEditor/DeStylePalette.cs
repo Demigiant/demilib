@@ -306,7 +306,14 @@ namespace DG.DemiEditor
         static Texture2D LoadTexture(ref Texture2D property, string name, FilterMode filterMode = FilterMode.Point, int maxTextureSize = 32, TextureWrapMode wrapMode = TextureWrapMode.Clamp)
         {
             if (property == null) {
-                property = AssetDatabase.LoadAssetAtPath(String.Format("{0}{1}.png", _adbImgsDir, name), typeof(Texture2D)) as Texture2D;
+                property = AssetDatabase.LoadAssetAtPath(string.Format("{0}{1}.png", _adbImgsDir, name), typeof(Texture2D)) as Texture2D;
+                if (property == null) {
+                    // Look inside package manager folder
+                    property = AssetDatabase.LoadAssetAtPath(string.Format(
+                        "Packages/com.demigiant.demilib/Demigiant/DemiLib/Core/Editor/Imgs/{0}.png",
+                        name
+                    ), typeof(Texture2D)) as Texture2D;
+                }
                 property.SetGUIFormat(filterMode, maxTextureSize, wrapMode);
             }
             return property;
