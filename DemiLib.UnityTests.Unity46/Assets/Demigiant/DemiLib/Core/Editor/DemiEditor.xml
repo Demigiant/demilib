@@ -109,6 +109,12 @@
             <param name="s">string to replace</param>
             <param name="minLength">Minimum length for considering the string valid</param>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorFileUtils.FilePathIsWithinUnityProjectAssets(System.String)">
+            <summary>
+            Returns TRUE if the given filepath is within this Unity project Assets folder
+            </summary>
+            <param name="fullFilePath">Full file path</param>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorFileUtils.ConvertToValidFilename(System.String,System.Char)">
             <summary>
             Returns the given string stripped of any invalid filename characters.<para/>
@@ -171,6 +177,34 @@
             <summary>
             Precisely returns the last controlId assigned to a GUI element
             </summary>
+        </member>
+        <member name="T:DG.DemiEditor.DeEditorPackageManager">
+            <summary>
+            Utils to manage UnityPackages import/export and file mirroring
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorPackageManager.WriteFileListTo(System.String,System.String)">
+            <summary>
+            Stores all file paths (excluding metas) found in the given AssetDatabase directory and subdirectory
+            into the given AssetDatabase file (which will be created if missing),
+            writing them as relative to the given directory.<para/>
+            EXAMPLE:<para/>
+            <code>adbReadFromDirPath = "Plugins/DOTween"<para/>
+            file "Assets/Plugins/DOTween/aScript.cs" stored as "aScript.cs"<para/>
+            file "Assets/Plugins/DOTween/Subdir/aScript.cs" stored as "Subdir/aScript.cs"<para/>
+            </code>
+            </summary>
+            <param name="adbWriteToFilePath">AssetDatabase path ("Assets/...") where the list should be written</param>
+            <param name="adbReadFromDirPath">AssetDatabase path ("Assets/...") from which the list of files should be retrieved, without final slash</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorPackageManager.ParseListAndRemoveExtraFiles(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Parses a file list created via <see cref="M:DG.DemiEditor.DeEditorPackageManager.WriteFileListTo(System.String,System.String)"/> and removes any files not present in the list from the given directory
+            </summary>
+            <param name="label">Label to use when logging the result</param>
+            <param name="adbListFilePath">AssetDatabase path ("Assets/...") to the file containing the list</param>
+            <param name="adbParseDirPath">AssetDatabase path ("Assets/...") to the directory to parse for extra files to remove</param>
+            <param name="simulate">If TRUE only returns a report log and doesn't actually delete the files</param>
         </member>
         <member name="T:DG.DemiEditor.DeEditorPanelUtils">
             <summary>

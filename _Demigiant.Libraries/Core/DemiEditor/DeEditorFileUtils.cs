@@ -130,6 +130,15 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Returns TRUE if the given filepath is within this Unity project Assets folder
+        /// </summary>
+        /// <param name="fullFilePath">Full file path</param>
+        public static bool FilePathIsWithinUnityProjectAssets(string fullFilePath)
+        {
+            return ApplySystemDirectorySeparators(fullFilePath).StartsWith(assetsPath);
+        }
+
+        /// <summary>
         /// Returns the given string stripped of any invalid filename characters.<para/>
         /// BEWARE: doesn't check for reserved words
         /// </summary>
