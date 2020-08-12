@@ -17,10 +17,8 @@ namespace DG.DemiEditor
         #region Public Methods
 
         /// <summary>
-        /// Returns the value of the given property (works like a cast to type).
-        /// <para>
+        /// Returns the value of the given property (works like a cast to type).<para/>
         /// Improved from HiddenMonk's functions (http://answers.unity3d.com/questions/627090/convert-serializedproperty-to-custom-class.html)
-        /// </para>
         /// </summary>
         public static T CastTo<T>(this SerializedProperty property)
         {
@@ -41,6 +39,7 @@ namespace DG.DemiEditor
                         continue;
                     }
                     // Final obj is list element, find and return it
+                    if (obj == null) return default(T);
                     int index = property.GetIndexInArray(); // Can be out of range in case the element had just been created
                     IList<T> iList = (IList<T>)obj;
                     return iList.Count - 1 < index ? default(T) : iList[index];
