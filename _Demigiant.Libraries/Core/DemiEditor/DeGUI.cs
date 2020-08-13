@@ -584,6 +584,40 @@ namespace DG.DemiEditor
             return false;
         }
 
+        /// <summary>
+        /// Draws a button that returns TRUE the first time the mouse moves over it while the mouse button is pressed,
+        /// even if it was pressed outside of the button first
+        /// </summary>
+        public static bool DownButton(Rect rect, string text, GUIStyle guiStyle)
+        { return DownButton(rect, new GUIContent(text, ""), guiStyle); }
+        /// <summary>
+        /// Draws a button that returns TRUE the first time the mouse moves over it while the mouse button is pressed,
+        /// even if it was pressed outside of the button first
+        /// </summary>
+        public static bool DownButton(Rect rect, GUIContent content, GUIStyle guiStyle)
+        {
+            if (GUI.enabled && Event.current.type == EventType.MouseUp && _activePressButtonId != -1) {
+                _activePressButtonId = -1;
+                GUIUtility.hotControl = 0;
+                Event.current.Use();
+            }
+            GUI.Button(rect, content, guiStyle);
+            int controlId = DeEditorGUIUtils.GetLastControlId(); // Changed from prev while working on DeInspektor
+            int hotControl = GUIUtility.hotControl;
+            bool mousePressed = GUI.enabled && controlId > 1 && hotControl > 1 && _activePressButtonId != controlId && rect.Contains(Event.current.mousePosition);
+            if (mousePressed) {
+                if (_activePressButtonId != controlId) {
+                    GUIUtility.hotControl = controlId;
+                    _activePressButtonId = controlId;
+                    return true;
+                }
+            }
+            if (!mousePressed && hotControl < 1) {
+                _activePressButtonId = -1;
+            }
+            return false;
+        }
+
         /// <summary>Toolbar foldout button</summary>
         public static bool ToolbarFoldoutButton(Rect rect, bool toggled, string text = null, bool isLarge = false, bool stretchedLabel = false, Color? forceLabelColor = null)
         {

@@ -120,26 +120,21 @@ namespace DG.DemiEditor
         public static bool PressButton(GUIContent content, GUIStyle guiStyle, params GUILayoutOption[] options)
         {
             return DeGUI.PressButton(GUILayoutUtility.GetRect(content, guiStyle, options), content, guiStyle);
+        }
 
-//            // NOTE: tried using RepeatButton, but doesn't work if used for dragging
-//            if (GUI.enabled && Event.current.type == EventType.MouseUp && _activePressButtonId != -1) {
-//                _activePressButtonId = -1;
-//                GUIUtility.hotControl = 0;
-//                Event.current.Use();
-//            }
-//            GUILayout.Button(content, guiStyle, options);
-//            int controlId = DeEditorGUIUtils.GetLastControlId(); // Changed from prev while working on DeInspektor
-//            int hotControl = GUIUtility.hotControl;
-//            bool pressed = GUI.enabled && hotControl > 1 && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition);
-//            if (pressed) {
-//                if (_activePressButtonId == -1 && _activePressButtonId != controlId) { // Modified while working on DeInspektor
-//                    GUIUtility.hotControl = controlId; // Remove control from other elements (added while working on DeInspektor)
-//                    _activePressButtonId = controlId;
-//                    return true;
-//                }
-//            }
-//            if (!pressed && hotControl < 1) _activePressButtonId = -1;
-//            return false;
+        /// <summary>
+        /// Draws a button that returns TRUE the first time the mouse moves over it while the mouse button is pressed,
+        /// even if it was pressed outside of the button first
+        /// </summary>
+        public static bool DownButton(string text, GUIStyle guiStyle, params GUILayoutOption[] options)
+        { return DownButton(new GUIContent(text, ""), guiStyle, options); }
+        /// <summary>
+        /// Draws a button that returns TRUE the first time the mouse moves over it while the mouse button is pressed,
+        /// even if it was pressed outside of the button first
+        /// </summary>
+        public static bool DownButton(GUIContent content, GUIStyle guiStyle, params GUILayoutOption[] options)
+        {
+            return DeGUI.DownButton(GUILayoutUtility.GetRect(content, guiStyle, options), content, guiStyle);
         }
 
         /// <summary>Toolbar foldout button</summary>

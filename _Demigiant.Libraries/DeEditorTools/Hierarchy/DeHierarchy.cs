@@ -92,7 +92,7 @@ namespace DG.DeEditorTools.Hierarchy
                 Texture2D ico = DeStylePalette.ico_visibility;
                 extraR = new Rect(selectionRect.xMax - ico.width - 2, (int)(selectionRect.center.y - (ico.height * 0.5f)), ico.width, ico.height);
                 using (new DeGUI.ColorScope(null, null, isActiveInHierarchy ? _icoVisibilityOnColor : _icoVisibilityOffColor)) {
-                    if (GUI.Button(extraR, "", isActive ? _btVisibility : _btVisibilityOff)) {
+                    if (DeGUI.DownButton(extraR, "", isActive ? _btVisibility : _btVisibilityOff)) {
                         Undo.RecordObject(go, go.name + " Visibility");
                         go.SetActive(!isActive);
                         EditorUtility.SetDirty(go);

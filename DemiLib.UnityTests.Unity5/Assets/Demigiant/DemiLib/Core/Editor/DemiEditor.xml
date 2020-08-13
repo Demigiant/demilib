@@ -1247,6 +1247,18 @@
             Draws a button that returns TRUE the first time it's pressed, instead than when its released.
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.DownButton(System.String,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>
+            Draws a button that returns TRUE the first time the mouse moves over it while the mouse button is pressed,
+            even if it was pressed outside of the button first
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.DownButton(UnityEngine.GUIContent,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>
+            Draws a button that returns TRUE the first time the mouse moves over it while the mouse button is pressed,
+            even if it was pressed outside of the button first
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUILayout.ToolbarFoldoutButton(System.Boolean,System.String,System.Boolean,System.Boolean,System.Nullable{UnityEngine.Color})">
             <summary>Toolbar foldout button</summary>
         </member>
@@ -1612,6 +1624,18 @@
         <member name="M:DG.DemiEditor.DeGUI.PressButton(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
             <summary>
             Draws a button that returns TRUE the first time it's pressed, instead than when its released.
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.DownButton(UnityEngine.Rect,System.String,UnityEngine.GUIStyle)">
+            <summary>
+            Draws a button that returns TRUE the first time the mouse moves over it while the mouse button is pressed,
+            even if it was pressed outside of the button first
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.DownButton(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.GUIStyle)">
+            <summary>
+            Draws a button that returns TRUE the first time the mouse moves over it while the mouse button is pressed,
+            even if it was pressed outside of the button first
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ToolbarFoldoutButton(UnityEngine.Rect,System.Boolean,System.String,System.Boolean,System.Boolean,System.Nullable{UnityEngine.Color})">
