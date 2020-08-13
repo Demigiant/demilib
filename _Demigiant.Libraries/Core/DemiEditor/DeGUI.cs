@@ -44,6 +44,7 @@ namespace DG.DemiEditor
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
         static string _doubleClickTextFieldId; // ID of selected double click textField
         static int _activePressButtonId = -1;
+        static readonly HashSet<int> _ActiveDownButtonsIds = new HashSet<int>();
         static int _pressFrame = -1;
         static bool _hasEditorPressUpdateActive = false;
         static readonly Dictionary<Rect, ButtonState> _ButtonRectToState = new Dictionary<Rect, ButtonState>();
@@ -596,25 +597,21 @@ namespace DG.DemiEditor
         /// </summary>
         public static bool DownButton(Rect rect, GUIContent content, GUIStyle guiStyle)
         {
-            if (GUI.enabled && Event.current.type == EventType.MouseUp && _activePressButtonId != -1) {
-                _activePressButtonId = -1;
+            if (GUI.enabled && Event.current.type == EventType.MouseUp && _ActiveDownButtonsIds.Count > 0) {
+                _ActiveDownButtonsIds.Clear();
                 GUIUtility.hotControl = 0;
                 Event.current.Use();
             }
             GUI.Button(rect, content, guiStyle);
             int controlId = DeEditorGUIUtils.GetLastControlId(); // Changed from prev while working on DeInspektor
             int hotControl = GUIUtility.hotControl;
-            bool mousePressed = GUI.enabled && controlId > 1 && hotControl > 1 && _activePressButtonId != controlId && rect.Contains(Event.current.mousePosition);
+            bool mousePressed = GUI.enabled && controlId > 1 && hotControl > 1 && !_ActiveDownButtonsIds.Contains(controlId) && rect.Contains(Event.current.mousePosition);
             if (mousePressed) {
-                if (_activePressButtonId != controlId) {
-                    GUIUtility.hotControl = controlId;
-                    _activePressButtonId = controlId;
-                    return true;
-                }
+                GUIUtility.hotControl = controlId;
+                _ActiveDownButtonsIds.Add(controlId);
+                return true;
             }
-            if (!mousePressed && hotControl < 1) {
-                _activePressButtonId = -1;
-            }
+            if (hotControl < 1) _ActiveDownButtonsIds.Clear();
             return false;
         }
 
