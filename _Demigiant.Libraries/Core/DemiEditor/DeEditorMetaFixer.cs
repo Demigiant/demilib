@@ -68,6 +68,7 @@ namespace DG.DemiEditor
             }
             EditorUtility.DisplayProgressBar("Fix MissingScripts", "Fixing MissingScript errors in all scenes and prefabs", 0);
             yield return null;
+            ModInfo modInfo = new ModInfo();
             int totGuidsFixed = 0;
             string[] allSceneAndPrefabFiles = Directory.GetFiles(DeEditorFileUtils.assetsPath, "*.*", SearchOption.AllDirectories)
                 .Where(f => f.EndsWith(".unity") || f.EndsWith(".prefab")).ToArray();
@@ -84,7 +85,7 @@ namespace DG.DemiEditor
                     string content = File.ReadAllText(sceneOrPrefabFile);
                     bool modified = false;
                     foreach (ComponentData cData in cDatas) {
-                        int tot = FixComponentGuidInSceneOrPrefabString(cData, ref content);
+                        int tot = FixComponentGuidInSceneOrPrefabString(cData, ref content, DeEditorFileUtils.FullPathToADBPath(sceneOrPrefabFile), modInfo);
                         totGuidsFixed += tot;
                         if (tot > 0) modified = true;
                     }
@@ -106,11 +107,10 @@ namespace DG.DemiEditor
                 .Append(totGuidsFixed).Append(" GUIDs fixed in ")
                 .Append(totModifiedScenes).Append(" scenes and ").Append(totModifiedPrefabs).Append(" prefabs");
             if (totModifiedFiles > 0) {
-                strb.Append(':');
                 for (int i = 0; i < totModifiedFiles; i++) {
                     string adbModifiedFile = DeEditorFileUtils.FullPathToADBPath(modifiedSceneAndPrefabFiles[i]);
                     AssetDatabase.ImportAsset(adbModifiedFile, ImportAssetOptions.ForceUpdate);
-                    strb.Append("\n- ").Append(adbModifiedFile.Substring(8));
+                    modInfo.AddDetailedModInfoTo(strb, adbModifiedFile);
                 }
             }
             // Log result
@@ -148,6 +148,7 @@ namespace DG.DemiEditor
             EditorUtility.DisplayProgressBar("Fix MissingScripts", "Fixing MissingScript errors in active scene", 0);
             yield return null;
             // Parse and replace
+            ModInfo modInfo = new ModInfo();
             string currSceneFullPath = DeEditorFileUtils.ADBPathToFullPath(_currSceneADBFilePath);
             int totCDatas = cDatas.Length;
             int totGuidsFixed = 0;
@@ -155,7 +156,7 @@ namespace DG.DemiEditor
             for (int i = 0; i < totCDatas; i++) {
                 ComponentData rcData = cDatas[i];
                 EditorUtility.DisplayProgressBar("Fix MissingScripts", "Checking/fixing MissingScript errors for " + rcData.id, i / (float)totCDatas);
-                totGuidsFixed += FixComponentGuidInSceneOrPrefabString(rcData, ref sceneFileString);
+                totGuidsFixed += FixComponentGuidInSceneOrPrefabString(rcData, ref sceneFileString, _currSceneADBFilePath, modInfo);
                 yield return null;
             }
             // Save if necessary
@@ -174,6 +175,11 @@ namespace DG.DemiEditor
             // Log result
             EditorUtility.ClearProgressBar();
             StringBuilder strb = new StringBuilder();
+            strb.Append(totGuidsFixed + " GUIDs fixed in active scene");
+            modInfo.AddDetailedModInfoTo(strb, _currSceneADBFilePath);
+            Debug.Log(strb.ToString());
+            //
+            strb.Length = 0;
             foreach (ComponentData cData in cDatas) {
                 strb.Append("\n- ").Append(cData.id).Append(": ").Append(cData.totGuidsFixed).Append(" GUIDs fixed");
             }
@@ -214,7 +220,7 @@ namespace DG.DemiEditor
         /// and replaces their GUID with the one passed (if different).<para/>
         /// Returns the total number of Component GUIDs that were fixed
         /// </summary>
-        static int FixComponentGuidInSceneOrPrefabString(ComponentData cData, ref string sceneOrPrefabFileString)
+        static int FixComponentGuidInSceneOrPrefabString(ComponentData cData, ref string sceneOrPrefabFileString, string sceneOrPrefabADBFile, ModInfo modInfo)
         {
             // Read scene file and detect component
             int totProperties = cData.serializedIdentifiers.Length;
@@ -223,48 +229,61 @@ namespace DG.DemiEditor
             // using (StreamReader reader = new StreamReader(currSceneFullPath)) {
             using (StringReader stringReader = new StringReader(sceneOrPrefabFileString)) {
                 string line;
+                bool seekingForGameObjectName = false;
                 bool seekingWithinComponent = false;
-                string currGuidLine = null;
+                string currGameObjectName = null;
+                string currComponentGuidLine = null;
                 int totPropertiesFound = 0;
                 while ((line = stringReader.ReadLine()) != null) {
                     switch (line) {
+                    case "GameObject:":
+                        seekingForGameObjectName = true;
+                        break;
                     case "MonoBehaviour:":
                     case "Behaviour:":
                     case "Component:":
                         seekingWithinComponent = true;
                         break;
                     default:
-                        if (seekingWithinComponent && line.StartsWith("-")) {
-                            seekingWithinComponent = false;
-                            currGuidLine = null;
+                        if (line.StartsWith("-")) {
+                            seekingForGameObjectName = seekingWithinComponent = false;
+                            currComponentGuidLine = null;
                             totPropertiesFound = 0;
                         }
                         break;
                     }
-                    if (!seekingWithinComponent) continue;
-                    string trimmedLine = line.TrimStart(' ');
-                    if (trimmedLine.StartsWith("m_Script: ")) {
-                        currGuidLine = line;
-                        continue;
-                    }
-                    int colonIndex = trimmedLine.IndexOf(':');
-                    if (colonIndex == -1) continue;
-                    string propName = trimmedLine.Substring(0, colonIndex);
-                    if (Array.IndexOf(cData.serializedIdentifiers, propName) != -1) totPropertiesFound++;
-                    if (totPropertiesFound == totProperties) {
-                        // Component found, store GUID line for later and stop here
-                        // (at this point search could be interrupted because we only needed to find the eventually incorrect GUID,
-                        // but I'm continuing in order to store the total number of incorrect Components GUIDs)
-                        int guidStartIndex = currGuidLine.IndexOf("guid: ") + 6;
-                        int guidEndIndex = currGuidLine.IndexOf(',', guidStartIndex) - 1;
-                        string componentGuid = currGuidLine.Substring(guidStartIndex, guidEndIndex - guidStartIndex + 1);
-                        if (componentGuid != cData.correctGuid) {
-                            currGuid = componentGuid;
-                            totComponentsWDiffGuidFound++;
+                    if (seekingForGameObjectName) {
+                        string trimmedLine = line.TrimStart(' ');
+                        if (trimmedLine.StartsWith("m_Name: ")) {
+                            currGameObjectName = trimmedLine.Substring(8);
+                            seekingForGameObjectName = false;
                         }
-                        seekingWithinComponent = false;
-                        currGuidLine = null;
-                        totPropertiesFound = 0;
+                    } else if (seekingWithinComponent) {
+                        string trimmedLine = line.TrimStart(' ');
+                        if (trimmedLine.StartsWith("m_Script: ")) {
+                            currComponentGuidLine = line;
+                            continue;
+                        }
+                        int colonIndex = trimmedLine.IndexOf(':');
+                        if (colonIndex == -1) continue;
+                        string propName = trimmedLine.Substring(0, colonIndex);
+                        if (Array.IndexOf(cData.serializedIdentifiers, propName) != -1) totPropertiesFound++;
+                        if (totPropertiesFound == totProperties) {
+                            // Component found, store GUID line for later and stop here
+                            // (at this point search could be interrupted because we only needed to find the eventually incorrect GUID,
+                            // but I'm continuing in order to store the total number of incorrect Components GUIDs)
+                            int guidStartIndex = currComponentGuidLine.IndexOf("guid: ") + 6;
+                            int guidEndIndex = currComponentGuidLine.IndexOf(',', guidStartIndex) - 1;
+                            string componentGuid = currComponentGuidLine.Substring(guidStartIndex, guidEndIndex - guidStartIndex + 1);
+                            if (componentGuid != cData.correctGuid) {
+                                modInfo.AddModifiedGameObjectName(sceneOrPrefabADBFile, currGameObjectName);
+                                currGuid = componentGuid;
+                                totComponentsWDiffGuidFound++;
+                            }
+                            seekingWithinComponent = false;
+                            currComponentGuidLine = null;
+                            totPropertiesFound = 0;
+                        }
                     }
                 }
             }
@@ -293,6 +312,43 @@ namespace DG.DemiEditor
                 this.id = id;
                 this.correctGuid = correctGuid;
                 this.serializedIdentifiers = serializedIdentifiers;
+            }
+        }
+
+        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+        class ModInfo
+        {
+            readonly Dictionary<string, List<string>> _sceneOrPrefabADBFileToGosNames = new Dictionary<string, List<string>>();
+
+            // Adds the gameObject name to the dictionary only if it doesn't already exist in the key list
+            public void AddModifiedGameObjectName(string sceneOrPrefabADBFile, string goName)
+            {
+                if (!_sceneOrPrefabADBFileToGosNames.ContainsKey(sceneOrPrefabADBFile)) {
+                    _sceneOrPrefabADBFileToGosNames.Add(sceneOrPrefabADBFile, new List<string>());
+                }
+                if (!_sceneOrPrefabADBFileToGosNames[sceneOrPrefabADBFile].Contains(goName)) {
+                    _sceneOrPrefabADBFileToGosNames[sceneOrPrefabADBFile].Add(goName);
+                }
+            }
+
+            public List<string> GetModifiedGameObjectNamesFor(string sceneOrPrefabADBFile)
+            {
+                if (!_sceneOrPrefabADBFileToGosNames.ContainsKey(sceneOrPrefabADBFile)) return null;
+                return _sceneOrPrefabADBFileToGosNames[sceneOrPrefabADBFile];
+            }
+
+            public void AddDetailedModInfoTo(StringBuilder addToStrb, string adbModifiedFile)
+            {
+                List<string> modGosForFile = GetModifiedGameObjectNamesFor(adbModifiedFile);
+                if (modGosForFile == null) return;
+                addToStrb.Append("\n- ").Append(adbModifiedFile.Substring(8));
+                addToStrb.Append(" ► GOs modified: ");
+                for (int j = 0; j < modGosForFile.Count; j++) {
+                    if (j > 0) addToStrb.Append(", ");
+                    string goName = modGosForFile[j];
+                    addToStrb.Append('\"').Append(goName).Append('\"');
+                }
             }
         }
     }

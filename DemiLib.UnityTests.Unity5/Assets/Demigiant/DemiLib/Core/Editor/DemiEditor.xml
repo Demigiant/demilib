@@ -201,7 +201,7 @@
             </summary>
             <param name="cDatas"><see cref="T:DG.DemiEditor.DeEditorMetaFixer.ComponentData"/> objects to use for the operation</param>
         </member>
-        <member name="M:DG.DemiEditor.DeEditorMetaFixer.FixComponentGuidInSceneOrPrefabString(DG.DemiEditor.DeEditorMetaFixer.ComponentData,System.String@)">
+        <member name="M:DG.DemiEditor.DeEditorMetaFixer.FixComponentGuidInSceneOrPrefabString(DG.DemiEditor.DeEditorMetaFixer.ComponentData,System.String@,System.String,DG.DemiEditor.DeEditorMetaFixer.ModInfo)">
             <summary>
             Finds all MonoBehaviour/Behaviour/Component in the given scene/prefab file string
             that contain the given <see cref="F:DG.DemiEditor.DeEditorMetaFixer.ComponentData.serializedIdentifiers"/>
