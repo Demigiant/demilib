@@ -178,6 +178,37 @@
             Precisely returns the last controlId assigned to a GUI element
             </summary>
         </member>
+        <member name="T:DG.DemiEditor.DeEditorMetaFixer">
+            <summary>
+            Framework used to fix missing monoScript reference in GameObjects when a script's meta guid changes
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorMetaFixer.RetrieveMetaGuid(System.String)">
+            <summary>
+            Retrieves the GUID in the given meta file and returns it, or NULL if it's not found
+            </summary>
+            <param name="metaFilePath">Full filePath to the meta file</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorMetaFixer.FixComponentsGuidsInAllScenesAndPrefabs(DG.DemiEditor.DeEditorMetaFixer.ComponentData[])">
+            <summary>
+            Fixes all wrong Component GUIDs in scenes and prefabs
+            </summary>
+            <param name="cDatas"><see cref="T:DG.DemiEditor.DeEditorMetaFixer.ComponentData"/> objects to use for the operation</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorMetaFixer.FixComponentsGuidsInActiveScene(DG.DemiEditor.DeEditorMetaFixer.ComponentData[])">
+            <summary>
+            Fixes all wrong Component GUIDs in the active scene and returns the total number of Components fixed
+            </summary>
+            <param name="cDatas"><see cref="T:DG.DemiEditor.DeEditorMetaFixer.ComponentData"/> objects to use for the operation</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorMetaFixer.FixComponentGuidInSceneOrPrefabString(DG.DemiEditor.DeEditorMetaFixer.ComponentData,System.String@)">
+            <summary>
+            Finds all MonoBehaviour/Behaviour/Component in the given scene/prefab file string
+            that contain the given <see cref="F:DG.DemiEditor.DeEditorMetaFixer.ComponentData.serializedIdentifiers"/>
+            and replaces their GUID with the one passed (if different).<para/>
+            Returns the total number of Component GUIDs that were fixed
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeEditorPackageManager">
             <summary>
             Utils to manage UnityPackages import/export and file mirroring
