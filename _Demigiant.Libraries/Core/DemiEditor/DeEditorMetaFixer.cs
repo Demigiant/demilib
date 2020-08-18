@@ -222,19 +222,22 @@ namespace DG.DemiEditor
         /// </summary>
         static int FixComponentGuidInSceneOrPrefabString(ComponentData cData, ref string sceneOrPrefabFileString, string sceneOrPrefabADBFile, ModInfo modInfo)
         {
+            Queue<int> linesToRewrite = null;
             // Read scene file and detect component
             int totProperties = cData.serializedIdentifiers.Length;
             string currGuid = null;
             int totComponentsWDiffGuidFound = 0;
-            // using (StreamReader reader = new StreamReader(currSceneFullPath)) {
             using (StringReader stringReader = new StringReader(sceneOrPrefabFileString)) {
                 string line;
+                int lineIndex = -1;
                 bool seekingForGameObjectName = false;
                 bool seekingWithinComponent = false;
                 string currGameObjectName = null;
                 string currComponentGuidLine = null;
+                int currComponentGuidLineIndex = -1;
                 int totPropertiesFound = 0;
                 while ((line = stringReader.ReadLine()) != null) {
+                    lineIndex++;
                     switch (line) {
                     case "GameObject:":
                         seekingForGameObjectName = true;
@@ -248,6 +251,7 @@ namespace DG.DemiEditor
                         if (line.StartsWith("-")) {
                             seekingForGameObjectName = seekingWithinComponent = false;
                             currComponentGuidLine = null;
+                            currComponentGuidLineIndex = -1;
                             totPropertiesFound = 0;
                         }
                         break;
@@ -262,6 +266,7 @@ namespace DG.DemiEditor
                         string trimmedLine = line.TrimStart(' ');
                         if (trimmedLine.StartsWith("m_Script: ")) {
                             currComponentGuidLine = line;
+                            currComponentGuidLineIndex = lineIndex;
                             continue;
                         }
                         int colonIndex = trimmedLine.IndexOf(':');
@@ -269,19 +274,21 @@ namespace DG.DemiEditor
                         string propName = trimmedLine.Substring(0, colonIndex);
                         if (Array.IndexOf(cData.serializedIdentifiers, propName) != -1) totPropertiesFound++;
                         if (totPropertiesFound == totProperties) {
-                            // Component found, store GUID line for later and stop here
-                            // (at this point search could be interrupted because we only needed to find the eventually incorrect GUID,
-                            // but I'm continuing in order to store the total number of incorrect Components GUIDs)
+                            // Component found, store data so it can be rewritten when the loop ends
                             int guidStartIndex = currComponentGuidLine.IndexOf("guid: ") + 6;
                             int guidEndIndex = currComponentGuidLine.IndexOf(',', guidStartIndex) - 1;
                             string componentGuid = currComponentGuidLine.Substring(guidStartIndex, guidEndIndex - guidStartIndex + 1);
-                            if (componentGuid != cData.correctGuid) {
+                            if (componentGuid != cData.correctGuid && string.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(componentGuid))) {
+                                // GUID returns no asset path and is different from correctGuid
                                 modInfo.AddModifiedGameObjectName(sceneOrPrefabADBFile, currGameObjectName);
                                 currGuid = componentGuid;
+                                if (linesToRewrite == null) linesToRewrite = new Queue<int>();
+                                linesToRewrite.Enqueue(currComponentGuidLineIndex);
                                 totComponentsWDiffGuidFound++;
                             }
                             seekingWithinComponent = false;
                             currComponentGuidLine = null;
+                            currComponentGuidLineIndex = -1;
                             totPropertiesFound = 0;
                         }
                     }
@@ -290,7 +297,21 @@ namespace DG.DemiEditor
             cData.totGuidsFixed += totComponentsWDiffGuidFound;
             if (currGuid == null) return 0; // Component not found in scene or already correct
             // Replace correct GUID in Component GUID lines
-            sceneOrPrefabFileString = sceneOrPrefabFileString.Replace(currGuid, cData.correctGuid);
+            using (StringReader stringReader = new StringReader(sceneOrPrefabFileString)) {
+                using (StringWriter writer = new StringWriter()) {
+                    string line;
+                    int lineIndex = -1;
+                    int nextLineToRewrite = linesToRewrite.Dequeue();
+                    while ((line = stringReader.ReadLine()) != null) {
+                        lineIndex++;
+                        if (lineIndex == nextLineToRewrite) {
+                            writer.WriteLine(line.Replace(currGuid, cData.correctGuid));
+                            if (linesToRewrite.Count > 0) nextLineToRewrite = linesToRewrite.Dequeue();
+                        } else writer.WriteLine(line);
+                    }
+                    sceneOrPrefabFileString = writer.ToString();
+                }
+            }
             return totComponentsWDiffGuidFound;
         }
 
