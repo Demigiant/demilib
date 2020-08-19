@@ -118,7 +118,7 @@ namespace DG.DemiEditor
             else _Strb.Insert(0, string.Format("{0} ► Deleted {1} files", label, totDeleted));
             string msg = _Strb.ToString();
             _Strb.Length = 0;
-            Debug.Log(msg);
+            if (totDeleted > 0) Debug.LogWarning(msg);
         }
 
         #endregion
