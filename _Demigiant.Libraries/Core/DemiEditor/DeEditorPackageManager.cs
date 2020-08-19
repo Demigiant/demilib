@@ -34,7 +34,8 @@ namespace DG.DemiEditor
         /// </summary>
         /// <param name="adbWriteToFilePath">AssetDatabase path ("Assets/...") where the list should be written</param>
         /// <param name="adbReadFromDirPath">AssetDatabase path ("Assets/...") from which the list of files should be retrieved, without final slash</param>
-        public static void WriteFileListTo(string adbWriteToFilePath, string adbReadFromDirPath)
+        /// <param name="ignoreASMDEFs">If TRUE ignores ASMDEF files</param>
+        public static void WriteFileListTo(string adbWriteToFilePath, string adbReadFromDirPath, bool ignoreASMDEFs = true)
         {
             if (adbReadFromDirPath.Length == 0) {
                 Debug.LogWarning("WriteFileListTo ► parameter adbReadFromDirPath can't be empty");
@@ -56,14 +57,21 @@ namespace DG.DemiEditor
                 return;
             }
             MakeFilePathsRelativeTo(relFilePaths, adbReadFromDirPath); // Make relative to original adbReadFromDirPath
+            int totWritten = 0;
+            int totIgnored = 0;
             string fullWriteToFilePath = DeEditorFileUtils.ADBPathToFullPath(adbWriteToFilePath);
             using (StreamWriter writer = new StreamWriter(fullWriteToFilePath, false)) {
                 for (int i = 0; i < relFilePaths.Length; ++i) {
+                    if (ignoreASMDEFs && relFilePaths[i].EndsWith(".asmdef")) {
+                        totIgnored++;
+                        continue;
+                    }
+                    totWritten++;
                     writer.WriteLine(relFilePaths[i]);
                 }
             }
             AssetDatabase.ImportAsset(DeEditorFileUtils.FullPathToADBPath(fullWriteToFilePath));
-            Debug.Log(string.Format("WriteFileListTo ► {0} files written to \"{1}\"", relFilePaths.Length, fullWriteToFilePath));
+            Debug.Log(string.Format("WriteFileListTo ► {0} files written ({1} ignored) to \"{2}\"", totWritten, totIgnored, fullWriteToFilePath));
             EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(adbWriteToFilePath));
         }
 
@@ -73,8 +81,9 @@ namespace DG.DemiEditor
         /// <param name="label">Label to use when logging the result</param>
         /// <param name="adbListFilePath">AssetDatabase path ("Assets/...") to the file containing the list</param>
         /// <param name="adbParseDirPath">AssetDatabase path ("Assets/...") to the directory to parse for extra files to remove</param>
+        /// <param name="ignoreASMDEFs">If TRUE ignores ASMDEF files</param>
         /// <param name="simulate">If TRUE only returns a report log and doesn't actually delete the files</param>
-        public static void ParseListAndRemoveExtraFiles(string label, string adbListFilePath, string adbParseDirPath, bool simulate = false)
+        public static void ParseListAndRemoveExtraFiles(string label, string adbListFilePath, string adbParseDirPath, bool ignoreASMDEFs = true, bool simulate = false)
         {
             string fullParseDirPath = DeEditorFileUtils.ADBPathToFullPath(adbParseDirPath);
             if (!Directory.Exists(fullParseDirPath)) {
@@ -102,6 +111,7 @@ namespace DG.DemiEditor
             int totDeleted = 0;
             try {
                 for (int i = 0; i < fullFilePaths.Length; ++i) {
+                    if (ignoreASMDEFs && fullFilePaths[i].EndsWith(".asmdef")) continue;
                     string relFilePath = MakeFilePathRelativeTo(fullFilePaths[i], adbParseDirPath);
                     if (relListFilePaths.Contains(relFilePath)) continue;
                     totDeleted++;
