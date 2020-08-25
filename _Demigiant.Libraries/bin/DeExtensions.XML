@@ -183,6 +183,12 @@
             <param name="full">If TRUE, returns TRUE only if the second rect is fully included,
             otherwise just if some part of it is included</param>
         </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Intersects(UnityEngine.Rect,UnityEngine.Rect,UnityEngine.Rect@)">
+            <summary>
+            Returns TRUE if this rect intersects the given one, and also outputs the intersection area<para/>
+            </summary>
+            <param name="intersection">Intersection area</param>
+        </member>
         <member name="M:DG.DeExtensions.RectExtensions.ResetXY(UnityEngine.Rect)">
             <summary>
             Returns a copy of the Rect with its X/Y coordinates set to 0

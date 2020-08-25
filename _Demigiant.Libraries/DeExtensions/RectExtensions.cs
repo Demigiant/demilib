@@ -88,6 +88,23 @@ namespace DG.DeExtensions
         }
 
         /// <summary>
+        /// Returns TRUE if this rect intersects the given one, and also outputs the intersection area<para/>
+        /// </summary>
+        /// <param name="intersection">Intersection area</param>
+        public static bool Intersects(this Rect a, Rect b, out Rect intersection)
+        {
+            intersection = new Rect();
+            if (!a.Overlaps(b)) return false;
+
+            float minX = a.x < b.x ? b.x : a.x;
+            float maxX = a.xMax > b.xMax ? b.xMax : a.xMax;
+            float minY = a.y < b.y ? b.y : a.y;
+            float maxY = a.yMax > b.yMax ? b.yMax : a.yMax;
+            intersection = new Rect(minX, minY, maxX - minX, maxY - minY);
+            return true;
+        }
+
+        /// <summary>
         /// Returns a copy of the Rect with its X/Y coordinates set to 0
         /// </summary>
         public static Rect ResetXY(this Rect r)
