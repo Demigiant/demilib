@@ -1028,6 +1028,11 @@
             Sets the border of the style
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.GUIStyleExtensions.Border(UnityEngine.GUIStyle,System.Int32)">
+            <summary>
+            Sets the border of the style
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.GUIStyleExtensions.Border(UnityEngine.GUIStyle,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             Sets the border of the style

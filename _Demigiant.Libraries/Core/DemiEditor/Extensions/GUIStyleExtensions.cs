@@ -89,6 +89,14 @@ namespace DG.DemiEditor
         /// <summary>
         /// Sets the border of the style
         /// </summary>
+        public static GUIStyle Border(this GUIStyle style, int border)
+        {
+            style.border = new RectOffset(border, border, border, border);
+            return style;
+        }
+        /// <summary>
+        /// Sets the border of the style
+        /// </summary>
         public static GUIStyle Border(this GUIStyle style, int left, int right, int top, int bottom)
         {
             style.border = new RectOffset(left, right, top, bottom);
