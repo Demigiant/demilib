@@ -208,9 +208,11 @@ namespace DG.DemiEditor
             if (_dragData == null || _dragData.draggableList == null || _dragData.draggableList != draggableList) return new DeDragResult(DeDragResultType.NoDrag);
 //            if (_dragData == null || _dragId == -1 || _dragId != dragId) return new DeDragResult(DeDragResultType.NoDrag);
             if (_waitingToApplyDrag) {
+                int dragFrom = _dragData.draggedItemIndex;
+                int dragTo = _dragData.currDragIndex;
                 if (Event.current.type == EventType.Repaint) Event.current.type = EventType.Used;
                 if (Event.current.type == EventType.Used) ApplyDrag();
-                return new DeDragResult(DeDragResultType.Dragging, _dragData.draggedItemIndex, _dragData.currDragIndex);
+                return new DeDragResult(DeDragResultType.Dragging, dragFrom, dragTo);
             }
 
             _dragData.draggableList = draggableList; // Reassign in case of references that change every call (like with EditorBuildSettings.scenes)

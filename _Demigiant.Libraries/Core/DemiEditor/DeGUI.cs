@@ -147,6 +147,14 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Removes focus from any GUI button/text/element that has focus
+        /// </summary>
+        public static void Deselect()
+        {
+            GUI.FocusControl(null);
+        }
+
+        /// <summary>
         /// Changes the active palettes to the given ones
         /// (or resets them to the default ones if NULL).
         /// Returns TRUE if the styles were initialized or re-initialized

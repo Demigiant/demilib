@@ -1545,6 +1545,11 @@
             Exits the current event correctly, also taking care of eventual drag operations
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.Deselect">
+            <summary>
+            Removes focus from any GUI button/text/element that has focus
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUI.ChangePalette(DG.DemiLib.DeColorPalette,DG.DemiEditor.DeStylePalette)">
             <summary>
             Changes the active palettes to the given ones
@@ -2018,6 +2023,20 @@
             <summary>
             Returns a copy of the Rect with its X/Y coordinates set to 0
             </summary>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.HangToLeftOf(UnityEngine.Rect,System.Single,System.Single,System.Single)">
+            <summary>
+            Sets this rect to the left of the given x position, with options for margin and width resize
+            </summary>
+            <param name="margin">Distance between this rect and the given x position</param>
+            <param name="resizeWidthTo">If greater than zero resizes this rect to the given size</param>
+        </member>
+        <member name="M:DG.DemiEditor.RectExtensions.HangToRightAndResize(UnityEngine.Rect,System.Single,System.Single,System.Single)">
+            <summary>
+            Sets this rect to the right of the given x position and resizes it so that its xMax remains the same.
+            </summary>
+            <param name="margin">Distance between this rect and the given x position</param>
+            <param name="extraSizeOffset">Extra offset to add to the resulting width</param>
         </member>
         <member name="M:DG.DemiEditor.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
             <summary>

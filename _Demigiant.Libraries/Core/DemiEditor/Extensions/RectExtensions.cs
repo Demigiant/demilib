@@ -119,6 +119,31 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Sets this rect to the left of the given x position, with options for margin and width resize
+        /// </summary>
+        /// <param name="margin">Distance between this rect and the given x position</param>
+        /// <param name="resizeWidthTo">If greater than zero resizes this rect to the given size</param>
+        public static Rect HangToLeftOf(this Rect r, float x, float margin = 0, float resizeWidthTo = -1)
+        {
+            if (resizeWidthTo > 0) r = r.SetWidth(resizeWidthTo);
+            r.x = x - r.width - margin;
+            return r;
+        }
+
+        /// <summary>
+        /// Sets this rect to the right of the given x position and resizes it so that its xMax remains the same.
+        /// </summary>
+        /// <param name="margin">Distance between this rect and the given x position</param>
+        /// <param name="extraSizeOffset">Extra offset to add to the resulting width</param>
+        public static Rect HangToRightAndResize(this Rect r, float x, float margin = 0, float extraSizeOffset = 0)
+        {
+            float offset = x - r.x;
+            r.width = r.width - offset - margin + extraSizeOffset;
+            r.x = x + margin;
+            return r;
+        }
+
+        /// <summary>
         /// Returns a copy of the Rect with its values shifted according the the given parameters
         /// </summary>
         public static Rect Shift(this Rect r, float x, float y, float width, float height)
