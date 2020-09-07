@@ -80,6 +80,8 @@ namespace DG.DemiEditor
         const float _DragDelay = 0.15f;
         static GUIDragData _dragData;
         static int _dragId; // Unused since now it just checks that the dragged list is correct
+        static bool _dragLastDrawnIndexSet;
+        static int _tmpDragLastDrawnIndex = -1; // Used while trying to retrieve last drawn indexes
         static bool _waitingToApplyDrag;
         static DelayedCall _dragDelayedCall; // Used to set _dragDelayElapsed to TRUE
         static bool _dragDelayElapsed;
@@ -217,7 +219,19 @@ namespace DG.DemiEditor
 
             _dragData.draggableList = draggableList; // Reassign in case of references that change every call (like with EditorBuildSettings.scenes)
             int listCount = _dragData.draggableList.Count;
-            if (currDraggableItemIndex == 0 && Event.current.type == EventType.Repaint) _dragData.currDragSet = false;
+            // Find first and last drawn indexes (in case of non-layout GUI that isn't drawing all list elements)
+            if (currDraggableItemIndex < _dragData.firstDrawnIndex) _dragData.firstDrawnIndex = currDraggableItemIndex;
+            if (!_dragLastDrawnIndexSet) {
+                if (_tmpDragLastDrawnIndex > currDraggableItemIndex) {
+                    _dragData.lastDrawnIndex = _tmpDragLastDrawnIndex;
+                    _dragLastDrawnIndexSet = true;
+                } else {
+                    _dragData.lastDrawnIndex = listCount - 1;
+                    _tmpDragLastDrawnIndex = currDraggableItemIndex;
+                }
+            }
+            //
+            if (currDraggableItemIndex == _dragData.firstDrawnIndex && Event.current.type == EventType.Repaint) _dragData.currDragSet = false;
             if (!_dragData.currDragSet) {
                 // Find and store eventual drag position
                 Rect lastRect = lastGUIRect == null ? GUILayoutUtility.GetLastRect() : (Rect)lastGUIRect;
@@ -226,7 +240,7 @@ namespace DG.DemiEditor
                     switch (direction) {
                     case DeDragDirection.Auto:
                         // Auto-determine if drag is also horizontal
-                        if (currDraggableItemIndex == 0) _dragData.lastRect = lastRect;
+                        if (currDraggableItemIndex == _dragData.firstDrawnIndex) _dragData.lastRect = lastRect;
                         else if (_dragData.lastRect.width > 0) {
                             _dragData.hasHorizontalSet = true;
                             _dragData.hasHorizontalEls = !Mathf.Approximately(_dragData.lastRect.xMin, lastRect.xMin);
@@ -245,7 +259,7 @@ namespace DG.DemiEditor
                 Vector2 lastRectMiddleP = lastRect.center;
                 Vector2 mouseP = Event.current.mousePosition;
                 if (
-                    currDraggableItemIndex <= listCount - 1 && lastRect.Contains(mouseP)
+                    currDraggableItemIndex <= _dragData.lastDrawnIndex && lastRect.Contains(mouseP)
                     && (_dragData.hasHorizontalEls && mouseP.x <= lastRectMiddleP.x || !_dragData.hasHorizontalEls && mouseP.y <= lastRectMiddleP.y)
                 ) {
                     if (_dragDelayElapsed) {
@@ -257,8 +271,8 @@ namespace DG.DemiEditor
                     _dragData.currDragIndex = currDraggableItemIndex;
                     _dragData.currDragSet = true;
                 } else if (
-                    currDraggableItemIndex <= listCount - 1 && lastRect.Contains(mouseP)
-                                                            && (_dragData.hasHorizontalEls && mouseP.x > lastRectMiddleP.x || !_dragData.hasHorizontalEls && mouseP.y > lastRectMiddleP.y)
+                    currDraggableItemIndex <= _dragData.lastDrawnIndex && lastRect.Contains(mouseP)
+                    && (_dragData.hasHorizontalEls && mouseP.x > lastRectMiddleP.x || !_dragData.hasHorizontalEls && mouseP.y > lastRectMiddleP.y)
                 ) {
                     if (_dragDelayElapsed) {
                         Rect evidenceR = _dragData.hasHorizontalEls
@@ -269,7 +283,7 @@ namespace DG.DemiEditor
                     _dragData.currDragIndex = currDraggableItemIndex + 1;
                     _dragData.currDragSet = true;
                 } else if (
-                    currDraggableItemIndex == 0 && !lastRect.Contains(mouseP)
+                    currDraggableItemIndex == _dragData.firstDrawnIndex && !lastRect.Contains(mouseP)
                     && (_dragData.hasHorizontalEls && (mouseP.x <= lastRect.x || mouseP.y < lastRect.y) || !_dragData.hasHorizontalEls && mouseP.y <= lastRectMiddleP.y)
                 ) {
                     // First, with mouse above or aside drag areas
@@ -282,7 +296,7 @@ namespace DG.DemiEditor
                     _dragData.currDragIndex = currDraggableItemIndex;
                     _dragData.currDragSet = true;
                 } else if (
-                    currDraggableItemIndex >= listCount - 1
+                    currDraggableItemIndex >= _dragData.lastDrawnIndex
                     && (_dragData.hasHorizontalEls && (mouseP.x > lastRectMiddleP.x || mouseP.y > lastRect.yMax) || !_dragData.hasHorizontalEls && mouseP.y > lastRectMiddleP.y)
                 ) {
                     if (_dragDelayElapsed) {
@@ -291,7 +305,7 @@ namespace DG.DemiEditor
                             : new Rect(lastRect.xMin, lastRect.yMax - 5, lastRect.width, 5);
                         DeGUI.FlatDivider(evidenceR, dragEvidenceColor);
                     }
-                    _dragData.currDragIndex = listCount;
+                    _dragData.currDragIndex = _dragData.lastDrawnIndex + 1;
                     _dragData.currDragSet = true;
                 }
             }
@@ -374,6 +388,8 @@ namespace DG.DemiEditor
         {
             _dragData = null;
             _dragId = -1;
+            _dragLastDrawnIndexSet = false;
+            _tmpDragLastDrawnIndex = -1;
             _waitingToApplyDrag = false;
             _dragDelayElapsed = false;
             ClearDragDelayedCall();
@@ -399,6 +415,8 @@ namespace DG.DemiEditor
         public readonly int draggedItemIndex;
         public IList draggableList; // Collection within which the drag is being executed
         public int currDragIndex = -1; // Index of current drag position
+        public int firstDrawnIndex = int.MaxValue; // Used in case of a non-layout GUI that isn't drawing all elements because of scrolling
+        public int lastDrawnIndex = -1; // Used in case of a non-layout GUI that isn't drawing all elements because of scrolling
         public bool currDragSet;
         // Used to auto-check if the drag can be horizontal too
         public Rect lastRect;
