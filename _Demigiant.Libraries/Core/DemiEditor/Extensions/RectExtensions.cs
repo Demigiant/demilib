@@ -2,6 +2,7 @@
 // Created: 2017/03/23 12:41
 // License Copyright (c) Daniele Giardini
 
+using System;
 using UnityEngine;
 
 namespace DG.DemiEditor
@@ -106,6 +107,12 @@ namespace DG.DemiEditor
             float minY = a.y < b.y ? b.y : a.y;
             float maxY = a.yMax > b.yMax ? b.yMax : a.yMax;
             intersection = new Rect(minX, minY, maxX - minX, maxY - minY);
+            // Fix for Unity floating point imprecision where Overlaps returns TRUE in some cases when rects are simply adjacent
+            const float epsilon = 0.001f;
+            if (intersection.width < epsilon || intersection.height < epsilon) {
+                intersection = new Rect();
+                return false;
+            }
             return true;
         }
 

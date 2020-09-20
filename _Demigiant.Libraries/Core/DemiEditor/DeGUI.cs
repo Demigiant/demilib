@@ -1190,7 +1190,7 @@ namespace DG.DemiEditor
         public static bool MultiTextArea(Rect rect, string fieldName, IList sources)
         {
             using (var mScope = new MultiPropertyScope(fieldName, sources)) {
-                mScope.value = EditorGUI.TextArea(rect, (string)mScope.fieldInfo.GetValue(sources[0]));
+                mScope.value = EditorGUI.TextArea(rect, (string)mScope.fieldInfo.GetValue(sources[0]), EditorStyles.textArea);
                 return mScope.hasMixedValue;
             }
         }
