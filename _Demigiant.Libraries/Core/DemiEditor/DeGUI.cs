@@ -390,7 +390,12 @@ namespace DG.DemiEditor
                 object defValue = null;
                 for (int i = 0; i < targets.Count; ++i) {
                     if (i == 0) defValue = fInfo.GetValue(targets[i]);
-                    else if (!fInfo.GetValue(targets[i]).Equals(defValue)) return true;
+                    else {
+                        object value = fInfo.GetValue(targets[i]);
+                        if (value == null) {
+                            if (defValue != null) return true;
+                        } else if (!value.Equals(defValue)) return true;
+                    }
                 }
                 return false;
             }
