@@ -40,8 +40,6 @@ namespace DG.DeEditorTools.Hierarchy
         [MenuItem("GameObject/DeHierarchy/Icon/Light", false, 22)]
         static void SetIconLight() { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Light); }
 
-        [MenuItem("GameObject/DeHierarchy/Icon/Cog", false, 22)]
-
         [MenuItem("GameObject/DeHierarchy/Icon/Play", false, 22)]
         static void SetIconPlay() { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Play); }
 
