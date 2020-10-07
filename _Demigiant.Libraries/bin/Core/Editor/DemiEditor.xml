@@ -1324,6 +1324,12 @@
         <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,UnityEngine.GUIContent,UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
             <summary>Button that can be toggled on and off</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,UnityEngine.GUIContent,DG.DemiLib.ToggleColors,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,UnityEngine.GUIContent,DG.DemiLib.ToggleColors,DG.DemiLib.ToggleColors,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUILayout.ToggleButton(System.Boolean,UnityEngine.GUIContent,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
             <summary>Button that can be toggled on and off</summary>
         </member>
@@ -1706,6 +1712,12 @@
             <summary>Button that can be toggled on and off</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,UnityEngine.GUIContent,UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIStyle)">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,UnityEngine.GUIContent,DG.DemiLib.ToggleColors,UnityEngine.GUIStyle)">
+            <summary>Button that can be toggled on and off</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,UnityEngine.GUIContent,DG.DemiLib.ToggleColors,DG.DemiLib.ToggleColors,UnityEngine.GUIStyle)">
             <summary>Button that can be toggled on and off</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.ToggleButton(UnityEngine.Rect,System.Boolean,UnityEngine.GUIContent,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,UnityEngine.GUIStyle)">

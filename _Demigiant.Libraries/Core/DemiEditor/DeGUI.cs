@@ -682,6 +682,18 @@ namespace DG.DemiEditor
         public static bool ToggleButton(Rect rect, bool toggled, GUIContent content, Color bgOnColor, Color contentOnColor, GUIStyle guiStyle = null)
         { return ToggleButton(rect, toggled, content, DeGUI.colors.bg.toggleOff, bgOnColor, DeGUI.colors.content.toggleOff, contentOnColor, guiStyle); }
         /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, GUIContent content, ToggleColors onColors, GUIStyle guiStyle = null)
+        {
+            DeToggleColors.ColorCombination combo = DeGUI.colors.toggle.GetColors(ToggleColors.DefaultOff, onColors);
+            return ToggleButton(rect, toggled, content, combo.offCols.bg, combo.onCols.bg, combo.offCols.content, combo.onCols.content, guiStyle);
+        }
+        /// <summary>Button that can be toggled on and off</summary>
+        public static bool ToggleButton(Rect rect, bool toggled, GUIContent content, ToggleColors offColors, ToggleColors onColors, GUIStyle guiStyle = null)
+        {
+            DeToggleColors.ColorCombination combo = DeGUI.colors.toggle.GetColors(offColors, onColors);
+            return ToggleButton(rect, toggled, content, combo.offCols.bg, combo.onCols.bg, combo.offCols.content, combo.onCols.content, guiStyle);
+        }
+        /// <summary>Button that can be toggled on and off</summary>
         public static bool ToggleButton(Rect rect, bool toggled, GUIContent content, Color bgOffColor, Color bgOnColor, Color contentOffColor, Color contenOnColor, GUIStyle guiStyle = null)
         {
             Color prevBgColor = GUI.backgroundColor;

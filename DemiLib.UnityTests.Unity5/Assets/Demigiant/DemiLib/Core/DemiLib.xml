@@ -52,6 +52,11 @@
             Content colors
             </summary>
         </member>
+        <member name="T:DG.DemiLib.DeToggleColors">
+            <summary>
+            Toggle button specific colors
+            </summary>
+        </member>
         <member name="T:DG.DemiLib.DeInputUtils">
             <summary>
             Various Input utils
