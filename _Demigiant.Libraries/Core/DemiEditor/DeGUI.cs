@@ -618,7 +618,10 @@ namespace DG.DemiEditor
             GUI.Button(rect, content, guiStyle);
             int controlId = DeEditorGUIUtils.GetLastControlId(); // Changed from prev while working on DeInspektor
             int hotControl = GUIUtility.hotControl;
-            bool mousePressed = GUI.enabled && controlId > 1 && hotControl > 1 && !_ActiveDownButtonsIds.Contains(controlId) && rect.Contains(Event.current.mousePosition);
+            bool mousePressed = GUI.enabled && controlId > 1 && hotControl > 1
+                                && !_ActiveDownButtonsIds.Contains(controlId) && rect.Contains(Event.current.mousePosition)
+                                // This line makes sure that if a non-down-button element is pressed before this nothing will happen
+                                && (hotControl == controlId || _ActiveDownButtonsIds.Contains(hotControl));
             if (mousePressed) {
                 GUIUtility.hotControl = controlId;
                 _ActiveDownButtonsIds.Add(controlId);

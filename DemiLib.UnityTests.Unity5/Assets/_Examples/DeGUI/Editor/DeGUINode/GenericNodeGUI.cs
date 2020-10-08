@@ -2,7 +2,6 @@
 // Created: 2017/03/22 12:56
 // License Copyright (c) Daniele Giardini
 
-using DG.DeExtensions;
 using DG.DemiEditor;
 using DG.DemiEditor.DeGUINodeSystem;
 using DG.DemiLib;

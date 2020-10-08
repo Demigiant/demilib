@@ -3,7 +3,6 @@
 
 using DG.DeAudio;
 using DG.DeAudioEditor;
-using DG.DeExtensions;
 using DG.DemiLib;
 using UnityEditor;
 using UnityEngine;

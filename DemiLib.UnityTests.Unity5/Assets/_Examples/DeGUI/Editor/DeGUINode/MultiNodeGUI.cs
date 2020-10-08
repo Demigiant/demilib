@@ -3,7 +3,6 @@
 // License Copyright (c) Daniele Giardini
 
 using System.Collections.Generic;
-using DG.DeExtensions;
 using DG.DemiEditor;
 using DG.DemiEditor.DeGUINodeSystem;
 using DG.DemiLib;
