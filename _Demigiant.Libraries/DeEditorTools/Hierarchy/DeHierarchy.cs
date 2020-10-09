@@ -441,6 +441,7 @@ namespace DG.DeEditorTools.Hierarchy
                     else comps = go.GetComponents<Component>();
                     int len = comps.Length;
                     for (int i = len - 1; i > 0; --i) { // Ignore 0 because it's always Transform or RectTransform
+                        if (comps[i] == null) continue; // Happens in case of missing scripts
                         if (checkForCustomComponentsInChildren) {
                             bool isChildComp = comps[i].transform != parentT;
                             if (!isChildComp && hasCustomComponents || isChildComp && hasCustomComponentsInChildren) continue;
