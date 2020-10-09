@@ -85,24 +85,28 @@ namespace DG.DeEditorTools.Hierarchy
             GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
             if (go == null) return;
 
-            bool requiresGoData = DeEditorToolsPrefs.deHierarchy_showEvidenceOnCustomComponent
+            bool requiresGoData = DeEditorToolsPrefs.deHierarchy_showCustomComponentIndicator
                                   || DeEditorToolsPrefs.deHierarchy_showSortingLayer || DeEditorToolsPrefs.deHierarchy_showOrderInLayer;
             GameObjectData goData = requiresGoData
-                ? GetGameObjectData(go, DeEditorToolsPrefs.deHierarchy_showEvidenceOnCustomComponent)
-                : null;
+                ? GetGameObjectData(go,
+                    DeEditorToolsPrefs.deHierarchy_showCustomComponentIndicator, DeEditorToolsPrefs.deHierarchy_showCustomComponentsInChildrenIndicator
+                ) : null;
 
             // Custom Components icon
-            if (DeEditorToolsPrefs.deHierarchy_showEvidenceOnCustomComponent && goData.hasCustomComponents) {
-                Rect compR = new Rect(selectionRect.x - 3, selectionRect.y + 5, 2, selectionRect.height - 8);
-                Rect compDotR = new Rect(0, 0, 8, 8).SetCenter(compR.center.x, compR.center.y);
-                using (new DeGUI.ColorScope(null, null, _hasComponentsColor)) {
-                    GUI.DrawTexture(compR, DeStylePalette.whiteSquare);
-                    // GUI.DrawTexture(compDotR, DeStylePalette.whiteDot);
+            if (DeEditorToolsPrefs.deHierarchy_showCustomComponentIndicator && (goData.hasCustomComponents || goData.hasCustomComponentsInChildren)) {
+                if (goData.hasCustomComponents) {
+                    Rect compR = new Rect(selectionRect.x - 3, selectionRect.y + 5, 2, selectionRect.height - 8);
+                    if (DeEditorToolsPrefs.deHierarchy_showBorder) compR.x -= 1;
+                    using (new DeGUI.ColorScope(null, null, _hasComponentsColor)) {
+                        GUI.DrawTexture(compR, DeStylePalette.whiteSquare);
+                    }
                 }
-                // Rect compR = new Rect(selectionRect.x - 14, selectionRect.y + 2, 14, selectionRect.height - 3);
-                // using (new DeGUI.ColorScope(null, null, _hasComponentsColor)) {
-                //     GUI.DrawTexture(compR, DeStylePalette.squareBorderEmpty01);
-                // }
+                if (goData.hasCustomComponentsInChildren) {
+                    Rect subcompR = new Rect(selectionRect.x - 11, selectionRect.yMax - 2, 7, 1);
+                    using (new DeGUI.ColorScope(null, null, _hasComponentsColor)) {
+                        GUI.DrawTexture(subcompR, DeStylePalette.whiteSquare);
+                    }
+                }
             }
 
             Rect extraR = new Rect(selectionRect.xMax, selectionRect.y, 0, selectionRect.height);
@@ -272,6 +276,7 @@ namespace DG.DeEditorTools.Hierarchy
 
         public static void OnPreferencesRefresh(bool flagsChanged)
         {
+            Refresh();
             if (flagsChanged) {
                 if (dehComponent != null) SetDeHierarchyGOFlags(dehComponent.gameObject);
                 EditorApplication.DirtyHierarchyWindowSorting();
@@ -400,9 +405,9 @@ namespace DG.DeEditorTools.Hierarchy
             }
         }
 
-        static GameObjectData GetGameObjectData(GameObject go, bool checkForCustomComponents)
+        static GameObjectData GetGameObjectData(GameObject go, bool checkForCustomComponents, bool checkForCustomComponentsInChildren)
         {
-            if (!_GoToData.ContainsKey(go)) _GoToData.Add(go, new GameObjectData(go, checkForCustomComponents));
+            if (!_GoToData.ContainsKey(go)) _GoToData.Add(go, new GameObjectData(go, checkForCustomComponents, checkForCustomComponentsInChildren));
             return _GoToData[go];
         }
 
@@ -417,18 +422,31 @@ namespace DG.DeEditorTools.Hierarchy
             public Renderer renderer;
             public bool hasRenderer;
             public bool hasCustomComponents;
+            public bool hasCustomComponentsInChildren;
 
-            public GameObjectData(GameObject go, bool checkForCustomComponents)
+            public GameObjectData(GameObject go, bool checkForCustomComponents, bool checkForCustomComponentsInChildren)
             {
                 renderer = go.GetComponent<Renderer>();
                 hasRenderer = renderer != null;
                 if (checkForCustomComponents) {
-                    Component[] comps = go.GetComponents<Component>();
+                    Transform parentT = go.transform;
+                    Component[] comps;
+                    if (checkForCustomComponentsInChildren) comps = go.GetComponentsInChildren<Component>(true);
+                    else comps = go.GetComponents<Component>();
                     int len = comps.Length;
-                    for (int i = len - 1; i > -1; --i) {
-                        if (comps[i].GetType().FullName.StartsWith("UnityEngine")) continue;
-                        hasCustomComponents = true;
-                        break;
+                    for (int i = len - 1; i > 0; --i) { // Ignore 0 because it's always Transform or RectTransform
+                        if (checkForCustomComponentsInChildren) {
+                            bool isChildComp = comps[i].transform != parentT;
+                            if (!isChildComp && hasCustomComponents || isChildComp && hasCustomComponentsInChildren) continue;
+                            if (comps[i].GetType().FullName.StartsWith("UnityEngine")) continue;
+                            if (isChildComp) hasCustomComponentsInChildren = true;
+                            else hasCustomComponents = true;
+                            if (hasCustomComponents && hasCustomComponentsInChildren) break;
+                        } else {
+                            if (comps[i].GetType().FullName.StartsWith("UnityEngine")) continue;
+                            hasCustomComponents = true;
+                            break;
+                        }
                     }
                 }
             }
