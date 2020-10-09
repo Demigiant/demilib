@@ -26,7 +26,8 @@ namespace DG.DemiLib.External
             BrightGrey,
             DarkGrey,
             Black,
-            White
+            White,
+            Pink
         }
 
         public enum IcoType
@@ -173,12 +174,13 @@ namespace DG.DemiLib.External
         public static Color GetColor(HColor color)
         {
             switch (color) {
-            case HColor.Blue: return new Color(0.2145329f, 0.4501492f, 0.9117647f, 1f);
+            case HColor.Red: return new Color(0.82f, 0f, 0f);
+            case HColor.Orange: return new Color(1f, 0.44f, 0f);
+            case HColor.Yellow: return new Color(0.99f, 0.84f, 0.12f);
             case HColor.Green: return new Color(0.05060553f, 0.8602941f, 0.2237113f, 1f);
-            case HColor.Orange: return new Color(0.9558824f, 0.4471125f, 0.05622837f, 1f);
-            case HColor.Purple: return new Color(0.907186f, 0.05406574f, 0.9191176f, 1f);
-            case HColor.Red: return new Color(0.9191176f, 0.1617312f, 0.07434041f, 1f);
-            case HColor.Yellow: return new Color(1f, 0.853854f, 0.03676468f, 1f);
+            case HColor.Blue: return new Color(0.21f, 0.62f, 1f);
+            case HColor.Purple: return new Color(0.64f, 0.27f, 1f);
+            case HColor.Pink: return new Color(1f, 0.21f, 0.82f);
             case HColor.BrightGrey: return new Color(0.6470588f, 0.6470588f, 0.6470588f, 1f);
             case HColor.DarkGrey: return new Color(0.3308824f, 0.3308824f, 0.3308824f, 1f);
             case HColor.Black: return Color.black;
@@ -222,23 +224,6 @@ namespace DG.DemiLib.External
 
             public Color GetSeparatorColor()
             { return DeHierarchyComponent.GetColor(separatorHColor); }
-
-//            Color GetColor(HColor color)
-//            {
-//                switch (color) {
-//                case HColor.Blue: return new Color(0.2145329f, 0.4501492f, 0.9117647f, 1f);
-//                case HColor.Green: return new Color(0.05060553f, 0.8602941f, 0.2237113f, 1f);
-//                case HColor.Orange: return new Color(0.9558824f, 0.4471125f, 0.05622837f, 1f);
-//                case HColor.Purple: return new Color(0.907186f, 0.05406574f, 0.9191176f, 1f);
-//                case HColor.Red: return new Color(0.9191176f, 0.1617312f, 0.07434041f, 1f);
-//                case HColor.Yellow: return new Color(1f, 0.853854f, 0.03676468f, 1f);
-//                case HColor.BrightGrey: return new Color(0.6470588f, 0.6470588f, 0.6470588f, 1f);
-//                case HColor.DarkGrey: return new Color(0.3308824f, 0.3308824f, 0.3308824f, 1f);
-//                case HColor.Black: return Color.black;
-//                case HColor.White: return Color.white;
-//                default: return Color.white;
-//                }
-//            }
         }
     }
 }

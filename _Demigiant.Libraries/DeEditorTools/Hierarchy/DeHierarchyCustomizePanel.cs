@@ -20,7 +20,7 @@ namespace DG.DeEditorTools.Hierarchy
         }
 		
         const string _Title = "DeHierarchy";
-        static DeHierarchyComponent.HColor[] _hColors;
+        static DeHierarchyComponent.HColor[] _hColors; // Stored as sorted colors
         static DeHierarchyComponent.SeparatorType[] _separatorTypes;
         static DeHierarchyComponent.IcoType[] _icoTypes;
         static Texture2D[] _icoTextures;
@@ -30,7 +30,13 @@ namespace DG.DeEditorTools.Hierarchy
         void OnEnable()
         {
             Undo.undoRedoPerformed += Repaint;
-            _hColors = (DeHierarchyComponent.HColor[])Enum.GetValues(typeof(DeHierarchyComponent.HColor));
+            // _hColors = (DeHierarchyComponent.HColor[])Enum.GetValues(typeof(DeHierarchyComponent.HColor));
+            _hColors = new[] {
+                DeHierarchyComponent.HColor.None,
+                DeHierarchyComponent.HColor.Red, DeHierarchyComponent.HColor.Yellow, DeHierarchyComponent.HColor.Orange,
+                DeHierarchyComponent.HColor.Green, DeHierarchyComponent.HColor.Blue, DeHierarchyComponent.HColor.Purple, DeHierarchyComponent.HColor.Pink,
+                DeHierarchyComponent.HColor.BrightGrey, DeHierarchyComponent.HColor.DarkGrey, DeHierarchyComponent.HColor.Black, DeHierarchyComponent.HColor.White
+            };
             _separatorTypes = (DeHierarchyComponent.SeparatorType[])Enum.GetValues(typeof(DeHierarchyComponent.SeparatorType));
             _icoTypes = (DeHierarchyComponent.IcoType[])Enum.GetValues(typeof(DeHierarchyComponent.IcoType));
             _icoTextures = new Texture2D[_icoTypes.Length];

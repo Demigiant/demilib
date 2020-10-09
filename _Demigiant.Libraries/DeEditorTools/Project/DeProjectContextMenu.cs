@@ -55,40 +55,28 @@ namespace DG.DeEditorTools.Project
 
         [MenuItem("Assets/DeProject/Color/None", false, _Priority_Color)]
         static void SetColorNone() { DeProject.SetColorForSelections(DeProjectData.HColor.None, Selection.assetGUIDs); }
-
-        [MenuItem("Assets/DeProject/Color/Blue", false, _Priority_Icon_Sub0)]
-        static void SetColorBlue() { DeProject.SetColorForSelections(DeProjectData.HColor.Blue, Selection.assetGUIDs); }
-
-        [MenuItem("Assets/DeProject/Color/Blue (Bright)", false, _Priority_Icon_Sub0)]
-        static void SetColorBrightBlue() { DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue, Selection.assetGUIDs); }
-
-        [MenuItem("Assets/DeProject/Color/Green", false, _Priority_Icon_Sub0)]
-        static void SetColorGreen() { DeProject.SetColorForSelections(DeProjectData.HColor.Green, Selection.assetGUIDs); }
-
-        [MenuItem("Assets/DeProject/Color/Orange", false, _Priority_Icon_Sub0)]
-        static void SetColorOrange() { DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs); }
-
-        [MenuItem("Assets/DeProject/Color/Purple", false, _Priority_Icon_Sub0)]
-        static void SetColorPurple() { DeProject.SetColorForSelections(DeProjectData.HColor.Purple, Selection.assetGUIDs); }
-
         [MenuItem("Assets/DeProject/Color/Red", false, _Priority_Icon_Sub0)]
         static void SetColorRed() { DeProject.SetColorForSelections(DeProjectData.HColor.Red, Selection.assetGUIDs); }
-
-        [MenuItem("Assets/DeProject/Color/Violet", false, _Priority_Icon_Sub0)]
-        static void SetColorViolet() { DeProject.SetColorForSelections(DeProjectData.HColor.Violet, Selection.assetGUIDs); }
-
         [MenuItem("Assets/DeProject/Color/Yellow", false, _Priority_Icon_Sub0)]
         static void SetColorYellow() { DeProject.SetColorForSelections(DeProjectData.HColor.Yellow, Selection.assetGUIDs); }
-
+        [MenuItem("Assets/DeProject/Color/Orange", false, _Priority_Icon_Sub0)]
+        static void SetColorOrange() { DeProject.SetColorForSelections(DeProjectData.HColor.Orange, Selection.assetGUIDs); }
+        [MenuItem("Assets/DeProject/Color/Green", false, _Priority_Icon_Sub0)]
+        static void SetColorGreen() { DeProject.SetColorForSelections(DeProjectData.HColor.Green, Selection.assetGUIDs); }
+        [MenuItem("Assets/DeProject/Color/Blue", false, _Priority_Icon_Sub0)]
+        static void SetColorBlue() { DeProject.SetColorForSelections(DeProjectData.HColor.Blue, Selection.assetGUIDs); }
+        [MenuItem("Assets/DeProject/Color/Blue (Bright)", false, _Priority_Icon_Sub0)]
+        static void SetColorBrightBlue() { DeProject.SetColorForSelections(DeProjectData.HColor.BrightBlue, Selection.assetGUIDs); }
+        [MenuItem("Assets/DeProject/Color/Violet", false, _Priority_Icon_Sub0)]
+        static void SetColorViolet() { DeProject.SetColorForSelections(DeProjectData.HColor.Violet, Selection.assetGUIDs); }
+        [MenuItem("Assets/DeProject/Color/Purple", false, _Priority_Icon_Sub0)]
+        static void SetColorPurple() { DeProject.SetColorForSelections(DeProjectData.HColor.Purple, Selection.assetGUIDs); }
         [MenuItem("Assets/DeProject/Color/Black", false, _Priority_Color_Sub1)]
         static void SetColorBlack() { DeProject.SetColorForSelections(DeProjectData.HColor.Black, Selection.assetGUIDs); }
-
         [MenuItem("Assets/DeProject/Color/White", false, _Priority_Color_Sub1)]
         static void SetColorWhite() { DeProject.SetColorForSelections(DeProjectData.HColor.White, Selection.assetGUIDs); }
-
         [MenuItem("Assets/DeProject/Color/Grey (Bright)", false, _Priority_Color_Sub1)]
         static void SetColorBrightGrey() { DeProject.SetColorForSelections(DeProjectData.HColor.BrightGrey, Selection.assetGUIDs); }
-
         [MenuItem("Assets/DeProject/Color/Grey (Dark)", false, _Priority_Color_Sub1)]
         static void SetColorDarkGrey() { DeProject.SetColorForSelections(DeProjectData.HColor.DarkGrey, Selection.assetGUIDs); }
 
