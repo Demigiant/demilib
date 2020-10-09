@@ -19,6 +19,7 @@ namespace DG.DeEditorTools.Hierarchy
     {
         static public DeHierarchyComponent dehComponent { get; private set; }
         static readonly Dictionary<GameObject,GameObjectData> _GoToData = new Dictionary<GameObject,GameObjectData>();
+        static string[] _extraNamespacesToIgnoreInComponents;
 
         static bool _stylesSet;
         static Color _icoVisibilityOnColor, _icoVisibilityOffColor, _hasComponentsColor;
@@ -47,6 +48,11 @@ namespace DG.DeEditorTools.Hierarchy
         static void Refresh()
         {
             _GoToData.Clear();
+            _extraNamespacesToIgnoreInComponents = DeEditorToolsPrefs.deHierarchy_ignoreCustomComponentsNamespaces.Split('\n');
+            for (int i = 0; i < _extraNamespacesToIgnoreInComponents.Length; ++i) {
+                _extraNamespacesToIgnoreInComponents[i] = _extraNamespacesToIgnoreInComponents[i].Trim();
+                if (!_extraNamespacesToIgnoreInComponents[i].EndsWith(".")) _extraNamespacesToIgnoreInComponents[i] = _extraNamespacesToIgnoreInComponents[i] + '.';
+            }
 
             ConnectToDeHierarchyComponent(false, true);
             if (dehComponent == null) return;
@@ -438,17 +444,27 @@ namespace DG.DeEditorTools.Hierarchy
                         if (checkForCustomComponentsInChildren) {
                             bool isChildComp = comps[i].transform != parentT;
                             if (!isChildComp && hasCustomComponents || isChildComp && hasCustomComponentsInChildren) continue;
-                            if (comps[i].GetType().FullName.StartsWith("UnityEngine")) continue;
+                            // if (comps[i].GetType().FullName.StartsWith("UnityEngine")) continue;
+                            if (!IsValidCustomComponent(comps[i].GetType().FullName)) continue;
                             if (isChildComp) hasCustomComponentsInChildren = true;
                             else hasCustomComponents = true;
                             if (hasCustomComponents && hasCustomComponentsInChildren) break;
                         } else {
-                            if (comps[i].GetType().FullName.StartsWith("UnityEngine")) continue;
+                            if (!IsValidCustomComponent(comps[i].GetType().FullName)) continue;
                             hasCustomComponents = true;
                             break;
                         }
                     }
                 }
+            }
+
+            bool IsValidCustomComponent(string typeName)
+            {
+                if (typeName.StartsWith("UnityEngine.")) return false;
+                for (int i = 0; i < _extraNamespacesToIgnoreInComponents.Length; ++i) {
+                    if (typeName.StartsWith(_extraNamespacesToIgnoreInComponents[i])) return false;
+                }
+                return true;
             }
         }
     }
