@@ -15,9 +15,21 @@ namespace DG.DemiEditor
 
         public static void ExpandGameObject(GameObject go)
         {
-            if (_miExpand == null) _miExpand = Type.GetType("UnityEditor.SceneHierarchyWindow,UnityEditor.dll")
-                                               .GetMethod("ExpandTreeViewItem", BindingFlags.Instance | BindingFlags.NonPublic);
-            EditorApplication.ExecuteMenuItem("Window/Hierarchy");
+            if (_miExpand == null) {
+                Type t = Type.GetType("UnityEditor.SceneHierarchyWindow,UnityEditor.dll");
+                if (t == null) {
+                    Debug.LogError("Couldn't find type \"UnityEditor.SceneHierarchyWindow,UnityEditor.dll\"");
+                    return;
+                }
+                _miExpand = t.GetMethod("ExpandTreeViewItem", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (_miExpand == null) _miExpand = t.GetMethod("SetExpandedRecursive", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (_miExpand == null) {
+                    Debug.LogError("Couldn't find SceneHierarchyWindow \"ExpandTreeViewItem\" or \"SetExpandedRecursive\" methods");
+                    return;
+                }
+            }
+            if (DeUnityEditorVersion.MajorVersion < 2019) EditorApplication.ExecuteMenuItem("Window/Hierarchy");
+            else EditorApplication.ExecuteMenuItem("Window/General/Hierarchy");
             var hierarchy = EditorWindow.focusedWindow;
             _miExpand.Invoke(hierarchy, new object[] { go.GetInstanceID(), true});
         }
