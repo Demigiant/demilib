@@ -127,7 +127,7 @@ namespace DG.DeEditorTools.Hierarchy
                 Color evColor = goData.extraEvidenceColor;
                 switch (goData.extraEvidenceMode) {
                 case DeHierarchyData.EvidenceMode.Box:
-                    Color labelColor = DeGUI.GetVisibleContentColorOn(goData.extraEvidenceColor);
+                    Color labelColor = goData.extraEvidenceLabelColor;
                     if (!isActiveInHierarchy) {
                         evColor.a *= 0.4f;
                         labelColor = new DeSkinColor(labelColor == Color.white ? 0.5f : 0.15f);
@@ -488,6 +488,7 @@ namespace DG.DeEditorTools.Hierarchy
             public readonly bool hasExtraEvidence;
             public readonly DeHierarchyData.EvidenceMode extraEvidenceMode;
             public readonly Color extraEvidenceColor;
+            public readonly Color extraEvidenceLabelColor;
 
             public GameObjectData(GameObject go, bool checkForCustomComponents, bool checkForCustomComponentsInChildren)
             {
@@ -529,6 +530,7 @@ namespace DG.DeEditorTools.Hierarchy
                             hasExtraEvidence = true;
                             extraEvidenceMode = _projectSrc.extraEvidences[j].evidenceMode;
                             extraEvidenceColor = _projectSrc.extraEvidences[j].color;
+                            extraEvidenceLabelColor = DeGUI.GetVisibleContentColorOn(extraEvidenceColor);
                             break;
                         }
                         if (hasExtraEvidence) break;
