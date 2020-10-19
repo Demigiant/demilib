@@ -42,11 +42,6 @@ namespace DG.DemiEditor
         public void SetContentWidth(float width)
         {
             fullContentArea = new Rect(fullContentArea.x, fullContentArea.y, width, fullContentArea.height);
-            visibleContentArea = new Rect(
-                visibleContentArea.x, visibleContentArea.y,
-                fullContentArea.width,
-                fullContentArea.width > area.width ? area.height - 16 : area.height
-            );
         }
 
         /// <summary>
@@ -55,11 +50,6 @@ namespace DG.DemiEditor
         public void SetContentHeight(float height)
         {
             fullContentArea = new Rect(fullContentArea.x, fullContentArea.y, fullContentArea.width, height);
-            visibleContentArea = new Rect(
-                visibleContentArea.x, visibleContentArea.y,
-                fullContentArea.height > area.height ? area.width - 16 : area.width,
-                fullContentArea.height
-            );
         }
 
         /// <summary>
@@ -69,11 +59,6 @@ namespace DG.DemiEditor
         public void IncreaseContentHeightBy(float value)
         {
             fullContentArea = new Rect(fullContentArea.x, fullContentArea.y, fullContentArea.width, fullContentArea.height + value);
-            visibleContentArea = new Rect(
-                visibleContentArea.x, visibleContentArea.y,
-                fullContentArea.height > area.height ? area.width - 16 : area.width,
-                fullContentArea.height
-            );
         }
 
         /// <summary>
@@ -124,11 +109,16 @@ namespace DG.DemiEditor
                 fullContentArea.height
             );
             scrollPosition = GUI.BeginScrollView(area, scrollPosition, fullContentArea);
-            if (resetContentHeightToZero) fullContentArea = new Rect(fullContentArea.x, fullContentArea.y, fullContentArea.width, 0);
+            // if (resetContentHeightToZero) fullContentArea = new Rect(fullContentArea.x, fullContentArea.y, fullContentArea.width, 0);
             visibleContentArea = new Rect(
                 area.x, scrollPosition.y,
                 fullContentArea.height > area.height ? area.width - 16 : area.width,
                 fullContentArea.width > area.width ? area.height - 16 : area.height
+            );
+            fullContentArea = new Rect(
+                fullContentArea.x, fullContentArea.y,
+                fullContentArea.height > area.height ? area.width - 16 : area.width,
+                resetContentHeightToZero ? 0 : fullContentArea.height
             );
             _CurrScrollViews.Push(this);
         }
