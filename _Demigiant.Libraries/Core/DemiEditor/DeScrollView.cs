@@ -37,12 +37,29 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Sets the <see cref="fullContentArea"/> width
+        /// </summary>
+        public void SetContentWidth(float width)
+        {
+            fullContentArea = new Rect(fullContentArea.x, fullContentArea.y, width, fullContentArea.height);
+            visibleContentArea = new Rect(
+                visibleContentArea.x, visibleContentArea.y,
+                fullContentArea.width,
+                fullContentArea.width > area.width ? area.height - 16 : area.height
+            );
+        }
+
+        /// <summary>
         /// Sets the <see cref="fullContentArea"/> height
         /// </summary>
-        /// <param name="height"></param>
         public void SetContentHeight(float height)
         {
             fullContentArea = new Rect(fullContentArea.x, fullContentArea.y, fullContentArea.width, height);
+            visibleContentArea = new Rect(
+                visibleContentArea.x, visibleContentArea.y,
+                fullContentArea.height > area.height ? area.width - 16 : area.width,
+                fullContentArea.height
+            );
         }
 
         /// <summary>
@@ -52,6 +69,11 @@ namespace DG.DemiEditor
         public void IncreaseContentHeightBy(float value)
         {
             fullContentArea = new Rect(fullContentArea.x, fullContentArea.y, fullContentArea.width, fullContentArea.height + value);
+            visibleContentArea = new Rect(
+                visibleContentArea.x, visibleContentArea.y,
+                fullContentArea.height > area.height ? area.width - 16 : area.width,
+                fullContentArea.height
+            );
         }
 
         /// <summary>
@@ -64,6 +86,18 @@ namespace DG.DemiEditor
         {
             Rect r = new Rect(fullContentArea.x, fullContentArea.yMax, fullContentArea.width, height < 0 ? EditorGUIUtility.singleLineHeight : height);
             if (increaseScrollViewHeight) IncreaseContentHeightBy(r.height);
+            return r;
+        }
+        /// <summary>
+        /// Returns a Rect for a single line at the current scrollView yMax, as wide as the max visible rect width
+        /// </summary>
+        /// <param name="height">If less than 0 uses default line height, otherwise the value passed</param>
+        /// <param name="increaseScrollViewHeight">if TRUE (default) automatically increases the height of the <see cref="fullContentArea"/> accordingly</param>
+        /// <returns></returns>
+        public Rect GetWideSingleLineRect(float height = -1, bool increaseScrollViewHeight = true)
+        {
+            Rect r = GetSingleLineRect(height, increaseScrollViewHeight);
+            r.xMax = visibleContentArea.xMax;
             return r;
         }
 
@@ -85,12 +119,17 @@ namespace DG.DemiEditor
             fullContentArea = new Rect(
                 fullContentArea.x,
                 fullContentArea.y,
-                fullContentArea.height > area.height ? area.width - 16 : area.width,
+                // fullContentArea.height > area.height ? area.width - 16 : area.width,
+                fullContentArea.width,
                 fullContentArea.height
             );
             scrollPosition = GUI.BeginScrollView(area, scrollPosition, fullContentArea);
             if (resetContentHeightToZero) fullContentArea = new Rect(fullContentArea.x, fullContentArea.y, fullContentArea.width, 0);
-            visibleContentArea = new Rect(area.x, scrollPosition.y, fullContentArea.width, area.height);
+            visibleContentArea = new Rect(
+                area.x, scrollPosition.y,
+                fullContentArea.height > area.height ? area.width - 16 : area.width,
+                fullContentArea.width > area.width ? area.height - 16 : area.height
+            );
             _CurrScrollViews.Push(this);
         }
 

@@ -51,6 +51,11 @@
             Relies on <see cref="T:DG.DemiLib.External.DeHierarchyComponent"/> in Core library.
             </summary>
         </member>
+        <member name="T:DG.DeEditorTools.Hierarchy.DeHierarchyData">
+            <summary>
+            Stores project-related DeHierarchy preferences
+            </summary>
+        </member>
         <member name="T:DG.DeEditorTools.Project.DeProject">
             <summary>
             Customizes Project panel

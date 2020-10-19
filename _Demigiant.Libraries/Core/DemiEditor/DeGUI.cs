@@ -117,10 +117,23 @@ namespace DG.DemiEditor
         /// <summary>
         /// Better implementation of GUI.BeginScrollView.
         /// Returns the modified scrollView struct.<para/>
-        /// Must be closed by a DeGUI.<see cref="EndScrollView"/>.
+        /// Must be closed by a DeGUI.<see cref="EndScrollView"/>.<para/>
+        /// <pre><code>EXAMPLE
+        /// Rect scrollViewArea = ...;
+        /// Rect drawArea = scrollViewArea;
+        /// // Decrease the full drawing area to exclude scrollbars if necessary
+        /// if (_scrollView.fullContentArea.height > scrollViewArea.height) drawArea = drawArea.Shift(0, 0, -11, 0);
+        /// // Begin scrollView
+        /// _scrollView = DeGUI.BeginScrollView(scrollViewArea, _scrollView);
+        /// // Increase scrollView area correctly (or directly set it with SetFullContentHeight
+        /// _scrollView.IncreaseContentHeightBy(...)
+        /// // End
+        /// DeGUI.EndScrollView();
+        /// </code></pre>
         /// </summary>
-        /// <param name="scrollViewArea">Area used by the scrollView</param>
-        /// <param name="scrollView"><see cref="DeScrollView"/> target</param>
+        /// <param name="scrollViewArea">Visible area used by the scrollView</param>
+        /// <param name="scrollView"><see cref="DeScrollView"/> target. You'll need to set its size to the correct full content height
+        /// (either within the Begin/ENd ScrollView calls or before them)</param>
         /// <param name="resetContentHeightToZero">If TRUE (default) resets <see cref="DeScrollView.fullContentArea"/>.height to 0
         /// after beginning the ScrollView</param>
         public static DeScrollView BeginScrollView(Rect scrollViewArea, DeScrollView scrollView, bool resetContentHeightToZero = true)
@@ -202,6 +215,27 @@ namespace DG.DemiEditor
         public static void ShowTexturePreview(Texture2D texture)
         {
             TexturePreviewWindow.Open(texture);
+        }
+
+        /// <summary>
+        /// Gets either black or white, depending on the color that would be most visible on the given one
+        /// </summary>
+        public static Color GetVisibleContentColorOn(Color32 bgColor)
+        {
+            int lum = (int)Math.Sqrt(
+                bgColor.r * bgColor.r * .299 +
+                bgColor.g * bgColor.g * .587 +
+                bgColor.b * bgColor.b * .114
+            );
+            return lum > 130 ? Color.black : Color.white;
+        }
+        /// <summary>
+        /// Gets either black or white, depending on the color that would be most visible on the given one
+        /// </summary>
+        public static Color GetFastVisibleContentColorOn(Color32 bgColor)
+        {
+            // Old faster but obviously not as good method
+            return bgColor.r + bgColor.g + bgColor.b > 1.5f ? Color.black : Color.white;
         }
 
         #endregion

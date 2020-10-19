@@ -55,6 +55,7 @@
     <Compile Include="Hierarchy\DeHierarchyComponentInspector.cs" />
     <Compile Include="Hierarchy\DeHierarchyContextMenu.cs" />
     <Compile Include="Hierarchy\DeHierarchyCustomizePanel.cs" />
+    <Compile Include="Hierarchy\DeHierarchyData.cs" />
     <Compile Include="Project\DeProject.cs" />
     <Compile Include="Project\DeProjectClipboard.cs" />
     <Compile Include="Project\DeProjectCustomizeItemWindow.cs" />

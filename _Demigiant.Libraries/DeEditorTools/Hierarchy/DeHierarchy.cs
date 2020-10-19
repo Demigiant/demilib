@@ -2,12 +2,14 @@
 // Created: 2017/02/04 11:30
 // License Copyright (c) Daniele Giardini
 
+using System;
 using System.Collections.Generic;
 using DG.DemiEditor;
 using DG.DemiLib;
 using DG.DemiLib.External;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DG.DeEditorTools.Hierarchy
 {
@@ -17,13 +19,20 @@ namespace DG.DeEditorTools.Hierarchy
     [InitializeOnLoad]
     public class DeHierarchy
     {
+        public const string ADBDataPath = "Assets/-DeHierarchyProjectPreferences.asset";
+
+        static DeHierarchyData _projectSrc;
         static public DeHierarchyComponent dehComponent { get; private set; }
         static readonly Dictionary<GameObject,GameObjectData> _GoToData = new Dictionary<GameObject,GameObjectData>();
         static string[] _extraNamespacesToIgnoreInComponents;
+        static readonly GUIContent _TmpGUIContent = new GUIContent();
+        static readonly List<Component> _TmpComponents = new List<Component>();
+
+        static Rect _evidenceRShiftByVersion = new Rect();
 
         static bool _stylesSet;
         static Color _icoVisibilityOnColor, _icoVisibilityOffColor, _hasComponentsColor;
-        static GUIStyle _evidenceStyle, _btVisibility, _btVisibilityOff, _layerBox, _layerOrderBox;
+        static GUIStyle _evidenceStyle, _btVisibility, _btVisibilityOff, _layerBox, _layerOrderBox, _extraEvidenceBox, _extraEvidenceBoxLabel;
 
         static DeHierarchy()
         {
@@ -45,8 +54,14 @@ namespace DG.DeEditorTools.Hierarchy
 
         #region GUI
 
-        static void Refresh()
+        public static void Refresh()
         {
+            if (DeUnityEditorVersion.MajorVersion >= 2020) {
+                _evidenceRShiftByVersion = new Rect(17, -1, 1, 1);
+            } else if (DeUnityEditorVersion.MajorVersion >= 2017) {
+                _evidenceRShiftByVersion = new Rect(16, -1, 0, 0);
+            }
+
             _GoToData.Clear();
             _extraNamespacesToIgnoreInComponents = DeEditorToolsPrefs.deHierarchy_ignoreCustomComponentsNamespaces.Split('\n');
             for (int i = 0; i < _extraNamespacesToIgnoreInComponents.Length; ++i) {
@@ -85,18 +100,51 @@ namespace DG.DeEditorTools.Hierarchy
                 if (Event.current.type == EventType.Layout) return;
             } else if (!hasDehComponent || Event.current.type != EventType.Repaint) return;
 
+            ConnectToProjectData(true);
             DeGUI.BeginGUI();
             SetStyles();
 
             GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
             if (go == null) return;
 
+            bool isActiveInHierarchy = go.activeInHierarchy;
             bool requiresGoData = DeEditorToolsPrefs.deHierarchy_showCustomComponentIndicator
-                                  || DeEditorToolsPrefs.deHierarchy_showSortingLayer || DeEditorToolsPrefs.deHierarchy_showOrderInLayer;
+                                  || DeEditorToolsPrefs.deHierarchy_showSortingLayer || DeEditorToolsPrefs.deHierarchy_showOrderInLayer
+                                  || _projectSrc.totExtraEvidences > 0;
             GameObjectData goData = requiresGoData
                 ? GetGameObjectData(go,
                     DeEditorToolsPrefs.deHierarchy_showCustomComponentIndicator, DeEditorToolsPrefs.deHierarchy_showCustomComponentsInChildrenIndicator
                 ) : null;
+
+            // Extra evidence
+            if (requiresGoData && goData.hasExtraEvidence) {
+                _TmpGUIContent.text = go.name;
+                Rect evidenceR = new Rect(selectionRect.x - 1, selectionRect.y + 2, GUI.skin.label.CalcSize(_TmpGUIContent).x, selectionRect.height - 2);
+                evidenceR = new Rect(
+                    evidenceR.x + _evidenceRShiftByVersion.x, evidenceR.y + _evidenceRShiftByVersion.y,
+                    evidenceR.width + _evidenceRShiftByVersion.width, evidenceR.height + _evidenceRShiftByVersion.height
+                );
+                Color evColor = goData.extraEvidenceColor;
+                switch (goData.extraEvidenceMode) {
+                case DeHierarchyData.EvidenceMode.Box:
+                    Color labelColor = DeGUI.GetVisibleContentColorOn(goData.extraEvidenceColor);
+                    if (!isActiveInHierarchy) {
+                        evColor.a *= 0.4f;
+                        labelColor = new DeSkinColor(labelColor == Color.white ? 0.5f : 0.15f);
+                    }
+                    using (new DeGUI.ColorScope(evColor, labelColor)) {
+                        GUI.Box(evidenceR, GUIContent.none, _extraEvidenceBox);
+                        GUI.Label(evidenceR, _TmpGUIContent, _extraEvidenceBoxLabel);
+                    }
+                    break;
+                default:
+                    if (!isActiveInHierarchy) evColor.a *= 0.5f;
+                    using (new DeGUI.ColorScope(null, null, evColor)) {
+                        GUI.Box(evidenceR, GUIContent.none, DeGUI.styles.box.roundOutline01);
+                    }
+                    break;
+                }
+            }
 
             // Custom Components icon
             if (DeEditorToolsPrefs.deHierarchy_showCustomComponentIndicator && (goData.hasCustomComponents || goData.hasCustomComponentsInChildren)) {
@@ -119,7 +167,6 @@ namespace DG.DeEditorTools.Hierarchy
             // Visibility button
             if (showVisibilityButton) {
                 bool isActive = go.activeSelf;
-                bool isActiveInHierarchy = go.activeInHierarchy;
                 Texture2D ico = DeStylePalette.ico_visibility;
                 extraR = new Rect(selectionRect.xMax - ico.width - 2, (int)(selectionRect.center.y - (ico.height * 0.5f)), ico.width, ico.height);
                 using (new DeGUI.ColorScope(null, null, isActiveInHierarchy ? _icoVisibilityOnColor : _icoVisibilityOffColor)) {
@@ -274,6 +321,10 @@ namespace DG.DeEditorTools.Hierarchy
             _layerBox = new GUIStyle(GUI.skin.label).Add(TextAnchor.MiddleCenter, 10, new DeSkinColor(0.2f, 0.8f)).Padding(2, 2, 1, 1).Margin(0)
                 .Background(DeGUI.IsProSkin ? DeStylePalette.blackSquare : DeStylePalette.whiteSquare);
             _layerOrderBox = _layerBox.Clone();
+
+            _extraEvidenceBox = DeGUI.styles.box.roundOutline01.Clone().Background(DeStylePalette.whiteSquareCurved02);
+            _extraEvidenceBoxLabel = new GUIStyle(GUI.skin.label).Add(Color.white).Padding(0)
+                .ContentOffset(DeUnityEditorVersion.MajorVersion < 2020 ? 1 : 2, 0);
         }
 
         #endregion
@@ -400,6 +451,11 @@ namespace DG.DeEditorTools.Hierarchy
             dehComponent = go.AddComponent<DeHierarchyComponent>();
         }
 
+        static void ConnectToProjectData(bool createIfMissing)
+        {
+            if (_projectSrc == null) _projectSrc = DeEditorPanelUtils.ConnectToSourceAsset<DeHierarchyData>(DeHierarchy.ADBDataPath, createIfMissing, false);
+        }
+
         static void SetDeHierarchyGOFlags(GameObject deHierarchyGO)
         {
             if (DeEditorToolsPrefs.deHierarchy_hideObject) {
@@ -425,36 +481,57 @@ namespace DG.DeEditorTools.Hierarchy
 
         public class GameObjectData
         {
-            public Renderer renderer;
-            public bool hasRenderer;
-            public bool hasCustomComponents;
-            public bool hasCustomComponentsInChildren;
+            public readonly Renderer renderer;
+            public readonly bool hasRenderer;
+            public readonly bool hasCustomComponents;
+            public readonly bool hasCustomComponentsInChildren;
+            public readonly bool hasExtraEvidence;
+            public readonly DeHierarchyData.EvidenceMode extraEvidenceMode;
+            public readonly Color extraEvidenceColor;
 
             public GameObjectData(GameObject go, bool checkForCustomComponents, bool checkForCustomComponentsInChildren)
             {
                 renderer = go.GetComponent<Renderer>();
                 hasRenderer = renderer != null;
                 if (checkForCustomComponents) {
+                    // Custom components
                     Transform parentT = go.transform;
-                    Component[] comps;
-                    if (checkForCustomComponentsInChildren) comps = go.GetComponentsInChildren<Component>(true);
-                    else comps = go.GetComponents<Component>();
-                    int len = comps.Length;
+                    if (checkForCustomComponentsInChildren) go.GetComponentsInChildren<Component>(true, _TmpComponents);
+                    else go.GetComponents<Component>(_TmpComponents);
+                    int len = _TmpComponents.Count;
                     for (int i = len - 1; i > 0; --i) { // Ignore 0 because it's always Transform or RectTransform
-                        if (comps[i] == null) continue; // Happens in case of missing scripts
+                        if (_TmpComponents[i] == null) continue; // Happens in case of missing scripts
                         if (checkForCustomComponentsInChildren) {
-                            bool isChildComp = comps[i].transform != parentT;
+                            bool isChildComp = _TmpComponents[i].transform != parentT;
                             if (!isChildComp && hasCustomComponents || isChildComp && hasCustomComponentsInChildren) continue;
                             // if (comps[i].GetType().FullName.StartsWith("UnityEngine")) continue;
-                            if (!IsValidCustomComponent(comps[i].GetType().FullName)) continue;
+                            if (!IsValidCustomComponent(_TmpComponents[i].GetType().FullName)) continue;
                             if (isChildComp) hasCustomComponentsInChildren = true;
                             else hasCustomComponents = true;
                             if (hasCustomComponents && hasCustomComponentsInChildren) break;
                         } else {
-                            if (!IsValidCustomComponent(comps[i].GetType().FullName)) continue;
+                            if (!IsValidCustomComponent(_TmpComponents[i].GetType().FullName)) continue;
                             hasCustomComponents = true;
                             break;
                         }
+                    }
+                }
+                if (_projectSrc.totExtraEvidences > 0) {
+                    // Extra evidences
+                    go.GetComponents<Component>(_TmpComponents);
+                    int len = _TmpComponents.Count;
+                    for (int i = len - 1; i > 0; --i) { // Ignore 0 because it's always Transform or RectTransform
+                        if (_TmpComponents[i] == null) continue; // Happens in case of missing scripts
+                        string typeName = _TmpComponents[i].GetType().FullName;
+                        for (int j = 0; j < _projectSrc.totExtraEvidences; ++j) {
+                            if (string.IsNullOrEmpty(_projectSrc.extraEvidences[j].componentClass)) continue;
+                            if (!typeName.EndsWith(_projectSrc.extraEvidences[j].componentClass)) continue;
+                            hasExtraEvidence = true;
+                            extraEvidenceMode = _projectSrc.extraEvidences[j].evidenceMode;
+                            extraEvidenceColor = _projectSrc.extraEvidences[j].color;
+                            break;
+                        }
+                        if (hasExtraEvidence) break;
                     }
                 }
             }
