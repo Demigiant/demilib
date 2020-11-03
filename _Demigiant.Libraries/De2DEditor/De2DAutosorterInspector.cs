@@ -32,6 +32,7 @@ namespace DG.De2DEditor
 
             _src.sortMode = (SortMode)EditorGUILayout.EnumPopup("Sort Mode", _src.sortMode);
             _src.ignoreEditorOnly = EditorGUILayout.Toggle("Ignore EditorOnly", _src.ignoreEditorOnly);
+            _src.invert = EditorGUILayout.Toggle("Invert", _src.invert);
             switch (_src.sortMode) {
             case SortMode.OrderInLayer:
                 _src.sortFrom = EditorGUILayout.IntField("Starting Order", _src.sortFrom);
@@ -42,7 +43,7 @@ namespace DG.De2DEditor
             }
 
             if (GUI.changed) {
-                if (_src.sortFrom < 0) _src.sortFrom = 0;
+                // if (_src.sortFrom < 0) _src.sortFrom = 0;
                 Reorder();
             }
         }
@@ -80,7 +81,7 @@ namespace DG.De2DEditor
                 case SortMode.OrderInLayer:
                     foreach (Renderer r in rs) {
                         if (de2DAutosorter.ignoreEditorOnly && IsEditorOnly(r.transform)) continue;
-                        r.sortingOrder = de2DAutosorter.sortFrom + sortIncrement;
+                        r.sortingOrder = de2DAutosorter.sortFrom + (de2DAutosorter.invert ? -sortIncrement : sortIncrement);
                         SetLocalZ(r.transform, 0);
                         sortIncrement++;
                     }
@@ -89,7 +90,7 @@ namespace DG.De2DEditor
                     foreach (Renderer r in rs) {
                         if (de2DAutosorter.ignoreEditorOnly && IsEditorOnly(r.transform)) continue;
                         r.sortingOrder = de2DAutosorter.sortFrom;
-                        SetLocalZ(r.transform, -sortIncrement * de2DAutosorter.zShift);
+                        SetLocalZ(r.transform, (de2DAutosorter.invert ? sortIncrement : -sortIncrement) * de2DAutosorter.zShift);
                         sortIncrement++;
                     }
                     break;

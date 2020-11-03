@@ -24,6 +24,7 @@ namespace DG.De2D
     {
         public SortMode sortMode = SortMode.OrderInLayer;
         public bool ignoreEditorOnly = false;
+        public bool invert = false; // If TRUE first lower elements' sorting oeder decreases instead of increasing
         public int sortFrom = 0;
         public float zShift = 0.001f;
 
