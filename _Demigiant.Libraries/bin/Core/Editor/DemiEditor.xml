@@ -1309,6 +1309,9 @@
             even if it was pressed outside of the button first
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.ToolbarFoldoutButton(System.Boolean)">
+            <summary>Toolbar foldout button</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUILayout.ToolbarFoldoutButton(System.Boolean,System.String,System.Boolean,System.Boolean,System.Nullable{UnityEngine.Color})">
             <summary>Toolbar foldout button</summary>
         </member>

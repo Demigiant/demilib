@@ -138,10 +138,13 @@ namespace DG.DemiEditor
         }
 
         /// <summary>Toolbar foldout button</summary>
-        public static bool ToolbarFoldoutButton(bool toggled, string text = null, bool isLarge = false, bool stretchedLabel = false, Color? forceLabelColor = null)
+        public static bool ToolbarFoldoutButton(bool toggled)
+        { return ToolbarFoldoutButton(toggled, GUIContent.none); }
+        /// <summary>Toolbar foldout button</summary>
+        public static bool ToolbarFoldoutButton(bool toggled, string text, bool isLarge = false, bool stretchedLabel = false, Color? forceLabelColor = null)
         { return ToolbarFoldoutButton(toggled, string.IsNullOrEmpty(text) ? GUIContent.none : new GUIContent(text), isLarge, stretchedLabel, forceLabelColor); }
         /// <summary>Toolbar foldout button</summary>
-        public static bool ToolbarFoldoutButton(bool toggled, GUIContent guiContent = null, bool isLarge = false, bool stretchedLabel = false, Color? forceLabelColor = null)
+        public static bool ToolbarFoldoutButton(bool toggled, GUIContent guiContent, bool isLarge = false, bool stretchedLabel = false, Color? forceLabelColor = null)
         {
             GUIStyle style;
             if (isLarge) {
