@@ -6,7 +6,7 @@
     <members>
         <member name="T:DG.DemiEditor.DeEditorCompatibilityUtils">
             <summary>
-            Utils to use he correct method based on Unity's version
+            Utils to use the correct method based on Unity's version
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.EncodeToPNG(UnityEngine.Texture2D)">

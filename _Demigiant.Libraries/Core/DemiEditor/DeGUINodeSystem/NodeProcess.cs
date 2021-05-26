@@ -88,6 +88,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         readonly Func<IEditorGUINode,IEditorGUINode,bool> _onCloneNodeCallback; // Returns FALSE if cloning shouldn't happen
         bool _guiInitialized; // Indicates that eventual calls that require a first GUI call to happen were done
         bool _isDockableEditor; // Used in conjunction with hack to allow correct GUI scaling on dockable windows
+        bool _checkMouseLeaveForMouseUp; // Used in Unity 2020 and later where mouseUp outside of editor window is not detected anymore
         bool _repaintOnEnd; // If TRUE, repaints the editor during EndGUI. Set to FALSE at each EndGUI
         bool _resetInteractionOnEnd;
         Vector2 _forceApplyAreaShiftBy; // Used by ShiftAreaBy to apply a shift the next time the process begins
@@ -344,6 +345,12 @@ namespace DG.DemiEditor.DeGUINodeSystem
             if (!_guiInitialized) {
                 _guiInitialized = true;
                 _isDockableEditor = DeEditorPanelUtils.IsDockableWindow(editor);
+                if (DeUnityEditorVersion.MajorVersion >= 2020) {
+                    // Fix for MouseUp events not working anymore if outside the editor window (not even using rawType)
+                    // Will need to check for MouseLeaveWindow event which is fired when releasing the mouse outside the window
+                    _checkMouseLeaveForMouseUp = true;
+                    DeEditorUtils.SetEditorWantsMouseEnterLeaveWindow(editor, true);
+                }
             }
             if (options.debug_showFps) _debug.OnNodeProcessStart(interaction.state);
 
@@ -751,7 +758,11 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 break;
             }
 
-            switch (Event.current.rawType) {
+            EventType currEventRawType = Event.current.rawType;
+            if (_checkMouseLeaveForMouseUp && interaction.state != InteractionManager.State.Inactive) {
+                if (currEventRawType.ToString() == "MouseLeaveWindow") currEventRawType = EventType.MouseUp;
+            }
+            switch (currEventRawType) {
 //            // RAW KEY EVENTS ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //            case EventType.KeyDown:
 //                if (_isAltPressed) break;

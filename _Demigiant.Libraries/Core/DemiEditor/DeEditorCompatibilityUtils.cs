@@ -11,7 +11,7 @@ using Object = UnityEngine.Object;
 namespace DG.DemiEditor
 {
     /// <summary>
-    /// Utils to use he correct method based on Unity's version
+    /// Utils to use the correct method based on Unity's version
     /// </summary>
     public static class DeEditorCompatibilityUtils
     {

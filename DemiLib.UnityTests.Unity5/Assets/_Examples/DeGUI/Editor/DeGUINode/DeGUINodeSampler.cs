@@ -128,7 +128,10 @@ namespace _Examples.DeGUI.Editor.DeGUINode
             menu.AddItem(new GUIContent(string.Format("Reset Panning (current: {0},{1})", src.nodeSystem.areaShift.x, src.nodeSystem.areaShift.y)), false, () => {
                 src.nodeSystem.areaShift = Vector2.zero;
                 EditorUtility.SetDirty(src);
-                this.Repaint();
+                _nodeProcess.MarkLayoutAsDirty();
+            });
+            menu.AddItem(new GUIContent("Draw New Group"), false, () => {
+
             });
             menu.AddItem(new GUIContent("Capture screenshot"), false, () => {
                 _nodeProcess.CaptureScreenshot(NodeProcess.ScreenshotMode.VisibleArea, DG.DemiEditor.DeGUI.ShowTexturePreview);

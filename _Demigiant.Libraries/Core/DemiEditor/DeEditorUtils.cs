@@ -25,6 +25,7 @@ namespace DG.DemiEditor
         static MethodInfo _miSetGizmoEnabled;
         static int _miSetGizmoEnabledTotParms;
         static MethodInfo _miSetIconEnabled;
+        static PropertyInfo _piWantsMouseEnterLeaveWindow;
 
         #region Public Methods
 
@@ -241,6 +242,14 @@ namespace DG.DemiEditor
                 }
                 _miSetIconEnabled.Invoke(null, new object[] { classId, scriptClass, setValue });
             }
+        }
+
+        public static void SetEditorWantsMouseEnterLeaveWindow(EditorWindow editor, bool enable)
+        {
+            if (_piWantsMouseEnterLeaveWindow == null) {
+                _piWantsMouseEnterLeaveWindow = typeof(EditorWindow).GetProperty("wantsMouseEnterLeaveWindow", BindingFlags.Instance | BindingFlags.Public);
+            }
+            if (_piWantsMouseEnterLeaveWindow == null) _piWantsMouseEnterLeaveWindow.SetValue(editor, enable, null);
         }
 
         #region Legacy
