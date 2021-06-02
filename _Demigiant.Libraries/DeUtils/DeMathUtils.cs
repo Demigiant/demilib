@@ -51,6 +51,45 @@ namespace DG.DeUtils
         }
 
         /// <summary>
+        /// Finds the point on a segment that is closest to the given p coordinates
+        /// </summary>
+        // Uses code from https://stackoverflow.com/questions/3120357/get-closest-point-to-a-line
+        public static Vector2 FindClosestPointOnSegment(Vector2 p, Vector2 a, Vector2 b)
+        {
+            Vector2 ap = p - a; // Vector from A to P
+            Vector2 ab = b - a; // Vector from A to B
+
+            float magnitudeAB = ab.sqrMagnitude; // Magnitude of AB vector (it's length squared)
+            float product_AB_AP = Vector2.Dot(ap, ab); // The DOT product of a_to_p and a_to_b
+            float distance = product_AB_AP / magnitudeAB; // The normalized "distance" from a to your closest point
+
+            if (distance < 0) return a;
+            if (distance > 1)  return b;
+            return a + ab * distance;
+        }
+
+        // Uses code from https://github.com/setchi/Unity-LineSegmentsIntersection/blob/master/Assets/LineSegmentIntersection/Scripts/Math2d.cs
+        /// <summary>
+        /// Finds the eventual point where two segments intersect.
+        /// Returns FALSE if there is no intersection happening
+        /// </summary>
+        public static bool FindSegmentToSegmentIntersection(Vector2 a0, Vector2 a1, Vector2 b0, Vector2 b1, out Vector2 intersection)
+        {
+            intersection = Vector2.zero;
+
+            float d = (a1.x - a0.x) * (b1.y - b0.y) - (a1.y - a0.y) * (b1.x - b0.x);
+            if (d == 0.0f) return false;
+
+            float u = ((b0.x - a0.x) * (b1.y - b0.y) - (b0.y - a0.y) * (b1.x - b0.x)) / d;
+            float v = ((b0.x - a0.x) * (a1.y - a0.y) - (b0.y - a0.y) * (a1.x - a0.x)) / d;
+            if (u < 0.0f || u > 1.0f || v < 0.0f || v > 1.0f) return false;
+
+            intersection.x = a0.x + u * (a1.x - a0.x);
+            intersection.y = a0.y + u * (a1.y - a0.y);
+            return true;
+        }
+
+        /// <summary>
         /// Finds the eventual intersection points between a line and a circle, and returns the total number of intersections
         /// </summary>
         /// Uses code from Rod Stephens: http://csharphelper.com/blog/2014/09/determine-where-a-line-intersects-a-circle-in-c/
