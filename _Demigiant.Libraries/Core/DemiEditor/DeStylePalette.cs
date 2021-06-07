@@ -75,6 +75,7 @@ namespace DG.DemiEditor
         public static Texture2D whiteDot_darkBorder { get { return LoadTexture(ref _whiteDot_darkBorder, "whiteDot_darkBorder"); } }
         public static Texture2D whiteDot_whiteBorderAlpha { get { return LoadTexture(ref _whiteDot_whiteBorderAlpha, "whiteDot_whiteBorderAlpha"); } }
         public static Texture2D circle { get { return LoadTexture(ref _circle, "circle", FilterMode.Bilinear); } }
+        public static Texture2D circleDashedBorderEmpty { get { return LoadTexture(ref _circleDashedBorderEmpty, "circle_dashedBorderEmpty", FilterMode.Bilinear); } }
         static Texture2D _transparent;
         static Texture2D _whiteSquare;
         static Texture2D _whiteSquareCurved;
@@ -116,6 +117,7 @@ namespace DG.DemiEditor
         static Texture2D _whiteDot_darkBorder;
         static Texture2D _whiteDot_whiteBorderAlpha;
         static Texture2D _circle;
+        static Texture2D _circleDashedBorderEmpty;
         public static Texture2D ico_demigiant { get { return LoadTexture(ref _ico_demigiant, "ico_demigiant", FilterMode.Bilinear, 16); } }
         public static Texture2D ico_lock { get { return LoadTexture(ref _ico_lock, "ico_lock"); } }
         public static Texture2D ico_lock_open { get { return LoadTexture(ref _ico_lock_open, "ico_lock_open"); } }

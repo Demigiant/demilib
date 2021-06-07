@@ -36,6 +36,12 @@
             Finds the point on a segment that is closest to the given p coordinates
             </summary>
         </member>
+        <member name="M:DG.DeUtils.DeMathUtils.FindSegmentToSegmentIntersection(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2@)">
+            <summary>
+            Finds the eventual point where two segments intersect.
+            Returns FALSE if there is no intersection happening
+            </summary>
+        </member>
         <member name="M:DG.DeUtils.DeMathUtils.FindLineCircleIntersection(UnityEngine.Vector2,System.Single,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2@,UnityEngine.Vector2@)">
             <summary>
             Finds the eventual intersection points between a line and a circle, and returns the total number of intersections
