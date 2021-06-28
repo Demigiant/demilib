@@ -89,6 +89,19 @@ namespace DG.DemiEditor.DeGUINodeSystem
 
         #region Public Methods
 
+        /// <summary>
+        /// Resets the interaction state
+        /// </summary>
+        public void Reset()
+        {
+            SetState(State.Inactive, false);
+            mouseTargetType = TargetType.None;
+            nodeTargetType = NodeTargetType.None;
+            targetNode = null;
+            targetNodeConnectorAreaIndex = 0;
+            _currMouseCursor = MouseCursor.Arrow;
+        }
+
         /// <summary>Returns TRUE if the given node is currently being dragged</summary>
         public bool IsDragging(IEditorGUINode node)
         {
@@ -98,16 +111,6 @@ namespace DG.DemiEditor.DeGUINodeSystem
         #endregion
 
         #region Internal Methods
-
-        internal void Reset()
-        {
-            SetState(State.Inactive, false);
-            mouseTargetType = TargetType.None;
-            nodeTargetType = NodeTargetType.None;
-            targetNode = null;
-            targetNodeConnectorAreaIndex = 0;
-            _currMouseCursor = MouseCursor.Arrow;
-        }
 
         // Also resets readyForState
         internal void SetState(State toState, bool allowRepaint = true)

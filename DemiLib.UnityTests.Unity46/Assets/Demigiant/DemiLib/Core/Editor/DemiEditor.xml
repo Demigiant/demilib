@@ -683,6 +683,11 @@
         <member name="P:DG.DemiEditor.DeGUINodeSystem.InteractionManager.isDraggingNodes">
             <summary>TRUE when read-to or dragging nodes</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.Reset">
+            <summary>
+            Resets the interaction state
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.InteractionManager.IsDragging(DG.DemiLib.IEditorGUINode)">
             <summary>Returns TRUE if the given node is currently being dragged</summary>
         </member>
@@ -797,6 +802,12 @@
             <param name="useProgressBar">If TRUE (default) displays a progress bar during the operation.
             You'll want to set this to FALSE when you're already using a custom progressBar
             and the screenshot is only part of a larger queue of operations</param>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.DeleteNode``1(System.String,System.Collections.Generic.IList{``0})">
+            <summary>
+            Removes the node with the given ID from the list and removes all connections to it from other nodes.<para/>
+            Doesn't mark things dirty nor prepares them for undo
+            </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcessScope`1.#ctor(DG.DemiEditor.DeGUINodeSystem.NodeProcess,UnityEngine.Rect,UnityEngine.Vector2@,System.Collections.Generic.IList{`0})">
             <summary>

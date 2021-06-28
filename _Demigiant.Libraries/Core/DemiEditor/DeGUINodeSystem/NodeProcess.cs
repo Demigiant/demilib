@@ -49,7 +49,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             AllNodes
         }
 
-        public const string Version = "1.0.060";
+        public const string Version = "1.0.072";
         /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
         public const int SnapOffset = 12;
         public EditorWindow editor; // Get/set so it can be refreshed if necessary
@@ -325,6 +325,27 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public void CaptureScreenshot(ScreenshotMode screenshotMode, Action<Texture2D> onComplete, float allNodesScaleFactor = 1, bool useProgressBar = true)
         {
             ScreenshotManager.CaptureScreenshot(this, screenshotMode, onComplete, allNodesScaleFactor, useProgressBar);
+        }
+
+        /// <summary>
+        /// Removes the node with the given ID from the list and removes all connections to it from other nodes.<para/>
+        /// Doesn't mark things dirty nor prepares them for undo
+        /// </summary>
+        public void DeleteNode<T>(string nodeId, IList<T> removeFrom) where T : IEditorGUINode
+        {
+            int index = IndexOfNodeById(nodeId, removeFrom);
+            if (index == -1) return;
+            IEditorGUINode nodeToRemove = removeFrom[index];
+            removeFrom.RemoveAt(index);
+            // Remove from ordered nodes
+            index = orderedNodes.IndexOf(nodeToRemove);
+            if (index != -1) orderedNodes.RemoveAt(index);
+            // Remove references to deleted nodes from connections
+            foreach (IEditorGUINode node in nodes) {
+                for (int i = 0; i < node.connectedNodesIds.Count; ++i) {
+                    if (node.connectedNodesIds[i] == nodeId) node.connectedNodesIds[i] = null;
+                }
+            }
         }
 
         #endregion
@@ -1161,7 +1182,8 @@ namespace DG.DemiEditor.DeGUINodeSystem
         }
 
         // Deletes all selected nodes if they're part of the given list,
-        // and removes their ID from any other node that referenced them as a connection
+        // and removes their ID from any other node that referenced them as a connection.
+        // See DeleteNode for a public version of this method with repeated code
         void DeleteSelectedNodesInList<T>(IList<T> removeFrom) where T : IEditorGUINode
         {
             _tmp_string.Clear(); // Used to store ids to remove
