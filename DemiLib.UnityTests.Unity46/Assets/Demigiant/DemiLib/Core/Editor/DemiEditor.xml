@@ -2274,5 +2274,22 @@
             Returns a clone of the event
             </summary>
         </member>
+        <member name="T:DG.DemiEditor.DeSerializedPropertySet">
+            <summary>
+            Utility class meant to be extended so you can add as many public fields as the SerializedProperties you want to access.
+            They should have the same name as the original property so that calling <see cref="M:DG.DemiEditor.DeSerializedPropertySet.Init(UnityEditor.SerializedObject)"/> will initialize them correctly
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeSerializedPropertySet.Init(UnityEditor.SerializedObject)">
+            <summary>
+            Initialized the <see cref="T:UnityEditor.SerializedProperty"/> fields, required before any other operation/access
+            </summary>
+            <param name="so"></param>
+        </member>
+        <member name="M:DG.DemiEditor.DeSerializedPropertySet.DrawAllPropertyFields">
+            <summary>
+            Draws all property fields
+            </summary>
+        </member>
     </members>
 </doc>
