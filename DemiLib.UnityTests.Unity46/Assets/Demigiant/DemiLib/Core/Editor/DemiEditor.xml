@@ -2276,15 +2276,10 @@
         </member>
         <member name="T:DG.DemiEditor.DeSerializedPropertySet">
             <summary>
-            Utility class meant to be extended so you can add as many public fields as the SerializedProperties you want to access.
-            They should have the same name as the original property so that calling <see cref="M:DG.DemiEditor.DeSerializedPropertySet.Init(UnityEditor.SerializedObject)"/> will initialize them correctly
+            Utility class. You can either use it as is via its constructor, which automatically retrieves all serializedProperties in the instance,
+            or you can extend it so you can add as many public SerializedProperties as the SerializedProperties you want to access
+            (their name must be the same as the serialized field they refer to)
             </summary>
-        </member>
-        <member name="M:DG.DemiEditor.DeSerializedPropertySet.Init(UnityEditor.SerializedObject)">
-            <summary>
-            Initialized the <see cref="T:UnityEditor.SerializedProperty"/> fields, required before any other operation/access
-            </summary>
-            <param name="so"></param>
         </member>
         <member name="M:DG.DemiEditor.DeSerializedPropertySet.DrawAllPropertyFields">
             <summary>
