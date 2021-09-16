@@ -843,6 +843,10 @@
             Requires to be updated at the beginning of every GUI call.
             </summary>
         </member>
+        <member name="P:DG.DemiEditor.DeGUIKey.interpretOSXCommandAs">
+            <summary>Note: ALT isn't correctly interpreted as OPTION on OSX, contrary to what Unity manual states,
+            so using Command instead fixes that</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUIKey.Refresh(System.String)">
             <summary>
             Call this method to update data required by softCtrl calculations.

@@ -55,7 +55,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             cGroup.AppendDefinition("Open/Close [b]Help Panel[/b]").AddKey("F1");
             cGroup.AppendDefinition("Pan area").AddKey("MMB → Drag");
             cGroup.AppendDefinition("Zoom in/out (if allowed)").AddKey("CTRL+Scrollwheel");
-            cGroup.AppendDefinition("Show extra UI buttons").AddKey("ALT");
+            cGroup.AppendDefinition("Show extra UI buttons").AddKey("ALT/CMD");
             cGroup.AppendDefinition("Background context menu").AddKey("RMB");
             // SELECTION
             cGroup = AddContentGroup("Selection");
@@ -63,7 +63,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             cGroup.AppendDefinition("Draw selection rect").AddKey("LMB → Drag").AddKeyTarget("on background");
             cGroup.AppendDefinition("Draw selection rect (add)").AddKey("SHIFT+LMB → Drag").AddKeyTarget("on background");
             cGroup.AppendDefinition("Add/Remove node from selection").AddKey("SHIFT+LMB").AddKeyTarget("on node");
-            cGroup.AppendDefinition("Add node plus all forward connected nodes to selection").AddKey("SHIFT+ALT+LMB").AddKeyTarget("on node");
+            cGroup.AppendDefinition("Add node plus all forward connected nodes to selection").AddKey("SHIFT+ALT/CMD+LMB").AddKeyTarget("on node");
             // NODE MANIPULATION
             cGroup = AddContentGroup("Nodes Manipulation");
             cGroup.AppendDefinition("Delete selected nodes").AddKey("DELETE").AddKey("BACKSPACE");
@@ -74,7 +74,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             cGroup.AppendDefinition("Move selected nodes by 10 pixel").AddKey("SHIFT+ARROWS");
             cGroup.AppendDefinition("Align and arrange selected nodes vertically").AddKey("CTRL+SHIFT+LEFT");
             cGroup.AppendDefinition("Align and arrange selected nodes horizontally").AddKey("CTRL+SHIFT+UP");
-            cGroup.AppendDefinition("Disable snapping while dragging nodes").AddKey("ALT");
+            cGroup.AppendDefinition("Disable snapping while dragging nodes").AddKey("ALT/CMD");
             cGroup.AppendDefinition("Drag connection from node (if allowed)").AddKey("CTRL+LMB → Drag");
             cGroup.AppendDefinition("Drag alternative connection from node (if allowed)").AddKey("CTRL+SPACE+LMB → Drag");
             cGroup.AppendDefinition("Clone selected nodes and drag them").AddKey("SHIFT+CTRL+LMB → Drag");

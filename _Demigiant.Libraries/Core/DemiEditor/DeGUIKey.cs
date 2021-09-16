@@ -14,19 +14,43 @@ namespace DG.DemiEditor
     /// </summary>
     public static class DeGUIKey
     {
+        public enum Key
+        {
+            Alt,
+            Control
+        }
+
+        /// <summary>Note: ALT isn't correctly interpreted as OPTION on OSX, contrary to what Unity manual states,
+        /// so using Command instead fixes that</summary>
+        public static Key interpretOSXCommandAs {
+            get { return _interpretOSXCommandAsAlt ? Key.Alt : Key.Control; }
+            set {
+                switch (value) {
+                case Key.Alt:
+                    _interpretOSXCommandAsAlt = true;
+                    _interpretOSXCommandAsCtrl = false;
+                    break;
+                case Key.Control:
+                    _interpretOSXCommandAsAlt = false;
+                    _interpretOSXCommandAsCtrl = true;
+                    break;
+                }
+            }
+        }
+
         public static bool shift { get { return Event.current.shift; }}
-        public static bool ctrl { get { return Event.current.control || Event.current.command; }}
-        public static bool alt { get { return Event.current.alt; }}
+        public static bool ctrl { get { return Event.current.control || _interpretOSXCommandAsCtrl && Event.current.command; }}
+        public static bool alt { get { return Event.current.alt || _interpretOSXCommandAsAlt && Event.current.command; }}
         public static bool none { get { return !ctrl && !shift && !alt; } }
 
         public static bool softShift { get {
-            return (Event.current.shift || Time.realtimeSinceStartup - _timeAtShiftKeyRelease < _SoftDelay);
+            return (shift || Time.realtimeSinceStartup - _timeAtShiftKeyRelease < _SoftDelay);
         }}
         public static bool softCtrl { get {
-            return (Event.current.control || Event.current.command || Time.realtimeSinceStartup - _timeAtCtrlKeyRelease < _SoftDelay);
+            return (ctrl || Time.realtimeSinceStartup - _timeAtCtrlKeyRelease < _SoftDelay);
         }}
         public static bool softAlt { get {
-            return (Event.current.alt || Time.realtimeSinceStartup - _timeAtAltKeyRelease < _SoftDelay);
+            return (alt || Time.realtimeSinceStartup - _timeAtAltKeyRelease < _SoftDelay);
         }}
 
         public static bool ctrlShiftAlt { get { return ctrl && shift && alt; }}
@@ -42,6 +66,8 @@ namespace DG.DemiEditor
         const float _SoftDelay = 0.2f;
         static float _timeAtShiftKeyRelease, _timeAtCtrlKeyRelease, _timeAtAltKeyRelease;
         static readonly Dictionary<string,Keys> _idToDownKeysAtLastPass = new Dictionary<string, Keys>();
+        static bool _interpretOSXCommandAsAlt = true;
+        static bool _interpretOSXCommandAsCtrl;
 
         #region Internal Methods
 
@@ -78,8 +104,6 @@ namespace DG.DemiEditor
                     break;
                 case KeyCode.LeftControl:
                 case KeyCode.RightControl:
-                case KeyCode.LeftCommand:
-                case KeyCode.RightCommand:
                     result.released.ctrl = true;
                     _timeAtCtrlKeyRelease = Time.realtimeSinceStartup;
                     break;
@@ -88,6 +112,16 @@ namespace DG.DemiEditor
 //                case KeyCode.AltGr: // Ignore AltGr
                     result.released.alt = true;
                     _timeAtAltKeyRelease = Time.realtimeSinceStartup;
+                    break;
+                case KeyCode.LeftCommand:
+                case KeyCode.RightCommand:
+                    if (_interpretOSXCommandAsAlt) {
+                        result.released.alt = true;
+                        _timeAtAltKeyRelease = Time.realtimeSinceStartup;
+                    } else {
+                        result.released.ctrl = true;
+                        _timeAtCtrlKeyRelease = Time.realtimeSinceStartup;
+                    }
                     break;
                 case KeyCode.Space:
                     Extra.space = result.released.space = false;
