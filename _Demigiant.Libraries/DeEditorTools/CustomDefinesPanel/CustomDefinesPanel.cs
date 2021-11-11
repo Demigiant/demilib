@@ -2,6 +2,7 @@
 // Created: 2021/11/10
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.DemiEditor;
 using DG.DemiLib;
@@ -21,6 +22,7 @@ namespace DG.DeEditorTools.CustomDefinesPanel
         const string _Title = "Defines Panel";
         const string _SrcADBFilePath = "Assets/-CustomDefinesPanelData.asset";
         CustomDefinesPanelData _src;
+        bool _waitingForCompilation;
         Vector2 _scrollPos;
         readonly GUIContent _gcRefresh = new GUIContent("Refresh", "Force refresh");
         readonly GUIContent _gcAdd = new GUIContent("+ ADD", "Add new define");
@@ -53,9 +55,16 @@ namespace DG.DeEditorTools.CustomDefinesPanel
 
         void OnGUI()
         {
+            if (_src == null) _src = DeEditorPanelUtils.ConnectToSourceAsset<CustomDefinesPanelData>(_SrcADBFilePath, true);
+
             DeGUI.BeginGUI();
 
-            if (_src == null) _src = DeEditorPanelUtils.ConnectToSourceAsset<CustomDefinesPanelData>(_SrcADBFilePath, true);
+            if (EditorApplication.isCompiling) {
+                WaitForCompilation();
+                return;
+            } else {
+                _waitingForCompilation = false;
+            }
 
             using (new DeGUILayout.ToolbarScope(new DeSkinColor(0.75f, 0.6f), DeGUI.styles.toolbar.def)) {
                 GUILayout.FlexibleSpace();
@@ -149,6 +158,29 @@ namespace DG.DeEditorTools.CustomDefinesPanel
 
             GUILayout.EndScrollView();
             if (GUI.changed) EditorUtility.SetDirty(_src);
+        }
+
+        void WaitForCompilation()
+        {
+            EditorGUILayout.HelpBox("Waiting for Unity to compile", MessageType.Info, true);
+            if (GUILayout.Button("CLICK HERE TO REFRESH", GUILayout.ExpandWidth(true))) {
+                DeEditorUtils.DelayedCall(0.1f, Repaint);
+            }
+        
+            if (_waitingForCompilation) return;
+        
+            _waitingForCompilation = true;
+            DeEditorCoroutines.StartCoroutine(WaitForCompilationCoroutine());
+        }
+        
+        IEnumerator WaitForCompilationCoroutine()
+        {
+            if (!_waitingForCompilation) yield break;
+            while (EditorApplication.isCompiling) {
+                yield return null;
+            }
+            _waitingForCompilation = false;
+            Repaint();
         }
 
         #endregion
