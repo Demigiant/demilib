@@ -24,6 +24,11 @@
             Must return an <code>OnWillBuildResult</code> indicating if you wish to continue
             </summary>
         </member>
+        <member name="T:DG.DeEditorTools.CustomDefinesPanel.CustomDefinesPanel">
+            <summary>
+            Public so it can be extended for custom projects
+            </summary>
+        </member>
         <member name="M:DG.DeEditorTools.DeEditorToolsUtils.FindAllComponentsOfType``1(System.Boolean)">
             <summary>
             Returns all components of type T in the currently open scene/s, or NULL if none could be found.<para/>

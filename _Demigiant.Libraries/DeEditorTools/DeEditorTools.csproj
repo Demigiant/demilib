@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="BuildPanel\DeBuildPanel.cs" />
     <Compile Include="BuildPanel\DeBuildPanelData.cs" />
+    <Compile Include="CustomDefinesPanel\CustomDefinesPanel.cs" />
     <Compile Include="DeEditorToolsPrefs.cs" />
     <Compile Include="DeEditorToolsUtils.cs" />
     <Compile Include="Hierarchy\DeHierarchy.cs" />
@@ -82,6 +83,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>call $(SolutionDir)PostBuild_Editor.bat $(SolutionDir) $(TargetDir) $(TargetFileName) $(TargetName)</PostBuildEvent>

@@ -120,6 +120,36 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
+        /// Adds the given list of global defines (if they're not already present) to all the <see cref="BuildTargetGroup"/>
+        /// or only to the given <see cref="BuildTargetGroup"/>, depending on passed parameters,
+        /// and returns TRUE if it was added, FALSE otherwise.<para/>
+        /// NOTE: when adding to all of them some legacy warnings might appear, which you can ignore.
+        /// </summary>
+        /// <param name="ids">Defines to add</param>
+        /// <param name="buildTargetGroup"><see cref="BuildTargetGroup"/>to use. Leave NULL to add to all of them.</param>
+        public static bool AddGlobalDefines(List<string> ids, BuildTargetGroup? buildTargetGroup = null)
+        {
+            if (ids.Count == 0) return false;
+
+            bool added = false;
+            BuildTargetGroup[] targetGroups = buildTargetGroup == null
+                ? (BuildTargetGroup[])Enum.GetValues(typeof(BuildTargetGroup))
+                : new[] {(BuildTargetGroup)buildTargetGroup};
+            foreach(BuildTargetGroup btg in targetGroups) {
+                if (!IsValidBuildTargetGroup(btg)) continue;
+                string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
+                string[] singleDefs = defs.Split(';');
+                foreach (string id in ids) {
+                    if (System.Array.IndexOf(singleDefs, id) != -1) continue; // Already present
+                    added = true;
+                    defs += defs.Length > 0 ? ";" + id : id;
+                }
+                if (added) PlayerSettings.SetScriptingDefineSymbolsForGroup(btg, defs);
+            }
+            return added;
+        }
+
+        /// <summary>
         /// Removes the given global define (if present) from all the <see cref="BuildTargetGroup"/>
         /// or only from the given <see cref="BuildTargetGroup"/>, depending on passed parameters,
         /// and returns TRUE if it was removed, FALSE otherwise.<para/>
@@ -152,11 +182,50 @@ namespace DG.DemiEditor
         }
 
         /// <summary>
-        /// Returns TRUE if the given global define is present in all the <see cref="BuildTargetGroup"/>
+        /// Removes the given global defines (if present) from all the <see cref="BuildTargetGroup"/>
+        /// or only from the given <see cref="BuildTargetGroup"/>, depending on passed parameters,
+        /// and returns TRUE if it was removed, FALSE otherwise.<para/>
+        /// NOTE: when removing from all of them some legacy warnings might appear, which you can ignore.
+        /// </summary>
+        /// <param name="ids">Defines to remove</param>
+        /// <param name="buildTargetGroup"><see cref="BuildTargetGroup"/>to use. Leave NULL to remove from all of them.</param>
+        public static bool RemoveGlobalDefines(List<string> ids, BuildTargetGroup? buildTargetGroup = null)
+        {
+            if (ids.Count == 0) return false;
+
+            bool removed = false;
+            BuildTargetGroup[] targetGroups = buildTargetGroup == null
+                ? (BuildTargetGroup[])Enum.GetValues(typeof(BuildTargetGroup))
+                : new[] {(BuildTargetGroup)buildTargetGroup};
+            foreach(BuildTargetGroup btg in targetGroups) {
+                if (!IsValidBuildTargetGroup(btg)) continue;
+                string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(btg);
+                string[] singleDefs = defs.Split(';');
+                bool hasId = false;
+                foreach (string id in ids) {
+                    if (System.Array.IndexOf(singleDefs, id) == -1) continue; // Not present
+                    hasId = removed = true;
+                    break;
+                }
+                if (!hasId) continue; // Not present
+                _Strb.Length = 0;
+                for (int i = 0; i < singleDefs.Length; ++i) {
+                    if (ids.Contains(singleDefs[i])) continue;
+                    if (_Strb.Length > 0) _Strb.Append(';');
+                    _Strb.Append(singleDefs[i]);
+                }
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(btg, _Strb.ToString());
+            }
+            _Strb.Length = 0;
+            return removed;
+        }
+
+        /// <summary>
+        /// Returns TRUE if the given global define is present in at least one of the <see cref="BuildTargetGroup"/>
         /// or only in the given <see cref="BuildTargetGroup"/>, depending on passed parameters.<para/>
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="buildTargetGroup"><see cref="BuildTargetGroup"/>to use. Leave NULL to check in all of them.</param>
+        /// <param name="buildTargetGroup"><see cref="BuildTargetGroup"/>to use. Leave NULL to check in all of them for the first occurrence.</param>
         public static bool HasGlobalDefine(string id, BuildTargetGroup? buildTargetGroup = null)
         {
             BuildTargetGroup[] targetGroups = buildTargetGroup == null
@@ -169,6 +238,21 @@ namespace DG.DemiEditor
                 if (System.Array.IndexOf(singleDefs, id) != -1) return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Returns an array of all defines in the current <see cref="BuildTargetGroup"/>.<para/>
+        /// </summary>
+        public static List<string> GetGlobalDefinesForCurrentBuildTargetGroup()
+        {
+            List<string> result = new List<string>();
+            BuildTargetGroup current = EditorUserBuildSettings.selectedBuildTargetGroup;
+            string defs = PlayerSettings.GetScriptingDefineSymbolsForGroup(current);
+            string[] allDefs = defs.Split(';');
+            foreach (string def in allDefs) {
+                if (!string.IsNullOrEmpty(def)) result.Add(def);
+            }
+            return result;
         }
 
         // Uses code from Zwer99 on UnityAnswers (thank you): https://answers.unity.com/questions/851470/how-to-hide-gizmos-by-script.html
