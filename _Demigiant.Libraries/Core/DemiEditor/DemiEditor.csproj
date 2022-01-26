@@ -57,6 +57,7 @@
     <Compile Include="DeEditorGUIUtils.cs" />
     <Compile Include="DeEditorHierarchyUtils.cs" />
     <Compile Include="DeEditorMetaFixer.cs" />
+    <Compile Include="DeEditorNotification.cs" />
     <Compile Include="DeEditorPackageManager.cs" />
     <Compile Include="DeEditorPanelUtils.cs" />
     <Compile Include="DeEditorPrefabUtils.cs" />

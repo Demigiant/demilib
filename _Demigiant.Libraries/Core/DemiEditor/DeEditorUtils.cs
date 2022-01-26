@@ -14,6 +14,9 @@ namespace DG.DemiEditor
 {
     public static class DeEditorUtils
     {
+        /// <summary>Returns TRUE if Unity editor is neither compiling code nor updating assets</summary>
+        public static bool isUnityReady { get { return !EditorApplication.isCompiling && !EditorApplication.isUpdating; } }
+
         static readonly List<DelayedCall> _DelayedCalls = new List<DelayedCall>();
         static MethodInfo _clearConsoleMI;
         static readonly List<GameObject> _RootGOs = new List<GameObject>(500);

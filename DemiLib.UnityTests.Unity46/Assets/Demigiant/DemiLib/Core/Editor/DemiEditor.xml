@@ -209,6 +209,11 @@
             Returns the total number of Component GUIDs that were fixed
             </summary>
         </member>
+        <member name="E:DG.DemiEditor.DeEditorNotification.OnUnityReady">
+            <summary>
+            Dispatched when Unity has finished compiling code and updating the AssetDatabase
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeEditorPackageManager">
             <summary>
             Utils to manage UnityPackages import/export and file mirroring
@@ -317,6 +322,9 @@
             Based on RodGreen's method (http://forum.unity3d.com/threads/82883-Breaking-connection-from-gameObject-to-prefab-for-good.?p=726602&amp;viewfull=1#post726602)
             </para>
             </summary>
+        </member>
+        <member name="P:DG.DemiEditor.DeEditorUtils.isUnityReady">
+            <summary>Returns TRUE if Unity editor is neither compiling code nor updating assets</summary>
         </member>
         <member name="M:DG.DemiEditor.DeEditorUtils.DelayedCall(System.Single,System.Action)">
             <summary>Calls the given action after the given delay</summary>
