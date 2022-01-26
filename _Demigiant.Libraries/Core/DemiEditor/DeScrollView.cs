@@ -22,7 +22,7 @@ namespace DG.DemiEditor
         /// <summary>Content area currently visible (scroll bars excluded)</summary>
         public Rect visibleContentArea { get; private set; }
         /// <summary>Current scrollPosition</summary>
-        public Vector2 scrollPosition { get; private set; }
+        public Vector2 scrollPosition;
 
         static readonly Stack<DeScrollView> _CurrScrollViews = new Stack<DeScrollView>();
 

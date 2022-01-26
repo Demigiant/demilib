@@ -929,7 +929,7 @@
         <member name="P:DG.DemiEditor.DeScrollView.visibleContentArea">
             <summary>Content area currently visible (scroll bars excluded)</summary>
         </member>
-        <member name="P:DG.DemiEditor.DeScrollView.scrollPosition">
+        <member name="F:DG.DemiEditor.DeScrollView.scrollPosition">
             <summary>Current scrollPosition</summary>
         </member>
         <member name="M:DG.DemiEditor.DeScrollView.Current">
