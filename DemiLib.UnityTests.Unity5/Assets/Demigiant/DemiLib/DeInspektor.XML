@@ -679,18 +679,6 @@
         <member name="F:DG.DeInspektor.Attributes.DePosition.HThirdRight">
             <summary>One third of inspector width (extended or default depending on the attribute drawn), right side</summary>
         </member>
-        <member name="T:DG.DeInspektor.Attributes.DeScriptExecutionOrderAttribute">
-            <summary>
-            <code>Class attribute</code><para/>
-            Sets the script execution order index
-            </summary>
-        </member>
-        <member name="M:DG.DeInspektor.Attributes.DeScriptExecutionOrderAttribute.#ctor(System.Int32)">
-            <summary>
-            Sets the script execution order for this class
-            </summary>
-            <param name="order">Script execution order index</param>
-        </member>
         <member name="T:DG.DeInspektor.Attributes.DeToggleButtonAttribute">
             <summary>
             <code>Property attribute</code><para/>

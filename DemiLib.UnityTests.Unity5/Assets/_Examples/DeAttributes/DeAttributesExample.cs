@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DG.DeInspektor.Attributes;
 using DG.DemiLib;
+using DG.DemiLib.Attributes;
 using UnityEngine;
 
 [DeScriptExecutionOrder(-456)] // Sets the script execution order of this MonoBehaviour to -456

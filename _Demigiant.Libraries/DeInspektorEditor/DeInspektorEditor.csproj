@@ -18,11 +18,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\bin\Editor\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\DeInspektorEditor.XML</DocumentationFile>
+    <DocumentationFile>..\bin\Editor\DeInspektorEditor.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -69,7 +69,6 @@
     <Compile Include="AttributesManagers\DeMethodButtonEditor.cs" />
     <Compile Include="AttributesManagers\DeObjectGuidAttributePropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeRangePropertyDrawer.cs" />
-    <Compile Include="AttributesManagers\DeScriptExecutionOrderManager.cs" />
     <Compile Include="AttributesManagers\DeSortingLayerPropertyDrawer.cs" />
     <Compile Include="AttributesManagers\DeToggleButtonPropertyDrawer.cs" />
     <Compile Include="DeInspektor.cs" />

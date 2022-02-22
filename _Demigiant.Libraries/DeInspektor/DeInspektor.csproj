@@ -68,7 +68,6 @@
     <Compile Include="Attributes\DeMethodButtonAttribute.cs" />
     <Compile Include="Attributes\Properties %28no namespace%29\DeLayout.cs" />
     <Compile Include="Attributes\Properties %28no namespace%29\DePosition.cs" />
-    <Compile Include="Attributes\DeScriptExecutionOrderAttribute.cs" />
     <Compile Include="Attributes\DeToggleButtonAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
