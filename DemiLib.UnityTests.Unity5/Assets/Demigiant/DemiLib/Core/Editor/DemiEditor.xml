@@ -2318,6 +2318,12 @@
             (their name must be the same as the serialized field they refer to)
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeSerializedPropertySet.#ctor(UnityEditor.SerializedObject,System.String[])">
+            <summary>
+            Automatically retrieves all serializable properties on the given serializedObject,
+            or only specific ones if propNames is specified
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeSerializedPropertySet.DrawAllPropertyFields">
             <summary>
             Draws all property fields

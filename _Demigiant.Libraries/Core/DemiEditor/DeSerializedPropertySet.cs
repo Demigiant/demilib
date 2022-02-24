@@ -18,10 +18,21 @@ namespace DG.DemiEditor
     {
         readonly List<SerializedProperty> _props = new List<SerializedProperty>();
 
-        public DeSerializedPropertySet(SerializedObject serializedObject)
+        /// <summary>
+        /// Automatically retrieves all serializable properties on the given serializedObject,
+        /// or only specific ones if propNames is specified
+        /// </summary>
+        public DeSerializedPropertySet(SerializedObject serializedObject, params string[] propNames)
         {
-            if (this.GetType() != typeof(DeSerializedPropertySet)) AutoFillFromChildClassFields(serializedObject);
-            else AutoFillFromSerializedObjectFields(serializedObject);
+            if (propNames != null) {
+                // Fill with only specific props
+                foreach (string propName in propNames) {
+                    _props.Add(serializedObject.FindProperty(propName));
+                }
+            } else {
+                if (this.GetType() != typeof(DeSerializedPropertySet)) AutoFillFromChildClassFields(serializedObject);
+                else AutoFillFromSerializedObjectFields(serializedObject);
+            }
         }
 
         #region Public Methods
