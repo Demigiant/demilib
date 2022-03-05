@@ -21,13 +21,20 @@ namespace DG.DemiEditor
         /// Starts an editor coroutine. You can't use normal <code>yield new WaitFor</code> methods because
         /// those are Unity runtime, but you can instead use <see cref="DeEditorCoroutines.WaitForSeconds"/>.
         /// Other than that, you can use normal <code>yield null/etc</code>.<para/>
-        /// Returns an <see cref="IEnumerator"/> which you can use with <see cref="StopCoroutine"/> to cancel the coroutine.
+        /// Returns an <see cref="IEnumerator"/> (which you can use with <see cref="StopCoroutine"/> to cancel the coroutine),
+        /// or NULL in case the coroutine completed immediately.
         /// </summary>
         public static IEnumerator StartCoroutine(IEnumerator coroutine)
         {
+            if (UpdateCoroutine(coroutine)) return null; // Completed immediately
+
             _Coroutines.Add(coroutine);
             if (_Coroutines.Count == 1) EditorApplication.update += UpdateCoroutines;
             return coroutine;
+
+            // _Coroutines.Add(coroutine);
+            // if (_Coroutines.Count == 1) EditorApplication.update += UpdateCoroutines;
+            // return coroutine;
         }
 
         /// <summary>
@@ -35,6 +42,8 @@ namespace DG.DemiEditor
         /// </summary>
         public static void StopCoroutine(IEnumerator coroutine)
         {
+            if (coroutine == null) return;
+
             bool changed = false;
             for (int i = 0; i < _Coroutines.Count; ++i) {
                 if (_Coroutines[i] != coroutine) continue;
@@ -63,14 +72,28 @@ namespace DG.DemiEditor
 
         static void UpdateCoroutines()
         {
-            for (int i = 0; i < _Coroutines.Count; ++i) {
-                if (_Coroutines[i].Current is IEnumerator) {
-                    if (MoveNext((IEnumerator)_Coroutines[i].Current)) continue;
-                }
-                if (!_Coroutines[i].MoveNext()) _Coroutines.RemoveAt(i--);
-            }
+            // for (int i = 0; i < _Coroutines.Count; ++i) {
+            //     if (_Coroutines[i].Current is IEnumerator) {
+            //         if (MoveNext((IEnumerator)_Coroutines[i].Current)) continue;
+            //     }
+            //     if (!_Coroutines[i].MoveNext()) _Coroutines.RemoveAt(i--);
+            // }
+            //
+            // if (_Coroutines.Count == 0) EditorApplication.update -= UpdateCoroutines;
 
+            for (int i = 0; i < _Coroutines.Count; ++i) {
+                if (UpdateCoroutine(_Coroutines[i])) _Coroutines.RemoveAt(i--);
+            }
             if (_Coroutines.Count == 0) EditorApplication.update -= UpdateCoroutines;
+        }
+
+        // Returns TRUE if the coroutine was completed
+        static bool UpdateCoroutine(IEnumerator coroutine)
+        {
+            if (coroutine.Current is IEnumerator) {
+                if (MoveNext((IEnumerator)coroutine.Current)) return false;
+            }
+            return !coroutine.MoveNext();
         }
 
         static bool MoveNext(IEnumerator coroutine)

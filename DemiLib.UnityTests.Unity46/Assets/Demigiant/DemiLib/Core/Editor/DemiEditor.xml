@@ -26,7 +26,8 @@
             Starts an editor coroutine. You can't use normal <code>yield new WaitFor</code> methods because
             those are Unity runtime, but you can instead use <see cref="M:DG.DemiEditor.DeEditorCoroutines.WaitForSeconds(System.Single)"/>.
             Other than that, you can use normal <code>yield null/etc</code>.<para/>
-            Returns an <see cref="T:System.Collections.IEnumerator"/> which you can use with <see cref="M:DG.DemiEditor.DeEditorCoroutines.StopCoroutine(System.Collections.IEnumerator)"/> to cancel the coroutine.
+            Returns an <see cref="T:System.Collections.IEnumerator"/> (which you can use with <see cref="M:DG.DemiEditor.DeEditorCoroutines.StopCoroutine(System.Collections.IEnumerator)"/> to cancel the coroutine),
+            or NULL in case the coroutine completed immediately.
             </summary>
         </member>
         <member name="M:DG.DemiEditor.DeEditorCoroutines.StopCoroutine(System.Collections.IEnumerator)">
