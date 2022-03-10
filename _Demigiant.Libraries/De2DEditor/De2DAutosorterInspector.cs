@@ -82,7 +82,7 @@ namespace DG.De2DEditor
                     foreach (Renderer r in rs) {
                         if (de2DAutosorter.ignoreEditorOnly && IsEditorOnly(r.transform)) continue;
                         r.sortingOrder = de2DAutosorter.sortFrom + (de2DAutosorter.invert ? -sortIncrement : sortIncrement);
-                        SetLocalZ(r.transform, 0);
+                        // SetLocalZ(r.transform, 0);
                         sortIncrement++;
                     }
                     break;
