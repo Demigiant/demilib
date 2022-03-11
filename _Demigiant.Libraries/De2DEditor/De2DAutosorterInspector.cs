@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using DG.De2D;
+using DG.DemiEditor;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,6 +32,12 @@ namespace DG.De2DEditor
             GUILayout.Space(4);
 
             _src.sortMode = (SortMode)EditorGUILayout.EnumPopup("Sort Mode", _src.sortMode);
+            if (_src.sortMode == SortMode.OrderInLayer) {
+                _src.enforceSortingLayer = EditorGUILayout.Toggle("Enforce SortingLayer", _src.enforceSortingLayer);
+                if (_src.enforceSortingLayer) {
+                    _src.sortingLayerID = DeGUILayout.SortingLayer("Sorting Layer", _src.sortingLayerID);
+                }
+            }
             _src.ignoreEditorOnly = EditorGUILayout.Toggle("Ignore EditorOnly", _src.ignoreEditorOnly);
             _src.invert = EditorGUILayout.Toggle("Invert", _src.invert);
             switch (_src.sortMode) {
@@ -81,6 +88,9 @@ namespace DG.De2DEditor
                 case SortMode.OrderInLayer:
                     foreach (Renderer r in rs) {
                         if (de2DAutosorter.ignoreEditorOnly && IsEditorOnly(r.transform)) continue;
+                        if (de2DAutosorter.enforceSortingLayer) {
+                            r.sortingLayerID = de2DAutosorter.sortingLayerID;
+                        }
                         r.sortingOrder = de2DAutosorter.sortFrom + (de2DAutosorter.invert ? -sortIncrement : sortIncrement);
                         // SetLocalZ(r.transform, 0);
                         sortIncrement++;

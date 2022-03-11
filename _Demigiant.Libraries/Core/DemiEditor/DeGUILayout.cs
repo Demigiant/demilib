@@ -635,6 +635,20 @@ namespace DG.DemiEditor
             return EditorGUILayout.ObjectField(label, obj, typeof(Object), false);
         }
 
+        /// <summary>
+        /// Draws a dropdown for choosing a SortingLayer ID
+        /// </summary>
+        public static int SortingLayer(string text, int sortingLayerId, GUIStyle style = null)
+        { return SortingLayer(new GUIContent(text), sortingLayerId, style); }
+        /// <summary>
+        /// Draws a dropdown for choosing a SortingLayer ID
+        /// </summary>
+        public static int SortingLayer(GUIContent guiContent, int sortingLayerId, GUIStyle style = null, params GUILayoutOption[] options)
+        {
+            Rect r = GUILayoutUtility.GetRect(guiContent, style == null ? DeGUI.styles.button.def : style, options);
+            return DeGUI.SortingLayer(r, guiContent, sortingLayerId, style);
+        }
+
         #endregion
     }
 }

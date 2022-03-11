@@ -1577,6 +1577,16 @@
         <member name="M:DG.DemiEditor.DeGUILayout.SceneField(System.String,UnityEngine.Object)">
             <summary>Scene field</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.SortingLayer(System.String,System.Int32,UnityEngine.GUIStyle)">
+            <summary>
+            Draws a dropdown for choosing a SortingLayer ID
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.SortingLayer(UnityEngine.GUIContent,System.Int32,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>
+            Draws a dropdown for choosing a SortingLayer ID
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUI">
             <summary>
             Global Demigiant GUI manager. Call <see cref="M:DG.DemiEditor.DeGUI.BeginGUI(DG.DemiLib.DeColorPalette,DG.DemiEditor.DeStylePalette)"/> to initialize it inside GUI calls.
@@ -1938,6 +1948,16 @@
         </member>
         <member name="M:DG.DemiEditor.DeGUI.FlatDivider(UnityEngine.Rect,System.Nullable{UnityEngine.Color})">
             <summary>Divider</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.SortingLayer(UnityEngine.Rect,System.String,System.Int32,UnityEngine.GUIStyle)">
+            <summary>
+            Draws a dropdown for choosing a SortingLayer ID
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.SortingLayer(UnityEngine.Rect,UnityEngine.GUIContent,System.Int32,UnityEngine.GUIStyle)">
+            <summary>
+            Draws a dropdown for choosing a SortingLayer ID
+            </summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.Vector2FieldAdvanced(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Vector2,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
             <summary>Draws a Vector3Field that can have single axes disabled</summary>

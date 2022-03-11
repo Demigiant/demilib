@@ -23,6 +23,8 @@ namespace DG.De2D
     public class De2DAutosorter : MonoBehaviour
     {
         public SortMode sortMode = SortMode.OrderInLayer;
+        public bool enforceSortingLayer = false;
+        public int sortingLayerID;
         public bool ignoreEditorOnly = false;
         public bool invert = false; // If TRUE first lower elements' sorting oeder decreases instead of increasing
         public int sortFrom = 0;

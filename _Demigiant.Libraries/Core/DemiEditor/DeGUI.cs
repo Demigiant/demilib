@@ -42,6 +42,7 @@ namespace DG.DemiEditor
 
         static DeColorPalette _defaultColorPalette; // Default color palette if none selected
         static DeStylePalette _defaultStylePalette; // Default style palette if none selected
+        static GUIContent[] _sortingLayersNames;
         static string _doubleClickTextFieldId; // ID of selected double click textField
         static int _activePressButtonId = -1;
         static readonly HashSet<int> _ActiveDownButtonsIds = new HashSet<int>();
@@ -983,6 +984,34 @@ namespace DG.DemiEditor
             if (color != null) GUI.backgroundColor = (Color)color;
             GUI.Box(rect, "", DeGUI.styles.box.flat);
             GUI.backgroundColor = prevBgColor;
+        }
+
+        /// <summary>
+        /// Draws a dropdown for choosing a SortingLayer ID
+        /// </summary>
+        public static int SortingLayer(Rect rect, string text, int sortingLayerId, GUIStyle style = null)
+        { return SortingLayer(rect, new GUIContent(text), sortingLayerId, style); }
+        /// <summary>
+        /// Draws a dropdown for choosing a SortingLayer ID
+        /// </summary>
+        public static int SortingLayer(Rect rect, GUIContent guiContent, int sortingLayerId, GUIStyle style = null)
+        {
+            SortingLayer[] layers = UnityEngine.SortingLayer.layers;
+            if (_sortingLayersNames == null || layers.Length != _sortingLayersNames.Length) {
+                // Regenerate sorting layers
+                _sortingLayersNames = new GUIContent[layers.Length];
+                for (int i = 0; i < layers.Length; i++) _sortingLayersNames[i] = new GUIContent(layers[i].name);
+            } else {
+                // Simply reassign names to be sure they're right
+                for (int i = 0; i < layers.Length; i++) _sortingLayersNames[i].text = layers[i].name;
+            }
+            int index = 0;
+            for (int i = 0; i < layers.Length; ++i) {
+                SortingLayer layer = layers[i];
+                if (layer.id == sortingLayerId) index = i;
+            }
+            int result = EditorGUI.Popup(rect, guiContent, index, _sortingLayersNames);
+            return layers[result].id;
         }
 
         /// <summary>Draws a Vector3Field that can have single axes disabled</summary>
