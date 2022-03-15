@@ -2,6 +2,7 @@
 // Created: 2017/04/20 21:40
 // License Copyright (c) Daniele Giardini
 
+using DG.DemiLib.Utils;
 using UnityEngine;
 
 namespace DG.DemiEditor
@@ -70,9 +71,7 @@ namespace DG.DemiEditor
         /// otherwise doesn't and returns a hex of 6 characters</param>
         public static string ToHex(this Color32 color, bool includeAlpha = false)
         {
-            string result = color.r.ToString("x2") + color.g.ToString("x2") + color.b.ToString("x2");
-            if (includeAlpha) result += color.a.ToString("x2");
-            return result;
+            return DeUtils.ToHex(color, includeAlpha);
         }
 
         /// <summary>
@@ -82,7 +81,7 @@ namespace DG.DemiEditor
         /// otherwise doesn't and returns a hex of 6 characters</param>
         public static string ToHex(this Color color, bool includeAlpha = false)
         {
-            return ToHex((Color32)color, includeAlpha);
+            return DeUtils.ToHex((Color32)color, includeAlpha);
         }
 
         #endregion

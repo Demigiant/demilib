@@ -201,5 +201,31 @@
         <member name="M:DG.DemiLib.Range.ToString">
             <inheritdoc />
         </member>
+        <member name="M:DG.DemiLib.Utils.DeUtils.GetOnlyComponentsInChildren``1(UnityEngine.GameObject,System.Boolean)">
+            <summary>
+            Returns ONLY the Components in the children, and ignores the parent.
+            </summary>
+            <param name="includeInactive">If TRUE also includes inactive children</param>
+        </member>
+        <member name="M:DG.DemiLib.Utils.DeUtils.GetOnlyComponentInChildren``1(UnityEngine.GameObject,System.Boolean)">
+            <summary>
+            Returns the Component only if it's in a child, and ignores the parent.
+            </summary>
+            <param name="includeInactive">If TRUE also searches inactive children</param>
+        </member>
+        <member name="M:DG.DemiLib.Utils.DeUtils.ToHex(UnityEngine.Color32,System.Boolean)">
+            <summary>
+            Returns a HEX version of the given Unity Color, without the initial #
+            </summary>
+            <param name="includeAlpha">If TRUE, also converts the alpha value and returns a hex of 8 characters,
+            otherwise doesn't and returns a hex of 6 characters</param>
+        </member>
+        <member name="M:DG.DemiLib.Utils.DeUtils.ToHex(UnityEngine.Color,System.Boolean)">
+            <summary>
+            Returns a HEX version of the given Unity Color, without the initial #
+            </summary>
+            <param name="includeAlpha">If TRUE, also converts the alpha value and returns a hex of 8 characters,
+            otherwise doesn't and returns a hex of 6 characters</param>
+        </member>
     </members>
 </doc>
