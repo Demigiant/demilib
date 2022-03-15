@@ -71,7 +71,7 @@ namespace DG.DemiEditor
         /// otherwise doesn't and returns a hex of 6 characters</param>
         public static string ToHex(this Color32 color, bool includeAlpha = false)
         {
-            return DeUtils.ToHex(color, includeAlpha);
+            return DeRuntimeUtils.ToHex(color, includeAlpha);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace DG.DemiEditor
         /// otherwise doesn't and returns a hex of 6 characters</param>
         public static string ToHex(this Color color, bool includeAlpha = false)
         {
-            return DeUtils.ToHex((Color32)color, includeAlpha);
+            return DeRuntimeUtils.ToHex((Color32)color, includeAlpha);
         }
 
         #endregion

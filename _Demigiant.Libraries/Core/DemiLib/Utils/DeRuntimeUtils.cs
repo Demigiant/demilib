@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DG.DemiLib.Utils
 {
-    public static class DeUtils
+    public static class DeRuntimeUtils
     {
         #region Public Methods
 
