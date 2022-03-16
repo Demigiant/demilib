@@ -27,6 +27,7 @@ namespace DG.De2DEditor
 
         public override void OnInspectorGUI()
         {
+            DeGUI.BeginGUI();
             Undo.RecordObject(_src, "De2DAutosorter");
 
             GUILayout.Space(4);
