@@ -181,7 +181,8 @@ namespace DG.DemiEditor.DeGUINodeSystem.Core
         {
             if (original == null) return null;
             Type t = original.GetType();
-            if (t.IsValueType || t == typeof(string) || t.Namespace != null && t.Namespace.StartsWith("UnityEngine")) return original; // struct
+            if (t.IsValueType || t == typeof(string) || t.Namespace != null && t.Namespace.StartsWith("UnityEngine")) return original;
+            if (t.IsSubclassOf(typeof(UnityEngine.Object))) return original; // Custom Unity Object
 
             object clone = Activator.CreateInstance(t);
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
