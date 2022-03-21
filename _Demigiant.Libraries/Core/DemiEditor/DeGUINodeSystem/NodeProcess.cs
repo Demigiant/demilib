@@ -49,7 +49,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             AllNodes
         }
 
-        public const string Version = "1.0.080";
+        public const string Version = "1.0.085";
         /// <summary>Distance at which nodes will be placed when snapping next to each other</summary>
         public const int SnapOffset = 12;
         public EditorWindow editor; // Get/set so it can be refreshed if necessary
@@ -374,6 +374,10 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 }
             }
             if (options.debug_showFps) _debug.OnNodeProcessStart(interaction.state);
+
+            // Hack to allow dragging of selection outside of EditorWindow in Unity 2021 and later
+            int controlId = GUIUtility.GetControlID(FocusType.Passive);
+            if (Event.current.GetTypeForControl(controlId) == EventType.MouseDown) GUIUtility.hotControl = controlId;
 
             if (_isDockableEditor) {
                 // Hack to avoid clipping when zooming on dockable window
