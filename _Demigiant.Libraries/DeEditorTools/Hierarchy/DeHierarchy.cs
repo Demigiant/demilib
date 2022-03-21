@@ -27,6 +27,7 @@ namespace DG.DeEditorTools.Hierarchy
         static string[] _extraNamespacesToIgnoreInComponents;
         static readonly GUIContent _TmpGUIContent = new GUIContent();
         static readonly List<Component> _TmpComponents = new List<Component>();
+        static readonly List<string> _TmpComponentTypeFullNames = new List<string>();
 
         static Rect _evidenceRShiftByVersion = new Rect();
 
@@ -520,22 +521,108 @@ namespace DG.DeEditorTools.Hierarchy
                 if (_projectSrc.totExtraEvidences > 0) {
                     // Extra evidences
                     go.GetComponents<Component>(_TmpComponents);
-                    int len = _TmpComponents.Count;
-                    for (int i = len - 1; i > 0; --i) { // Ignore 0 because it's always Transform or RectTransform
-                        if (_TmpComponents[i] == null) continue; // Happens in case of missing scripts
-                        string typeName = _TmpComponents[i].GetType().FullName;
-                        for (int j = 0; j < _projectSrc.totExtraEvidences; ++j) {
-                            if (string.IsNullOrEmpty(_projectSrc.extraEvidences[j].componentClass)) continue;
-                            if (!typeName.EndsWith(_projectSrc.extraEvidences[j].componentClass)) continue;
-                            hasExtraEvidence = true;
-                            extraEvidenceMode = _projectSrc.extraEvidences[j].evidenceMode;
-                            extraEvidenceColor = _projectSrc.extraEvidences[j].color;
-                            extraEvidenceLabelColor = DeGUI.GetVisibleContentColorOn(extraEvidenceColor);
-                            break;
+                    int componentsLen = _TmpComponents.Count;
+                    if (componentsLen > 1) { // Ignore 0 because it's always Transform or RectTransform
+                        _TmpComponentTypeFullNames.Clear();
+                        for (int i = 1; i < componentsLen; ++i) {
+                            if (_TmpComponents[i] != null) _TmpComponentTypeFullNames.Add(_TmpComponents[i].GetType().FullName);
                         }
-                        if (hasExtraEvidence) break;
+                        int fullNamesLen = _TmpComponentTypeFullNames.Count;
+                        if (fullNamesLen > 0) {
+                            foreach (DeHierarchyData.ExtraEvidenceData evData in _projectSrc.extraEvidences) {
+                                if (string.IsNullOrEmpty(evData.componentClass)) continue;
+                                string searchStr = string.IsNullOrEmpty(evData.searchString) ? evData.componentClass : evData.searchString;
+                                switch (evData.searchMode) {
+                                case DeHierarchyData.SearchMode.Unset:
+                                    // Ignore
+                                    break;
+                                case DeHierarchyData.SearchMode.Contains:
+                                    for (int i = 0; i < fullNamesLen; ++i) {
+                                        if (!_TmpComponentTypeFullNames[i].Contains(searchStr)) continue;
+                                        hasExtraEvidence = true;
+                                        break;
+                                    }
+                                    break;
+                                case DeHierarchyData.SearchMode.StartsWith:
+                                    for (int i = 0; i < fullNamesLen; ++i) {
+                                        if (!_TmpComponentTypeFullNames[i].StartsWith(searchStr)) continue;
+                                        hasExtraEvidence = true;
+                                        break;
+                                    }
+                                    break;
+                                case DeHierarchyData.SearchMode.EndsWith:
+                                    for (int i = 0; i < fullNamesLen; ++i) {
+                                        if (!_TmpComponentTypeFullNames[i].EndsWith(searchStr)) continue;
+                                        hasExtraEvidence = true;
+                                        break;
+                                    }
+                                    break;
+                                }
+                                if (hasExtraEvidence) {
+                                    extraEvidenceMode = evData.evidenceMode;
+                                    extraEvidenceColor = evData.color;
+                                    extraEvidenceLabelColor = DeGUI.GetVisibleContentColorOn(extraEvidenceColor);
+                                    break;
+                                }
+                            }
+                        }
                     }
+                    // for (int i = len - 1; i > 0; --i) { // Ignore 0 because it's always Transform or RectTransform
+                    // for (int i = 1; i < componentsLen; ++i) { // Ignore 0 because it's always Transform or RectTransform
+                    //     if (_TmpComponents[i] == null) continue; // Happens in case of missing scripts
+                    //     string typeName = _TmpComponents[i].GetType().FullName;
+                    //     foreach (DeHierarchyData.ExtraEvidenceData evData in _projectSrc.extraEvidences) {
+                    //         if (string.IsNullOrEmpty(evData.componentClass)) continue;
+                    //         switch (evData.searchMode) {
+                    //         case DeHierarchyData.SearchMode.StartsWith:
+                    //             if (!typeName.StartsWith(evData.componentClass)) continue;
+                    //             break;
+                    //         case DeHierarchyData.SearchMode.EndsWith:
+                    //             if (!typeName.EndsWith(evData.componentClass)) continue;
+                    //             break;
+                    //         default:
+                    //             if (!typeName.Contains(evData.componentClass)) continue;
+                    //             break;
+                    //         }
+                    //         hasExtraEvidence = true;
+                    //         extraEvidenceMode = evData.evidenceMode;
+                    //         extraEvidenceColor = evData.color;
+                    //         extraEvidenceLabelColor = DeGUI.GetVisibleContentColorOn(extraEvidenceColor);
+                    //         break;
+                    //     }
+                    //     if (hasExtraEvidence) break;
+                    // }
                 }
+                // if (_projectSrc.totExtraEvidences > 0) {
+                //     // Extra evidences
+                //     go.GetComponents<Component>(_TmpComponents);
+                //     int len = _TmpComponents.Count;
+                //     // for (int i = len - 1; i > 0; --i) { // Ignore 0 because it's always Transform or RectTransform
+                //     for (int i = 1; i < len; ++i) { // Ignore 0 because it's always Transform or RectTransform
+                //         if (_TmpComponents[i] == null) continue; // Happens in case of missing scripts
+                //         string typeName = _TmpComponents[i].GetType().FullName;
+                //         foreach (DeHierarchyData.ExtraEvidenceData evData in _projectSrc.extraEvidences) {
+                //             if (string.IsNullOrEmpty(evData.componentClass)) continue;
+                //             switch (evData.searchMode) {
+                //             case DeHierarchyData.SearchMode.StartsWith:
+                //                 if (!typeName.StartsWith(evData.componentClass)) continue;
+                //                 break;
+                //             case DeHierarchyData.SearchMode.EndsWith:
+                //                 if (!typeName.EndsWith(evData.componentClass)) continue;
+                //                 break;
+                //             default:
+                //                 if (!typeName.Contains(evData.componentClass)) continue;
+                //                 break;
+                //             }
+                //             hasExtraEvidence = true;
+                //             extraEvidenceMode = evData.evidenceMode;
+                //             extraEvidenceColor = evData.color;
+                //             extraEvidenceLabelColor = DeGUI.GetVisibleContentColorOn(extraEvidenceColor);
+                //             break;
+                //         }
+                //         if (hasExtraEvidence) break;
+                //     }
+                // }
             }
 
             bool IsValidCustomComponent(string typeName)

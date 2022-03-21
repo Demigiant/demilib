@@ -7,6 +7,7 @@ _Demigiant.Libraries/Core/*/obj
 *.pdb
 *.pdb.meta
 *.DotSettings
+.idea
 _Demigiant.Libraries/.gitignore
 _Demigiant.Libraries/.git
 *.Unity*/_ReSharper*
