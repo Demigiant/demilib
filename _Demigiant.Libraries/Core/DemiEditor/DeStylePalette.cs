@@ -132,6 +132,8 @@ namespace DG.DemiEditor
         public static Texture2D ico_end { get { return LoadTexture(ref _ico_end, "ico_end", FilterMode.Bilinear); } }
         public static Texture2D ico_alert { get { return LoadTexture(ref _ico_alert, "ico_alert", FilterMode.Bilinear); } }
         public static Texture2D ico_ok { get { return LoadTexture(ref _ico_ok, "ico_ok", FilterMode.Bilinear); } }
+        public static Texture2D ico_todo { get { return LoadTexture(ref _ico_todo, "ico_todo", FilterMode.Bilinear); } }
+        public static Texture2D ico_doing { get { return LoadTexture(ref _ico_doing, "ico_doing", FilterMode.Bilinear); } }
         public static Texture2D ico_alignTL { get { return LoadTexture(ref _ico_alignTL, "ico_alignTL"); } }
         public static Texture2D ico_alignTC { get { return LoadTexture(ref _ico_alignTC, "ico_alignTC"); } }
         public static Texture2D ico_alignTR { get { return LoadTexture(ref _ico_alignTR, "ico_alignTR"); } }
@@ -186,6 +188,8 @@ namespace DG.DemiEditor
         static Texture2D _ico_end;
         static Texture2D _ico_alert;
         static Texture2D _ico_ok;
+        static Texture2D _ico_todo;
+        static Texture2D _ico_doing;
         static Texture2D _ico_alignTL; // Icons with square with corners and center
         static Texture2D _ico_alignTC;
         static Texture2D _ico_alignTR;
