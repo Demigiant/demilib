@@ -60,6 +60,7 @@ namespace DG.DeEditorTools.BuildPanel
             public string buildName; // Folder within buildFolder where the build will be created (this one is created if it doesn't exist)
             public bool clearBuildFolder = true;
             public string bundleIdentifier;
+            public bool deleteBackupThisFolder = true;
             // Android/iOS only
             public string key;
             public bool increaseInternalBuildNumber = false;
