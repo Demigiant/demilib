@@ -37,6 +37,14 @@ namespace DG.DemiEditor
                         BindingFlags.Static | BindingFlags.Public | BindingFlags.InvokeMethod, Type.DefaultBinder,
                         new[] { typeof(AudioClip), typeof(int), typeof(bool) }, null
                     );
+                    if (_miPlay == null) {
+                        // Even newer versions of Unity
+                        _miPlay = t.GetMethod(
+                            "PlayPreviewClip",
+                            BindingFlags.Static | BindingFlags.Public | BindingFlags.InvokeMethod, Type.DefaultBinder,
+                            new[] { typeof(AudioClip), typeof(int), typeof(bool) }, null
+                        );
+                    }
                 }
             }
             if (DeUnityEditorVersion.MajorVersion < 2019) {
@@ -70,6 +78,10 @@ namespace DG.DemiEditor
             if (_miStopAll == null) {
                 Type t = editorAssembly.CreateInstance("UnityEditor.AudioUtil").GetType();
                 _miStopAll = t.GetMethod("StopAllClips", BindingFlags.Static | BindingFlags.Public);
+                if (_miStopAll == null) {
+                    // Newer Unity versions
+                    _miStopAll = t.GetMethod("StopAllPreviewClips", BindingFlags.Static | BindingFlags.Public);
+                }
             }
             _miStopAll.Invoke(null, null);
         }

@@ -3,11 +3,13 @@
 // License Copyright (c) Daniele Giardini
 
 using System;
+using System.Collections;
 using DG.DeAudio;
 using DG.DeAudio.Attributes;
 using DG.DemiEditor;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DG.DeAudioEditor
 {
@@ -20,6 +22,8 @@ namespace DG.DeAudioEditor
         public static DeAudioClipDataModeAttribute drawMode;
 
         static readonly DeAudioClipDataModeAttribute _DefDrawMode = new DeAudioClipDataModeAttribute(DeAudioClipGUIMode.Full, true);
+        const string _PreviewAudioSourceName = "[DeAudioPreview]";
+        IEnumerator _coTrackAudioSource;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -134,64 +138,115 @@ namespace DG.DeAudioEditor
         {
             AudioClip clip = property.FindPropertyRelative("clip").objectReferenceValue as AudioClip;
             if (clip == null) return;
-            MonoBehaviour m = GetValidMonoBehaviour(property);
-            if (m == null) {
-                // Can't use AudioSource: play clip regardless of volume
-                DeEditorSoundUtils.StopAll();
-                DeEditorSoundUtils.Play(clip);
-                return;
-            }
-            AudioSource s = m.GetComponent<AudioSource>();
-            if (s == null) {
-                if (EditorUtility.DisplayDialog("Play DeAudioClipData", "Add AudioSource to preview the clip with the correct volume?", "Ok", "Cancel")) {
-                    s = m.gameObject.AddComponent<AudioSource>();
-                }
-            }
-            if (s == null) return;
+            AudioSource s = GetPreviewAudioSourceInScene(true);
             s.playOnAwake = false;
             s.volume = property.FindPropertyRelative("volume").floatValue;
             s.pitch = property.FindPropertyRelative("pitch").floatValue;
             s.loop = property.FindPropertyRelative("loop").boolValue;
             s.clip = clip;
             s.Play();
+            if (_coTrackAudioSource != null) DeEditorCoroutines.StopCoroutine(_coTrackAudioSource);
+            _coTrackAudioSource = DeEditorCoroutines.StartCoroutine(TrackAudioSource(s));
         }
 
         void Stop(SerializedProperty property)
         {
-            MonoBehaviour m = GetValidMonoBehaviour(property);
-            if (m == null) {
-                DeEditorSoundUtils.StopAll();
-                return;
+            if (_coTrackAudioSource != null) {
+                DeEditorCoroutines.StopCoroutine(_coTrackAudioSource);
+                _coTrackAudioSource = null;
             }
-            AudioSource s = m.GetComponent<AudioSource>();
+            AudioSource s = GetPreviewAudioSourceInScene();
             if (s == null) return;
-
             s.Stop();
+            Object.DestroyImmediate(s.gameObject);
         }
+
+        // void Play(SerializedProperty property)
+        // {
+        //     AudioClip clip = property.FindPropertyRelative("clip").objectReferenceValue as AudioClip;
+        //     if (clip == null) return;
+        //     MonoBehaviour m = GetValidMonoBehaviour(property);
+        //     if (m == null) {
+        //         // Can't use AudioSource: play clip regardless of volume
+        //         DeEditorSoundUtils.StopAll();
+        //         DeEditorSoundUtils.Play(clip);
+        //         return;
+        //     }
+        //     AudioSource s = m.GetComponent<AudioSource>();
+        //     if (s == null) {
+        //         if (EditorUtility.DisplayDialog("Play DeAudioClipData", "Add AudioSource to preview the clip with the correct volume?", "Ok", "Cancel")) {
+        //             s = m.gameObject.AddComponent<AudioSource>();
+        //         }
+        //     }
+        //     if (s == null) return;
+        //     s.playOnAwake = false;
+        //     s.volume = property.FindPropertyRelative("volume").floatValue;
+        //     s.pitch = property.FindPropertyRelative("pitch").floatValue;
+        //     s.loop = property.FindPropertyRelative("loop").boolValue;
+        //     s.clip = clip;
+        //     s.Play();
+        // }
+
+        // void Stop(SerializedProperty property)
+        // {
+        //     MonoBehaviour m = GetValidMonoBehaviour(property);
+        //     if (m == null) {
+        //         DeEditorSoundUtils.StopAll();
+        //         return;
+        //     }
+        //     AudioSource s = m.GetComponent<AudioSource>();
+        //     if (s == null) return;
+        //
+        //     s.Stop();
+        // }
 
         void AdjustVolume(SerializedProperty property, float volume)
         {
-            MonoBehaviour m = GetValidMonoBehaviour(property);
-            if (m == null) return;
-            AudioSource s = m.GetComponent<AudioSource>();
+            AudioSource s = GetPreviewAudioSourceInScene();
             if (s != null && s.isPlaying) s.volume = volume;
+            // MonoBehaviour m = GetValidMonoBehaviour(property);
+            // if (m == null) return;
+            // AudioSource s = m.GetComponent<AudioSource>();
+            // if (s != null && s.isPlaying) s.volume = volume;
         }
 
         void AdjustPitch(SerializedProperty property, float pitch)
         {
-            MonoBehaviour m = GetValidMonoBehaviour(property);
-            if (m == null) return;
-            AudioSource s = m.GetComponent<AudioSource>();
+            AudioSource s = GetPreviewAudioSourceInScene();
             if (s != null && s.isPlaying) s.pitch = pitch;
+            // MonoBehaviour m = GetValidMonoBehaviour(property);
+            // if (m == null) return;
+            // AudioSource s = m.GetComponent<AudioSource>();
+            // if (s != null && s.isPlaying) s.pitch = pitch;
         }
 
-        MonoBehaviour GetValidMonoBehaviour(SerializedProperty property)
+        // MonoBehaviour GetValidMonoBehaviour(SerializedProperty property)
+        // {
+        //     MonoBehaviour m = property.serializedObject.targetObject as MonoBehaviour;
+        //     if (m == null) return null;
+        //     PrefabType pType = PrefabUtility.GetPrefabType(m);
+        //     if (pType == PrefabType.Prefab || pType == PrefabType.ModelPrefab) return null;
+        //     return m;
+        // }
+
+        AudioSource GetPreviewAudioSourceInScene(bool createIfMissing = false)
         {
-            MonoBehaviour m = property.serializedObject.targetObject as MonoBehaviour;
-            if (m == null) return null;
-            PrefabType pType = PrefabUtility.GetPrefabType(m);
-            if (pType == PrefabType.Prefab || pType == PrefabType.ModelPrefab) return null;
-            return m;
+            GameObject audioSourceGO = GameObject.Find(_PreviewAudioSourceName);
+            if (audioSourceGO == null) {
+                if (createIfMissing) {
+                    audioSourceGO = new GameObject(_PreviewAudioSourceName) {
+                        hideFlags = HideFlags.DontSaveInEditor
+                    };
+                    return audioSourceGO.AddComponent<AudioSource>();
+                } else return null;
+            } else return audioSourceGO.GetComponent<AudioSource>();
+        }
+
+        IEnumerator TrackAudioSource(AudioSource s)
+        {
+            while (s != null && s.isPlaying) yield return null;
+            if (s != null) Object.DestroyImmediate(s.gameObject);
+            _coTrackAudioSource = null;
         }
     }
 }
