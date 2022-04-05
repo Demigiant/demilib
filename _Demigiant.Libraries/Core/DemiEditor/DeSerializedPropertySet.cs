@@ -27,7 +27,9 @@ namespace DG.DemiEditor
             if (propNames != null) {
                 // Fill with only specific props
                 foreach (string propName in propNames) {
-                    _props.Add(serializedObject.FindProperty(propName));
+                    SerializedProperty prop = serializedObject.FindProperty(propName);
+                    if (prop == null) Debug.LogError("DeSerializedPropertySet ► No property named \"" + serializedObject.targetObject.GetType() + "." + propName + "\" exists");
+                    else _props.Add(serializedObject.FindProperty(propName));
                 }
             } else {
                 if (this.GetType() != typeof(DeSerializedPropertySet)) AutoFillFromChildClassFields(serializedObject);
@@ -38,7 +40,8 @@ namespace DG.DemiEditor
         #region Public Methods
 
         /// <summary>
-        /// Draws all property fields
+        /// Draws all property fields. Remember to wrap this within <code>serializedObject.Update</code>
+        /// and <code>serializedObject.ApplyModifiedProperties</code>
         /// </summary>
         public void DrawAllPropertyFields()
         {

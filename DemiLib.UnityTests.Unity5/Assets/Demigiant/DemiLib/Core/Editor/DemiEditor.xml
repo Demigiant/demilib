@@ -2345,9 +2345,10 @@
             or only specific ones if propNames is specified
             </summary>
         </member>
-        <member name="M:DG.DemiEditor.DeSerializedPropertySet.DrawAllPropertyFields">
+        <member name="M:DG.DemiEditor.DeSerializedPropertySet.DrawAllPropertyFields(System.Boolean)">
             <summary>
-            Draws all property fields
+            Draws all property fields. Remember to wrap this within <code>serializedObject.Update</code>
+            and <code>serializedObject.ApplyModifiedProperties</code>
             </summary>
         </member>
     </members>
