@@ -88,7 +88,9 @@ namespace DG.DemiEditor
                 if (curr == '_') _Strb.Append(' '); // Replace underscores with spaces
                 else {
                     // Add spaces before numbers and uppercase letters
-                    if (curr != ' ' && (char.IsUpper(curr) && (prev != ' ' && prev != '_') || char.IsNumber(curr) && prev != ' ' && prev != '_' && !char.IsNumber(prev))) _Strb.Append(' ');
+                    if (curr != ' ' && (char.IsUpper(curr) && (prev != ' ' && prev != '_' && !char.IsUpper(prev)) || char.IsNumber(curr) && prev != ' ' && prev != '_' && !char.IsNumber(prev))) {
+                        _Strb.Append(' ');
+                    }
                     _Strb.Append(curr);
                 }
             }
