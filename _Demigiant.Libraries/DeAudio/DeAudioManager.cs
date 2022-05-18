@@ -31,7 +31,7 @@ namespace DG.DeAudio
         }
 
         internal static DeAudioManager I;
-        public const string Version = "1.1.026";
+        public const string Version = "1.1.030";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
@@ -284,6 +284,16 @@ namespace DG.DeAudio
         /// <summary>Unlocks all <see cref="DeAudioSource"/> instances for the given clip</summary>
         public static void Unlock(AudioClip clip)
         { IterateOnAllGroups(OperationType.UnlockByClip, clip); }
+
+        /// <summary>Returns TRUE if any group is playing the given audioClip</summary>
+        /// <param name="clip"></param>
+        public static bool IsPlaying(AudioClip clip)
+        {
+            for (int i = 0; i < audioGroups.Length; ++i) {
+                if (audioGroups[i].IsPlaying(clip)) return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Returns the <see cref="DeAudioGroup"/> with the given ID, or NULL if there is none

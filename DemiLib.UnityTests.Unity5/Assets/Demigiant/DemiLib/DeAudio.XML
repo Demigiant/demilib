@@ -316,6 +316,10 @@
         <member name="M:DG.DeAudio.DeAudioManager.Unlock(UnityEngine.AudioClip)">
             <summary>Unlocks all <see cref="T:DG.DeAudio.DeAudioSource"/> instances for the given clip</summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioManager.IsPlaying(UnityEngine.AudioClip)">
+            <summary>Returns TRUE if any group is playing the given audioClip</summary>
+            <param name="clip"></param>
+        </member>
         <member name="M:DG.DeAudio.DeAudioManager.GetAudioGroup(DG.DeAudio.DeAudioGroupId)">
             <summary>
             Returns the <see cref="T:DG.DeAudio.DeAudioGroup"/> with the given ID, or NULL if there is none
