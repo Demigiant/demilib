@@ -44,7 +44,15 @@ namespace DG.De2D
         [SerializeField] float _duration = 0.4f; // Ignored in case of ColorTint transition (who has it internally to ColorBlock)
         // Transition ► Color
         /// <summary>Only used in case of <see cref="TransitionType.ColorTint"/> transitions</summary>
-        public ColorBlock colors = ColorBlock.defaultColorBlock;
+        public ColorBlock colors = new ColorBlock() {
+            colorMultiplier = 1,
+            fadeDuration = 0.2f,
+            normalColor = Color.white,
+            highlightedColor = Color.white,
+            pressedColor = Color.white,
+            disabledColor = Color.white,
+        };
+        // public ColorBlock colors = ColorBlock.defaultColorBlock; // generates error when extending class
         //
         [SerializeField] bool _showOnClick = true; // Editor-only
         [SerializeField] bool _showOnPress, _showOnRelease; // Editor-only
