@@ -98,7 +98,19 @@ namespace DG.DeInspektorEditor
         static void DrawList(SerializedProperty iterator)
         {
             // Header
+            // ► Main
             EditorGUILayout.PropertyField(iterator, new GUIContent(string.Format("[{0}] {1}", iterator.arraySize, iterator.displayName)), false, new GUILayoutOption[0]);
+            if (DeUnityEditorVersion.MajorVersion >= 2021) {
+                // ► Force-add an expand arrow because newer versions of Unity removed them from top headers (why?!?)
+                Rect headerRect = GUILayoutUtility.GetLastRect();
+                Rect foldoutRect = new Rect(headerRect.x - 15, headerRect.yMax - 18, 20, 20);
+                GUIStyle style = iterator.isExpanded ? DeGUI.styles.button.toolFoldoutOpen : DeGUI.styles.button.toolFoldoutClosed;
+                if (DeGUI.PressButton(foldoutRect, GUIContent.none, style)) {
+                    iterator.isExpanded = !iterator.isExpanded;
+                    DeGUI.ExitCurrentEvent();
+                    return;
+                }
+            }
             // Header buttons (to draw them overlayed correctly even if there's decorators assigned to the current property)
             GUILayout.Space(-18);
             GUILayout.BeginHorizontal();
