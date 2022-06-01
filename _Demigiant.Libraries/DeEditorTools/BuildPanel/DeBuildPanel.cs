@@ -196,6 +196,7 @@ namespace DG.DeEditorTools.BuildPanel
                         DeGUIDrag.StartDrag(this, affixes, i);
                     }
                     using (new DeGUI.ColorScope(affix.enabled ? Color.white : (Color)new DeSkinColor(0.7f, 0.7f), affix.enabled ? Color.white : (Color)new DeSkinColor(0.7f, 0.5f))) {
+                        affix.target = (DeBuildPanelData.AffixTarget)EditorGUILayout.EnumPopup(affix.target, GUILayout.Width(74));
                         affix.text = EditorGUILayout.TextField(affix.text);
                     }
                     if (!string.IsNullOrEmpty(affix.text) && affix.text.StartsWith("@")) {
@@ -205,14 +206,20 @@ namespace DG.DeEditorTools.BuildPanel
                             }
                         }
                     }
-                    affix.enabled = DeGUILayout.ToggleButton(affix.enabled, "Enabled", Styles.btInlineToggle, GUILayout.Width(60));
-                    using (new EditorGUI.DisabledScope(!affix.enabled)) {
-                        affix.enabledForInnerExecutable = DeGUILayout.ToggleButton(
-                            affix.enabledForInnerExecutable,
-                            new GUIContent("Win/Linux Filename", "If toggled applies this also to the filename on WIN/Linux builds only"),
-                            Styles.btInlineToggle, GUILayout.Width(121)
-                        );
+                    switch (affix.target) {
+                    case DeBuildPanelData.AffixTarget.All:
+                    case DeBuildPanelData.AffixTarget.Windows:
+                    case DeBuildPanelData.AffixTarget.Linux:
+                        using (new EditorGUI.DisabledScope(!affix.enabled)) {
+                            affix.enabledForInnerExecutable = DeGUILayout.ToggleButton(
+                                affix.enabledForInnerExecutable,
+                                new GUIContent("Win/Linux Filename", "If toggled applies this also to the filename on WIN/Linux builds only"),
+                                Styles.btInlineToggle, GUILayout.Width(121)
+                            );
+                        }
+                        break;
                     }
+                    affix.enabled = DeGUILayout.ToggleButton(affix.enabled, "Enabled", Styles.btInlineToggle, GUILayout.Width(60));
                     if (GUILayout.Button("×", Styles.btDeleteBuild)) {
                         affixes.RemoveAt(i);
                         --i;
@@ -330,6 +337,7 @@ namespace DG.DeEditorTools.BuildPanel
         {
             GenericMenu menu = new GenericMenu();
             foreach (BuildTarget buildTarget in DeBuildPanelData.AllowedBuildTargets) {
+                if (buildTarget == BuildTarget.NoTarget) continue;
                 menu.AddItem(new GUIContent(buildTarget.ToString()), false, CM_AddPlatform_Apply, buildTarget);
             }
             menu.ShowAsContext();
@@ -549,11 +557,13 @@ namespace DG.DeEditorTools.BuildPanel
             bool isInnerExecutable = withExtension && build.HasInnerExecutable();
             _StrbAlt.Length = 0;
             foreach (DeBuildPanelData.Affix affix in _src.prefixes) {
-                if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.GetText());
+                // if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.GetText());
+                if (affix.IsEnabledFor(build.buildTarget, isInnerExecutable, _src)) _StrbAlt.Append(affix.GetText());
             }
             _StrbAlt.Append(build.buildName);
             foreach (DeBuildPanelData.Affix affix in _src.suffixes) {
-                if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.GetText());
+                // if (affix.enabled && (!isInnerExecutable || affix.enabledForInnerExecutable)) _StrbAlt.Append(affix.GetText());
+                if (affix.IsEnabledFor(build.buildTarget, isInnerExecutable, _src)) _StrbAlt.Append(affix.GetText());
             }
             string result = _StrbAlt.ToString();
             if (!isInnerExecutable) {

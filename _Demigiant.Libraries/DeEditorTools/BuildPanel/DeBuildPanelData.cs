@@ -13,6 +13,20 @@ namespace DG.DeEditorTools.BuildPanel
     [Serializable]
     public class DeBuildPanelData : ScriptableObject
     {
+        public enum AffixTarget // Corresponds to BuildTarget[] indexes
+        {
+            All,
+            Windows,
+            OSX,
+            Linux,
+            Android,
+            iOS,
+            WebGL,
+            PS4,
+            XboxOne,
+            Switch
+        }
+
         #region Serialized
 
         public List<Affix> prefixes = new List<Affix>();
@@ -21,15 +35,24 @@ namespace DG.DeEditorTools.BuildPanel
 
         #endregion
 
-        public const string Version = "1.0.050";
+        public const string Version = "1.0.060";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
+            BuildTarget.NoTarget, // Here so indexes correspond to AffixTarget enum
             BuildTarget.StandaloneWindows64,
             BuildTarget.StandaloneOSX,
             BuildTarget.StandaloneLinuxUniversal,
             BuildTarget.Android,
             BuildTarget.iOS,
-            BuildTarget.WebGL
+            BuildTarget.WebGL,
+            BuildTarget.PS4,
+            BuildTarget.XboxOne,
+            BuildTarget.Switch
         };
+
+        internal BuildTarget AffixTargetToBuildTarget(AffixTarget affixTarget)
+        {
+            return AllowedBuildTargets[(int)affixTarget];
+        }
 
         // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
         // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
@@ -40,6 +63,7 @@ namespace DG.DeEditorTools.BuildPanel
         {
             public bool enabled = true;
             public bool enabledForInnerExecutable = false; // If TRUE also uses this affix when determining the fileName on standalone platforms
+            public AffixTarget target = AffixTarget.All;
             public string text;
 
             // Returns the right text value, evaluating it as a static string property in case it starts with a @
@@ -47,6 +71,13 @@ namespace DG.DeEditorTools.BuildPanel
             {
                 if (string.IsNullOrEmpty(text) || !text.StartsWith("@")) return text;
                 return text.Substring(1).EvalAsProperty<string>(null, logErrors);
+            }
+
+            public bool IsEnabledFor(BuildTarget buildTarget, bool isInnerExecutable, DeBuildPanelData src)
+            {
+                return enabled
+                       && (target == AffixTarget.All || src.AffixTargetToBuildTarget(target) == buildTarget)
+                       && (!isInnerExecutable || enabledForInnerExecutable);
             }
         }
         
