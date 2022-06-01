@@ -213,6 +213,21 @@
             Returns TRUE if the initialization is successful, FALSE otherwise.
             </summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioManager.RegisterAudioClipDatas(System.Collections.Generic.IList{DG.DeAudio.DeAudioClipData})">
+            <summary>
+            Registers <see cref="T:DG.DeAudio.DeAudioClipData"/> elements so that they can be retrieved via <see cref="M:DG.DeAudio.DeAudioManager.GetAudioClipData(UnityEngine.AudioClip,System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.RegisterAudioClipData(DG.DeAudio.DeAudioClipData)">
+            <summary>
+            Registers the given <see cref="T:DG.DeAudio.DeAudioClipData"/> so that it can be retrieved via <see cref="M:DG.DeAudio.DeAudioManager.GetAudioClipData(UnityEngine.AudioClip,System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.UnregisterAudioClipDatas">
+            <summary>
+            Unregisters all stored <see cref="T:DG.DeAudio.DeAudioClipData"/> elements
+            </summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioManager.Play(DG.DeAudio.DeAudioClipData,System.Nullable{System.Single},System.Nullable{System.Single},System.Nullable{System.Boolean})">
             <summary>
             Plays the given <see cref="T:DG.DeAudio.DeAudioClipData"/> on the stored group,
@@ -319,6 +334,13 @@
         <member name="M:DG.DeAudio.DeAudioManager.IsPlaying(UnityEngine.AudioClip)">
             <summary>Returns TRUE if any group is playing the given audioClip</summary>
             <param name="clip"></param>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioManager.GetAudioClipData(UnityEngine.AudioClip,System.Boolean)">
+            <summary>
+            Returns the registered <see cref="T:DG.DeAudio.DeAudioClipData"/> for the given <see cref="T:UnityEngine.AudioClip"/>, or NULL if there is none
+            </summary>
+            <param name="fromClip"><see cref="T:UnityEngine.AudioClip"/> whose registered <see cref="T:DG.DeAudio.DeAudioClipData"/> to search</param>
+            <param name="throwErrorIfNotFound">If TRUE, will throw an error if no <see cref="T:DG.DeAudio.DeAudioClipData"/> is found</param>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.GetAudioGroup(DG.DeAudio.DeAudioGroupId)">
             <summary>

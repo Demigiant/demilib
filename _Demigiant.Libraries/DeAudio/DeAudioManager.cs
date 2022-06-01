@@ -29,13 +29,14 @@ namespace DG.DeAudio
             get { return I.fooGlobalVolume; }
             set { SetVolume(value); }
         }
+        public const string Version = "1.1.035";
 
         internal static DeAudioManager I;
-        public const string Version = "1.1.030";
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
         internal static DeAudioGroup globalGroup; // Group created when playing a clip without any group indication. Also stored as the final _audioGroups value
+        static readonly Dictionary<AudioClip, DeAudioClipData> _ClipToClipData = new Dictionary<AudioClip, DeAudioClipData>();
         static Tween _fadeTween;
 
 
@@ -124,6 +125,32 @@ namespace DG.DeAudio
         }
 
         #endregion
+
+        /// <summary>
+        /// Registers <see cref="DeAudioClipData"/> elements so that they can be retrieved via <see cref="GetAudioClipData"/>
+        /// </summary>
+        public static void RegisterAudioClipDatas(IList<DeAudioClipData> clipDatas)
+        {
+            foreach (DeAudioClipData clipData in clipDatas) RegisterAudioClipData(clipData);
+        }
+        /// <summary>
+        /// Registers the given <see cref="DeAudioClipData"/> so that it can be retrieved via <see cref="GetAudioClipData"/>
+        /// </summary>
+        public static void RegisterAudioClipData(DeAudioClipData clipData)
+        {
+            if (clipData.clip == null) return;
+            if (_ClipToClipData.ContainsKey(clipData.clip)) {
+                Debug.LogWarning(string.Format("DeAudioClipData for clip \"{0}\" already registered", clipData.clip));
+            } else _ClipToClipData.Add(clipData.clip, clipData);
+        }
+
+        /// <summary>
+        /// Unregisters all stored <see cref="DeAudioClipData"/> elements
+        /// </summary>
+        public static void UnregisterAudioClipDatas()
+        {
+            _ClipToClipData.Clear();
+        }
 
         /// <summary>
         /// Plays the given <see cref="DeAudioClipData"/> on the stored group,
@@ -293,6 +320,22 @@ namespace DG.DeAudio
                 if (audioGroups[i].IsPlaying(clip)) return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Returns the registered <see cref="DeAudioClipData"/> for the given <see cref="AudioClip"/>, or NULL if there is none
+        /// </summary>
+        /// <param name="fromClip"><see cref="AudioClip"/> whose registered <see cref="DeAudioClipData"/> to search</param>
+        /// <param name="throwErrorIfNotFound">If TRUE, will throw an error if no <see cref="DeAudioClipData"/> is found</param>
+        public static DeAudioClipData GetAudioClipData(AudioClip fromClip, bool throwErrorIfNotFound = false)
+        {
+            if (fromClip == null) {
+                Debug.LogError("DeAudio : NULL clip passed to DeAudioManager.GetAudioClipData");
+                return null;
+            }
+            if (_ClipToClipData.ContainsKey(fromClip)) return _ClipToClipData[fromClip];
+            if (throwErrorIfNotFound) throw new NullReferenceException(string.Format("No DeAudioClipData registered for clip \"{0}\"", fromClip));
+            return null;
         }
 
         /// <summary>

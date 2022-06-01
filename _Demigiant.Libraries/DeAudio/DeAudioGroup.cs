@@ -86,7 +86,7 @@ namespace DG.DeAudio
         /// Plays the given sound with the given options.
         /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be played</para>
         /// </summary>
-        public DeAudioSource Play(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
+        public DeAudioSource Play(AudioClip clip, float volume, float pitch = 1, bool loop = false)
         { return PlayFrom(clip, 0, volume, pitch, loop); }
         /// <summary>
         /// Plays the given sound with the stored volume, pitch and loop settings (unless set otherwise).
