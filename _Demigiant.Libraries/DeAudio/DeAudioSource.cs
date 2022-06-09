@@ -282,15 +282,18 @@ namespace DG.DeAudio
         }
         void OnFadeToInternalComplete_Default()
         {
+            _fadeTween = null;
             isFadingOut = false;
         }
         void OnFadeToInternalComplete_Stop()
         {
+            _fadeTween = null;
             isFadingOut = false;
             Stop();
         }
         void OnFadeToInternalComplete_Pause()
         {
+            _fadeTween = null;
             isFadingOut = false;
             PauseDirect();
         }
@@ -325,6 +328,7 @@ namespace DG.DeAudio
         // Kills _fadeTween and sets it as null
         void DestroyFadeTween()
         {
+            isFadingOut = false;
             if (_fadeTween == null) return;
             _fadeTween.Kill();
             _fadeTween = null;
