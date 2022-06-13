@@ -215,15 +215,17 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.RegisterAudioClipDatas(System.Collections.Generic.IList{DG.DeAudio.DeAudioClipData})">
             <summary>
-            Registers <see cref="T:DG.DeAudio.DeAudioClipData"/> elements so that they can be retrieved via <see cref="M:DG.DeAudio.DeAudioManager.GetAudioClipData(UnityEngine.AudioClip,System.Boolean)"/>
+            Registers <see cref="T:DG.DeAudio.DeAudioClipData"/> elements so that they can be retrieved via <see cref="M:DG.DeAudio.DeAudioManager.GetAudioClipData(UnityEngine.AudioClip,System.Boolean)"/>.
+            Note that clips are registered by name, so each clip must have univocal name
             </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.RegisterAudioClipData(DG.DeAudio.DeAudioClipData)">
             <summary>
-            Registers the given <see cref="T:DG.DeAudio.DeAudioClipData"/> so that it can be retrieved via <see cref="M:DG.DeAudio.DeAudioManager.GetAudioClipData(UnityEngine.AudioClip,System.Boolean)"/>
+            Registers the given <see cref="T:DG.DeAudio.DeAudioClipData"/> so that it can be retrieved via <see cref="M:DG.DeAudio.DeAudioManager.GetAudioClipData(UnityEngine.AudioClip,System.Boolean)"/>.
+            Note that clips are registered by name, so each clip must have univocal name
             </summary>
         </member>
-        <member name="M:DG.DeAudio.DeAudioManager.UnregisterAudioClipDatas">
+        <member name="M:DG.DeAudio.DeAudioManager.UnregisterAllAudioClipDatas">
             <summary>
             Unregisters all stored <see cref="T:DG.DeAudio.DeAudioClipData"/> elements
             </summary>
