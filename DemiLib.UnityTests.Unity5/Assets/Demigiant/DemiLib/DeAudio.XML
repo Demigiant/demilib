@@ -213,6 +213,14 @@
             Returns TRUE if the initialization is successful, FALSE otherwise.
             </summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioManager.SetRegisterMode(DG.DeAudio.RegisterMode)">
+            <summary>
+            Sets the register mode (by <see cref="T:UnityEngine.AudioClip"/> name or object reference)
+            used when registering <see cref="T:DG.DeAudio.DeAudioClipData"/> and then retrieving them.
+            This can only be called before registering the first <see cref="T:DG.DeAudio.DeAudioClipData"/>
+            </summary>
+            <param name="mode"></param>
+        </member>
         <member name="M:DG.DeAudio.DeAudioManager.RegisterAudioClipDatas(System.Collections.Generic.IList{DG.DeAudio.DeAudioClipData})">
             <summary>
             Registers <see cref="T:DG.DeAudio.DeAudioClipData"/> elements so that they can be retrieved via <see cref="M:DG.DeAudio.DeAudioManager.GetAudioClipData(UnityEngine.AudioClip,System.Boolean)"/>.
@@ -227,7 +235,7 @@
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.UnregisterAllAudioClipDatas">
             <summary>
-            Unregisters all stored <see cref="T:DG.DeAudio.DeAudioClipData"/> elements
+            Unregisters all stored <see cref="T:DG.DeAudio.DeAudioClipData"/> elements and unlocks <see cref="T:DG.DeAudio.RegisterMode"/>
             </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Play(DG.DeAudio.DeAudioClipData,System.Nullable{System.Single},System.Nullable{System.Single},System.Nullable{System.Boolean})">

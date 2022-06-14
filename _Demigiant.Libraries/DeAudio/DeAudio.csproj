@@ -63,6 +63,7 @@
     <Compile Include="Events\DeAudioEventArgs.cs" />
     <Compile Include="FadeBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterMode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -29,14 +29,17 @@ namespace DG.DeAudio
             get { return I.fooGlobalVolume; }
             set { SetVolume(value); }
         }
-        public const string Version = "1.1.045";
+        public const string Version = "1.1.050";
 
         internal static DeAudioManager I;
         internal const string LogPrefix = "DeAudio :: ";
         static bool _isInitializing; // If TRUE skips audioGroups initialization at Awake
+        static RegisterMode _registerMode = RegisterMode.ByAudioClip;
+        static bool _registerModeLocked; // TRUE after register mode is set or the first DeAudioClipData is registered
         internal static DeAudioGroup[] audioGroups; // Internal so Inspector can read it
         internal static DeAudioGroup globalGroup; // Group created when playing a clip without any group indication. Also stored as the final _audioGroups value
         static readonly Dictionary<string, DeAudioClipData> _ClipNameToClipData = new Dictionary<string, DeAudioClipData>();
+        static readonly Dictionary<AudioClip, DeAudioClipData> _ClipToClipData = new Dictionary<AudioClip, DeAudioClipData>();
         static Tween _fadeTween;
 
 
@@ -127,6 +130,21 @@ namespace DG.DeAudio
         #endregion
 
         /// <summary>
+        /// Sets the register mode (by <see cref="AudioClip"/> name or object reference)
+        /// used when registering <see cref="DeAudioClipData"/> and then retrieving them.
+        /// This can only be called before registering the first <see cref="DeAudioClipData"/>
+        /// </summary>
+        /// <param name="mode"></param>
+        public static void SetRegisterMode(RegisterMode mode)
+        {
+            if (_registerModeLocked) {
+                Debug.LogError(LogPrefix + "Register mode is locked: already set or first DeAudioClipData already registered");
+                return;
+            }
+            _registerMode = mode;
+        }
+
+        /// <summary>
         /// Registers <see cref="DeAudioClipData"/> elements so that they can be retrieved via <see cref="GetAudioClipData"/>.
         /// Note that clips are registered by name, so each clip must have univocal name
         /// </summary>
@@ -140,21 +158,35 @@ namespace DG.DeAudio
         /// </summary>
         public static void RegisterAudioClipData(DeAudioClipData clipData)
         {
+            _registerModeLocked = true;
             if (clipData.clip == null) {
                 Debug.LogWarning(LogPrefix + "Trying to register DeAudioClipData with NULL clip, skipping it");
                 return;
             }
-            if (_ClipNameToClipData.ContainsKey(clipData.clip.name)) {
-                Debug.LogWarning(string.Format("{0}DeAudioClipData for a clip named \"{1}\" already registered", LogPrefix, clipData.clip));
-            } else _ClipNameToClipData.Add(clipData.clip.name, clipData);
+            switch (_registerMode) {
+            case RegisterMode.ByAudioClipName:
+                if (_ClipNameToClipData.ContainsKey(clipData.clip.name)) {
+                    Debug.LogWarning(string.Format("{0}DeAudioClipData for a clip named \"{1}\" already registered", LogPrefix, clipData.clip));
+                }
+                _ClipNameToClipData.Add(clipData.clip.name, clipData);
+                break;
+            default:
+                if (_ClipToClipData.ContainsKey(clipData.clip)) {
+                    Debug.LogWarning(string.Format("{0}DeAudioClipData for clip \"{1}\" already registered", LogPrefix, clipData.clip));
+                }
+                _ClipToClipData.Add(clipData.clip, clipData);
+                break;
+            }
         }
 
         /// <summary>
-        /// Unregisters all stored <see cref="DeAudioClipData"/> elements
+        /// Unregisters all stored <see cref="DeAudioClipData"/> elements and unlocks <see cref="RegisterMode"/>
         /// </summary>
         public static void UnregisterAllAudioClipDatas()
         {
+            _registerModeLocked = false;
             _ClipNameToClipData.Clear();
+            _ClipToClipData.Clear();
         }
 
         /// <summary>
@@ -338,7 +370,14 @@ namespace DG.DeAudio
                 Debug.LogError(LogPrefix + "NULL clip passed to DeAudioManager.GetAudioClipData");
                 return null;
             }
-            if (_ClipNameToClipData.ContainsKey(fromClip.name)) return _ClipNameToClipData[fromClip.name];
+            switch (_registerMode) {
+            case RegisterMode.ByAudioClipName:
+                if (_ClipNameToClipData.ContainsKey(fromClip.name)) return _ClipNameToClipData[fromClip.name];
+                break;
+            default:
+                if (_ClipToClipData.ContainsKey(fromClip)) return _ClipToClipData[fromClip];
+                break;
+            }
             if (throwErrorIfNotFound) throw new NullReferenceException(string.Format("{0}No DeAudioClipData registered for clip \"{1}\"", LogPrefix, fromClip));
             return null;
         }
