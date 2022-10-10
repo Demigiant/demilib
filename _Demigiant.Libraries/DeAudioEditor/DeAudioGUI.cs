@@ -110,7 +110,9 @@ namespace DG.DeAudioEditor
             }
             if (hasVolume) {
                 Rect volumeR = lineR;
-                value.volume = EditorGUI.Slider(volumeR, "└ Volume", value.volume, 0, 1);
+                using (new DeGUI.LabelFieldWidthScope(60)) {
+                    value.volume = EditorGUI.Slider(volumeR, "└ Volume", value.volume, 0, 1);
+                }
             }
             // Third line
             lineR.y = lineR.yMax + VSpace;
@@ -122,7 +124,9 @@ namespace DG.DeAudioEditor
             }
             if (hasPitch) {
                 Rect pitchR = lineR;
-                value.pitch = EditorGUI.Slider(pitchR, "└ Pitch", value.pitch, 0, 3);
+                using (new DeGUI.LabelFieldWidthScope(60)) {
+                    value.pitch = EditorGUI.Slider(pitchR, "└ Pitch", value.pitch, 0, 3);
+                }
             }
 
             return value;

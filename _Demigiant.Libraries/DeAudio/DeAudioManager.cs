@@ -29,7 +29,7 @@ namespace DG.DeAudio
             get { return I.fooGlobalVolume; }
             set { SetVolume(value); }
         }
-        public const string Version = "1.1.050";
+        public const string Version = "1.1.055";
 
         internal static DeAudioManager I;
         internal const string LogPrefix = "DeAudio :: ";
