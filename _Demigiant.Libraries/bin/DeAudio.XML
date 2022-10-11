@@ -139,6 +139,9 @@
             <param name="value">Pitch to set</param>
             <param name="assignAsTargetPitch">If TRUE also sets this pitch as the new targetPitch for each source</param>
         </member>
+        <member name="M:DG.DeAudio.DeAudioGroup.SetTimeScale(System.Single)">
+            <summary>Sets the timeScale for this group (same as setting <see cref="P:DG.DeAudio.DeAudioGroup.timeScale"/> directly)</summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioGroup.SetVolume(System.Single)">
             <summary>Sets the volume for this group (same as setting <see cref="P:DG.DeAudio.DeAudioGroup.volume"/> directly)</summary>
         </member>
@@ -192,6 +195,11 @@
         </member>
         <member name="F:DG.DeAudio.DeAudioManager.inspectorUpdater">
             <summary>Used internally inside Unity Editor, as a trick to update DeAudioManager's inspector at every frame</summary>
+        </member>
+        <member name="P:DG.DeAudio.DeAudioManager.timeScale">
+            <summary>
+            Changes the global pitch of all sources to reflect the given timeScale
+            </summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.Init">
             <summary>
@@ -323,8 +331,12 @@
         <member name="M:DG.DeAudio.DeAudioManager.ChangePitch(System.Single)">
             <summary>Changes the pitch for all audio groups' existing sources</summary>
         </member>
+        <member name="M:DG.DeAudio.DeAudioManager.SetTimeScale(System.Single)">
+            <summary>Sets the global timeScale of all audio reproduction, by changing every clip's pitch
+            (same as setting <see cref="P:DG.DeAudio.DeAudioManager.timeScale"/> directly)</summary>
+        </member>
         <member name="M:DG.DeAudio.DeAudioManager.SetVolume(System.Single)">
-            <summary>Sets the global volume (same as setting <see cref="P:DG.DeAudio.DeAudioManager.globalVolume"/> directly</summary>
+            <summary>Sets the global volume (same as setting <see cref="P:DG.DeAudio.DeAudioManager.globalVolume"/> directly)</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.SetVolume(DG.DeAudio.DeAudioGroupId,System.Single)">
             <summary>Sets the volume for the given group</summary>
@@ -468,8 +480,8 @@
             <summary>Unscaled pitch (doesn't include modifiers caused by targetPitch)</summary>
         </member>
         <member name="P:DG.DeAudio.DeAudioSource.pitch">
-            <summary>Getter returns current audioSource.pitch (which is influenced by targetPitch).<para/>
-            Setter automatically applies scale factors (targetPitch)</summary>
+            <summary>Getter returns current audioSource.pitch (which is influenced by global, group and target pitch).<para/>
+            Setter automatically applies scale factors (target, audioGroup and global pitch)</summary>
         </member>
         <member name="M:DG.DeAudio.DeAudioSource.SetTargetVolume(System.Single,System.Boolean)">
             <summary>

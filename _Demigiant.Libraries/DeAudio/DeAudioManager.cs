@@ -21,6 +21,7 @@ namespace DG.DeAudio
         public bool logInfo = false;
         public DeAudioGroup[] fooAudioGroups;
         public float fooGlobalVolume = 1;
+        public float fooTimeScale = 1;
         public Ease fadeEase = Ease.Linear;
         /// <summary>Used internally inside Unity Editor, as a trick to update DeAudioManager's inspector at every frame</summary>
         public int inspectorUpdater;
@@ -29,7 +30,14 @@ namespace DG.DeAudio
             get { return I.fooGlobalVolume; }
             set { SetVolume(value); }
         }
-        public const string Version = "1.1.055";
+        /// <summary>
+        /// Changes the global pitch of all sources to reflect the given timeScale
+        /// </summary>
+        public static float timeScale {
+            get { return I.fooTimeScale; }
+            set { SetTimeScale(value); }
+        }
+        public const string Version = "1.1.065";
 
         internal static DeAudioManager I;
         internal const string LogPrefix = "DeAudio :: ";
@@ -320,7 +328,15 @@ namespace DG.DeAudio
             for (int i = 0; i < audioGroups.Length; ++i) audioGroups[i].ChangePitch(pitch);
         }
 
-        /// <summary>Sets the global volume (same as setting <see cref="globalVolume"/> directly</summary>
+        /// <summary>Sets the global timeScale of all audio reproduction, by changing every clip's pitch
+        /// (same as setting <see cref="timeScale"/> directly)</summary>
+        public static void SetTimeScale(float timeScale)
+        {
+            I.fooTimeScale = timeScale;
+            DeAudioNotificator.DispatchDeAudioEvent(DeAudioEventType.TimeScaleChange);
+        }
+
+        /// <summary>Sets the global volume (same as setting <see cref="globalVolume"/> directly)</summary>
         public static void SetVolume(float volume)
         {
             I.fooGlobalVolume = volume;

@@ -10,7 +10,9 @@ namespace DG.DeAudio.Events
     {
         GlobalVolumeChange,
         GroupVolumeChange,
-        GroupPitchChange
+        GroupPitchChange,
+        TimeScaleChange,
+        GroupTimeScaleChange,
     }
 
     public delegate void DeAudioEventDelegate(DeAudioEventArgs e);

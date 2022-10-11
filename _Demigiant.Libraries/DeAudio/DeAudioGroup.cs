@@ -26,11 +26,16 @@ namespace DG.DeAudio
         public int preallocate = 0;
         public bool recycle = true;
         public float fooVolume = 1;
+        public float fooTimeScale = 1;
 
         [System.NonSerialized] public List<DeAudioSource> sources; // Sources per each group
         public float volume {
             get { return fooVolume; }
             set { SetVolume(value); }
+        }
+        public float timeScale {
+            get { return fooTimeScale; }
+            set { SetTimeScale(value); }
         }
 
         bool _disposed;
@@ -160,6 +165,13 @@ namespace DG.DeAudio
         public void ChangeRealPitch(float value, bool assignAsTargetPitch = false)
         {
             for (int i = 0; i < sources.Count; i++) sources[i].SetRealPitch(value, assignAsTargetPitch);
+        }
+
+        /// <summary>Sets the timeScale for this group (same as setting <see cref="timeScale"/> directly)</summary>
+        public void SetTimeScale(float timeScale)
+        {
+            fooTimeScale = timeScale;
+            DeAudioNotificator.DispatchDeAudioEvent(DeAudioEventType.GroupTimeScaleChange, this);
         }
 
         /// <summary>Sets the volume for this group (same as setting <see cref="volume"/> directly)</summary>

@@ -54,15 +54,15 @@ namespace DG.DeAudio
         public float targetPitch { get; private set; }
         /// <summary>Unscaled pitch (doesn't include modifiers caused by targetPitch)</summary>
         public float unscaledPitch { get; private set; }
-        /// <summary>Getter returns current audioSource.pitch (which is influenced by targetPitch).<para/>
-        /// Setter automatically applies scale factors (targetPitch)</summary>
+        /// <summary>Getter returns current audioSource.pitch (which is influenced by global, group and target pitch).<para/>
+        /// Setter automatically applies scale factors (target, audioGroup and global pitch)</summary>
         public float pitch {
             get { return audioSource.pitch; }
             set {
                 unscaledPitch = value;
-                float to = value * targetPitch;
+                float to = value * targetPitch * audioGroup.fooTimeScale * DeAudioManager.timeScale;
                 if (to < 0) to = 0;
-                else if (to > 3) to = 3;
+                // else if (to > 3) to = 3;
                 audioSource.pitch = to;
             }
         }
@@ -346,6 +346,9 @@ namespace DG.DeAudio
                 break;
             case DeAudioEventType.GroupVolumeChange:
                 if (e.audioGroup == audioGroup) volume = unscaledVolume;
+                break;
+            case DeAudioEventType.TimeScaleChange:
+                pitch = unscaledPitch;
                 break;
             }
         }
