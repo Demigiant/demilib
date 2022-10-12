@@ -19,7 +19,7 @@ namespace DG.De2D
     /// (like UI: top is behind, bottom is frontal).
     /// Only applies sorting in the editor
     /// </summary>
-    [ExecuteInEditMode]
+    [ExecuteAlways]
     public class De2DAutosorter : MonoBehaviour
     {
         public SortMode sortMode = SortMode.OrderInLayer;
