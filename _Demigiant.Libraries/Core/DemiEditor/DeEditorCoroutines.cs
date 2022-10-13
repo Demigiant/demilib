@@ -82,7 +82,12 @@ namespace DG.DemiEditor
             // if (_Coroutines.Count == 0) EditorApplication.update -= UpdateCoroutines;
 
             for (int i = 0; i < _Coroutines.Count; ++i) {
-                if (UpdateCoroutine(_Coroutines[i])) _Coroutines.RemoveAt(i--);
+                // if (UpdateCoroutine(_Coroutines[i])) _Coroutines.RemoveAt(i--);
+                IEnumerator coroutine = _Coroutines[i];
+                if (UpdateCoroutine(coroutine) && coroutine != null) {
+                    // Remove if not already removed by internal code (in which case coroutine will be null)
+                    _Coroutines.Remove(coroutine);
+                }
             }
             if (_Coroutines.Count == 0) EditorApplication.update -= UpdateCoroutines;
         }
