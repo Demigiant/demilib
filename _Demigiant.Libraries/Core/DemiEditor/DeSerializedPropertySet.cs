@@ -24,7 +24,7 @@ namespace DG.DemiEditor
         /// </summary>
         public DeSerializedPropertySet(SerializedObject serializedObject, params string[] propNames)
         {
-            if (propNames != null) {
+            if (propNames != null && propNames.Length > 0) {
                 // Fill with only specific props
                 foreach (string propName in propNames) {
                     SerializedProperty prop = serializedObject.FindProperty(propName);
