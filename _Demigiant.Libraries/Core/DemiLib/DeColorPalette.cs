@@ -71,11 +71,14 @@ namespace DG.DemiLib
         public Color black = Color.black;
         public Color white = Color.white;
         public Color blue = new Color(0f, 0.4f, 0.91f);
+        public Color cyan = new Color(0.08f, 0.68f, 0.89f);
         public Color green = new Color(0.11f, 0.84f, 0.02f);
         public Color orange = new Color(0.98f, 0.44f, 0f);
         public Color purple = new Color(0.67f, 0.17f, 0.87f);
+        public Color pink = new Color(0.9f, 0.28f, 0.68f);
         public Color red = new Color(0.93f, 0.04f, 0.04f);
         public Color yellow = new Color(0.93f, 0.77f, 0.04f);
+        public Color transparent = new Color(0, 0, 0, 0);
     }
 
     /// <summary>
