@@ -15,9 +15,9 @@ namespace DG.DemiEditor
         NoDrag,
         /// <summary>Dragging</summary>
         Dragging,
-        /// <summary>Dragging concluced and accepted</summary>
+        /// <summary>Dragging concluded and accepted</summary>
         Accepted,
-        /// <summary>Dragging concluced but item position didn't change</summary>
+        /// <summary>Dragging concluded but item position didn't change</summary>
         Ineffective,
         /// <summary>Dragging canceled</summary>
         Canceled,
@@ -154,11 +154,14 @@ namespace DG.DemiEditor
         /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
         /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
         /// unless you want to skip eventual layout calculations</param>
+        /// <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
+        /// to reflect successful drag results</param>
         [Obsolete("Use overload that doesn't require dragId instead")]
         public static DeDragResult Drag(
-            int dragId, IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto
+            int dragId, IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null,
+            DeDragDirection direction = DeDragDirection.Auto, bool applyDragToListContents = true
         )
-        { return Drag(draggableList, currDraggableItemIndex, DefaultDragColor, lastGUIRect, direction); }
+        { return Drag(draggableList, currDraggableItemIndex, DefaultDragColor, lastGUIRect, direction, applyDragToListContents); }
         /// <summary>
         /// Call this after each draggable GUI block, to calculate and draw the current drag state
         /// (or complete it if the mouse was released).
@@ -169,10 +172,13 @@ namespace DG.DemiEditor
         /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
         /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
         /// unless you want to skip eventual layout calculations</param>
+        /// <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
+        /// to reflect successful drag results</param>
         public static DeDragResult Drag(
-            IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto
+            IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null,
+            DeDragDirection direction = DeDragDirection.Auto, bool applyDragToListContents = true
         )
-        { return Drag(draggableList, currDraggableItemIndex, DefaultDragColor, lastGUIRect, direction); }
+        { return Drag(draggableList, currDraggableItemIndex, DefaultDragColor, lastGUIRect, direction, applyDragToListContents); }
         /// <summary>
         /// Call this after each draggable GUI block, to calculate and draw the current drag state
         /// (or complete it if the mouse was released).
@@ -185,12 +191,14 @@ namespace DG.DemiEditor
         /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
         /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
         /// unless you want to skip eventual layout calculations</param>
+        /// <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
+        /// to reflect successful drag results</param>
         [Obsolete("Use overload that doesn't require dragId instead")]
         public static DeDragResult Drag(
             int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor,
-            Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto
+            Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto, bool applyDragToListContents = true
         )
-        { return Drag(draggableList, currDraggableItemIndex, dragEvidenceColor, lastGUIRect, direction); }
+        { return Drag(draggableList, currDraggableItemIndex, dragEvidenceColor, lastGUIRect, direction, applyDragToListContents); }
         /// <summary>
         /// Call this after each draggable GUI block, to calculate and draw the current drag state
         /// (or complete it if the mouse was released).
@@ -202,9 +210,11 @@ namespace DG.DemiEditor
         /// Pass this if you're creating a drag between elements that don't use GUILayout</param>
         /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
         /// unless you want to skip eventual layout calculations</param>
+        /// <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
+        /// to reflect successful drag results</param>
         public static DeDragResult Drag(
             IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor,
-            Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto
+            Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto, bool applyDragToListContents = true
         ){
             // Drag ID is ignored and is here only for legacy reasons
             if (_dragData == null || _dragData.draggableList == null || _dragData.draggableList != draggableList) return new DeDragResult(DeDragResultType.NoDrag);
@@ -318,7 +328,7 @@ namespace DG.DemiEditor
 
             if (GUIUtility.hotControl < 1) {
                 // End drag
-                if (_dragDelayElapsed && _dragData.hasHorizontalSet) return EndDrag(true);
+                if (_dragDelayElapsed && _dragData.hasHorizontalSet) return EndDrag(true, applyDragToListContents);
                 EndDrag(false);
                 return new DeDragResult(DeDragResultType.Click);
             }
@@ -330,8 +340,9 @@ namespace DG.DemiEditor
         /// Returns TRUE if the position of the dragged item actually changed.
         /// Called automatically by Drag method. Use it only if you want to force the end of a drag operation.
         /// </summary>
-        /// <param name="applyDrag">If TRUE applies the drag results, otherwise simply cancels the drag</param>
-        public static DeDragResult EndDrag(bool applyDrag)
+        /// <param name="applyDrag">If TRUE marks the drag as successful and applied it if set so, otherwise simply cancels the drag</param>
+        /// <param name="applyDragToListContents">If TRUE changes the list contents to reflect the drag result</param>
+        public static DeDragResult EndDrag(bool applyDrag, bool applyDragToListContents = true)
         {
             if (_dragData == null) return new DeDragResult(DeDragResultType.NoDrag);
 
@@ -340,9 +351,11 @@ namespace DG.DemiEditor
 
             if (applyDrag) {
                 bool changed = _dragData.currDragIndex < _dragData.draggedItemIndex || _dragData.currDragIndex > _dragData.draggedItemIndex + 1;
-                if (Event.current.type == EventType.Repaint) Event.current.type = EventType.Used;
-                else if (Event.current.type == EventType.Used) ApplyDrag();
-                else _waitingToApplyDrag = true;
+                if (applyDragToListContents) {
+                    if (Event.current.type == EventType.Repaint) Event.current.type = EventType.Used;
+                    else if (Event.current.type == EventType.Used) ApplyDrag();
+                    else _waitingToApplyDrag = true;
+                } else ApplyDrag(false);
                 DeDragResultType resultType = changed ? DeDragResultType.Accepted : DeDragResultType.Ineffective;
                 return new DeDragResult(resultType, dragFrom, dragTo);
             }
@@ -355,23 +368,25 @@ namespace DG.DemiEditor
 
         #region Methods
 
-        static void ApplyDrag()
+        static void ApplyDrag(bool applyDragToListContents = true)
         {
             if (_dragData == null) return;
 
-            int fromIndex = _dragData.draggedItemIndex;
-            int toIndex = _dragData.currDragIndex > _dragData.draggedItemIndex ? _dragData.currDragIndex - 1 : _dragData.currDragIndex;
-            if (toIndex != fromIndex) {
-                int index = fromIndex;
-                while (index > toIndex) {
-                    index--;
-                    _dragData.draggableList[index + 1] = _dragData.draggableList[index];
-                    _dragData.draggableList[index] = _dragData.draggedItem;
-                }
-                while (index < toIndex) {
-                    index++;
-                    _dragData.draggableList[index - 1] = _dragData.draggableList[index];
-                    _dragData.draggableList[index] = _dragData.draggedItem;
+            if (applyDragToListContents) {
+                int fromIndex = _dragData.draggedItemIndex;
+                int toIndex = _dragData.currDragIndex > _dragData.draggedItemIndex ? _dragData.currDragIndex - 1 : _dragData.currDragIndex;
+                if (toIndex != fromIndex) {
+                    int index = fromIndex;
+                    while (index > toIndex) {
+                        index--;
+                        _dragData.draggableList[index + 1] = _dragData.draggableList[index];
+                        _dragData.draggableList[index] = _dragData.draggedItem;
+                    }
+                    while (index < toIndex) {
+                        index++;
+                        _dragData.draggableList[index - 1] = _dragData.draggableList[index];
+                        _dragData.draggableList[index] = _dragData.draggedItem;
+                    }
                 }
             }
             Reset();
