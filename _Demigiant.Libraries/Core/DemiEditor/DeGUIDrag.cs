@@ -155,7 +155,9 @@ namespace DG.DemiEditor
         /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
         /// unless you want to skip eventual layout calculations</param>
         /// <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
-        /// to reflect successful drag results</param>
+        /// to reflect successful drag results.
+        /// Note that <see cref="DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+        /// (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         [Obsolete("Use overload that doesn't require dragId instead")]
         public static DeDragResult Drag(
             int dragId, IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null,
@@ -173,7 +175,9 @@ namespace DG.DemiEditor
         /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
         /// unless you want to skip eventual layout calculations</param>
         /// <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
-        /// to reflect successful drag results</param>
+        /// to reflect successful drag results.
+        /// Note that <see cref="DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+        /// (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         public static DeDragResult Drag(
             IList draggableList, int currDraggableItemIndex, Rect? lastGUIRect = null,
             DeDragDirection direction = DeDragDirection.Auto, bool applyDragToListContents = true
@@ -192,7 +196,9 @@ namespace DG.DemiEditor
         /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
         /// unless you want to skip eventual layout calculations</param>
         /// <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
-        /// to reflect successful drag results</param>
+        /// to reflect successful drag results.
+        /// Note that <see cref="DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+        /// (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         [Obsolete("Use overload that doesn't require dragId instead")]
         public static DeDragResult Drag(
             int dragId, IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor,
@@ -211,7 +217,9 @@ namespace DG.DemiEditor
         /// <param name="direction">Drag direction. You can leave it to <see cref="DeDragDirection.Auto"/>
         /// unless you want to skip eventual layout calculations</param>
         /// <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
-        /// to reflect successful drag results</param>
+        /// to reflect successful drag results.
+        /// Note that <see cref="DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+        /// (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         public static DeDragResult Drag(
             IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor,
             Rect? lastGUIRect = null, DeDragDirection direction = DeDragDirection.Auto, bool applyDragToListContents = true
@@ -347,7 +355,9 @@ namespace DG.DemiEditor
             if (_dragData == null) return new DeDragResult(DeDragResultType.NoDrag);
 
             int dragFrom = _dragData.draggedItemIndex;
-            int dragTo = _dragData.currDragIndex > _dragData.draggedItemIndex ? _dragData.currDragIndex - 1 : _dragData.currDragIndex;
+            int dragTo = applyDragToListContents
+                ? _dragData.currDragIndex > _dragData.draggedItemIndex ? _dragData.currDragIndex - 1 : _dragData.currDragIndex
+                : _dragData.currDragIndex;
 
             if (applyDrag) {
                 bool changed = _dragData.currDragIndex < _dragData.draggedItemIndex || _dragData.currDragIndex > _dragData.draggedItemIndex + 1;

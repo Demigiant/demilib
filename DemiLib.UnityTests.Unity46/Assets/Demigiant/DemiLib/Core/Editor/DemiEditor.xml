@@ -545,7 +545,9 @@
             <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
             unless you want to skip eventual layout calculations</param>
             <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
-            to reflect successful drag results</param>
+            to reflect successful drag results.
+            Note that <see cref="F:DG.DemiEditor.DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+            (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Collections.IList,System.Int32,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection,System.Boolean)">
             <summary>
@@ -559,7 +561,9 @@
             <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
             unless you want to skip eventual layout calculations</param>
             <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
-            to reflect successful drag results</param>
+            to reflect successful drag results.
+            Note that <see cref="F:DG.DemiEditor.DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+            (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Int32,System.Collections.IList,System.Int32,UnityEngine.Color,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection,System.Boolean)">
             <summary>
@@ -575,7 +579,9 @@
             <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
             unless you want to skip eventual layout calculations</param>
             <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
-            to reflect successful drag results</param>
+            to reflect successful drag results.
+            Note that <see cref="F:DG.DemiEditor.DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+            (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUIDrag.Drag(System.Collections.IList,System.Int32,UnityEngine.Color,System.Nullable{UnityEngine.Rect},DG.DemiEditor.DeDragDirection,System.Boolean)">
             <summary>
@@ -590,7 +596,9 @@
             <param name="direction">Drag direction. You can leave it to <see cref="F:DG.DemiEditor.DeDragDirection.Auto"/>
             unless you want to skip eventual layout calculations</param>
             <param name="applyDragToListContents">If TRUE (default) automatically reorders the given list
-            to reflect successful drag results</param>
+            to reflect successful drag results.
+            Note that <see cref="F:DG.DemiEditor.DeDragResult.movedToIndex"/> will be different if you apply the drag to the list or not
+            (in the former case it will reflect the current index after the change, in the latter it will reflect the desired position)</param>
         </member>
         <member name="M:DG.DemiEditor.DeGUIDrag.EndDrag(System.Boolean,System.Boolean)">
             <summary>
