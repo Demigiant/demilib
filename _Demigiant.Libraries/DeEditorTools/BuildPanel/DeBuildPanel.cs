@@ -72,6 +72,8 @@ namespace DG.DeEditorTools.BuildPanel
         const int _LabelWidth = 116;
         string _buildFolderComment;
         string[] _buildPathsLabels;
+        // Includes only enabled builds, sorted so current platform is always first
+        readonly List<DeBuildPanelData.Build> _sortedFilteredBuilds = new List<DeBuildPanelData.Build>();
 
         #region Unity and GUI Methods
 
@@ -99,7 +101,6 @@ namespace DG.DeEditorTools.BuildPanel
         void OnGUI()
         {
             if (_src == null) _src = DeEditorPanelUtils.ConnectToSourceAsset<DeBuildPanelData>(_SrcADBFilePath, true);
-            _scrollPos = GUILayout.BeginScrollView(_scrollPos);
             Undo.RecordObject(_src, _Title);
             DeGUI.BeginGUI();
             Styles.Init();
@@ -127,6 +128,8 @@ namespace DG.DeEditorTools.BuildPanel
                     }
                 }
             }
+
+            _scrollPos = GUILayout.BeginScrollView(_scrollPos);
 
             // Affixes
             GUILayout.Space(3);
@@ -365,10 +368,8 @@ namespace DG.DeEditorTools.BuildPanel
 
         void DoBuildAllEnabled()
         {
-            int totEnabled = 0;
-            foreach (DeBuildPanelData.Build build in _src.builds) {
-                if (build.enabled) totEnabled++;
-            }
+            RefreshSortedFilteredBuilds();
+            int totEnabled = _sortedFilteredBuilds.Count;
 
             if (totEnabled == 0) {
                 EditorUtility.DisplayDialog("Build All", "0 platforms enabled, nothing to build", "Ok");
@@ -386,8 +387,8 @@ namespace DG.DeEditorTools.BuildPanel
                 return;
             }
 
-            for (int i = 0; i < _src.builds.Count; i++) {
-                DeBuildPanelData.Build build = _src.builds[i];
+            for (int i = 0; i < _sortedFilteredBuilds.Count; i++) {
+                DeBuildPanelData.Build build = _sortedFilteredBuilds[i];
                 // Hook ► Verify if build should continue
                 OnWillBuildResult onWillBuildResult = Dispatch_OnWillBuild(build.buildTarget, i == 0);
                 switch (onWillBuildResult) {
@@ -513,6 +514,17 @@ namespace DG.DeEditorTools.BuildPanel
         #endregion
 
         #region Helpers
+
+        void RefreshSortedFilteredBuilds()
+        {
+            _sortedFilteredBuilds.Clear();
+            BuildTarget currBuildTarget = EditorUserBuildSettings.activeBuildTarget;
+            foreach (DeBuildPanelData.Build build in _src.builds) {
+                if (!build.enabled) continue;
+                if (build.buildTarget == currBuildTarget) _sortedFilteredBuilds.Insert(0, build);
+                else _sortedFilteredBuilds.Add(build);
+            }
+        }
 
         void RefreshBuildPathsLabels()
         {
