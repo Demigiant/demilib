@@ -183,7 +183,10 @@ namespace DG.DeEditorTools.BuildPanel
             }
 
             GUILayout.EndScrollView();
-            if (GUI.changed) EditorUtility.SetDirty(_src);
+            if (GUI.changed) {
+                RefreshBuildPathsLabels();
+                EditorUtility.SetDirty(_src);
+            }
         }
 
         void DrawAffixes(List<DeBuildPanelData.Affix> affixes)
