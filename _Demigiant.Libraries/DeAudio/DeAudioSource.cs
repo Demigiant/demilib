@@ -162,6 +162,39 @@ namespace DG.DeAudio
         }
 
         /// <summary>
+        /// Loads and immediately pauses the given clip with the stored volume, pitch and loop settings.
+        /// Calling Prewarm directly from a DeAudioSource overrides any lock that might've been set
+        /// (though the locked status won't change)
+        /// </summary>
+        public void Prewarm(DeAudioClipData clipData)
+        { Prewarm(clipData.clip, 0, clipData.volume, clipData.pitch, clipData.loop); }
+        /// <summary>
+        /// Loads and immediately pauses the given clip with the given options.
+        /// Calling Prewarm directly from a DeAudioSource overrides any lock that might've been set
+        /// (though the locked status won't change)
+        /// </summary>
+        public void Prewarm(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
+        { Prewarm(clip, 0, volume, pitch, loop); }
+
+        /// <summary>
+        /// Loads and immediately pauses the given clip with the stored volume, pitch and loop settings.
+        /// Calling Prewarm directly from a DeAudioSource overrides any lock that might've been set
+        /// (though the locked status won't change)
+        /// </summary>
+        public void Prewarm(DeAudioClipData clipData, float fromTime)
+        { Prewarm(clipData.clip, fromTime, clipData.volume, clipData.pitch, clipData.loop); }
+        /// <summary>
+        /// Loads and immediately pauses the given clip with the given options from the given time.
+        /// Calling Prewarm directly from a DeAudioSource overrides any lock that might've been set
+        /// (though the locked status won't change)
+        /// </summary>
+        public void Prewarm(AudioClip clip, float fromTime, float volume = 1, float pitch = 1, bool loop = false)
+        {
+            PlayFrom(clip, fromTime, volume, pitch, loop);
+            Pause();
+        }
+
+        /// <summary>
         /// If the source was actually playing something, pauses it and returns TRUE, otherwise returns FALSE
         /// </summary>
         public bool Pause()

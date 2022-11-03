@@ -37,7 +37,7 @@ namespace DG.DeAudio
             get { return I.fooTimeScale; }
             set { SetTimeScale(value); }
         }
-        public const string Version = "1.1.065";
+        public const string Version = "1.1.070";
 
         internal static DeAudioManager I;
         internal const string LogPrefix = "DeAudio :: ";
@@ -261,6 +261,72 @@ namespace DG.DeAudio
         public static DeAudioSource PlayFrom(AudioClip clip, float fromTime, float volume = 1, float pitch = 1, bool loop = false)
         {
             return globalGroup.PlayFrom(clip, fromTime, volume, pitch, loop);
+        }
+
+        /// <summary>
+        /// Loads and immediately pauses the given <see cref="DeAudioClipData"/> on the stored group,
+        /// with the stored volume, pitch and loop settings (unless set otherwise).
+        /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually load.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance to which the sound was assigned, or NULL if the clip couldn't be loaded</para>
+        /// </summary>
+        public static DeAudioSource Prewarm(DeAudioClipData clipData, float? volume = null, float? pitch = null, bool? loop = null)
+        {
+            return Prewarm(clipData, 0,
+                volume == null ? clipData.volume : (float)volume,
+                pitch == null ? clipData.pitch : (float)pitch,
+                loop == null ? clipData.loop : (bool)loop
+            );
+        }
+        /// <summary>
+        /// Loads and immediately pauses the given sound with the given options and using the given group id.
+        /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually load.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance to which the sound was assigned, or NULL if the clip couldn't be loaded</para>
+        /// </summary>
+        public static DeAudioSource Prewarm(DeAudioGroupId groupId, AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
+        { return Prewarm(groupId, clip, 0, volume, pitch, loop); }
+        /// <summary>
+        /// Loads and immediately pauses the given sound external to any group, using the given options.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance to which the sound was assigned, or NULL if the clip couldn't be loaded</para>
+        /// </summary>
+        public static DeAudioSource Prewarm(AudioClip clip, float volume = 1, float pitch = 1, bool loop = false)
+        { return Prewarm(clip, 0, volume, pitch, loop); }
+
+        /// <summary>
+        /// Loads and immediately pauses the given <see cref="DeAudioClipData"/> on the stored group,
+        /// with the stored volume, pitch, loop settings (unless set otherwise), and from the given time.
+        /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually load.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance to which the sound was assigned, or NULL if the clip couldn't be loaded</para>
+        /// </summary>
+        public static DeAudioSource Prewarm(DeAudioClipData clipData, float fromTime, float? volume = null, float? pitch = null, bool? loop = null)
+        {
+            DeAudioSource src = Prewarm(clipData.groupId, clipData.clip, fromTime,
+                volume == null ? clipData.volume : (float)volume,
+                pitch == null ? clipData.pitch : (float)pitch,
+                loop == null ? clipData.loop : (bool)loop
+            );
+            return src;
+        }
+        /// <summary>
+        /// Loads and immediately pauses the given sound with the given options, using the given group id, and from the given time.
+        /// A <see cref="DeAudioGroup"/> with the given ID must exist in order for the sound to actually load.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance to which the sound was assigned, or NULL if the clip couldn't be loaded</para>
+        /// </summary>
+        public static DeAudioSource Prewarm(DeAudioGroupId groupId, AudioClip clip, float fromTime, float volume = 1, float pitch = 1, bool loop = false)
+        {
+            DeAudioGroup group = GetAudioGroup(groupId);
+            if (group == null) {
+                Debug.LogWarning(LogPrefix + "Clip can't be prewarmed because no group with the given groupId (" + groupId + ") was created");
+                return null;
+            }
+            return group.Prewarm(clip, fromTime, volume, pitch, loop);
+        }
+        /// <summary>
+        /// Loads and immediately pauses the given sound external to any group, using the given options and from the given time.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance to which the sound was assigned, or NULL if the clip couldn't be loaded</para>
+        /// </summary>
+        public static DeAudioSource Prewarm(AudioClip clip, float fromTime, float volume = 1, float pitch = 1, bool loop = false)
+        {
+            return globalGroup.Prewarm(clip, fromTime, volume, pitch, loop);
         }
 
         /// <summary>Stops all sounds</summary>

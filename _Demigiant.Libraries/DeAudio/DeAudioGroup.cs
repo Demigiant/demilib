@@ -121,6 +121,53 @@ namespace DG.DeAudio
             return src;
         }
 
+        /// <summary>
+        /// Loads and immediately pauses the given <see cref="DeAudioClipData"/> with the stored volume, pitch and loop settings (unless set otherwise).
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be loaded</para>
+        /// </summary>
+        public DeAudioSource Prewarm(DeAudioClipData clipData, float? volume = null, float? pitch = null, bool? loop = null)
+        {
+            DeAudioSource src = Prewarm(clipData.clip, 0,
+                volume == null ? clipData.volume : (float)volume,
+                pitch == null ? clipData.pitch : (float)pitch,
+                loop == null ? clipData.loop : (bool)loop
+            );
+            return src;
+        }
+        /// <summary>
+        /// Loads and immediately pauses the given sound with the given options.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be loaded</para>
+        /// </summary>
+        public DeAudioSource Prewarm(AudioClip clip, float volume, float pitch = 1, bool loop = false)
+        { return Prewarm(clip, 0, volume, pitch, loop); }
+        /// <summary>
+        /// Loads and immediately pauses the given sound with the stored volume, pitch and loop settings (unless set otherwise).
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be loaded</para>
+        /// </summary>
+        public DeAudioSource Prewarm(DeAudioClipData clipData, float fromTime, float? volume = null, float? pitch = null, bool? loop = null)
+        {
+            DeAudioSource src = Prewarm(clipData.clip, fromTime,
+                volume == null ? clipData.volume : (float)volume,
+                pitch == null ? clipData.pitch : (float)pitch,
+                loop == null ? clipData.loop : (bool)loop
+            );
+            return src;
+        }
+        /// <summary>
+        /// Loads and immediately pauses the given sound with the given options from the given time.
+        /// <para>Returns the <see cref="DeAudioSource"/> instance used to play, or NULL if the clip couldn't be loaded</para>
+        /// </summary>
+        public DeAudioSource Prewarm(AudioClip clip, float fromTime, float volume = 1, float pitch = 1, bool loop = false)
+        {
+            DeAudioSource src = GetAvailableSource();
+            if (src == null) {
+                if (DeAudioManager.I.logInfo) Debug.Log(DeAudioManager.LogPrefix + "Clip can't be prewarmed because all sources are busy");
+                return null;
+            }
+            src.Prewarm(clip, fromTime, volume, pitch, loop);
+            return src;
+        }
+
         /// <summary>Stops all sounds for this group</summary>
         public void Stop()
         { IterateOnAllSources(OperationType.Stop); }
