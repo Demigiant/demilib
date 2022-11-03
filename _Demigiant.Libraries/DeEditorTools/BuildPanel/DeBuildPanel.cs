@@ -48,7 +48,7 @@ namespace DG.DeEditorTools.BuildPanel
         }
 
         /// <summary>
-        /// Called before a build starts.<para/>
+        /// Called before a build starts but before eventually switching platform to the correct build one.<para/>
         /// Must return an <code>OnWillBuildResult</code> indicating if you wish to continue
         /// </summary>
         public static event OnWillBuildHandler OnWillBuild;
@@ -58,12 +58,30 @@ namespace DG.DeEditorTools.BuildPanel
             return OnWillBuild == null ? OnWillBuildResult.Continue : OnWillBuild(buildTarget, isFirstBuildOfQueue);
         }
 
+        /// <summary>
+        /// Called immediately after switching to a build platform but before starting the build.
+        /// This is the right callback to use to start building Addressables for the platform
+        /// (which are otherwise buggy and won't build automatically)
+        /// via <code>AddressableAssetSettings.BuildPlayerContent()</code>
+        /// </summary>
+        public static event OnSwitchedToBuildPlatformHandler OnSwitchedToBuildPlatform;
+        public delegate void OnSwitchedToBuildPlatformHandler(BuildTargetGroup buildTargetGroup, BuildTarget buildTarget, BuildTarget prevBuildTarget);
+        static void Dispatch_OnSwitchedToBuildPlatform(BuildTargetGroup buildTargetGroup, BuildTarget buildTarget, BuildTarget prevBuildTarget)
+        {
+            if (OnSwitchedToBuildPlatform != null) OnSwitchedToBuildPlatform(buildTargetGroup, buildTarget, prevBuildTarget);
+        }
+
+
         #endregion
-        
+
         [MenuItem("Tools/Demigiant/" + _Title)]
-        static void ShowWindow() { GetWindow(typeof(DeBuildPanel), false, _Title); }
+        static void ShowWindow()
+        {
+            EditorWindow win = GetWindow(typeof(DeBuildPanel), false, _Title);
+            win.titleContent = new GUIContent(_Title, DeStylePalette.ico_demigiant);
+        }
         
-        const string _Title = "Simple Build Panel";
+        const string _Title = "DeBuild Panel";
         const string _SrcADBFilePath = "Assets/-DeBuildPanelData.asset";
         static readonly StringBuilder _Strb = new StringBuilder();
         static readonly StringBuilder _StrbAlt = new StringBuilder();
@@ -466,6 +484,7 @@ namespace DG.DeEditorTools.BuildPanel
             }
 
             // Build
+            BuildTargetGroup buildTargetGroup = BuildTargetGroup.Standalone;
             switch (build.buildTarget) {
             case BuildTarget.StandaloneWindows:
             case BuildTarget.StandaloneWindows64:
@@ -473,22 +492,26 @@ namespace DG.DeEditorTools.BuildPanel
             case BuildTarget.StandaloneLinuxUniversal:
             case BuildTarget.StandaloneLinux:
             case BuildTarget.StandaloneLinux64:
-                PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Standalone, build.bundleIdentifier);
+                buildTargetGroup = BuildTargetGroup.Standalone;
+                PlayerSettings.SetApplicationIdentifier(buildTargetGroup, build.bundleIdentifier);
                 // if (PlayerSettings.GetScriptingBackend(BuildTargetGroup.Standalone) == ScriptingImplementation.IL2CPP && !EditorUserBuildSettings.allowDebugging) {
                 //     PlayerSettings.SetIl2CppCompilerConfiguration(BuildTargetGroup.Standalone, Il2CppCompilerConfiguration.Release);
                 // }
                 break;
             case BuildTarget.Android:
-                PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, build.bundleIdentifier);
+                buildTargetGroup = BuildTargetGroup.Android;
+                PlayerSettings.SetApplicationIdentifier(buildTargetGroup, build.bundleIdentifier);
                 PlayerSettings.Android.bundleVersionCode = PlayerSettings.Android.bundleVersionCode + (build.increaseInternalBuildNumber ? 1 : 0);
                 PlayerSettings.Android.keystorePass = PlayerSettings.Android.keyaliasPass = build.key;
                 break;
             case BuildTarget.iOS:
-                PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.iOS, build.bundleIdentifier);
+                buildTargetGroup = BuildTargetGroup.iOS;
+                PlayerSettings.SetApplicationIdentifier(buildTargetGroup, build.bundleIdentifier);
                 PlayerSettings.iOS.buildNumber = PlayerSettings.iOS.buildNumber + (build.increaseInternalBuildNumber ? 1 : 0);
                 break;
             case BuildTarget.WebGL:
-                PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.WebGL, build.bundleIdentifier);
+                buildTargetGroup = BuildTargetGroup.WebGL;
+                PlayerSettings.SetApplicationIdentifier(buildTargetGroup, build.bundleIdentifier);
                 break;
             }
             BuildPlayerOptions buildOptions = new BuildPlayerOptions();
@@ -501,6 +524,9 @@ namespace DG.DeEditorTools.BuildPanel
             if (EditorUserBuildSettings.development) buildOptions.options |= BuildOptions.Development;
             if (EditorUserBuildSettings.allowDebugging) buildOptions.options |= BuildOptions.AllowDebugging;
             EditorUtility.ClearProgressBar();
+            BuildTarget prevBuildTarget = EditorUserBuildSettings.activeBuildTarget;
+            EditorUserBuildSettings.SwitchActiveBuildTarget(buildTargetGroup, build.buildTarget);
+            Dispatch_OnSwitchedToBuildPlatform(buildTargetGroup, build.buildTarget, prevBuildTarget);
             BuildReport report = BuildPipeline.BuildPlayer(buildOptions);
 
             if (build.deleteBackupThisFolder) {

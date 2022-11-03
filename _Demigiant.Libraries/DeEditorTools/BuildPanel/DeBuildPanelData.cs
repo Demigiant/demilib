@@ -35,7 +35,7 @@ namespace DG.DeEditorTools.BuildPanel
 
         #endregion
 
-        public const string Version = "1.0.070";
+        public const string Version = "1.0.075";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
             BuildTarget.NoTarget, // Here so indexes correspond to AffixTarget enum
             BuildTarget.StandaloneWindows64,

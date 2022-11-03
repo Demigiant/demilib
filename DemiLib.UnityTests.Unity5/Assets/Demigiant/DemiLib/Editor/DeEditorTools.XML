@@ -20,8 +20,16 @@
         </member>
         <member name="E:DG.DeEditorTools.BuildPanel.DeBuildPanel.OnWillBuild">
             <summary>
-            Called before a build starts.<para/>
+            Called before a build starts but before eventually switching platform to the correct build one.<para/>
             Must return an <code>OnWillBuildResult</code> indicating if you wish to continue
+            </summary>
+        </member>
+        <member name="E:DG.DeEditorTools.BuildPanel.DeBuildPanel.OnSwitchedToBuildPlatform">
+            <summary>
+            Called immediately after switching to a build platform but before starting the build.
+            This is the right callback to use to start building Addressables for the platform
+            (which are otherwise buggy and won't build automatically)
+            via <code>AddressableAssetSettings.BuildPlayerContent()</code>
             </summary>
         </member>
         <member name="T:DG.DeEditorTools.CustomDefinesPanel.CustomDefinesPanel">
