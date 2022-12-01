@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using DG.DeAudio;
 using DG.DemiEditor;
+using DG.DemiLib;
 using DG.Tweening;
 using UnityEditor;
 using UnityEditorInternal;
@@ -23,11 +24,14 @@ namespace DG.DeAudioEditor
         readonly List<DeAudioGroupId> _duplicateGroupIds = new List<DeAudioGroupId>();
         bool _requiresDuplicateCheck; // Used to check for duplicates during draw method, since during onChangedCallback it won't work correctly
         StringBuilder _runtimeStrb = new StringBuilder();
+        Texture2D _icoPause;
 
         #region Unity and GUI Methods
 
         void OnEnable()
         {
+            _icoPause = (Texture2D)EditorGUIUtility.IconContent("d_PauseButton On").image;
+
             _src = target as DeAudioManager;
             DeAudioEditorUtils.CheckForDuplicateAudioGroupIds(_src.fooAudioGroups, _duplicateGroupIds);
 
@@ -151,12 +155,19 @@ namespace DG.DeAudioEditor
             for (int i = 0; i < len; ++i) {
                 // Sources volume and play time
                 DeAudioSource s = group.sources[i];
-                if (!s.isPlaying) continue;
+                if (!s.isPlaying && !s.isPaused) continue;
                 _runtimeStrb.Length = 0;
                 _runtimeStrb.Append("└ ").Append(s.clip.name);
                 if (s.locked) _runtimeStrb.Append(" [LOCKED]");
                 if (s.loop) _runtimeStrb.Append(" [loop]");
                 GUILayout.Label(_runtimeStrb.ToString());
+                if (s.isPaused) {
+                    Rect pauseR = GUILayoutUtility.GetLastRect();
+                    pauseR = pauseR.SetWidth(20).SetHeight(20).Shift(-2, 12, 0, 0);
+                    using (new DeGUI.ColorScope(null, null, new DeSkinColor(0, 1))) {
+                        GUI.DrawTexture(pauseR, _icoPause, ScaleMode.ScaleToFit);
+                    }
+                }
                 // Volume
                 DrawRuntimeSourceBar(volumeColor, s.unscaledVolume, null, s.volume, trueVolumeColor);
                 // Pitch

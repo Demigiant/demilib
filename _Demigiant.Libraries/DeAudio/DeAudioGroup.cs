@@ -240,12 +240,15 @@ namespace DG.DeAudio
 
         #region Info Methods
 
-        public bool IsPlaying(AudioClip clip)
+        public bool IsPlaying(AudioClip clip, bool ignoreIfFadingOutWithStop = true)
         {
             if (clip == null) return false;
             for (int i = 0; i < sources.Count; ++i) {
                 if (sources[i].clip != clip) continue;
-                return sources[i].isPlaying;
+                bool isPlaying = ignoreIfFadingOutWithStop
+                    ? sources[i].isPlaying && (!sources[i].isFadingOut || sources[i].onFadeOutCompleteBehaviour != FadeBehaviour.Stop)
+                    : sources[i].isPlaying;
+                if (isPlaying) return true;
             }
             return false;
         }
@@ -293,7 +296,8 @@ namespace DG.DeAudio
             int len = sources.Count;
             for (int i = 0; i < len; ++i) {
                 DeAudioSource src = sources[i];
-                if (!src.isPlaying || src.isFadingOut) continue; // Ignore sources that are fading to 0 or that are not playing at all
+                // if (!src.isPlaying || src.isFadingOut) continue; // Ignore sources that are fading to 0 or that are not playing at all
+                if (src.isFadingOut && src.onFadeOutCompleteBehaviour == FadeBehaviour.Stop) continue; // Ignore sources that are fading to 0 with a stop complete behaviour
                 sources[i].FadeTo(to, duration, ignoreTimeScale, onCompleteBehaviour, onComplete);
             }
         }

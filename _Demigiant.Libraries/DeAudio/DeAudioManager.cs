@@ -37,7 +37,7 @@ namespace DG.DeAudio
             get { return I.fooTimeScale; }
             set { SetTimeScale(value); }
         }
-        public const string Version = "1.1.070";
+        public const string Version = "1.1.080";
 
         internal static DeAudioManager I;
         internal const string LogPrefix = "DeAudio :: ";
@@ -433,10 +433,11 @@ namespace DG.DeAudio
 
         /// <summary>Returns TRUE if any group is playing the given audioClip</summary>
         /// <param name="clip"></param>
-        public static bool IsPlaying(AudioClip clip)
+        /// <param name="ignoreIfFadingOutWithStop">If TRUE, doesn't consider clip as playing if it's fading out with a stop onComplete behaviour</param>
+        public static bool IsPlaying(AudioClip clip, bool ignoreIfFadingOutWithStop = true)
         {
             for (int i = 0; i < audioGroups.Length; ++i) {
-                if (audioGroups[i].IsPlaying(clip)) return true;
+                if (audioGroups[i].IsPlaying(clip, ignoreIfFadingOutWithStop)) return true;
             }
             return false;
         }

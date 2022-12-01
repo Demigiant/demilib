@@ -68,6 +68,7 @@ namespace DG.DeAudio
         }
 
         internal float playTime { get; private set; } // Time.realTimeSinceStartup since the last Play call
+        internal FadeBehaviour onFadeOutCompleteBehaviour { get; private set; }
 
         bool _disposed;
         Tween _fadeTween;
@@ -299,7 +300,10 @@ namespace DG.DeAudio
             _fadeTween.Kill();
             _fadeTween = DOTween.To(() => unscaledVolume, x => volume = x, to, duration)
                 .SetTarget(this).SetUpdate(ignoreTimeScale).SetEase(DeAudioManager.I.fadeEase);
-            if (to <= 0) isFadingOut = true;
+            if (to <= 0) {
+                isFadingOut = true;
+                onFadeOutCompleteBehaviour = onCompleteBehaviour;
+            }
             switch (onCompleteBehaviour) {
             case FadeBehaviour.Stop:
                 _fadeTween.OnStepComplete(OnFadeToInternalComplete_Stop);

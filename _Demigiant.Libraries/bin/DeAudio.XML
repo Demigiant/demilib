@@ -419,9 +419,10 @@
         <member name="M:DG.DeAudio.DeAudioManager.Unlock(UnityEngine.AudioClip)">
             <summary>Unlocks all <see cref="T:DG.DeAudio.DeAudioSource"/> instances for the given clip</summary>
         </member>
-        <member name="M:DG.DeAudio.DeAudioManager.IsPlaying(UnityEngine.AudioClip)">
+        <member name="M:DG.DeAudio.DeAudioManager.IsPlaying(UnityEngine.AudioClip,System.Boolean)">
             <summary>Returns TRUE if any group is playing the given audioClip</summary>
             <param name="clip"></param>
+            <param name="ignoreIfFadingOutWithStop">If TRUE, doesn't consider clip as playing if it's fading out with a stop onComplete behaviour</param>
         </member>
         <member name="M:DG.DeAudio.DeAudioManager.GetAudioClipData(UnityEngine.AudioClip,System.Boolean)">
             <summary>
