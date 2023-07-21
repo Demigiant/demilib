@@ -18,8 +18,6 @@
             <summary>
             Returns the prefab parent by using different code on Unity 2018 or later
             </summary>
-            <param name="instance"></param>
-            <returns></returns>
         </member>
         <member name="M:DG.DemiEditor.DeEditorCoroutines.StartCoroutine(System.Collections.IEnumerator)">
             <summary>
