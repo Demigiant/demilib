@@ -807,6 +807,21 @@
             Shifts the visible are to the given coordinates and repaints on end
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ResetScale">
+            <summary>
+            Resets the node process scale to 1
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ScaleUp">
+            <summary>
+            Scales up the node process area (if not already at max scale)
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.ScaleDown">
+            <summary>
+            Scales down the node process area (if not already at min scale)
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUINodeSystem.NodeProcess.RepaintOnEnd">
             <summary>
             Tells the process to repaint once the process has ended.

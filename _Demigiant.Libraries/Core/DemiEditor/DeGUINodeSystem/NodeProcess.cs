@@ -184,6 +184,32 @@ namespace DG.DemiEditor.DeGUINodeSystem
         }
 
         /// <summary>
+        /// Resets the node process scale to 1
+        /// </summary>
+        public void ResetScale()
+        {
+            Vector2 v = Vector2.zero;
+            SetScale(1, relativeArea.center, ref v);
+        }
+
+        /// <summary>
+        /// Scales up the node process area (if not already at max scale)
+        /// </summary>
+        public void ScaleUp()
+        {
+            Vector2 v = Vector2.zero;
+            Scale(true, relativeArea.center, ref v);
+        }
+        /// <summary>
+        /// Scales down the node process area (if not already at min scale)
+        /// </summary>
+        public void ScaleDown()
+        {
+            Vector2 v = Vector2.zero;
+            Scale(false, relativeArea.center, ref v);
+        }
+
+        /// <summary>
         /// Tells the process to repaint once the process has ended.
         /// Calling this
         /// </summary>
@@ -642,25 +668,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
                 if (options.mouseWheelScalesGUI && DeGUIKey.Exclusive.ctrl) {
                     // Zoom
                     bool isScaleUp = Event.current.delta.y < 0;
-                    if (isScaleUp && Mathf.Approximately(options.guiScaleValues[0], guiScale)) break;
-                    if (!isScaleUp && Mathf.Approximately(options.guiScaleValues[options.guiScaleValues.Length - 1], guiScale)) break;
-                    for (int i = 0; i < options.guiScaleValues.Length; ++i) {
-                        if (!Mathf.Approximately(options.guiScaleValues[i], guiScale)) continue;
-                        float prevGuiScale = guiScale;
-                        guiScale = isScaleUp ? options.guiScaleValues[i - 1] : options.guiScaleValues[i + 1];
-                        // Center on mouse (only works if new guiScale is exactly half or double the previous one)
-                        Vector2 mouseP = Event.current.mousePosition;
-                        Vector2 offset = isScaleUp ? -mouseP : mouseP;
-                        float scaleFactor = guiScale / prevGuiScale;
-                        scaleFactor = guiScale < prevGuiScale
-                            ? (1 - scaleFactor) / scaleFactor
-                            : (guiScale - prevGuiScale) / guiScale;
-                        offset *= scaleFactor;
-                        refAreaShift += offset;
-                        _repaintOnEnd = true;
-                        DispatchOnGUIChange(GUIChangeType.GUIScale);
-                        break;
-                    }
+                    Scale(isScaleUp, Event.current.mousePosition, ref refAreaShift);
                 }
                 break;
             // KEYBOARD EVENTS //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1244,6 +1252,35 @@ namespace DG.DemiEditor.DeGUINodeSystem
             guiChangeType = GUIChangeType.SortedNodes;
             GUI.changed = _repaintOnEnd = true;
             DispatchOnGUIChange(GUIChangeType.SortedNodes);
+        }
+
+        // Scales up/down the node process area.
+        void Scale(bool isScaleUp, Vector2 currMouseP, ref Vector2 refAreaShift)
+        {
+            if (isScaleUp && Mathf.Approximately(options.guiScaleValues[0], guiScale)) return;
+            if (!isScaleUp && Mathf.Approximately(options.guiScaleValues[options.guiScaleValues.Length - 1], guiScale)) return;
+            for (int i = 0; i < options.guiScaleValues.Length; ++i) {
+                if (!Mathf.Approximately(options.guiScaleValues[i], guiScale)) continue;
+                SetScale(isScaleUp ? options.guiScaleValues[i - 1] : options.guiScaleValues[i + 1], currMouseP, ref refAreaShift);
+                break;
+            }
+        }
+
+        void SetScale(float scale, Vector2 currMouseP, ref Vector2 refAreaShift)
+        {
+            if (Mathf.Approximately(guiScale, scale)) return;
+            float prevGuiScale = guiScale;
+            guiScale = scale;
+            // Center on mouse (only works if new guiScale is exactly half or double the previous one)
+            Vector2 offset = guiScale > prevGuiScale ? -currMouseP : currMouseP;
+            float scaleFactor = guiScale / prevGuiScale;
+            scaleFactor = guiScale < prevGuiScale
+                ? (1 - scaleFactor) / scaleFactor
+                : (guiScale - prevGuiScale) / guiScale;
+            offset *= scaleFactor;
+            refAreaShift += offset;
+            _repaintOnEnd = true;
+            DispatchOnGUIChange(GUIChangeType.GUIScale);
         }
 
         // Adds all forward connected nodes to selection, paying attention not to select a node twice
