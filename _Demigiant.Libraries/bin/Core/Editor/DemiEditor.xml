@@ -14,6 +14,16 @@
             Encodes to PNG using reflection to use correct method depending if editor is version 2017 or earlier
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.FindObjectsOfType``1(System.Boolean)">
+            <summary>
+            Warning: some versions of this method don't have the includeInactive parameter so it won't be taken into account
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.FindObjectsOfType(System.Type,System.Boolean)">
+            <summary>
+            Warning: some versions of this method don't have the includeInactive parameter so it won't be taken into account
+            </summary>
+        </member>
         <member name="M:DG.DemiEditor.DeEditorCompatibilityUtils.GetPrefabParent(UnityEngine.GameObject)">
             <summary>
             Returns the prefab parent by using different code on Unity 2018 or later

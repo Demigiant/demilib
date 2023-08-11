@@ -23,6 +23,8 @@ namespace DG.DemiEditor
         static MethodInfo _miFindObjectsOfType;
         static MethodInfo _miFreeMoveHandle;
         static MethodInfo _miGetPrefabParent;
+        static bool _findObjectsOfType_hasIncludeInactiveParam;
+        static bool _findObjectsOfTypeGeneric_hasIncludeInactiveParam;
         static Type _findObjectsInactiveType;
         static Type _findObjectsSortModeType;
 
@@ -97,15 +99,26 @@ namespace DG.DemiEditor
             }
         }
 
+        /// <summary>
+        /// Warning: some versions of this method don't have the includeInactive parameter so it won't be taken into account
+        /// </summary>
         public static T[] FindObjectsOfType<T>(bool includeInactive = false)
         {
             if (_miFindObjectsOfTypeGeneric == null) {
                 if (DeUnityEditorVersion.MajorVersion < 2023) {
                     _miFindObjectsOfTypeGeneric = typeof(UnityEngine.Object).GetMethod(
-                            "FindObjectsOfType", BindingFlags.Static | BindingFlags.Public, Type.DefaultBinder,
-                            new[] {typeof(bool)},
-                            null
-                        ).MakeGenericMethod(typeof(T));
+                        "FindObjectsOfType", BindingFlags.Static | BindingFlags.Public, Type.DefaultBinder,
+                        new[] {typeof(bool)},
+                        null
+                    );
+                    _findObjectsOfTypeGeneric_hasIncludeInactiveParam = true;
+                    if (_miFindObjectOfTypeGeneric == null) {
+                        _miFindObjectsOfTypeGeneric = typeof(UnityEngine.Object).GetMethod(
+                            "FindObjectsOfType", BindingFlags.Static | BindingFlags.Public
+                        );
+                        _findObjectsOfTypeGeneric_hasIncludeInactiveParam = false;
+                    }
+                    _miFindObjectsOfTypeGeneric.MakeGenericMethod(typeof(T));
                 } else {
                     if (_findObjectsInactiveType == null) _findObjectsInactiveType = typeof(GameObject).Assembly.GetType("UnityEngine.FindObjectsInactive");
                     if (_findObjectsSortModeType == null) _findObjectsSortModeType = typeof(GameObject).Assembly.GetType("UnityEngine.FindObjectsSortMode");
@@ -117,11 +130,15 @@ namespace DG.DemiEditor
                 }
             }
             if (DeUnityEditorVersion.MajorVersion < 2023) {
-                return (T[])_miFindObjectsOfTypeGeneric.Invoke(null, new object[] {includeInactive});
+                if (_findObjectsOfTypeGeneric_hasIncludeInactiveParam) return (T[])_miFindObjectsOfTypeGeneric.Invoke(null, new object[] {includeInactive});
+                else return (T[])_miFindObjectsOfTypeGeneric.Invoke(null, null);
             } else {
                 return (T[])_miFindObjectsOfTypeGeneric.Invoke(null, new object[] {includeInactive ? 0 : 1, 0});
             }
         }
+        /// <summary>
+        /// Warning: some versions of this method don't have the includeInactive parameter so it won't be taken into account
+        /// </summary>
         public static Object[] FindObjectsOfType(Type type, bool includeInactive = false)
         {
             if (_miFindObjectsOfType == null) {
@@ -131,6 +148,15 @@ namespace DG.DemiEditor
                         new[] {typeof(Type), typeof(bool)},
                         null
                     );
+                    _findObjectsOfType_hasIncludeInactiveParam = true;
+                    if (_miFindObjectOfType == null) {
+                        _miFindObjectsOfType = typeof(UnityEngine.Object).GetMethod(
+                            "FindObjectsOfType", BindingFlags.Static | BindingFlags.Public, Type.DefaultBinder,
+                            new[] {typeof(Type)},
+                            null
+                        );
+                        _findObjectsOfType_hasIncludeInactiveParam = false;
+                    }
                 } else {
                     if (_findObjectsInactiveType == null) _findObjectsInactiveType = typeof(GameObject).Assembly.GetType("UnityEngine.FindObjectsInactive");
                     if (_findObjectsSortModeType == null) _findObjectsSortModeType = typeof(GameObject).Assembly.GetType("UnityEngine.FindObjectsSortMode");
@@ -142,7 +168,8 @@ namespace DG.DemiEditor
                 }
             }
             if (DeUnityEditorVersion.MajorVersion < 2023) {
-                return (Object[])_miFindObjectsOfType.Invoke(null, new object[] {type, includeInactive});
+                if (_findObjectsOfType_hasIncludeInactiveParam) return (Object[])_miFindObjectsOfType.Invoke(null, new object[] {type, includeInactive});
+                else return (Object[])_miFindObjectsOfType.Invoke(null, new object[] {type});
             } else {
                 return (Object[])_miFindObjectsOfType.Invoke(null, new object[] {type, includeInactive ? 0 : 1, 0});
             }

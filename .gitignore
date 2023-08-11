@@ -8,7 +8,6 @@ _Demigiant.Libraries/Core/*/obj
 *.pdb.meta
 *.DotSettings
 .idea
-_Demigiant.Libraries/.gitignore
 _Demigiant.Libraries/.git
 *.Unity*/_ReSharper*
 *.Unity*/Library
@@ -28,4 +27,4 @@ test builds
 LocalOnly*
 _Screenshots.xar
 
-DemiLib.UnityTests.Unity2018
+/DemiLib.UnityTests.Unity2018.BKP
