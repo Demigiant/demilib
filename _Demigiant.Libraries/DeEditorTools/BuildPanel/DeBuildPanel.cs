@@ -269,8 +269,17 @@ namespace DG.DeEditorTools.BuildPanel
                 build.foldout = DeGUILayout.ToolbarFoldoutButton(build.foldout, build.buildTarget.ToString(), false, true);
                 build.enabled = DeGUILayout.ToggleButton(build.enabled, "Enabled", Styles.btToolbarToggle, GUILayout.Width(60));
                 using (new EditorGUI.DisabledScope(!ValidateBuildData(build))) {
-                    if (GUILayout.Button("BUILD NOW", DeGUI.styles.button.tool, GUILayout.Width(80))) {
+                    if (GUILayout.Button("BUILD", DeGUI.styles.button.tool, GUILayout.Width(70))) {
                         Build(build);
+                    }
+                    switch (build.buildTarget)
+                    {
+                        case BuildTarget.StandaloneWindows:
+                        case BuildTarget.StandaloneWindows64:
+                            if (GUILayout.Button("BUILD AND PLAY", DeGUI.styles.button.tool, GUILayout.Width(130))) {
+                                Build(build, true);
+                            }
+                            break;
                     }
                 }
                 if (GUILayout.Button("×", Styles.btDeleteBuildToolbar)) {
@@ -426,7 +435,7 @@ namespace DG.DeEditorTools.BuildPanel
             }
         }
 
-        void Build(DeBuildPanelData.Build build)
+        void Build(DeBuildPanelData.Build build, bool andPlay = false)
         {
             // Hook ► Verify if build should continue
             OnWillBuildResult onWillBuildResult = Dispatch_OnWillBuild(build.buildTarget, true);
@@ -435,11 +444,11 @@ namespace DG.DeEditorTools.BuildPanel
             EditorUtility.DisplayProgressBar(string.Format("Build ({0})", build.buildTarget), "Preparing...", 0.2f);
             // Use delayed call to prevent Unity GUILayout bug
             DeEditorUtils.ClearAllDelayedCalls();
-            DeEditorUtils.DelayedCall(0.1f, ()=> DoBuild(build));
+            DeEditorUtils.DelayedCall(0.1f, ()=> DoBuild(build, andPlay));
         }
 
         // Returns TRUE if all builds in queue should be canceled
-        DeBuildResult DoBuild(DeBuildPanelData.Build build)
+        DeBuildResult DoBuild(DeBuildPanelData.Build build, bool andPlay = false)
         {
             string dialogTitle = string.Format("Build ({0})", build.buildTarget);
 
@@ -537,6 +546,11 @@ namespace DG.DeEditorTools.BuildPanel
                 if (Directory.Exists(debugDataFolder)) Directory.Delete(debugDataFolder, true);
             }
 
+            if (andPlay)
+            {
+                DeEditorUtils.DelayedCall(0.1f, ()=> System.Diagnostics.Process.Start(buildFilePath));
+            }
+            
             return report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded ? DeBuildResult.Success : DeBuildResult.Failed;
         }
 
