@@ -53,6 +53,7 @@
     <Compile Include="Attributes\DeAudioClipDataModeAttribute.cs" />
     <Compile Include="Core\OperationType.cs" />
     <Compile Include="DeAudioClipData.cs" />
+    <Compile Include="DeAudioClipDataVariant.cs" />
     <Compile Include="DeAudioClipGUIMode.cs" />
     <Compile Include="DeAudioCollection.cs" />
     <Compile Include="DeAudioGroup.cs" />

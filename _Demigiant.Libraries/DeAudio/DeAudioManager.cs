@@ -37,7 +37,7 @@ namespace DG.DeAudio
             get { return I.fooTimeScale; }
             set { SetTimeScale(value); }
         }
-        public const string Version = "1.1.080";
+        public const string Version = "1.1.085";
 
         internal static DeAudioManager I;
         internal const string LogPrefix = "DeAudio :: ";

@@ -38,6 +38,18 @@
             Returns TRUE if this clip is currently playing
             </summary>
         </member>
+        <member name="T:DG.DeAudio.DeAudioClipDataVariant">
+            <summary>
+            Used to store variants for the same sfx and return a smart random one when needed
+            </summary>
+        </member>
+        <member name="M:DG.DeAudio.DeAudioClipDataVariant.GetClipData">
+            <summary>
+            Returns a random <see cref="T:DG.DeAudio.DeAudioClipData"/> among its variants,
+            but never returns the same one twice in a row (unless there's only one variant)
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:DG.DeAudio.DeAudioClipGUIMode">
             <summary>
             Display mode used when drawing <see cref="T:DG.DeAudio.DeAudioClipData"/> objects in a custom editor.
