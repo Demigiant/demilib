@@ -62,7 +62,6 @@ namespace DG.DeAudio
                 unscaledPitch = value;
                 float to = value * targetPitch * audioGroup.fooTimeScale * DeAudioManager.timeScale;
                 if (to < 0) to = 0;
-                // else if (to > 3) to = 3;
                 audioSource.pitch = to;
             }
         }

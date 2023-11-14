@@ -26,9 +26,10 @@ namespace DG.DeAudio
         public int preallocate = 0;
         public bool recycle = true;
         public float fooVolume = 1;
-        public float fooTimeScale = 1;
-
-        [System.NonSerialized] public List<DeAudioSource> sources; // Sources per each group
+        
+        [NonSerialized] public float fooTimeScale = 1;
+        [NonSerialized] public List<DeAudioSource> sources; // Sources per each group
+        
         public float volume {
             get { return fooVolume; }
             set { SetVolume(value); }
