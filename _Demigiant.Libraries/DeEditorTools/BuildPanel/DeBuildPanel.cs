@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using DG.DemiEditor;
 using DG.DemiLib;
@@ -90,6 +91,7 @@ namespace DG.DeEditorTools.BuildPanel
         const int _LabelWidth = 116;
         string _buildFolderComment;
         string[] _buildPathsLabels;
+        MethodInfo _miGetBuildPlayerOptions;
         // Includes only enabled builds, sorted so current platform is always first
         readonly List<DeBuildPanelData.Build> _sortedFilteredBuilds = new List<DeBuildPanelData.Build>();
 
@@ -523,20 +525,26 @@ namespace DG.DeEditorTools.BuildPanel
                 PlayerSettings.SetApplicationIdentifier(buildTargetGroup, build.bundleIdentifier);
                 break;
             }
-            BuildPlayerOptions buildOptions = new BuildPlayerOptions();
-            buildOptions.options = BuildOptions.None;
-            string[] scenes = new string[EditorBuildSettings.scenes.Length];
-            for (int i = 0; i < scenes.Length; ++i) scenes[i] = EditorBuildSettings.scenes[i].path;
-            buildOptions.scenes = scenes;
-            buildOptions.locationPathName = buildFilePath;
-            buildOptions.target = build.buildTarget;
-            if (EditorUserBuildSettings.development) buildOptions.options |= BuildOptions.Development;
-            if (EditorUserBuildSettings.allowDebugging) buildOptions.options |= BuildOptions.AllowDebugging;
+            // Check if there's scene enabled for builds
+            int totEnabledScenes = 0;
+            foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
+            {
+                if (scene.enabled) totEnabledScenes++;
+            }
+            if (totEnabledScenes == 0)
+            {
+                EditorUtility.ClearProgressBar();
+                EditorUtility.DisplayDialog(dialogTitle, "The Build Settings contain no active scenes, canceling all builds", "Ok");
+                return DeBuildResult.CancelAll;
+            }
+            // Prepare current build options configured with correct build path
+            BuildPlayerOptions buildPlayerOptions = GetCurrentBuildPlayerOptions(buildFilePath, build.buildTarget, buildTargetGroup);
             EditorUtility.ClearProgressBar();
+            // Build
             BuildTarget prevBuildTarget = EditorUserBuildSettings.activeBuildTarget;
             EditorUserBuildSettings.SwitchActiveBuildTarget(buildTargetGroup, build.buildTarget);
             Dispatch_OnSwitchedToBuildPlatform(buildTargetGroup, build.buildTarget, prevBuildTarget);
-            BuildReport report = BuildPipeline.BuildPlayer(buildOptions);
+            BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
 
             if (build.deleteBackupThisFolder) {
                 // Can't find a way to prevent Unity from generating this, so I'll delete it afterwards
@@ -641,6 +649,21 @@ namespace DG.DeEditorTools.BuildPanel
                 }
             }
             return result;
+        }
+
+        // Retrieves the current BuildPlayerOptions without opening a folder dialog like BuildPlayerWindow.DefaultBuildMethods.GetBuildPlayerOptions does
+        BuildPlayerOptions GetCurrentBuildPlayerOptions(string buildFilePath, BuildTarget buildTarget, BuildTargetGroup buildTargetGroup)
+        {
+            if (_miGetBuildPlayerOptions == null)
+            {
+                _miGetBuildPlayerOptions = typeof(BuildPlayerWindow.DefaultBuildMethods)
+                    .GetMethod("GetBuildPlayerOptionsInternal", BindingFlags.NonPublic | BindingFlags.Static);
+            }
+            if (_miGetBuildPlayerOptions == null) throw new MissingMethodException("Can't find method BuildPlayerWindow.DefaultBuildMethods.GetBuildPlayerOptionsInternal");
+            
+            EditorUserBuildSettings.selectedBuildTargetGroup = buildTargetGroup;
+            EditorUserBuildSettings.SetBuildLocation(buildTarget, buildFilePath);
+            return (BuildPlayerOptions)_miGetBuildPlayerOptions.Invoke(null, new object[] { false, new BuildPlayerOptions() });
         }
 
         #endregion
