@@ -32,7 +32,7 @@ namespace DG.DeEditorTools.Hierarchy
         static Rect _evidenceRShiftByVersion = new Rect();
 
         static bool _stylesSet;
-        static Color _icoVisibilityOnColor, _icoVisibilityOffColor, _hasComponentsColor;
+        static Color _icoVisibilityOnColor, _icoVisibilityOffColor, _hasComponentsColor, _prefabLabelColor, _inactivePrefabLabelColor;
         static GUIStyle _evidenceStyle, _btVisibility, _btVisibilityOff, _layerBox, _layerOrderBox, _extraEvidenceBox, _extraEvidenceBoxLabel;
 
         static DeHierarchy()
@@ -128,10 +128,10 @@ namespace DG.DeEditorTools.Hierarchy
                 Color evColor = goData.extraEvidenceColor;
                 switch (goData.extraEvidenceMode) {
                 case DeHierarchyData.EvidenceMode.Box:
-                    Color labelColor = goData.extraEvidenceLabelColor;
+                    Color labelColor = goData.isPrefab ? _prefabLabelColor : goData.extraEvidenceLabelColor;
                     if (!isActiveInHierarchy) {
                         evColor.a *= 0.4f;
-                        labelColor = new DeSkinColor(labelColor == Color.white ? 0.5f : 0.15f);
+                        labelColor = goData.isPrefab ? _inactivePrefabLabelColor : (Color)new DeSkinColor(labelColor == Color.white ? 0.5f : 0.15f);
                     }
                     using (new DeGUI.ColorScope(evColor, labelColor)) {
                         GUI.Box(evidenceR, GUIContent.none, _extraEvidenceBox);
@@ -313,6 +313,8 @@ namespace DG.DeEditorTools.Hierarchy
             _icoVisibilityOnColor = new DeSkinColor(DeGUI.IsProSkin ? 0.65f : 0.5f);
             _icoVisibilityOffColor = new DeSkinColor(DeGUI.IsProSkin ? 0.4f : 0.6f);
             _hasComponentsColor = new DeSkinColor(new Color(0.09f, 0.63f, 0.98f));
+            _prefabLabelColor = new DeSkinColor(new Color(0.51f, 0.71f, 1f));
+            _inactivePrefabLabelColor = new DeSkinColor(new Color(0.26f, 0.37f, 0.55f));
 
             _evidenceStyle = DeGUI.styles.button.bBlankBorder.Clone(TextAnchor.MiddleLeft).Background(DeStylePalette.squareBorderCurvedEmpty)
                 .PaddingLeft(3).PaddingTop(2);
@@ -490,9 +492,11 @@ namespace DG.DeEditorTools.Hierarchy
             public readonly DeHierarchyData.EvidenceMode extraEvidenceMode;
             public readonly Color extraEvidenceColor;
             public readonly Color extraEvidenceLabelColor;
+            public readonly bool isPrefab;
 
             public GameObjectData(GameObject go, bool checkForCustomComponents, bool checkForCustomComponentsInChildren)
             {
+                isPrefab = PrefabUtility.IsPartOfAnyPrefab(go);
                 renderer = go.GetComponent<Renderer>();
                 hasRenderer = renderer != null;
                 if (checkForCustomComponents) {
@@ -567,62 +571,7 @@ namespace DG.DeEditorTools.Hierarchy
                             }
                         }
                     }
-                    // for (int i = len - 1; i > 0; --i) { // Ignore 0 because it's always Transform or RectTransform
-                    // for (int i = 1; i < componentsLen; ++i) { // Ignore 0 because it's always Transform or RectTransform
-                    //     if (_TmpComponents[i] == null) continue; // Happens in case of missing scripts
-                    //     string typeName = _TmpComponents[i].GetType().FullName;
-                    //     foreach (DeHierarchyData.ExtraEvidenceData evData in _projectSrc.extraEvidences) {
-                    //         if (string.IsNullOrEmpty(evData.componentClass)) continue;
-                    //         switch (evData.searchMode) {
-                    //         case DeHierarchyData.SearchMode.StartsWith:
-                    //             if (!typeName.StartsWith(evData.componentClass)) continue;
-                    //             break;
-                    //         case DeHierarchyData.SearchMode.EndsWith:
-                    //             if (!typeName.EndsWith(evData.componentClass)) continue;
-                    //             break;
-                    //         default:
-                    //             if (!typeName.Contains(evData.componentClass)) continue;
-                    //             break;
-                    //         }
-                    //         hasExtraEvidence = true;
-                    //         extraEvidenceMode = evData.evidenceMode;
-                    //         extraEvidenceColor = evData.color;
-                    //         extraEvidenceLabelColor = DeGUI.GetVisibleContentColorOn(extraEvidenceColor);
-                    //         break;
-                    //     }
-                    //     if (hasExtraEvidence) break;
-                    // }
                 }
-                // if (_projectSrc.totExtraEvidences > 0) {
-                //     // Extra evidences
-                //     go.GetComponents<Component>(_TmpComponents);
-                //     int len = _TmpComponents.Count;
-                //     // for (int i = len - 1; i > 0; --i) { // Ignore 0 because it's always Transform or RectTransform
-                //     for (int i = 1; i < len; ++i) { // Ignore 0 because it's always Transform or RectTransform
-                //         if (_TmpComponents[i] == null) continue; // Happens in case of missing scripts
-                //         string typeName = _TmpComponents[i].GetType().FullName;
-                //         foreach (DeHierarchyData.ExtraEvidenceData evData in _projectSrc.extraEvidences) {
-                //             if (string.IsNullOrEmpty(evData.componentClass)) continue;
-                //             switch (evData.searchMode) {
-                //             case DeHierarchyData.SearchMode.StartsWith:
-                //                 if (!typeName.StartsWith(evData.componentClass)) continue;
-                //                 break;
-                //             case DeHierarchyData.SearchMode.EndsWith:
-                //                 if (!typeName.EndsWith(evData.componentClass)) continue;
-                //                 break;
-                //             default:
-                //                 if (!typeName.Contains(evData.componentClass)) continue;
-                //                 break;
-                //             }
-                //             hasExtraEvidence = true;
-                //             extraEvidenceMode = evData.evidenceMode;
-                //             extraEvidenceColor = evData.color;
-                //             extraEvidenceLabelColor = DeGUI.GetVisibleContentColorOn(extraEvidenceColor);
-                //             break;
-                //         }
-                //         if (hasExtraEvidence) break;
-                //     }
-                // }
             }
 
             bool IsValidCustomComponent(string typeName)
