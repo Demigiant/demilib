@@ -11,10 +11,14 @@ using UnityEngine;
 
 namespace DG.DeAudioEditor
 {
+#pragma warning disable CS0618 // Type or member is obsolete
     [CustomEditor(typeof (DeAudioCollection))]
+#pragma warning restore CS0618 // Type or member is obsolete
     public class DeAudioCollectionInspector : Editor
     {
+#pragma warning disable CS0618 // Type or member is obsolete
         DeAudioCollection _src;
+#pragma warning restore CS0618 // Type or member is obsolete
         ReorderableList _dataList;
         AudioSource _previewSource { get { return ConnectToAudioSource(); } }
 
@@ -22,7 +26,9 @@ namespace DG.DeAudioEditor
 
         void OnEnable()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             _src = target as DeAudioCollection;
+#pragma warning restore CS0618 // Type or member is obsolete
             ConnectToAudioSource();
 
             float lineH = EditorGUIUtility.singleLineHeight;

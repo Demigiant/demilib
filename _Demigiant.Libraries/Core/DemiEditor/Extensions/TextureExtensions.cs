@@ -36,7 +36,8 @@ namespace DG.DemiEditor
                 || tImporter.filterMode != filterMode
                 || tImporter.wrapMode != wrapMode
                 || tImporter.maxTextureSize != maxTextureSize
-                || tImporter.textureFormat != 0 && tImporter.textureFormat != TextureImporterFormat.AutomaticTruecolor
+                // || tImporter.textureFormat != 0 && tImporter.textureFormat != TextureImporterFormat.AutomaticTruecolor
+                || DeEditorCompatibilityUtils.IsTextureFormatSetToTrueColor(tImporter)
                 || tImporter.compressionQuality != quality;
             if (!reimportRequired) return;
 
@@ -45,7 +46,8 @@ namespace DG.DemiEditor
             tImporter.filterMode = filterMode;
             tImporter.wrapMode = wrapMode;
             tImporter.maxTextureSize = maxTextureSize;
-            tImporter.textureFormat = TextureImporterFormat.AutomaticTruecolor;
+            // tImporter.textureFormat = TextureImporterFormat.AutomaticTruecolor;
+            DeEditorCompatibilityUtils.SetTextureFormatToTrueColor(tImporter);
             tImporter.compressionQuality = quality;
             AssetDatabase.ImportAsset(path);
         }

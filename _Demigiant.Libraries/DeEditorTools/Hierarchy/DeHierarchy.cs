@@ -44,10 +44,10 @@ namespace DG.DeEditorTools.Hierarchy
         static void Init()
         {
             EditorApplication.delayCall -= Init;
-            EditorApplication.hierarchyWindowChanged -= Refresh;
+            EditorApplication.hierarchyChanged -= Refresh;
             EditorApplication.hierarchyWindowItemOnGUI -= ItemOnGUI;
             Undo.undoRedoPerformed -= UndoRedoPerformed;
-            EditorApplication.hierarchyWindowChanged += Refresh;
+            EditorApplication.hierarchyChanged += Refresh;
             EditorApplication.hierarchyWindowItemOnGUI += ItemOnGUI;
             Undo.undoRedoPerformed += UndoRedoPerformed;
             Refresh();

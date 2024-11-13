@@ -23,12 +23,14 @@ namespace DG.DemiEditor
         static MethodInfo _miFindObjectsOfType;
         static MethodInfo _miFreeMoveHandle;
         static MethodInfo _miGetPrefabParent;
+        static PropertyInfo _pTextureCompression;
         static bool _findObjectOfType_hasIncludeInactiveParam;
         static bool _findObjectOfTypeGeneric_hasIncludeInactiveParam;
         static bool _findObjectsOfType_hasIncludeInactiveParam;
         static bool _findObjectsOfTypeGeneric_hasIncludeInactiveParam;
         static Type _findObjectsInactiveType;
         static Type _findObjectsSortModeType;
+        static Type _textureFormatType;
 
         #region Public Methods
 
@@ -247,6 +249,37 @@ namespace DG.DemiEditor
                 }
             }
             return (Object)_miGetPrefabParent.Invoke(null, new object[] {instance});
+        }
+
+        public static bool IsTextureFormatSetToTrueColor(TextureImporter importer)
+        {
+            StoreImporterInfoIfMissing();
+            if (DeUnityEditorVersion.MajorVersion >= 6000) return (int)_pTextureCompression.GetValue(importer, null) == 0;
+            return (int)_pTextureCompression.GetValue(importer, null) == -3;
+        }
+        
+        public static void SetTextureFormatToTrueColor(TextureImporter importer)
+        {
+            StoreImporterInfoIfMissing();
+            if (DeUnityEditorVersion.MajorVersion >= 6000) _pTextureCompression.SetValue(importer, 0, null);
+            else _pTextureCompression.SetValue(importer, -3, null);
+        }
+
+        #endregion
+
+        #region Methods
+
+        static void StoreImporterInfoIfMissing()
+        {
+            if (_pTextureCompression != null) return;
+            
+            if (DeUnityEditorVersion.MajorVersion >= 6000) {
+                _pTextureCompression = typeof(TextureImporter).GetProperty("textureCompression", BindingFlags.Public | BindingFlags.Instance);
+                _textureFormatType = typeof(GameObject).Assembly.GetType("UnityEditor.TextureImporterCompression");
+            } else {
+                _pTextureCompression = typeof(TextureImporter).GetProperty("textureFormat", BindingFlags.Public | BindingFlags.Instance);
+                _textureFormatType = typeof(GameObject).Assembly.GetType("UnityEditor.TextureImporterFormat");
+            }
         }
 
         #endregion
