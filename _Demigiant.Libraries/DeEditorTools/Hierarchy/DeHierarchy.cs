@@ -57,7 +57,9 @@ namespace DG.DeEditorTools.Hierarchy
 
         public static void Refresh()
         {
-            if (DeUnityEditorVersion.MajorVersion >= 2020) {
+            if (DeUnityEditorVersion.MajorVersion >= 6000) {
+                _evidenceRShiftByVersion = new Rect(17, -2, 0, 2);
+            } else if (DeUnityEditorVersion.MajorVersion >= 2020) {
                 _evidenceRShiftByVersion = new Rect(17, -1, 1, 1);
             } else if (DeUnityEditorVersion.MajorVersion >= 2017) {
                 _evidenceRShiftByVersion = new Rect(16, -1, 0, 0);
@@ -552,6 +554,7 @@ namespace DG.DeEditorTools.Hierarchy
                         int fullNamesLen = _TmpComponentTypeFullNames.Count;
                         if (fullNamesLen > 0) {
                             foreach (DeHierarchyData.ExtraEvidenceData evData in _projectSrc.extraEvidences) {
+                                bool extraEv = false;
                                 if (string.IsNullOrEmpty(evData.componentClass)) continue;
                                 string searchStr = string.IsNullOrEmpty(evData.searchString) ? evData.componentClass : evData.searchString;
                                 switch (evData.searchMode) {
@@ -561,26 +564,27 @@ namespace DG.DeEditorTools.Hierarchy
                                 case DeHierarchyData.SearchMode.Contains:
                                     for (int i = 0; i < fullNamesLen; ++i) {
                                         if (!_TmpComponentTypeFullNames[i].Contains(searchStr)) continue;
-                                        hasExtraEvidences = true;
+                                        extraEv = true;
                                         break;
                                     }
                                     break;
                                 case DeHierarchyData.SearchMode.StartsWith:
                                     for (int i = 0; i < fullNamesLen; ++i) {
                                         if (!_TmpComponentTypeFullNames[i].StartsWith(searchStr)) continue;
-                                        hasExtraEvidences = true;
+                                        extraEv = true;
                                         break;
                                     }
                                     break;
                                 case DeHierarchyData.SearchMode.EndsWith:
                                     for (int i = 0; i < fullNamesLen; ++i) {
                                         if (!_TmpComponentTypeFullNames[i].EndsWith(searchStr)) continue;
-                                        hasExtraEvidences = true;
+                                        extraEv = true;
                                         break;
                                     }
                                     break;
                                 }
-                                if (hasExtraEvidences) {
+                                if (extraEv) {
+                                    hasExtraEvidences = true;
                                     extraEvidenceModes.Add(evData.evidenceMode);
                                     extraEvidenceColors.Add(evData.color);
                                     if (evData.evidenceMode == DeHierarchyData.EvidenceMode.Box) extraEvidenceLabelColor = DeGUI.GetVisibleContentColorOn(evData.color);
