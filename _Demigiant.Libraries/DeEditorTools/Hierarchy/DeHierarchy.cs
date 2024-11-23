@@ -118,32 +118,50 @@ namespace DG.DeEditorTools.Hierarchy
                 ) : null;
 
             // Extra evidence
-            if (requiresGoData && goData.hasExtraEvidence) {
+            if (requiresGoData && goData.hasExtraEvidences) {
                 _TmpGUIContent.text = go.name;
                 Rect evidenceR = new Rect(selectionRect.x - 1, selectionRect.y + 2, GUI.skin.label.CalcSize(_TmpGUIContent).x, selectionRect.height - 2);
                 evidenceR = new Rect(
                     evidenceR.x + _evidenceRShiftByVersion.x, evidenceR.y + _evidenceRShiftByVersion.y,
                     evidenceR.width + _evidenceRShiftByVersion.width, evidenceR.height + _evidenceRShiftByVersion.height
                 );
-                Color evColor = goData.extraEvidenceColor;
-                switch (goData.extraEvidenceMode) {
-                case DeHierarchyData.EvidenceMode.Box:
-                    Color labelColor = goData.isPrefab ? _prefabLabelColor : goData.extraEvidenceLabelColor;
-                    if (!isActiveInHierarchy) {
-                        evColor.a *= 0.4f;
-                        labelColor = goData.isPrefab ? _inactivePrefabLabelColor : (Color)new DeSkinColor(labelColor == Color.white ? 0.5f : 0.15f);
+                const int dotSize = 8;
+                float dotRadius = dotSize * 0.5f;
+                const int dotSpace = 2;
+                Rect dotR = new Rect(evidenceR.xMax - dotSize, evidenceR.center.y - dotRadius, dotSize, dotSize);
+                for (int i = 0; i < goData.extraEvidenceModes.Count; i++) {
+                    DeHierarchyData.EvidenceMode evMode = goData.extraEvidenceModes[i];
+                    switch (evMode) {
+                    case DeHierarchyData.EvidenceMode.Box:
+                    case DeHierarchyData.EvidenceMode.Outline:
+                        Color evColor = goData.extraEvidenceColors[i];
+                        switch (evMode) {
+                        case DeHierarchyData.EvidenceMode.Box:
+                            Color labelColor = goData.isPrefab ? _prefabLabelColor : goData.extraEvidenceLabelColor;
+                            if (!isActiveInHierarchy) {
+                                evColor.a *= 0.4f;
+                                labelColor = goData.isPrefab ? _inactivePrefabLabelColor : (Color)new DeSkinColor(labelColor == Color.white ? 0.5f : 0.15f);
+                            }
+                            using (new DeGUI.ColorScope(evColor, labelColor)) {
+                                GUI.Box(evidenceR, GUIContent.none, _extraEvidenceBox);
+                                GUI.Label(evidenceR, _TmpGUIContent, _extraEvidenceBoxLabel);
+                            }
+                            break;
+                        default:
+                            if (!isActiveInHierarchy) evColor.a *= 0.5f;
+                            using (new DeGUI.ColorScope(null, null, evColor)) {
+                                GUI.Box(evidenceR, GUIContent.none, DeGUI.styles.box.roundOutline01);
+                            }
+                            break;
+                        }
+                        break;
+                    case DeHierarchyData.EvidenceMode.Dot:
+                        dotR = dotR.ShiftX(dotSpace + dotSize);
+                        using (new DeGUI.ColorScope(null, null, goData.extraEvidenceColors[i])) {
+                            GUI.DrawTexture(dotR, DeStylePalette.whiteDot, ScaleMode.StretchToFill);
+                        }
+                        break;
                     }
-                    using (new DeGUI.ColorScope(evColor, labelColor)) {
-                        GUI.Box(evidenceR, GUIContent.none, _extraEvidenceBox);
-                        GUI.Label(evidenceR, _TmpGUIContent, _extraEvidenceBoxLabel);
-                    }
-                    break;
-                default:
-                    if (!isActiveInHierarchy) evColor.a *= 0.5f;
-                    using (new DeGUI.ColorScope(null, null, evColor)) {
-                        GUI.Box(evidenceR, GUIContent.none, DeGUI.styles.box.roundOutline01);
-                    }
-                    break;
                 }
             }
 
@@ -488,9 +506,9 @@ namespace DG.DeEditorTools.Hierarchy
             public readonly bool hasRenderer;
             public readonly bool hasCustomComponents;
             public readonly bool hasCustomComponentsInChildren;
-            public readonly bool hasExtraEvidence;
-            public readonly DeHierarchyData.EvidenceMode extraEvidenceMode;
-            public readonly Color extraEvidenceColor;
+            public readonly bool hasExtraEvidences;
+            public readonly List<DeHierarchyData.EvidenceMode> extraEvidenceModes = new List<DeHierarchyData.EvidenceMode>();
+            public readonly List<Color> extraEvidenceColors = new List<Color>();
             public readonly Color extraEvidenceLabelColor;
             public readonly bool isPrefab;
 
@@ -543,30 +561,29 @@ namespace DG.DeEditorTools.Hierarchy
                                 case DeHierarchyData.SearchMode.Contains:
                                     for (int i = 0; i < fullNamesLen; ++i) {
                                         if (!_TmpComponentTypeFullNames[i].Contains(searchStr)) continue;
-                                        hasExtraEvidence = true;
+                                        hasExtraEvidences = true;
                                         break;
                                     }
                                     break;
                                 case DeHierarchyData.SearchMode.StartsWith:
                                     for (int i = 0; i < fullNamesLen; ++i) {
                                         if (!_TmpComponentTypeFullNames[i].StartsWith(searchStr)) continue;
-                                        hasExtraEvidence = true;
+                                        hasExtraEvidences = true;
                                         break;
                                     }
                                     break;
                                 case DeHierarchyData.SearchMode.EndsWith:
                                     for (int i = 0; i < fullNamesLen; ++i) {
                                         if (!_TmpComponentTypeFullNames[i].EndsWith(searchStr)) continue;
-                                        hasExtraEvidence = true;
+                                        hasExtraEvidences = true;
                                         break;
                                     }
                                     break;
                                 }
-                                if (hasExtraEvidence) {
-                                    extraEvidenceMode = evData.evidenceMode;
-                                    extraEvidenceColor = evData.color;
-                                    extraEvidenceLabelColor = DeGUI.GetVisibleContentColorOn(extraEvidenceColor);
-                                    break;
+                                if (hasExtraEvidences) {
+                                    extraEvidenceModes.Add(evData.evidenceMode);
+                                    extraEvidenceColors.Add(evData.color);
+                                    if (evData.evidenceMode == DeHierarchyData.EvidenceMode.Box) extraEvidenceLabelColor = DeGUI.GetVisibleContentColorOn(evData.color);
                                 }
                             }
                         }

@@ -14,7 +14,8 @@ namespace DG.DeEditorTools.Hierarchy
         public enum EvidenceMode
         {
             Outline,
-            Box
+            Box,
+            Dot
         }
 
         public enum SearchMode
