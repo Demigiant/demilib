@@ -198,6 +198,11 @@
             Returns a random value within this range (min/max included)
             </summary>
         </member>
+        <member name="M:DG.DemiLib.Range.Evaluate(System.Single)">
+            <summary>
+            Returns a value within the range at the given 0-1 (clamped) percentage
+            </summary>
+        </member>
         <member name="M:DG.DemiLib.Range.ToString">
             <inheritdoc />
         </member>

@@ -34,6 +34,16 @@ namespace DG.DemiLib
             return UnityEngine.Random.Range(min, max);
         }
 
+        /// <summary>
+        /// Returns a value within the range at the given 0-1 (clamped) percentage
+        /// </summary>
+        public float Evaluate(float atPercentage)
+        {
+            if (atPercentage > 1) atPercentage = 1;
+            else if (atPercentage < 0) atPercentage = 0;
+            return min + (max - min) * atPercentage;
+        }
+
         /// <inheritdoc />
         public override string ToString()
         {
