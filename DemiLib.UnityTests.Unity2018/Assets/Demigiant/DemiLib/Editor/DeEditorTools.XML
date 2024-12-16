@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DeEditorTools</name>
+    </assembly>
+    <members>
+        <member name="F:DG.DeEditorTools.BuildPanel.DeBuildPanel.OnWillBuildResult.Continue">
+            <summary>Continue</summary>
+        </member>
+        <member name="F:DG.DeEditorTools.BuildPanel.DeBuildPanel.OnWillBuildResult.Cancel">
+            <summary>Cancel this build</summary>
+        </member>
+        <member name="F:DG.DeEditorTools.BuildPanel.DeBuildPanel.OnWillBuildResult.CancelAll">
+            <summary>Cancel all builds in queue</summary>
+        </member>
+        <member name="E:DG.DeEditorTools.BuildPanel.DeBuildPanel.OnBuildNameRequest">
+            <summary>
+            Called when assigning the build's name. Hook to this to modify it and return the one you want.<para/>
+            Must return a string with the name to use</summary>
+        </member>
+        <member name="E:DG.DeEditorTools.BuildPanel.DeBuildPanel.OnWillBuild">
+            <summary>
+            Called before a build starts but before eventually switching platform to the correct build one.<para/>
+            Must return an <code>OnWillBuildResult</code> indicating if you wish to continue
+            </summary>
+        </member>
+        <member name="E:DG.DeEditorTools.BuildPanel.DeBuildPanel.OnSwitchedToBuildPlatform">
+            <summary>
+            Called immediately after switching to a build platform but before starting the build.
+            This is the right callback to use to start building Addressables for the platform
+            (which are otherwise buggy and won't build automatically)
+            via <code>AddressableAssetSettings.BuildPlayerContent()</code>
+            </summary>
+        </member>
+        <member name="T:DG.DeEditorTools.CustomDefinesPanel.CustomDefinesPanel">
+            <summary>
+            Public so it can be extended for custom projects
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.DeEditorToolsUtils.FindAllComponentsOfType``1(System.Boolean)">
+            <summary>
+            Returns all components of type T in the currently open scene/s, or NULL if none could be found.<para/>
+            This is a more efficient version of <code>DeEditorUtils.FindAllComponentsOfType</code>.
+            </summary>
+            <param name="activeSceneOnly">If TRUE only finds them in the active scene, otherwise in all loaded scenes</param>
+        </member>
+        <member name="M:DG.DeEditorTools.DeEditorToolsUtils.FindFirstComponentOfType``1(System.Boolean)">
+            <summary>
+            Returns the first of type T in the currently open scene/s, or NULL if none could be found.<para/>
+            </summary>
+            <param name="activeSceneOnly">If TRUE only finds it in the active scene, otherwise in all loaded scenes</param>
+        </member>
+        <member name="M:DG.DeEditorTools.DeEditorToolsUtils.CaptureGameViewScreenshot(System.Int32,System.Int32,UnityEngine.Camera,System.Boolean)">
+            <summary>
+            Captures a screenshot of the gameView from the given camera, and returns it as a Texture2D object
+            </summary>
+            <param name="width">Width</param>
+            <param name="height">Height</param>
+            <param name="cam">If NULL uses the main camera</param>
+            <param name="alpha">If TRUE uses transparency</param>
+        </member>
+        <member name="T:DG.DeEditorTools.Hierarchy.DeHierarchy">
+            <summary>
+            Relies on <see cref="T:DG.DemiLib.External.DeHierarchyComponent"/> in Core library.
+            </summary>
+        </member>
+        <member name="T:DG.DeEditorTools.Hierarchy.DeHierarchyData">
+            <summary>
+            Stores project-related DeHierarchy preferences
+            </summary>
+        </member>
+        <member name="T:DG.DeEditorTools.Project.DeProject">
+            <summary>
+            Customizes Project panel
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProject.SetFolderColor(DG.DeEditorTools.Project.DeProjectData.HColor,System.String,System.Boolean)">
+            <summary>
+            Sets the color of a project folder with options to apply it to subfolders also
+            </summary>
+            <param name="color">Color to apply</param>
+            <param name="absOrAdbFolderPath">Absolute or AssetDatabase path</param>
+            <param name="alsoApplyToSubdirectories">If TRUE also applies the color to all subdirectories</param>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProject.SetFolderColor(UnityEngine.Color,System.String,System.Boolean)">
+            <summary>
+            Sets the color of a project folder with options to apply it to subfolders also
+            </summary>
+            <param name="color">Color to apply</param>
+            <param name="absOrAdbFolderPath">Absolute or AssetDatabase path</param>
+            <param name="alsoApplyToSubdirectories">If TRUE also applies the color to all subdirectories</param>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProject.SetFolderIcon(DG.DeEditorTools.Project.DeProjectData.IcoType,System.String,System.Boolean)">
+            <summary>
+            Sets the icon of a project folder with options to apply it to subfolders also
+            </summary>
+            <param name="icoType">Icon to apply</param>
+            <param name="absOrAdbFolderPath">Absolute or AssetDatabase path</param>
+            <param name="alsoApplyToSubdirectories">If TRUE also applies the color to all subdirectories</param>
+        </member>
+        <member name="T:DG.DeEditorTools.Project.DeProjectData">
+            <summary>
+            Stored in main Assets folder
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.StoreItem(System.String)">
+            <summary>
+            If the item exists returns it, otherwise first creates it and then returns it
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.StoreItemColor(System.String,DG.DeEditorTools.Project.DeProjectData.HColor,System.Nullable{UnityEngine.Color})">
+            <summary>
+            If the item exists sets it, otherwise first creates it and then sets it
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.StoreItemIcon(System.String,DG.DeEditorTools.Project.DeProjectData.IcoType)">
+            <summary>
+            If the item exists sets it, otherwise first creates it and then sets it
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.RemoveItemData(System.String)">
+            <summary>
+            Returns TRUE if the item existed and was removed.
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.GetItem(System.String)">
+            <summary>
+            Returns the customizedItem for the given gameObject, or NULL if none was found
+            </summary>
+        </member>
+        <member name="M:DG.DeEditorTools.Project.DeProjectData.Clean">
+            <summary>
+            Removes any leftover items that don't exist in the Project anymore
+            </summary>
+        </member>
+        <member name="T:DG.DeEditorTools.Scene.DeScene">
+            <summary>
+            Adds extra features to the Scene panel (like right-click).
+            </summary>
+        </member>
+    </members>
+</doc>

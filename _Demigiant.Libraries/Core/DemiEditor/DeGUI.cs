@@ -33,7 +33,7 @@ namespace DG.DemiEditor
         /// </summary>
         public static DeStylePalette styles;
         /// <summary>TRUE if we're using the PRO skin</summary>
-        public static readonly bool IsProSkin;
+        public static bool IsProSkin;
         public static Color defaultGUIColor, defaultGUIBackgroundColor, defaultGUIContentColor; // Set on Begin GUI
         public static int defaultFontSize { get; private set; } // Set on Begin GUI
         public static bool usesInterFont { get; private set; } // Set on Begin GUI: new default font added in Unity 2019.3
@@ -70,7 +70,7 @@ namespace DG.DemiEditor
 
         static DeGUI()
         {
-            GUIUtils.isProSkin = IsProSkin = EditorGUIUtility.isProSkin;
+            GUIUtils.isProSkin = IsProSkin = EditorGUIUtility.isProSkin; // Refreshed also later because Unity 6 doesn't return proSkin true on startup
             EditorApplication.update -= OnEditorPressUpdate;
             _hasEditorPressUpdateActive = false;
         }
@@ -96,6 +96,7 @@ namespace DG.DemiEditor
         /// <param name="guiStylePalette">Eventual <see cref="DeStylePalette"/> to use</param>
         public static bool BeginGUI(DeColorPalette guiColorPalette = null, DeStylePalette guiStylePalette = null)
         {
+            GUIUtils.isProSkin = IsProSkin = EditorGUIUtility.isProSkin; // Second refresh because of Unity 6 issue
             bool stylesReinitialized = ChangePalette(guiColorPalette, guiStylePalette);
             defaultGUIColor = GUI.color;
             defaultGUIBackgroundColor = GUI.backgroundColor;

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DeAudioEditor</name>
+    </assembly>
+    <members>
+        <member name="F:DG.DeAudioEditor.DeAudioClipDataPropertyDrawer.drawMode">
+            <summary>
+            Set temporarilu if a <see cref="T:DG.DeAudio.Attributes.DeAudioClipDataModeAttribute"/> is present
+            </summary>
+        </member>
+        <member name="M:DG.DeAudioEditor.DeAudioEditorUtils.CheckForDuplicateAudioGroupIds(DG.DeAudio.DeAudioGroup[],System.Collections.Generic.List{DG.DeAudio.DeAudioGroupId})">
+            <summary>
+            Check if there are duplicate DeAudioGroupIds in the DeAudioGroups added to DeAudioManager
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DG.DeAudioEditor.DeAudioGUI">
+            <summary>
+            GUI methods for drawing DeAudio data objects
+            </summary>
+        </member>
+        <member name="T:DG.DeAudioEditor.DeAudioGUILayout">
+            <summary>
+            GUILayout methods for drawing DeAudio data objects
+            </summary>
+        </member>
+    </members>
+</doc>

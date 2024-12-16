@@ -1,0 +1,353 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DeExtensions</name>
+    </assembly>
+    <members>
+        <member name="M:DG.DeExtensions.ColorExtensions.ChangeBrightness(UnityEngine.Color,System.Single,System.Nullable{System.Single})">
+            <summary>
+            Returns a new color equal to the given one with changed brightness
+            </summary>
+            <param name="color">Color to evaluate</param>
+            <param name="brightnessFactor">Brightness factor (multiplied by current brightness)</param>
+            <param name="alpha">If set applies this alpha value</param>
+        </member>
+        <member name="M:DG.DeExtensions.ColorExtensions.ChangeSaturation(UnityEngine.Color,System.Single,System.Nullable{System.Single})">
+            <summary>
+            Returns a new color equal to the given one with changed saturation
+            </summary>
+            <param name="color">Color to evaluate</param>
+            <param name="saturationFactor">Saturation factor (multiplied by current brightness)</param>
+            <param name="alpha">If set applies this alpha value</param>
+        </member>
+        <member name="M:DG.DeExtensions.ColorExtensions.SetAlpha(UnityEngine.Color,System.Single)">
+            <summary>
+            Changes the alpha of this color and returns it
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.ColorExtensions.ToHex(UnityEngine.Color32,System.Boolean)">
+            <summary>
+            Returns a HEX version of the given Unity Color, without the initial #
+            </summary>
+            <param name="includeAlpha">If TRUE, also converts the alpha value and returns a hex of 8 characters,
+            otherwise doesn't and returns a hex of 6 characters</param>
+        </member>
+        <member name="M:DG.DeExtensions.ColorExtensions.ToHex(UnityEngine.Color,System.Boolean)">
+            <summary>
+            Returns a HEX version of the given Unity Color, without the initial #
+            </summary>
+            <param name="includeAlpha">If TRUE, also converts the alpha value and returns a hex of 8 characters,
+            otherwise doesn't and returns a hex of 6 characters</param>
+        </member>
+        <member name="F:DG.DeExtensions.ComponentExtensions.CopyMode.Add">
+            <summary>Adds the component even if another component of the same type already exists on the target</summary>
+        </member>
+        <member name="F:DG.DeExtensions.ComponentExtensions.CopyMode.AddIfMissing">
+            <summary>Adds the component only if the same component doesn't already exist on the target</summary>
+        </member>
+        <member name="M:DG.DeExtensions.ComponentExtensions.CopyTo``1(``0,UnityEngine.GameObject,DG.DeExtensions.ComponentExtensions.CopyMode,System.Boolean)">
+            <summary>
+            Copies a component with all its public and private dynamic fields, and adds it to the given target
+            </summary>
+            <param name="original">Component to copy</param>
+            <param name="to">GameObject to add the component to</param>
+            <param name="copyMode">Copy mode</param>
+            <param name="removeOriginalComponent">If TRUE, removes the original components after copying it</param>
+        </member>
+        <member name="M:DG.DeExtensions.ComponentExtensions.GetOnlyComponentsInChildren``1(UnityEngine.MonoBehaviour,System.Boolean)">
+            <summary>
+            Returns ONLY the Components in the children, and ignores the parent.
+            </summary>
+            <param name="includeInactive">If TRUE also includes inactive children</param>
+        </member>
+        <member name="M:DG.DeExtensions.ComponentExtensions.GetOnlyComponentInChildren``1(UnityEngine.MonoBehaviour,System.Boolean)">
+            <summary>
+            Returns the Component only if it's in a child, and ignores the parent.
+            </summary>
+            <param name="includeInactive">If TRUE also searches inactive children</param>
+        </member>
+        <member name="M:DG.DeExtensions.ComponentExtensions.GetComponentInParentExtended``1(UnityEngine.MonoBehaviour,System.Boolean)">
+            <summary>
+            Finds the component in the given MonoBehaviour or its parents, with options to choose if ignoring inactive objects or not
+            </summary>
+            <param name="includeInactive">If TRUE also searches inactive parents</param>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.AwakeAndDeactivate(UnityEngine.GameObject)">
+            <summary>
+            Activates then immediately deactivates the target gameObject.
+            Useful when wanting to call Awake before deactivating a gameObject.
+            </summary>
+            <param name="go"></param>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.IsChildOfComponent``1(UnityEngine.GameObject)">
+            <summary>Returns TRUE if the gameObject is a child of an object with the given Component</summary>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.HasOrIsChildOfComponent``1(UnityEngine.GameObject)">
+            <summary>Returns TRUE if the gameObject has or is a child of an object with the given Component</summary>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.IsChildOfTag(UnityEngine.GameObject,System.String)">
+            <summary>Returns TRUE if the gameObject is a child of the given tag</summary>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.HasOrIsChildOfTag(UnityEngine.GameObject,System.String)">
+            <summary>Returns TRUE if the gameObject has or is a child of the given tag</summary>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.GetOnlyComponentsInChildren``1(UnityEngine.GameObject,System.Boolean)">
+            <summary>
+            Returns ONLY the Components in the children, and ignores the parent.
+            </summary>
+            <param name="includeInactive">If TRUE also includes inactive children</param>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.GetOnlyComponentInChildren``1(UnityEngine.GameObject,System.Boolean)">
+            <summary>
+            Returns the Component only if it's in a child, and ignores the parent.
+            </summary>
+            <param name="includeInactive">If TRUE also searches inactive children</param>
+        </member>
+        <member name="M:DG.DeExtensions.GameObjectExtensions.GetComponentInParentExtended``1(UnityEngine.GameObject,System.Boolean)">
+            <summary>
+            Finds the component in the given MonoBehaviour or its parents, with options to choose if ignoring inactive objects or not
+            </summary>
+            <param name="includeInactive">If TRUE also searches inactive parents</param>
+        </member>
+        <member name="T:DG.DeExtensions.ListExtensions">
+            <summary>
+            List, IList, Array and Dictionary utils
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.ListExtensions.Shift``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32)">
+            <summary>
+            Shifts an item from an index to another, without modifying the list except than by moving elements around
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.ListExtensions.Shuffle``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            Shuffles the list
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.ListExtensions.AddAndReturnValue``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1)">
+            <summary>
+            Adds a key/value pair to the dictionary and returns its value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.NumberExtensions.IsWithinRange(System.Int32,System.Int32,System.Int32,System.Boolean)">
+            <summary>Returns TRUE if the int is within the given range.</summary>
+            <param name="min">Min</param>
+            <param name="max">Max</param>
+            <param name="inclusive">If TRUE min/max range values will be valid, otherwise not</param>
+            <returns></returns>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Add(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary>
+            Adds one rect into another, and returns the resulting a
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Expand(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy or the Rect expanded around its center by the given amount
+            </summary>
+            <param name="amount">Indicates how much to expand the rect on each size</param>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Expand(UnityEngine.Rect,System.Single,System.Single)">
+            <summary>
+            Returns a copy or the Rect expanded around its center by the given amount
+            </summary>
+            <param name="amountX">Indicates how much to expand the rect on each horizontal side</param>
+            <param name="amountY">Indicates how much to expand the rect on each vertical side</param>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Contract(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy or the Rect contracted around its center by the given amount
+            </summary>
+            <param name="amount">Indicates how much to contract the rect on each size</param>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Contract(UnityEngine.Rect,System.Single,System.Single)">
+            <summary>
+            Returns a copy or the Rect contracted around its center by the given amount
+            </summary>
+            <param name="amountX">Indicates how much to contract the rect on each horizontal side</param>
+            <param name="amountY">Indicates how much to contract the rect on each vertical side</param>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Returns a copy of the Rect resized so it fits proportionally within the given size limits
+            </summary>
+            <param name="w">Width to fit</param>
+            <param name="h">Height to fit</param>
+            <param name="shrinkOnly">If TRUE (default) only shrinks the rect if needed, if FALSE also enlarges it to fit</param>
+            <returns></returns>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Includes(UnityEngine.Rect,UnityEngine.Rect,System.Boolean)">
+            <summary>
+            Returns TRUE if the first rect includes the second one
+            </summary>
+            <param name="full">If TRUE, returns TRUE only if the second rect is fully included,
+            otherwise just if some part of it is included</param>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Intersects(UnityEngine.Rect,UnityEngine.Rect,UnityEngine.Rect@)">
+            <summary>
+            Returns TRUE if this rect intersects the given one, and also outputs the intersection area<para/>
+            </summary>
+            <param name="intersection">Intersection area</param>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.ResetXY(UnityEngine.Rect)">
+            <summary>
+            Returns a copy of the Rect with its X/Y coordinates set to 0
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its values shifted according the the given parameters
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.ShiftX(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X value shifted by the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.ShiftY(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its Y value shifted by the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.ShiftXAndResize(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its x shifted by the given value and its width shrinked/expanded accordingly
+            (so that the xMax value will stay the same as before)
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.ShiftYAndResize(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its y shifted by the given value and its height shrinked/expanded accordingly
+            (so that the yMax value will stay the same as before)
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetX(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X property set to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetY(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its Y property set to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetHeight(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its height property set to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetWidth(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its width property set to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetCenter(UnityEngine.Rect,System.Single,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X,Y properties set so the rect center corresponds to the given values
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetCenterX(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its X property set so the rect X center corresponds to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.RectExtensions.SetCenterY(UnityEngine.Rect,System.Single)">
+            <summary>
+            Returns a copy of the Rect with its Y property set so the rect Y center corresponds to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.StringExtensions.IsNullOrEmpty(System.String,System.Boolean)">
+            <summary>
+            Returns TRUE if the string is null or empty
+            </summary>
+            <param name="trimSpaces">If TRUE (default) and the string contains only spaces, considers it empty</param>
+        </member>
+        <member name="M:DG.DeExtensions.StringExtensions.HexToColor(System.String)">
+            <summary>
+            Converts a HEX color to a Unity Color and returns it
+            </summary>
+            <param name="hex">The HEX color, either with or without the initial # (accepts both regular and short format)</param>
+        </member>
+        <member name="M:DG.DeExtensions.StringExtensions.Nicify(System.String)">
+            <summary>
+            Nicifies a string, replacing underscores with spaces, and adding a space before Uppercase letters (except the first character)
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.StringExtensions.ToEnum``1(System.String,System.Nullable{``0})">
+            <summary>
+            Converts the string to the given enum value.
+            Throws an exception if the string can't be converted.
+            If the enum value can't be found, returns the 0 indexed value.<para/>
+            NOTE: doesn't use try/catch (TryParse) since on some platforms that won't work.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.StringExtensions.ToFloat(System.String,System.Single)">
+            <summary>
+            Converts the given string to a float and returns it.
+            Returns <code>defaultValue</code> if the conversion fails or the string is empty
+            </summary>
+            <param name="defaultValue">Default value to return if conversion fails</param>
+        </member>
+        <member name="M:DG.DeExtensions.StringExtensions.VersionIsMinorThan(System.String,System.String)">
+            <summary>
+            Compares a version string (in format #.#.###) with another of the same format,
+            and return TRUE if this one is minor. Boths trings must have the same number of dot separators.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.TextureExtensions.GetRect(UnityEngine.Texture2D,System.Single,System.Single,System.Single)">
+            <summary>
+            Returns the full Rect of this texture, with options for position and scale
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.UIExtensions.StretchToFill(UnityEngine.RectTransform)">
+            <summary>
+            Sets the given RectTransform to stretch to the exact borders of its parent
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.SetX(UnityEngine.Vector2,System.Single)">
+            <summary>
+            Returns a copy of the vector with its X set to the given value.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.SetY(UnityEngine.Vector2,System.Single)">
+            <summary>
+            Returns a copy of the vector with its Y set to the given value.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.Round(UnityEngine.Vector2)">
+            <summary>
+            Returns a copy of the vector with its values rounded to integers, using Mathf.Round.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.Floor(UnityEngine.Vector2)">
+            <summary>
+            Returns a copy of the vector with its values rounded to integers, using a fast int cast.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.RotateAroundPivot(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>
+            Rotates the given vector around the given pivot by the given angles
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.RotateAroundPivot(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Quaternion)">
+            <summary>
+            Rotates the given vector around the given pivot by the given angles
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.SetX(UnityEngine.Vector3,System.Single)">
+            <summary>
+            Returns a copy of the vector with its X set to the given value.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.SetY(UnityEngine.Vector3,System.Single)">
+            <summary>
+            Returns a copy of the vector with its Y set to the given value.
+            </summary>
+        </member>
+        <member name="M:DG.DeExtensions.VectorExtensions.SetZ(UnityEngine.Vector3,System.Single)">
+            <summary>
+            Returns a copy of the vector with its Z set to the given value.
+            </summary>
+        </member>
+    </members>
+</doc>

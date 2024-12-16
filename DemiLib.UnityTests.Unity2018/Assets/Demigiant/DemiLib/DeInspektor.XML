@@ -1,0 +1,732 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DeInspektor</name>
+    </assembly>
+    <members>
+        <member name="T:DG.DeInspektor.Attributes.DeBeginDisabledAttribute">
+            <summary>
+            <code>Decorator</code><para/>
+            Begins a conditional group that will be disabled if the given condition is not met.
+            Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndDisabledAttribute"/>
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeBeginDisabledAttribute.#ctor(System.String,System.Boolean)">
+            <summary>
+            Begins a conditional group that wil be disabled if the given condition is TRUE. Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndDisabledAttribute"/>
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (boolean)</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeBeginDisabledAttribute.#ctor(System.String,System.String,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Begins a conditional group that wil be disabled if the given condition is TRUE. Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndDisabledAttribute"/>
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (string)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeBeginDisabledAttribute.#ctor(System.String,System.Single,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Begins a conditional group that wil be disabled if the given condition is TRUE. Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndDisabledAttribute"/>
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeBeginDisabledAttribute.#ctor(System.String,System.Int32,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Begins a conditional group that wil be disabled if the given condition is TRUE. Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndDisabledAttribute"/>
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeBeginDisabledAttribute.#ctor(System.String,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Begins a conditional group that wil be disabled if the given condition is TRUE. Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndDisabledAttribute"/>
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeEndDisabledAttribute">
+            <summary>
+            Closes a disabled group
+            </summary>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeBeginGroupAttribute">
+            <summary>
+            <code>Decorator</code><para/>
+            Begins a group that will be drawn inside a box GUIStyle.
+            Must always be closed by a <see cref="T:DG.DeInspektor.Attributes.DeEndGroupAttribute"/>.<para/>
+            NOTE: doesn't respect order as usual decorators do: the group will contain any other decorators added to the same field
+            </summary>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeEndGroupAttribute">
+            <summary>
+            Closes a box group
+            </summary>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeButtonAttribute">
+            <summary>
+            <code>Decorator + Method caller</code><para/>
+            Draws a button which will call the given method from the given class type<para/>
+            Extra properties which can be set directly:<para/>
+            - mode
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeButtonAttribute.mode">
+            <summary>Display mode</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeButtonAttribute.#ctor(System.String,DG.DeInspektor.Attributes.DePosition,System.String,System.String,System.Type,System.String,System.Object[])">
+            <summary>
+            Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
+            </summary>
+            <param name="buttonText">Button text</param>
+            <param name="position"><see cref="T:DG.DeInspektor.Attributes.DePosition"/> of the button relative to Inspector width</param>
+            <param name="textShade">Color shade (hex string, without #) for the button text</param>
+            <param name="bgShade">Color shade (hex string, without #) for the button background</param>
+            <param name="targetType">Type of the class that implements the method to call</param>
+            <param name="methodName">Name of the method to call</param>
+            <param name="parameters">Eventual parameters to pass to the method</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeButtonAttribute.#ctor(DG.DeInspektor.Attributes.DePosition,System.String,System.String,System.Type,System.String,System.Object[])">
+            <summary>
+            Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
+            </summary>
+            <param name="position"><see cref="T:DG.DeInspektor.Attributes.DePosition"/> of the button relative to Inspector width</param>
+            <param name="textShade">Color shade (hex string, without #) for the button text</param>
+            <param name="bgShade">Color shade (hex string, without #) for the button background</param>
+            <param name="targetType">Type of the class that implements the method to call</param>
+            <param name="methodName">Name of the method to call</param>
+            <param name="parameters">Eventual parameters to pass to the method</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeButtonAttribute.#ctor(System.String,System.String,System.String,System.Type,System.String,System.Object[])">
+            <summary>
+            Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
+            </summary>
+            <param name="buttonText">Button text</param>
+            <param name="textShade">Color shade (hex string, without #) for the button text</param>
+            <param name="bgShade">Color shade (hex string, without #) for the button background</param>
+            <param name="targetType">Type of the class that implements the method to call</param>
+            <param name="methodName">Name of the method to call</param>
+            <param name="parameters">Eventual parameters to pass to the method</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeButtonAttribute.#ctor(System.String,System.String,System.Type,System.String,System.Object[])">
+            <summary>
+            Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
+            </summary>
+            <param name="textShade">Color shade (hex string, without #) for the button text</param>
+            <param name="bgShade">Color shade (hex string, without #) for the button background</param>
+            <param name="targetType">Type of the class that implements the method to call</param>
+            <param name="methodName">Name of the method to call</param>
+            <param name="parameters">Eventual parameters to pass to the method</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeButtonAttribute.#ctor(System.String,DG.DeInspektor.Attributes.DePosition,System.Type,System.String,System.Object[])">
+            <summary>
+            Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
+            </summary>
+            <param name="buttonText">Button text</param>
+            <param name="position"><see cref="T:DG.DeInspektor.Attributes.DePosition"/> of the button relative to Inspector width</param>
+            <param name="targetType">Type of the class that implements the method to call</param>
+            <param name="methodName">Name of the method to call</param>
+            <param name="parameters">Eventual parameters to pass to the method</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeButtonAttribute.#ctor(DG.DeInspektor.Attributes.DePosition,System.Type,System.String,System.Object[])">
+            <summary>
+            Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
+            </summary>
+            <param name="position"><see cref="T:DG.DeInspektor.Attributes.DePosition"/> of the button relative to Inspector width</param>
+            <param name="targetType">Type of the class that implements the method to call</param>
+            <param name="methodName">Name of the method to call</param>
+            <param name="parameters">Eventual parameters to pass to the method</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeButtonAttribute.#ctor(System.String,System.Type,System.String,System.Object[])">
+            <summary>
+            Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
+            </summary>
+            <param name="buttonText">Button text</param>
+            <param name="targetType">Type of the class that implements the method to call</param>
+            <param name="methodName">Name of the method to call</param>
+            <param name="parameters">Eventual parameters to pass to the method</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeButtonAttribute.#ctor(System.Type,System.String,System.Object[])">
+            <summary>
+            Draws a button which will call the given method. Method can be public/private/instance/static/whatever and on any class type
+            </summary>
+            <param name="targetType">Type of the class that implements the method to call</param>
+            <param name="methodName">Name of the method to call</param>
+            <param name="parameters">Eventual parameters to pass to the method</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeComponentDescriptionAttribute">
+            <summary>
+            <code>Class attribute</code> (MonoBehaviour only)<para/>
+            Shows a description for the given MonoBehaviour before any other field.<para/>
+            Extra properties which can be set directly:<para/>
+            - mode
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeComponentDescriptionAttribute.#ctor(System.String,System.Int32)">
+            <summary>
+            Shows a description for this MonoBehaviour before any other field.
+            </summary>
+            <param name="text">Text</param>
+            <param name="fontSize">Font size</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeImagePreviewAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows a bigger preview image for the given sprite/texture.<para/>
+            Extra properties which can be set directly:<para/>
+            - emptyAlert<para/>
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeImagePreviewAttribute.emptyAlert">
+            <summary>If TRUE marks this field if no image is present</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeImagePreviewAttribute.#ctor">
+            <summary>
+            Shows a bigger preview image for the given sprite/texture.
+            </summary>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeLayerAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows a popup with available layers in the Inspector. Requires a valye of type <see cref="T:System.Int32"/>.
+            </summary>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeObjectGuidAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows the GUID with as a clickable button that pings the target object (if it exist), only works with string fields
+            </summary>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeRangeAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows a float/int value with a slider.
+            Works like Unity's Range attribute, but has extra options for custom label, and also works with DemiLib's <code>Range</code> structs
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeRangeAttribute.#ctor(System.Single,System.Single,System.String)">
+            <summary>
+            Shows a float/int value with a slider.
+            Works like Unity's Range attribute, but has extra options for custom label, and also works with DemiLib's <code>Range</code> structs
+            </summary>
+            <param name="min">Min value</param>
+            <param name="max">Max value</param>
+            <param name="label">Override field label</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeSortingLayer">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows a popup with available SortingLayers in the Inspector. Requires a valye of type <see cref="T:System.Int32"/>.
+            </summary>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeButtonMode">
+            <summary>
+            Appearance of button attributes
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeButtonMode.Default">
+            <summary>Enabled always</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeButtonMode.PlayModeOnly">
+            <summary>Enabled only if application is playing</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeButtonMode.NoPlayMode">
+            <summary>Enabled only if application is not playing</summary>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeColoredLabelAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Draws the label with the given color and background
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeColoredLabelAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Colors the prefix label for the following property
+            </summary>
+            <param name="textColor">Prefix label color</param>
+            <param name="bgColor">Prefix label bg color</param>
+            <param name="customText">If not NULL, writes this in the label instead of the regular nicified property name</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeCommentAttribute">
+            <summary>
+            <code>Decorator</code><para/>
+            Shows a comment in the Inspector.<para/>
+            Extra properties which can be set directly:<para/>
+            - fontSize<para/>
+            - style<para/>
+            - textAnchor<para/>
+            Normal properties which can be set directly:<para/>
+            - textColor<para/>
+            - bgColor<para/>
+            - marginBottom
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.fontSize">
+            <summary>Font size (default = 9)</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.textColor">
+            <summary>Text color</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.bgColor">
+            <summary>Background color</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.marginBottom">
+            <summary>Margin bottom (default = 0)</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.style">
+            <summary>Comment style (default = Box)</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentAttribute.textAnchor">
+            <summary>Text anchor (default = UpperLeft)</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.Int32)">
+            <summary>
+            Shows a comment.
+            </summary>
+            <param name="text">Text</param>
+            <param name="marginBottom">Bottom margin</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Shows a comment.
+            </summary>
+            <param name="text">Text</param>
+            <param name="textColor">Text color</param>
+            <param name="bgColor">Background color</param>
+            <param name="marginBottom">Bottom margin</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,System.Boolean,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows a comment if the given condition is met.
+            </summary>
+            <param name="text">Text</param>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (boolean)</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,System.String,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows a comment if the given condition is met.
+            </summary>
+            <param name="text">Text</param>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (string)</param>
+            <param name="conditionType">Condition type (required parameter in this case, to distinguish condition overload from main color settings)</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,System.Single,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows a comment if the given condition is met.
+            </summary>
+            <param name="text">Text</param>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,System.Int32,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows a comment if the given condition is met.
+            </summary>
+            <param name="text">Text</param>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (int)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCommentAttribute.#ctor(System.String,System.String,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows a comment if the given condition is met.
+            </summary>
+            <param name="text">Text</param>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeCommentStyle">
+            <summary>Comment style</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.Box">
+            <summary>Text inside a box</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.BoxExtended">
+            <summary>Text inside a box, extended to encompass the full width of the Inspector</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.TextOnly">
+            <summary>Text only</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.TextInValueArea">
+            <summary>Text only, placed inside the value area and not encompassing the label area</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeCommentStyle.WrapNextLine">
+            <summary>Box that wraps the next line</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,System.Boolean)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (boolean)</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,System.String,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (string)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,System.Single,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,System.Int32,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (int or enum-int)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeCondition.#ctor(System.String,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeConditionalAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows/hides or enables/disables the property depending on the given conditions.<para/>
+            Extra properties which can be set directly:<para/>
+            - customLabel
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeConditionalAttribute.customLabel">
+            <summary>Custom label to use instead of regular nicified property name</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeConditionalAttribute.#ctor(System.String,System.Boolean,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (boolean)</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeConditionalAttribute.#ctor(System.String,System.String,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (string)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeConditionalAttribute.#ctor(System.String,System.Single,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeConditionalAttribute.#ctor(System.String,System.Int32,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (int)</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeConditionalAttribute.#ctor(System.String,DG.DeInspektor.Attributes.Condition,DG.DeInspektor.Attributes.ConditionalBehaviour)">
+            <summary>
+            Shows/enables the property only if the condition is met
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="conditionType">Condition type</param>
+            <param name="behaviour">Behaviour in case condition is not met</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeDisabledAttribute">
+            <summary>
+            <code>Decorator</code><para/>
+            Disables a field if the given condition is not met.
+            Works like DeConditional but:<para/>
+            - Is a Decorator, so it can be combined with other attributes<para/>
+            - Only allows to disable a field, not to hide it
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeDisabledAttribute.#ctor(System.String,System.Boolean)">
+            <summary>
+            Disables the field if the given condition is TRUE.
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (boolean)</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeDisabledAttribute.#ctor(System.String,System.String,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Disables the field if the given condition is TRUE.
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (string)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeDisabledAttribute.#ctor(System.String,System.Single,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Disables the field if the given condition is TRUE.
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeDisabledAttribute.#ctor(System.String,System.Int32,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Disables the field if the given condition is TRUE.
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="value">Property value to compare (float)</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeDisabledAttribute.#ctor(System.String,DG.DeInspektor.Attributes.Condition)">
+            <summary>
+            Disables the field if the given condition is TRUE.
+            </summary>
+            <param name="propertyToCompare">Name of the property to check for conditions</param>
+            <param name="conditionType">Condition type</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeDividerAttribute">
+            <summary>
+            <code>Decorator</code><para/>
+            Draws a divider in the Inspector
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeDividerAttribute.#ctor(System.Int32,System.String,System.Int32,System.Int32)">
+            <summary>
+            Draws a divider with the given size, color and margins
+            </summary>
+            <param name="height">Divider height</param>
+            <param name="hexColor">Hex color (# optional)</param>
+            <param name="marginTop">Top margin</param>
+            <param name="marginBottom">Bottom margin</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeEmptyAlertAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Only for object reference or string fields: shows them red if empty/null
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeEmptyAlertAttribute.#ctor(System.Boolean)">
+            <summary>
+            Only for object reference or string fields: shows them red if empty/null
+            </summary>
+            <param name="alsoMarkIfOk">If TRUE, also colorizes the field in green if non-empty</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeHeaderAttribute">
+            <summary>
+            <code>Decorator</code><para/>
+            Draws a header in the inspector.<para/>
+            Extra properties which can be set directly:<para/>
+            - mode<para/>
+            - marginTop<para/>
+            - marginBottom
+            </summary>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeHeaderAttribute.Mode">
+            <summary>
+            Draw mode
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeHeaderAttribute.mode">
+            <summary>Draw mode</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeHeaderAttribute.marginTop">
+            <summary>Top margin (default = 6)</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeHeaderAttribute.marginBottom">
+            <summary>Bottom margin (default = 3)</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeHeaderAttribute.#ctor(System.String,System.String,System.String,UnityEngine.FontStyle,System.Int32)">
+            <summary>
+            Draws a header with a color and background hColor
+            </summary>
+            <param name="text">Text</param>
+            <param name="textColor">Color hex (no #) for text, leave NULL to use default</param>
+            <param name="bgColor">Color hex (no #) for bg, leave NULL to use no bg color</param>
+            <param name="fontStyle">Font style</param>
+            <param name="fontSize">Font size</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeHeaderAttribute.#ctor(System.String,UnityEngine.TextAnchor,System.String,System.String,UnityEngine.FontStyle,System.Int32)">
+            <summary>
+            Draws a header with a color and background hColor
+            </summary>
+            <param name="text">Text</param>
+            <param name="textAnchor">TextAnchor</param>
+            <param name="textColor">Color hex (no #) for text, leave NULL to use default</param>
+            <param name="bgColor">Color hex (no #) for bg, leave NULL to use no bg color</param>
+            <param name="fontStyle">Font style</param>
+            <param name="fontSize">Font size</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeImageAttribute">
+            <summary>
+            <code>Decorator</code><para/>
+            Draws an image in the inspector.<para/>
+            Extra properties which can be set directly:<para/>
+            - marginTop<para/>
+            - marginBottom
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeImageAttribute.marginTop">
+            <summary>Top margin (default = 2)</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeImageAttribute.marginBottom">
+            <summary>Bottom margin (default = 2)</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeImageAttribute.#ctor(System.String,System.Single,System.Single)">
+            <summary>
+            Draws an image in the inspector, and fits it to max width/height if set higher than 0
+            </summary>
+            <param name="filePath">Image filepath, relative to Assets folder.<para>(example: "Images/myImg.png")</para></param>
+            <param name="maxWidth">Max width (if lower than 0 ignores it)</param>
+            <param name="maxHeight">Max height (if lower than 0 ignores it)</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeLabelAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Writes custom text as the property label
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeLabelAttribute.#ctor(System.String)">
+            <summary>
+            Writes custem text as label, instead of using the regular nicified property name
+            </summary>
+            <param name="customText">Label</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeMethodButtonAttribute">
+            <summary>
+            <code>Method attribute</code><para/>
+            Draws a button which will call the given method.<para/>
+            Extra properties which can be set directly:<para/>
+            - mode<para/>
+            - textShade<para/>
+            - bgShade<para/>
+            - layout
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.mode">
+            <summary>Display mode</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.textShade">
+            <summary>Text shade</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.bgShade">
+            <summary>Background shade</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeMethodButtonAttribute.layout">
+            <summary>Layout changes (default: None)</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeMethodButtonAttribute.#ctor(System.String,System.Int32,System.Object[])">
+            <summary>
+            Draws a button which will call the method below.
+            You can add as many DeMethodButton you want to the same method, then use the order parameter to order them correctly
+            (note that the order will count only towards attributes on the same method, not overall).
+            </summary>
+            <param name="buttonText">Button text (if NULL uses a prettified version of the method name)</param>
+            <param name="order">Order in which attributes for the same method will be displayed</param>
+            <param name="parameters">Eventual parameters to pass to the method (higher means lower vertical position)</param>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeLayout">
+            <summary>
+            Layout
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeLayout.None">
+            <summary>No layout change</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeLayout.BeginHorizontal">
+            <summary>Begins an horizontal layout before this element</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeLayout.EndHorizontal">
+            <summary>Ends an horizontal layout after this element</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DePosition.HDefault">
+            <summary>Default inspector width excluding label-reserved space</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DePosition.HExtended">
+            <summary>Default inspector width including label-reserved space</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DePosition.HHalfLeft">
+            <summary>Half of inspector width (extended or default depending on the attribute drawn), left side</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DePosition.HHalfRight">
+            <summary>Half of inspector width (extended or default depending on the attribute drawn), right side</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DePosition.HThirdLeft">
+            <summary>One third of inspector width (extended or default depending on the attribute drawn), left side</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DePosition.HThirdMiddle">
+            <summary>One third of inspector width (extended or default depending on the attribute drawn), middle</summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DePosition.HThirdRight">
+            <summary>One third of inspector width (extended or default depending on the attribute drawn), right side</summary>
+        </member>
+        <member name="T:DG.DeInspektor.Attributes.DeToggleButtonAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Draws a toggle button instead of the usual checkbox, only works with boolean fields.<para/>
+            Extra properties which can be set directly:<para/>
+            - offText<para/>, 
+            - customLabel
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeToggleButtonAttribute.customLabel">
+            <summary>
+            Custom label. Used only if the <code>showLabel</code> parameter was set to TRUE
+            </summary>
+        </member>
+        <member name="F:DG.DeInspektor.Attributes.DeToggleButtonAttribute.offText">
+            <summary>Optional text shown when the toggle is OFF</summary>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeToggleButtonAttribute.#ctor(System.String,System.Boolean,System.String,System.String,System.String,System.String)">
+            <summary>
+            Draws a toggle button instead of the usual checkbox (only works with booleans)
+            </summary>
+            <param name="text">Button label</param>
+            <param name="showLabel">If TRUE also shows the property's label</param>
+            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeToggleButtonAttribute.#ctor(System.String,DG.DeInspektor.Attributes.DePosition,System.String,System.String,System.String,System.String)">
+            <summary>
+            Draws a toggle button instead of the usual checkbox (only works with booleans)
+            </summary>
+            <param name="text">Button label</param>
+            <param name="position"><see cref="T:DG.DeInspektor.Attributes.DePosition"/> of the button relative to Inspector width</param>
+            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+        </member>
+        <member name="M:DG.DeInspektor.Attributes.DeToggleButtonAttribute.#ctor(DG.DeInspektor.Attributes.DePosition,System.String,System.String,System.String,System.String)">
+            <summary>
+            Draws a toggle button instead of the usual checkbox (only works with booleans)
+            </summary>
+            <param name="position"><see cref="T:DG.DeInspektor.Attributes.DePosition"/> of the button relative to Inspector width</param>
+            <param name="bgOffColor">Background color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="bgOnColor">Background color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+            <param name="labelOffColor">Lable color (hex no #) when OFF (leave NULL or empty to use default hColor)</param>
+            <param name="labelOnColor">Label color (hex no #) when ON (leave NULL or empty to use default hColor)</param>
+        </member>
+    </members>
+</doc>

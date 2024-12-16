@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DeInspektorEditor</name>
+    </assembly>
+    <members>
+        <member name="T:DG.DeInspektorEditor.AttributesManagers.DeMethodButtonEditor">
+            <summary>
+            Implemented by <see cref="T:DG.DeInspektorEditor.DeInspektor"/>
+            </summary>
+        </member>
+        <member name="T:DG.DeInspektorEditor.DeInspektor">
+            <summary>
+            Used to draw special method attributes.
+            If you need another generic inspector, inherit from this and override DoEnable, DoDisable and OnInspectorGUI.
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektorEditor.DeInspektor.InjectGUITop">
+            <summary>
+            Can be used to inject GUI elements before any other default GUI calls.
+            </summary>
+        </member>
+        <member name="M:DG.DeInspektorEditor.DeInspektor.DrawReorderingButtons">
+            <summary>
+            Draws buttons to reorder the component on its header
+            </summary>
+        </member>
+        <member name="T:DG.DeInspektorEditor.DeInspektorForScriptableObject">
+            <summary>
+            Inherits from DeInspektor to allow everything to work on ScriptableObjects too
+            </summary>
+        </member>
+    </members>
+</doc>

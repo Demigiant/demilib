@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DeUtils</name>
+    </assembly>
+    <members>
+        <member name="M:DG.DeUtils.DeColorUtils.HexToColor(System.String)">
+            <summary>
+            Converts a HEX color to a Unity Color and returns it
+            </summary>
+            <param name="hex">The HEX color, either with or without the initial # (accepts both regular and short format)</param>
+        </member>
+        <member name="M:DG.DeUtils.DeColorUtils.ColorToHex(UnityEngine.Color32)">
+            <summary>
+            Returns a HEX version of the given Unity Color, without the initial #
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeColorUtils.ChangeAlpha(UnityEngine.Color,System.Single)">
+            <summary>
+            Returns a clone of the given Color with the alpha changed to the given value
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeLayerUtils.LayerMaskToIndex(UnityEngine.LayerMask)">
+            <summary>
+            Returns the int value of the given LayerMask
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeMathUtils.ClampAngle(System.Single,System.Single,System.Single)">
+            <summary>
+            Clamps an angle between the given values.
+            </summary>
+            Taken from wydoidoit's code on Unity Answers http://answers.unity3d.com/questions/659932/how-do-i-clamp-my-rotation.html
+        </member>
+        <member name="M:DG.DeUtils.DeMathUtils.FindClosestPointOnSegment(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2)">
+            <summary>
+            Finds the point on a segment that is closest to the given p coordinates
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeMathUtils.FindSegmentToSegmentIntersection(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2@)">
+            <summary>
+            Finds the eventual point where two segments intersect.
+            Returns FALSE if there is no intersection happening
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeMathUtils.FindLineCircleIntersection(UnityEngine.Vector2,System.Single,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2@,UnityEngine.Vector2@)">
+            <summary>
+            Finds the eventual intersection points between a line and a circle, and returns the total number of intersections
+            </summary>
+            Uses code from Rod Stephens: http://csharphelper.com/blog/2014/09/determine-where-a-line-intersects-a-circle-in-c/
+        </member>
+        <member name="M:DG.DeUtils.DeMathUtils.FindNearestLineCircleIntersection(UnityEngine.Vector2,System.Single,UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Vector2@)">
+            <summary>
+            Finds the closest intersection point between a line and a circle, and returns TRUE if it's found, FALSE otherwise
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeMathUtils.LineToRectangle(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,UnityEngine.Vector2@,UnityEngine.Vector2@,UnityEngine.Vector2@,UnityEngine.Vector2@)">
+            <summary>
+            Finds the clockwise vertices of a rectangle built around the given line with the given width, taking line rotation into account
+            </summary>
+            Uses code from Kromster: https://stackoverflow.com/questions/7854043/drawing-rectangle-between-two-points-with-arbitrary-width
+        </member>
+        <member name="T:DG.DeUtils.DeRectUtils">
+            <summary>
+            Utils for structs
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeRectUtils.Add(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary>
+            Adds one rect into another, and returns the resulting a
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeRectUtils.Fit(UnityEngine.Rect,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Resizes the given Rect so it fits proportionally within the given size limits
+            </summary>
+            <param name="r">Rect target</param>
+            <param name="w">Width to fit</param>
+            <param name="h">Height to fit</param>
+            <param name="shrinkOnly">If TRUE (default) only shrinks the rect if needed, if FALSE also enlarges it to fit</param>
+            <returns></returns>
+        </member>
+        <member name="M:DG.DeUtils.DeRectUtils.Includes(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary>
+            Returns TRUE if the first rect fully includes the second one
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeRectUtils.Shift(UnityEngine.Rect,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Modifies and returns the given Rect, with its values shifted according the the given parameters
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeVector3Utils.AngleY(UnityEngine.Vector3)">
+            <summary>
+            Returns the Y angle in degrees of the given vector (0 to 180, negative if on left, positive if on right), based on world coordinates.
+            </summary>
+        </member>
+        <member name="M:DG.DeUtils.DeVector3Utils.AngleY(UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>
+            Returns the Y angle in degrees between from and to (0 to 180, negative if to is on left, positive if to is on right).
+            </summary>
+        </member>
+    </members>
+</doc>

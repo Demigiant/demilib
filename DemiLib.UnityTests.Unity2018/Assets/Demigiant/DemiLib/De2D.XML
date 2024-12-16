@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>De2D</name>
+    </assembly>
+    <members>
+        <member name="T:DG.De2D.De2DAutosorter">
+            <summary>
+            Automatically sorts all its SpriteRenderer children based on their position in the Hierarchy
+            (like UI: top is behind, bottom is frontal).
+            Only applies sorting in the editor
+            </summary>
+        </member>
+        <member name="T:DG.De2D.De2DCamera">
+            <summary>
+            Sets up the 2D orthographic camera it's attached to
+            </summary>
+        </member>
+        <member name="M:DG.De2D.De2DCamera.FitToTarget(UnityEngine.Renderer)">
+            <summary>
+            Set the camera to center and fit on the given target.<para/>
+            Uses code from satchel82: https://answers.unity.com/questions/1231701/fitting-bounds-into-orthographic-2d-camera.html
+            </summary>
+            <param name="targetRenderer">Target renderer to use for fitting</param>
+        </member>
+        <member name="T:DG.De2D.De2DManager">
+            <summary>
+            Global-permanent runtime component that fires callbacks in case screen changes
+            (used to avoid having Update calls on all 2D components)
+            </summary>
+        </member>
+        <member name="T:DG.De2D.De2DLayout">
+            <summary>
+            Works even if disabled (unless it's disabled in-editor)
+            </summary>
+        </member>
+        <member name="T:DG.De2D.DeRendererSortOrder">
+            <summary>
+            Allows to set the sortingOrder of Renderers, not just SpriteRenderers
+            </summary>
+        </member>
+        <member name="F:DG.De2D.DeSpriteButton.colors">
+            <summary>Only used in case of <see cref="F:DG.De2D.DeSpriteButton.TransitionType.ColorTint"/> transitions</summary>
+        </member>
+        <member name="M:DG.De2D.DeSpriteButton.Refresh(System.Boolean)">
+            <summary>
+            Force-refreshes the graphics of this button
+            </summary>
+        </member>
+        <member name="T:DG.De2D.UI.DeUIMesh">
+            <summary>
+            Used to draw a custom mesh inside Unity's UI
+            </summary>
+        </member>
+        <member name="M:DG.De2D.UI.DeUIMesh.Draw(UnityEngine.Vector2[],System.Int32[],UnityEngine.Vector2[],UnityEngine.Color)">
+            <summary>
+            Draws a mesh with the given data. Coordinates are Canvas-based.
+            </summary>
+        </member>
+        <member name="M:DG.De2D.UI.DeUIMesh.Draw(UnityEngine.Vector2[],System.Int32[],UnityEngine.Vector2[],UnityEngine.Vector2[],UnityEngine.Color)">
+            <summary>
+            Draws a mesh with the given data. Coordinates are Canvas-based.
+            </summary>
+        </member>
+        <member name="M:DG.De2D.UI.DeUIMesh.Clear">
+            <summary>
+            Clears the drawn mesh (by activating culling so it doesn't show)
+            </summary>
+        </member>
+    </members>
+</doc>
