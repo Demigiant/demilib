@@ -402,16 +402,17 @@ namespace DG.DemiEditor
                 contentOffset = new Vector2(2, -1),
                 richText = true
             };
+            toolFoldoutClosed.active = toolFoldoutClosed.normal;
             toolFoldoutClosedWLabel = toolFoldoutClosed.Clone(DeGUI.usesInterFont ? 11 : 9).Width(0).StretchWidth(false);
             toolFoldoutClosedWStretchedLabel = toolFoldoutClosedWLabel.Clone().StretchWidth();
             toolFoldoutOpen = new GUIStyle(toolFoldoutClosed) {
-//                normal = { background = EditorStyles.foldout.onNormal.background }
                 normal = { background = DeStylePalette.ico_foldout_open, scaledBackgrounds = new Texture2D[0] }
             };
+            toolFoldoutOpen.active = toolFoldoutOpen.normal;
             toolFoldoutOpenWLabel = new GUIStyle(toolFoldoutClosedWLabel) {
-//                normal = { background = EditorStyles.foldout.onNormal.background }
                 normal = { background = DeStylePalette.ico_foldout_open, scaledBackgrounds = new Texture2D[0] }
             };
+            toolFoldoutOpenWLabel.active = toolFoldoutOpenWLabel.normal;
             toolFoldoutOpenWStretchedLabel = toolFoldoutOpenWLabel.Clone().StretchWidth();
             // Large
             toolLFoldoutClosed = toolFoldoutClosed.Clone().OverflowTop(-4);
