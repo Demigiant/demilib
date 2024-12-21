@@ -167,6 +167,8 @@ namespace DG.DemiEditor
         public static Texture2D ico_skull_border { get { return LoadTexture(ref _ico_skull_border, "ico_skull_border"); } }
         public static Texture2D ico_camera { get { return LoadTexture(ref _ico_camera, "ico_camera"); } }
         public static Texture2D ico_camera_border { get { return LoadTexture(ref _ico_camera_border, "ico_camera_border"); } }
+        public static Texture2D ico_audio { get { return LoadTexture(ref _ico_audio, "ico_audio"); } }
+        public static Texture2D ico_audio_border { get { return LoadTexture(ref _ico_sound_audio, "ico_audio_border"); } }
         public static Texture2D ico_light { get { return LoadTexture(ref _ico_light, "ico_light"); } }
         public static Texture2D ico_light_border { get { return LoadTexture(ref _ico_light_border, "ico_light_border"); } }
         public static Texture2D grid_dark { get { return LoadTexture(ref _grid_dark, "grid_dark", FilterMode.Point, 64, TextureWrapMode.Repeat); } }
@@ -224,6 +226,8 @@ namespace DG.DemiEditor
         static Texture2D _ico_skull_border;
         static Texture2D _ico_camera;
         static Texture2D _ico_camera_border;
+        static Texture2D _ico_audio;
+        static Texture2D _ico_sound_audio;
         static Texture2D _ico_light;
         static Texture2D _ico_light_border;
         static Texture2D _grid_dark;

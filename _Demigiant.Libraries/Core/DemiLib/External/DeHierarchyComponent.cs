@@ -41,7 +41,8 @@ namespace DG.DemiLib.External
             Heart,
             Skull,
             Camera,
-            Light
+            Light,
+            Audio
         }
 
         public enum SeparatorType

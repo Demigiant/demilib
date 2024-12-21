@@ -288,6 +288,9 @@ namespace DG.DeEditorTools.Hierarchy
                 case DeHierarchyComponent.IcoType.Camera:
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_camera_border : DeStylePalette.ico_camera;
                     break;
+                case DeHierarchyComponent.IcoType.Audio:
+                    icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_audio_border : DeStylePalette.ico_audio;
+                    break;
                 case DeHierarchyComponent.IcoType.Light:
                     icoTexture = DeEditorToolsPrefs.deHierarchy_showIcoBorder ? DeStylePalette.ico_light_border : DeStylePalette.ico_light;
                     break;

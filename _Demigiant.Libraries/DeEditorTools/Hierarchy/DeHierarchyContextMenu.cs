@@ -28,6 +28,9 @@ namespace DG.DeEditorTools.Hierarchy
 
         #region Icon
 
+        [MenuItem("GameObject/DeHierarchy/Icon/Audio", false, _Priority_Evidence_Sub0)]
+        static void SetIconAudio() { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Audio); }
+        
         [MenuItem("GameObject/DeHierarchy/Icon/Camera", false, _Priority_Evidence_Sub0)]
         static void SetIconCamera() { DeHierarchy.SetIconForSelections(DeHierarchyComponent.IcoType.Camera); }
 
