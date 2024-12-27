@@ -27,9 +27,10 @@ namespace DG.DeEditorTools.Hierarchy
         static DeHierarchyComponent.IcoType[] _icoTypes;
         static Texture2D[] _icoTextures;
         static DeScrollView _scrollView;
-        static readonly GUIContent tips = new GUIContent("Normally checks if the full name contains the given text" +
-                                                         "\n- Start with \"|\" to look at the start of the full name" +
-                                                         "\n- End with \"|\" to look at the end of the full name");
+        static readonly GUIContent tips = new GUIContent("By default checks if the full class name including namespace contains the given text" +
+                                                         "\n- Start with <color=#fcb935>|</color> to look at the start of the full name" +
+                                                         "\n- End with <color=#fcb935>|</color> to look at the end of the full name" +
+                                                         "\n- Start with <color=#fcb935>^</color> to check for inheritance (requires full class name)");
 
         #region Unity and GUI Methods
 
@@ -164,7 +165,7 @@ namespace DG.DeEditorTools.Hierarchy
                 // ► Tips
                 float tipsRHeight = Styles.evidenceTips.CalcHeight(tips, _scrollView.visibleContentArea.width);
                 Rect tipsR = _scrollView.GetWideSingleLineRect(tipsRHeight);
-                EditorGUI.HelpBox(tipsR, tips.text, MessageType.Info);
+                GUI.Label(tipsR, tips, Styles.evidenceTips);
                 // ► Items
                 if (_src.extraEvidences != null) {
                     for (int i = 0; i < _src.extraEvidences.Length; ++i) {
@@ -238,7 +239,7 @@ namespace DG.DeEditorTools.Hierarchy
                 bt = DeGUI.styles.button.bBlankBorder.Clone().Background(DeStylePalette.squareBorderCurvedEmpty);
                 btColor = DeGUI.styles.button.flatWhite.Clone();
                 btNoColor = DeGUI.styles.button.flatWhite.Clone().Background(DeStylePalette.squareCornersEmpty02);
-                evidenceTips = EditorStyles.helpBox.Clone();
+                evidenceTips = DeGUI.styles.box.def.Clone(11, Format.RichText, TextAnchor.MiddleLeft);
             }
         }
     }

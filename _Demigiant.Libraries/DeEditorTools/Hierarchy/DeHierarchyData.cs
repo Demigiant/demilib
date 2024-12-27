@@ -2,6 +2,8 @@
 // Created: 2020/10/19
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DG.DeEditorTools.Hierarchy
@@ -23,7 +25,8 @@ namespace DG.DeEditorTools.Hierarchy
             Unset,
             Contains,
             StartsWith,
-            EndsWith
+            EndsWith,
+            IsOrIsSubclassOf
         }
 
         #region Serialized
@@ -47,9 +50,11 @@ namespace DG.DeEditorTools.Hierarchy
             [SerializeField] SearchMode _foo_searchMode;
 
             public SearchMode searchMode { get { return _foo_searchMode; } }
+            // public string searchType { get; private set; } // Only used by IsOrIsSubclassOf
 
             public void RefreshSearchMode()
             {
+                // searchType = null;
                 searchString = componentClass;
                 if (string.IsNullOrEmpty(componentClass)) _foo_searchMode = SearchMode.Unset;
                 else {
@@ -61,9 +66,22 @@ namespace DG.DeEditorTools.Hierarchy
                         } else if (componentClass.EndsWith("|")) {
                             _foo_searchMode = SearchMode.EndsWith;
                             searchString = componentClass.Substring(0, strLen - 1);
+                        } else if (componentClass.StartsWith("^")) {
+                            _foo_searchMode = SearchMode.IsOrIsSubclassOf;
+                            searchString = GetAssemblyQualifiedTypeString(componentClass.Substring(1));
                         } else _foo_searchMode = SearchMode.Contains;
                     } else _foo_searchMode = SearchMode.Contains;
                 }
+            }
+            
+            string GetAssemblyQualifiedTypeString(string str)
+            {
+                return AppDomain.CurrentDomain.GetAssemblies()
+                    .ToList()
+                    .SelectMany(x => x.GetTypes())
+                    .Where(x => x.FullName == str)
+                    .Select(x => x.AssemblyQualifiedName)
+                    .FirstOrDefault();
             }
         }
     }

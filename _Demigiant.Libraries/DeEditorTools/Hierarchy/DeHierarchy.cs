@@ -27,6 +27,7 @@ namespace DG.DeEditorTools.Hierarchy
         static string[] _extraNamespacesToIgnoreInComponents;
         static readonly GUIContent _TmpGUIContent = new GUIContent();
         static readonly List<Component> _TmpComponents = new List<Component>();
+        static readonly List<Type> _TmpComponentTypes = new List<Type>();
         static readonly List<string> _TmpComponentTypeFullNames = new List<string>();
 
         static Rect _evidenceRShiftByVersion = new Rect();
@@ -564,9 +565,14 @@ namespace DG.DeEditorTools.Hierarchy
                     go.GetComponents<Component>(_TmpComponents);
                     int componentsLen = _TmpComponents.Count;
                     if (componentsLen > 1) { // Ignore 0 because it's always Transform or RectTransform
+                        _TmpComponentTypes.Clear();
                         _TmpComponentTypeFullNames.Clear();
                         for (int i = 1; i < componentsLen; ++i) {
-                            if (_TmpComponents[i] != null) _TmpComponentTypeFullNames.Add(_TmpComponents[i].GetType().FullName);
+                            if (_TmpComponents[i] != null) {
+                                Type t = _TmpComponents[i].GetType();
+                                _TmpComponentTypes.Add(t);
+                                _TmpComponentTypeFullNames.Add(t.FullName);
+                            }
                         }
                         int fullNamesLen = _TmpComponentTypeFullNames.Count;
                         if (fullNamesLen > 0) {
@@ -595,6 +601,16 @@ namespace DG.DeEditorTools.Hierarchy
                                 case DeHierarchyData.SearchMode.EndsWith:
                                     for (int i = 0; i < fullNamesLen; ++i) {
                                         if (!_TmpComponentTypeFullNames[i].EndsWith(searchStr)) continue;
+                                        extraEv = true;
+                                        break;
+                                    }
+                                    break;
+                                case DeHierarchyData.SearchMode.IsOrIsSubclassOf:
+                                    if (evData.searchString == null) break;
+                                    Type t = Type.GetType(evData.searchString);
+                                    if (t == null) break;
+                                    for (int i = 0; i < fullNamesLen; ++i) {
+                                        if (!_TmpComponentTypes[i].IsSubclassOf(t) && _TmpComponentTypes[i] != t) continue;
                                         extraEv = true;
                                         break;
                                     }
