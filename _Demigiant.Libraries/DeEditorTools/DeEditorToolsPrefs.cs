@@ -21,6 +21,7 @@ namespace DG.DeEditorTools
         public static bool deHierarchy_showCustomComponentIndicator;
         public static bool deHierarchy_showCustomComponentsInChildrenIndicator;
         public static string deHierarchy_ignoreCustomComponentsNamespaces;
+        public static bool deHierarchy_showLayer;
         public static bool deHierarchy_showSortingLayer;
         public static bool deHierarchy_showOrderInLayer;
         public static bool deHierarchy_showIco;
@@ -38,6 +39,7 @@ namespace DG.DeEditorTools
         const string _ID_DeHierarchy_ShowCustomComponentIndicator = _SavePrefix + "deHierarchy_showCustomComponentIndicator";
         const string _ID_DeHierarchy_ShowCustomComponentsInChildrenIndicator = _SavePrefix + "deHierarchy_showCustomComponentsInChildrenIndicator";
         const string _ID_DeHierarchy_IgnoreCustomComponentsNamespaces = _SavePrefix + "deHierarchy_ignoreCustomComponentsNamespaces";
+        const string _ID_DeHierarchy_ShowLayer = _SavePrefix + "deHierarchy_showLayer";
         const string _ID_DeHierarchy_ShowSortingLayer = _SavePrefix + "deHierarchy_showSortingLayer";
         const string _ID_DeHierarchy_ShowOrderInLayer = _SavePrefix + "deHierarchy_showOrderInLayer";
         const string _ID_DeHierarchy_ShowIco = _SavePrefix + "deHierarchy_showIco";
@@ -72,6 +74,7 @@ namespace DG.DeEditorTools
             deHierarchy_showCustomComponentIndicator = EditorPrefs.GetBool(_ID_DeHierarchy_ShowCustomComponentIndicator, true);
             deHierarchy_showCustomComponentsInChildrenIndicator = EditorPrefs.GetBool(_ID_DeHierarchy_ShowCustomComponentsInChildrenIndicator, true);
             deHierarchy_ignoreCustomComponentsNamespaces = EditorPrefs.GetString(_ID_DeHierarchy_IgnoreCustomComponentsNamespaces, "TMPro");
+            deHierarchy_showLayer = EditorPrefs.GetBool(_ID_DeHierarchy_ShowLayer, false);
             deHierarchy_showSortingLayer = EditorPrefs.GetBool(_ID_DeHierarchy_ShowSortingLayer, false);
             deHierarchy_showOrderInLayer = EditorPrefs.GetBool(_ID_DeHierarchy_ShowOrderInLayer, false);
             deHierarchy_showIco = EditorPrefs.GetBool(_ID_DeHierarchy_ShowIco, true);
@@ -124,6 +127,7 @@ namespace DG.DeEditorTools
                             deHierarchy_ignoreCustomComponentsNamespaces = EditorGUILayout.TextArea(deHierarchy_ignoreCustomComponentsNamespaces);
                         }
                     }
+                    deHierarchy_showLayer = EditorGUILayout.Toggle("Show layer", deHierarchy_showLayer);
                     deHierarchy_showSortingLayer = EditorGUILayout.Toggle("Show sorting layer", deHierarchy_showSortingLayer);
                     deHierarchy_showOrderInLayer = EditorGUILayout.Toggle("Show sorting order", deHierarchy_showOrderInLayer);
                     deHierarchy_showIco = EditorGUILayout.Toggle("Show colored icon", deHierarchy_showIco);
@@ -152,6 +156,7 @@ namespace DG.DeEditorTools
             EditorPrefs.SetBool(_ID_DeHierarchy_ShowCustomComponentIndicator, deHierarchy_showCustomComponentIndicator);
             EditorPrefs.SetBool(_ID_DeHierarchy_ShowCustomComponentsInChildrenIndicator, deHierarchy_showCustomComponentsInChildrenIndicator);
             EditorPrefs.SetString(_ID_DeHierarchy_IgnoreCustomComponentsNamespaces, deHierarchy_ignoreCustomComponentsNamespaces);
+            EditorPrefs.SetBool(_ID_DeHierarchy_ShowLayer, deHierarchy_showLayer);
             EditorPrefs.SetBool(_ID_DeHierarchy_ShowSortingLayer, deHierarchy_showSortingLayer);
             EditorPrefs.SetBool(_ID_DeHierarchy_ShowOrderInLayer, deHierarchy_showOrderInLayer);
             EditorPrefs.SetBool(_ID_DeHierarchy_ShowIco, deHierarchy_showIco);

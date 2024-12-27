@@ -33,7 +33,7 @@ namespace DG.DeEditorTools.Hierarchy
 
         static bool _stylesSet;
         static Color _icoVisibilityOnColor, _icoVisibilityOffColor, _hasComponentsColor, _prefabLabelColor, _inactivePrefabLabelColor;
-        static GUIStyle _evidenceStyle, _btVisibility, _btVisibilityOff, _layerBox, _layerOrderBox, _extraEvidenceBox, _extraEvidenceBoxLabel;
+        static GUIStyle _evidenceStyle, _btVisibility, _btVisibilityOff, _layerBox, _sortingLayerBox, _layerOrderBox, _extraEvidenceBox, _extraEvidenceBoxLabel;
 
         static DeHierarchy()
         {
@@ -112,6 +112,7 @@ namespace DG.DeEditorTools.Hierarchy
 
             bool isActiveInHierarchy = go.activeInHierarchy;
             bool requiresGoData = DeEditorToolsPrefs.deHierarchy_showCustomComponentIndicator
+                                  || DeEditorToolsPrefs.deHierarchy_showLayer
                                   || DeEditorToolsPrefs.deHierarchy_showSortingLayer || DeEditorToolsPrefs.deHierarchy_showOrderInLayer
                                   || _projectSrc.totExtraEvidences > 0;
             GameObjectData goData = requiresGoData
@@ -198,14 +199,24 @@ namespace DG.DeEditorTools.Hierarchy
                     }
                 }
             }
+            // Layer
+            if (DeEditorToolsPrefs.deHierarchy_showLayer) {
+                GUIContent label = new GUIContent(goData.layerName == "Default" ? "D" : goData.layerName);
+                Vector2 size = _layerOrderBox.CalcSize(label);
+                extraR = extraR.Shift(-size.x - 2, 0, 0, 0).SetY((int)(selectionRect.center.y - (size.y * 0.5f)))
+                    .SetHeight(size.y).SetWidth(size.x);
+                using (new DeGUI.ColorScope(new DeSkinColor(0.7f, 0.3f))) {
+                    GUI.Label(extraR, label, _layerBox);
+                }
+            }
             // Sorting layer/order
             if ((DeEditorToolsPrefs.deHierarchy_showSortingLayer || DeEditorToolsPrefs.deHierarchy_showOrderInLayer) && goData.hasRenderer) {
                 if (DeEditorToolsPrefs.deHierarchy_showSortingLayer) {
-                    GUIContent label = new GUIContent(goData.renderer.sortingLayerName);
+                    GUIContent label = new GUIContent(goData.renderer.sortingLayerName == "Default" ? "D" : goData.renderer.sortingLayerName);
                     Vector2 size = _layerOrderBox.CalcSize(label);
                     extraR = extraR.Shift(-size.x - 2, 0, 0, 0).SetY((int)(selectionRect.center.y - (size.y * 0.5f)))
                         .SetHeight(size.y).SetWidth(size.x);
-                    GUI.Label(extraR, label, _layerBox);
+                    GUI.Label(extraR, label, _sortingLayerBox);
                 }
                 if (DeEditorToolsPrefs.deHierarchy_showOrderInLayer) {
                     GUIContent label = new GUIContent(goData.renderer.sortingOrder.ToString());
@@ -345,8 +356,9 @@ namespace DG.DeEditorTools.Hierarchy
                 .Width(DeStylePalette.ico_visibility.width).Height(DeStylePalette.ico_visibility.height);
             _btVisibilityOff = _btVisibility.Clone().Background(DeStylePalette.ico_visibility_off);
             _layerBox = new GUIStyle(GUI.skin.label).Add(TextAnchor.MiddleCenter, 10, new DeSkinColor(0.2f, 0.8f)).Padding(2, 2, 1, 1).Margin(0)
-                .Background(DeGUI.IsProSkin ? DeStylePalette.blackSquare : DeStylePalette.whiteSquare);
-            _layerOrderBox = _layerBox.Clone();
+                .Background(DeStylePalette.whiteSquare);
+            _sortingLayerBox = _layerBox.Clone().Background(DeGUI.IsProSkin ? DeStylePalette.blackSquare : DeStylePalette.whiteSquare);
+            _layerOrderBox = _sortingLayerBox.Clone();
 
             _extraEvidenceBox = DeGUI.styles.box.roundOutline01.Clone().Background(DeStylePalette.whiteSquareCurved02);
             _extraEvidenceBoxLabel = new GUIStyle(GUI.skin.label).Add(Color.white).Padding(0)
@@ -507,6 +519,7 @@ namespace DG.DeEditorTools.Hierarchy
 
         public class GameObjectData
         {
+            public readonly string layerName;
             public readonly Renderer renderer;
             public readonly bool hasRenderer;
             public readonly bool hasCustomComponents;
@@ -520,6 +533,7 @@ namespace DG.DeEditorTools.Hierarchy
             public GameObjectData(GameObject go, bool checkForCustomComponents, bool checkForCustomComponentsInChildren)
             {
                 isPrefab = PrefabUtility.IsPartOfAnyPrefab(go);
+                layerName = LayerMask.LayerToName(go.layer);
                 renderer = go.GetComponent<Renderer>();
                 hasRenderer = renderer != null;
                 if (checkForCustomComponents) {
