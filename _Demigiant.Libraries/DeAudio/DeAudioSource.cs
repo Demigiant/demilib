@@ -230,7 +230,7 @@ namespace DG.DeAudio
         public void Stop()
         {
             isPaused = false;
-            audioSource.time = 0; // Reset time to beginning
+            if (audioSource.clip != null) audioSource.time = 0; // Reset time to beginning
             DestroyFadeTween();
             audioSource.Stop();
         }
