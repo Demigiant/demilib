@@ -29,7 +29,7 @@ namespace DG.DemiLib
         /// <summary>
         /// Returns a random value within this range (min/max included)
         /// </summary>
-        public float RandomWithin()
+        public int RandomWithin()
         {
             return UnityEngine.Random.Range(min, max + 1);
         }
