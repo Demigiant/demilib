@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DeRangeAttribute.cs" />
     <Compile Include="Attributes\DeScriptExecutionOrderAttribute.cs" />
     <Compile Include="Core\GUIUtils.cs" />
     <Compile Include="DeColorPalette.cs" />

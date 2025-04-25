@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using DG.DemiLib;
+using DG.DemiLib.Attributes;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ namespace DG.DemiEditor.PropertyDrawers
             float floatVal = 0;
             int intVal = 0;
 
+            DeRangeAttribute attr = DeEditorReflectionUtils.GetAttributeOfType<DeRangeAttribute>(this);
+            bool hasAttr = attr != null;
             EditorGUI.BeginProperty(position, label, property);
 
             position = EditorGUI.PrefixLabel(position, label);
@@ -40,9 +43,11 @@ namespace DG.DemiEditor.PropertyDrawers
             if (EditorGUI.EndChangeCheck()) {
                 GUI.changed = true;
                 if (isIntRange) {
+                    if (hasAttr && intVal < attr.min) intVal = (int)attr.min;
                     if (intVal > max.intValue) intVal = max.intValue;
                     min.intValue = intVal;
                 } else {
+                    if (hasAttr && floatVal < attr.min) floatVal = attr.min;
                     if (floatVal > max.floatValue) floatVal = max.floatValue;
                     min.floatValue = floatVal;
                 }
@@ -57,10 +62,12 @@ namespace DG.DemiEditor.PropertyDrawers
             if (EditorGUI.EndChangeCheck()) {
                 GUI.changed = true;
                 if (isIntRange) {
-                    if (intVal < max.intValue) intVal = min.intValue;
+                    if (hasAttr && intVal > attr.max) intVal = (int)attr.max;
+                    if (intVal < min.intValue) intVal = min.intValue;
                     max.intValue = intVal;
                 } else {
-                    if (floatVal < max.floatValue) floatVal = min.floatValue;
+                    if (hasAttr && floatVal > attr.max) floatVal = attr.max;
+                    if (floatVal < min.floatValue) floatVal = min.floatValue;
                     max.floatValue = floatVal;
                 }
             }

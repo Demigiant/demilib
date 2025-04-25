@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEditor;
 
 namespace DG.DemiEditor
 {
@@ -26,6 +27,12 @@ namespace DG.DemiEditor
             return fields;
         }
 
+        public static T GetAttributeOfType<T>(PropertyDrawer forPropDrawer) where T : Attribute
+        {
+            object[] customAttrs = forPropDrawer.fieldInfo.GetCustomAttributes(typeof(T), true);
+            return customAttrs.Length > 0 ? (T)customAttrs[0] : null;
+        }
+
         /// <summary>
         /// Perform a deep copy of the class
         /// </summary>
@@ -34,7 +41,6 @@ namespace DG.DemiEditor
             if (obj == null) throw new ArgumentNullException("Object cannot be null");
             return (T)DoCopy(obj);
         }
-
 
         /// <summary>
         /// Does the copy
