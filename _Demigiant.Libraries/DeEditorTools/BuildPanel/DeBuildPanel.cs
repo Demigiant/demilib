@@ -446,7 +446,7 @@ namespace DG.DeEditorTools.BuildPanel
             EditorUtility.DisplayProgressBar(string.Format("Build ({0})", build.buildTarget), "Preparing...", 0.2f);
             // Use delayed call to prevent Unity GUILayout bug
             DeEditorUtils.ClearAllDelayedCalls();
-            DeEditorUtils.DelayedCall(0.1f, ()=> DoBuild(build, andPlay));
+            DeEditorUtils.DelayedCall(0.1f, () => DoBuild(build, andPlay));
         }
 
         // Returns TRUE if all builds in queue should be canceled
@@ -537,6 +537,13 @@ namespace DG.DeEditorTools.BuildPanel
                 EditorUtility.DisplayDialog(dialogTitle, "The Build Settings contain no active scenes, canceling all builds", "Ok");
                 return DeBuildResult.CancelAll;
             }
+            // Log
+            _Strb.Length = 0;
+            _Strb.Append("<size=18>");
+            _Strb.Append("Starting build for ").Append(build.buildTarget);
+            _Strb.Append("</size>");
+            Debug.Log(_Strb.ToString());
+            _Strb.Length = 0;
             // Prepare current build options configured with correct build path
             BuildPlayerOptions buildPlayerOptions = GetCurrentBuildPlayerOptions(buildFilePath, build.buildTarget, buildTargetGroup);
             EditorUtility.ClearProgressBar();
@@ -558,8 +565,17 @@ namespace DG.DeEditorTools.BuildPanel
             {
                 DeEditorUtils.DelayedCall(0.1f, ()=> System.Diagnostics.Process.Start(buildFilePath));
             }
-            
-            return report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded ? DeBuildResult.Success : DeBuildResult.Failed;
+
+            bool success = report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded;
+            // Log
+            _Strb.Length = 0;
+            _Strb.Append("<size=18>").Append(success ? "<color=#00ff00>" : "<color=#ff0000>");
+            _Strb.Append("Build for ").Append(build.buildTarget).Append(' ').Append(success ? "completed successfully" : "failed");
+            _Strb.Append("</color></size>");
+            Debug.Log(_Strb.ToString());
+            _Strb.Length = 0;
+            //
+            return success ? DeBuildResult.Success : DeBuildResult.Failed;
         }
 
         #endregion
