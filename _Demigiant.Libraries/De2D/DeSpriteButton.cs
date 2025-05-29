@@ -10,7 +10,6 @@ using UnityEngine.UI;
 
 namespace DG.De2D
 {
-    [RequireComponent(typeof(SpriteRenderer))]
     public class DeSpriteButton : MonoBehaviour
     {
         public enum TransitionType
@@ -36,6 +35,7 @@ namespace DG.De2D
         #region Serialized
 
         [SerializeField] bool _interactable = true;
+        [SerializeField] SpriteRenderer _spriteTarget; // Set to itself if NULL 
         [SerializeField] TransitionType _transition;
         // Transition ► Scale
         [SerializeField] float _highlightedScaleFactor = 1.1f;
@@ -52,7 +52,6 @@ namespace DG.De2D
             pressedColor = Color.white,
             disabledColor = Color.white,
         };
-        // public ColorBlock colors = ColorBlock.defaultColorBlock; // generates error when extending class
         //
         [SerializeField] bool _showOnClick = true; // Editor-only
         [SerializeField] bool _showOnPress, _showOnRelease; // Editor-only
@@ -69,12 +68,12 @@ namespace DG.De2D
         UnityEvent _onExit;
         //
         public bool interactable { get { return _interactable; } set { SetInteractable(value); } }
+        public SpriteRenderer spriteTarget { get { return _spriteTarget; } }
 
         bool _initialized;
         bool _isActive;
         State _state = State.Normal;
         State _prevState = State.Normal;
-        SpriteRenderer _spriteR;
         Vector3 _defLocalScale;
         bool _isOver;
         bool _isDown;
@@ -89,7 +88,10 @@ namespace DG.De2D
 
             _initialized = true;
 
-            _spriteR = this.GetComponent<SpriteRenderer>();
+            if (_spriteTarget == null) {
+                _spriteTarget = this.GetComponent<SpriteRenderer>();
+                if (_spriteTarget == null && _transition == TransitionType.ColorTint) Debug.LogError("DeSpriteButton \"" + this.name + "\": No SpriteRenderer found", this);
+            }
             _defLocalScale = this.transform.localScale;
         }
 
@@ -203,11 +205,6 @@ namespace DG.De2D
                 case State.Rollover:
                     switch (_transition) {
                     case TransitionType.BounceScale:
-//                        if (!immediate && _prevState == State.Press) {
-//                            // Reset scale to default so loop works correctly
-//                            TweenScaleTo(_defLocalScale, 0.1f, false);
-//                            yield return new WaitForSecondsRealtime(0.1f);
-//                        }
                         if (!immediate) {
                             // Jump fast to highlighted scale and then start loop
                             TweenScaleTo(_defLocalScale * _highlightedScaleFactor, 0.1f, false);
@@ -316,24 +313,24 @@ namespace DG.De2D
                 _coTransitionTween = null;
             }
             if (duration <= 0) {
-                _spriteR.color = color;
+                _spriteTarget.color = color;
                 return;
             }
-            if (_spriteR.color.Equals(color)) return;
+            if (_spriteTarget.color.Equals(color)) return;
 
             _coTransitionTween = this.StartCoroutine(CO_ColorTo(color, duration));
         }
 
         IEnumerator CO_ColorTo(Color color, float duration)
         {
-            Color startColor = _spriteR.color;
+            Color startColor = _spriteTarget.color;
             float startTime = Time.realtimeSinceStartup;
             bool complete = false;
             while (!complete) {
                 float elapsed = Time.realtimeSinceStartup - startTime;
                 float elapsedPerc = elapsed / duration;
                 if (elapsedPerc > 1) elapsedPerc = 1;
-                _spriteR.color = Color.Lerp(startColor, color, elapsedPerc);
+                _spriteTarget.color = Color.Lerp(startColor, color, elapsedPerc);
                 if (elapsed > duration) complete = true;
                 else yield return null;
             }

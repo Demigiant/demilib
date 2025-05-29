@@ -24,6 +24,7 @@ namespace DG.De2DEditor
         DeSpriteButton _src;
 
         SerializedProperty _p_interactable,
+                           _p_spriteTarget,
                            _p_transition,
                            _p_highlightedScaleFactor, _p_pressedScaleFactor, _p_disabledScaleFactor, _p_duration,
                            _p_colors,
@@ -37,6 +38,7 @@ namespace DG.De2DEditor
             _src = this.target as DeSpriteButton;
 
             _p_interactable = serializedObject.FindProperty("_interactable");
+            _p_spriteTarget = serializedObject.FindProperty("_spriteTarget");
             _p_transition = serializedObject.FindProperty("_transition");
             _p_highlightedScaleFactor = serializedObject.FindProperty("_highlightedScaleFactor");
             _p_pressedScaleFactor = serializedObject.FindProperty("_pressedScaleFactor");
@@ -89,6 +91,10 @@ namespace DG.De2DEditor
 
             using (var check = new EditorGUI.ChangeCheckScope()) {
                 EditorGUILayout.PropertyField(_p_interactable);
+                if (_p_spriteTarget.objectReferenceValue == null && _p_transition.intValue == 0) {
+                    EditorGUILayout.HelpBox("Will look for SpriteRenderer on self, be sure there is one", MessageType.Warning);
+                }
+                EditorGUILayout.PropertyField(_p_spriteTarget);
                 EditorGUILayout.PropertyField(_p_transition);
                 if (!_p_transition.hasMultipleDifferentValues) {
                     // Transition
@@ -144,7 +150,8 @@ namespace DG.De2DEditor
         {
             foreach (Object obj in serializedObject.targetObjects) {
                 DeSpriteButton bt = (DeSpriteButton)obj;
-                SpriteRenderer spriteR = bt.GetComponent<SpriteRenderer>();
+                SpriteRenderer spriteR = bt.spriteTarget != null ? bt.spriteTarget : bt.GetComponent<SpriteRenderer>();
+                if (spriteR == null) continue;
                 Undo.RecordObject(spriteR, "DeSpriteButton");
                 spriteR.color = (bt.interactable ? bt.colors.normalColor : bt.colors.disabledColor) * bt.colors.colorMultiplier;
                 EditorUtility.SetDirty(spriteR);
