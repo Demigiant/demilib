@@ -762,10 +762,15 @@ namespace DG.DemiEditor
         /// <summary>Scene field</summary>
         public static Object SceneField(Rect rect, string label, Object obj)
         {
+            return SceneField(rect, new GUIContent(label), obj);
+        }
+        /// <summary>Scene field</summary>
+        public static Object SceneField(Rect rect, GUIContent content, Object obj)
+        {
             // Verify that obj is a SceneAsset (not recognized by compiler as a class, so we have to use the string representation)
             if (obj != null && !obj.ToString().EndsWith(".SceneAsset)")) obj = null;
             // Draw
-            return EditorGUI.ObjectField(rect, label, obj, typeof(Object), false);
+            return EditorGUI.ObjectField(rect, content, obj, typeof(Object), false);
         }
 
         #endregion
