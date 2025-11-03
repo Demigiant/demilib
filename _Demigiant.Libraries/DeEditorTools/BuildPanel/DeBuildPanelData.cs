@@ -35,7 +35,9 @@ namespace DG.DeEditorTools.BuildPanel
 
         #endregion
 
-        public const string Version = "1.0.090";
+        static DeBuildPanelData I;
+        public const string Version = "1.0.100";
+        const string _ADBFilePath = "Assets/-DeBuildPanelData.asset";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
             BuildTarget.NoTarget, // Here so indexes correspond to AffixTarget enum
             BuildTarget.StandaloneWindows64,
@@ -48,6 +50,17 @@ namespace DG.DeEditorTools.BuildPanel
             BuildTarget.XboxOne,
             BuildTarget.Switch
         };
+
+        public static DeBuildPanelData Load()
+        {
+            if (I == null) I = DeEditorPanelUtils.ConnectToSourceAsset<DeBuildPanelData>(_ADBFilePath, true);
+            return I;
+        }
+
+        void OnDestroy()
+        {
+            if (I == this) I = null;
+        }
 
         internal BuildTarget AffixTargetToBuildTarget(AffixTarget affixTarget)
         {

@@ -83,7 +83,6 @@ namespace DG.DeEditorTools.BuildPanel
         }
         
         const string _Title = "DeBuild Panel";
-        const string _SrcADBFilePath = "Assets/-DeBuildPanelData.asset";
         static readonly StringBuilder _Strb = new StringBuilder();
         static readonly StringBuilder _StrbAlt = new StringBuilder();
         DeBuildPanelData _src;
@@ -99,7 +98,7 @@ namespace DG.DeEditorTools.BuildPanel
 
         void OnEnable()
         {
-            if (_src == null) _src = DeEditorPanelUtils.ConnectToSourceAsset<DeBuildPanelData>(_SrcADBFilePath, true);
+            _src = DeBuildPanelData.Load();
             RefreshBuildPathsLabels();
             _buildFolderComment = string.Format(
                 "The build folder is relative to your Unity's project folder:\n\n\"{0}/\"\n\nYou can use \"../\" to navigate backwards",
@@ -114,13 +113,13 @@ namespace DG.DeEditorTools.BuildPanel
 
         void OnFocus()
         {
-            if (_src == null) _src = DeEditorPanelUtils.ConnectToSourceAsset<DeBuildPanelData>(_SrcADBFilePath, true);
+            _src = DeBuildPanelData.Load();
             RefreshBuildPathsLabels();
         }
 
         void OnGUI()
         {
-            if (_src == null) _src = DeEditorPanelUtils.ConnectToSourceAsset<DeBuildPanelData>(_SrcADBFilePath, true);
+            _src = DeBuildPanelData.Load();
             Undo.RecordObject(_src, _Title);
             DeGUI.BeginGUI();
             Styles.Init();
