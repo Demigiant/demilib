@@ -240,6 +240,14 @@ namespace DG.DemiEditor
             return bgColor.r + bgColor.g + bgColor.b > 1.5f ? Color.black : Color.white;
         }
 
+        /// <summary>
+        /// Returns TRUE if the double-click text area/field with the given id is currently in editing mode
+        /// </summary>
+        public static bool IsDoubleClickTextBeingEdited(string doubleClickTextId)
+        {
+            return doubleClickTextId == _doubleClickTextFieldId;
+        }
+
         #endregion
 
         #region Methods

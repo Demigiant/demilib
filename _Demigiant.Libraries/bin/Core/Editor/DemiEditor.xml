@@ -1737,6 +1737,11 @@
             Gets either black or white, depending on the color that would be most visible on the given one
             </summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUI.IsDoubleClickTextBeingEdited(System.String)">
+            <summary>
+            Returns TRUE if the double-click text area/field with the given id is currently in editing mode
+            </summary>
+        </member>
         <member name="T:DG.DemiEditor.DeGUI.CursorColorScope">
             <summary>
             Sets the GUI cursor color to the given ones
