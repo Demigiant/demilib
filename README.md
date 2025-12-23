@@ -1,5 +1,5 @@
 # DemiLib
-Various utility libraries for Unity (alpha).  
+Various utility libraries for Unity.  
 Developed by Daniele Giardini - http://www.demigiant.com
 
 #### [Read more on the Wiki](https://github.com/Demigiant/demilib/wiki) - or check the [API](http://demigiant.github.io/apis/demilib/html/namespace_d_g.html)
