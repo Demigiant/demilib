@@ -357,6 +357,7 @@ namespace DG.DemiEditor
         /// </summary>
         public static GUIStyle StretchHeight(this GUIStyle style, bool doStretch = true)
         {
+            style.fixedHeight = 0;
             style.stretchHeight = doStretch;
             return style;
         }
@@ -365,6 +366,7 @@ namespace DG.DemiEditor
         /// </summary>
         public static GUIStyle StretchWidth(this GUIStyle style, bool doStretch = true)
         {
+            style.fixedWidth = 0;
             style.stretchWidth = doStretch;
             return style;
         }
