@@ -1627,6 +1627,9 @@
         <member name="M:DG.DemiEditor.DeGUILayout.SceneField(System.String,UnityEngine.Object)">
             <summary>Scene field</summary>
         </member>
+        <member name="M:DG.DemiEditor.DeGUILayout.SceneField(UnityEngine.GUIContent,UnityEngine.Object)">
+            <summary>Scene field</summary>
+        </member>
         <member name="M:DG.DemiEditor.DeGUILayout.SortingLayer(System.String,System.Int32,UnityEngine.GUIStyle)">
             <summary>
             Draws a dropdown for choosing a SortingLayer ID
@@ -1732,6 +1735,11 @@
         <member name="M:DG.DemiEditor.DeGUI.GetFastVisibleContentColorOn(UnityEngine.Color32)">
             <summary>
             Gets either black or white, depending on the color that would be most visible on the given one
+            </summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.IsDoubleClickTextBeingEdited(System.String)">
+            <summary>
+            Returns TRUE if the double-click text area/field with the given id is currently in editing mode
             </summary>
         </member>
         <member name="T:DG.DemiEditor.DeGUI.CursorColorScope">
@@ -1886,6 +1894,9 @@
             <summary>Button that can be toggled on and off</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.SceneField(UnityEngine.Rect,System.String,UnityEngine.Object)">
+            <summary>Scene field</summary>
+        </member>
+        <member name="M:DG.DemiEditor.DeGUI.SceneField(UnityEngine.Rect,UnityEngine.GUIContent,UnityEngine.Object)">
             <summary>Scene field</summary>
         </member>
         <member name="M:DG.DemiEditor.DeGUI.BackgroundGrid(UnityEngine.Rect,UnityEngine.Vector2,UnityEngine.Texture2D,System.Single)">
@@ -2096,6 +2107,14 @@
             </summary>
             <param name="color">Color to evaluate</param>
             <param name="brightnessFactor">Brightness factor (multiplied by current brightness)</param>
+            <param name="alpha">If set applies this alpha value</param>
+        </member>
+        <member name="M:DG.DemiEditor.ColorExtensions.CloneAndChangeHue(UnityEngine.Color,System.Single,System.Nullable{System.Single})">
+            <summary>
+            Returns a new color equal to the given one with changed hue
+            </summary>
+            <param name="color">Color to evaluate</param>
+            <param name="hueAngleAdd">Hue angle to add to current hue (0 to 360)</param>
             <param name="alpha">If set applies this alpha value</param>
         </member>
         <member name="M:DG.DemiEditor.ColorExtensions.CloneAndChangeSaturation(UnityEngine.Color,System.Single,System.Nullable{System.Single})">

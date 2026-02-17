@@ -10,7 +10,7 @@ namespace DG.DemiEditor
     public static class ColorExtensions
     {
         #region Public Methods
-
+        
         /// <summary>
         /// Returns a new color equal to the given one with changed brightness
         /// </summary>
@@ -24,6 +24,25 @@ namespace DG.DemiEditor
             v *= brightnessFactor;
             if (v < 0) v = 0;
             else if (v > 1) v = 1;
+            Color result = HSVToRGB(h, s, v);
+            if (alpha != null) result.a = (float)alpha;
+            return result;
+        }
+        
+        /// <summary>
+        /// Returns a new color equal to the given one with changed hue
+        /// </summary>
+        /// <param name="color">Color to evaluate</param>
+        /// <param name="hueAngleAdd">Hue angle to add to current hue (0 to 360)</param>
+        /// <param name="alpha">If set applies this alpha value</param>
+        public static Color CloneAndChangeHue(this Color color, float hueAngleAdd, float? alpha = null)
+        {
+            hueAngleAdd /= 360;
+            float h, s, v;
+            RGBToHSV(color, out h, out s, out v);
+            h += hueAngleAdd;
+            if (h < 0) h = 1 + h;
+            else if (h > 1) h = h - 1;
             Color result = HSVToRGB(h, s, v);
             if (alpha != null) result.a = (float)alpha;
             return result;

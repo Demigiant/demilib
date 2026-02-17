@@ -70,6 +70,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
         public readonly List<IEditorGUINode> orderedNodes = new List<IEditorGUINode>();
         internal Vector2 guiScalePositionDiff { get; private set; } // Used by GUI calls that need to rotate the matrix
 
+        int _dockableHackShiftY { get { return DeUnityEditorVersion.MajorVersion < 6000 ? 22 : 24; } }
         readonly NodeProcessDebug _debug = new NodeProcessDebug();
         internal readonly List<IEditorGUINode> nodes = new List<IEditorGUINode>(); // Used in conjunction with dictionaries to loop them in desired order
         internal readonly Dictionary<string,IEditorGUINode> idToNode = new Dictionary<string,IEditorGUINode>();
@@ -408,7 +409,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             if (_isDockableEditor) {
                 // Hack to avoid clipping when zooming on dockable window
                 GUI.EndGroup();
-                nodeArea.y += 22;
+                nodeArea.y += _dockableHackShiftY;
             }
 
             // Validate nodes order
@@ -1064,7 +1065,7 @@ namespace DG.DemiEditor.DeGUINodeSystem
             GUI.matrix = Matrix4x4.identity;
 
             if (options.debug_showFps) _debug.OnNodeProcessEnd();
-            if (_isDockableEditor) GUI.BeginGroup(editor.position.ResetXY().SetY(22)); // Hack to avoid clipping when zooming on dockable window
+            if (_isDockableEditor) GUI.BeginGroup(editor.position.ResetXY().SetY(_dockableHackShiftY)); // Hack to avoid clipping when zooming on dockable window
         }
 
         #endregion

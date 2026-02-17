@@ -4,6 +4,22 @@
         <name>DemiLib</name>
     </assembly>
     <members>
+        <member name="T:DG.DemiLib.Attributes.DeRangeAttribute">
+            <summary>
+            <code>Property attribute</code><para/>
+            Shows a float/int value with a slider.
+            Works like Unity's Range attribute, but has extra options for custom label, and also works with DemiLib's <code>Range</code> structs
+            </summary>
+        </member>
+        <member name="M:DG.DemiLib.Attributes.DeRangeAttribute.#ctor(System.Single,System.Single,System.String)">
+            <summary>
+            Shows a float/int value with a slider.
+            Works like Unity's Range attribute, but has extra options for custom label, and also works with DemiLib's <code>Range</code> structs
+            </summary>
+            <param name="min">Min value</param>
+            <param name="max">Max value</param>
+            <param name="label">Override field label</param>
+        </member>
         <member name="T:DG.DemiLib.Attributes.DeScriptExecutionOrderAttribute">
             <summary>
             <code>Class attribute</code><para/>
