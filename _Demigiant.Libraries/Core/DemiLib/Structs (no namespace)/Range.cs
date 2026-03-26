@@ -3,6 +3,7 @@
 // License Copyright (c) Daniele Giardini
 
 using System;
+using UnityEngine;
 
 namespace DG.DemiLib
 {
@@ -48,6 +49,16 @@ namespace DG.DemiLib
         public override string ToString()
         {
             return "(" + min + "/" + max + ")";
+        }
+        
+        public static bool operator==(Range a, Range b)
+        {
+            return Mathf.Approximately(a.min, b.min) && Mathf.Approximately(a.max, b.max);
+        }
+
+        public static bool operator !=(Range a, Range b)
+        {
+            return !(a == b);
         }
     }
 }

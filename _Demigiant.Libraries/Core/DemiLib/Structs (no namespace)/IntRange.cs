@@ -39,5 +39,15 @@ namespace DG.DemiLib
         {
             return "(" + min + "/" + max + ")";
         }
+        
+        public static bool operator==(IntRange a, IntRange b)
+        {
+            return a.min == b.min && a.max == b.max;
+        }
+
+        public static bool operator !=(IntRange a, IntRange b)
+        {
+            return !(a == b);
+        }
     }
 }
