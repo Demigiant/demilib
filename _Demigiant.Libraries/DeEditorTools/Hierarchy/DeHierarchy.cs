@@ -42,17 +42,43 @@ namespace DG.DeEditorTools.Hierarchy
             EditorApplication.delayCall += Init;
         }
 
-        static void Init()
+        public static void Init()
         {
             EditorApplication.delayCall -= Init;
+            EditorApplication.playModeStateChanged -= PlayModeStateChanged;
             EditorApplication.hierarchyChanged -= Refresh;
             EditorApplication.hierarchyWindowItemOnGUI -= ItemOnGUI;
             Undo.undoRedoPerformed -= UndoRedoPerformed;
+            
+            EditorApplication.playModeStateChanged += PlayModeStateChanged;
+            
+            ConnectToProjectData(false);
+            if (_projectSrc != null) {
+                switch (_projectSrc.mode) {
+                    case DeHierarchyData.Mode.Disabled:
+                        return;
+                    case DeHierarchyData.Mode.DisabledAtRuntime:
+                        if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+                        break;
+                }
+            }
+
             EditorApplication.hierarchyChanged += Refresh;
             EditorApplication.hierarchyWindowItemOnGUI += ItemOnGUI;
             Undo.undoRedoPerformed += UndoRedoPerformed;
             Refresh();
         }
+
+        static void PlayModeStateChanged(PlayModeStateChange change)
+        {
+            switch (change) {
+                case PlayModeStateChange.EnteredEditMode:
+                case PlayModeStateChange.EnteredPlayMode:
+                    Init();
+                    break;
+            }
+        }
+
 
         #region GUI
 
@@ -369,6 +395,12 @@ namespace DG.DeEditorTools.Hierarchy
         #endregion
 
         #region Public Methods
+        
+        public static DeHierarchyData ConnectToProjectData(bool createIfMissing)
+        {
+            if (_projectSrc == null) _projectSrc = DeEditorPanelUtils.ConnectToSourceAsset<DeHierarchyData>(DeHierarchy.ADBDataPath, createIfMissing, false);
+            return _projectSrc;
+        }
 
         public static void OnPreferencesRefresh(bool flagsChanged)
         {
@@ -488,11 +520,6 @@ namespace DG.DeEditorTools.Hierarchy
             GameObject go = new GameObject(":: DeHierarchy ::");
             SetDeHierarchyGOFlags(go);
             dehComponent = go.AddComponent<DeHierarchyComponent>();
-        }
-
-        static void ConnectToProjectData(bool createIfMissing)
-        {
-            if (_projectSrc == null) _projectSrc = DeEditorPanelUtils.ConnectToSourceAsset<DeHierarchyData>(DeHierarchy.ADBDataPath, createIfMissing, false);
         }
 
         static void SetDeHierarchyGOFlags(GameObject deHierarchyGO)

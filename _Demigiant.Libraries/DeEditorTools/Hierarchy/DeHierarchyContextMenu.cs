@@ -10,11 +10,102 @@ namespace DG.DeEditorTools.Hierarchy
 {
     public class DeHierarchyContextMenu : MonoBehaviour
     {
+        const int _Priority_Status = -116;
+        const int _Priority_Pre = -115;
         const int _Priority = -100; // was 21
         const int _Priority_Evidence_Sub0 = _Priority + 11;
         const int _Priority_Evidence_Sub1 = _Priority_Evidence_Sub0 + 11;
         const int _Priority_Evidence_Sub2 = _Priority_Evidence_Sub1 + 11;
         const int _Priority_Evidence_Sub3 = _Priority_Evidence_Sub2 + 11;
+        
+        #region Mode
+
+        const string _StatusEnabled = "GameObject/DeHierarchy/STATUS : Enabled";
+        const string _StatusDisabled = "GameObject/DeHierarchy/STATUS : Disabled";
+        const string _StatusDisabledAtRuntime = "GameObject/DeHierarchy/STATUS : Disabled at Runtime";
+        const string _MenuEnabled = "GameObject/DeHierarchy/Enabled";
+        const string _MenuDisabled = "GameObject/DeHierarchy/Disabled";
+        const string _MenuDisabledAtRuntime = "GameObject/DeHierarchy/Disabled at Runtime";
+        
+        [MenuItem(_StatusEnabled, false, _Priority_Status)]
+        static void Status_Enabled() {}
+        [MenuItem(_StatusEnabled, true)]
+        static bool Validate_Status_Enabled()
+        {
+            DeHierarchyData data = DeHierarchy.ConnectToProjectData(false);
+            return data == null || data.mode == DeHierarchyData.Mode.Enabled;
+        }
+        
+        [MenuItem(_StatusDisabled, false, _Priority_Status)]
+        static void Status_Disabled() {}
+        [MenuItem(_StatusDisabled, true)]
+        static bool Validate_Status_Disabled()
+        {
+            DeHierarchyData data = DeHierarchy.ConnectToProjectData(false);
+            return data != null && data.mode == DeHierarchyData.Mode.Disabled;
+        }
+        
+        [MenuItem(_StatusDisabledAtRuntime, false, _Priority_Status)]
+        static void Status_DisabledAtRuntime() {}
+        [MenuItem(_StatusDisabledAtRuntime, true)]
+        static bool Validate_Status_DisabledAtRuntime()
+        {
+            DeHierarchyData data = DeHierarchy.ConnectToProjectData(false);
+            return data != null && data.mode == DeHierarchyData.Mode.DisabledAtRuntime;
+        }
+        
+        [MenuItem(_MenuEnabled, false, _Priority_Pre)]
+        static void Mode_Enabled()
+        {
+            DeHierarchyData data = DeHierarchy.ConnectToProjectData(true);
+            Undo.RecordObject(data, "DeHierarchy");
+            data.mode = DeHierarchyData.Mode.Enabled;
+            EditorUtility.SetDirty(data);
+            DeHierarchy.Init();
+        }
+        [MenuItem(_MenuEnabled, true, _Priority_Pre)]
+        static bool Validate_Mode_Enabled()
+        {
+            DeHierarchyData data = DeHierarchy.ConnectToProjectData(false);
+            Menu.SetChecked(_MenuEnabled, data == null || data.mode == DeHierarchyData.Mode.Enabled);
+            return true;
+        }
+        
+        [MenuItem(_MenuDisabled, false, _Priority_Pre + 1)]
+        static void Mode_Disabled()
+        {
+            DeHierarchyData data = DeHierarchy.ConnectToProjectData(true);
+            Undo.RecordObject(data, "DeHierarchy");
+            data.mode = DeHierarchyData.Mode.Disabled;
+            EditorUtility.SetDirty(data);
+            DeHierarchy.Init();
+        }
+        [MenuItem(_MenuDisabled, true, _Priority_Pre + 1)]
+        static bool Validate_Mode_Disabled()
+        {
+            DeHierarchyData data = DeHierarchy.ConnectToProjectData(false);
+            Menu.SetChecked(_MenuDisabled, data != null && data.mode == DeHierarchyData.Mode.Disabled);
+            return true;
+        }
+        
+        [MenuItem(_MenuDisabledAtRuntime, false, _Priority_Pre + 2)]
+        static void Mode_DisabledAtRuntime()
+        {
+            DeHierarchyData data = DeHierarchy.ConnectToProjectData(true);
+            Undo.RecordObject(data, "DeHierarchy");
+            data.mode = DeHierarchyData.Mode.DisabledAtRuntime;
+            EditorUtility.SetDirty(data);
+            DeHierarchy.Init();
+        }
+        [MenuItem(_MenuDisabledAtRuntime, true, _Priority_Pre + 2)]
+        static bool Validate_Mode_DisabledAtRuntime()
+        {
+            DeHierarchyData data = DeHierarchy.ConnectToProjectData(false);
+            Menu.SetChecked(_MenuDisabledAtRuntime, data != null && data.mode == DeHierarchyData.Mode.DisabledAtRuntime);
+            return true;
+        }
+
+        #endregion
 
         #region Reset
 

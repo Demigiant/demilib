@@ -13,6 +13,13 @@ namespace DG.DeEditorTools.Hierarchy
     /// </summary>
     public class DeHierarchyData : ScriptableObject
     {
+        public enum Mode
+        {
+            Enabled,
+            Disabled,
+            DisabledAtRuntime
+        }
+        
         public enum EvidenceMode
         {
             Outline,
@@ -31,6 +38,7 @@ namespace DG.DeEditorTools.Hierarchy
 
         #region Serialized
 
+        public Mode mode = Mode.Enabled;
         public ExtraEvidenceData[] extraEvidences = new ExtraEvidenceData[0];
         public int totExtraEvidences = 0;
 
