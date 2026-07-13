@@ -194,6 +194,27 @@ namespace DG.DeEditorTools.Hierarchy
                     }
                 }
             }
+            
+            // Tree structure lines
+            if (DeEditorToolsPrefs.deHierarchy_showTreeLines && go.transform.parent != null) {
+                const float columnStep = 14;
+                float minColumnX = DeUnityEditorVersion.Version < 2019.3f ? 30 : 64;
+                Rect r = new Rect(selectionRect.x - 14, selectionRect.y, 1, selectionRect.height);
+                Color linesCol = new Color(0.4078432f, 0.4078432f, 0.4078432f, 1f);
+                bool firstElementDone = false;
+                while (r.x > 20) {
+                    float colorDepth = columnStep / (r.x - minColumnX + columnStep);
+                    if (colorDepth < 0.1f) colorDepth = 0.1f;
+                    linesCol = linesCol.SetAlpha(colorDepth);
+                    Rect drawR = new Rect(r.x - 8, r.y - 7, r.width, r.height);
+                    DeGUI.DrawColoredSquare(drawR, linesCol); // vertical
+                    drawR = new Rect(drawR.x + drawR.width, drawR.y + drawR.height - 1, 14 - drawR.width, 1);
+                    if (firstElementDone) drawR.width = 2;
+                    DeGUI.DrawColoredSquare(drawR, linesCol);
+                    firstElementDone = true;
+                    r.x -= columnStep;
+                }
+            }
 
             // Custom Components icon
             if (DeEditorToolsPrefs.deHierarchy_showCustomComponentIndicator && (goData.hasCustomComponents || goData.hasCustomComponentsInChildren)) {
@@ -251,27 +272,6 @@ namespace DG.DeEditorTools.Hierarchy
                     extraR = extraR.Shift(-size.x - 2, 0, 0, 0).SetY((int)(selectionRect.center.y - (size.y * 0.5f)))
                         .SetHeight(size.y).SetWidth(size.x);
                     GUI.Label(extraR, label, _layerOrderBox);
-                }
-            }
-
-            // Tree structure lines
-            if (DeEditorToolsPrefs.deHierarchy_showTreeLines && go.transform.parent != null) {
-                const float columnStep = 14;
-                float minColumnX = DeUnityEditorVersion.Version < 2019.3f ? 30 : 64;
-                Rect r = new Rect(selectionRect.x - 14, selectionRect.y, 1, selectionRect.height);
-                Color linesCol = new Color(0.4078432f, 0.4078432f, 0.4078432f, 1f);
-                bool firstElementDone = false;
-                while (r.x > 20) {
-                    float colorDepth = columnStep / (r.x - minColumnX + columnStep);
-                    if (colorDepth < 0.1f) colorDepth = 0.1f;
-                    linesCol = linesCol.SetAlpha(colorDepth);
-                    Rect drawR = new Rect(r.x - 8, r.y - 7, r.width, r.height);
-                    DeGUI.DrawColoredSquare(drawR, linesCol); // vertical
-                    drawR = new Rect(drawR.x + drawR.width, drawR.y + drawR.height - 1, 14 - drawR.width, 1);
-                    if (firstElementDone) drawR.width = 2;
-                    DeGUI.DrawColoredSquare(drawR, linesCol);
-                    firstElementDone = true;
-                    r.x -= columnStep;
                 }
             }
 
