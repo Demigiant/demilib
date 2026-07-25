@@ -69,6 +69,15 @@ namespace DG.DemiEditor
         static bool _interpretOSXCommandAsAlt = true;
         static bool _interpretOSXCommandAsCtrl;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void ResetStatics()
+        {
+            _timeAtShiftKeyRelease = _timeAtCtrlKeyRelease = _timeAtAltKeyRelease = 0;
+            _idToDownKeysAtLastPass.Clear();
+            _interpretOSXCommandAsAlt = true;
+            _interpretOSXCommandAsCtrl = false;
+        }
+
         #region Internal Methods
 
         /// <summary>
