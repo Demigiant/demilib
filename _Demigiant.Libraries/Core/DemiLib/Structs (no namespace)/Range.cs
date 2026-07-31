@@ -36,6 +36,15 @@ namespace DG.DemiLib
         }
 
         /// <summary>
+        /// Returns TRUE if the value is contained within the range
+        /// </summary>
+        /// <param name="value"></param>
+        public bool Contains(float value)
+        {
+            return value >= min && value <= max;
+        }
+
+        /// <summary>
         /// Returns a value within the range at the given 0-1 (clamped) percentage
         /// </summary>
         public float Evaluate(float atPercentage)

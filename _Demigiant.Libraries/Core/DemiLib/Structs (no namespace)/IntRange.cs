@@ -33,6 +33,15 @@ namespace DG.DemiLib
         {
             return UnityEngine.Random.Range(min, max + 1);
         }
+        
+        /// <summary>
+        /// Returns TRUE if the value is contained within the range
+        /// </summary>
+        /// <param name="value"></param>
+        public bool Contains(int value)
+        {
+            return value >= min && value <= max;
+        }
 
         /// <inheritdoc />
         public override string ToString()
