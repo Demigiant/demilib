@@ -37,7 +37,7 @@ namespace DG.DeEditorTools.BuildPanel
         #endregion
 
         static DeBuildPanelData I;
-        public const string Version = "1.0.105";
+        public const string Version = "1.0.106";
         const string _ADBFilePath = "Assets/-DeBuildPanelData.asset";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
             BuildTarget.NoTarget, // Here so indexes correspond to AffixTarget enum
