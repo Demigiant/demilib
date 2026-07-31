@@ -190,6 +190,12 @@
             Returns a random value within this range (min/max included)
             </summary>
         </member>
+        <member name="M:DG.DemiLib.IntRange.Contains(System.Int32)">
+            <summary>
+            Returns TRUE if the value is contained within the range
+            </summary>
+            <param name="value"></param>
+        </member>
         <member name="M:DG.DemiLib.IntRange.ToString">
             <inheritdoc />
         </member>
@@ -213,6 +219,12 @@
             <summary>
             Returns a random value within this range (min/max included)
             </summary>
+        </member>
+        <member name="M:DG.DemiLib.Range.Contains(System.Single)">
+            <summary>
+            Returns TRUE if the value is contained within the range
+            </summary>
+            <param name="value"></param>
         </member>
         <member name="M:DG.DemiLib.Range.Evaluate(System.Single)">
             <summary>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using DG.DemiEditor;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace DG.DeEditorTools.BuildPanel
 {
@@ -36,7 +37,7 @@ namespace DG.DeEditorTools.BuildPanel
         #endregion
 
         static DeBuildPanelData I;
-        public const string Version = "1.0.100";
+        public const string Version = "1.0.105";
         const string _ADBFilePath = "Assets/-DeBuildPanelData.asset";
         internal static readonly BuildTarget[] AllowedBuildTargets = new [] {
             BuildTarget.NoTarget, // Here so indexes correspond to AffixTarget enum
@@ -104,7 +105,8 @@ namespace DG.DeEditorTools.BuildPanel
             public string buildName; // Folder within buildFolder where the build will be created (this one is created if it doesn't exist)
             public bool clearBuildFolder = true;
             public string bundleIdentifier;
-            public bool deleteBackupThisFolder = true;
+            [FormerlySerializedAs("deleteBackupThisFolder")]
+            public bool deleteDebugFolder = true;
             // Android/iOS only
             public string key;
             public bool increaseInternalBuildNumber = false;
