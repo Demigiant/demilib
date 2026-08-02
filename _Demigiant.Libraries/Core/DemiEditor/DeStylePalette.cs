@@ -130,6 +130,7 @@ namespace DG.DemiEditor
         public static Texture2D ico_foldout_open { get { return LoadTexture(ref _ico_foldout_open, "ico_foldout_open"); } }
         public static Texture2D ico_foldout_closed { get { return LoadTexture(ref _ico_foldout_closed, "ico_foldout_closed"); } }
         public static Texture2D ico_nodeArrow { get { return LoadTexture(ref _ico_nodeArrow, "ico_nodeArrow", FilterMode.Bilinear, 16); } }
+        public static Texture2D ico_arrowThin { get { return LoadTexture(ref _ico_arrowThin, "ico_arrowThin", FilterMode.Bilinear, 16); } }
         public static Texture2D ico_delete { get { return LoadTexture(ref _ico_delete, "ico_delete", FilterMode.Bilinear, 16); } }
         public static Texture2D ico_end { get { return LoadTexture(ref _ico_end, "ico_end", FilterMode.Bilinear); } }
         public static Texture2D ico_alert { get { return LoadTexture(ref _ico_alert, "ico_alert", FilterMode.Bilinear); } }
@@ -191,6 +192,7 @@ namespace DG.DemiEditor
         static Texture2D _ico_foldout_open;
         static Texture2D _ico_foldout_closed;
         static Texture2D _ico_nodeArrow;
+        static Texture2D _ico_arrowThin;
         static Texture2D _ico_delete;
         static Texture2D _ico_end;
         static Texture2D _ico_alert;
